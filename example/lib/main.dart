@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    print('initPlatformState()');
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -35,20 +36,27 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
+    print('queueing set state');
     setState(() {
+      print('set state');
       _platformVersion = platformVersion;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('widget build');
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Ably Plugin Example App'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              Text('Running on: $_platformVersion\n')
+            ]
+          ),
         ),
       ),
     );
