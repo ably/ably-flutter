@@ -15,6 +15,8 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallHandler {
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        // TODO replace deprecated getFlutterEngine()
+        // TODO work out whether this instance method should really be creating a new instance
         final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin");
         channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
     }
