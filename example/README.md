@@ -42,6 +42,40 @@ From this folder, use `flutter build apk`, which at the time of writing this pro
     Running Gradle task 'assembleRelease'... Done                      83.1s
     ✓ Built build/app/outputs/apk/release/app-release.apk (15.1MB).
 
+## Running
+
+Before you can run the example application from this folder, you need to launch an emulator.
+Otherwise, `flutter run` will grumble with:
+
+    No supported devices connected.
+
+Find out what emulators you have available with:
+
+    flutter emulators
+
+Which will give you an output looking something like this:
+
+    2 available emulators:
+    
+    Nexus_5X_API_29_x86 • Nexus 5X API 29 x86 • Google • android
+    apple_ios_simulator • iOS Simulator       • Apple  • ios
+
+At which point you can launch an emulator using the ID specified - e.g. iOS:
+
+    flutter emulator --launch apple_ios_simulator
+
+or Android:
+
+    flutter emulator --launch Nexus_5X_API_29_x86
+
+Now, you can run the app with:
+
+    flutter run
+
+To see log output from the running app then, from a new console window, use:
+
+    flutter logs
+
 ## Flutter Resources
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
