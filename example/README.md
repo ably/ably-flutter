@@ -24,7 +24,7 @@ From this folder, use `flutter build ios`, which at the time of writing this pro
     Xcode build done.                                           60.3s
     Built /Users/quintin/code/experiments/flutter/ably_test_flutter_oldskool_plugin/example/build/ios/iphoneos/Runner.app.
 
-## Buidling for Android
+## Building for Android
 
 From this folder, use `flutter build apk`, which at the time of writing this produces the following:
 
