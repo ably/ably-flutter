@@ -5,3 +5,8 @@
 .pub/
 
 build/
+
+# Even though we are using Android Studio, it still uses Buildship (an Eclipse thing),
+# which means that we end up with .project files popping up everywhere.
+.project
+
