@@ -1,20 +1,48 @@
 #import "AblyTestFlutterOldskoolPlugin.h"
 
-@implementation AblyTestFlutterOldskoolPlugin
+NS_ASSUME_NONNULL_BEGIN
+
+typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
+
+NS_ASSUME_NONNULL_END
+
+static FlutterHandler _getPlatformVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+};
+
+@implementation AblyTestFlutterOldskoolPlugin {
+    NSDictionary<NSString *, FlutterHandler>* _handlers;
+}
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-    FlutterMethodChannel* channel =
+    FlutterMethodChannel *const channel =
         [FlutterMethodChannel methodChannelWithName:@"ably_test_flutter_oldskool_plugin"
                                     binaryMessenger:[registrar messenger]];
-    AblyTestFlutterOldskoolPlugin* instance = [[AblyTestFlutterOldskoolPlugin alloc] init];
-    [registrar addMethodCallDelegate:instance channel:channel];
+    AblyTestFlutterOldskoolPlugin *const plugin = [[AblyTestFlutterOldskoolPlugin alloc] init];
+    [registrar addMethodCallDelegate:plugin channel:channel];
+}
+
+-(instancetype)init {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    
+    _handlers = @{
+        @"getPlatformVersion": _getPlatformVersion,
+    };
+
+    return self;
 }
 
 -(void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    if ([@"getPlatformVersion" isEqualToString:call.method]) {
-        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    } else {
+    const FlutterHandler handler = [_handlers objectForKey:call.method];
+    if (!handler) {
+        // We don't have a handler for a method with this name so tell the caller.
         result(FlutterMethodNotImplemented);
+    } else {
+        // We have a handler for a method with this name so delegate to it.
+        handler(self, call, result);
     }
 }
 
