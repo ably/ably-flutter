@@ -24,8 +24,16 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 28
 
+    // Require Java language level 8 so we can use Method References (used with Lambdas)
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     defaultConfig {
-        minSdkVersion 16
+        // Require Android 7.0 (Nougat) runtime so we can use Lambda expressions
+        minSdkVersion 24
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {

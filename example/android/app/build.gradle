@@ -27,6 +27,12 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 28
 
+    // Require Java language level 8 so we can use Method References (used with Lambdas)
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -34,7 +40,10 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "io.ably.flutter.ably_test_flutter_oldskool_plugin_example"
-        minSdkVersion 16
+
+        // Require Android 7.0 (Nougat) runtime so we can use Lambda expressions
+        minSdkVersion 24
+
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -1,6 +1,11 @@
 package io.ably.flutter.ably_test_flutter_oldskool_plugin;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -35,16 +40,41 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
     }
 
+    private final HandlerMap _handlers = new HandlerMap();
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        if (call.method.equals("getPlatformVersion")) {
-            result.success("Android " + android.os.Build.VERSION.RELEASE);
-        } else {
-            result.notImplemented();
-        }
+        _handlers.handle(call, result);
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    }
+
+    private class HandlerMap {
+        private final Map<String, BiConsumer<MethodCall, Result>> _map;
+        private final Handlers _handlers = new Handlers();
+
+        HandlerMap() {
+            _map = new HashMap<>();
+            _map.put("getPlatformVersion", _handlers::getPlatformVersion);
+        }
+
+        public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
+            final BiConsumer<MethodCall, Result> handler = _map.get(call.method);
+            if (null == handler) {
+                // We don't have a handler for a method with this name so tell the caller.
+                result.notImplemented();
+            } else {
+                // We have a handler for a method with this name so delegate to it.
+                handler.accept(call, result);
+            }
+        }
+    }
+
+    private class Handlers {
+        private void getPlatformVersion(@NonNull MethodCall call, @NonNull Result result) {
+            result.success("Android " + android.os.Build.VERSION.RELEASE);
+        }
     }
 }
