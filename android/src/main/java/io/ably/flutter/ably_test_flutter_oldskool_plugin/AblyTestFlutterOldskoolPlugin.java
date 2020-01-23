@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import io.ably.lib.transport.Defaults;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -58,6 +59,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         HandlerMap() {
             _map = new HashMap<>();
             _map.put("getPlatformVersion", _handlers::getPlatformVersion);
+            _map.put("getAblyVersion", _handlers::getAblyVersion);
         }
 
         public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
@@ -75,6 +77,10 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
     private class Handlers {
         private void getPlatformVersion(@NonNull MethodCall call, @NonNull Result result) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
+        }
+
+        private void getAblyVersion(@NonNull MethodCall call, @NonNull Result result) {
+            result.success(Defaults.ABLY_LIB_VERSION);
         }
     }
 }

@@ -13,6 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  String _ablyVersion = 'Unknown';
 
   @override
   void initState() {
@@ -24,11 +25,18 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     print('initPlatformState()');
     String platformVersion;
+    String ablyVersion;
+
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await AblyTestFlutterOldskoolPlugin.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
+    }
+    try {
+      ablyVersion = await AblyTestFlutterOldskoolPlugin.ablyVersion;
+    } on PlatformException {
+      ablyVersion = 'Failed to get Ably version.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -40,6 +48,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       print('set state');
       _platformVersion = platformVersion;
+      _ablyVersion = ablyVersion;
     });
   }
 
@@ -54,7 +63,8 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Column(
             children: [
-              Text('Running on: $_platformVersion\n')
+              Text('Running on: $_platformVersion\n'),
+              Text('Ably version: $_ablyVersion\n'),
             ]
           ),
         ),

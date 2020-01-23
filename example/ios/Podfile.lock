@@ -1,11 +1,94 @@
 PODS:
-  - ably_test_flutter_oldskool_plugin (0.0.1):
+  - Ably (1.1.16):
+    - KSCrashAblyFork (= 1.15.20-ably-5)
+    - msgpack (= 0.3.1)
+    - SAMKeychain (= 1.5.3)
+    - SocketRocketAblyFork (= 0.5.2-ably-4)
+    - ULID (= 1.1.0)
+  - ably_test_flutter_oldskool_plugin (0.0.2):
+    - Ably
     - Flutter
   - Flutter (1.0.0)
+  - KSCrashAblyFork (1.15.20-ably-5):
+    - KSCrashAblyFork/Installations (= 1.15.20-ably-5)
+  - KSCrashAblyFork/Installations (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting
+  - KSCrashAblyFork/Recording (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording/Tools (= 1.15.20-ably-5)
+  - KSCrashAblyFork/Recording/Tools (1.15.20-ably-5)
+  - KSCrashAblyFork/Reporting (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/MessageUI (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Sinks (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Tools (= 1.15.20-ably-5)
+  - KSCrashAblyFork/Reporting/Filters (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Alert (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/AppleFmt (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/Base (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/Basic (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/GZip (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/JSON (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/Sets (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/Stringify (= 1.15.20-ably-5)
+    - KSCrashAblyFork/Reporting/Filters/Tools (= 1.15.20-ably-5)
+  - KSCrashAblyFork/Reporting/Filters/Alert (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/AppleFmt (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/Base (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+  - KSCrashAblyFork/Reporting/Filters/Basic (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/GZip (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/JSON (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/Sets (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/AppleFmt
+    - KSCrashAblyFork/Reporting/Filters/Base
+    - KSCrashAblyFork/Reporting/Filters/Basic
+    - KSCrashAblyFork/Reporting/Filters/GZip
+    - KSCrashAblyFork/Reporting/Filters/JSON
+    - KSCrashAblyFork/Reporting/Filters/Stringify
+  - KSCrashAblyFork/Reporting/Filters/Stringify (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters/Base
+  - KSCrashAblyFork/Reporting/Filters/Tools (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+  - KSCrashAblyFork/Reporting/MessageUI (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+  - KSCrashAblyFork/Reporting/Sinks (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+    - KSCrashAblyFork/Reporting/Filters
+    - KSCrashAblyFork/Reporting/Tools
+  - KSCrashAblyFork/Reporting/Tools (1.15.20-ably-5):
+    - KSCrashAblyFork/Recording
+  - msgpack (0.3.1)
+  - SAMKeychain (1.5.3)
+  - SocketRocketAblyFork (0.5.2-ably-4)
+  - ULID (1.1.0)
 
 DEPENDENCIES:
   - ably_test_flutter_oldskool_plugin (from `.symlinks/plugins/ably_test_flutter_oldskool_plugin/ios`)
   - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - Ably
+    - KSCrashAblyFork
+    - msgpack
+    - SAMKeychain
+    - SocketRocketAblyFork
+    - ULID
 
 EXTERNAL SOURCES:
   ably_test_flutter_oldskool_plugin:
@@ -14,9 +97,15 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  ably_test_flutter_oldskool_plugin: ea055074ed1ad1a17137580e0728792aaa277c15
+  Ably: b8dd747b116787f0759844dc1a045046ef9a2c7a
+  ably_test_flutter_oldskool_plugin: da63dd9b02a5763389bae00317c72e0d74462ffc
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  KSCrashAblyFork: c9f408f9abe1e781753b4bfb6c30e01037287c08
+  msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
+  SocketRocketAblyFork: ed717517ed5cb5217878987c84bc415890582bb3
+  ULID: b4714891a02819364faecd574a53e391c4c6de9d
 
-PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
+PODFILE CHECKSUM: 49ec7d4076524b7e225c38b98147173651ac4b9d
 
 COCOAPODS: 1.8.4

@@ -10,4 +10,8 @@ class AblyTestFlutterOldskoolPlugin {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+
+  static Future<String> get ablyVersion async {
+    return await _channel.invokeMethod('getAblyVersion');
+  }
 }

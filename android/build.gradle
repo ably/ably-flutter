@@ -21,6 +21,10 @@ rootProject.allprojects {
 
 apply plugin: 'com.android.library'
 
+dependencies {
+    implementation 'io.ably:ably-android:1.1.8'
+}
+
 android {
     compileSdkVersion 28
 

@@ -1,5 +1,10 @@
 #import "AblyTestFlutterOldskoolPlugin.h"
 
+// TODO work out why importing Ably as a module does not work like this:
+//   @import Ably;
+
+#import "Ably.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
@@ -8,6 +13,10 @@ NS_ASSUME_NONNULL_END
 
 static FlutterHandler _getPlatformVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+};
+
+static FlutterHandler _getAblyVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
 @implementation AblyTestFlutterOldskoolPlugin {
@@ -30,6 +39,7 @@ static FlutterHandler _getPlatformVersion = ^void(AblyTestFlutterOldskoolPlugin 
     
     _handlers = @{
         @"getPlatformVersion": _getPlatformVersion,
+        @"getAblyVersion": _getAblyVersion,
     };
 
     return self;
