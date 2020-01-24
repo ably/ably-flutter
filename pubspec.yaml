@@ -15,6 +15,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Specifying a slightly older version minimum for the 'pure' Dart test package
+  # because the flutter_test package needs an older version of test_api.
+  test: ^1.9.4
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
