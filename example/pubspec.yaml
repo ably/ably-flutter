@@ -22,6 +22,9 @@ dev_dependencies:
   ably_test_flutter_oldskool_plugin:
     path: ../
 
+  # Stricter Linting
+  pedantic: ^1.0.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

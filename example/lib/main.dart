@@ -79,6 +79,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // https://github.com/dart-lang/sdk/issues/37498
+  // ignore: missing_return
   String opStateDescription(OpState state, String action, String operating, String done) {
     switch (state) {
       case OpState.NotStarted: return action;
@@ -88,6 +90,8 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  // https://github.com/dart-lang/sdk/issues/37498
+  // ignore: missing_return
   Color opStateColor(OpState state) {
     switch (state) {
       case OpState.NotStarted: return Color.fromARGB(255, 192, 192, 255);

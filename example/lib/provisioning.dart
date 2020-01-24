@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const _capabilitySpec = const {
+const _capabilitySpec = {
   // Allow us to publish and subscribe to any channel.
   '*': ['publish', 'subscribe'],
 };
@@ -21,7 +21,7 @@ final _appSpec = Map.unmodifiable({
   ],
 });
 
-const _requestHeaders = const {
+const _requestHeaders = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
 };
