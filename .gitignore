@@ -10,3 +10,11 @@ build/
 # which means that we end up with .project files popping up everywhere.
 .project
 
+# VS Code is keen for the following file types to be excluded (as well as .project)
+.classpath
+.settings
+.factorypath
+
+# And VS Code will create this folder if you tell it to
+.vscode
+
