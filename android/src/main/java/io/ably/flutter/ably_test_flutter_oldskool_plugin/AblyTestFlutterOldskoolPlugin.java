@@ -13,17 +13,23 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.MethodCodec;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.plugin.common.StandardMethodCodec;
 
 /**
  * AblyTestFlutterOldskoolPlugin
  */
 public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallHandler {
+    private static MethodCodec createCodec() {
+        return new StandardMethodCodec(new AblyMessageCodec());
+    }
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         // TODO replace deprecated getFlutterEngine()
         // TODO work out whether this instance method should really be creating a new instance
-        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin");
+        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin", createCodec());
         channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
     }
 
@@ -37,7 +43,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
     public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "ably_test_flutter_oldskool_plugin");
+        final MethodChannel channel = new MethodChannel(registrar.messenger(), "ably_test_flutter_oldskool_plugin", createCodec());
         channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
     }
 
