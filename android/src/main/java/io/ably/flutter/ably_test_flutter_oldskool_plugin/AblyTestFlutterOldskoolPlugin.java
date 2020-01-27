@@ -60,9 +60,11 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
             _map = new HashMap<>();
             _map.put("getPlatformVersion", _handlers::getPlatformVersion);
             _map.put("getVersion", _handlers::getVersion);
+            _map.put("createRealtimeWithOptions", _handlers::createRealtimeWithOptions);
         }
 
         public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
+            System.out.println("method: " + call.method);
             final BiConsumer<MethodCall, Result> handler = _map.get(call.method);
             if (null == handler) {
                 // We don't have a handler for a method with this name so tell the caller.
@@ -81,6 +83,10 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
 
         private void getVersion(@NonNull MethodCall call, @NonNull Result result) {
             result.success(Defaults.ABLY_LIB_VERSION);
+        }
+
+        private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull Result result) {
+            result.success(call.arguments.getClass().toString());
         }
     }
 }
