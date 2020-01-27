@@ -10,9 +10,9 @@ abstract class Channels {
 }
 
 abstract class Realtime {
-  factory Realtime(final ClientOptions options) {
-    return impl.Realtime();
-  }
+  static Future<Realtime> create(final ClientOptions options) => impl.Realtime.create(options);
+
+  Realtime(this.connection, this.channels);
 
   final Connection connection;
   final Channels channels;

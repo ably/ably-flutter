@@ -24,6 +24,8 @@ class _MyAppState extends State<MyApp> {
   String _ablyVersion = 'Unknown';
   OpState _provisioningState = OpState.NotStarted;
   provisioning.AppKey _appKey;
+  OpState _realtimeCreationState = OpState.NotStarted;
+  ably.Realtime _realtime;
 
   @override
   void initState() {
@@ -69,6 +71,7 @@ class _MyAppState extends State<MyApp> {
     try {
       appKey = await provisioning.provision('sandbox-');
     } catch (error) {
+      print('Error provisioning Ably: ${error}');
       setState(() { _provisioningState = OpState.Failed; });
       return;
     }
@@ -79,9 +82,24 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void createAblyRealtime() async {
+    setState(() { _realtimeCreationState = OpState.InProgress; });
+
+    final clientOptions = ably.ClientOptions();
+
+    ably.Realtime realtime;
+    try {
+      realtime = await ably.Realtime.create(clientOptions);
+    } catch (error) {
+      print('Error creating Ably Realtime: ${error}');
+      setState(() { _realtimeCreationState = OpState.Failed; });
+      return;
+    }
+  }
+
   // https://github.com/dart-lang/sdk/issues/37498
   // ignore: missing_return
-  String opStateDescription(OpState state, String action, String operating, String done) {
+  static String opStateDescription(OpState state, String action, String operating, String done) {
     switch (state) {
       case OpState.NotStarted: return action;
       case OpState.InProgress: return operating + '...';
@@ -92,7 +110,7 @@ class _MyAppState extends State<MyApp> {
 
   // https://github.com/dart-lang/sdk/issues/37498
   // ignore: missing_return
-  Color opStateColor(OpState state) {
+  static Color opStateColor(OpState state) {
     switch (state) {
       case OpState.NotStarted: return Color.fromARGB(255, 192, 192, 255);
       case OpState.InProgress: return Color.fromARGB(255, 192, 192, 192);
@@ -101,14 +119,17 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Widget provisionButton() => FlatButton(
-    onPressed: (_provisioningState == OpState.NotStarted || _provisioningState == OpState.Failed) ? provisionAbly : null,
+  static Widget button(final OpState state, Function action, String actionDescription, String operatingDescription, String doneDescription) => FlatButton(
+    onPressed: (state == OpState.NotStarted || state == OpState.Failed) ? action : null,
     child: Text(
-      opStateDescription(_provisioningState, 'Provision Ably', 'Provisioning Ably', 'Ably Provisioned'),
+      opStateDescription(state, actionDescription, operatingDescription, doneDescription),
     ),
-    color: opStateColor(_provisioningState),
-    disabledColor: opStateColor(_provisioningState),
+    color: opStateColor(state),
+    disabledColor: opStateColor(state),
   );
+
+  Widget provisionButton() => button(_provisioningState, provisionAbly, 'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
+  Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +146,8 @@ class _MyAppState extends State<MyApp> {
               Text('Ably version: $_ablyVersion\n'),
               provisionButton(),
               Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
+              createRealtimeButton(),
+              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),              
             ]
           ),
         ),
