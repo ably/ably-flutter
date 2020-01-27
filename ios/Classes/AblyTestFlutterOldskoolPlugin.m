@@ -15,7 +15,7 @@ static FlutterHandler _getPlatformVersion = ^void(AblyTestFlutterOldskoolPlugin 
     result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
 };
 
-static FlutterHandler _getAblyVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _getVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
@@ -39,7 +39,7 @@ static FlutterHandler _getAblyVersion = ^void(AblyTestFlutterOldskoolPlugin *con
     
     _handlers = @{
         @"getPlatformVersion": _getPlatformVersion,
-        @"getAblyVersion": _getAblyVersion,
+        @"getVersion": _getVersion,
     };
 
     return self;

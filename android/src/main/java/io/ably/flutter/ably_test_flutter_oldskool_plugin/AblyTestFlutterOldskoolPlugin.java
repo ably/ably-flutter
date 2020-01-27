@@ -59,7 +59,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         HandlerMap() {
             _map = new HashMap<>();
             _map.put("getPlatformVersion", _handlers::getPlatformVersion);
-            _map.put("getAblyVersion", _handlers::getAblyVersion);
+            _map.put("getVersion", _handlers::getVersion);
         }
 
         public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
@@ -79,7 +79,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         }
 
-        private void getAblyVersion(@NonNull MethodCall call, @NonNull Result result) {
+        private void getVersion(@NonNull MethodCall call, @NonNull Result result) {
             result.success(Defaults.ABLY_LIB_VERSION);
         }
     }

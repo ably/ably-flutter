@@ -1,4 +1,16 @@
+import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as api;
+
+const MethodChannel methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin');
+
+Future<String> get platformVersion async {
+  return await methodChannel.invokeMethod('getPlatformVersion');
+}
+
+Future<String> get version async {
+  return await methodChannel.invokeMethod('getVersion');
+}
 
 /// An object which has a live counterpart in the Platform client library SDK.
 abstract class PlatformObject {

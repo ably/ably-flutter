@@ -1,5 +1,8 @@
 import 'package:ably_test_flutter_oldskool_plugin/src/ably.dart' as impl;
 
+Future<String> get platformVersion async => impl.platformVersion;
+Future<String> get version async => impl.version;
+
 abstract class Connection {
 }
 

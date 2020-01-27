@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:ably_test_flutter_oldskool_plugin/ably_test_flutter_oldskool_plugin.dart';
+import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as ably;
 import 'package:ably_test_flutter_oldskool_plugin_example/provisioning.dart' as provisioning;
 
 void main() => runApp(MyApp());
@@ -39,12 +39,12 @@ class _MyAppState extends State<MyApp> {
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await AblyTestFlutterOldskoolPlugin.platformVersion;
+      platformVersion = await ably.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
-      ablyVersion = await AblyTestFlutterOldskoolPlugin.ablyVersion;
+      ablyVersion = await ably.version;
     } on PlatformException {
       ablyVersion = 'Failed to get Ably version.';
     }
