@@ -5,6 +5,8 @@
 
 #import "Ably.h"
 
+#import "AblyFlutterReaderWriter.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
@@ -24,9 +26,13 @@ static FlutterHandler _getVersion = ^void(AblyTestFlutterOldskoolPlugin *const p
 }
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+    FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
+    FlutterStandardMethodCodec *const methodCodec =
+        [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
     FlutterMethodChannel *const channel =
         [FlutterMethodChannel methodChannelWithName:@"ably_test_flutter_oldskool_plugin"
-                                    binaryMessenger:[registrar messenger]];
+                                    binaryMessenger:[registrar messenger]
+                                              codec:methodCodec];
     AblyTestFlutterOldskoolPlugin *const plugin = [[AblyTestFlutterOldskoolPlugin alloc] init];
     [registrar addMethodCallDelegate:plugin channel:channel];
 }
