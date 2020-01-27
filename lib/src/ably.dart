@@ -28,6 +28,8 @@ class Realtime extends PlatformObject implements api.Realtime {
   Realtime._(int handle) : super(handle);
 
   static Future<Realtime> create(final api.ClientOptions options) async {
+    // TODO options.authCallback
+    // TODO options.logHandler
     return Realtime._(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
   }
 
@@ -67,7 +69,6 @@ class Codec extends StandardMessageCodec {
       final api.ClientOptions v = value;
 
       // AuthOptions (super class of ClientOptions)
-      writeValue(buffer, v.authCallback);
       writeValue(buffer, v.authUrl);
       writeValue(buffer, v.authMethod);
       writeValue(buffer, v.key);
@@ -80,7 +81,6 @@ class Codec extends StandardMessageCodec {
       // ClientOptions
       writeValue(buffer, v.clientId);
       writeValue(buffer, v.logLevel);
-      writeValue(buffer, v.logHandler);
       writeValue(buffer, v.tls);
       writeValue(buffer, v.restHost);
       writeValue(buffer, v.realtimeHost);
