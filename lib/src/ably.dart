@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as api;
