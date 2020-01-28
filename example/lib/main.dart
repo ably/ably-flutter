@@ -95,6 +95,11 @@ class _MyAppState extends State<MyApp> {
       setState(() { _realtimeCreationState = OpState.Failed; });
       return;
     }
+
+    setState(() {
+      _realtime = realtime;
+      _realtimeCreationState = OpState.Succeeded;
+    });
   }
 
   // https://github.com/dart-lang/sdk/issues/37498
