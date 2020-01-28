@@ -20,6 +20,9 @@ abstract class PlatformObject {
   final int handle;
 
   PlatformObject(this.handle);
+
+  @override
+  String toString() => 'Ably Platform Object $handle';
 }
 
 class Realtime extends PlatformObject implements api.Realtime {
