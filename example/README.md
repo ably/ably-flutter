@@ -76,6 +76,16 @@ To see log output from the running app then, from a new console window, use:
 
     flutter logs
 
+To see all Android output from the running app then you will need to use `adb logcat`, which is a
+lot less noisy if you supply it with the id of the Flutter process. So, for example, were you to
+observe this in the output from `flutter run`:
+
+    I/flutter (13997): initPlatformState()
+
+then you can view Android output for just that process in another terminal session with:
+
+    adb logcat --pid=13997
+
 ## Flutter Resources
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
