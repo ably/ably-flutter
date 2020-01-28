@@ -7,6 +7,8 @@
 
 #import "AblyFlutterReaderWriter.h"
 
+#define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
@@ -36,13 +38,17 @@ static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskool
     result([plugin addRealtime:realtime]);
 };
 
+static NSUInteger _nextId = 1;
+
 @implementation AblyTestFlutterOldskoolPlugin {
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     long long _nextHandle;
+    NSUInteger _id;
 }
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+    LOG(@"registrar: %@", [registrar class]);
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
     FlutterStandardMethodCodec *const methodCodec =
         [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
@@ -68,11 +74,15 @@ static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskool
     
     _realtimeInstances = [NSMutableDictionary new];
     _nextHandle = 1;
+    _id = _nextId++;
+    
+    LOG(@"id = %@", @(_id));
 
     return self;
 }
 
 -(void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    LOG(@"%@(%@)", call.method, call.arguments ? [call.arguments class] : @"");
     const FlutterHandler handler = [_handlers objectForKey:call.method];
     if (!handler) {
         // We don't have a handler for a method with this name so tell the caller.
