@@ -1,6 +1,18 @@
 #import "AblyFlutterReader.h"
 #import "Ably.h"
 
+static ARTLogLevel _logLevel(NSNumber *const number) {
+    switch (number.unsignedIntegerValue) {
+        case 99: return ARTLogLevelNone;
+        case 2: return ARTLogLevelVerbose;
+        case 3: return ARTLogLevelDebug;
+        case 4: return ARTLogLevelInfo;
+        case 5: return ARTLogLevelWarn;
+        case 6: return ARTLogLevelError;
+    }
+    return ARTLogLevelWarn;
+}
+
 @implementation AblyFlutterReader
 
 typedef NS_ENUM(UInt8, _Value) {
@@ -33,11 +45,15 @@ typedef NS_ENUM(UInt8, _Value) {
  object (other than null) that indicates the Objective-C property value is to be
  set to an id value of nil.
  */
-#define READ_VALUE(OBJECT, PROPERTY) { \
+#define ON_VALUE(BLOCK) { \
     const id value = [self readValue]; \
     if (value) { \
-        OBJECT.PROPERTY = value; \
+        BLOCK(value); \
     } \
+}
+
+#define READ_VALUE(OBJECT, PROPERTY) { \
+    ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }); \
 }
 
 -(ARTClientOptions *)readClientOptions {
@@ -55,7 +71,7 @@ typedef NS_ENUM(UInt8, _Value) {
 
     // ClientOptions
     READ_VALUE(o, clientId);
-    [self readValue]; // TODO READ_VALUE(o, logLevel); // ARTLogLevel
+    ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); });
     READ_VALUE(o, tls);
     READ_VALUE(o, restHost);
     READ_VALUE(o, realtimeHost);
