@@ -23,6 +23,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private void readValue(final ByteBuffer buffer, final Consumer<Object> consumer) {
         final Object object = readValue(buffer);
+        if (null != object) {
+            consumer.accept(object);
+        }
     }
 
     private Object readClientOptions(final ByteBuffer buffer) {
