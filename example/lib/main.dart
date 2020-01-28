@@ -87,6 +87,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions();
     clientOptions.key = _appKey.toString();
+    clientOptions.realtimeHost = 'sandbox-realtime.ably.io';
 
     ably.Realtime realtime;
     try {
