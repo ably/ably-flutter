@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.transport.Defaults;
+import io.ably.lib.types.AblyException;
+import io.ably.lib.types.ClientOptions;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -82,7 +85,10 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         }
     }
 
-    private class Handlers {
+    private static class Handlers {
+        private long _nextHandle = 1;
+        private final Map<Long, AblyRealtime> _realtimeInstances= new HashMap<>();
+
         private void getPlatformVersion(@NonNull MethodCall call, @NonNull Result result) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         }
@@ -92,7 +98,19 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         }
 
         private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull Result result) {
-            result.success(call.arguments.getClass().toString());
+            final ClientOptions clientOptions = (ClientOptions)call.arguments;
+
+            final AblyRealtime realtime;
+            try {
+                realtime = new AblyRealtime(clientOptions);
+            } catch (AblyException e) {
+                result.error(Integer.toString(e.errorInfo.code), e.getMessage(), null);
+                return;
+            }
+
+            final long handle = _nextHandle++;
+            _realtimeInstances.put(handle, realtime);
+            result.success(handle);
         }
     }
 }
