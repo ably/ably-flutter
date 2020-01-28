@@ -27,18 +27,23 @@ import io.flutter.plugin.common.StandardMethodCodec;
 public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallHandler {
     private final Listener _listener = new Listener();
 
+    private static int _nextId = 1;
+    private final int _id = _nextId++;
+    public AblyTestFlutterOldskoolPlugin() {
+        System.out.println("New Ably Plugin " + _id);
+    }
+
     private static MethodCodec createCodec() {
         return new StandardMethodCodec(new AblyMessageCodec());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        System.out.println("Ably Plugin onAttachedToEngine");
+        System.out.println("Ably Plugin " + _id + " onAttachedToEngine");
         // TODO replace deprecated getFlutterEngine()
-        // TODO work out whether this instance method should really be creating a new instance
         final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin", createCodec());
         flutterPluginBinding.getFlutterEngine().addEngineLifecycleListener(_listener);
-        channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
+        channel.setMethodCallHandler(this);
     }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -64,7 +69,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        System.out.println("Ably Plugin onDetachedFromEngine");
+        System.out.println("Ably Plugin " + _id + " onDetachedFromEngine");
     }
 
     private class HandlerMap {
@@ -83,7 +88,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         }
 
         public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
-            System.out.println("method: " + call.method);
+            System.out.println("Ably Plugin " + _id + " handle: " + call.method);
             final BiConsumer<MethodCall, Result> handler = _map.get(call.method);
             if (null == handler) {
                 // We don't have a handler for a method with this name so tell the caller.
@@ -99,7 +104,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         @Override
         public void onPreEngineRestart() {
             // hot restart
-            System.out.println("Ably Plugin onPreEngineRestart");
+            System.out.println("Ably Plugin " + _id + " onPreEngineRestart");
             _handlers.reset();
         }
     }
@@ -109,6 +114,14 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         private final Map<Long, AblyRealtime> _realtimeInstances= new HashMap<>();
 
         public void reset() {
+            System.out.println("Ably Plugin reset - AblyRealtime count: " + _realtimeInstances.size() + " (next handle " + _nextHandle + ")");
+            for (final AblyRealtime r : _realtimeInstances.values()) {
+                try {
+                    r.close();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
             _realtimeInstances.clear();
         }
 
