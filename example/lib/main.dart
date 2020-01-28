@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
     clientOptions.key = _appKey.toString();
     clientOptions.realtimeHost = 'sandbox-realtime.ably.io';
     clientOptions.logLevel = 2; // verbose
-    clientOptions.autoConnect = false;
+    // clientOptions.autoConnect = false;
 
     ably.Realtime realtime;
     try {

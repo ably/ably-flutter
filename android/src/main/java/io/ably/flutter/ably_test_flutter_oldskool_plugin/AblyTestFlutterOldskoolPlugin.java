@@ -11,6 +11,7 @@ import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ClientOptions;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -24,15 +25,19 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * AblyTestFlutterOldskoolPlugin
  */
 public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallHandler {
+    private final Listener _listener = new Listener();
+
     private static MethodCodec createCodec() {
         return new StandardMethodCodec(new AblyMessageCodec());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        System.out.println("Ably Plugin onAttachedToEngine");
         // TODO replace deprecated getFlutterEngine()
         // TODO work out whether this instance method should really be creating a new instance
         final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin", createCodec());
+        flutterPluginBinding.getFlutterEngine().addEngineLifecycleListener(_listener);
         channel.setMethodCallHandler(new AblyTestFlutterOldskoolPlugin());
     }
 
@@ -59,6 +64,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        System.out.println("Ably Plugin onDetachedFromEngine");
     }
 
     private class HandlerMap {
@@ -70,6 +76,10 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
             _map.put("getPlatformVersion", _handlers::getPlatformVersion);
             _map.put("getVersion", _handlers::getVersion);
             _map.put("createRealtimeWithOptions", _handlers::createRealtimeWithOptions);
+        }
+
+        private void reset() {
+            _handlers.reset();
         }
 
         public void handle(final @NonNull MethodCall call, final @NonNull Result result) {
@@ -85,9 +95,22 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin, MethodCallH
         }
     }
 
+    private class Listener implements FlutterEngine.EngineLifecycleListener {
+        @Override
+        public void onPreEngineRestart() {
+            // hot restart
+            System.out.println("Ably Plugin onPreEngineRestart");
+            _handlers.reset();
+        }
+    }
+
     private static class Handlers {
         private long _nextHandle = 1;
         private final Map<Long, AblyRealtime> _realtimeInstances= new HashMap<>();
+
+        public void reset() {
+            _realtimeInstances.clear();
+        }
 
         private void getPlatformVersion(@NonNull MethodCall call, @NonNull Result result) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
