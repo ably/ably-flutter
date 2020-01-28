@@ -86,6 +86,7 @@ class _MyAppState extends State<MyApp> {
     setState(() { _realtimeCreationState = OpState.InProgress; });
 
     final clientOptions = ably.ClientOptions();
+    clientOptions.key = _appKey.toString();
 
     ably.Realtime realtime;
     try {
