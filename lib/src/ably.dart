@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as api;
@@ -25,6 +27,17 @@ abstract class PlatformObject {
   String toString() => 'Ably Platform Object $handle';
 }
 
+int _nextTickerId = 1;
+void _ticker(Null n) async {
+  final id = _nextTickerId++;
+  print('Ticker $id Started');
+  int i = 1;
+  do {
+    sleep(Duration(seconds: 2));
+    print('Ticker $id Tick ${i++}');
+  } while (true);
+}
+
 class Realtime extends PlatformObject implements api.Realtime {
   /// Private constructor. https://stackoverflow.com/a/55143972/392847
   Realtime._(int handle) : super(handle);
@@ -32,6 +45,7 @@ class Realtime extends PlatformObject implements api.Realtime {
   static Future<Realtime> create(final api.ClientOptions options) async {
     // TODO options.authCallback
     // TODO options.logHandler
+    await Isolate.spawn(_ticker, null);
     return Realtime._(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
   }
 
