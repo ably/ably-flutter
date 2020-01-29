@@ -1,7 +1,12 @@
-import 'package:ably_test_flutter_oldskool_plugin/src/ably.dart' as impl;
+import 'src/ably_implementation.dart';
 
-Future<String> get platformVersion async => impl.platformVersion;
-Future<String> get version async => impl.version;
+abstract class Ably {
+  factory Ably() => AblyImplementation();
+
+  Future<String> get platformVersion;
+  Future<String> get version;
+  Future<Realtime> createRealtime(final ClientOptions options);
+}
 
 abstract class Connection {
 }
@@ -10,7 +15,6 @@ abstract class Channels {
 }
 
 abstract class Realtime {
-  static Future<Realtime> create(final ClientOptions options) => impl.Realtime.create(options);
 
   Realtime(this.connection, this.channels);
 

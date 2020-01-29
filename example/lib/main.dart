@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as ably;
-import 'package:ably_test_flutter_oldskool_plugin_example/provisioning.dart' as provisioning;
+import 'provisioning.dart' as provisioning;
 
 void main() => runApp(MyApp());
 
@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   OpState _provisioningState = OpState.NotStarted;
   provisioning.AppKey _appKey;
   OpState _realtimeCreationState = OpState.NotStarted;
+  ably.Ably _ablyPlugin;
   ably.Realtime _realtime;
 
   @override
@@ -36,17 +37,20 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     print('initPlatformState()');
+
+    final ably.Ably ablyPlugin = ably.Ably();
+
     String platformVersion;
     String ablyVersion;
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await ably.platformVersion;
+      platformVersion = await ablyPlugin.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
-      ablyVersion = await ably.version;
+      ablyVersion = await ablyPlugin.version;
     } on PlatformException {
       ablyVersion = 'Failed to get Ably version.';
     }
@@ -61,6 +65,7 @@ class _MyAppState extends State<MyApp> {
       print('set state');
       _platformVersion = platformVersion;
       _ablyVersion = ablyVersion;
+      _ablyPlugin = ablyPlugin;
     });
   }
 
@@ -93,7 +98,7 @@ class _MyAppState extends State<MyApp> {
 
     ably.Realtime realtime;
     try {
-      realtime = await ably.Realtime.create(clientOptions);
+      realtime = await _ablyPlugin.createRealtime(clientOptions);
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });

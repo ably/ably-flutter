@@ -3,18 +3,73 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as api;
+import '../ably.dart';
 
-/// Uses our custom message codec so that we can pass Ably types to the
-/// platform implementations.
-final methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin', StandardMethodCodec(Codec()));
+class AblyImplementation implements Ably {
+  static int _currentId = 0;
+  final int _id;
+  final methodChannel;
+  final List<PlatformObject> _platformObjects = [];
 
-Future<String> get platformVersion async {
-  return await methodChannel.invokeMethod('getPlatformVersion');
-}
+  factory AblyImplementation() {
+    final int id = ++_currentId;
+    _currentId = 666;
 
-Future<String> get version async {
-  return await methodChannel.invokeMethod('getVersion');
+    print('Creating Ably # $id');
+
+    /// Uses our custom message codec so that we can pass Ably types to the
+    /// platform implementations.
+    final methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin', StandardMethodCodec(Codec()));
+
+    return AblyImplementation._constructor(id, methodChannel);
+  }
+
+  AblyImplementation._constructor(this._id, this.methodChannel) {
+    Isolate.spawn(_ticker, this);
+  }
+
+  static const _notCurrent = 'Ably Flutter Plugin instance has been superceeded and is no longer current.';
+
+  @override
+  Future<Realtime> createRealtime(final ClientOptions options) async {
+    if (!_amCurrent) throw StateError(_notCurrent);
+
+    // TODO options.authCallback
+    // TODO options.logHandler
+    final r = RealtimePlatformObject(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
+    _platformObjects.add(r);
+    return r;
+  }
+
+  @override
+  Future<String> get platformVersion async => _amCurrent ? await methodChannel.invokeMethod('getPlatformVersion') : throw StateError(_notCurrent);
+
+  @override
+  Future<String> get version async => _amCurrent ? await methodChannel.invokeMethod('getVersion') : throw StateError(_notCurrent);
+
+  bool get _amCurrent => _id == _currentId;
+
+  void _dispose() async {
+    final List<int> handles = [];
+    for (final PlatformObject platformObject in _platformObjects) {
+      handles.add(platformObject.handle);
+    }
+    _platformObjects.clear();
+
+    await methodChannel.invokeMethod('dispose', handles);
+  }
+
+  static void _ticker(final AblyImplementation instance) async {
+    do {
+      // TODO assess how appropriate the arbitrary value of 250ms (4 Hz) is
+      sleep(Duration(milliseconds: 250));
+      if (!instance._amCurrent) {
+        // This instance is no longer the latest.
+        print('Disposing of superceeded Ably Flutter Plugin instance # ${instance._id} [$instance] (current is now $_currentId)');
+        await instance._dispose();
+      }
+    } while (true);
+  }
 }
 
 /// An object which has a live counterpart in the Platform client library SDK.
@@ -25,33 +80,18 @@ abstract class PlatformObject {
 
   @override
   String toString() => 'Ably Platform Object $handle';
-}
 
-int _nextTickerId = 1;
-void _ticker(Null n) async {
-  final id = _nextTickerId++;
-  print('Ticker $id Started');
-  int i = 1;
-  do {
-    sleep(Duration(seconds: 2));
-    print('Ticker $id Tick ${i++}');
-  } while (true);
-}
+  static Future<int> dispose() async {
 
-class Realtime extends PlatformObject implements api.Realtime {
-  /// Private constructor. https://stackoverflow.com/a/55143972/392847
-  Realtime._(int handle) : super(handle);
-
-  static Future<Realtime> create(final api.ClientOptions options) async {
-    // TODO options.authCallback
-    // TODO options.logHandler
-    await Isolate.spawn(_ticker, null);
-    return Realtime._(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
   }
+}
+
+class RealtimePlatformObject extends PlatformObject implements Realtime {
+  RealtimePlatformObject(int handle) : super(handle);
 
   @override
   // TODO: implement channels
-  api.Channels get channels => null;
+  Channels get channels => null;
 
   @override
   void close() {
@@ -65,7 +105,7 @@ class Realtime extends PlatformObject implements api.Realtime {
 
   @override
   // TODO: implement connection
-  api.Connection get connection => null;
+  Connection get connection => null;
 }
 
 class Codec extends StandardMessageCodec {
@@ -80,9 +120,9 @@ class Codec extends StandardMessageCodec {
 
   @override
   void writeValue (final WriteBuffer buffer, final dynamic value) {
-    if (value is api.ClientOptions) {
+    if (value is ClientOptions) {
       buffer.putUint8(_valueClientOptions);
-      final api.ClientOptions v = value;
+      final ClientOptions v = value;
 
       // AuthOptions (super class of ClientOptions)
       writeValue(buffer, v.authUrl);

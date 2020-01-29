@@ -20,6 +20,7 @@ typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMe
  */
 @interface AblyTestFlutterOldskoolPlugin ()
 -(NSNumber *)addRealtime:(ARTRealtime *)realtime;
+-(NSUInteger)disposeOfHandles:(NSArray<NSNumber *> *)handles;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -36,6 +37,10 @@ static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskool
     ARTClientOptions *const options = call.arguments;
     ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options];
     result([plugin addRealtime:realtime]);
+};
+
+static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    result(@([plugin disposeOfHandles:call.arguments]));
 };
 
 static NSUInteger _nextId = 1;
@@ -70,6 +75,7 @@ static NSUInteger _nextId = 1;
         @"getPlatformVersion": _getPlatformVersion,
         @"getVersion": _getVersion,
         @"createRealtimeWithOptions": _createRealtimeWithOptions,
+        @"dispose": _dispose,
     };
     
     _realtimeInstances = [NSMutableDictionary new];
@@ -97,6 +103,12 @@ static NSUInteger _nextId = 1;
     NSNumber *const handle = @(_nextHandle++);
     [_realtimeInstances setObject:realtime forKey:handle];
     return handle;
+}
+
+-(NSUInteger)disposeOfHandles:(NSArray<NSNumber *> *const)handles {
+    const NSUInteger _startCount = _realtimeInstances.count;
+    [_realtimeInstances removeObjectsForKeys:handles];
+    return _startCount - _realtimeInstances.count;
 }
 
 @end
