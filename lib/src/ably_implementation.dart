@@ -1,39 +1,26 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../ably.dart';
 
 class AblyImplementation implements Ably {
-  static int _currentId = 0;
-  final int _id;
   final methodChannel;
   final List<PlatformObject> _platformObjects = [];
 
   factory AblyImplementation() {
-    final int id = ++_currentId;
-    _currentId = 666;
-
-    print('Creating Ably # $id');
+    print('Creating Ably');
 
     /// Uses our custom message codec so that we can pass Ably types to the
     /// platform implementations.
     final methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin', StandardMethodCodec(Codec()));
 
-    return AblyImplementation._constructor(id, methodChannel);
+    return AblyImplementation._constructor(methodChannel);
   }
 
-  AblyImplementation._constructor(this._id, this.methodChannel) {
-    Isolate.spawn(_ticker, this);
-  }
-
-  static const _notCurrent = 'Ably Flutter Plugin instance has been superceeded and is no longer current.';
+  AblyImplementation._constructor(this.methodChannel);
 
   @override
   Future<Realtime> createRealtime(final ClientOptions options) async {
-    if (!_amCurrent) throw StateError(_notCurrent);
-
     // TODO options.authCallback
     // TODO options.logHandler
     final r = RealtimePlatformObject(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
@@ -42,34 +29,10 @@ class AblyImplementation implements Ably {
   }
 
   @override
-  Future<String> get platformVersion async => _amCurrent ? await methodChannel.invokeMethod('getPlatformVersion') : throw StateError(_notCurrent);
+  Future<String> get platformVersion async => await methodChannel.invokeMethod('getPlatformVersion');
 
   @override
-  Future<String> get version async => _amCurrent ? await methodChannel.invokeMethod('getVersion') : throw StateError(_notCurrent);
-
-  bool get _amCurrent => _id == _currentId;
-
-  void _dispose() async {
-    final List<int> handles = [];
-    for (final PlatformObject platformObject in _platformObjects) {
-      handles.add(platformObject.handle);
-    }
-    _platformObjects.clear();
-
-    await methodChannel.invokeMethod('dispose', handles);
-  }
-
-  static void _ticker(final AblyImplementation instance) async {
-    do {
-      // TODO assess how appropriate the arbitrary value of 250ms (4 Hz) is
-      sleep(Duration(milliseconds: 250));
-      if (!instance._amCurrent) {
-        // This instance is no longer the latest.
-        print('Disposing of superceeded Ably Flutter Plugin instance # ${instance._id} [$instance] (current is now $_currentId)');
-        await instance._dispose();
-      }
-    } while (true);
-  }
+  Future<String> get version async => await methodChannel.invokeMethod('getVersion');
 }
 
 /// An object which has a live counterpart in the Platform client library SDK.
