@@ -67,6 +67,13 @@ typedef NS_ENUM(UInt8, _Value) {
     ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }); \
 }
 
+/**
+ Where an NSNumber has been decoded and the property to be set is BOOL.
+ */
+#define READ_BOOL(OBJECT, PROPERTY) { \
+    ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }); \
+}
+
 -(ARTClientOptions *)readClientOptions {
     ARTClientOptions *const o = [ARTClientOptions new];
     
@@ -88,7 +95,7 @@ typedef NS_ENUM(UInt8, _Value) {
     READ_VALUE(o, realtimeHost);
     [self readValue]; // TODO READ_VALUE(o, port); // NSInteger
     [self readValue]; // TODO READ_VALUE(o, tlsPort); // NSInteger
-    READ_VALUE(o, autoConnect);
+    READ_BOOL(o, autoConnect);
     READ_VALUE(o, useBinaryProtocol);
     READ_VALUE(o, queueMessages);
     READ_VALUE(o, echoMessages);
