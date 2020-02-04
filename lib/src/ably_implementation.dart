@@ -6,6 +6,7 @@ import '../ably.dart';
 class AblyImplementation implements Ably {
   final methodChannel;
   final List<PlatformObject> _platformObjects = [];
+  int _handle;
 
   factory AblyImplementation() {
     print('Creating Ably');
@@ -13,17 +14,26 @@ class AblyImplementation implements Ably {
     /// Uses our custom message codec so that we can pass Ably types to the
     /// platform implementations.
     final methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin', StandardMethodCodec(Codec()));
-
     return AblyImplementation._constructor(methodChannel);
   }
 
-  AblyImplementation._constructor(this.methodChannel);
+  AblyImplementation._constructor(this.methodChannel) {
+    methodChannel.setMethodCallHandler(_handler);
+  }
+
+  Future<int> _register() async => (null != _handle) ? _handle : _handle = await methodChannel.invokeMethod('register');
+
+  Future<dynamic> _handler(MethodCall call) async {
+    return _handle;
+  }
 
   @override
   Future<Realtime> createRealtime(final ClientOptions options) async {
     // TODO options.authCallback
     // TODO options.logHandler
-    final r = RealtimePlatformObject(await methodChannel.invokeMethod('createRealtimeWithOptions', options));
+    final message = AblyMessage(await _register(), options);
+    print('createRealtime with registered handle ${message.registrationHandle}');
+    final r = RealtimePlatformObject(await methodChannel.invokeMethod('createRealtimeWithOptions', message));
     _platformObjects.add(r);
     return r;
   }
@@ -71,6 +81,13 @@ class RealtimePlatformObject extends PlatformObject implements Realtime {
   Connection get connection => null;
 }
 
+class AblyMessage {
+  final int registrationHandle;
+  final dynamic message;
+
+  AblyMessage(this.registrationHandle, this.message);
+}
+
 class Codec extends StandardMessageCodec {
   // Custom type values must be over 127. At the time of writing the standard message
   // codec encodes them as an unsigned byte which means the maximum type value is 255.
@@ -80,6 +97,7 @@ class Codec extends StandardMessageCodec {
   // by a subtype value - perhaps of a wider type.
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
   static const _valueClientOptions = 128;
+  static const _valueAblyMessage = 129;
 
   @override
   void writeValue (final WriteBuffer buffer, final dynamic value) {
@@ -125,6 +143,11 @@ class Codec extends StandardMessageCodec {
       writeValue(buffer, v.transportParams);
       writeValue(buffer, v.asyncHttpThreadpoolSize);
       writeValue(buffer, v.pushFullWait);
+    } else if (value is AblyMessage) {
+      buffer.putUint8(_valueAblyMessage);
+      final AblyMessage v = value;
+      writeValue(buffer, v.registrationHandle);
+      writeValue(buffer, v.message);
     } else {
       super.writeValue(buffer, value);
     }

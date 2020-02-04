@@ -2,10 +2,11 @@
 
 // TODO work out why importing Ably as a module does not work like this:
 //   @import Ably;
-
 #import "Ably.h"
 
 #import "AblyFlutterReaderWriter.h"
+#import "AblyFlutterMessage.h"
+#import "AblyFlutter.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -19,8 +20,8 @@ typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMe
  static FlutterHandle declarations.
  */
 @interface AblyTestFlutterOldskoolPlugin ()
--(NSNumber *)addRealtime:(ARTRealtime *)realtime;
--(NSUInteger)disposeOfHandles:(NSArray<NSNumber *> *)handles;
+-(void)registerWithCompletionHandler:(FlutterResult)completionHandler;
+-(nullable AblyFlutter *)ablyWithHandle:(NSNumber *)handle;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -33,23 +34,28 @@ static FlutterHandler _getVersion = ^void(AblyTestFlutterOldskoolPlugin *const p
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
+static FlutterHandler _register = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    [plugin registerWithCompletionHandler:result];
+};
+
 static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    ARTClientOptions *const options = call.arguments;
-    ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options];
-    result([plugin addRealtime:realtime]);
+    AblyFlutterMessage *const message = call.arguments;
+    LOG(@"message for handle %@", message.handle);
+    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    result([ably createRealtimeWithOptions:message.message]);
 };
 
 static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    result(@([plugin disposeOfHandles:call.arguments]));
+    // TODO
 };
 
-static NSUInteger _nextId = 1;
-
 @implementation AblyTestFlutterOldskoolPlugin {
+    long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
-    NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
-    long long _nextHandle;
-    NSUInteger _id;
+    NSNumber* _ablyHandle;
+    AblyFlutter* _ably;
+    FlutterMethodChannel* _channel;
 }
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -61,11 +67,11 @@ static NSUInteger _nextId = 1;
         [FlutterMethodChannel methodChannelWithName:@"ably_test_flutter_oldskool_plugin"
                                     binaryMessenger:[registrar messenger]
                                               codec:methodCodec];
-    AblyTestFlutterOldskoolPlugin *const plugin = [[AblyTestFlutterOldskoolPlugin alloc] init];
+    AblyTestFlutterOldskoolPlugin *const plugin = [[AblyTestFlutterOldskoolPlugin alloc] initWithChannel:channel];
     [registrar addMethodCallDelegate:plugin channel:channel];
 }
 
--(instancetype)init {
+-(instancetype)initWithChannel:(FlutterMethodChannel *const)channel {
     self = [super init];
     if (!self) {
         return nil;
@@ -74,16 +80,14 @@ static NSUInteger _nextId = 1;
     _handlers = @{
         @"getPlatformVersion": _getPlatformVersion,
         @"getVersion": _getVersion,
+        @"register": _register,
         @"createRealtimeWithOptions": _createRealtimeWithOptions,
         @"dispose": _dispose,
     };
     
-    _realtimeInstances = [NSMutableDictionary new];
-    _nextHandle = 1;
-    _id = _nextId++;
+    _nextRegistration = 1;
+    _channel = channel;
     
-    LOG(@"id = %@", @(_id));
-
     return self;
 }
 
@@ -99,16 +103,55 @@ static NSUInteger _nextId = 1;
     }
 }
 
--(NSNumber *)addRealtime:(ARTRealtime *const)realtime {
-    NSNumber *const handle = @(_nextHandle++);
-    [_realtimeInstances setObject:realtime forKey:handle];
-    return handle;
+-(void)registerWithCompletionHandler:(const FlutterResult)completionHandler {
+    if (!completionHandler) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"completionHandler cannot be nil."];
+    }
+    
+    if (_ably && !_ablyHandle) {
+        // TODO could this ever happen and, in which case, do we need to cater for it?
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"Registration request received when still not finished processing last request."];
+    }
+    
+    // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
+    // dispatch_assert_queue(dispatch_get_main_queue());
+    
+    NSNumber *const handle = @(_nextRegistration++);
+    LOG(@"NEW AblyFlutter with handle %@", handle);
+
+    if (_ablyHandle) {
+        LOG(@"Disposing of previous Ably instance (# %@).", _ablyHandle);
+    }
+
+    // Setting _ablyHandle to nil when _ably is not nil indicates that we're
+    // in the process of asynchronously disposing of the old instance.
+    _ablyHandle = nil;
+    
+    const dispatch_block_t createNew = ^
+    {
+        LOG(@"Creating new Ably instance (# %@).", handle);
+        self->_ably = [AblyFlutter new];
+        self->_ablyHandle = handle;
+        completionHandler(handle);
+    };
+    
+    if (_ably) {
+        [_ably disposeWithCompletionHandler:^
+        {
+            createNew();
+        }];
+    } else {
+        createNew();
+    }
 }
 
--(NSUInteger)disposeOfHandles:(NSArray<NSNumber *> *const)handles {
-    const NSUInteger _startCount = _realtimeInstances.count;
-    [_realtimeInstances removeObjectsForKeys:handles];
-    return _startCount - _realtimeInstances.count;
+-(AblyFlutter *)ablyWithHandle:(NSNumber *)handle {
+    if (![handle isEqualToNumber:_ablyHandle]) {
+        return nil;
+    }
+    return _ably;
 }
 
 @end

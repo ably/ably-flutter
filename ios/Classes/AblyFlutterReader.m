@@ -1,5 +1,6 @@
 #import "AblyFlutterReader.h"
 #import "Ably.h"
+#import "AblyFlutterMessage.h"
 
 static ARTLogLevel _logLevel(NSNumber *const number) {
     switch (number.unsignedIntegerValue) {
@@ -17,15 +18,25 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
 
 typedef NS_ENUM(UInt8, _Value) {
     _valueClientOptions = 128,
+    _valueAblyMessage = 129,
 };
 
 -(id)readValueOfType:(const UInt8)type {
     switch ((_Value)type) {
         case _valueClientOptions:
             return [self readClientOptions];
+            
+        case _valueAblyMessage:
+            return [self readAblyFlutterMessage];
     }
     
     return [super readValueOfType:type];
+}
+
+-(AblyFlutterMessage *)readAblyFlutterMessage {
+    NSNumber *const handle = [self readValue];
+    const id message = [self readValue];
+    return [[AblyFlutterMessage alloc] initWithHandle:handle message:message];
 }
 
 /**
