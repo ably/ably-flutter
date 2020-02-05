@@ -2,7 +2,6 @@ package io.ably.flutter.ably_test_flutter_oldskool_plugin;
 
 import androidx.annotation.NonNull;
 
-import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodCodec;
@@ -11,26 +10,17 @@ import io.flutter.plugin.common.StandardMethodCodec;
 
 /**
  * AblyTestFlutterOldskoolPlugin
+ *
+ * From what we've observed, it
  */
 public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin {
-    private final Listener _listener = new Listener();
-
-    private static int _nextId = 1;
-    private final int _id = _nextId++;
-    public AblyTestFlutterOldskoolPlugin() {
-        System.out.println("New Ably Plugin " + _id);
-    }
-
     private static MethodCodec createCodec() {
         return new StandardMethodCodec(new AblyMessageCodec());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        System.out.println("Ably Plugin " + _id + " onAttachedToEngine");
-        // TODO replace deprecated getFlutterEngine()
-        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ably_test_flutter_oldskool_plugin", createCodec());
-        flutterPluginBinding.getFlutterEngine().addEngineLifecycleListener(_listener);
+        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "ably_test_flutter_oldskool_plugin", createCodec());
         channel.setMethodCallHandler(AblyMethodCallHandler.getInstance());
     }
 
@@ -50,15 +40,6 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin {
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        System.out.println("Ably Plugin " + _id + " onDetachedFromEngine");
-    }
-
-    private class Listener implements FlutterEngine.EngineLifecycleListener {
-        @Override
-        public void onPreEngineRestart() {
-            // hot restart
-            System.out.println("Ably Plugin " + _id + " onPreEngineRestart");
-            // AblyMethodCallHandler.getInstance().reset();
-        }
+        System.out.println("Ably Plugin onDetachedFromEngine");
     }
 }
