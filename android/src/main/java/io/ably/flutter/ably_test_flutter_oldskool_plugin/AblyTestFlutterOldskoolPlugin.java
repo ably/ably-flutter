@@ -58,7 +58,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin {
         public void onPreEngineRestart() {
             // hot restart
             System.out.println("Ably Plugin " + _id + " onPreEngineRestart");
-            AblyMethodCallHandler.getInstance().reset();
+            // AblyMethodCallHandler.getInstance().reset();
         }
     }
 }

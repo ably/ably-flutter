@@ -11,12 +11,16 @@ import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
     private static final byte _valueClientOptions = (byte)128;
+    private static final byte _valueAblyMessage = (byte)129;
 
     @Override
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
         switch (type) {
             case _valueClientOptions:
                 return readClientOptions(buffer);
+
+            case _valueAblyMessage:
+                return readAblyFlutterMessage(buffer);
         }
         return super.readValueOfType(type, buffer);
     }
@@ -26,6 +30,28 @@ public class AblyMessageCodec extends StandardMessageCodec {
         if (null != object) {
             consumer.accept(object);
         }
+    }
+
+    /**
+     * Dart int types get delivered to Java as Integer, unless '32 bits not enough' in which case
+     * they are delivered as Long.
+     * See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+     */
+    private Long readValueAsLong(final ByteBuffer buffer) {
+        final Object object = readValue(buffer);
+        if (null == object) {
+            return null;
+        }
+        if (object instanceof Integer) {
+            return ((Integer)object).longValue();
+        }
+        return (Long)object; // will java.lang.ClassCastException if object is not a Long
+    }
+
+    private AblyFlutterMessage readAblyFlutterMessage(final ByteBuffer buffer) {
+        final Long handle = readValueAsLong(buffer);
+        final Object message = readValue(buffer);
+        return new AblyFlutterMessage(handle, message);
     }
 
     private Object readClientOptions(final ByteBuffer buffer) {
