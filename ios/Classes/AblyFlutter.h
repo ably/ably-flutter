@@ -1,12 +1,15 @@
 @import Foundation;
 
 @class ARTClientOptions;
+@class AblyFlutterSurfaceRealtime;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
 
 -(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *)options;
+
+-(nullable AblyFlutterSurfaceRealtime *)realtimeWithHandle:(NSNumber *)handle;
 
 /**
  This method must be called from the main dispatch queue. It may only be called

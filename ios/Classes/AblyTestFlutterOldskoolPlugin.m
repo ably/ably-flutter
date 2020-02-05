@@ -7,6 +7,7 @@
 #import "AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutter.h"
+#import "AblyFlutterSurfaceRealtime.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -46,6 +47,16 @@ static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskool
     result([ably createRealtimeWithOptions:message.message]);
 };
 
+static FlutterHandler _connectRealtime = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    LOG(@"message for handle %@", message.handle);
+    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    NSNumber *const handle = message.message;
+    [[ably realtimeWithHandle:handle] connect];
+    result(nil); // success with void response
+};
+
 static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     // TODO
 };
@@ -82,6 +93,7 @@ static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plug
         @"getVersion": _getVersion,
         @"register": _register,
         @"createRealtimeWithOptions": _createRealtimeWithOptions,
+        @"connectRealtime": _connectRealtime,
         @"dispose": _dispose,
     };
     
