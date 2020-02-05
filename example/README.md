@@ -72,7 +72,7 @@ Now, you can run the app with:
 
     flutter run
 
-To see log output from the running app then, from a new console window, use:
+To see log output from the running app then, from a new console window, you may need to use:
 
     flutter logs
 
@@ -85,6 +85,42 @@ observe this in the output from `flutter run`:
 then you can view Android output for just that process in another terminal session with:
 
     adb logcat --pid=13997
+
+As an example, when I was debugging Android, I was seeing the following unhelpful message in the terminal
+where I had launched with `flutter run`:
+
+    I/flutter (15216): createRealtime with registered handle 2
+    I/flutter (15216): Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtimeWithOptions on channel ably_test_flutter_oldskool_plugin)
+    I/flutter (15216): widget build
+
+What was confusing was that I had definitely implemented a handler for this method and was sure that
+it could not be my Java code that was calling `result.notImplemented()`. It was only after I used
+`adb logcat --pid=15216` that I could see the real cause:
+
+    02-05 10:13:42.984 15216 15254 I flutter : createRealtime with registered handle 2
+    02-05 10:13:42.992 15216 15216 E DartMessenger: Uncaught exception in binary message listener
+    02-05 10:13:42.992 15216 15216 E DartMessenger: java.lang.IllegalArgumentException: Message corrupted
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.plugin.common.StandardMessageCodec.readValueOfType(StandardMessageCodec.java:433)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.ably.flutter.ably_test_flutter_oldskool_plugin.AblyMessageCodec.readValueOfType(AblyMessageCodec.java:21)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.plugin.common.StandardMessageCodec.readValue(StandardMessageCodec.java:343)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.plugin.common.StandardMethodCodec.decodeMethodCall(StandardMethodCodec.java:46)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler.onMessage(MethodChannel.java:229)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.embedding.engine.dart.DartMessenger.handleMessageFromDart(DartMessenger.java:93)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at io.flutter.embedding.engine.FlutterJNI.handlePlatformMessage(FlutterJNI.java:642)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at android.os.MessageQueue.nativePollOnce(Native Method)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at android.os.MessageQueue.next(MessageQueue.java:336)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at android.os.Looper.loop(Looper.java:174)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at android.app.ActivityThread.main(ActivityThread.java:7356)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at java.lang.reflect.Method.invoke(Native Method)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+    02-05 10:13:42.992 15216 15216 E DartMessenger: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+    02-05 10:13:43.006 15216 15254 I flutter : Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtimeWithOptions on channel ably_test_flutter_oldskool_plugin)
+    02-05 10:13:43.011 15216 15254 I flutter : widget build
+
+The message codec gets invoked before my method call handler ever gets called. And it seems that the Flutter
+Engine comes back to the Dart side with 'not implemented' when there has, in fact, been a codec error.
+In this case the message is not technically corrupted, it was just that I had not implemented in Java the new
+value type that I had added on the Dart side.
 
 ## Flutter Resources
 
