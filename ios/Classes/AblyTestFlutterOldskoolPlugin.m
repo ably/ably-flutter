@@ -119,7 +119,6 @@ static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plug
     // dispatch_assert_queue(dispatch_get_main_queue());
     
     NSNumber *const handle = @(_nextRegistration++);
-    LOG(@"NEW AblyFlutter with handle %@", handle);
 
     if (_ablyHandle) {
         LOG(@"Disposing of previous Ably instance (# %@).", _ablyHandle);
