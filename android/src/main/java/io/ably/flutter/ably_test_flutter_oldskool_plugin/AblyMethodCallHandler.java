@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
@@ -33,6 +34,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put("getVersion", this::getVersion);
         _map.put("register", this::register);
         _map.put("createRealtimeWithOptions", this::createRealtimeWithOptions);
+        _map.put("connectRealtime", this::connectRealtime);
     }
 
     @Override
@@ -79,6 +81,17 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             } catch (final AblyException e) {
                 result.error(Integer.toString(e.errorInfo.code), e.getMessage(), null);
             }
+        });
+    }
+
+    private void connectRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        // Using Number (the superclass of both Long and Integer) because Flutter could send us
+        // either depending on how big the value is.
+        // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+        this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
+            ablyLibrary.getRealtime(realtimeHandle.longValue()).connect();
+            result.success(null);
         });
     }
 

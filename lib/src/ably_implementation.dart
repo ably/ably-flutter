@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../ably.dart';
 
 class AblyImplementation implements Ably {
-  final methodChannel;
+  final MethodChannel methodChannel;
   final List<PlatformObject> _platformObjects = [];
   int _handle;
 
@@ -31,9 +31,9 @@ class AblyImplementation implements Ably {
   Future<Realtime> createRealtime(final ClientOptions options) async {
     // TODO options.authCallback
     // TODO options.logHandler
-    final message = AblyMessage(await _register(), options);
-    print('createRealtime with registered handle ${message.registrationHandle}');
-    final r = RealtimePlatformObject(await methodChannel.invokeMethod('createRealtimeWithOptions', message));
+    final handle = await _register();
+    final message = AblyMessage(handle, options);
+    final r = RealtimePlatformObject(handle, methodChannel, await methodChannel.invokeMethod('createRealtimeWithOptions', message));
     _platformObjects.add(r);
     return r;
   }
@@ -47,20 +47,28 @@ class AblyImplementation implements Ably {
 
 /// An object which has a live counterpart in the Platform client library SDK.
 abstract class PlatformObject {
-  final int handle;
+  final int _ablyHandle;
+  final MethodChannel _methodChannel;
+  final int _handle;
 
-  PlatformObject(this.handle);
+  PlatformObject(this._ablyHandle, this._methodChannel, this._handle);
 
   @override
-  String toString() => 'Ably Platform Object $handle';
+  String toString() => 'Ably Platform Object $_handle';
 
   static Future<int> dispose() async {
 
   }
+
+  /// Call a method that takes no arguments.
+  Future<dynamic> invoke(final String method) async {
+    final message = AblyMessage(_ablyHandle, _handle);
+    return await _methodChannel.invokeMethod(method, message);
+  }
 }
 
 class RealtimePlatformObject extends PlatformObject implements Realtime {
-  RealtimePlatformObject(int handle) : super(handle);
+  RealtimePlatformObject(int ablyHandle, MethodChannel methodChannel, int handle) : super(ablyHandle, methodChannel, handle);
 
   @override
   // TODO: implement channels
@@ -72,8 +80,8 @@ class RealtimePlatformObject extends PlatformObject implements Realtime {
   }
 
   @override
-  void connect() {
-    // TODO: implement connect
+  Future<void> connect() async {
+    await invoke('connectRealtime');
   }
 
   @override

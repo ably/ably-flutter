@@ -21,7 +21,7 @@ abstract class Realtime {
   final Connection connection;
   final Channels channels;
 
-  void connect();
+  Future<void> connect();
   void close();
 }
 

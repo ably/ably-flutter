@@ -145,6 +145,15 @@ class _MyAppState extends State<MyApp> {
   Widget provisionButton() => button(_provisioningState, provisionAbly, 'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
+  Widget createConnectButton() => FlatButton(
+    onPressed: () async {
+      print('Calling connect...');
+      await _realtime.connect();
+      print('Connect call completed.');
+    },
+    child: Text('Connect'),
+  );
+
   @override
   Widget build(BuildContext context) {
     print('widget build');
@@ -161,7 +170,8 @@ class _MyAppState extends State<MyApp> {
               provisionButton(),
               Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
               createRealtimeButton(),
-              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),              
+              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+              createConnectButton(),
             ]
           ),
         ),
