@@ -3,6 +3,31 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../ably.dart';
 
+/// A method with a corresponding handler in platform code.
+enum Method {
+  getPlatformVersion,
+  getVersion,
+  register,
+  createRealtimeWithOptions,
+  connectRealtime,
+
+  /// Create an event listener. Called against a platform object (e.g. Realtime) with
+  /// the argument being the type of indirect platform object against which the
+  /// listener is to be created (e.g. Connection).
+  createListener,
+
+  eventsOff,
+  eventsOn,
+  eventOnce,
+}
+
+extension on Method {
+  String toName() {
+    // https://stackoverflow.com/a/59308734/392847
+    return this.toString().split('.').last;
+  }
+}
+
 class AblyImplementation implements Ably {
   final MethodChannel methodChannel;
   final List<PlatformObject> _platformObjects = [];
@@ -17,15 +42,9 @@ class AblyImplementation implements Ably {
     return AblyImplementation._constructor(methodChannel);
   }
 
-  AblyImplementation._constructor(this.methodChannel) {
-    methodChannel.setMethodCallHandler(_handler);
-  }
+  AblyImplementation._constructor(this.methodChannel);
 
-  Future<int> _register() async => (null != _handle) ? _handle : _handle = await methodChannel.invokeMethod('register');
-
-  Future<dynamic> _handler(MethodCall call) async {
-    return _handle;
-  }
+  Future<int> _register() async => (null != _handle) ? _handle : _handle = await methodChannel.invokeMethod(Method.register.toName());
 
   @override
   Future<Realtime> createRealtime(final ClientOptions options) async {
@@ -33,19 +52,21 @@ class AblyImplementation implements Ably {
     // TODO options.logHandler
     final handle = await _register();
     final message = AblyMessage(handle, options);
-    final r = RealtimePlatformObject(handle, methodChannel, await methodChannel.invokeMethod('createRealtimeWithOptions', message));
+    final r = RealtimePlatformObject(handle, methodChannel, await methodChannel.invokeMethod(Method.createRealtimeWithOptions.toName(), message));
     _platformObjects.add(r);
     return r;
   }
 
   @override
-  Future<String> get platformVersion async => await methodChannel.invokeMethod('getPlatformVersion');
+  Future<String> get platformVersion async => await methodChannel.invokeMethod(Method.getPlatformVersion.toName());
 
   @override
-  Future<String> get version async => await methodChannel.invokeMethod('getVersion');
+  Future<String> get version async => await methodChannel.invokeMethod(Method.getVersion.toName());
 }
 
-/// An object which has a live counterpart in the Platform client library SDK.
+/// An object which has a live counterpart in the Platform client library SDK,
+/// where that live counterpart is held as a strong reference by the plugin
+/// implementation.
 abstract class PlatformObject {
   final int _ablyHandle;
   final MethodChannel _methodChannel;
@@ -60,15 +81,25 @@ abstract class PlatformObject {
 
   }
 
-  /// Call a method that takes no arguments.
-  Future<dynamic> invoke(final String method) async {
-    final message = AblyMessage(_ablyHandle, _handle);
-    return await _methodChannel.invokeMethod(method, message);
+  /// Call a method.
+  Future<dynamic> invoke(final Method method, [final dynamic argument]) async {
+    final message = (null != argument)
+      ? AblyMessage(_ablyHandle, AblyMessage(_handle, argument))
+      : AblyMessage(_ablyHandle, _handle);
+    return await _methodChannel.invokeMethod(method.toName(), message);
   }
 }
 
 class RealtimePlatformObject extends PlatformObject implements Realtime {
-  RealtimePlatformObject(int ablyHandle, MethodChannel methodChannel, int handle) : super(ablyHandle, methodChannel, handle);
+  // The _connection instance keeps a reference to this platform object.
+  // Ideally _connection would be final, but that would need 'late final' which is coming.
+  // https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
+  ConnectionIndirectPlatformObject _connection;
+
+  RealtimePlatformObject(int ablyHandle, MethodChannel methodChannel, int handle)
+  : super(ablyHandle, methodChannel, handle) {
+    _connection = ConnectionIndirectPlatformObject(this);
+  }
 
   @override
   // TODO: implement channels
@@ -81,12 +112,11 @@ class RealtimePlatformObject extends PlatformObject implements Realtime {
 
   @override
   Future<void> connect() async {
-    await invoke('connectRealtime');
+    await invoke(Method.connectRealtime);
   }
 
   @override
-  // TODO: implement connection
-  Connection get connection => null;
+  Connection get connection => _connection;
 }
 
 class AblyMessage {
@@ -94,6 +124,78 @@ class AblyMessage {
   final dynamic message;
 
   AblyMessage(this.registrationHandle, this.message);
+}
+
+/// An object which has a live counterpart in the Platform client library SDK,
+/// where that live counterpart is only ever accessed by the plugin implementation
+/// by reading a property on another platform object on demand.
+abstract class IndirectPlatformObject {
+  // Ideally the constant value for connection would be grouped or typed more strongly.
+  // Possible approaches, albeit impossible (for now) with dart...
+  // 1) Dart enums are not as feature rich as other languages:
+  //    https://github.com/dart-lang/language/issues/158
+  // 2) The concept of 'type branding' might help but that's also not yet a thing:
+  //    https://github.com/dart-lang/sdk/issues/2626#issuecomment-464638272
+  static final int connection = 1;
+
+  final PlatformObject _provider;
+  final int _type;
+
+  IndirectPlatformObject(this._provider, this._type);
+}
+
+class ConnectionListenerPlatformObject extends PlatformObject implements EventListener<ConnectionEvent> {
+  ConnectionListenerPlatformObject(int ablyHandle, MethodChannel methodChannel, int handle)
+  : super(ablyHandle, methodChannel, handle);
+
+  @override
+  Future<void> off() async {
+    await invoke(Method.eventsOff);
+  }
+
+  @override
+  Stream<ConnectionEvent> on([ConnectionEvent event]) async* {
+    // Based on:
+    // https://medium.com/flutter/flutter-platform-channels-ce7f540a104e#03ed
+    // https://dart.dev/tutorials/language/streams#transform-function
+    // TODO do we need to send a message to register first?
+    final stream = EventChannel('com.ably/$_handle').receiveBroadcastStream();
+    await for (final event in stream) {
+      yield event;
+    }
+  }
+
+  @override
+  Future<ConnectionEvent> once([ConnectionEvent event]) async {
+    final result = await invoke(Method.eventOnce, event);
+    switch (result) {
+      case 'initialized': return ConnectionEvent.initialized;
+      case 'connecting': return ConnectionEvent.connecting;
+      case 'connected': return ConnectionEvent.connected;
+      case 'disconnected': return ConnectionEvent.disconnected;
+      case 'suspended': return ConnectionEvent.suspended;
+      case 'closing': return ConnectionEvent.closing;
+      case 'closed': return ConnectionEvent.closed;
+      case 'failed': return ConnectionEvent.failed;
+      case 'update': return ConnectionEvent.update;
+    }
+    throw('Unhandled result "$result".');
+  }
+}
+
+class ConnectionIndirectPlatformObject extends IndirectPlatformObject implements Connection {
+  ConnectionIndirectPlatformObject(PlatformObject provider) : super(provider, IndirectPlatformObject.connection);
+
+  @override
+  Future<EventListener<ConnectionEvent>> createListener() async {
+    final handle = await _provider.invoke(Method.createListener, _type);
+    return ConnectionListenerPlatformObject(_provider._ablyHandle, _provider._methodChannel, handle);
+  }
+
+  @override
+  Future<void> off() async {
+    await _provider.invoke(Method.eventsOff, _type);
+  }
 }
 
 class Codec extends StandardMessageCodec {

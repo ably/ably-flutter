@@ -3,7 +3,7 @@ description: Demonstrates how to use the ably_test_flutter_oldskool_plugin plugi
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:

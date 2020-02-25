@@ -1,9 +1,13 @@
 package io.ably.flutter.ably_test_flutter_oldskool_plugin;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -35,6 +39,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put("register", this::register);
         _map.put("createRealtimeWithOptions", this::createRealtimeWithOptions);
         _map.put("connectRealtime", this::connectRealtime);
+        _map.put("createListener", this::createListener);
+        _map.put("eventOnce", this::eventOnce);
     }
 
     @Override
@@ -92,6 +98,42 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
             ablyLibrary.getRealtime(realtimeHandle.longValue()).connect();
             result.success(null);
+        });
+    }
+
+    private void createListener(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<AblyFlutterMessage>ablyDo(message, (ablyLibrary, innerMessage) -> {
+            final Object resultValue;
+            final int type = ((Number)innerMessage.message).intValue();
+            switch (type) {
+                case 1: // connection
+                    resultValue = ablyLibrary.createConnectionListener(ablyLibrary.getRealtime(innerMessage.handle));
+                    break;
+                default:
+                    result.error("unhandled type", null, null);
+                    return;
+            }
+            result.success(resultValue);
+        });
+    }
+
+    // https://flutter.dev/docs/development/platform-integration/platform-channels#jumping-to-the-ui-thread-in-android
+    private final Handler androidMainMessageQueue = new Handler(Looper.getMainLooper());
+
+    private void eventOnce(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<Number>ablyDo(message, (ablyLibrary, listenerHandle) -> {
+            // TODO actually, the argument could be an AblyFlutterMessage if the user specifies the
+            // specific event they want to listen for. Either that needs refactor or we need to
+            // handle it here.
+            ablyLibrary.getConnectionListener(listenerHandle.longValue()).listen().thenAcceptAsync(connectionStateChange -> androidMainMessageQueue.post(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO consider serialising numerically - perhaps supporting this type in the codec
+                    result.success(connectionStateChange.current.toString());
+                }
+            }));
         });
     }
 

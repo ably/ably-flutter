@@ -105,10 +105,16 @@ class _MyAppState extends State<MyApp> {
       return;
     }
 
+    final listener = await realtime.connection.createListener();
+
     setState(() {
       _realtime = realtime;
       _realtimeCreationState = OpState.Succeeded;
     });
+
+    print('Awaiting one event...');
+    final event = await listener.once();
+    print('The one event arrived: $event');
   }
 
   // https://github.com/dart-lang/sdk/issues/37498

@@ -8,7 +8,41 @@ abstract class Ably {
   Future<Realtime> createRealtime(final ClientOptions options);
 }
 
-abstract class Connection {
+/// Interface implemented by event listeners, returned by event emitters.
+abstract class EventListener<E> {
+  /// Register for all events (no parameter), or a specific event.
+  Stream<E> on([E event]);
+
+  /// Register for a single occurrence of any event (no parameter), or a specific event.
+  Future<E> once([E event]);
+
+  /// Remove registrations for this listener, irrespective of type.
+  Future<void> off();
+}
+
+/// Interface implemented by Ably classes that can emit events, offering the capability
+/// to create listeners for those events.
+abstract class EventEmitter<E> {
+  /// Remove all listener registrations, irrespective of type.
+  Future<void> off();
+
+  /// Create a listener, with which registrations may be made.
+  Future<EventListener<E>> createListener();
+}
+
+enum ConnectionEvent {
+	initialized,
+	connecting,
+	connected,
+	disconnected,
+	suspended,
+	closing,
+	closed,
+	failed,
+	update,
+}
+
+abstract class Connection implements EventEmitter<ConnectionEvent> {
 }
 
 abstract class Channels {
