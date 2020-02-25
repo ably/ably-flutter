@@ -1,6 +1,6 @@
-# ably_test_flutter_oldskool_plugin_example
+# Ably Flutter Plugin Example
 
-Demonstrates how to use the ably_test_flutter_oldskool_plugin plugin.
+Demonstrates how to use the Ably Flutter plugin.
 
 ## Building for iOS
 

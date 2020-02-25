@@ -1,5 +1,5 @@
-name: ably_test_flutter_oldskool_plugin_example
-description: Demonstrates how to use the ably_test_flutter_oldskool_plugin plugin.
+name: ably_flutter_plugin_example
+description: Demonstrates how to use the Ably Flutter plugin.
 publish_to: 'none'
 
 environment:
@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  ably_test_flutter_oldskool_plugin:
+  ably_flutter_plugin:
     path: ../
 
   # Stricter Linting

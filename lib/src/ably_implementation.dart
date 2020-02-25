@@ -38,7 +38,7 @@ class AblyImplementation implements Ably {
 
     /// Uses our custom message codec so that we can pass Ably types to the
     /// platform implementations.
-    final methodChannel = MethodChannel('ably_test_flutter_oldskool_plugin', StandardMethodCodec(Codec()));
+    final methodChannel = MethodChannel('ably_flutter_plugin', StandardMethodCodec(Codec()));
     return AblyImplementation._constructor(methodChannel);
   }
 

@@ -1,4 +1,4 @@
-package io.ably.flutter.ably_test_flutter_oldskool_plugin_example;
+package io.ably.flutter.plugin_example;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;

@@ -5,7 +5,7 @@ PODS:
     - SAMKeychain (= 1.5.3)
     - SocketRocketAblyFork (= 0.5.2-ably-4)
     - ULID (= 1.1.0)
-  - ably_test_flutter_oldskool_plugin (0.0.2):
+  - ably_flutter_plugin (0.0.2):
     - Ably
     - Flutter
   - Flutter (1.0.0)
@@ -78,7 +78,7 @@ PODS:
   - ULID (1.1.0)
 
 DEPENDENCIES:
-  - ably_test_flutter_oldskool_plugin (from `.symlinks/plugins/ably_test_flutter_oldskool_plugin/ios`)
+  - ably_flutter_plugin (from `.symlinks/plugins/ably_flutter_plugin/ios`)
   - Flutter (from `Flutter`)
 
 SPEC REPOS:
@@ -91,14 +91,14 @@ SPEC REPOS:
     - ULID
 
 EXTERNAL SOURCES:
-  ably_test_flutter_oldskool_plugin:
-    :path: ".symlinks/plugins/ably_test_flutter_oldskool_plugin/ios"
+  ably_flutter_plugin:
+    :path: ".symlinks/plugins/ably_flutter_plugin/ios"
   Flutter:
     :path: Flutter
 
 SPEC CHECKSUMS:
   Ably: b8dd747b116787f0759844dc1a045046ef9a2c7a
-  ably_test_flutter_oldskool_plugin: da63dd9b02a5763389bae00317c72e0d74462ffc
+  ably_flutter_plugin: 72069121d750b83f093f89c212380021297fa135
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   KSCrashAblyFork: c9f408f9abe1e781753b4bfb6c30e01037287c08
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4

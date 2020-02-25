@@ -1,4 +1,4 @@
-package io.ably.flutter.ably_test_flutter_oldskool_plugin;
+package io.ably.flutter.plugin;
 
 import androidx.annotation.NonNull;
 
@@ -8,19 +8,14 @@ import io.flutter.plugin.common.MethodCodec;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-/**
- * AblyTestFlutterOldskoolPlugin
- *
- * From what we've observed, it
- */
-public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin {
+public class AblyFlutterPlugin implements FlutterPlugin {
     private static MethodCodec createCodec() {
         return new StandardMethodCodec(new AblyMessageCodec());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "ably_test_flutter_oldskool_plugin", createCodec());
+        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "ably_flutter_plugin", createCodec());
         channel.setMethodCallHandler(AblyMethodCallHandler.getInstance());
     }
 
@@ -34,7 +29,7 @@ public class AblyTestFlutterOldskoolPlugin implements FlutterPlugin {
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
     public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "ably_test_flutter_oldskool_plugin", createCodec());
+        final MethodChannel channel = new MethodChannel(registrar.messenger(), "ably_flutter_plugin", createCodec());
         channel.setMethodCallHandler(AblyMethodCallHandler.getInstance());
     }
 

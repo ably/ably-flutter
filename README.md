@@ -1,4 +1,4 @@
-# ably_test_flutter_oldskool_plugin
+# Ably Flutter Plugin
 
 A Flutter plugin project investigating wrapping the
 [ably-cocoa](https://github.com/ably/ably-cocoa) (iOS)
@@ -34,7 +34,7 @@ The Android project does use [AndroidX](https://developer.android.com/jetpack/an
 ### iOS
 
 Once changes have been made to the platform code in the [ios folder](ios), especially if those changes involve changing
-[the pod spec](ably_test_flutter_oldskool_plugin.podspec) to add a dependency, then it may be necessary to force that build up stream with:
+[the pod spec](ios/ably_flutter_plugin.podspec) to add a dependency, then it may be necessary to force that build up stream with:
 
 1. Bump `s.version` in the pod spec
 2. From [example/ios](example/ios) run `pod install`

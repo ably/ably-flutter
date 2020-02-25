@@ -1,4 +1,4 @@
-group 'io.ably.flutter.ably_test_flutter_oldskool_plugin'
+group 'io.ably.flutter.plugin'
 version '1.0'
 
 buildscript {

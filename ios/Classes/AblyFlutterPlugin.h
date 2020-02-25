@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AblyTestFlutterOldskoolPlugin : NSObject<FlutterPlugin>
+@interface AblyFlutterPlugin : NSObject<FlutterPlugin>
 
 +(instancetype)new NS_UNAVAILABLE;
 +(instancetype)init NS_UNAVAILABLE;

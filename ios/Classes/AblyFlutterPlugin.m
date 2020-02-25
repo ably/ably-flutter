@@ -1,4 +1,4 @@
-#import "AblyTestFlutterOldskoolPlugin.h"
+#import "AblyFlutterPlugin.h"
 
 // TODO work out why importing Ably as a module does not work like this:
 //   @import Ably;
@@ -13,33 +13,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^FlutterHandler)(AblyTestFlutterOldskoolPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
+typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
 
 /**
  Anonymous category providing forward declarations of the methods implemented
  by this class for use within this implementation file, specifically from the
  static FlutterHandle declarations.
  */
-@interface AblyTestFlutterOldskoolPlugin ()
+@interface AblyFlutterPlugin ()
 -(void)registerWithCompletionHandler:(FlutterResult)completionHandler;
 -(nullable AblyFlutter *)ablyWithHandle:(NSNumber *)handle;
 @end
 
 NS_ASSUME_NONNULL_END
 
-static FlutterHandler _getPlatformVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _getPlatformVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
 };
 
-static FlutterHandler _getVersion = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
-static FlutterHandler _register = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     [plugin registerWithCompletionHandler:result];
 };
 
-static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     LOG(@"message for handle %@", message.handle);
     AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
@@ -47,7 +47,7 @@ static FlutterHandler _createRealtimeWithOptions = ^void(AblyTestFlutterOldskool
     result([ably createRealtimeWithOptions:message.message]);
 };
 
-static FlutterHandler _connectRealtime = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     LOG(@"message for handle %@", message.handle);
     AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
@@ -57,11 +57,11 @@ static FlutterHandler _connectRealtime = ^void(AblyTestFlutterOldskoolPlugin *co
     result(nil); // success with void response
 };
 
-static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     // TODO
 };
 
-@implementation AblyTestFlutterOldskoolPlugin {
+@implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     NSNumber* _ablyHandle;
@@ -75,10 +75,10 @@ static FlutterHandler _dispose = ^void(AblyTestFlutterOldskoolPlugin *const plug
     FlutterStandardMethodCodec *const methodCodec =
         [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
     FlutterMethodChannel *const channel =
-        [FlutterMethodChannel methodChannelWithName:@"ably_test_flutter_oldskool_plugin"
+        [FlutterMethodChannel methodChannelWithName:@"ably_flutter_plugin"
                                     binaryMessenger:[registrar messenger]
                                               codec:methodCodec];
-    AblyTestFlutterOldskoolPlugin *const plugin = [[AblyTestFlutterOldskoolPlugin alloc] initWithChannel:channel];
+    AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel];
     [registrar addMethodCallDelegate:plugin channel:channel];
 }
 

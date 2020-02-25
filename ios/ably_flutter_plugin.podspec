@@ -1,17 +1,17 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint ably_test_flutter_oldskool_plugin.podspec' to validate before publishing.
+# Run `pod lib lint ably_flutter_plugin.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'ably_test_flutter_oldskool_plugin'
+  s.name             = 'ably_flutter_plugin'
   s.version          = '0.0.2'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'Ably Cocoa platform support for our Flutter plugin.'
   s.description      = <<-DESC
-A new flutter plugin project.
+Ably Cocoa platform support for our Flutter plugin.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Ably' => 'support@ably.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'

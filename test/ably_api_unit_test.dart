@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:ably_test_flutter_oldskool_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably.dart';
 
 void main() {
   /// We are leaving it up to the platform client library SDK to supply defaults.

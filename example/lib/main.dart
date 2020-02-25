@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:ably_test_flutter_oldskool_plugin/ably.dart' as ably;
+import 'package:ably_flutter_plugin/ably.dart' as ably;
 import 'provisioning.dart' as provisioning;
 
 void main() => runApp(MyApp());
