@@ -189,7 +189,8 @@ abstract class TokenParams {
   int ttl;
 }
 
-abstract class TokenDetails {
+class TokenDetails {
+  TokenDetails(this.token);
   String capability;
   String clientId;
   int expires;
@@ -352,7 +353,7 @@ abstract class AuthOptions {
     if(key.contains(':')){
       this.key = key;
     }else{
-      this.token = key;
+      this.tokenDetails = TokenDetails(key);
     }
   }
 
@@ -370,7 +371,6 @@ abstract class AuthOptions {
   HTTPMethods authMethod;	//optional
   String key;	//optional
 
-  String token;	//optional  TODO remove and strictly use token details?
   TokenDetails tokenDetails;	//optional
 
   Map<String, String> authHeaders;	//optional
@@ -479,62 +479,30 @@ abstract class EventEmitter<E> {
 }
 
 // Classes
-class PushChannelSubscriptions {
-  Future<PushChannelSubscription> save(PushChannelSubscription subscription) async {
-    //TODO
-    return null;
-  }
-  Future<PaginatedResult<PushChannelSubscription>> list(PushChannelsParams params) async {
-    //TODO
-    return null;
-  }
-  Future<PaginatedResult<String>> listChannels(PushChannelsParams params) async {
-    //TODO
-    return null;
-  }
-  Future<void> remove(PushChannelsParams params) async {
-    //TODO
-    return null;
-  }
-  Future<void> removeWhere(PushChannelSubscriptionParams params) async {
-    //TODO
-    return null;
-  }
+abstract class PushChannelSubscriptions {
+  Future<PushChannelSubscription> save(PushChannelSubscription subscription);
+  Future<PaginatedResult<PushChannelSubscription>> list(PushChannelsParams params);
+  Future<PaginatedResult<String>> listChannels(PushChannelsParams params);
+  Future<void> remove(PushChannelsParams params);
+  Future<void> removeWhere(PushChannelSubscriptionParams params);
 }
 
-class PushDeviceRegistrations {
-  Future<DeviceDetails> save(DeviceDetails deviceDetails) async {
-    //TODO
-    return null;
-  }
+abstract class PushDeviceRegistrations {
+  Future<DeviceDetails> save(DeviceDetails deviceDetails);
   Future<DeviceDetails> get({
     DeviceDetails deviceDetails, String deviceId
-  }) async {
-    //TODO
-    return null;
-  }
-  Future<PaginatedResult<DeviceDetails>> list(DeviceRegistrationParams params) async {
-    //TODO
-    return null;
-  }
+  });
+  Future<PaginatedResult<DeviceDetails>> list(DeviceRegistrationParams params);
   Future<void> remove({
     DeviceDetails deviceDetails, String deviceId
-  }) async {
-    //TODO
-    return null;
-  }
-  Future<void> removeWhere(DeviceRegistrationParams params) async {
-    //TODO
-    return null;
-  }
+  });
+  Future<void> removeWhere(DeviceRegistrationParams params);
 }
 
-class PushAdmin {
+abstract class PushAdmin {
   PushDeviceRegistrations deviceRegistrations;
   PushChannelSubscriptions channelSubscriptions;
-  Future<void> publish(Map<String, dynamic> recipient, Map payload) async {
-    //TODO
-  }
+  Future<void> publish(Map<String, dynamic> recipient, Map payload);
 }
 
 class Push {
@@ -553,51 +521,22 @@ class Stats {
   StatsRequestCount tokenRequests;
 }
 
-class PaginatedResult<T> {
-
-  List<T> items(){
-    //TODO
-    return null;
-  }
-
-  Future<PaginatedResult<T>> first() async {
-    //TODO
-    return null;
-  }
-
-  Future<PaginatedResult<T>> next() async {
-    //TODO
-    return null;
-  }
-
-  Future<PaginatedResult<T>> current() async {
-    //TODO
-    return null;
-  }
-
-  bool hasNext(){
-    //TODO
-    return false;
-  }
-
-  bool isLast(){
-    //TODO
-    return false;
-  }
-
+abstract class PaginatedResult<T> {
+  List<T> items();
+  Future<PaginatedResult<T>> first();
+  Future<PaginatedResult<T>> next();
+  Future<PaginatedResult<T>> current();
+  bool hasNext();
+  bool isLast();
 }
 
-class HttpPaginatedResponse extends PaginatedResult<String> {
-  // TODO resolve below signature match to this definiton
-  // class HttpPaginatedResponse extends PaginatedResult<dynamic> {
-  //    items: String[];
-  //    .....
+abstract class HttpPaginatedResponse extends PaginatedResult<String> {
   List<String> items();
   int statusCode;
   bool success;
   int errorCode;
   String errorMessage;
-  dynamic headers;  //TODO change to Map<String, dynamic> ??
+  Map<String, String> headers;
 }
 
 
@@ -607,12 +546,8 @@ typedef void FromEncodedArray<T>(dynamic jsonArray, ChannelOptions channelOption
 
 
 class Message {
-  Message.fromEncoded(Map jsonObject, ChannelOptions channelOptions){
-    //TODO
-  }
-  Message.fromEncodedArray(List jsonArray, ChannelOptions channelOptions){
-    //TODO
-  }
+  Message.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+  Message.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
   String clientId;
   String connectionId;
   dynamic data;
@@ -624,21 +559,13 @@ class Message {
 }
 
 abstract class MessageStatic {  //TODO why is this class required?
-  MessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions){
-    //TODO
-  }
-  MessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions){
-    //TODO
-  }
+  MessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+  MessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
 }
 
 class PresenceMessage {
-  PresenceMessage.fromEncoded(Map jsonObject, ChannelOptions channelOptions){
-    //TODO
-  }
-  PresenceMessage.fromEncodedArray(List jsonArray, ChannelOptions channelOptions){
-    //TODO
-  }
+  PresenceMessage.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+  PresenceMessage.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
   PresenceAction action;
   String clientId;
   String connectionId;
@@ -649,12 +576,8 @@ class PresenceMessage {
 }
 
 abstract class PresenceMessageStatic {  //TODO why is this class required?
-  PresenceMessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions){
-    //TODO
-  }
-  PresenceMessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions){
-    //TODO
-  }
+  PresenceMessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+  PresenceMessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
 }
 
 abstract class Crypto {
@@ -706,81 +629,43 @@ abstract class RestBase {
   static Crypto crypto;
   static MessageStatic message;
   static PresenceMessageStatic presenceMessage;
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]);
-}
-
-class Rest extends RestBase { //TODO check if this should be abstract!
-  Rest.fromOptions(ClientOptions options): super.fromOptions(options);
-  Rest.fromKey(String key): super.fromKey(key);
-  static Rest rest; //todo factory?
   Auth auth;
-  Channels<Channel> channels;
+  Push push;
+  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]);
   Future<HttpPaginatedResponse> request({
     @required String method,
     @required String path,
-    Map params, //TODO decide if this needs to be a map
-    dynamic body, //?: dynamic[] | dynamic,
-    Map headers //TODO decide if this needs to be a map?: dynamic
-  }) async {
-    //TODO
-    return null;
-  }
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]){
-    //TODO
-    return null;
-  }
-  Future<int> time() async {
-    //TODO
-    return null;
-  }
+    Map<String, dynamic> params,
+    dynamic body,
+    Map<String, String> headers
+  });
+  Future<int> time();
+}
+
+abstract class Rest extends RestBase {
+  Rest.fromOptions(ClientOptions options): super.fromOptions(options);
+  Rest.fromKey(String key): super.fromKey(key);
+  Auth auth;
+  Channels<Channel> channels;
+  Future<int> time();
   Push push;
 }
 
 abstract class RealtimeBase extends RestBase {
   RealtimeBase.fromOptions(ClientOptions options): super.fromOptions(options);
   RealtimeBase.fromKey(String key): super.fromKey(key);
-  static Realtime realtime; //todo factory?
   String clientId;
   void close();
   void connect();
 }
 
-class Realtime extends RealtimeBase {
+abstract class Realtime extends RealtimeBase {
   Realtime.fromOptions(ClientOptions options): super.fromOptions(options);
   Realtime.fromKey(String key): super.fromKey(key);
-  Auth auth;
-  Channels<RealtimeChannel> channels;
   Connection connection;
-  Future<HttpPaginatedResponse> request({
-    @required String method,
-    @required String path,
-    Map params, //TODO decide if this needs to be a map
-    dynamic body, //?: dynamic[] | dynamic,
-    Map headers //TODO decide if this needs to be a map?: dynamic
-  }) async {
-    //TODO
-    return null;
-  }
-
-  Future<int> time() async {
-    //TODO
-    return null;
-  }
-
-  Push push;
-
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]){
-    //TODO
-    return null;
-  }
-
-  close(){
-    //TODO
-  }
-
-  connect(){
-    //TODO
-  }
+  Channels<RealtimeChannel> channels;
+  close();
+  connect();
 
 }
 
@@ -788,28 +673,19 @@ class AuthBase {
   String clientId;
 }
 
-class Auth extends AuthBase {
+abstract class Auth extends AuthBase {
   Future<TokenDetails> authorize({
     TokenParams tokenParams,
     AuthOptions authOptions
-  }){
-    //TODO
-    return null;
-  }
+  });
   Future<TokenRequest> createTokenRequest({
     TokenParams tokenParams,
     AuthOptions authOptions
-  }){
-    //TODO
-    return null;
-  }
+  });
   Future<TokenDetails> requestToken({
     TokenParams tokenParams,
     AuthOptions authOptions
-  }){
-    //TODO
-    return null;
-  }
+  });
 }
 
 
@@ -827,67 +703,35 @@ abstract class RealtimePresenceBase {
   });
 }
 
-class RealtimePresence extends RealtimePresenceBase {
-  Future<List<PresenceMessage>> get([RealtimePresenceParams params]) async {
-    //TODO
-    return null;
-  }
-  Future<PaginatedResult<PresenceMessage>> history([RealtimeHistoryParams params]) async {
-    //TODO
-    return null;
-  }
+abstract class RealtimePresence extends RealtimePresenceBase {
+  Future<List<PresenceMessage>> get([RealtimePresenceParams params]);
+  Future<PaginatedResult<PresenceMessage>> history([RealtimeHistoryParams params]);
   Future<void> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,
     EventListener<PresenceMessage> listener //TODO check if this is the type that is expected
-  }){
-    //TODO
-    return null;
-  }
+  });
   void unsubscribe({
     PresenceAction action,
     List<PresenceAction> actions,
     EventListener<PresenceMessage> listener //TODO check if this is the type that is expected
-  }){
-    //TODO
-  }
-  Future<void> enter([dynamic data]){
-    //TODO
-    return null;
-  }
-  Future<void> update([dynamic data]){
-    //TODO
-    return null;
-  }
-  Future<void> leave([dynamic data]){
-    //TODO
-    return null;
-  }
-  Future<void> enterClient({String clientId, dynamic data }) async {
-    //TODO
-  }
-  Future<void> updateClient({String clientId, dynamic data}) async {
-    //TODO
-  }
-  Future<void> leaveClient({String clientId, dynamic data}) async {
-    //TODO
-  }
+  });
+  Future<void> enter([dynamic data]);
+  Future<void> update([dynamic data]);
+  Future<void> leave([dynamic data]);
+  Future<void> enterClient({String clientId, dynamic data });
+  Future<void> updateClient({String clientId, dynamic data});
+  Future<void> leaveClient({String clientId, dynamic data});
 }
 
-class ChannelBase {
+abstract class ChannelBase {
   String name;
 }
 
-class Channel extends ChannelBase {
+abstract class Channel extends ChannelBase {
   Presence presence;
-  Future<PaginatedResult<Message>> history([RestHistoryParams params]){
-    // TODO
-    return null;
-  }
-  Future<void> publish({String name, dynamic messageData}){
-    // TODO
-    return null;
-  }
+  Future<PaginatedResult<Message>> history([RestHistoryParams params]);
+  Future<void> publish({String name, dynamic messageData});
 }
 
 abstract class RealtimeChannelBase extends EventEmitter<ChannelEvent> {
@@ -902,7 +746,7 @@ abstract class RealtimeChannelBase extends EventEmitter<ChannelEvent> {
   });
 }
 
-abstract class RealtimeChannel extends RealtimeChannelBase {  //TODO abstract?
+abstract class RealtimeChannel extends RealtimeChannelBase {
   RealtimePresence presence;
   Future<void> attach();
   Future<void> detach();
