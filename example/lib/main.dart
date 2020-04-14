@@ -90,10 +90,9 @@ class _MyAppState extends State<MyApp> {
   void createAblyRealtime() async {
     setState(() { _realtimeCreationState = OpState.InProgress; });
 
-    final clientOptions = ably.ClientOptions();
-    clientOptions.key = _appKey.toString();
+    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.realtimeHost = 'sandbox-realtime.ably.io';
-    clientOptions.logLevel = 2; // verbose
+    clientOptions.log = ably.LogInfo(level: ably.LogLevel.verbose); // verbose
     clientOptions.autoConnect = false;
 
     ably.Realtime realtime;
