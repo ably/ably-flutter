@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import '../ably.dart';
 import 'impl/platform_object.dart';
 import 'impl/realtime.dart';
-import 'impl/rest.dart';
+import 'impl/rest/rest.dart';
 
 extension on PlatformMethod {
   String toName() {
@@ -59,14 +59,16 @@ class AblyImplementation implements Ably {
     // TODO options.logHandler
     final handle = await _register();
     final message = AblyMessage(handle, options);
-    final r = RestPlatformObject(
+    final r = RestPlatformObject.fromOptions(
         handle,
         methodChannel,
         await methodChannel.invokeMethod(
             PlatformMethod.createRestWithOptions.toName(),
             message
-        )
+        ),
+        options
     );
+    // await r.channels.get("str").publish(name: "greeting", message: "hello");
     _platformObjects.add(r);
     return r;
   }
@@ -87,6 +89,7 @@ class Codec extends StandardMessageCodec {
   // than 128 [255 - 127]) then we can either roll our own codec from scratch or,
   // perhaps easier, reserve custom type value 255 to indicate that it will be followed
   // by a subtype value - perhaps of a wider type.
+  //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
   static const _valueClientOptions = 128;
   static const _valueAblyMessage = 129;
@@ -109,7 +112,7 @@ class Codec extends StandardMessageCodec {
 
       // ClientOptions
       writeValue(buffer, v.clientId);
-      writeValue(buffer, v.log.level);
+      writeValue(buffer, v.log.level.index);
       writeValue(buffer, v.tls);
       writeValue(buffer, v.restHost);
       writeValue(buffer, v.realtimeHost);

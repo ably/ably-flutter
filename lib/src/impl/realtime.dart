@@ -19,10 +19,6 @@ class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
   }
 
   @override
-  // TODO: implement channels
-  Channels<RealtimeChannel> get channels => null;
-
-  @override
   void close() {
     // TODO: implement close
   }
@@ -48,11 +44,6 @@ class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
   Push push;
 
   @override
-  void set channels(Channels<RealtimeChannel> _channels) {
-    // TODO: implement channels
-  }
-
-  @override
   void set connection(Connection _connection) {
     // TODO: implement connection
   }
@@ -74,4 +65,7 @@ class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
     // TODO: implement time
     return null;
   }
+
+  @override
+  RealtimeChannels channels;
 }
