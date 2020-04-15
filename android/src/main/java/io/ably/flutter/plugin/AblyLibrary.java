@@ -1,17 +1,21 @@
 package io.ably.flutter.plugin;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.util.LongSparseArray;
 
 import io.ably.lib.realtime.AblyRealtime;
+import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ClientOptions;
 
 class AblyLibrary {
     private boolean _disposed = false;
     private long _nextHandle = 1;
-    private final Map<Long, AblyRealtime> _realtimeInstances = new HashMap<>();
-    private final Map<Long, AblyRealtimeConnectionListener> _connectionListeners = new HashMap<>();
+
+    //    using LongSparseArray as suggested by Studio
+    //    and as per this answer https://stackoverflow.com/a/31413003
+    private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
+    private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
+    private final LongSparseArray<AblyRealtimeConnectionListener> _connectionListeners = new LongSparseArray<>();
 
     private void assertNotDisposed() {
         if (_disposed) {
@@ -23,9 +27,16 @@ class AblyLibrary {
         assertNotDisposed();
 
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
-        final long handle = _nextHandle++;
-        _realtimeInstances.put(handle, realtime);
-        return handle;
+        _realtimeInstances.put(_nextHandle, realtime);
+        return _nextHandle++;
+    }
+
+    long createRest(final ClientOptions clientOptions) throws AblyException {
+        assertNotDisposed();
+
+        final AblyRest rest = new AblyRest(clientOptions);
+        _restInstances.put(_nextHandle, rest);
+        return _nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
@@ -34,14 +45,19 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
+    AblyRest getRest(final long handle){
+        assertNotDisposed();
+
+        return _restInstances.get(handle);
+    }
+
     long createConnectionListener(final AblyRealtime realtime) {
         assertNotDisposed();
 
         final AblyRealtimeConnectionListener listener = new AblyRealtimeConnectionListener();
         realtime.connection.on(listener);
-        final long handle = _nextHandle++;
-        _connectionListeners.put(handle, listener);
-        return handle;
+        _connectionListeners.put(_nextHandle, listener);
+        return _nextHandle++;
     }
 
     AblyRealtimeConnectionListener getConnectionListener(final long handle) {
@@ -55,13 +71,24 @@ class AblyLibrary {
 
         _disposed = true;
 
-        for (final AblyRealtime r : _realtimeInstances.values()) {
+        for(int i=0; i<_realtimeInstances.size(); i++){
+            long key = _realtimeInstances.keyAt(i);
+            AblyRealtime r = _realtimeInstances.get(key);
             try {
                 r.close();
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
+
+//        for (final AblyRealtime r : _realtimeInstances) {
+//            try {
+//                r.close();
+//            } catch (Throwable t) {
+//                t.printStackTrace();
+//            }
+//        }
         _realtimeInstances.clear();
+        _restInstances.clear();
     }
 }
