@@ -25,8 +25,10 @@ class _MyAppState extends State<MyApp> {
   OpState _provisioningState = OpState.NotStarted;
   provisioning.AppKey _appKey;
   OpState _realtimeCreationState = OpState.NotStarted;
+  OpState _restCreationState = OpState.NotStarted;
   ably.Ably _ablyPlugin;
   ably.Realtime _realtime;
+  ably.Rest _rest;
 
   @override
   void initState() {
@@ -85,6 +87,34 @@ class _MyAppState extends State<MyApp> {
       _appKey = appKey;
       _provisioningState = OpState.Succeeded;
     });
+  }
+
+  void createAblyRest() async {
+    setState(() { _restCreationState = OpState.InProgress; });
+
+    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
+    clientOptions.restHost = 'rest.ably.io';
+    clientOptions.log = ably.LogInfo(level: ably.LogLevel.verbose); // verbose
+
+    ably.Rest rest;
+    try{
+      rest = await _ablyPlugin.createRest(clientOptions);
+    } catch (error) {
+      print('Error creating Ably Rest: ${error}');
+      setState(() { _restCreationState = OpState.Failed; });
+      rethrow;
+    }
+
+    setState(() {
+      _rest = rest;
+      _restCreationState = OpState.Succeeded;
+    });
+
+    String name = "Hello";
+    dynamic data = "Flutter";
+    print('publishing message... name "$name", message "$data"');
+    await rest.channels.get('test').publish(name, data);
+    print('Message published');
   }
 
   void createAblyRealtime() async {
@@ -148,6 +178,7 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget provisionButton() => button(_provisioningState, provisionAbly, 'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
+  Widget createRestButton() => button(_restCreationState, createAblyRest, 'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
   Widget createConnectButton() => FlatButton(
@@ -159,6 +190,18 @@ class _MyAppState extends State<MyApp> {
     child: Text('Connect'),
   );
 
+  int msgCounter = 0;
+  Widget sendRestMessage() => FlatButton(
+    onPressed: () async {
+      print('Sendimg rest message...');
+      await _rest.channels.get('test').publish('Hello', 'Flutter ${++msgCounter}');
+      print('Rest message sent.');
+      setState(() {});
+    },
+    color: Colors.yellow,
+    child: Text('Publish'),
+  );
+
   @override
   Widget build(BuildContext context) {
     print('widget build');
@@ -168,16 +211,25 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Ably Plugin Example App'),
         ),
         body: Center(
-          child: Column(
-            children: [
-              Text('Running on: $_platformVersion\n'),
-              Text('Ably version: $_ablyVersion\n'),
-              provisionButton(),
-              Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
-              createRealtimeButton(),
-              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-              createConnectButton(),
-            ]
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 36.0),
+            child: Column(
+                children: [
+                  Text('Running on: $_platformVersion\n'),
+                  Text('Ably version: $_ablyVersion\n'),
+                  provisionButton(),
+                  Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
+                  Divider(),
+                  createRealtimeButton(),
+                  Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+                  createConnectButton(),
+                  Divider(),
+                  createRestButton(),
+                  Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
+                  sendRestMessage(),
+                  Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
+                ]
+            ),
           ),
         ),
       ),

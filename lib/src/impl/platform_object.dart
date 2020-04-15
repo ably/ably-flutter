@@ -10,6 +10,7 @@ enum PlatformMethod {
 
   /// Rest
   createRestWithOptions,
+  publish,
 
   /// Realtime
   createRealtimeWithOptions,
@@ -58,6 +59,7 @@ abstract class PlatformObject {
 
   /// Call a method.
   Future<dynamic> invoke(final PlatformMethod method, [final dynamic argument]) async {
+    print("argument $argument");
     final message = (null != argument)
         ? AblyMessage(_ablyHandle, AblyMessage(_handle, argument))
         : AblyMessage(_ablyHandle, _handle);
