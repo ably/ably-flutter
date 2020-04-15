@@ -7,13 +7,13 @@ import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
+import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ClientOptions;
+import io.ably.lib.types.ErrorInfo;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -21,6 +21,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private static AblyMethodCallHandler _instance;
 
     static synchronized AblyMethodCallHandler getInstance() {
+        // TODO decide why singleton instance is required!
         if (null == _instance) {
             _instance = new AblyMethodCallHandler();
         }
@@ -37,14 +38,66 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put("getPlatformVersion", this::getPlatformVersion);
         _map.put("getVersion", this::getVersion);
         _map.put("register", this::register);
+
+        // Rest
+        _map.put("createRestWithOptions", this::createRestWithOptions);
+        _map.put("publish", this::publishRestMessage);
+
+        //Realtime
         _map.put("createRealtimeWithOptions", this::createRealtimeWithOptions);
         _map.put("connectRealtime", this::connectRealtime);
         _map.put("createListener", this::createListener);
         _map.put("eventOnce", this::eventOnce);
     }
 
+    // MethodChannel.Result wrapper that responds on the platform thread.
+    private static class MethodResultWrapper implements MethodChannel.Result {
+        private MethodChannel.Result methodResult;
+        private Handler handler;
+
+        MethodResultWrapper(MethodChannel.Result result) {
+            methodResult = result;
+            handler = new Handler(Looper.getMainLooper());
+        }
+
+        @Override
+        public void success(final Object result) {
+            handler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            methodResult.success(result);
+                        }
+                    });
+        }
+
+        @Override
+        public void error(
+                final String errorCode, final String errorMessage, final Object errorDetails) {
+            handler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            methodResult.error(errorCode, errorMessage, errorDetails);
+                        }
+                    });
+        }
+
+        @Override
+        public void notImplemented() {
+            handler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            methodResult.notImplemented();
+                        }
+                    });
+        }
+    }
+
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
+        MethodChannel.Result result = new MethodResultWrapper(rawResult);
         System.out.println("Ably Plugin handle: " + call.method);
         final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
         if (null == handler) {
@@ -77,6 +130,40 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _ablyHandle = handle;
 
         result.success(handle);
+    }
+
+    private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<ClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
+            try {
+                result.success(ablyLibrary.createRest(clientOptions));
+            } catch (final AblyException e) {
+                result.error(Integer.toString(e.errorInfo.code), e.getMessage(), null);
+            }
+        });
+    }
+
+    private void publishRestMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            Map<String, Object> map = messageData.message;
+            String channelName = (String)map.get("channel");
+            String name = (String)map.get("name");
+            Object data = map.get("message");
+            System.out.println("pushing... NAME " + name + ", DATA " + ((data==null)?"-":data.toString()));
+            ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(name, data, new CompletionListener() {
+                @Override
+                public void onSuccess() {
+                    result.success(null);
+                }
+
+                @Override
+                public void onError(ErrorInfo reason) {
+                    System.err.println("Unable to publish message to Ably server; err = " + reason.message);
+                    result.error(Integer.toString(reason.code), "Unable to publish message to Ably server; err = " + reason.message, reason);
+                }
+            });
+        });
     }
 
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

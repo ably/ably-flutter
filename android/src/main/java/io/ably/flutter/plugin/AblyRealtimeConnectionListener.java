@@ -21,7 +21,7 @@ public class AblyRealtimeConnectionListener implements ConnectionStateListener {
         _once.clear();
     }
 
-    public synchronized CompletableFuture<ConnectionStateChange> listen() {
+    synchronized CompletableFuture<ConnectionStateChange> listen() {
         final CompletableFuture<ConnectionStateChange> future = new CompletableFuture<>();
         _once.add(future);
         return future;
