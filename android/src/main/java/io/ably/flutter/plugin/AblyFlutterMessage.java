@@ -1,10 +1,10 @@
 package io.ably.flutter.plugin;
 
-class AblyFlutterMessage {
+class AblyFlutterMessage<T> {
     final Long handle;
-    final Object message;
+    final T message;
 
-    AblyFlutterMessage(final Long handle, final Object message) {
+    AblyFlutterMessage(final Long handle, final T message) {
         if (null == handle) {
             throw new NullPointerException("handle cannot be null.");
         }

@@ -51,7 +51,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private AblyFlutterMessage readAblyFlutterMessage(final ByteBuffer buffer) {
         final Long handle = readValueAsLong(buffer);
         final Object message = readValue(buffer);
-        return new AblyFlutterMessage(handle, message);
+        return new AblyFlutterMessage<>(handle, message);
     }
 
     private Object readClientOptions(final ByteBuffer buffer) {
