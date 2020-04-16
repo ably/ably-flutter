@@ -6,6 +6,9 @@ import '../ably.dart';
 
 
 class Codec extends StandardMessageCodec {
+
+  const Codec();
+
   // Custom type values must be over 127. At the time of writing the standard message
   // codec encodes them as an unsigned byte which means the maximum type value is 255.
   // If we get to the point of having more than that number of custom types (i.e. more
@@ -79,4 +82,68 @@ class Codec extends StandardMessageCodec {
       super.writeValue(buffer, value);
     }
   }
+
+  dynamic readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case _valueClientOptions:
+        final ClientOptions v = ClientOptions();
+
+        // AuthOptions (super class of ClientOptions)
+        v.authUrl = readValue(buffer) as String;
+        v.authMethod = readValue(buffer) as HTTPMethods;
+        v.key = readValue(buffer) as String;
+        v.tokenDetails = readValue(buffer) as TokenDetails;
+        v.authHeaders = readValue(buffer) as Map<String, String>;
+        v.authParams = readValue(buffer) as Map<String, String>;
+        v.queryTime = readValue(buffer) as bool;
+        v.useTokenAuth = readValue(buffer) as bool;
+
+        // ClientOptions
+        v.clientId = readValue(buffer) as String;
+        v.log.level = LogLevel.values[readValue(buffer) as int];
+        v.tls = readValue(buffer) as bool;
+        v.restHost = readValue(buffer) as String;
+        v.realtimeHost = readValue(buffer) as String;
+        v.port = readValue(buffer) as int;
+        v.tlsPort = readValue(buffer) as int;
+        v.autoConnect = readValue(buffer) as bool;
+        v.useBinaryProtocol = readValue(buffer) as bool;
+        v.queueMessages = readValue(buffer) as bool;
+        v.echoMessages = readValue(buffer) as bool;
+        v.recover = readValue(buffer) as String;
+        v.proxy = readValue(buffer) as ProxyOptions;
+
+        v.environment = readValue(buffer) as String;
+        v.idempotentRestPublishing = readValue(buffer) as bool;
+        v.httpOpenTimeout = readValue(buffer) as int;
+        v.httpRequestTimeout = readValue(buffer) as int;
+        v.httpMaxRetryCount = readValue(buffer) as int;
+        v.realtimeRequestTimeout = readValue(buffer) as int;
+        v.fallbackHosts = readValue(buffer) as List<String>;
+        v.fallbackHostsUseDefault = readValue(buffer) as bool;
+        v.fallbackRetryTimeout = readValue(buffer) as int;
+        v.defaultTokenParams = readValue(buffer) as TokenParams;
+        v.channelRetryTimeout = readValue(buffer) as int;
+        v.transportParams = readValue(buffer) as Map<String, String>;
+        v.asyncHttpThreadpoolSize = readValue(buffer) as int;
+        v.pushFullWait = readValue(buffer) as bool;
+        return v;
+
+      case _valueTokenDetails:
+        TokenDetails t = TokenDetails(readValue(buffer));
+        t.expires = readValue(buffer) as int;
+        t.issued = readValue(buffer) as int;
+        t.capability = readValue(buffer) as String;
+        t.clientId = readValue(buffer) as String;
+        return t;
+      case _valueAblyMessage:
+        return AblyMessage(
+          readValue(buffer) as int,
+          readValue(buffer),
+        );
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+
 }
