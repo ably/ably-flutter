@@ -23,7 +23,7 @@ extension on PlatformMethod {
 class AblyImplementation implements Ably {
 
   /// instance of method channel to interact with android/ios code
-  final MethodChannel _methodChannel;
+  final MethodChannel methodChannel;
 
   /// Storing all platform objects, for easy references/cleanup
   final List<PlatformObject> _platformObjects = [];
@@ -40,12 +40,12 @@ class AblyImplementation implements Ably {
     return AblyImplementation._constructor(methodChannel);
   }
 
-  AblyImplementation._constructor(this._methodChannel);
+  AblyImplementation._constructor(this.methodChannel);
 
   /// Registering instance with ably.
   /// On registration, older ably instance id destroyed!
   /// TODO check if this is desired behavior in case if 2 different ably instances are created in app
-  Future<int> _register() async => (null != _handle) ? _handle : _handle = await _methodChannel.invokeMethod(PlatformMethod.register.toName());
+  Future<int> _register() async => (null != _handle) ? _handle : _handle = await methodChannel.invokeMethod(PlatformMethod.register.toName());
 
   @override
   Future<Realtime> createRealtime(final ClientOptions options) async {
@@ -55,8 +55,8 @@ class AblyImplementation implements Ably {
     final message = AblyMessage(handle, options);
     final r = RealtimePlatformObject(
         handle,
-        _methodChannel,
-        await _methodChannel.invokeMethod(
+        methodChannel,
+        await methodChannel.invokeMethod(
             PlatformMethod.createRealtimeWithOptions.toName(),
             message
         )
@@ -76,8 +76,8 @@ class AblyImplementation implements Ably {
     final message = AblyMessage(handle, options);
     final r = RestPlatformObject.fromOptions(
         handle,
-        _methodChannel,
-        await _methodChannel.invokeMethod(
+        methodChannel,
+        await methodChannel.invokeMethod(
             PlatformMethod.createRestWithOptions.toName(),
             message
         ),
@@ -89,9 +89,9 @@ class AblyImplementation implements Ably {
 
   @override
   Future<String> get platformVersion async =>
-      await _methodChannel.invokeMethod(PlatformMethod.getPlatformVersion.toName());
+      await methodChannel.invokeMethod(PlatformMethod.getPlatformVersion.toName());
 
   @override
   Future<String> get version async =>
-      await _methodChannel.invokeMethod(PlatformMethod.getVersion.toName());
+      await methodChannel.invokeMethod(PlatformMethod.getVersion.toName());
 }
