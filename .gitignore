@@ -18,3 +18,8 @@ build/
 # And VS Code will create this folder if you tell it to
 .vscode
 
+**/.idea/dictionaries/
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/usage.statistics.xml
+**/.idea/caches/
