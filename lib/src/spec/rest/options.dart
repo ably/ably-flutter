@@ -50,9 +50,13 @@ abstract class AuthOptions {
 
 class ClientOptions extends AuthOptions {
 
-  ClientOptions();
+  ClientOptions(){
+    log = LogInfo();
+  }
 
-  ClientOptions.fromKey(String key): super.fromKey(key);
+  ClientOptions.fromKey(String key): super.fromKey(key){
+    log = LogInfo();
+  }
 
   ///Optional clientId that can be used to specify the identity for this client.
   /// In most cases it is preferable to instead specific a clientId in the token
