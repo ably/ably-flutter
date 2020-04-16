@@ -26,6 +26,7 @@ enum PlatformMethod {
   eventOnce,
 }
 
+///Extension to extract string name from PlatformMethod
 extension on PlatformMethod {
 
   /// ref: https://stackoverflow.com/a/59308734/392847

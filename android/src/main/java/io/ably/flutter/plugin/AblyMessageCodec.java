@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 import io.ably.lib.rest.Auth;
+import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.ProxyOptions;
@@ -11,13 +12,17 @@ import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
     private static final byte _valueClientOptions = (byte)128;
-    private static final byte _valueAblyMessage = (byte)129;
+    private static final byte _valueTokenDetails = (byte)129;
+    private static final byte _valueAblyMessage = (byte)255;
 
     @Override
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
         switch (type) {
             case _valueClientOptions:
                 return readClientOptions(buffer);
+
+            case _valueTokenDetails:
+                return readTokenDetails(buffer);
 
             case _valueAblyMessage:
                 return readAblyFlutterMessage(buffer);
@@ -95,6 +100,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValue(buffer, v -> o.transportParams = (Param[])v);
         readValue(buffer, v -> o.asyncHttpThreadpoolSize = (Integer)v);
         readValue(buffer, v -> o.pushFullWait = (Boolean)v);
+
+        return o;
+    }
+
+    private Object readTokenDetails(final ByteBuffer buffer) {
+        final TokenDetails o = new TokenDetails();
+
+        readValue(buffer, v -> o.token = (String)v);
+        readValue(buffer, v -> o.expires = (int)v);
+        readValue(buffer, v -> o.issued = (int)v);
+        readValue(buffer, v -> o.capability = (String)v);
+        readValue(buffer, v -> o.clientId = (String)v);
 
         return o;
     }
