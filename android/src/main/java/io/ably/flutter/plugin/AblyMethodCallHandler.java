@@ -51,6 +51,12 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     // MethodChannel.Result wrapper that responds on the platform thread.
+    //
+    // Plugins crash with "Methods marked with @UiThread must be executed on the main thread."
+    // This happens while making network calls in thread other than main thread
+    //
+    // https://github.com/flutter/flutter/issues/34993#issue-459900986
+    // https://github.com/aloisdeniel/flutter_geocoder/commit/bc34cfe473bfd1934fe098bb7053248b75200241
     private static class MethodResultWrapper implements MethodChannel.Result {
         private MethodChannel.Result methodResult;
         private Handler handler;
