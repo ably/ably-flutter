@@ -8,7 +8,7 @@ void main() {
   test('Default ClientOptions', () { 
     final clientOptions = ClientOptions();
     expect(clientOptions.clientId, isNull);
-    expect(clientOptions.log.level, isNull);
+    expect(clientOptions.log.level, LogLevel.info);
     expect(clientOptions.log.handler, isNull);
     expect(clientOptions.tls, isNull);
     expect(clientOptions.restHost, isNull);
