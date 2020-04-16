@@ -165,8 +165,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void onError(ErrorInfo reason) {
-                    System.err.println("Unable to publish message to Ably server; err = " + reason.message);
-                    result.error(Integer.toString(reason.code), "Unable to publish message to Ably server; err = " + reason.message, reason);
+                    result.error(Integer.toString(reason.code), "Unable to publish message to Ably server; err = " + reason.message, null);
                 }
             });
         });

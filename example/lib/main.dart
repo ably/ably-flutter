@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
     setState(() { _restCreationState = OpState.InProgress; });
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
-    clientOptions.restHost = 'rest.ably.io';
+    clientOptions.restHost = 'sandbox-rest.ably.io';
     clientOptions.log = ably.LogInfo(level: ably.LogLevel.verbose); // verbose
 
     ably.Rest rest;
