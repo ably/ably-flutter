@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/src/spec/message.dart';
-import 'package:ably_flutter_plugin/src/spec/rest/ably_base.dart';
+import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
-
-import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 
 
 class RestPlatformChannel extends PlatformObject implements spec.Channel{
+
   @override
-  AblyBase ably;
+  spec.AblyBase ably;
 
   @override
   String name;
@@ -25,19 +23,22 @@ class RestPlatformChannel extends PlatformObject implements spec.Channel{
       : super(ablyHandle, methodChannel, restHandle);
 
   @override
-  Future<spec.PaginatedResult<Message>> history([spec.RestHistoryParams params]) {
+  Future<spec.PaginatedResult<spec.Message>> history([spec.RestHistoryParams params]) {
     // TODO: implement history
     return null;
   }
 
   @override
   Future<void> publish([String name, dynamic data]) async {
-    await this.invoke(PlatformMethod.publish, {
-      "channel": this.name,
-      "name": name,
-      "message": data
-    });
-    return null;
+    try {
+      await this.invoke(PlatformMethod.publish, {
+        "channel": this.name,
+        "name": name,
+        "message": data
+      });
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message);
+    }
   }
 
 }
@@ -49,7 +50,7 @@ class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel>{
   MethodChannel methodChannel;
   int restHandle;
 
-  RestPlatformChannels(this.ablyHandle, this.methodChannel, this.restHandle, AblyBase ably): super(ably);
+  RestPlatformChannels(this.ablyHandle, this.methodChannel, this.restHandle, spec.AblyBase ably): super(ably);
 
   @override
   RestPlatformChannel createChannel(name, options){
