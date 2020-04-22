@@ -23,3 +23,5 @@ build/
 **/.idea/tasks.xml
 **/.idea/usage.statistics.xml
 **/.idea/caches/
+**/.idea/libraries/
+**/.idea/*
