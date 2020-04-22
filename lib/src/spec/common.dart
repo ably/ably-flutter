@@ -156,16 +156,6 @@ class LogInfo{
   }
 }
 
-/// Java: io.ably.lib.types.ProxyOptions
-class ProxyOptions {
-  String host;
-  int port;
-  String username;
-  String password;
-  List<String> nonProxyHosts;
-  HttpAuthType prefAuthType;
-}
-
 abstract class ChannelStateChange {
   ChannelState current;
   ChannelState previous;

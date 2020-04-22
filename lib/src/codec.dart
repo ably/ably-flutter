@@ -51,7 +51,6 @@ class Codec extends StandardMessageCodec {
       writeValue(buffer, v.queueMessages);
       writeValue(buffer, v.echoMessages);
       writeValue(buffer, v.recover);
-      writeValue(buffer, v.proxy);
       writeValue(buffer, v.environment);
       writeValue(buffer, v.idempotentRestPublishing);
       writeValue(buffer, v.httpOpenTimeout);
@@ -64,8 +63,6 @@ class Codec extends StandardMessageCodec {
       writeValue(buffer, v.defaultTokenParams);
       writeValue(buffer, v.channelRetryTimeout);
       writeValue(buffer, v.transportParams);
-      writeValue(buffer, v.asyncHttpThreadpoolSize);
-      writeValue(buffer, v.pushFullWait);
     } else if (value is TokenDetails) {
       buffer.putUint8(_valueTokenDetails);
       final TokenDetails v = value;
@@ -113,8 +110,6 @@ class Codec extends StandardMessageCodec {
         v.queueMessages = readValue(buffer) as bool;
         v.echoMessages = readValue(buffer) as bool;
         v.recover = readValue(buffer) as String;
-        v.proxy = readValue(buffer) as ProxyOptions;
-
         v.environment = readValue(buffer) as String;
         v.idempotentRestPublishing = readValue(buffer) as bool;
         v.httpOpenTimeout = readValue(buffer) as int;
@@ -127,8 +122,6 @@ class Codec extends StandardMessageCodec {
         v.defaultTokenParams = readValue(buffer) as TokenParams;
         v.channelRetryTimeout = readValue(buffer) as int;
         v.transportParams = readValue(buffer) as Map<String, String>;
-        v.asyncHttpThreadpoolSize = readValue(buffer) as int;
-        v.pushFullWait = readValue(buffer) as bool;
         return v;
 
       case _valueTokenDetails:
