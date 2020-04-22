@@ -39,7 +39,8 @@ class Codec extends StandardMessageCodec {
 
       // ClientOptions
       writeValue(buffer, v.clientId);
-      writeValue(buffer, v.log.level.index);
+      writeValue(buffer, v.logLevel.index);
+      //TODO handle logHandler
       writeValue(buffer, v.tls);
       writeValue(buffer, v.restHost);
       writeValue(buffer, v.realtimeHost);
@@ -100,7 +101,8 @@ class Codec extends StandardMessageCodec {
 
         // ClientOptions
         v.clientId = readValue(buffer) as String;
-        v.log.level = LogLevel.values[readValue(buffer) as int];
+        v.logLevel = LogLevel.values[readValue(buffer) as int];
+        //TODO handle logHandler
         v.tls = readValue(buffer) as bool;
         v.restHost = readValue(buffer) as String;
         v.realtimeHost = readValue(buffer) as String;

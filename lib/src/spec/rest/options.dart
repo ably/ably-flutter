@@ -51,11 +51,11 @@ abstract class AuthOptions {
 class ClientOptions extends AuthOptions {
 
   ClientOptions(){
-    log = LogInfo();
+    logLevel = LogLevel.info;
   }
 
   ClientOptions.fromKey(String key): super.fromKey(key){
-    log = LogInfo();
+    logLevel = LogLevel.info;
   }
 
   ///Optional clientId that can be used to specify the identity for this client.
@@ -64,7 +64,8 @@ class ClientOptions extends AuthOptions {
   String clientId;	//optional
 
   ///Logger configuration
-  LogInfo log;	//optional
+  LogHandler logHandler;  //optional
+  LogLevel logLevel;  //optional
 
   String restHost;	//optional
   String realtimeHost;	//optional
