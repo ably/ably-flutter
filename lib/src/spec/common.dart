@@ -114,7 +114,7 @@ abstract class RealtimeHistoryParams {
 class AblyException implements Exception {
 
   final String code;
-  final dynamic message;
+  final String message;
 
   AblyException([this.code, this.message]);
 
