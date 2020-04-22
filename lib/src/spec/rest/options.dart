@@ -47,7 +47,7 @@ abstract class AuthOptions {
   bool useTokenAuth;	//optional
 }
 
-
+typedef void LogHandler({String msg, AblyException exception});
 class ClientOptions extends AuthOptions {
 
   ClientOptions(){
