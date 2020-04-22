@@ -130,32 +130,6 @@ class AblyException implements Exception {
 
 }
 
-typedef void LogHandler({String msg, AblyException exception});
-class LogInfo{
-
-  LogInfo({
-    this.level = LogLevel.info,
-    LogHandler handler
-  });
-
-  ///A int controlling the verbosity of the output.
-  ///Valid values are: 0 (no logs), 1 (errors only),
-  ///2 (errors plus connection and channel state changes), 3 (high-level debug output), and 4 (full debug output).
-  LogLevel level;  //level?: int;
-
-  /// A function to handle each line of log output.
-  /// If handler is not specified, console.log is used.
-  LogHandler handler;
-
-  void log({String msg, AblyException exception}){
-    if(handler==null){
-      print(exception??msg);
-    }else{
-      handler(msg: msg, exception: exception);
-    }
-  }
-}
-
 abstract class ChannelStateChange {
   ChannelState current;
   ChannelState previous;
