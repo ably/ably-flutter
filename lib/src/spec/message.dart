@@ -11,7 +11,7 @@ class Message {
   dynamic extras;
   String id;
   String name;
-  int timestamp;
+  DateTime timestamp;
 }
 
 abstract class MessageStatic {  //TODO why is this class required?

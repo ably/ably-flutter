@@ -61,7 +61,7 @@ abstract class TokenParams {
   String  capability;
   String clientId;
   String nonce;
-  int timestamp;
+  DateTime timestamp;
   int ttl;
 }
 
@@ -80,7 +80,7 @@ abstract class TokenRequest {
   String keyName;
   String mac;
   String nonce;
-  int timestamp;
+  DateTime timestamp;
   int ttl;
 }
 
