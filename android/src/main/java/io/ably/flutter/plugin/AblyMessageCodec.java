@@ -7,7 +7,6 @@ import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.Param;
-import io.ably.lib.types.ProxyOptions;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
@@ -85,7 +84,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValue(buffer, v -> o.queueMessages = (Boolean)v);
         readValue(buffer, v -> o.echoMessages = (Boolean)v);
         readValue(buffer, v -> o.recover = (String)v);
-        readValue(buffer, v -> o.proxy = (ProxyOptions)v);
         readValue(buffer, v -> o.environment = (String)v);
         readValue(buffer, v -> o.idempotentRestPublishing = (Boolean)v);
         readValue(buffer, v -> o.httpOpenTimeout = (Integer)v);
@@ -98,9 +96,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValue(buffer, v -> o.defaultTokenParams = (Auth.TokenParams) v);
         readValue(buffer, v -> o.channelRetryTimeout = (Integer)v);
         readValue(buffer, v -> o.transportParams = (Param[])v);
-        readValue(buffer, v -> o.asyncHttpThreadpoolSize = (Integer)v);
-        readValue(buffer, v -> o.pushFullWait = (Boolean)v);
-
         return o;
     }
 

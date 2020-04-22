@@ -20,7 +20,6 @@ void main() {
     expect(clientOptions.queueMessages, isNull);
     expect(clientOptions.echoMessages, isNull);
     expect(clientOptions.recover, isNull);
-    expect(clientOptions.proxy, isNull);
     expect(clientOptions.environment, isNull);
     expect(clientOptions.idempotentRestPublishing, isNull);
     expect(clientOptions.httpOpenTimeout, isNull);
@@ -33,7 +32,5 @@ void main() {
     expect(clientOptions.defaultTokenParams, isNull);
     expect(clientOptions.channelRetryTimeout, isNull);
     expect(clientOptions.transportParams, isNull);
-    expect(clientOptions.asyncHttpThreadpoolSize, isNull);
-    expect(clientOptions.pushFullWait, isNull);
   });
 }

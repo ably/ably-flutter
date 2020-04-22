@@ -107,12 +107,8 @@ class ClientOptions extends AuthOptions {
 
   int disconnectedRetryTimeout;	//optional
   int suspendedRetryTimeout;	//optional
-  bool closeOnUnload;	//optional
   bool idempotentRestPublishing;	//optional
   Map<String, String> transportParams;	//optional
-
-
-  ProxyOptions proxy;
 
   int httpOpenTimeout;
   int httpRequestTimeout;
@@ -121,6 +117,4 @@ class ClientOptions extends AuthOptions {
   int realtimeRequestTimeout;
   int fallbackRetryTimeout;
   int channelRetryTimeout;
-  int asyncHttpThreadpoolSize;
-  bool pushFullWait;
 }
