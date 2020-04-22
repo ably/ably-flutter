@@ -12,8 +12,11 @@ abstract class CipherParams {
 
 abstract class ErrorInfo {
   int code;
+  String herf;
   String message;
+  ErrorInfo cause;
   int statusCode;
+  String requestId;
 }
 
 abstract class StatsMessageCount {
