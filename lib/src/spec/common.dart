@@ -55,8 +55,7 @@ abstract class StatsMessageTraffic {
 }
 
 abstract class TokenParams {
-  String  capability;   //See below -v-
-  Map<String, List<capabilityOp>> capabilityMap;	//optional
+  String  capability;
   String clientId;
   String nonce;
   int timestamp;
