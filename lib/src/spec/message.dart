@@ -19,7 +19,7 @@ abstract class MessageStatic {  //TODO why is this class required?
   MessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
 }
 
-class PresenceMessage {
+abstract class PresenceMessage {
   PresenceMessage.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
   PresenceMessage.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
   PresenceAction action;
@@ -27,8 +27,10 @@ class PresenceMessage {
   String connectionId;
   dynamic data;
   String encoding;
+  Map<String, dynamic> extras;
   String id;
-  int timestamp;
+  DateTime timestamp;
+  String memberKey();
 }
 
 abstract class PresenceMessageStatic {  //TODO why is this class required?
