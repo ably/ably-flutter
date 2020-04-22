@@ -3,7 +3,7 @@ import 'rest/channels.dart';
 
 class Message {
   Message.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
-  Message.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
+  Message.fromEncodedArray(List<Map> jsonArray, ChannelOptions channelOptions);
   String clientId;
   String connectionId;
   dynamic data;
