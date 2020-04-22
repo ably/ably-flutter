@@ -80,14 +80,6 @@ class AblyLibrary {
                 t.printStackTrace();
             }
         }
-
-//        for (final AblyRealtime r : _realtimeInstances) {
-//            try {
-//                r.close();
-//            } catch (Throwable t) {
-//                t.printStackTrace();
-//            }
-//        }
         _realtimeInstances.clear();
         _restInstances.clear();
     }
