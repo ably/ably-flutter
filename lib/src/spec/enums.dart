@@ -69,25 +69,6 @@ enum HttpAuthType {
   X_ABLY_TOKEN,
 }
 
-enum Transport{
-  web_socket,
-  xhr_streaming,
-  xhr_polling,
-  jsonp,
-  comet
-}
-
-enum capabilityOp{
-  publish,
-  subscribe,
-  presence,
-  history,
-  stats,
-  channel_metadata,
-  push_subscribe,
-  push_admin
-}
-
 enum LogLevel{
   none,   //no logs
   errors, //errors only
