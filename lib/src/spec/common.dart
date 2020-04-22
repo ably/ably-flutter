@@ -1,4 +1,6 @@
 import 'enums.dart';
+import 'rest/ably_base.dart';
+import 'rest/channels.dart';
 
 //==============================================================================
 //==========================    ABSTRACT CLASSES    ============================
@@ -270,4 +272,36 @@ class Stats {
   StatsMessageTraffic outbound;
   StatsMessageTypes persisted;
   StatsRequestCount tokenRequests;
+}
+
+class Channels<ChannelType> {
+
+  Channels(this.ably);
+
+  AblyBase ably;
+  Map<String, ChannelType> _channels = {};
+
+  ChannelType createChannel(name, options){
+    return Channel(ably, name, options) as ChannelType;
+  }
+
+  ChannelType get(String name, [ChannelOptions options]) {
+    if(_channels[name]==null){
+      _channels[name] = createChannel(name, options);
+    }
+    return _channels[name];
+  }
+
+  bool exists(String name){
+    return _channels[name] != null;
+  }
+
+  Iterable<ChannelType> iterate(){
+    return _channels.values;
+  }
+
+  void release(String str) {
+    // TODO: implement release
+  }
+
 }
