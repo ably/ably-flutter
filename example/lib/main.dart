@@ -93,8 +93,11 @@ class _MyAppState extends State<MyApp> {
     setState(() { _restCreationState = OpState.InProgress; });
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
-    clientOptions.restHost = 'sandbox-rest.ably.io';
-    clientOptions.log = ably.LogInfo(level: ably.LogLevel.verbose); // verbose
+    clientOptions.environment = 'sandbox';
+    clientOptions.logLevel = ably.LogLevel.verbose;
+    clientOptions.logHandler = ({String msg, ably.AblyException exception}){
+      print("Custom logger :: $msg $exception");
+    };
 
     ably.Rest rest;
     try{
@@ -121,8 +124,11 @@ class _MyAppState extends State<MyApp> {
     setState(() { _realtimeCreationState = OpState.InProgress; });
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
-    clientOptions.realtimeHost = 'sandbox-realtime.ably.io';
-    clientOptions.log = ably.LogInfo(level: ably.LogLevel.verbose); // verbose
+    clientOptions.environment = 'sandbox';
+    clientOptions.logLevel = ably.LogLevel.verbose;
+    clientOptions.logHandler = ({String msg, ably.AblyException exception}){
+      print("Custom logger :: $msg $exception");
+    };
     clientOptions.autoConnect = false;
 
     ably.Realtime realtime;
