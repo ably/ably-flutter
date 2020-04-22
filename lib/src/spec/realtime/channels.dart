@@ -83,26 +83,8 @@ class RealtimeChannel extends RealtimeChannelBase {
 }
 
 
-class RealtimeChannels<T extends RealtimeChannel> {
+class RealtimeChannels<T extends RealtimeChannel> extends Channels<T> {
 
-  RealtimeChannels(this.ably);
-
-  AblyBase ably;
-  Map<String, RealtimeChannel> _channels;
-
-  T createChannel(name, options){
-    return RealtimeChannel(ably, name, options) as T;
-  }
-
-  T get(String name, [ChannelOptions options]) {
-    if(_channels[name]==null){
-      _channels[name] = createChannel(name, options);
-    }
-    return _channels[name];
-  }
-
-  void release(String str) {
-    // TODO: implement release
-  }
+  RealtimeChannels(AblyBase ably): super(ably);
 
 }

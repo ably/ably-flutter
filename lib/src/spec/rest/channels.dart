@@ -41,26 +41,8 @@ class Channel extends ChannelBase {
 }
 
 
-class RestChannels<T extends Channel> {
+class RestChannels<T extends Channel> extends Channels<T> {
 
-  RestChannels(this.ably);
-
-  AblyBase ably;
-  Map<String, Channel> _channels = {};
-
-  T createChannel(name, options){
-    return Channel(ably, name, options) as T;
-  }
-
-  T get(String name, [ChannelOptions options]) {
-    if(_channels[name]==null){
-      _channels[name] = createChannel(name, options);
-    }
-    return _channels[name];
-  }
-
-  void release(String str) {
-    // TODO: implement release
-  }
+  RestChannels(ably) : super(ably);
 
 }
