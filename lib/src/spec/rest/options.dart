@@ -109,7 +109,6 @@ class ClientOptions extends AuthOptions {
   bool closeOnUnload;	//optional
   bool idempotentRestPublishing;	//optional
   Map<String, String> transportParams;	//optional
-  List<Transport> transports;	//optional
 
 
   ProxyOptions proxy;
