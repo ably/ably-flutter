@@ -7,7 +7,7 @@ class Message {
   String clientId;
   String connectionId;
   dynamic data;
-  dynamic encoding;
+  String encoding;
   dynamic extras;
   String id;
   String name;
