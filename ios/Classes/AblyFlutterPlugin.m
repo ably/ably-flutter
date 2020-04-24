@@ -39,6 +39,44 @@ static FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, Flutter
     [plugin registerWithCompletionHandler:result];
 };
 
+static FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    LOG(@"message for handle %@", message.handle);
+    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    result([ably createRestWithOptions:message.message]);
+};
+
+static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    LOG(@"message for handle %@", message.handle);
+    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *>* _dataMap = messageData.message;
+    NSString *channelName = (NSString*)[_dataMap objectForKey:@"channel"];
+    NSString *eventName = (NSString*)[_dataMap objectForKey:@"name"];
+    NSObject *eventData = (NSString*)[_dataMap objectForKey:@"message"];
+    ARTRest *client = [ably getRest:messageData.handle];
+    ARTRestChannel *channel = [client.channels get:channelName];
+
+    //Handling nil cases, to be generalized based on other encounters
+    NSString *nilStr = nil;
+    if([eventName isKindOfClass:[NSNull class]]){ eventName = nilStr; }
+    if([eventData isKindOfClass:[NSNull class]]){ eventData = nilStr; }
+    [channel publish:eventName data:eventData callback:^(ARTErrorInfo *_Nullable error){
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:nil
+                    ]);
+        }else{
+            result(nil);
+        }
+    }];
+};
+
 static FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     LOG(@"message for handle %@", message.handle);
@@ -92,6 +130,8 @@ static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterM
         @"getPlatformVersion": _getPlatformVersion,
         @"getVersion": _getVersion,
         @"register": _register,
+        @"createRestWithOptions": _createRestWithOptions,
+        @"publish": _publishRestMessage,
         @"createRealtimeWithOptions": _createRealtimeWithOptions,
         @"connectRealtime": _connectRealtime,
         @"dispose": _dispose,

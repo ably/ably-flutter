@@ -9,6 +9,7 @@
 @implementation AblyFlutter {
     BOOL _disposed;
     NSMutableDictionary<NSNumber *, AblyFlutterSurfaceRealtime *>* _realtimeInstances;
+    NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
     long long _nextHandle;
 }
 
@@ -19,6 +20,7 @@
     }
     
     _realtimeInstances = [NSMutableDictionary new];
+    _restInstances = [NSMutableDictionary new];
     _nextHandle = 1;
 
     return self;
@@ -29,6 +31,23 @@
         [NSException raise:NSInternalInconsistencyException \
                     format:@"Instance disposed."]; \
     }
+
+-(NSNumber *)createRestWithOptions:(ARTClientOptions *const)options {
+    if (!options) {
+        [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
+    }
+    
+    ASSERT_NOT_DISPOSED
+    
+    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options];
+    NSNumber *const handle = @(_nextHandle++);
+    [_restInstances setObject:instance forKey:handle];
+    return handle;
+}
+
+-(ARTRest *)getRest:(NSNumber *const)handle {
+    return [_restInstances objectForKey:handle];
+}
 
 -(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *const)options {
     if (!options) {
