@@ -1,11 +1,16 @@
 @import Foundation;
 
+@class ARTRest;
 @class ARTClientOptions;
 @class AblyFlutterSurfaceRealtime;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
+
+-(NSNumber *)createRestWithOptions:(ARTClientOptions *)options;
+
+-(nullable ARTRest *)getRest:(NSNumber *)handle;
 
 -(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *)options;
 
