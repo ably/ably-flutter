@@ -18,13 +18,17 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
 
 typedef NS_ENUM(UInt8, _Value) {
     _valueClientOptions = 128,
-    _valueAblyMessage = 129,
+    _valueTokenDetails = 129,
+    _valueAblyMessage = 255,
 };
 
 -(id)readValueOfType:(const UInt8)type {
     switch ((_Value)type) {
         case _valueClientOptions:
             return [self readClientOptions];
+            
+        case _valueTokenDetails:
+            return [self readTokenDeatils];
             
         case _valueAblyMessage:
             return [self readAblyFlutterMessage];
@@ -81,7 +85,8 @@ typedef NS_ENUM(UInt8, _Value) {
     READ_VALUE(o, authUrl);
     READ_VALUE(o, authMethod);
     READ_VALUE(o, key);
-    READ_VALUE(o, tokenDetails);
+//    READ_VALUE(o, tokenDetails);
+    ON_VALUE(^(const id value) { o.tokenDetails = value; });
     READ_VALUE(o, authHeaders);
     READ_VALUE(o, authParams);
     READ_VALUE(o, queryTime);
@@ -90,6 +95,7 @@ typedef NS_ENUM(UInt8, _Value) {
     // ClientOptions
     READ_VALUE(o, clientId);
     ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); });
+    //TODO log handler
     READ_VALUE(o, tls);
     READ_VALUE(o, restHost);
     READ_VALUE(o, realtimeHost);
@@ -100,7 +106,6 @@ typedef NS_ENUM(UInt8, _Value) {
     READ_VALUE(o, queueMessages);
     READ_VALUE(o, echoMessages);
     READ_VALUE(o, recover);
-    [self readValue]; // TODO READ_VALUE(o, proxy); // property not found
     READ_VALUE(o, environment);
     READ_VALUE(o, idempotentRestPublishing);
     [self readValue]; // TODO READ_VALUE(o, httpOpenTimeout); // NSTimeInterval
@@ -113,9 +118,28 @@ typedef NS_ENUM(UInt8, _Value) {
     READ_VALUE(o, defaultTokenParams);
     [self readValue]; // TODO READ_VALUE(o, channelRetryTimeout); // NSTimeInterval
     [self readValue]; // TODO READ_VALUE(o, transportParams); // property not found
-    [self readValue]; // TODO READ_VALUE(o, asyncHttpThreadpoolSize); // property not found
-    READ_VALUE(o, pushFullWait);
+    //    [self readValue]; // TODO READ_VALUE(o, asyncHttpThreadpoolSize); // property not found
+    //    READ_VALUE(o, pushFullWait);
     
+    return o;
+}
+
+
+-(ARTTokenDetails *)readTokenDeatils {
+    __block NSString *token = nil;
+    __block NSDate *expires = nil;
+    __block NSDate *issued = nil;
+    __block NSString *capability = nil;
+    __block NSString *clientId = nil;
+    
+    ON_VALUE(^(const id value) { token = value; })
+    ON_VALUE(^(const id value) { expires = value; })
+    ON_VALUE(^(const id value) { issued = value; })
+    ON_VALUE(^(const id value) { capability = value; })
+    ON_VALUE(^(const id value) { clientId = value; })
+    
+    ARTTokenDetails *const o = [ARTTokenDetails new];
+    [o initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
     return o;
 }
 
