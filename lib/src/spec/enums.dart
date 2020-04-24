@@ -69,14 +69,6 @@ enum HttpAuthType {
   X_ABLY_TOKEN,
 }
 
-enum LogLevel{
-  none,   //no logs
-  errors, //errors only
-  info,   //errors and channel state changes
-  debug,  //high-level debug output
-  verbose //full debug output
-}
-
 enum DevicePushState{
   active,
   failing,

@@ -51,11 +51,11 @@ typedef void LogHandler({String msg, AblyException exception});
 class ClientOptions extends AuthOptions {
 
   ClientOptions(){
-    logLevel = LogLevel.info;
+    logLevel = 4;
   }
 
   ClientOptions.fromKey(String key): super.fromKey(key){
-    logLevel = LogLevel.info;
+    logLevel = 4;
   }
 
   ///Optional clientId that can be used to specify the identity for this client.
@@ -65,7 +65,7 @@ class ClientOptions extends AuthOptions {
 
   ///Logger configuration
   LogHandler logHandler;  //optional
-  LogLevel logLevel;  //optional
+  int logLevel;  //optional
 
   String restHost;	//optional
   String realtimeHost;	//optional

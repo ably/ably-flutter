@@ -92,9 +92,10 @@ class _MyAppState extends State<MyApp> {
   void createAblyRest() async {
     setState(() { _restCreationState = OpState.InProgress; });
 
+    final clientOptions = ably.ClientOptions.fromKey("dBjBRg.FqW4GA:68x_ibgJnyCebDUE");
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.verbose;
+    clientOptions.logLevel = ably.LogLevel.VERBOSE;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
@@ -125,7 +126,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.verbose;
+    clientOptions.logLevel = ably.LogLevel.VERBOSE;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
