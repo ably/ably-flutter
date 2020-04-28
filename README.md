@@ -11,7 +11,7 @@ client library SDKs for [Ably](https://ably.io/), the realtime data delivery pla
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
 
-## :construction: Work In Progress! :construction:
+## :construction: Experimental! :construction:
 
 We're busy working on this repository at the moment and we're doing that work in the public domain so that you can watch or
 [contribute](#contributing).
