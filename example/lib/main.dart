@@ -92,7 +92,6 @@ class _MyAppState extends State<MyApp> {
   void createAblyRest() async {
     setState(() { _restCreationState = OpState.InProgress; });
 
-    final clientOptions = ably.ClientOptions.fromKey("dBjBRg.FqW4GA:68x_ibgJnyCebDUE");
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
     clientOptions.logLevel = ably.LogLevel.VERBOSE;
@@ -116,8 +115,10 @@ class _MyAppState extends State<MyApp> {
 
     String name = "Hello";
     dynamic data = "Flutter";
-    print('publishing message... name "$name", message "$data"');
+    print('publishing messages... name "$name", message "$data"');
     await rest.channels.get('test').publish(name, data);
+    await rest.channels.get('test').publish(name);
+    await rest.channels.get('test').publish();
     print('Message published');
   }
 
