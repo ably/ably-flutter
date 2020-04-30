@@ -16,7 +16,7 @@
     [super writeValue:value];
 }
 
-- (void) writeErrorInfo:(ARTErrorInfo *) e{
+- (void) writeErrorInfo:(ARTErrorInfo *const) e{
     [self writeValue: nil];    //code - not available in ably-cocoa
     [self writeValue: [e message]];
     [self writeValue: @([e statusCode])];
