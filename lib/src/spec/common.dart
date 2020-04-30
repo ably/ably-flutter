@@ -12,13 +12,23 @@ abstract class CipherParams {
   String mode;
 }
 
-abstract class ErrorInfo {
-  int code;
-  String herf;
-  String message;
-  ErrorInfo cause;
-  int statusCode;
-  String requestId;
+///An [AblyException] encapsulates [ErrorInfo] which carries details
+///about information related to Ably-specific error [code],
+/// generic [statusCode], error [message],
+/// link to error related documentation as [href],
+/// [requestId] and [cause] of this exception
+class ErrorInfo {
+  final int code;
+  final String href;
+  final String message;
+  final ErrorInfo cause;
+  final int statusCode;
+  final String requestId;
+
+  ErrorInfo({
+    this.code, this.href, this.message,
+    this.cause, this.statusCode, this.requestId
+  });
 }
 
 abstract class StatsMessageCount {
@@ -120,8 +130,9 @@ class AblyException implements Exception {
 
   final String code;
   final String message;
+  final ErrorInfo errorInfo;
 
-  AblyException([this.code, this.message]);
+  AblyException([this.code, this.message, this.errorInfo]);
 
   String toString() {
     if (message == null) return "AblyException";

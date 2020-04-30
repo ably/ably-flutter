@@ -36,7 +36,7 @@ class RestPlatformChannel extends PlatformObject implements spec.Channel{
       if(data!=null) _map["message"] = data;
       await this.invoke(PlatformMethod.publish, _map);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message);
+      throw spec.AblyException(pe.code, pe.message, pe.details);
     }
   }
 
