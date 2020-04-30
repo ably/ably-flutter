@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
@@ -7,11 +8,13 @@ import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.Param;
+import io.ably.lib.types.ErrorInfo;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
     private static final byte _valueClientOptions = (byte)128;
     private static final byte _valueTokenDetails = (byte)129;
+    private static final byte _errorInfo = (byte)144;
     private static final byte _valueAblyMessage = (byte)255;
 
     @Override
@@ -109,5 +112,27 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValue(buffer, v -> o.clientId = (String)v);
 
         return o;
+    }
+
+
+    //HANDLING WRITE
+
+    @Override
+    protected void writeValue(ByteArrayOutputStream stream, Object value) {
+        if(value instanceof ErrorInfo){
+            stream.write(_errorInfo);
+            writeErrorInfo(stream, (ErrorInfo) value);
+            return;
+        }
+        super.writeValue(stream, value);
+    }
+
+    private void writeErrorInfo(ByteArrayOutputStream stream, ErrorInfo e){
+        writeValue(stream, e.code);
+        writeValue(stream, e.message);
+        writeValue(stream, e.statusCode);
+        writeValue(stream, e.href);
+        writeValue(stream, null); //requestId - not available in ably-java
+        writeValue(stream, null); //cause - not available in ably-java
     }
 }
