@@ -4,7 +4,7 @@
 //   @import Ably;
 #import "Ably.h"
 
-#import "AblyFlutterReaderWriter.h"
+#import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutter.h"
 #import "AblyFlutterSurfaceRealtime.h"
@@ -65,7 +65,7 @@ static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugi
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
                     message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
-                    details:nil
+                    details:error
                     ]);
         }else{
             result(nil);

@@ -16,12 +16,6 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
 
 @implementation AblyFlutterReader
 
-typedef NS_ENUM(UInt8, _Value) {
-    _valueClientOptions = 128,
-    _valueTokenDetails = 129,
-    _valueAblyMessage = 255,
-};
-
 -(id)readValueOfType:(const UInt8)type {
     switch ((_Value)type) {
         case _valueClientOptions:
