@@ -29,7 +29,7 @@ class RestPlatformChannel extends PlatformObject implements spec.Channel{
   }
 
   @override
-  Future<void> publish([String name, dynamic data]) async {
+  Future<void> publish({String name, dynamic data}) async {
     try {
       Map _map = { "channel": this.name, };
       if(name!=null) _map["name"] = name;

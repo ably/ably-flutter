@@ -34,7 +34,7 @@ class Channel extends ChannelBase {
     //TODO
     return null;
   }
-  Future<void> publish([String name, dynamic data]){
+  Future<void> publish({String name, dynamic data}){
     //TODO
     return null;
   }
