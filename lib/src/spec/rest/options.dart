@@ -1,3 +1,5 @@
+import 'package:ably_flutter_plugin/ably.dart';
+
 import '../enums.dart';
 import '../common.dart';
 
@@ -51,11 +53,11 @@ typedef void LogHandler({String msg, AblyException exception});
 class ClientOptions extends AuthOptions {
 
   ClientOptions(){
-    logLevel = 4;
+    logLevel = LogLevel.INFO;
   }
 
   ClientOptions.fromKey(String key): super.fromKey(key){
-    logLevel = 4;
+    logLevel = LogLevel.INFO;
   }
 
   ///Optional clientId that can be used to specify the identity for this client.

@@ -48,7 +48,10 @@ class AblyImplementation implements Ably {
   Future<int> _register() async => (null != _handle) ? _handle : _handle = await methodChannel.invokeMethod(PlatformMethod.register.toName());
 
   @override
-  Future<Realtime> createRealtime(final ClientOptions options) async {
+  Future<Realtime> createRealtime({
+    ClientOptions options,
+    final String key
+  }) async {
     // TODO options.authCallback
     // TODO options.logHandler
     final handle = await _register();
@@ -69,19 +72,23 @@ class AblyImplementation implements Ably {
   Future<Rest> createRestWithKey(final String key) async => createRest(ClientOptions.fromKey(key));
 
   @override
-  Future<Rest> createRest(final ClientOptions options) async {
+  Future<Rest> createRest({
+    ClientOptions options,
+    final String key
+  }) async {
     // TODO options.authCallback
     // TODO options.logHandler
     final handle = await _register();
     final message = AblyMessage(handle, options);
-    final r = RestPlatformObject.fromOptions(
+    final r = RestPlatformObject(
         handle,
         methodChannel,
         await methodChannel.invokeMethod(
             PlatformMethod.createRestWithOptions.toName(),
             message
         ),
-        options
+        options: options,
+        key: key
     );
     _platformObjects.add(r);
     return r;

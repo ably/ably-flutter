@@ -10,14 +10,13 @@ import 'channels.dart';
 
 class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatformChannels> {
 
-  RestPlatformObject.fromOptions(int ablyHandle, MethodChannel methodChannel, int handle, this.options)
-      :super(ablyHandle, methodChannel, handle){
-    this.channels = RestPlatformChannels(ablyHandle, methodChannel, handle, this);
-  }
-
-  RestPlatformObject.fromKey(int ablyHandle, MethodChannel methodChannel, int handle, String key)
-      :super(ablyHandle, methodChannel, handle){
-    this.options = ClientOptions.fromKey(key);
+  RestPlatformObject(int ablyHandle, MethodChannel methodChannel, int handle, {
+    ClientOptions options,
+    final String key
+  })
+      :assert(options!=null || key!=null),
+        super(ablyHandle, methodChannel, handle){
+    this.options = (options==null)?ClientOptions.fromKey(key):options;
     this.channels = RestPlatformChannels(ablyHandle, methodChannel, handle, this);
   }
 
@@ -40,7 +39,7 @@ class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatfor
   }
 
   @override
-  Future<int> time() {
+  Future<DateTime> time() {
     // TODO: implement time
     return null;
   }

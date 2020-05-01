@@ -70,21 +70,21 @@ void main() {
     ClientOptions o = ClientOptions();
     String host = "http://rest.ably.io/";
     o.restHost = host;
-    RestPlatformObject rest = await ably.createRest(o);
+    RestPlatformObject rest = await ably.createRest(options: o);
     expect(rest.ablyHandle, ablyCounter);
     expect(rest.handle, counter);
     expect(rest.options.restHost, host);
   });
 
   test("createRestWithKey", () async {
-    RestPlatformObject rest = await ably.createRestWithKey('TEST-KEY');
+    RestPlatformObject rest = await ably.createRest(key: 'TEST-KEY');
     expect(rest.ablyHandle, ablyCounter);
     expect(rest.handle, counter);
   });
 
   test("publishMessage", () async {
-    RestPlatformObject rest = await ably.createRestWithKey('TEST-KEY');
-    await rest.channels.get('test').publish('name', 'data');
+    RestPlatformObject rest = await ably.createRest(key: 'TEST-KEY');
+    await rest.channels.get('test').publish(name: 'name', data: 'data');
     expect(1, 1);
   });
 

@@ -8,6 +8,13 @@ enum ChannelState {
   failed
 }
 
+enum ChannelMode{   // TB2d
+  presence,
+  publish,
+  subscribe,
+  presence_subscribe
+}
+
 enum ChannelEvent {
   initialized,
   attaching,

@@ -116,18 +116,20 @@ abstract class RestPresenceParams {
   String connectionId;
 }
 
-abstract class RealtimePresenceParams {
-  bool waitForSync; //waitForSync;	//?: bool;
-  String clientId; //clientId;	//?: String;
-  String connectionId; //;	//?: String;
+class RealtimePresenceParams {
+  bool waitForSync;
+  String clientId;
+  String connectionId;
+  RealtimePresenceParams({this.waitForSync, this.clientId, this.connectionId});
 }
 
-abstract class RealtimeHistoryParams {
+class RealtimeHistoryParams {
   int start; //  start;	//?: int;
   int end; //  end;	//?: int;
   int direction; //  direction;	//?: String;
   int limit; //  limit;	//?: int;
   bool untilAttach; //  untilAttach;	//?: bool;
+  RealtimeHistoryParams({this.start, this.end, this.direction, this.limit, this.untilAttach});
 }
 
 
@@ -147,18 +149,26 @@ class AblyException implements Exception {
 
 }
 
-abstract class ChannelStateChange {
-  ChannelState current;
-  ChannelState previous;
-  ErrorInfo reason; //optional
-  bool resumed;
+class ChannelStateChange {
+  final ChannelState current;
+  final ChannelState previous;
+  ErrorInfo reason;
+  final bool resumed;
+  ChannelStateChange(this.current, this.previous, {
+    this.reason,
+    this.resumed=false
+  });
 }
 
-abstract class ConnectionStateChange {
-  ConnectionState current;
-  ConnectionState previous;
-  ErrorInfo reason; //optional
-  int retryIn;      //optional
+class ConnectionStateChange {
+  final ConnectionState current;
+  final ConnectionState previous;
+  ErrorInfo reason;
+  int retryIn;
+  ConnectionStateChange(this.current, this.previous, {
+    this.reason,
+    this.retryIn
+  });
 }
 
 abstract class DevicePushDetails {

@@ -13,10 +13,14 @@ abstract class Crypto {
 
 ///io.ably.lib.rest.AblyBase
 abstract class AblyBase {
-  AblyBase.fromOptions(this.options);
-  AblyBase.fromKey(String key){
-    this.options = ClientOptions.fromKey(key);
+
+  AblyBase({
+    ClientOptions options,
+    final String key
+  }):assert(options!=null || key!=null){
+    this.options = (options==null)?ClientOptions.fromKey(key):options;
   }
+
   ClientOptions options;
   static Crypto crypto;
   static MessageStatic message;
@@ -31,5 +35,5 @@ abstract class AblyBase {
     dynamic body,
     Map<String, String> headers
   });
-  Future<int> time();
+  Future<DateTime> time();
 }
