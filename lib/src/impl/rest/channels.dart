@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../platform_object.dart';
 
 
-class RestPlatformChannel extends PlatformObject implements spec.Channel{
+class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
 
   @override
   spec.AblyBase ably;

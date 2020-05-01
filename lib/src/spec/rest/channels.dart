@@ -10,38 +10,22 @@ abstract class ChannelOptions {
   dynamic cipher;
 }
 
-abstract class ChannelBase {
+abstract class RestChannel {
 
-  ChannelBase(this.ably, this.name, this.options);
+  RestChannel(this.ably, this.name, this.options){
+    this.presence = Presence();
+  }
 
   AblyBase ably;
   String name;
   ChannelOptions options;
   Presence presence;
-}
-
-class Channel extends ChannelBase {
-
-  @override
-  Channel(AblyBase ably, String name, ChannelOptions options): super(ably, name, options) {
-    this.presence = Presence();
-  }
-
-  AblyBase ably;
-  ChannelOptions options;
-  Presence presence;
-  Future<PaginatedResult<Message>> history([RestHistoryParams params]){
-    //TODO
-    return null;
-  }
-  Future<void> publish({String name, dynamic data}){
-    //TODO
-    return null;
-  }
+  Future<PaginatedResult<Message>> history([RestHistoryParams params]);
+  Future<void> publish({String name, dynamic data});
 }
 
 
-class RestChannels<T extends Channel> extends Channels<T> {
+abstract class RestChannels<T extends RestChannel> extends Channels<T> {
 
   RestChannels(ably) : super(ably);
 
