@@ -16,11 +16,14 @@ abstract class Rest<C extends RestChannels> extends AblyBase {
   Push push;
   C channels;
 
-  Rest.fromOptions(ClientOptions options): super.fromOptions(options);
+  Rest({
+    ClientOptions options,
+    final String key
+  }): super(options: options, key: key);
+
   /*{
     channels = RestChannels(this);
   }*/
-  Rest.fromKey(String key): super.fromKey(key);
   /*{
     channels = RestChannels(this);
   }*/

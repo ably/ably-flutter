@@ -10,12 +10,19 @@ abstract class Ably {
   /// Returns ably library version
   Future<String> get version;
 
-  /// Creates a [Realtime] instance with [options]
-  Future<Realtime> createRealtime(final ClientOptions options);
+  /// Creates a [Realtime] instance either with [options] or with [key]
+  /// obtained from Ably dashboard
+  Future<Realtime> createRealtime({
+    ClientOptions options,
+    final String key
+  });
 
-  /// Creates a [Rest] instance with [options]
-  Future<Rest> createRest(final ClientOptions options);
+  /// Creates a [Rest] instance either with [options] or with [key]
+  /// obtained from Ably dashboard
+  Future<Rest> createRest({
+    ClientOptions options,
+    final String key
+  });
 
-  /// Creates a [Rest] instance with [key] obtained from ably
-  Future<Rest> createRestWithKey(final String key);
+  CancelListening startListening(Listener listener);
 }

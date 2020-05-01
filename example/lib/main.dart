@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
 
     ably.Rest rest;
     try{
-      rest = await _ablyPlugin.createRest(clientOptions);
+      rest = await _ablyPlugin.createRest(options: clientOptions);
     } catch (error) {
       print('Error creating Ably Rest: ${error}');
       setState(() { _restCreationState = OpState.Failed; });
@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp> {
 
     ably.Realtime realtime;
     try {
-      realtime = await _ablyPlugin.createRealtime(clientOptions);
+      realtime = await _ablyPlugin.createRealtime(options: clientOptions);
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });

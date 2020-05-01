@@ -1,3 +1,4 @@
+import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
 import 'package:ably_flutter_plugin/src/spec/rest/ably_base.dart';
 import 'package:ably_flutter_plugin/src/spec/rest/channels.dart';
 
@@ -7,79 +8,47 @@ import '../message.dart';
 import 'presence.dart';
 
 
-abstract class RealtimeChannelBase extends EventEmitter<ChannelEvent> {
+abstract class RealtimeChannel extends EventEmitter<ChannelEvent> { //  embeds EventEmitter<ChannelEvent, ChannelStateChange?> // RTL2a, RTL2d, RTL2e
 
-  RealtimeChannelBase(this.ably, this.name, this.options);
+  RealtimeChannel(this.ably, this.name, this.options);
 
   AblyBase ably;
-  String name;
-  ChannelOptions options;
+
+  String name;              //Not in IDL
+  ChannelOptions options;   //Not in IDL
+
   ErrorInfo errorReason;
   ChannelState state;
-  void setOptions(dynamic options);
+  RealtimePresence presence;
+//  ChannelProperties properties;
+  PushChannel push;
+  List<ChannelMode> modes;
+  Map<String, String> params;
+
+  Future<ChannelStateChange> whenState(ChannelState targetState);
+  Future<EventListener<ChannelEvent>> createListener();
+  Future<void> off();
+
+  Future<void> attach();
+  Future<void> detach();
+  Future<PaginatedResult<Message>> history([RealtimeHistoryParams params]);
+  Future<void> publish({
+    Message message,
+    List<Message> messages,
+    String name,
+    dynamic data
+  });
+  Future<void> subscribe({
+    String event,
+    List<String> events,
+    EventListener<Message> listener
+  });
   void unsubscribe({
     String event,
     List<String> events,
     EventListener<Message> listener //TODO check if this is the type that is expected
   });
-}
-
-class RealtimeChannel extends RealtimeChannelBase {
-  RealtimePresence presence;
-
-  RealtimeChannel(AblyBase ably, String name, ChannelOptions options) : super(ably, name, options);
-
-  Future<void> attach() async {
-    //TODO impl
-    return;
-  }
-  Future<void> detach() async {
-    //TODO impl
-    return;
-  }
-  Future<PaginatedResult<Message>> history([RealtimeHistoryParams params]) async {
-    //TODO impl
-    return null;
-  }
-  Future<void> subscribe({
-    String event,
-    List<String> events,
-    EventListener<Message> listener
-  }) async {
-    //TODO impl
-    return;
-  }
-  Future<void> publish({String name, dynamic data}) async {
-    //TODO impl
-    return;
-  }
-  Future<ChannelStateChange> whenState(ChannelState targetState) async {
-    //TODO impl
-    return null;
-  }
-
-  //  Implement events
-  @override
-  Future<EventListener<ChannelEvent>> createListener() {
-    // TODO: implement createListener
-    return null;
-  }
-
-  @override
-  Future<void> off() {
-    // TODO: implement off
-    return null;
-  }
-
-  @override
-  void setOptions(options) {
-    // TODO: implement setOptions
-  }
-
-  @override
-  void unsubscribe({String event, List<String> events, EventListener<Message> listener}) {
-    // TODO: implement unsubscribe
-  }
+  void setOptions(ChannelOptions options);
 }
 
 
