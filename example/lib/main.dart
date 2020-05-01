@@ -117,8 +117,9 @@ class _MyAppState extends State<MyApp> {
     dynamic data = "Flutter";
     print('publishing messages... name "$name", message "$data"');
     try {
-      await rest.channels.get('test').publish(name, data);
-      await rest.channels.get('test').publish(name);
+      await rest.channels.get('test').publish(name: name, data: data);
+      await rest.channels.get('test').publish(name: name);
+      await rest.channels.get('test').publish(data: data);
       await rest.channels.get('test').publish();
     } on ably.AblyException catch(e) {
       print(e.errorInfo);
@@ -206,7 +207,10 @@ class _MyAppState extends State<MyApp> {
   Widget sendRestMessage() => FlatButton(
     onPressed: () async {
       print('Sendimg rest message...');
-      await _rest.channels.get('test').publish('Hello', 'Flutter ${++msgCounter}');
+      await _rest.channels.get('test').publish(
+        name: 'Hello',
+        data: 'Flutter ${++msgCounter}'
+      );
       print('Rest message sent.');
       setState(() {});
     },
