@@ -52,7 +52,7 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent> { //  embeds E
 }
 
 
-class RealtimeChannels<T extends RealtimeChannel> extends Channels<T> {
+abstract class RealtimeChannels<T extends RealtimeChannel> extends Channels<T> {
 
   RealtimeChannels(AblyBase ably): super(ably);
 

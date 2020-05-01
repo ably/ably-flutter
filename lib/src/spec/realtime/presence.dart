@@ -3,19 +3,16 @@ import '../common.dart';
 import '../message.dart';
 
 
-abstract class RealtimePresenceBase {
+abstract class RealtimePresence {
   bool syncComplete;
-  void unsubscribe({
+  Future<List<PresenceMessage>> get([RealtimePresenceParams params]);
+  Future<PaginatedResult<PresenceMessage>> history([RealtimeHistoryParams params]);
+  Future<void> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,
     EventListener<PresenceMessage> listener //TODO check if this is the type that is expected
   });
-}
-
-abstract class RealtimePresence extends RealtimePresenceBase {
-  Future<List<PresenceMessage>> get([RealtimePresenceParams params]);
-  Future<PaginatedResult<PresenceMessage>> history([RealtimeHistoryParams params]);
-  Future<void> subscribe({
+  void unsubscribe({
     PresenceAction action,
     List<PresenceAction> actions,
     EventListener<PresenceMessage> listener //TODO check if this is the type that is expected

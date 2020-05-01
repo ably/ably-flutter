@@ -265,16 +265,14 @@ class Stats {
   StatsRequestCount tokenRequests;
 }
 
-class Channels<ChannelType> {
+abstract class Channels<ChannelType> {
 
   Channels(this.ably);
 
   AblyBase ably;
   Map<String, ChannelType> _channels = {};
 
-  ChannelType createChannel(name, options){
-    return Channel(ably, name, options) as ChannelType;
-  }
+  ChannelType createChannel(name, options);
 
   ChannelType get(String name, [ChannelOptions options]) {
     if(_channels[name]==null){
