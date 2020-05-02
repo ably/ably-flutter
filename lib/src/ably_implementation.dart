@@ -4,10 +4,11 @@ import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/interface.dart';
 import 'package:flutter/services.dart';
 
+import 'package:streams_channel/streams_channel.dart';
 import '../ably.dart';
 import 'codec.dart';
 import 'impl/platform_object.dart';
-import 'impl/realtime.dart';
+import 'impl/realtime/realtime.dart';
 import 'impl/rest/rest.dart';
 
 ///Extension to extract string name from PlatformMethod
@@ -26,7 +27,7 @@ class AblyImplementation implements Ably {
   final MethodChannel methodChannel;
 
   /// instance of method channel to listen to android/ios events
-  final EventChannel eventChannel;
+  final StreamsChannel streamsChannel;
 
   /// Storing all platform objects, for easy references/cleanup
   final List<PlatformObject> _platformObjects = [];
@@ -42,11 +43,11 @@ class AblyImplementation implements Ably {
     StandardMethodCodec codec = StandardMethodCodec(Codec());
     return AblyImplementation._constructor(
         MethodChannel('io.ably.flutter.plugin', codec),
-        EventChannel('io.ably.flutter.stream', codec)
+        StreamsChannel('io.ably.flutter.stream', codec)
     );
   }
 
-  AblyImplementation._constructor(this.methodChannel, this.eventChannel);
+  AblyImplementation._constructor(this.methodChannel, this.streamsChannel);
 
   /// Registering instance with ably.
   /// On registration, older ably instance id destroyed!
@@ -68,7 +69,9 @@ class AblyImplementation implements Ably {
         await methodChannel.invokeMethod(
             PlatformMethod.createRealtimeWithOptions.toName(),
             message
-        )
+        ),
+        options: options,
+        key: key
     );
     _platformObjects.add(r);
     return r;
