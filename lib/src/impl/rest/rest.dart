@@ -15,7 +15,7 @@ class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatfor
       :assert(options!=null || key!=null),
         super(ablyHandle, ablyPlugin, handle){
     this.options = (options==null)?ClientOptions.fromKey(key):options;
-    this.channels = RestPlatformChannels(ablyHandle, methodChannel, handle, this);
+    this.channels = RestPlatformChannels(ablyHandle, ablyPlugin, handle, this);
   }
 
   @override
