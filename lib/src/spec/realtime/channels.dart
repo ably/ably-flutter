@@ -8,7 +8,7 @@ import '../message.dart';
 import 'presence.dart';
 
 
-abstract class RealtimeChannel extends EventEmitter<ChannelEvent> { //  embeds EventEmitter<ChannelEvent, ChannelStateChange?> // RTL2a, RTL2d, RTL2e
+abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateChange> {
 
   RealtimeChannel(this.ably, this.name, this.options);
 
@@ -24,10 +24,6 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent> { //  embeds E
   PushChannel push;
   List<ChannelMode> modes;
   Map<String, String> params;
-
-  Future<ChannelStateChange> whenState(ChannelState targetState);
-  Future<EventListener<ChannelEvent>> createListener();
-  Future<void> off();
 
   Future<void> attach();
   Future<void> detach();

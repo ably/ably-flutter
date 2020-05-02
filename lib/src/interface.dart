@@ -24,5 +24,4 @@ abstract class Ably {
     final String key
   });
 
-  CancelListening startListening(Listener listener);
 }

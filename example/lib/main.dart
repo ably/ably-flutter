@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 
   void provisionAbly() async {
     setState(() { _provisioningState = OpState.InProgress; });
-    
+
     provisioning.AppKey appKey;
     try {
       appKey = await provisioning.provision('sandbox-');
@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       setState(() { _provisioningState = OpState.Failed; });
       return;
     }
-    
+
     setState(() {
       _appKey = appKey;
       _provisioningState = OpState.Succeeded;
@@ -141,22 +141,40 @@ class _MyAppState extends State<MyApp> {
     ably.Realtime realtime;
     try {
       realtime = await _ablyPlugin.createRealtime(options: clientOptions);
+
+      ///One can listen from multiple listeners on the same event,
+      /// and must cancel each subscription one by one
+      //RETAINING LISTENER
+      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+        print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
+      });
+
+      //RETAINING LISTENER
+      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+        print('RETAINER LISTENER β :: Change event arrived!: ${stateChange.event}');
+      });
+
+      //DISPOSE ON CONNECTED
+      Stream<ably.ConnectionStateChange> stream = realtime.connection.on();
+      StreamSubscription subscription;
+      subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
+        print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
+        if(stateChange.event == ably.ConnectionEvent.connected){
+          await subscription.cancel();
+        }
+      });
+
+      setState(() {
+        _realtime = realtime;
+        _realtimeCreationState = OpState.Succeeded;
+      });
+
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });
-      return;
+      rethrow;
     }
 
-    final listener = await realtime.connection.createListener();
-
-    setState(() {
-      _realtime = realtime;
-      _realtimeCreationState = OpState.Succeeded;
-    });
-
-    print('Awaiting one event...');
-    final event = await listener.once();
-    print('The one event arrived: $event');
   }
 
   // https://github.com/dart-lang/sdk/issues/37498
@@ -194,7 +212,7 @@ class _MyAppState extends State<MyApp> {
   Widget createRestButton() => button(_restCreationState, createAblyRest, 'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
-  Widget createConnectButton() => FlatButton(
+  Widget createRTCConnectButton() => FlatButton(
     onPressed: () async {
       print('Calling connect...');
       await _realtime.connect();
@@ -203,13 +221,22 @@ class _MyAppState extends State<MyApp> {
     child: Text('Connect'),
   );
 
+  Widget createRTCloseButton() => FlatButton(
+    onPressed: () async {
+      print('Calling connect...');
+      await _realtime.close();
+      print('Connect call completed.');
+    },
+    child: Text('Close Connection'),
+  );
+
   int msgCounter = 0;
   Widget sendRestMessage() => FlatButton(
     onPressed: () async {
       print('Sendimg rest message...');
       await _rest.channels.get('test').publish(
-        name: 'Hello',
-        data: 'Flutter ${++msgCounter}'
+          name: 'Hello',
+          data: 'Flutter ${++msgCounter}'
       );
       print('Rest message sent.');
       setState(() {});
@@ -220,7 +247,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget build');
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -238,7 +264,8 @@ class _MyAppState extends State<MyApp> {
                   Divider(),
                   createRealtimeButton(),
                   Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-                  createConnectButton(),
+                  createRTCConnectButton(),
+                  createRTCloseButton(),
                   Divider(),
                   createRestButton(),
                   Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
