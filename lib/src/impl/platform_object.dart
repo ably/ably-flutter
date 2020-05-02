@@ -1,5 +1,7 @@
 import 'package:ably_flutter_plugin/src/ably_implementation.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:flutter/services.dart';
+import 'package:streams_channel/streams_channel.dart';
 
 
 /// A method with a corresponding handler in platform code.
@@ -15,6 +17,7 @@ enum PlatformMethod {
   /// Realtime
   createRealtimeWithOptions,
   connectRealtime,
+  closeRealtime,
 
   /// Create an event listener. Called against a platform object (e.g. Realtime) with
   /// the argument being the type of indirect platform object against which the
@@ -51,8 +54,8 @@ abstract class PlatformObject {
 
   get handle => _handle;
   get ablyHandle => _ablyHandle;
-  get methodChannel => _ablyPlugin.methodChannel;
-  get eventChannel => _ablyPlugin.eventChannel;
+  MethodChannel get methodChannel => _ablyPlugin.methodChannel;
+  StreamsChannel get eventChannel => _ablyPlugin.streamsChannel;
 
   static Future<int> dispose() async {
     //TODO implement or convert to abstract!
@@ -66,26 +69,9 @@ abstract class PlatformObject {
         : AblyMessage(_ablyHandle, _handle);
     return await methodChannel.invokeMethod(method.toName(), message);
   }
-}
 
-/// An object which has a live counterpart in the Platform client library SDK,
-/// where that live counterpart is only ever accessed by the plugin implementation
-/// by reading a property on another platform object on demand.
-abstract class IndirectPlatformObject {
-  // Ideally the constant value for connection would be grouped or typed more strongly.
-  // Possible approaches, albeit impossible (for now) with dart...
-  // 1) Dart enums are not as feature rich as other languages:
-  //    https://github.com/dart-lang/language/issues/158
-  // 2) The concept of 'type branding' might help but that's also not yet a thing:
-  //    https://github.com/dart-lang/sdk/issues/2626#issuecomment-464638272
-  static final int connection = 1;
-
-  final PlatformObject _provider;
-  final int _type;
-
-  IndirectPlatformObject(this._provider, this._type);
-
-  PlatformObject get provider => _provider;
-  int get type => _type;
+  Stream<dynamic> listen(final String eventName){
+    return eventChannel.receiveBroadcastStream(AblyMessage(_ablyHandle, AblyMessage(_handle, eventName)));
+  }
 
 }
