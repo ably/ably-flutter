@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ably_flutter_plugin/ably.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
 import '../platform_object.dart';
@@ -19,8 +20,8 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
   @override
   spec.Presence presence;
 
-  RestPlatformChannel(int ablyHandle, MethodChannel methodChannel, int restHandle, this.ably, this.name, this.options)
-      : super(ablyHandle, methodChannel, restHandle);
+  RestPlatformChannel(int ablyHandle, Ably ablyPlugin, int restHandle, this.ably, this.name, this.options)
+      : super(ablyHandle, ablyPlugin, restHandle);
 
   @override
   Future<spec.PaginatedResult<spec.Message>> history([spec.RestHistoryParams params]) {
@@ -46,14 +47,14 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
 class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel>{
 
   int ablyHandle;
-  MethodChannel methodChannel;
   int restHandle;
+  Ably ablyPlugin;
 
-  RestPlatformChannels(this.ablyHandle, this.methodChannel, this.restHandle, spec.AblyBase ably): super(ably);
+  RestPlatformChannels(this.ablyHandle, this.ablyPlugin, this.restHandle, spec.AblyBase ably): super(ably);
 
   @override
   RestPlatformChannel createChannel(name, options){
-    return RestPlatformChannel(ablyHandle, methodChannel, restHandle, ably, name, options);
+    return RestPlatformChannel(ablyHandle, ablyPlugin, restHandle, ably, name, options);
   }
 
 }

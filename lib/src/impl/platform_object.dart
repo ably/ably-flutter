@@ -1,5 +1,5 @@
+import 'package:ably_flutter_plugin/src/ably_implementation.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:flutter/services.dart';
 
 
 /// A method with a corresponding handler in platform code.
@@ -40,18 +40,19 @@ extension on PlatformMethod {
 /// implementation.
 abstract class PlatformObject {
   final int _ablyHandle;
-  final MethodChannel _methodChannel;
+  final AblyImplementation _ablyPlugin;
   final int _handle;
 
 
-  PlatformObject(this._ablyHandle, this._methodChannel, this._handle);
+  PlatformObject(this._ablyHandle, this._ablyPlugin, this._handle);
 
   @override
   String toString() => 'Ably Platform Object $_handle';
 
   get handle => _handle;
   get ablyHandle => _ablyHandle;
-  get methodChannel => _methodChannel;
+  get methodChannel => _ablyPlugin.methodChannel;
+  get eventChannel => _ablyPlugin.eventChannel;
 
   static Future<int> dispose() async {
     //TODO implement or convert to abstract!
@@ -63,7 +64,7 @@ abstract class PlatformObject {
     final message = (null != argument)
         ? AblyMessage(_ablyHandle, AblyMessage(_handle, argument))
         : AblyMessage(_ablyHandle, _handle);
-    return await _methodChannel.invokeMethod(method.toName(), message);
+    return await methodChannel.invokeMethod(method.toName(), message);
   }
 }
 
