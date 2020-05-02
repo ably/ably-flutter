@@ -4,6 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
+import io.ably.lib.realtime.ChannelEvent;
+import io.ably.lib.realtime.ChannelState;
+import io.ably.lib.realtime.ChannelStateListener;
+import io.ably.lib.realtime.ConnectionEvent;
+import io.ably.lib.realtime.ConnectionState;
+import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
@@ -15,6 +21,15 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private static final byte _valueClientOptions = (byte)128;
     private static final byte _valueTokenDetails = (byte)129;
     private static final byte _errorInfo = (byte)144;
+
+    // Events
+    private static final byte _connectionEvent = (byte)201;
+    private static final byte _connectionState = (byte)202;
+    private static final byte _connectionStateChange = (byte)203;
+    private static final byte _channelEvent = (byte)204;
+    private static final byte _channelState = (byte)205;
+    private static final byte _channelStateChange = (byte)206;
+
     private static final byte _valueAblyMessage = (byte)255;
 
     @Override
@@ -120,19 +135,60 @@ public class AblyMessageCodec extends StandardMessageCodec {
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value) {
         if(value instanceof ErrorInfo){
-            stream.write(_errorInfo);
             writeErrorInfo(stream, (ErrorInfo) value);
+            return;
+        }else if(value instanceof ConnectionEvent){
+            writeEnum(stream, _connectionEvent, (ConnectionEvent) value);
+            return;
+        }else if(value instanceof ConnectionState){
+            writeEnum(stream, _connectionState, (ConnectionState) value);
+            return;
+        }else if(value instanceof ConnectionStateListener.ConnectionStateChange){
+            writeConnectionStateChange(stream, (ConnectionStateListener.ConnectionStateChange) value);
+            return;
+        }else if(value instanceof ChannelEvent){
+            writeEnum(stream, _channelEvent, (ChannelEvent) value);
+            return;
+        }else if(value instanceof ChannelState){
+            writeEnum(stream, _channelState, (ChannelState) value);
+            return;
+        }else if(value instanceof ChannelStateListener.ChannelStateChange){
+            writeChannelStateChange(stream, (ChannelStateListener.ChannelStateChange) value);
             return;
         }
         super.writeValue(stream, value);
     }
 
     private void writeErrorInfo(ByteArrayOutputStream stream, ErrorInfo e){
+        stream.write(_errorInfo);
         writeValue(stream, e.code);
         writeValue(stream, e.message);
         writeValue(stream, e.statusCode);
         writeValue(stream, e.href);
         writeValue(stream, null); //requestId - not available in ably-java
         writeValue(stream, null); //cause - not available in ably-java
+    }
+
+    private void writeConnectionStateChange(ByteArrayOutputStream stream, ConnectionStateListener.ConnectionStateChange c){
+        stream.write(_connectionStateChange);
+        writeValue(stream, c.current);
+        writeValue(stream, c.previous);
+        writeValue(stream, c.event);
+        writeValue(stream, c.retryIn);
+        writeValue(stream, c.reason);
+    }
+
+    private void writeChannelStateChange(ByteArrayOutputStream stream, ChannelStateListener.ChannelStateChange c){
+        stream.write(_channelStateChange);
+        writeValue(stream, c.current);
+        writeValue(stream, c.previous);
+        writeValue(stream, c.event);
+        writeValue(stream, c.resumed);
+        writeValue(stream, c.reason);
+    }
+
+    private void writeEnum(ByteArrayOutputStream stream, int eventCode, Enum e){
+        stream.write(eventCode);
+        writeValue(stream, e.ordinal());
     }
 }

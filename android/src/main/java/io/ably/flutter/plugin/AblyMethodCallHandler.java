@@ -46,6 +46,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         //Realtime
         _map.put("createRealtimeWithOptions", this::createRealtimeWithOptions);
         _map.put("connectRealtime", this::connectRealtime);
+        _map.put("closeRealtime", this::closeRealtime);
+
         _map.put("createListener", this::createListener);
         _map.put("eventOnce", this::eventOnce);
     }
@@ -193,6 +195,14 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
+    private void closeRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
+            ablyLibrary.getRealtime(realtimeHandle.longValue()).close();
+            result.success(null);
+        });
+    }
+
     private void createListener(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage>ablyDo(message, (ablyLibrary, innerMessage) -> {
@@ -229,7 +239,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
-    private <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
+    public <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
         if (!message.handle.equals(_ablyHandle)) {
             // TODO an error response, perhaps? or allow Dart side to understand null response?
             return;
