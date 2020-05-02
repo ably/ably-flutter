@@ -25,6 +25,9 @@ class AblyImplementation implements Ably {
   /// instance of method channel to interact with android/ios code
   final MethodChannel methodChannel;
 
+  /// instance of method channel to listen to android/ios events
+  final EventChannel eventChannel;
+
   /// Storing all platform objects, for easy references/cleanup
   final List<PlatformObject> _platformObjects = [];
 
@@ -36,11 +39,14 @@ class AblyImplementation implements Ably {
   factory AblyImplementation() {
     /// Uses our custom message codec so that we can pass Ably types to the
     /// platform implementations.
-    final methodChannel = MethodChannel('ably_flutter_plugin', StandardMethodCodec(Codec()));
-    return AblyImplementation._constructor(methodChannel);
+    StandardMethodCodec codec = StandardMethodCodec(Codec());
+    return AblyImplementation._constructor(
+        MethodChannel('io.ably.flutter.plugin', codec),
+        EventChannel('io.ably.flutter.stream', codec)
+    );
   }
 
-  AblyImplementation._constructor(this.methodChannel);
+  AblyImplementation._constructor(this.methodChannel, this.eventChannel);
 
   /// Registering instance with ably.
   /// On registration, older ably instance id destroyed!
@@ -58,7 +64,7 @@ class AblyImplementation implements Ably {
     final message = AblyMessage(handle, options);
     final r = RealtimePlatformObject(
         handle,
-        methodChannel,
+        this,
         await methodChannel.invokeMethod(
             PlatformMethod.createRealtimeWithOptions.toName(),
             message
@@ -67,9 +73,6 @@ class AblyImplementation implements Ably {
     _platformObjects.add(r);
     return r;
   }
-
-  @override
-  Future<Rest> createRestWithKey(final String key) async => createRest(ClientOptions.fromKey(key));
 
   @override
   Future<Rest> createRest({
@@ -82,7 +85,7 @@ class AblyImplementation implements Ably {
     final message = AblyMessage(handle, options);
     final r = RestPlatformObject(
         handle,
-        methodChannel,
+        this,
         await methodChannel.invokeMethod(
             PlatformMethod.createRestWithOptions.toName(),
             message

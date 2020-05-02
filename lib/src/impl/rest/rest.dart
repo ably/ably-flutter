@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
@@ -10,12 +8,12 @@ import 'channels.dart';
 
 class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatformChannels> {
 
-  RestPlatformObject(int ablyHandle, MethodChannel methodChannel, int handle, {
+  RestPlatformObject(int ablyHandle, Ably ablyPlugin, int handle, {
     ClientOptions options,
     final String key
   })
       :assert(options!=null || key!=null),
-        super(ablyHandle, methodChannel, handle){
+        super(ablyHandle, ablyPlugin, handle){
     this.options = (options==null)?ClientOptions.fromKey(key):options;
     this.channels = RestPlatformChannels(ablyHandle, methodChannel, handle, this);
   }
