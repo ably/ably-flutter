@@ -5,20 +5,20 @@ import 'package:flutter/services.dart';
 import '../ably.dart';
 
 
-typedef CodecEncoder(final WriteBuffer buffer, final dynamic value);
+typedef CodecEncoder<T>(final WriteBuffer buffer, final T value);
 typedef T CodecDecoder<T>(ReadBuffer buffer);
 class CodecPair<T>{
 
-  final Function encoder;
-  final CodecDecoder decoder;
+  final CodecEncoder<T> encoder;
+  final CodecDecoder<T> decoder;
   CodecPair(this.encoder, this.decoder);
 
   encode(final WriteBuffer buffer, final dynamic value){
     if(this.encoder==null) throw AblyException("Codec encoder not defined");
-    return this.encoder(buffer, value);
+    return this.encoder(buffer, value as T);
   }
 
-  decode(ReadBuffer buffer){
+  T decode(ReadBuffer buffer){
     if(this.decoder==null) throw AblyException("Codec decoder not defined");
     return this.decoder(buffer);
   }
@@ -39,6 +39,14 @@ class Codec extends StandardMessageCodec {
   static const _valueClientOptions = 128;
   static const _valueTokenDetails = 129;
   static const _valueErrorInfo = 144;
+  // Events
+  static const _connectionEvent = 201;
+  static const _connectionState = 202;
+  static const _connectionStateChange = 203;
+  static const _channelEvent = 204;
+  static const _channelState = 205;
+  static const _channelStateChange = 206;
+
   static const _valueAblyMessage = 255;
 
   Map<int, CodecPair> codecMap;
@@ -48,6 +56,17 @@ class Codec extends StandardMessageCodec {
       _valueClientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
       _valueTokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
       _valueErrorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
+
+      //Events - Connection
+      _connectionEvent: CodecPair<ConnectionEvent>(null, decodeConnectionEvent),
+      _connectionState: CodecPair<ConnectionState>(null, decodeConnectionState),
+      _connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
+
+      //Events - Channel
+      _channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
+      _channelState: CodecPair<ChannelState>(null, decodeChannelState),
+      _channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
+
       _valueAblyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
     };
   }
@@ -84,9 +103,8 @@ class Codec extends StandardMessageCodec {
     }
   }
 
-  encodeClientOptions(final WriteBuffer buffer, final dynamic value){
-    final ClientOptions v = value;
-
+  // =========== ENCODERS ===========
+  encodeClientOptions(final WriteBuffer buffer, final ClientOptions v){
     // AuthOptions (super class of ClientOptions)
     writeValue(buffer, v.authUrl);
     writeValue(buffer, v.authMethod);
@@ -125,8 +143,7 @@ class Codec extends StandardMessageCodec {
     writeValue(buffer, v.transportParams);
   }
 
-  encodeTokenDetails(final WriteBuffer buffer, final dynamic value){
-    final TokenDetails v = value;
+  encodeTokenDetails(final WriteBuffer buffer, final TokenDetails v){
     writeValue(buffer, v.token);
     writeValue(buffer, v.expires);
     writeValue(buffer, v.issued);
@@ -134,8 +151,7 @@ class Codec extends StandardMessageCodec {
     writeValue(buffer, v.clientId);
   }
 
-  encodeAblyMessage(final WriteBuffer buffer, final dynamic value){
-    final AblyMessage v = value;
+  encodeAblyMessage(final WriteBuffer buffer, final AblyMessage v){
     writeValue(buffer, v.registrationHandle);
     writeValue(buffer, v.message);
   }
@@ -209,6 +225,29 @@ class Codec extends StandardMessageCodec {
         requestId: readValue(buffer) as String,
         cause: readValue(buffer) as ErrorInfo
     );
+  }
+
+  ConnectionEvent decodeConnectionEvent(ReadBuffer buffer) => ConnectionEvent.values[readValue(buffer) as int];
+  ConnectionState decodeConnectionState(ReadBuffer buffer) => ConnectionState.values[readValue(buffer) as int];
+  ChannelEvent decodeChannelEvent(ReadBuffer buffer) => ChannelEvent.values[readValue(buffer) as int];
+  ChannelState decodeChannelState(ReadBuffer buffer) => ChannelState.values[readValue(buffer) as int];
+
+  ConnectionStateChange decodeConnectionStateChange(ReadBuffer buffer){
+    ConnectionState current = readValue(buffer) as ConnectionState;
+    ConnectionState previous = readValue(buffer) as ConnectionState;
+    ConnectionEvent event = readValue(buffer) as ConnectionEvent;
+    int retryIn = readValue(buffer) as int;
+    ErrorInfo reason = readValue(buffer) as ErrorInfo;
+    return ConnectionStateChange(current, previous, event, retryIn: retryIn, reason: reason);
+  }
+
+  ChannelStateChange decodeChannelStateChange(ReadBuffer buffer){
+    ChannelState current = readValue(buffer) as ChannelState;
+    ChannelState previous = readValue(buffer) as ChannelState;
+    ChannelEvent event = readValue(buffer) as ChannelEvent;
+    bool resumed = readValue(buffer) as bool;
+    ErrorInfo reason = readValue(buffer) as ErrorInfo;
+    return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);
   }
 
 }

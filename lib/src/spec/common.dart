@@ -150,22 +150,24 @@ class AblyException implements Exception {
 }
 
 class ChannelStateChange {
+  final ChannelEvent event;
   final ChannelState current;
   final ChannelState previous;
   ErrorInfo reason;
   final bool resumed;
-  ChannelStateChange(this.current, this.previous, {
+  ChannelStateChange(this.current, this.previous, this.event, {
     this.reason,
     this.resumed=false
   });
 }
 
 class ConnectionStateChange {
+  final ConnectionEvent event;
   final ConnectionState current;
   final ConnectionState previous;
   ErrorInfo reason;
   int retryIn;
-  ConnectionStateChange(this.current, this.previous, {
+  ConnectionStateChange(this.current, this.previous, this.event, {
     this.reason,
     this.retryIn
   });
@@ -227,12 +229,15 @@ abstract class EventListener<E> {
 
 /// Interface implemented by Ably classes that can emit events, offering the capability
 /// to create listeners for those events.
-abstract class EventEmitter<E> {
-  /// Remove all listener registrations, irrespective of type.
-  Future<void> off();
+/// [E] is type of event to listen for
+/// [G] is the instance which will be passed back in streams
+abstract class EventEmitter<E, G> {
+
+  // Remove all listener registrations, irrespective of type.
+  //Future<void> off();
 
   /// Create a listener, with which registrations may be made.
-  Future<EventListener<E>> createListener();
+  Stream<G> on([E event]);
 }
 
 abstract class PaginatedResult<T> {

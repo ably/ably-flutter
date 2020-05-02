@@ -1,11 +1,13 @@
- import 'platform_object.dart';
- import '../spec/spec.dart' show ConnectionEvent, EventListener;
- import 'package:flutter/services.dart';
+import 'package:ably_flutter_plugin/ably.dart';
+import 'package:flutter/services.dart';
+
+import '../../spec/spec.dart' show ConnectionEvent, EventListener;
+import '../platform_object.dart';
 
 
 class ConnectionListenerPlatformObject extends PlatformObject implements EventListener<ConnectionEvent> {
-  ConnectionListenerPlatformObject(int ablyHandle, MethodChannel methodChannel, int handle)
-      : super(ablyHandle, methodChannel, handle);
+  ConnectionListenerPlatformObject(int ablyHandle, Ably ablyPlugin, int handle)
+      : super(ablyHandle, ablyPlugin, handle);
 
   @override
   Future<void> off() async {

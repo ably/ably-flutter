@@ -2,7 +2,7 @@ import 'enums.dart';
 import 'common.dart';
 
 
-abstract class Connection extends EventEmitter<ConnectionEvent> {
+abstract class Connection implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
 
   ///current state of this connection
   ConnectionState state;
@@ -27,5 +27,5 @@ abstract class Connection extends EventEmitter<ConnectionEvent> {
   void connect();
 
   Future<int> ping();
-//  Future<ConnectionStateChange> whenState(ConnectionState targetState); //TODO remove?
+
 }
