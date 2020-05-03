@@ -19,14 +19,9 @@ enum PlatformMethod {
   connectRealtime,
   closeRealtime,
 
-  /// Create an event listener. Called against a platform object (e.g. Realtime) with
-  /// the argument being the type of indirect platform object against which the
-  /// listener is to be created (e.g. Connection).
-  createListener,
-
-  eventsOff,
-  eventsOn,
-  eventOnce,
+  ///Realtime events
+  realtime_onConnectionStateChanged,
+  realtime_onChannelStateChanged,
 }
 
 ///Extension to extract string name from PlatformMethod

@@ -40,7 +40,6 @@ void main() {
         case "createrestWithKey":
         case "createRestWithOptions":
         case "createRealtimeWithOptions":
-        case "createListener":
           return ++counter;
 
         case "publish":

@@ -71,12 +71,6 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   }
 
   @override
-  Future<spec.EventListener<spec.ChannelEvent>> createListener() {
-    // TODO: implement createListener
-    return null;
-  }
-
-  @override
   Future<void> detach() {
     // TODO: implement detach
     return null;
