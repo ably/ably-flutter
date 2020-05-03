@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import app.loup.streams_channel.StreamsChannel;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodCodec;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
