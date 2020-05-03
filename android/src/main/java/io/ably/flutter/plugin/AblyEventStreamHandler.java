@@ -73,13 +73,13 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
             String eventName = message.message;
             switch(eventName) {
-                case "realtime:connectionStateChanged":
+                case "realtime_onConnectionStateChanged":
                     connectionStateListener = new PluginConnectionStateListener(eventSink);
                     ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
                     return;
-                case "realtime:channelStateListener":
+                case "realtime_onChannelStateChanged":
                     channelStateListener = new PluginChannelStateListener(eventSink);
-//                    ablyLibrary.getRealtime(message.handle).connection.on(channelStateListener);
+                    // ablyLibrary.getRealtime(message.handle).connection.on(channelStateListener);
                     return;
                 default:
                     eventSink.error("unhandled event", null, null);
@@ -96,10 +96,10 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
             String eventName = message.message;
             switch (eventName) {
-                case "realtime:connectionStateChanged":
+                case "realtime_onConnectionStateChanged":
                     ablyLibrary.getRealtime(message.handle).connection.off(connectionStateListener);
-                case "realtime:channelStateListener":
-//                    ablyLibrary.getRealtime(handle).connection.off(connectionStateListener);
+                case "realtime_onChannelStateChanged":
+                    // ablyLibrary.getRealtime(handle).connection.off(connectionStateListener);
             }
         });
     }
