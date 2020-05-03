@@ -2,6 +2,8 @@ package io.ably.flutter.plugin;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import io.ably.lib.realtime.ChannelEvent;
@@ -13,13 +15,18 @@ import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
-import io.ably.lib.types.Param;
 import io.ably.lib.types.ErrorInfo;
+import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
-    private static final byte _valueClientOptions = (byte)128;
-    private static final byte _valueTokenDetails = (byte)129;
+
+    //Ably flutter plugin protocol message
+    private static final byte _valueAblyMessage = (byte)128;
+
+    //Other ably objects
+    private static final byte _valueClientOptions = (byte)129;
+    private static final byte _valueTokenDetails = (byte)130;
     private static final byte _errorInfo = (byte)144;
 
     // Events
@@ -30,19 +37,63 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private static final byte _channelState = (byte)205;
     private static final byte _channelStateChange = (byte)206;
 
-    private static final byte _valueAblyMessage = (byte)255;
+//    @FunctionalInterface
+    interface CodecEncoder<T>{ void encode(ByteArrayOutputStream stream, T value); }
+//    @FunctionalInterface
+    interface CodecDecoder<T>{ T decode(ByteBuffer buffer); }
+    class CodecPair<T>{
+
+        final CodecEncoder<T> encoder;
+        final CodecDecoder<T> decoder;
+        CodecPair(CodecEncoder<T> encoder, CodecDecoder<T> decoder){
+            this.encoder = encoder;
+            this.decoder = decoder;
+        }
+
+        void encode(final ByteArrayOutputStream stream, final Object value){
+            if(this.encoder==null){
+                System.out.println("Codec encoder not defined");
+                return;
+            }
+            this.encoder.encode(stream, (T)value);
+        }
+
+        T decode(ByteBuffer buffer){
+            if(this.decoder==null){
+                System.out.println("Codec decoder not defined");
+                return null;
+            }
+            return this.decoder.decode(buffer);
+        }
+    }
+
+    private Map<Byte, CodecPair> codecMap;
+
+    AblyMessageCodec(){
+        AblyMessageCodec self = this;
+        codecMap = new HashMap<Byte, CodecPair>(){
+            {
+                put(_valueAblyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
+                put(_valueClientOptions, new CodecPair<>(null, self::readClientOptions));
+                put(_valueTokenDetails, new CodecPair<>(null, self::readTokenDetails));
+                put(_errorInfo, new CodecPair<>(self::writeErrorInfo, null));
+
+                put(_connectionEvent, new CodecPair<>(self::writeConnectionEvent, null));
+                put(_connectionState, new CodecPair<>(self::writeConnectionState, null));
+                put(_connectionStateChange, new CodecPair<>(self::writeConnectionStateChange, null));
+
+                put(_channelEvent, new CodecPair<>(self::writeChannelEvent, null));
+                put(_channelState, new CodecPair<>(self::writeChannelState, null));
+                put(_channelStateChange, new CodecPair<>(self::writeChannelStateChange, null));
+            }
+        };
+    }
 
     @Override
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
-        switch (type) {
-            case _valueClientOptions:
-                return readClientOptions(buffer);
-
-            case _valueTokenDetails:
-                return readTokenDetails(buffer);
-
-            case _valueAblyMessage:
-                return readAblyFlutterMessage(buffer);
+        CodecPair pair = codecMap.get(type);
+        if(pair!=null){
+            return pair.decode(buffer);
         }
         return super.readValueOfType(type, buffer);
     }
@@ -52,6 +103,34 @@ public class AblyMessageCodec extends StandardMessageCodec {
         if (null != object) {
             consumer.accept(object);
         }
+    }
+
+    @Override
+    protected void writeValue(ByteArrayOutputStream stream, Object value) {
+        Byte type = null;
+        if(value instanceof ErrorInfo){
+            type = _errorInfo;
+        }else if(value instanceof ConnectionEvent){
+            type = _connectionEvent;
+        }else if(value instanceof ConnectionState){
+            type = _connectionState;
+        }else if(value instanceof ConnectionStateListener.ConnectionStateChange){
+            type = _connectionStateChange;
+        }else if(value instanceof ChannelEvent){
+            type = _channelEvent;
+        }else if(value instanceof ChannelState){
+            type = _channelState;
+        }else if(value instanceof ChannelStateListener.ChannelStateChange){
+            type = _channelStateChange;
+        }
+        if(type!=null){
+            CodecPair pair = codecMap.get(type);
+            if(pair!=null) {
+                pair.encode(stream, value);
+                return;
+            }
+        }
+        super.writeValue(stream, value);
     }
 
     /**
@@ -76,7 +155,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return new AblyFlutterMessage<>(handle, message);
     }
 
-    private Object readClientOptions(final ByteBuffer buffer) {
+    private ClientOptions readClientOptions(final ByteBuffer buffer) {
         final ClientOptions o = new ClientOptions();
 
         // AuthOptions (super class of ClientOptions)
@@ -117,7 +196,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return o;
     }
 
-    private Object readTokenDetails(final ByteBuffer buffer) {
+    private TokenDetails readTokenDetails(final ByteBuffer buffer) {
         final TokenDetails o = new TokenDetails();
 
         readValue(buffer, v -> o.token = (String)v);
@@ -131,34 +210,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
 
     //HANDLING WRITE
-
-    @Override
-    protected void writeValue(ByteArrayOutputStream stream, Object value) {
-        if(value instanceof ErrorInfo){
-            writeErrorInfo(stream, (ErrorInfo) value);
-            return;
-        }else if(value instanceof ConnectionEvent){
-            writeEnum(stream, _connectionEvent, (ConnectionEvent) value);
-            return;
-        }else if(value instanceof ConnectionState){
-            writeEnum(stream, _connectionState, (ConnectionState) value);
-            return;
-        }else if(value instanceof ConnectionStateListener.ConnectionStateChange){
-            writeConnectionStateChange(stream, (ConnectionStateListener.ConnectionStateChange) value);
-            return;
-        }else if(value instanceof ChannelEvent){
-            writeEnum(stream, _channelEvent, (ChannelEvent) value);
-            return;
-        }else if(value instanceof ChannelState){
-            writeEnum(stream, _channelState, (ChannelState) value);
-            return;
-        }else if(value instanceof ChannelStateListener.ChannelStateChange){
-            writeChannelStateChange(stream, (ChannelStateListener.ChannelStateChange) value);
-            return;
-        }
-        super.writeValue(stream, value);
-    }
-
     private void writeErrorInfo(ByteArrayOutputStream stream, ErrorInfo e){
         stream.write(_errorInfo);
         writeValue(stream, e.code);
@@ -169,6 +220,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValue(stream, null); //cause - not available in ably-java
     }
 
+    private void writeConnectionEvent(ByteArrayOutputStream stream, ConnectionEvent e){ writeEnum(stream, _connectionEvent, e); }
+    private void writeConnectionState(ByteArrayOutputStream stream, ConnectionState e){ writeEnum(stream, _connectionState, e); }
     private void writeConnectionStateChange(ByteArrayOutputStream stream, ConnectionStateListener.ConnectionStateChange c){
         stream.write(_connectionStateChange);
         writeValue(stream, c.current);
@@ -178,6 +231,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValue(stream, c.reason);
     }
 
+    private void writeChannelEvent(ByteArrayOutputStream stream, ChannelEvent e){ writeEnum(stream, _channelEvent, e); }
+    private void writeChannelState(ByteArrayOutputStream stream, ChannelState e){ writeEnum(stream, _channelState, e); }
     private void writeChannelStateChange(ByteArrayOutputStream stream, ChannelStateListener.ChannelStateChange c){
         stream.write(_channelStateChange);
         writeValue(stream, c.current);
@@ -191,4 +246,5 @@ public class AblyMessageCodec extends StandardMessageCodec {
         stream.write(eventCode);
         writeValue(stream, e.ordinal());
     }
+
 }
