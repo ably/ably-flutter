@@ -1,8 +1,8 @@
 @import Foundation;
 
 @class ARTRest;
+@class ARTRealtime;
 @class ARTClientOptions;
-@class AblyFlutterSurfaceRealtime;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *)options;
 
--(nullable AblyFlutterSurfaceRealtime *)realtimeWithHandle:(NSNumber *)handle;
+-(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
 
 /**
  This method must be called from the main dispatch queue. It may only be called
