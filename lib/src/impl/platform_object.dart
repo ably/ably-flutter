@@ -65,8 +65,8 @@ abstract class PlatformObject {
     return await methodChannel.invokeMethod(method.toName(), message);
   }
 
-  Stream<dynamic> listen(final String eventName){
-    return eventChannel.receiveBroadcastStream(AblyMessage(_ablyHandle, AblyMessage(_handle, eventName)));
+  Stream<dynamic> listen(final PlatformMethod method){
+    return eventChannel.receiveBroadcastStream(AblyMessage(_ablyHandle, AblyMessage(_handle, method.toName())));
   }
 
 }
