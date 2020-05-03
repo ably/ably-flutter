@@ -36,9 +36,15 @@ class Codec extends StandardMessageCodec {
   // by a subtype value - perhaps of a wider type.
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
-  static const _valueClientOptions = 128;
-  static const _valueTokenDetails = 129;
+
+  //Ably flutter plugin protocol message
+  static const _valueAblyMessage = 128;
+
+  //Other ably objects
+  static const _valueClientOptions = 129;
+  static const _valueTokenDetails = 130;
   static const _valueErrorInfo = 144;
+
   // Events
   static const _connectionEvent = 201;
   static const _connectionState = 202;
@@ -47,12 +53,14 @@ class Codec extends StandardMessageCodec {
   static const _channelState = 205;
   static const _channelStateChange = 206;
 
-  static const _valueAblyMessage = 255;
-
   Map<int, CodecPair> codecMap;
 
   Codec():super(){
     this.codecMap = {
+      //Ably flutter plugin protocol message
+      _valueAblyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
+
+      //Other ably objects
       _valueClientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
       _valueTokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
       _valueErrorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
@@ -66,8 +74,6 @@ class Codec extends StandardMessageCodec {
       _channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
       _channelState: CodecPair<ChannelState>(null, decodeChannelState),
       _channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
-
-      _valueAblyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
     };
   }
 
