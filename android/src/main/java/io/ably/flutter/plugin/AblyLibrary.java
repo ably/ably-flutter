@@ -15,7 +15,6 @@ class AblyLibrary {
     //    and as per this answer https://stackoverflow.com/a/31413003
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
-    private final LongSparseArray<AblyRealtimeConnectionListener> _connectionListeners = new LongSparseArray<>();
 
     private void assertNotDisposed() {
         if (_disposed) {
@@ -49,21 +48,6 @@ class AblyLibrary {
         assertNotDisposed();
 
         return _restInstances.get(handle);
-    }
-
-    long createConnectionListener(final AblyRealtime realtime) {
-        assertNotDisposed();
-
-        final AblyRealtimeConnectionListener listener = new AblyRealtimeConnectionListener();
-        realtime.connection.on(listener);
-        _connectionListeners.put(_nextHandle, listener);
-        return _nextHandle++;
-    }
-
-    AblyRealtimeConnectionListener getConnectionListener(final long handle) {
-        assertNotDisposed();
-
-        return _connectionListeners.get(handle);
     }
 
     void dispose() {
