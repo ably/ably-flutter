@@ -29,6 +29,7 @@ class _MyAppState extends State<MyApp> {
   ably.Ably _ablyPlugin;
   ably.Realtime _realtime;
   ably.Rest _rest;
+  ably.ConnectionState _realtimeStatus;
 
   @override
   void initState() {
@@ -152,6 +153,7 @@ class _MyAppState extends State<MyApp> {
       //RETAINING LISTENER
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINER LISTENER β :: Change event arrived!: ${stateChange.event}');
+        setState(() { _realtimeStatus = stateChange.current; });
       });
 
       //DISPOSE ON CONNECTED
@@ -213,20 +215,12 @@ class _MyAppState extends State<MyApp> {
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
   Widget createRTCConnectButton() => FlatButton(
-    onPressed: () async {
-      print('Calling connect...');
-      await _realtime.connect();
-      print('Connect call completed.');
-    },
+    onPressed: _realtime?.connect,
     child: Text('Connect'),
   );
 
   Widget createRTCloseButton() => FlatButton(
-    onPressed: () async {
-      print('Calling connect...');
-      await _realtime.close();
-      print('Connect call completed.');
-    },
+    onPressed: _realtime?.close,
     child: Text('Close Connection'),
   );
 
@@ -264,6 +258,7 @@ class _MyAppState extends State<MyApp> {
                   Divider(),
                   createRealtimeButton(),
                   Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+                  Text('Connection Status: $_realtimeStatus'),
                   createRTCConnectButton(),
                   createRTCloseButton(),
                   Divider(),
