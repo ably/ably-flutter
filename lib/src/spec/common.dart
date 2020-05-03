@@ -29,6 +29,12 @@ class ErrorInfo {
     this.code, this.href, this.message,
     this.cause, this.statusCode, this.requestId
   });
+
+  @override
+  String toString() {
+    return 'ErrorInfo message=$message code=$code statusCode=$statusCode href=$href';
+  }
+
 }
 
 abstract class StatsMessageCount {
