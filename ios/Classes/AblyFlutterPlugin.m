@@ -7,7 +7,8 @@
 #import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutter.h"
-#import "AblyFlutterSurfaceRealtime.h"
+#import "AblyFlutterStreamHandler.h"
+#import "FlutterStreamsChannel.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -88,7 +89,16 @@ static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, 
     // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
     NSNumber *const handle = message.message;
     [[ably realtimeWithHandle:handle] connect];
-    result(nil); // success with void response
+    result(nil);
+};
+
+static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    LOG(@"message for handle %@", message.handle);
+    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    NSNumber *const handle = message.message;
+    [[ably realtimeWithHandle:handle] close];
+    result(nil);
 };
 
 static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -106,14 +116,20 @@ static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterM
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     LOG(@"registrar: %@", [registrar class]);
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
-    FlutterStandardMethodCodec *const methodCodec =
-        [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
+    FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
+    
     FlutterMethodChannel *const channel =
-        [FlutterMethodChannel methodChannelWithName:@"ably_flutter_plugin"
-                                    binaryMessenger:[registrar messenger]
-                                              codec:methodCodec];
-    AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel];
+        [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
+    AblyFlutterPlugin *const plugin =
+        [[AblyFlutterPlugin alloc] initWithChannel:channel];
+    
     [registrar addMethodCallDelegate:plugin channel:channel];
+
+    FlutterStreamsChannel *const eventChannel = [FlutterStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream" binaryMessenger:registrar.messenger codec: methodCodec];
+    [eventChannel setStreamHandlerFactory:^NSObject<FlutterStreamHandler> *(id arguments) {
+        return [[AblyFlutterStreamHandler alloc] initWithAbly: plugin];
+    }];
+    
 }
 
 -(instancetype)initWithChannel:(FlutterMethodChannel *const)channel {
@@ -130,6 +146,7 @@ static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterM
         @"publish": _publishRestMessage,
         @"createRealtimeWithOptions": _createRealtimeWithOptions,
         @"connectRealtime": _connectRealtime,
+        @"closeRealtime": _closeRealtime,
         @"dispose": _dispose,
     };
     
