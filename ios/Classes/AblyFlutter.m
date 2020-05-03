@@ -4,11 +4,10 @@
 //   @import Ably;
 #import "Ably.h"
 
-#import "AblyFlutterSurfaceRealtime.h"
 
 @implementation AblyFlutter {
     BOOL _disposed;
-    NSMutableDictionary<NSNumber *, AblyFlutterSurfaceRealtime *>* _realtimeInstances;
+    NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
     long long _nextHandle;
 }
@@ -57,13 +56,12 @@
     ASSERT_NOT_DISPOSED
     
     ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options];
-    AblyFlutterSurfaceRealtime *const realtime = [[AblyFlutterSurfaceRealtime alloc] initWithInstance:instance];
     NSNumber *const handle = @(_nextHandle++);
-    [_realtimeInstances setObject:realtime forKey:handle];
+    [_realtimeInstances setObject:instance forKey:handle];
     return handle;
 }
 
--(AblyFlutterSurfaceRealtime *)realtimeWithHandle:(NSNumber *const)handle {
+-(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
     return [_realtimeInstances objectForKey:handle];
 }
 
