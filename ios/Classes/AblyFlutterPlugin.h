@@ -1,4 +1,5 @@
 #import <Flutter/Flutter.h>
+#import "AblyFlutter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -6,6 +7,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype)new NS_UNAVAILABLE;
 +(instancetype)init NS_UNAVAILABLE;
+
+- (AblyFlutter *)ablyWithHandle:(NSNumber *)handle;
 
 @end
 
