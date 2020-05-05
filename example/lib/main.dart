@@ -121,15 +121,7 @@ class _MyAppState extends State<MyApp> {
       await rest.channels.get('test').publish(name);
       await rest.channels.get('test').publish();
     } on ably.AblyException catch(e) {
-      print("EXCEPTION...!");
-      print(e);
-      print("ERROR INFO FROM ABLY: \n"
-          "    CODE: ${e.errorInfo.code}\n"
-          "    STATUS_CODE: ${e.errorInfo.statusCode}\n"
-          "    MESSAGE: ${e.errorInfo.message}\n"
-          "    REQUESTID: ${e.errorInfo.requestId}\n"
-          "    CAUSE: ${e.errorInfo.cause}\n"
-          "    HREF: ${e.errorInfo.href}\n");
+      print(e.errorInfo);
     }
     print('Message published');
   }
