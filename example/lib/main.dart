@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.VERBOSE;
+    clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
@@ -127,7 +127,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.VERBOSE;
+    clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
