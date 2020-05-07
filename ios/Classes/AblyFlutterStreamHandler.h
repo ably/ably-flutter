@@ -13,9 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, readonly) AblyFlutterPlugin * plugin;
 
-- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
-                                       eventSink:(FlutterEventSink)events;
-- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments;
+- (nullable FlutterError *)onListenWithArguments:(nullable id)arguments eventSink:(FlutterEventSink)eventSink;
+- (nullable FlutterError *)onCancelWithArguments:(nullable id)arguments;
 @end
 
 NS_ASSUME_NONNULL_END
