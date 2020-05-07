@@ -15,12 +15,12 @@
     return self;
 }
 
-- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)events {
-    [self startListening:arguments emitter:events];
+- (nullable FlutterError *)onListenWithArguments:(nullable id)arguments eventSink:(FlutterEventSink)eventSink {
+    [self startListening:arguments emitter:eventSink];
     return nil;
 }
 
-- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+- (nullable FlutterError *)onCancelWithArguments:(nullable id)arguments {
     [self cancelListening:arguments];
     return nil;
 }
