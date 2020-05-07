@@ -8,9 +8,19 @@ import io.ably.lib.realtime.ConnectionStateListener;
 import io.flutter.plugin.common.EventChannel;
 
 
+/**
+ * Dart side can listen to Event Streams by pushing data to eventSink available in onListen method.
+ * Event listening can be cancelled when stream subscription is cancelled on dart side
+ *
+ * ref: https://api.flutter.dev/javadoc/io/flutter/plugin/common/EventChannel.StreamHandler.html
+ * */
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     private final AblyMethodCallHandler methodCallHandler;
 
+    /**
+     * Constructor requiring methodCallHandler, as it is a singleton and has all instances stored
+     * Event listening can be started on an instance picked from the stored instances
+     * */
     AblyEventStreamHandler(AblyMethodCallHandler methodCallHandler){
         this.methodCallHandler = methodCallHandler;
     }
@@ -78,9 +88,9 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
                     return;
                 case "realtime_onChannelStateChanged":
-                    channelStateListener = new PluginChannelStateListener(eventSink);
+                    // channelStateListener = new PluginChannelStateListener(eventSink);
                     // ablyLibrary.getRealtime(message.handle).connection.on(channelStateListener);
-                    return;
+                    // return;
                 default:
                     eventSink.error("unhandled event", null, null);
             }
