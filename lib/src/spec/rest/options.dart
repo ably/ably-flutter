@@ -19,9 +19,9 @@ abstract class AuthOptions {
   /// param [key]: the full key string as obtained from the dashboard
   AuthOptions.fromKey(String key){
     assert(key!=null);
-    if(key.contains(':')){
+    if (key.contains(':')) {
       this.key = key;
-    }else{
+    } else {
       this.tokenDetails = TokenDetails(key);
     }
   }

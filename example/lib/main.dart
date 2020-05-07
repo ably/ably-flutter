@@ -143,8 +143,8 @@ class _MyAppState extends State<MyApp> {
     try {
       realtime = await _ablyPlugin.createRealtime(options: clientOptions);
 
-      ///One can listen from multiple listeners on the same event,
-      /// and must cancel each subscription one by one
+      //One can listen from multiple listeners on the same event,
+      // and must cancel each subscription one by one
       //RETAINING LISTENER
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
@@ -161,7 +161,7 @@ class _MyAppState extends State<MyApp> {
       StreamSubscription subscription;
       subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
         print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
-        if(stateChange.event == ably.ConnectionEvent.connected){
+        if (stateChange.event == ably.ConnectionEvent.connected) {
           await subscription.cancel();
         }
       });
