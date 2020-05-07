@@ -280,7 +280,7 @@ abstract class Channels<ChannelType> {
   ChannelType createChannel(name, options);
 
   ChannelType get(String name, [ChannelOptions options]) {
-    if(_channels[name]==null){
+    if (_channels[name]==null) {
       _channels[name] = createChannel(name, options);
     }
     return _channels[name];

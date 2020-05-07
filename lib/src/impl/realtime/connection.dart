@@ -38,7 +38,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
             }
         )
     );
-    if(state!=null){
+    if (state!=null) {
       return stream.takeWhile((ConnectionStateChange _stateChange) => _stateChange.event==state);
     }
     return stream;

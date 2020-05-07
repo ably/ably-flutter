@@ -14,12 +14,12 @@ class CodecPair<T>{
   CodecPair(this.encoder, this.decoder);
 
   encode(final WriteBuffer buffer, final dynamic value){
-    if(this.encoder==null) throw AblyException("Codec encoder not defined");
+    if (this.encoder==null) throw AblyException("Codec encoder not defined");
     return this.encoder(buffer, value as T);
   }
 
   T decode(ReadBuffer buffer){
-    if(this.decoder==null) throw AblyException("Codec decoder not defined");
+    if (this.decoder==null) throw AblyException("Codec decoder not defined");
     return this.decoder(buffer);
   }
 
@@ -92,9 +92,9 @@ class Codec extends StandardMessageCodec {
   @override
   void writeValue (final WriteBuffer buffer, final dynamic value) {
     int type = getCodecType(value);
-    if(type==null){
+    if (type==null) {
       super.writeValue(buffer, value);
-    }else {
+    } else {
       buffer.putUint8(type);
       codecMap[type].encode(buffer, value);
     }
@@ -102,9 +102,9 @@ class Codec extends StandardMessageCodec {
 
   dynamic readValueOfType(int type, ReadBuffer buffer) {
     CodecPair pair = codecMap[type];
-    if(pair==null){
+    if (pair==null) {
       return super.readValueOfType(type, buffer);
-    }else{
+    } else {
       return pair.decode(buffer);
     }
   }
