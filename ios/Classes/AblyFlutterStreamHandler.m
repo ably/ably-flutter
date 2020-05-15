@@ -29,12 +29,12 @@
     AblyFlutter *const ably = [_plugin ablyWithHandle: message.handle];
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
-    
-    if([@"realtime:connectionStateChanged" isEqual: eventName]) {
+
+    if([@"realtime_onConnectionStateChanged" isEqual: eventName]) {
         listener = [[ably realtimeWithHandle: message.handle].connection  on: ^(ARTConnectionStateChange * const stateChange) {
             emitter(stateChange);
         }];
-    } else if([@"realtime:channelStateListener" isEqual: eventName]) {
+    } else if([@"realtime_onChannelStateChanged" isEqual: eventName]) {
         
     }
 }
