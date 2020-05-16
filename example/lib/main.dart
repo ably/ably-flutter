@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.verbose;
+    clientOptions.logLevel = ably.LogLevel.error;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
@@ -145,14 +145,9 @@ class _MyAppState extends State<MyApp> {
 
       //One can listen from multiple listeners on the same event,
       // and must cancel each subscription one by one
-      //RETAINING LISTENER
+      //RETAINING LISTENER - α
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
-      });
-
-      //RETAINING LISTENER
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINER LISTENER β :: Change event arrived!: ${stateChange.event}');
         setState(() { _realtimeConnectionState = stateChange.current; });
       });
 
@@ -164,6 +159,38 @@ class _MyAppState extends State<MyApp> {
         if (stateChange.event == ably.ConnectionEvent.connected) {
           await subscription.cancel();
         }
+      });
+
+      //RETAINING LISTENER - β
+      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+        print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
+        //NESTED LISTENER - ξ
+        realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
+          //k ξ listeners will be registered and each listener will be called `n-k` times respectively if listener β is called `n` times
+          print('NESTED LISTENER ξ: ${stateChangeX.event}');
+        });
+      });
+
+      StreamSubscription preZetaSubscription;
+      StreamSubscription postZetaSubscription;
+      preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
+        //This listener "pre ζ" will be cancelled from γ
+        print('NESTED LISTENER "pre ζ": ${stateChangeX.event}');
+      });
+
+
+      //RETAINING LISTENER - γ
+      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+        print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
+        if (stateChange.event == ably.ConnectionEvent.connected) {
+          await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
+          await postZetaSubscription.cancel(); //by the time this cancel is triggered, postZeta hasn't received the event yet. And will never receive as it is cancelled.
+        }
+      });
+
+      postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
+        //This listener "post ζ" will be cancelled from γ
+        print('NESTED LISTENER "post ζ": ${stateChangeX.event}');
       });
 
       setState(() {
