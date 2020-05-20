@@ -1,0 +1,47 @@
+syntax = "proto3";
+option java_outer_classname = "ProtoClientOptions";
+option java_package = "io.ably.flutter.plugin.protos";
+import "token.proto";
+
+enum HTTPMethods {
+    POST = 0;
+    GET = 1;
+}
+
+message ClientOptions {
+    string authUrl = 1;
+    HTTPMethods authMethod = 2;
+    string key = 3;
+    TokenDetails tokenDetails = 4;
+    map<string, string> authHeaders = 5;
+    map<string, string> authParams  = 6;
+    bool queryTime = 7;
+    bool useTokenAuth = 8;
+
+    // ClientOptions
+    string clientId = 9;
+    int32 logLevel = 10;
+    //TODO handle logHandler
+    bool tls = 11;
+    string restHost = 12;
+    string realtimeHost = 13;
+    uint32 port = 14;
+    uint32 tlsPort = 15;
+    bool autoConnect = 16;
+    bool useBinaryProtocol = 17;
+    bool queueMessages = 18;
+    bool echoMessages = 19;
+    string recover = 20;
+    string environment = 21;
+    bool idempotentRestPublishing = 22;
+    uint32 httpOpenTimeout = 23;
+    uint32 httpRequestTimeout = 24;
+    uint32 httpMaxRetryCount = 25;
+    uint32 realtimeRequestTimeout = 26;
+    repeated string fallbackHosts = 27;
+    bool fallbackHostsUseDefault = 28;
+    uint32 fallbackRetryTimeout = 29;
+    TokenParams defaultTokenParams = 30;
+    uint32 channelRetryTimeout = 31;
+    map<string, string> transportParams = 32;
+}

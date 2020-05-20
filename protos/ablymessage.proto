@@ -1,0 +1,12 @@
+syntax = "proto3";
+option java_outer_classname = "ProtoAblyMessage";
+option java_package = "io.ably.flutter.plugin.protos";
+
+import "datatypes.proto";
+import "google/protobuf/struct.proto";
+
+message AblyMessage {
+    int64 registrationHandle = 1;
+    CodecDataType messageType = 2;
+    google.protobuf.Struct message = 3;
+}

@@ -75,10 +75,20 @@ void main() {
     expect(rest.options.restHost, host);
   });
 
-  test("createRestWithKey", () async {
-    RestPlatformObject rest = await ably.createRest(key: 'TEST-KEY');
+  test("createRestWithToken", () async {
+    String key = 'TEST-KEY';
+    RestPlatformObject rest = await ably.createRest(key: key);
     expect(rest.ablyHandle, ablyCounter);
     expect(rest.handle, counter);
+    expect(rest.options.tokenDetails.token, key);
+  });
+
+  test("createRestWithKey", () async {
+    String key = 'TEST:KEY';
+    RestPlatformObject rest = await ably.createRest(key: key);
+    expect(rest.ablyHandle, ablyCounter);
+    expect(rest.handle, counter);
+    expect(rest.options.key, key);
   });
 
   test("publishMessage", () async {

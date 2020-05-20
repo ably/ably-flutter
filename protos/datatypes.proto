@@ -1,0 +1,31 @@
+syntax = "proto3";
+option java_outer_classname = "ProtoCodecDataTypes";
+option java_package = "io.ably.flutter.plugin.protos";
+
+// Custom type values must be over 127. At the time of writing the standard message
+// codec encodes them as an unsigned byte which means the maximum type value is 255.
+// If we get to the point of having more than that number of custom types (i.e. more
+// than 128 [255 - 127]) then we can either roll our own codec from scratch or,
+// perhaps easier, reserve custom type value 255 to indicate that it will be followed
+// by a subtype value - perhaps of a wider type.
+//
+// https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
+enum CodecDataType {
+    __ZERO__ = 0;  //this can't be avoided as first enum value must be 0 in proto3
+
+    //Ably flutter plugin protocol message
+    ABLY_MESSAGE = 128;
+
+    //Other ably objects
+    CLIENT_OPTIONS = 129;
+    TOKEN_DETAILS = 130;
+    ERROR_INFO = 144;
+
+    // Events
+    CONNECTION_EVENT = 201;
+    CONNECTION_STATE = 202;
+    CONNECTION_STATE_CHANGE = 203;
+    CHANNEL_EVENT = 204;
+    CHANNEL_STATE = 205;
+    CHANNEL_STATE_CHANGE = 206;
+}

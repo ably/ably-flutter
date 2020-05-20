@@ -32,7 +32,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
   @override
   Future<void> publish({String name, dynamic data}) async {
     try {
-      Map _map = { "channel": this.name, };
+      Map<String, dynamic> _map = { "channel": this.name, };
       if (name!=null) _map["name"] = name;
       if (data!=null) _map["message"] = data;
       await this.invoke(PlatformMethod.publish, _map);

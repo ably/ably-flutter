@@ -1,11 +1,15 @@
 package io.ably.flutter.plugin;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import io.ably.flutter.plugin.protos.ProtoAblyMessage;
+import io.ably.flutter.plugin.protos.ProtoCodecDataTypes;
 import io.ably.lib.realtime.ChannelEvent;
 import io.ably.lib.realtime.ChannelState;
 import io.ably.lib.realtime.ChannelStateListener;
@@ -19,28 +23,13 @@ import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
 
+
 public class AblyMessageCodec extends StandardMessageCodec {
 
-    //Ably flutter plugin protocol message
-    private static final byte _valueAblyMessage = (byte)128;
+    private static final String TAG = "AblyMessageCodec#";
 
-    //Other ably objects
-    private static final byte _valueClientOptions = (byte)129;
-    private static final byte _valueTokenDetails = (byte)130;
-    private static final byte _errorInfo = (byte)144;
-
-    // Events
-    private static final byte _connectionEvent = (byte)201;
-    private static final byte _connectionState = (byte)202;
-    private static final byte _connectionStateChange = (byte)203;
-    private static final byte _channelEvent = (byte)204;
-    private static final byte _channelState = (byte)205;
-    private static final byte _channelStateChange = (byte)206;
-
-//    @FunctionalInterface
     interface CodecEncoder<T>{ void encode(ByteArrayOutputStream stream, T value); }
-//    @FunctionalInterface
-    interface CodecDecoder<T>{ T decode(ByteBuffer buffer); }
+    interface CodecDecoder<T>{ T decode(ByteBuffer buffer) throws com.google.protobuf.InvalidProtocolBufferException; }
     class CodecPair<T>{
 
         final CodecEncoder<T> encoder;
@@ -58,7 +47,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
             this.encoder.encode(stream, (T)value);
         }
 
-        T decode(ByteBuffer buffer){
+        T decode(ByteBuffer buffer) throws com.google.protobuf.InvalidProtocolBufferException {
             if(this.decoder==null){
                 System.out.println("Codec decoder not defined");
                 return null;
@@ -67,33 +56,51 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
     }
 
-    private Map<Byte, CodecPair> codecMap;
+    private Map<ProtoCodecDataTypes.CodecDataType, CodecPair> codecMap;
 
     AblyMessageCodec(){
         AblyMessageCodec self = this;
-        codecMap = new HashMap<Byte, CodecPair>(){
+        codecMap = new HashMap<ProtoCodecDataTypes.CodecDataType, CodecPair>(){
             {
-                put(_valueAblyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
-                put(_valueClientOptions, new CodecPair<>(null, self::readClientOptions));
-                put(_valueTokenDetails, new CodecPair<>(null, self::readTokenDetails));
-                put(_errorInfo, new CodecPair<>(self::writeErrorInfo, null));
+                put(ProtoCodecDataTypes.CodecDataType.ABLY_MESSAGE,
+                        new CodecPair<>(null, self::readAblyFlutterMessage));
+                put(ProtoCodecDataTypes.CodecDataType.CLIENT_OPTIONS,
+                        new CodecPair<>(null, self::readClientOptions));
+                put(ProtoCodecDataTypes.CodecDataType.TOKEN_DETAILS,
+                        new CodecPair<>(null, self::readTokenDetails));
+                put(ProtoCodecDataTypes.CodecDataType.ERROR_INFO,
+                        new CodecPair<>(self::writeErrorInfo, null));
 
-                put(_connectionEvent, new CodecPair<>(self::writeConnectionEvent, null));
-                put(_connectionState, new CodecPair<>(self::writeConnectionState, null));
-                put(_connectionStateChange, new CodecPair<>(self::writeConnectionStateChange, null));
+                put(ProtoCodecDataTypes.CodecDataType.CONNECTION_EVENT,
+                        new CodecPair<>(self::writeConnectionEvent, null));
+                put(ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE,
+                        new CodecPair<>(self::writeConnectionState, null));
+                put(ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE_CHANGE,
+                        new CodecPair<>(self::writeConnectionStateChange, null));
 
-                put(_channelEvent, new CodecPair<>(self::writeChannelEvent, null));
-                put(_channelState, new CodecPair<>(self::writeChannelState, null));
-                put(_channelStateChange, new CodecPair<>(self::writeChannelStateChange, null));
+                put(ProtoCodecDataTypes.CodecDataType.CHANNEL_EVENT,
+                        new CodecPair<>(self::writeChannelEvent, null));
+                put(ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE,
+                        new CodecPair<>(self::writeChannelState, null));
+                put(ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE_CHANGE,
+                        new CodecPair<>(self::writeChannelStateChange, null));
             }
         };
     }
 
     @Override
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
-        CodecPair pair = codecMap.get(type);
+        //as byte supports from -128 to +127, converting to unsigned int is required to
+        // matching with [ProtoCodecDataTypes.CodecDataType]
+        int unsignedType = (type & 0xFF);
+        CodecPair pair = codecMap.get(ProtoCodecDataTypes.CodecDataType.forNumber(unsignedType));
         if(pair!=null){
-            return pair.decode(buffer);
+            try {
+                return pair.decode(buffer);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e){
+                Log.e(TAG, "Reading protocol buffer value failed.");
+                return null;
+            }
         }
         return super.readValueOfType(type, buffer);
     }
@@ -107,21 +114,21 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value) {
-        Byte type = null;
+        ProtoCodecDataTypes.CodecDataType type = null;
         if(value instanceof ErrorInfo){
-            type = _errorInfo;
+            type = ProtoCodecDataTypes.CodecDataType.ERROR_INFO;
         }else if(value instanceof ConnectionEvent){
-            type = _connectionEvent;
+            type = ProtoCodecDataTypes.CodecDataType.CONNECTION_EVENT;
         }else if(value instanceof ConnectionState){
-            type = _connectionState;
+            type = ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE;
         }else if(value instanceof ConnectionStateListener.ConnectionStateChange){
-            type = _connectionStateChange;
+            type = ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE_CHANGE;
         }else if(value instanceof ChannelEvent){
-            type = _channelEvent;
+            type = ProtoCodecDataTypes.CodecDataType.CHANNEL_EVENT;
         }else if(value instanceof ChannelState){
-            type = _channelState;
+            type = ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE;
         }else if(value instanceof ChannelStateListener.ChannelStateChange){
-            type = _channelStateChange;
+            type = ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE_CHANGE;
         }
         if(type!=null){
             CodecPair pair = codecMap.get(type);
@@ -149,10 +156,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return (Long)object; // will java.lang.ClassCastException if object is not a Long
     }
 
-    private AblyFlutterMessage readAblyFlutterMessage(final ByteBuffer buffer) {
-        final Long handle = readValueAsLong(buffer);
-        final Object message = readValue(buffer);
-        return new AblyFlutterMessage<>(handle, message);
+    private AblyFlutterMessage readAblyFlutterMessage(final ByteBuffer buffer) throws com.google.protobuf.InvalidProtocolBufferException {
+        ProtoAblyMessage.AblyMessage message = ProtoAblyMessage.AblyMessage.parseFrom(buffer.array());
+        ProtoCodecDataTypes.CodecDataType type = message.getMessageType();
+        System.out.println("type::"+type);
+//        codecMap[type].decode()
+
+        return new AblyFlutterMessage<>(message.getRegistrationHandle(), message.getMessage());
     }
 
     private ClientOptions readClientOptions(final ByteBuffer buffer) {
@@ -211,7 +221,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     //HANDLING WRITE
     private void writeErrorInfo(ByteArrayOutputStream stream, ErrorInfo e){
-        stream.write(_errorInfo);
+        stream.write(ProtoCodecDataTypes.CodecDataType.ERROR_INFO_VALUE);
         writeValue(stream, e.code);
         writeValue(stream, e.message);
         writeValue(stream, e.statusCode);
@@ -220,10 +230,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValue(stream, null); //cause - not available in ably-java
     }
 
-    private void writeConnectionEvent(ByteArrayOutputStream stream, ConnectionEvent e){ writeEnum(stream, _connectionEvent, e); }
-    private void writeConnectionState(ByteArrayOutputStream stream, ConnectionState e){ writeEnum(stream, _connectionState, e); }
+    private void writeConnectionEvent(ByteArrayOutputStream stream, ConnectionEvent e){
+        writeEnum(stream, ProtoCodecDataTypes.CodecDataType.CONNECTION_EVENT_VALUE, e);
+    }
+
+    private void writeConnectionState(ByteArrayOutputStream stream, ConnectionState e){
+        writeEnum(stream, ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE_VALUE, e);
+    }
+
     private void writeConnectionStateChange(ByteArrayOutputStream stream, ConnectionStateListener.ConnectionStateChange c){
-        stream.write(_connectionStateChange);
+        stream.write(ProtoCodecDataTypes.CodecDataType.CONNECTION_STATE_CHANGE_VALUE);
         writeValue(stream, c.current);
         writeValue(stream, c.previous);
         writeValue(stream, c.event);
@@ -231,10 +247,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValue(stream, c.reason);
     }
 
-    private void writeChannelEvent(ByteArrayOutputStream stream, ChannelEvent e){ writeEnum(stream, _channelEvent, e); }
-    private void writeChannelState(ByteArrayOutputStream stream, ChannelState e){ writeEnum(stream, _channelState, e); }
+    private void writeChannelEvent(ByteArrayOutputStream stream, ChannelEvent e){
+        writeEnum(stream, ProtoCodecDataTypes.CodecDataType.CHANNEL_EVENT_VALUE, e);
+    }
+
+    private void writeChannelState(ByteArrayOutputStream stream, ChannelState e){
+        writeEnum(stream, ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE_VALUE, e);
+    }
+
     private void writeChannelStateChange(ByteArrayOutputStream stream, ChannelStateListener.ChannelStateChange c){
-        stream.write(_channelStateChange);
+        stream.write(ProtoCodecDataTypes.CodecDataType.CHANNEL_STATE_CHANGE_VALUE);
         writeValue(stream, c.current);
         writeValue(stream, c.previous);
         writeValue(stream, c.event);

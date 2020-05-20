@@ -1,236 +1,271 @@
+import 'dart:ffi';
+import 'dart:typed_data';
+import 'dart:convert' show json;
+
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:fixnum/fixnum.dart';
+import 'package:protobuf/protobuf.dart' show GeneratedMessage;
+import '../gen/protos.dart' as protos;
 
 import '../ably.dart';
 
 
-typedef CodecEncoder<T>(final WriteBuffer buffer, final T value);
-typedef T CodecDecoder<T>(ReadBuffer buffer);
-class CodecPair<T>{
+typedef P CodecEncoder<T, P>(final WriteBuffer buffer, final T value);
+typedef T CodecDecoder<T>(Uint8List buffer);
+class CodecPair<T, P extends GeneratedMessage>{
 
-  final CodecEncoder<T> encoder;
+  final CodecEncoder<T, P> encoder;
   final CodecDecoder<T> decoder;
   CodecPair(this.encoder, this.decoder);
 
-  encode(final WriteBuffer buffer, final dynamic value){
+  Uint8List encode(final WriteBuffer buffer, final dynamic value){
     if (this.encoder==null) throw AblyException("Codec encoder not defined");
-    return this.encoder(buffer, value as T);
+    P message = this.encoder(buffer, value as T);
+    return message.writeToBuffer();
   }
 
-  T decode(ReadBuffer buffer){
+  T decode(Uint8List buffer){
     if (this.decoder==null) throw AblyException("Codec decoder not defined");
     return this.decoder(buffer);
   }
 
 }
 
+class CPair<T> extends CodecPair<T, protos.AblyMessage>{
+  CPair(a, b):super(a, b);
+}
+
 
 class Codec extends StandardMessageCodec {
 
-  // Custom type values must be over 127. At the time of writing the standard message
-  // codec encodes them as an unsigned byte which means the maximum type value is 255.
-  // If we get to the point of having more than that number of custom types (i.e. more
-  // than 128 [255 - 127]) then we can either roll our own codec from scratch or,
-  // perhaps easier, reserve custom type value 255 to indicate that it will be followed
-  // by a subtype value - perhaps of a wider type.
-  //
-  // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
-
-  //Ably flutter plugin protocol message
-  static const _valueAblyMessage = 128;
-
-  //Other ably objects
-  static const _valueClientOptions = 129;
-  static const _valueTokenDetails = 130;
-  static const _valueErrorInfo = 144;
-
-  // Events
-  static const _connectionEvent = 201;
-  static const _connectionState = 202;
-  static const _connectionStateChange = 203;
-  static const _channelEvent = 204;
-  static const _channelState = 205;
-  static const _channelStateChange = 206;
-
-  Map<int, CodecPair> codecMap;
+  Map<protos.CodecDataType, CodecPair> codecMap;
 
   Codec():super(){
     this.codecMap = {
       //Ably flutter plugin protocol message
-      _valueAblyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
+      protos.CodecDataType.ABLY_MESSAGE: CodecPair<AblyMessage, protos.AblyMessage>(ablyMessageToProto, ablyMessageFromProto),
 
       //Other ably objects
-      _valueClientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
-      _valueTokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
-      _valueErrorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
+      protos.CodecDataType.CLIENT_OPTIONS: CodecPair<ClientOptions, protos.ClientOptions>(encodeClientOptions, decodeClientOptions),
+//      protos.CodecDataType.TOKEN_DETAILS: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
+      /*protos.CodecDataType.ERROR_INFO: CPair<ErrorInfo>(null, decodeErrorInfo),
 
       //Events - Connection
-      _connectionEvent: CodecPair<ConnectionEvent>(null, decodeConnectionEvent),
-      _connectionState: CodecPair<ConnectionState>(null, decodeConnectionState),
-      _connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
+      protos.CodecDataType.CONNECTION_EVENT: CPair<ConnectionEvent>(null, decodeConnectionEvent),
+      protos.CodecDataType.CONNECTION_STATE: CPair<ConnectionState>(null, decodeConnectionState),
+      protos.CodecDataType.CONNECTION_STATE_CHANGE: CPair<ConnectionStateChange>(null, decodeConnectionStateChange),
 
       //Events - Channel
-      _channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
-      _channelState: CodecPair<ChannelState>(null, decodeChannelState),
-      _channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
+      protos.CodecDataType.CHANNEL_EVENT: CPair<ChannelEvent>(null, decodeChannelEvent),
+      protos.CodecDataType.CHANNEL_STATE: CPair<ChannelState>(null, decodeChannelState),
+      protos.CodecDataType.CHANNEL_STATE_CHANGE: CPair<ChannelStateChange>(null, decodeChannelStateChange),*/
     };
   }
 
-  getCodecType(final dynamic value){
+  protos.CodecDataType getCodecType(final dynamic value){
     if (value is ClientOptions) {
-      return _valueClientOptions;
+      return protos.CodecDataType.CLIENT_OPTIONS;
     } else if (value is TokenDetails) {
-      return _valueTokenDetails;
+      return protos.CodecDataType.TOKEN_DETAILS;
     } else if (value is ErrorInfo) {
-      return _valueErrorInfo;
+      return protos.CodecDataType.ERROR_INFO;
     } else if (value is AblyMessage) {
-      return _valueAblyMessage;
+      return protos.CodecDataType.ABLY_MESSAGE;
     }
+    return null;
   }
 
   @override
-  void writeValue (final WriteBuffer buffer, final dynamic value) {
-    int type = getCodecType(value);
+  void writeValue(final WriteBuffer buffer, final dynamic value) {
+    protos.CodecDataType type = getCodecType(value);
     if (type==null) {
       super.writeValue(buffer, value);
     } else {
-      buffer.putUint8(type);
-      codecMap[type].encode(buffer, value);
+      buffer.putUint8(type.value);
+      writeValue(buffer, codecMap[type].encode(buffer, value));
     }
   }
 
   dynamic readValueOfType(int type, ReadBuffer buffer) {
-    CodecPair pair = codecMap[type];
+    CodecPair pair = codecMap[protos.CodecDataType.valueOf(type)];
     if (pair==null) {
       return super.readValueOfType(type, buffer);
     } else {
-      return pair.decode(buffer);
+      return pair.decode(readValue(buffer) as Uint8List);
     }
   }
 
   // =========== ENCODERS ===========
-  encodeClientOptions(final WriteBuffer buffer, final ClientOptions v){
+  protos.ClientOptions encodeClientOptions(final WriteBuffer buffer, final ClientOptions v){
+    if(v==null) return null;
+    protos.ClientOptions options = protos.ClientOptions();
+
     // AuthOptions (super class of ClientOptions)
-    writeValue(buffer, v.authUrl);
-    writeValue(buffer, v.authMethod);
-    writeValue(buffer, v.key);
-    writeValue(buffer, v.tokenDetails);
-    writeValue(buffer, v.authHeaders);
-    writeValue(buffer, v.authParams);
-    writeValue(buffer, v.queryTime);
-    writeValue(buffer, v.useTokenAuth);
+    if(v.authUrl!=null) options.authUrl = v.authUrl;
+    if(v.authMethod!=null) options.authMethod = protos.HTTPMethods.valueOf(v.authMethod.index);
+    if(v.key!=null) options.key = v.key;
+    if(v.tokenDetails!=null) options.tokenDetails = tokenDetailsToProto(v.tokenDetails);
+    if(v.authHeaders!=null) options.authHeaders.addAll(v.authHeaders);
+    if(v.authParams!=null) options.authParams.addAll(v.authParams);
+    if(v.queryTime!=null) options.queryTime = v.queryTime;
+    if(v.useTokenAuth!=null) options.useTokenAuth = v.useTokenAuth;
 
     // ClientOptions
-    writeValue(buffer, v.clientId);
-    writeValue(buffer, v.logLevel);
+    if(v.clientId!=null) options.clientId = v.clientId;
+    if(v.logLevel!=null) options.logLevel = v.logLevel;
     //TODO handle logHandler
-    writeValue(buffer, v.tls);
-    writeValue(buffer, v.restHost);
-    writeValue(buffer, v.realtimeHost);
-    writeValue(buffer, v.port);
-    writeValue(buffer, v.tlsPort);
-    writeValue(buffer, v.autoConnect);
-    writeValue(buffer, v.useBinaryProtocol);
-    writeValue(buffer, v.queueMessages);
-    writeValue(buffer, v.echoMessages);
-    writeValue(buffer, v.recover);
-    writeValue(buffer, v.environment);
-    writeValue(buffer, v.idempotentRestPublishing);
-    writeValue(buffer, v.httpOpenTimeout);
-    writeValue(buffer, v.httpRequestTimeout);
-    writeValue(buffer, v.httpMaxRetryCount);
-    writeValue(buffer, v.realtimeRequestTimeout);
-    writeValue(buffer, v.fallbackHosts);
-    writeValue(buffer, v.fallbackHostsUseDefault);
-    writeValue(buffer, v.fallbackRetryTimeout);
-    writeValue(buffer, v.defaultTokenParams);
-    writeValue(buffer, v.channelRetryTimeout);
-    writeValue(buffer, v.transportParams);
+    if(v.tls!=null) options.tls = v.tls;
+    if(v.restHost!=null) options.restHost = v.restHost;
+    if(v.realtimeHost!=null) options.realtimeHost = v.realtimeHost;
+    if(v.port!=null) options.port = v.port;
+    if(v.tlsPort!=null) options.tlsPort = v.tlsPort;
+    if(v.autoConnect!=null) options.autoConnect = v.autoConnect;
+    if(v.useBinaryProtocol!=null) options.useBinaryProtocol = v.useBinaryProtocol;
+    if(v.queueMessages!=null) options.queueMessages = v.queueMessages;
+    if(v.echoMessages!=null) options.echoMessages = v.echoMessages;
+    if(v.recover!=null) options.recover = v.recover;
+    if(v.environment!=null) options.environment = v.environment;
+    if(v.idempotentRestPublishing!=null) options.idempotentRestPublishing = v.idempotentRestPublishing;
+    if(v.httpOpenTimeout!=null) options.httpOpenTimeout = v.httpOpenTimeout;
+    if(v.httpRequestTimeout!=null) options.httpRequestTimeout = v.httpRequestTimeout;
+    if(v.httpMaxRetryCount!=null) options.httpMaxRetryCount = v.httpMaxRetryCount;
+    if(v.realtimeRequestTimeout!=null) options.realtimeRequestTimeout = v.realtimeRequestTimeout;
+    if(v.fallbackHosts!=null) options.fallbackHosts.addAll(v.fallbackHosts);
+    if(v.fallbackHostsUseDefault!=null) options.fallbackHostsUseDefault = v.fallbackHostsUseDefault;
+    if(v.fallbackRetryTimeout!=null) options.fallbackRetryTimeout = v.fallbackRetryTimeout;
+    if(v.defaultTokenParams!=null) options.defaultTokenParams = tokenParamsToProto(v.defaultTokenParams);
+    if(v.channelRetryTimeout!=null) options.channelRetryTimeout = v.channelRetryTimeout;
+    if(v.transportParams!=null) options.transportParams.addAll(v.transportParams);
+    return options;
   }
 
-  encodeTokenDetails(final WriteBuffer buffer, final TokenDetails v){
-    writeValue(buffer, v.token);
-    writeValue(buffer, v.expires);
-    writeValue(buffer, v.issued);
-    writeValue(buffer, v.capability);
-    writeValue(buffer, v.clientId);
+  protos.TokenDetails tokenDetailsToProto(final TokenDetails v){
+    protos.TokenDetails details = protos.TokenDetails();
+    if(v.token!=null) details.token = v.token;
+    if(v.expires!=null) details.expires = v.expires;
+    if(v.issued!=null) details.issued = v.issued;
+    if(v.capability!=null) details.capability = v.capability;
+    if(v.clientId!=null) details.clientId = v.clientId;
+    return details;
   }
 
-  encodeAblyMessage(final WriteBuffer buffer, final AblyMessage v){
-    writeValue(buffer, v.registrationHandle);
-    writeValue(buffer, v.message);
+  protos.TokenParams tokenParamsToProto(final TokenParams v){
+    protos.TokenParams params = protos.TokenParams();
+    if(v.capability!=null) params.capability = v.capability;
+    if(v.clientId!=null) params.clientId = v.clientId;
+    if(v.nonce!=null) params.nonce = v.nonce;
+    if(v.timestamp!=null) params.timestamp = protos.Timestamp.fromDateTime(v.timestamp);
+    if(v.ttl!=null) params.ttl = v.ttl;
+    return params;
   }
 
+  protos.AblyMessage ablyMessageToProto(final WriteBuffer buffer, final AblyMessage v){
+    protos.AblyMessage message = protos.AblyMessage();
+    message.registrationHandle = Int64.parseInt(v.registrationHandle.toString());
+    if(v.message!=null) {
+      protos.CodecDataType type = getCodecType(v.message);
+      if (type == null) {
+        message.message = message.message.toBuilder()..mergeFromJsonMap(v.message as Map<String, dynamic>, null);
+      } else {
+        message.messageType = type;
+        message.message = message.message.toBuilder()
+          ..mergeFromBuffer(this.codecMap[type].encode(buffer, v.message));
+      }
+    }
+    return message;
+  }
 
   // =========== DECODERS ===========
-  ClientOptions decodeClientOptions(ReadBuffer buffer){
-    final ClientOptions v = ClientOptions();
+  ClientOptions decodeClientOptions(Uint8List buffer){
 
+    final protos.ClientOptions options = protos.ClientOptions.fromBuffer(buffer);
+
+    final ClientOptions v = ClientOptions();
     // AuthOptions (super class of ClientOptions)
-    v.authUrl = readValue(buffer) as String;
-    v.authMethod = readValue(buffer) as HTTPMethods;
-    v.key = readValue(buffer) as String;
-    v.tokenDetails = readValue(buffer) as TokenDetails;
-    v.authHeaders = readValue(buffer) as Map<String, String>;
-    v.authParams = readValue(buffer) as Map<String, String>;
-    v.queryTime = readValue(buffer) as bool;
-    v.useTokenAuth = readValue(buffer) as bool;
+    v.authUrl = options.authUrl;
+
+    v.authMethod = HTTPMethods.values[options.authMethod.value];
+    v.key = options.key;
+    v.tokenDetails = decodeTokenDetails(options.tokenDetails);
+    v.authHeaders = options.authHeaders;
+    v.authParams = options.authParams;
+    v.queryTime = options.queryTime;
+    v.useTokenAuth = options.useTokenAuth;
 
     // ClientOptions
-    v.clientId = readValue(buffer) as String;
-    v.logLevel = readValue(buffer) as int;
+    v.clientId = options.clientId;
+    v.logLevel = options.logLevel;
     //TODO handle logHandler
-    v.tls = readValue(buffer) as bool;
-    v.restHost = readValue(buffer) as String;
-    v.realtimeHost = readValue(buffer) as String;
-    v.port = readValue(buffer) as int;
-    v.tlsPort = readValue(buffer) as int;
-    v.autoConnect = readValue(buffer) as bool;
-    v.useBinaryProtocol = readValue(buffer) as bool;
-    v.queueMessages = readValue(buffer) as bool;
-    v.echoMessages = readValue(buffer) as bool;
-    v.recover = readValue(buffer) as String;
-    v.environment = readValue(buffer) as String;
-    v.idempotentRestPublishing = readValue(buffer) as bool;
-    v.httpOpenTimeout = readValue(buffer) as int;
-    v.httpRequestTimeout = readValue(buffer) as int;
-    v.httpMaxRetryCount = readValue(buffer) as int;
-    v.realtimeRequestTimeout = readValue(buffer) as int;
-    v.fallbackHosts = readValue(buffer) as List<String>;
-    v.fallbackHostsUseDefault = readValue(buffer) as bool;
-    v.fallbackRetryTimeout = readValue(buffer) as int;
-    v.defaultTokenParams = readValue(buffer) as TokenParams;
-    v.channelRetryTimeout = readValue(buffer) as int;
-    v.transportParams = readValue(buffer) as Map<String, String>;
+    v.tls = options.tls;
+    v.restHost = options.restHost;
+    v.realtimeHost = options.realtimeHost;
+    v.port = options.port;
+    v.tlsPort = options.tlsPort;
+    v.autoConnect = options.autoConnect;
+    v.useBinaryProtocol = options.useBinaryProtocol;
+    v.queueMessages = options.queueMessages;
+    v.echoMessages = options.echoMessages;
+    v.recover = options.recover;
+    v.environment = options.environment;
+    v.idempotentRestPublishing = options.idempotentRestPublishing;
+    v.httpOpenTimeout = options.httpOpenTimeout;
+    v.httpRequestTimeout = options.httpRequestTimeout;
+    v.httpMaxRetryCount = options.httpMaxRetryCount;
+    v.realtimeRequestTimeout = options.realtimeRequestTimeout;
+    v.fallbackHosts = options.fallbackHosts;
+    v.fallbackHostsUseDefault = options.fallbackHostsUseDefault;
+    v.fallbackRetryTimeout = options.fallbackRetryTimeout;
+    v.defaultTokenParams = decodeTokenParams(options.defaultTokenParams);
+    v.channelRetryTimeout = options.channelRetryTimeout;
+    v.transportParams = options.transportParams;
     return v;
   }
 
-  TokenDetails decodeTokenDetails(ReadBuffer buffer){
-    TokenDetails t = TokenDetails(readValue(buffer));
-    t.expires = readValue(buffer) as int;
-    t.issued = readValue(buffer) as int;
-    t.capability = readValue(buffer) as String;
-    t.clientId = readValue(buffer) as String;
+  TokenDetails decodeTokenDetails(protos.TokenDetails details){
+    TokenDetails t = TokenDetails(details.token);
+    t.expires = details.expires;
+    t.issued = details.issued;
+    t.capability = details.capability;
+    t.clientId = details.clientId;
     return t;
   }
 
-  AblyMessage decodeAblyMessage(ReadBuffer buffer){
+  TokenParams decodeTokenParams(protos.TokenParams params){
+    TokenParams p = TokenParams();
+    p.capability = params.capability;
+    p.clientId = params.clientId;
+    p.nonce = params.nonce;
+    p.timestamp = params.timestamp.toDateTime();
+    p.ttl = params.ttl;
+    return p;
+  }
+
+  AblyMessage ablyMessageFromProto(Uint8List buffer){
+    final protos.AblyMessage message = protos.AblyMessage.fromBuffer(buffer);
+    dynamic data;
+    if(message.messageType!=null && codecMap.containsKey(message.messageType)){
+      data = codecMap[message.messageType].decode(message.message.writeToBuffer());
+    }else{
+      data = message.message.writeToJsonMap();
+    }
     return AblyMessage(
-      readValue(buffer) as int,
-      readValue(buffer),
+      int.parse(message.registrationHandle.toString()),
+      data
     );
   }
 
-  ErrorInfo decodeErrorInfo(ReadBuffer buffer){
-    return ErrorInfo(
-        code: readValue(buffer) as int,
-        message: readValue(buffer) as String,
-        statusCode: readValue(buffer) as int,
-        href: readValue(buffer) as String,
-        requestId: readValue(buffer) as String,
-        cause: readValue(buffer) as ErrorInfo
-    );
+  ErrorInfo decodeErrorInfo(Uint8List buffer){
+    return ErrorInfo();
+//    return ErrorInfo(
+//        code: readValue(buffer) as int,
+//        message: readValue(buffer) as String,
+//        statusCode: readValue(buffer) as int,
+//        href: readValue(buffer) as String,
+//        requestId: readValue(buffer) as String,
+//        cause: readValue(buffer) as ErrorInfo
+//    );
   }
 
   ConnectionEvent decodeConnectionEvent(ReadBuffer buffer) => ConnectionEvent.values[readValue(buffer) as int];

@@ -1,0 +1,22 @@
+syntax = "proto3";
+option java_outer_classname = "ProtoToken";
+option java_package = "io.ably.flutter.plugin.protos";
+import "google/protobuf/timestamp.proto";
+
+
+message TokenDetails {
+    string token = 1;
+    uint32 expires = 2;
+    uint32 issued = 3;
+    string capability = 4;
+    string clientId = 5;
+}
+
+
+message TokenParams {
+    string capability = 1;
+    string clientId = 2;
+    string nonce = 3;
+    google.protobuf.Timestamp timestamp = 4;
+    uint32 ttl = 5;
+}

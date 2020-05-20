@@ -48,3 +48,16 @@ being a specialized package that includes platform-specific implementation code 
 - Flutter
 [documentation](https://flutter.dev/docs), offering tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+
+## Generating protos
+
+Generate protos for dart and iOS
+```bash
+protoc -I protos --dart_out=./lib/gen/protos --objc_out=./ios/Classes/protos ./protos/*.proto google/protobuf/timestamp.proto google/protobuf/struct.proto
+```
+
+Generating protos(well known dependencies only) for Android
+```bash
+protoc --java_out=lite:./android/src/main/java/ google/protobuf/timestamp.proto google/protobuf/struct.proto google/protobuf/internal.proto
+```

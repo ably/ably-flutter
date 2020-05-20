@@ -139,6 +139,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        System.out.println("<<<...HERE...>>>");
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<ClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
