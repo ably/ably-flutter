@@ -7,21 +7,21 @@
 
 typedef NS_ENUM(UInt8, _Value) {
 
-  codecTypes_ablyMessage = 128,
-  codecTypes_clientOptions = 129,
-  codecTypes_tokenDetails = 130,
-  codecTypes_errorInfo = 144,
-  codecTypes_connectionEvent = 201,
-  codecTypes_connectionState = 202,
-  codecTypes_connectionStateChange = 203,
-  codecTypes_channelEvent = 204,
-  codecTypes_channelState = 205,
-  codecTypes_channelStateChange = 206,
+  ablyMessageCodecType = 128,
+  clientOptionsCodecType = 129,
+  tokenDetailsCodecType = 130,
+  errorInfoCodecType = 144,
+  connectionEventCodecType = 201,
+  connectionStateCodecType = 202,
+  connectionStateChangeCodecType = 203,
+  channelEventCodecType = 204,
+  channelStateCodecType = 205,
+  channelStateChangeCodecType = 206,
   
 };
 
 
-@interface PLATFORM_METHODS : NSObject
+@interface AblyPlatformMethod : NSObject
 
 @property (class, nonatomic, assign, readonly) NSString *getPlatformVersion;
 @property (class, nonatomic, assign, readonly) NSString *getVersion;

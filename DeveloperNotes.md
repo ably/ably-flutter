@@ -52,4 +52,8 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Generating platform constants
 
+Some files in the project are generated to maintain sync between
+ platform constants on both native and dart side.
+  Generated file paths are configured as values in `bin/codegen.dart` for `toGenerate` Map
+
 [Read about generation of platform specific constant files](bin/README.md)

@@ -28,7 +28,7 @@
 }
 
 - (void) writeErrorInfo:(ARTErrorInfo *const) e{
-    [self writeByte:codecTypes_errorInfo];
+    [self writeByte:errorInfoCodecType];
     [self writeValue: nil];    //code - not available in ably-cocoa
     [self writeValue: [e message]];
     [self writeValue: @([e statusCode])];
@@ -37,10 +37,10 @@
     [self writeValue: nil]; //cause - not available in ably-java
 }
 
-- (void) writeConnectState:(ARTRealtimeConnectionState const) state{ [self writeEnum:codecTypes_connectionState enumValue:state]; }
-- (void) writeConnectEvent:(ARTRealtimeConnectionEvent const) event{ [self writeEnum:codecTypes_connectionEvent enumValue:event]; }
+- (void) writeConnectState:(ARTRealtimeConnectionState const) state{ [self writeEnum:connectionStateCodecType enumValue:state]; }
+- (void) writeConnectEvent:(ARTRealtimeConnectionEvent const) event{ [self writeEnum:connectionEventCodecType enumValue:event]; }
 - (void) writeConnectionStateChange:(ARTConnectionStateChange *const) stateChange{
-    [self writeByte:codecTypes_connectionStateChange];
+    [self writeByte:connectionStateChangeCodecType];
     [self writeConnectState: [stateChange current]];
     [self writeConnectState: [stateChange previous]];
     [self writeConnectEvent: [stateChange event]];
@@ -48,10 +48,10 @@
     [self writeValue: [stateChange reason]];
 }
 
-- (void) writeChannelState:(ARTRealtimeChannelState const) state{ [self writeEnum:codecTypes_channelState enumValue:state]; }
-- (void) writeChannelEvent:(ARTChannelEvent const) event{ [self writeEnum:codecTypes_channelEvent enumValue:event]; }
+- (void) writeChannelState:(ARTRealtimeChannelState const) state{ [self writeEnum:channelStateCodecType enumValue:state]; }
+- (void) writeChannelEvent:(ARTChannelEvent const) event{ [self writeEnum:channelEventCodecType enumValue:event]; }
 - (void) writeChannelStateChange:(ARTChannelStateChange *const) stateChange{
-    [self writeByte:codecTypes_channelStateChange];
+    [self writeByte:channelStateChangeCodecType];
     [self writeChannelState: [stateChange current]];
     [self writeChannelState: [stateChange previous]];
     [self writeChannelEvent: [stateChange event]];
