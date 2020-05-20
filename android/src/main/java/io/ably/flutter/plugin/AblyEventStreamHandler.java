@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import android.os.Handler;
 import android.os.Looper;
 
+import io.ably.flutter.plugin.gen.PlatformConstants;
 import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.flutter.plugin.common.EventChannel;
@@ -83,11 +84,11 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
             String eventName = message.message;
             switch(eventName) {
-                case "realtime_onConnectionStateChanged":
+                case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
                     connectionStateListener = new PluginConnectionStateListener(eventSink);
                     ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
                     return;
-                case "realtime_onChannelStateChanged":
+                case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
                     // channelStateListener = new PluginChannelStateListener(eventSink);
                     // ablyLibrary.getRealtime(message.handle).connection.on(channelStateListener);
                     // return;
@@ -106,9 +107,9 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
             String eventName = message.message;
             switch (eventName) {
-                case "realtime_onConnectionStateChanged":
+                case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
                     ablyLibrary.getRealtime(message.handle).connection.off(connectionStateListener);
-                case "realtime_onChannelStateChanged":
+                case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
                     // ablyLibrary.getRealtime(handle).connection.off(connectionStateListener);
             }
         });
