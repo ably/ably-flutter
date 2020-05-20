@@ -1,0 +1,11 @@
+class CodecTypes{
+
+  {{#each types}}static const int {{name}} = {{value}};
+  {{/each}}
+}
+
+class PlatformMethod {
+
+  {{#each methods}}static const String {{name}} = "{{value}}";
+  {{/each}}
+}

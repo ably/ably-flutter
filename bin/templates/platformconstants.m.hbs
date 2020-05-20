@@ -1,0 +1,9 @@
+#import <Foundation/Foundation.h>
+#import "AblyPlatformConstants.h"
+
+
+@implementation PLATFORM_METHODS
+
+{{#each methods}}+ (NSString*) {{name}} { return @"{{value}}"; }
+{{/each}}
+@end

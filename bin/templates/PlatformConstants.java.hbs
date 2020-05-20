@@ -1,0 +1,17 @@
+package io.ably.flutter.plugin.gen;
+
+
+public class PlatformConstants{
+
+  public class CodecTypes {
+    {{#each types}}public static final byte {{name}} = (byte){{value}};
+    {{/each}}
+  }
+
+  public class PlatformMethod {
+
+    {{#each methods}}public static final String {{name}} = "{{value}}";
+    {{/each}}
+  }
+
+}
