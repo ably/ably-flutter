@@ -20,13 +20,13 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
 
 -(id)readValueOfType:(const UInt8)type {
     switch (type) {
-        case codecTypes_clientOptions:
+        case clientOptionsCodecType:
             return [self readClientOptions];
             
-        case codecTypes_tokenDetails:
+        case tokenDetailsCodecType:
             return [self readTokenDeatils];
             
-        case codecTypes_ablyMessage:
+        case ablyMessageCodecType:
             return [self readAblyFlutterMessage];
     }
     

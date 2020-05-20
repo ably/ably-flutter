@@ -9,6 +9,7 @@
 #import "AblyFlutter.h"
 #import "AblyFlutterStreamHandler.h"
 #import "FlutterStreamsChannel.h"
+#import "codec/AblyPlatformConstants.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -101,10 +102,6 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     result(nil);
 };
 
-static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    // TODO
-};
-
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
@@ -139,15 +136,14 @@ static FlutterHandler _dispose = ^void(AblyFlutterPlugin *const plugin, FlutterM
     }
     
     _handlers = @{
-        @"getPlatformVersion": _getPlatformVersion,
-        @"getVersion": _getVersion,
-        @"register": _register,
-        @"createRestWithOptions": _createRestWithOptions,
-        @"publish": _publishRestMessage,
-        @"createRealtimeWithOptions": _createRealtimeWithOptions,
-        @"connectRealtime": _connectRealtime,
-        @"closeRealtime": _closeRealtime,
-        @"dispose": _dispose,
+        AblyPlatformMethod.getPlatformVersion: _getPlatformVersion,
+        AblyPlatformMethod.getVersion: _getVersion,
+        AblyPlatformMethod.registerAbly: _register,
+        AblyPlatformMethod.createRestWithOptions: _createRestWithOptions,
+        AblyPlatformMethod.publish: _publishRestMessage,
+        AblyPlatformMethod.createRealtimeWithOptions: _createRealtimeWithOptions,
+        AblyPlatformMethod.connectRealtime: _connectRealtime,
+        AblyPlatformMethod.closeRealtime: _closeRealtime
     };
     
     _nextRegistration = 1;

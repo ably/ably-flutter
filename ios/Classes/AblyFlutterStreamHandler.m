@@ -2,6 +2,7 @@
 #import "AblyFlutterPlugin.h"
 #import "AblyFlutterMessage.h"
 #import "ARTRealtime.h"
+#import "codec/AblyPlatformConstants.h"
 
 @implementation AblyFlutterStreamHandler{
     ARTEventListener *listener;
@@ -30,11 +31,11 @@
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
 
-    if([@"realtime_onConnectionStateChanged" isEqual: eventName]) {
+    if([AblyPlatformMethod.onRealtimeConnectionStateChanged isEqual: eventName]) {
         listener = [[ably realtimeWithHandle: message.handle].connection  on: ^(ARTConnectionStateChange * const stateChange) {
             emitter(stateChange);
         }];
-    } else if([@"realtime_onChannelStateChanged" isEqual: eventName]) {
+    } else if([AblyPlatformMethod.onRealtimeChannelStateChanged isEqual: eventName]) {
         
     }
 }
@@ -44,9 +45,9 @@
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
     
-    if([@"realtime_onConnectionStateChanged" isEqual: eventName]) {
+    if([AblyPlatformMethod.onRealtimeConnectionStateChanged isEqual: eventName]) {
         [[ably realtimeWithHandle: message.handle].connection  off: listener];
-    } else if([@"realtime_onChannelStateChanged" isEqual: eventName]) {
+    } else if([AblyPlatformMethod.onRealtimeChannelStateChanged isEqual: eventName]) {
             
     }
 }

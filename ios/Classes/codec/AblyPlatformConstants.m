@@ -7,7 +7,7 @@
 #import "AblyPlatformConstants.h"
 
 
-@implementation PLATFORM_METHODS
+@implementation AblyPlatformMethod
 
 + (NSString*) getPlatformVersion { return @"getPlatformVersion"; }
 + (NSString*) getVersion { return @"getVersion"; }
