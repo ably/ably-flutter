@@ -16,6 +16,7 @@ import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+import io.ably.flutter.plugin.gen.PlatformConstants;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private static AblyMethodCallHandler _instance;
@@ -35,18 +36,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private AblyMethodCallHandler() {
         _map = new HashMap<>();
-        _map.put("getPlatformVersion", this::getPlatformVersion);
-        _map.put("getVersion", this::getVersion);
-        _map.put("register", this::register);
+        _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
+        _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
+        _map.put(PlatformConstants.PlatformMethod.registerAbly, this::register);
 
         // Rest
-        _map.put("createRestWithOptions", this::createRestWithOptions);
-        _map.put("publish", this::publishRestMessage);
+        _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
+        _map.put(PlatformConstants.PlatformMethod.publish, this::publishRestMessage);
 
         //Realtime
-        _map.put("createRealtimeWithOptions", this::createRealtimeWithOptions);
-        _map.put("connectRealtime", this::connectRealtime);
-        _map.put("closeRealtime", this::closeRealtime);
+        _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
+        _map.put(PlatformConstants.PlatformMethod.connectRealtime, this::connectRealtime);
+        _map.put(PlatformConstants.PlatformMethod.closeRealtime, this::closeRealtime);
 
     }
 
