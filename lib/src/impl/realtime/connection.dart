@@ -31,7 +31,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   @override
   Stream<ConnectionStateChange> on([ConnectionEvent state]) {
-    Stream<ConnectionStateChange> stream = listen(PlatformMethod.realtime_onConnectionStateChanged).transform<ConnectionStateChange>(
+    Stream<ConnectionStateChange> stream = listen(PlatformMethod.onRealtimeConnectionStateChanged).transform<ConnectionStateChange>(
         StreamTransformer.fromHandlers(
             handleData: (dynamic value, EventSink<ConnectionStateChange> sink){
               sink.add(value as ConnectionStateChange);

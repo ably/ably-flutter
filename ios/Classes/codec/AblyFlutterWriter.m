@@ -3,6 +3,7 @@
 #import "ARTTypes.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
+#import "AblyPlatformConstants.h"
 
 
 @implementation AblyFlutterWriter
@@ -27,7 +28,7 @@
 }
 
 - (void) writeErrorInfo:(ARTErrorInfo *const) e{
-    [self writeByte:_ValueErrorInfo];
+    [self writeByte:codecTypes_errorInfo];
     [self writeValue: nil];    //code - not available in ably-cocoa
     [self writeValue: [e message]];
     [self writeValue: @([e statusCode])];
@@ -36,10 +37,10 @@
     [self writeValue: nil]; //cause - not available in ably-java
 }
 
-- (void) writeConnectState:(ARTRealtimeConnectionState const) state{ [self writeEnum:_connectionState enumValue:state]; }
-- (void) writeConnectEvent:(ARTRealtimeConnectionEvent const) event{ [self writeEnum:_connectionEvent enumValue:event]; }
+- (void) writeConnectState:(ARTRealtimeConnectionState const) state{ [self writeEnum:codecTypes_connectionState enumValue:state]; }
+- (void) writeConnectEvent:(ARTRealtimeConnectionEvent const) event{ [self writeEnum:codecTypes_connectionEvent enumValue:event]; }
 - (void) writeConnectionStateChange:(ARTConnectionStateChange *const) stateChange{
-    [self writeByte:_connectionStateChange];
+    [self writeByte:codecTypes_connectionStateChange];
     [self writeConnectState: [stateChange current]];
     [self writeConnectState: [stateChange previous]];
     [self writeConnectEvent: [stateChange event]];
@@ -47,10 +48,10 @@
     [self writeValue: [stateChange reason]];
 }
 
-- (void) writeChannelState:(ARTRealtimeChannelState const) state{ [self writeEnum:_channelState enumValue:state]; }
-- (void) writeChannelEvent:(ARTChannelEvent const) event{ [self writeEnum:_channelEvent enumValue:event]; }
+- (void) writeChannelState:(ARTRealtimeChannelState const) state{ [self writeEnum:codecTypes_channelState enumValue:state]; }
+- (void) writeChannelEvent:(ARTChannelEvent const) event{ [self writeEnum:codecTypes_channelEvent enumValue:event]; }
 - (void) writeChannelStateChange:(ARTChannelStateChange *const) stateChange{
-    [self writeByte:_channelStateChange];
+    [self writeByte:codecTypes_channelStateChange];
     [self writeChannelState: [stateChange current]];
     [self writeChannelState: [stateChange previous]];
     [self writeChannelEvent: [stateChange event]];

@@ -1,6 +1,8 @@
 #import "AblyFlutterReader.h"
 #import "Ably.h"
 #import "AblyFlutterMessage.h"
+#import "AblyPlatformConstants.h"
+
 
 static ARTLogLevel _logLevel(NSNumber *const number) {
     switch (number.unsignedIntegerValue) {
@@ -17,14 +19,14 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
 @implementation AblyFlutterReader
 
 -(id)readValueOfType:(const UInt8)type {
-    switch ((_Value)type) {
-        case _valueClientOptions:
+    switch (type) {
+        case codecTypes_clientOptions:
             return [self readClientOptions];
             
-        case _valueTokenDetails:
+        case codecTypes_tokenDetails:
             return [self readTokenDeatils];
             
-        case _valueAblyMessage:
+        case codecTypes_ablyMessage:
             return [self readAblyFlutterMessage];
     }
     

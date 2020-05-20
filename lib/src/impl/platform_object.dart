@@ -4,35 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:streams_channel/streams_channel.dart';
 
 
-/// A method with a corresponding handler in platform code.
-enum PlatformMethod {
-  getPlatformVersion,
-  getVersion,
-  register,
-
-  /// Rest
-  createRestWithOptions,
-  publish,
-
-  /// Realtime
-  createRealtimeWithOptions,
-  connectRealtime,
-  closeRealtime,
-
-  ///Realtime events
-  realtime_onConnectionStateChanged,
-  realtime_onChannelStateChanged,
-}
-
-///Extension to extract string name from PlatformMethod
-extension on PlatformMethod {
-
-  /// ref: https://stackoverflow.com/a/59308734/392847
-  String toName() => this.toString().split('.').last;
-
-}
-
-
 /// An object which has a live counterpart in the Platform client library SDK,
 /// where that live counterpart is held as a strong reference by the plugin
 /// implementation.
@@ -58,15 +29,15 @@ abstract class PlatformObject {
   }
 
   /// Call a method.
-  Future<dynamic> invoke(final PlatformMethod method, [final dynamic argument]) async {
+  Future<dynamic> invoke(final String method, [final dynamic argument]) async {
     final message = (null != argument)
         ? AblyMessage(_ablyHandle, AblyMessage(_handle, argument))
         : AblyMessage(_ablyHandle, _handle);
-    return await methodChannel.invokeMethod(method.toName(), message);
+    return await methodChannel.invokeMethod(method, message);
   }
 
-  Stream<dynamic> listen(final PlatformMethod method){
-    return eventChannel.receiveBroadcastStream(AblyMessage(_ablyHandle, AblyMessage(_handle, method.toName())));
+  Stream<dynamic> listen(final String method){
+    return eventChannel.receiveBroadcastStream(AblyMessage(_ablyHandle, AblyMessage(_handle, method)));
   }
 
 }

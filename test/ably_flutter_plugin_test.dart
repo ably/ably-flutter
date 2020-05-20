@@ -26,24 +26,28 @@ void main() {
   int ablyCounter = 0;
   int counter = 0;
 
+  //test constants
+  String platformVersion = '42';
+  String nativeLibraryVersion = '1.1.0';
+
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
       switch(methodCall.method){
-        case "getPlatformVersion":
-          return '42';
-        case "getVersion":
-          return '1.1.0';
+        case PlatformMethod.getPlatformVersion:
+          return platformVersion;
+        case PlatformMethod.getVersion:
+          return nativeLibraryVersion;
 
-        case "register":
+        case PlatformMethod.registerAbly:
           return ++ablyCounter;
 
         case "createrestWithKey":
-        case "createRestWithOptions":
-        case "createRealtimeWithOptions":
+        case PlatformMethod.createRestWithOptions:
+        case PlatformMethod.createRealtimeWithOptions:
           return ++counter;
 
-        case "publish":
-        case "connectRealtime":
+        case PlatformMethod.publish:
+        case PlatformMethod.connectRealtime:
         default:
           return null;
         //  eventsOff,
@@ -57,15 +61,15 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test(PlatformMethod.getPlatformVersion.toName(), () async {
-     expect(await ably.platformVersion, '42');
+  test(PlatformMethod.getPlatformVersion, () async {
+     expect(await ably.platformVersion, platformVersion);
   });
 
-  test(PlatformMethod.getVersion.toName(), () async {
-    expect(await ably.version, '1.1.0');
+  test(PlatformMethod.getVersion, () async {
+    expect(await ably.version, nativeLibraryVersion);
   });
 
-  test(PlatformMethod.createRestWithOptions.toName(), () async {
+  test(PlatformMethod.createRestWithOptions, () async {
     ClientOptions o = ClientOptions();
     String host = "http://rest.ably.io/";
     o.restHost = host;
@@ -75,10 +79,20 @@ void main() {
     expect(rest.options.restHost, host);
   });
 
-  test("createRestWithKey", () async {
-    RestPlatformObject rest = await ably.createRest(key: 'TEST-KEY');
+  test("createRestWithToken", () async {
+    String key = 'TEST-KEY';
+    RestPlatformObject rest = await ably.createRest(key: key);
     expect(rest.ablyHandle, ablyCounter);
     expect(rest.handle, counter);
+    expect(rest.options.tokenDetails.token, key);
+  });
+
+  test("createRestWithKey", () async {
+    String key = 'TEST:KEY';
+    RestPlatformObject rest = await ably.createRest(key: key);
+    expect(rest.ablyHandle, ablyCounter);
+    expect(rest.handle, counter);
+    expect(rest.options.key, key);
   });
 
   test("publishMessage", () async {
