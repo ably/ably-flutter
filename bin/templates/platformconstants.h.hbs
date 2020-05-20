@@ -1,0 +1,14 @@
+#import <Foundation/Foundation.h>
+
+typedef NS_ENUM(UInt8, _Value) {
+
+  {{#each types}}codecTypes_{{name}} = {{value}},
+  {{/each}}
+};
+
+
+@interface PLATFORM_METHODS : NSObject
+
+{{#each methods}}@property (class, nonatomic, assign, readonly) NSString *{{name}};
+{{/each}}
+@end
