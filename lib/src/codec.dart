@@ -1,4 +1,5 @@
 import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:ably_flutter_plugin/src/gen/platformconstants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -28,64 +29,39 @@ class CodecPair<T>{
 
 class Codec extends StandardMessageCodec {
 
-  // Custom type values must be over 127. At the time of writing the standard message
-  // codec encodes them as an unsigned byte which means the maximum type value is 255.
-  // If we get to the point of having more than that number of custom types (i.e. more
-  // than 128 [255 - 127]) then we can either roll our own codec from scratch or,
-  // perhaps easier, reserve custom type value 255 to indicate that it will be followed
-  // by a subtype value - perhaps of a wider type.
-  //
-  // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
-
-  //Ably flutter plugin protocol message
-  static const _valueAblyMessage = 128;
-
-  //Other ably objects
-  static const _valueClientOptions = 129;
-  static const _valueTokenDetails = 130;
-  static const _valueErrorInfo = 144;
-
-  // Events
-  static const _connectionEvent = 201;
-  static const _connectionState = 202;
-  static const _connectionStateChange = 203;
-  static const _channelEvent = 204;
-  static const _channelState = 205;
-  static const _channelStateChange = 206;
-
   Map<int, CodecPair> codecMap;
 
   Codec():super(){
     this.codecMap = {
       //Ably flutter plugin protocol message
-      _valueAblyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
+      CodecTypes.ablyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
 
       //Other ably objects
-      _valueClientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
-      _valueTokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
-      _valueErrorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
+      CodecTypes.clientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
+      CodecTypes.tokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
+      CodecTypes.errorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
 
       //Events - Connection
-      _connectionEvent: CodecPair<ConnectionEvent>(null, decodeConnectionEvent),
-      _connectionState: CodecPair<ConnectionState>(null, decodeConnectionState),
-      _connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
+      CodecTypes.connectionEvent: CodecPair<ConnectionEvent>(null, decodeConnectionEvent),
+      CodecTypes.connectionState: CodecPair<ConnectionState>(null, decodeConnectionState),
+      CodecTypes.connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
 
       //Events - Channel
-      _channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
-      _channelState: CodecPair<ChannelState>(null, decodeChannelState),
-      _channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
+      CodecTypes.channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
+      CodecTypes.channelState: CodecPair<ChannelState>(null, decodeChannelState),
+      CodecTypes.channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
     };
   }
 
   getCodecType(final dynamic value){
     if (value is ClientOptions) {
-      return _valueClientOptions;
+      return CodecTypes.clientOptions;
     } else if (value is TokenDetails) {
-      return _valueTokenDetails;
+      return CodecTypes.tokenDetails;
     } else if (value is ErrorInfo) {
-      return _valueErrorInfo;
+      return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {
-      return _valueAblyMessage;
+      return CodecTypes.ablyMessage;
     }
   }
 

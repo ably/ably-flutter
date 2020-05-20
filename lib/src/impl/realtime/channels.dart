@@ -90,7 +90,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   @override
   Stream<ChannelStateChange> on([ChannelEvent state]) {
     // TODO: implement on
-    Stream<ChannelStateChange> stream = listen(PlatformMethod.realtime_onChannelStateChanged);
+    Stream<ChannelStateChange> stream = listen(PlatformMethod.onRealtimeChannelStateChanged);
     if (state!=null) {
       return stream.takeWhile((ChannelStateChange _stateChange) => _stateChange.event==state);
     }

@@ -48,3 +48,8 @@ being a specialized package that includes platform-specific implementation code 
 - Flutter
 [documentation](https://flutter.dev/docs), offering tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+
+## Generating platform constants
+
+[Read about generation of platform specific constant files](bin/README.md)
