@@ -130,10 +130,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private AblyFlutterMessage readAblyFlutterMessage(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
-        final Long handle = readValueAsLong(jsonMap.get("registrationHandle"));
-        Object messageType = jsonMap.get("type");
+        final Long handle = readValueAsLong(jsonMap.get(PlatformConstants.TxAblyMessage.registrationHandle));
+        Object messageType = jsonMap.get(PlatformConstants.TxAblyMessage.type);
         final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
-        Object message = jsonMap.get("message");
+        Object message = jsonMap.get(PlatformConstants.TxAblyMessage.message);
         if(type!=null){
             message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
         }
@@ -145,51 +145,51 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final ClientOptions o = new ClientOptions();
 
         // AuthOptions (super class of ClientOptions)
-        readValueFromJson(jsonMap, "authUrl", v -> o.authUrl = (String)v);
-        readValueFromJson(jsonMap, "authMethod", v -> o.authMethod = (String)v);
-        readValueFromJson(jsonMap, "key", v -> o.key = (String)v);
-        readValueFromJson(jsonMap, "tokenDetails", v -> o.tokenDetails = readTokenDetails((Map<String, Object>)v));
-        readValueFromJson(jsonMap, "authHeaders", v -> o.authHeaders = (Param[])v);
-        readValueFromJson(jsonMap, "authParams", v -> o.authParams = (Param[])v);
-        readValueFromJson(jsonMap, "queryTime", v -> o.queryTime = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, v -> o.authUrl = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> o.authMethod = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.key, v -> o.key = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tokenDetails, v -> o.tokenDetails = readTokenDetails((Map<String, Object>)v));
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, v -> o.authHeaders = (Param[])v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[])v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean)v);
 //        readValueFromJson(buffer); // o.useAuthToken
 
         // ClientOptions
-        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
-        readValueFromJson(jsonMap, "logLevel", v -> o.logLevel = (Integer)v);
-        readValueFromJson(jsonMap, "tls", v -> o.tls = (Boolean)v);
-        readValueFromJson(jsonMap, "restHost", v -> o.restHost = (String)v);
-        readValueFromJson(jsonMap, "realtimeHost", v -> o.realtimeHost = (String)v);
-        readValueFromJson(jsonMap, "port", v -> o.port = (Integer)v);
-        readValueFromJson(jsonMap, "tlsPort", v -> o.tlsPort = (Integer)v);
-        readValueFromJson(jsonMap, "autoConnect", v -> o.autoConnect = (Boolean)v);
-        readValueFromJson(jsonMap, "useBinaryProtocol", v -> o.useBinaryProtocol = (Boolean)v);
-        readValueFromJson(jsonMap, "queueMessages", v -> o.queueMessages = (Boolean)v);
-        readValueFromJson(jsonMap, "echoMessages", v -> o.echoMessages = (Boolean)v);
-        readValueFromJson(jsonMap, "recover", v -> o.recover = (String)v);
-        readValueFromJson(jsonMap, "environment", v -> o.environment = (String)v);
-        readValueFromJson(jsonMap, "idempotentRestPublishing", v -> o.idempotentRestPublishing = (Boolean)v);
-        readValueFromJson(jsonMap, "httpOpenTimeout", v -> o.httpOpenTimeout = (Integer)v);
-        readValueFromJson(jsonMap, "httpRequestTimeout", v -> o.httpRequestTimeout = (Integer)v);
-        readValueFromJson(jsonMap, "httpMaxRetryCount", v -> o.httpMaxRetryCount = (Integer)v);
-        readValueFromJson(jsonMap, "realtimeRequestTimeout", v -> o.realtimeRequestTimeout = (Long)v);
-        readValueFromJson(jsonMap, "fallbackHosts", v -> o.fallbackHosts = (String[])v);
-        readValueFromJson(jsonMap, "fallbackHostsUseDefault", v -> o.fallbackHostsUseDefault = (Boolean)v);
-        readValueFromJson(jsonMap, "fallbackRetryTimeout", v -> o.fallbackRetryTimeout = (Long)v);
-        readValueFromJson(jsonMap, "defaultTokenParams", v -> o.defaultTokenParams = readTokenParams((Map<String, Object>)v));
-        readValueFromJson(jsonMap, "channelRetryTimeout", v -> o.channelRetryTimeout = (Integer)v);
-        readValueFromJson(jsonMap, "transportParams", v -> o.transportParams = (Param[])v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.logLevel, v -> o.logLevel = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tls, v -> o.tls = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.restHost, v -> o.restHost = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> o.realtimeHost = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.port, v -> o.port = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> o.tlsPort = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.autoConnect, v -> o.autoConnect = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useBinaryProtocol, v -> o.useBinaryProtocol = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queueMessages, v -> o.queueMessages = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> o.echoMessages = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.recover, v -> o.recover = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.environment, v -> o.environment = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.idempotentRestPublishing, v -> o.idempotentRestPublishing = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpOpenTimeout, v -> o.httpOpenTimeout = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> o.httpRequestTimeout = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> o.httpMaxRetryCount = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> o.realtimeRequestTimeout = (Long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> o.fallbackHosts = (String[])v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> o.fallbackHostsUseDefault = (Boolean)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = (Long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = readTokenParams((Map<String, Object>)v));
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[])v);
         return o;
     }
 
     private TokenDetails readTokenDetails(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final TokenDetails o = new TokenDetails();
-        readValueFromJson(jsonMap, "token", v -> o.token = (String)v);
-        readValueFromJson(jsonMap, "expires", v -> o.expires = (int)v);
-        readValueFromJson(jsonMap, "issued", v -> o.issued = (int)v);
-        readValueFromJson(jsonMap, "capability", v -> o.capability = (String)v);
-        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.token, v -> o.token = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.expires, v -> o.expires = (int)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.issued, v -> o.issued = (int)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.capability, v -> o.capability = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.clientId, v -> o.clientId = (String)v);
 
         return o;
     }
@@ -197,10 +197,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private Auth.TokenParams readTokenParams(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final Auth.TokenParams o = new Auth.TokenParams();
-        readValueFromJson(jsonMap, "capability", v -> o.capability = (String)v);
-        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
-        readValueFromJson(jsonMap, "timestamp", v -> o.timestamp = (int)v);
-        readValueFromJson(jsonMap, "ttl", v -> o.ttl = (long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.capability, v -> o.capability = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.clientId, v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.timestamp, v -> o.timestamp = (int)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = (long)v);
         //nonce is not supported in ably-java
         return o;
     }
@@ -212,10 +212,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private Map<String, Object> encodeErrorInfo(ErrorInfo c){
         if(c==null) return null;
         HashMap<String, Object> jsonMap = new HashMap<>();
-        writeValueToJson(jsonMap, "code", c.code);
-        writeValueToJson(jsonMap, "message", c.message);
-        writeValueToJson(jsonMap, "statusCode", c.statusCode);
-        writeValueToJson(jsonMap, "href", c.href);
+        writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.code, c.code);
+        writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.message, c.message);
+        writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.statusCode, c.statusCode);
+        writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.href, c.href);
         //requestId and cause - not available in ably-java
         return jsonMap;
     }
@@ -223,22 +223,22 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c){
         if(c==null) return null;
         HashMap<String, Object> jsonMap = new HashMap<>();
-        writeEnumToJson(jsonMap, "current", c.current);
-        writeEnumToJson(jsonMap, "previous", c.previous);
-        writeEnumToJson(jsonMap, "event", c.event);
-        writeValueToJson(jsonMap, "retryIn", c.retryIn);
-        writeValueToJson(jsonMap, "reason", encodeErrorInfo(c.reason));
+        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, c.current);
+        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, c.previous);
+        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, c.event);
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.retryIn, c.retryIn);
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.reason));
         return jsonMap;
     }
 
     private Map<String, Object> writeChannelStateChange(ChannelStateListener.ChannelStateChange c){
         if(c==null) return null;
         HashMap<String, Object> jsonMap = new HashMap<>();
-        writeEnumToJson(jsonMap, "current", c.current);
-        writeEnumToJson(jsonMap, "previous", c.previous);
-        writeEnumToJson(jsonMap, "event", c.event);
-        writeValueToJson(jsonMap, "resumed", c.resumed);
-        writeValueToJson(jsonMap, "reason", encodeErrorInfo(c.reason));
+        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, c.current);
+        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.previous, c.previous);
+        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, c.event);
+        writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
+        writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
         return jsonMap;
     }
 
