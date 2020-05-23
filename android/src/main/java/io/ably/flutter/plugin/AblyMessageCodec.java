@@ -22,10 +22,9 @@ import io.ably.flutter.plugin.gen.PlatformConstants;
 
 public class AblyMessageCodec extends StandardMessageCodec {
 
-//    @FunctionalInterface
-    interface CodecEncoder<T>{ void encode(ByteArrayOutputStream stream, T value); }
-//    @FunctionalInterface
-    interface CodecDecoder<T>{ T decode(ByteBuffer buffer); }
+    interface CodecEncoder<T>{ Map<String, Object> encode(T value); }
+    interface CodecDecoder<T>{ T decode(Map<String, Object> jsonMap); }
+
     class CodecPair<T>{
 
         final CodecEncoder<T> encoder;
@@ -35,20 +34,20 @@ public class AblyMessageCodec extends StandardMessageCodec {
             this.decoder = decoder;
         }
 
-        void encode(final ByteArrayOutputStream stream, final Object value){
+        Map<String, Object> encode(final Object value){
             if(this.encoder==null){
                 System.out.println("Codec encoder not defined");
-                return;
+                return null;
             }
-            this.encoder.encode(stream, (T)value);
+            return this.encoder.encode((T)value);
         }
 
-        T decode(ByteBuffer buffer){
+        T decode(Map<String, Object> jsonMap){
             if(this.decoder==null){
                 System.out.println("Codec decoder not defined");
                 return null;
             }
-            return this.decoder.decode(buffer);
+            return this.decoder.decode(jsonMap);
         }
     }
 
@@ -60,15 +59,15 @@ public class AblyMessageCodec extends StandardMessageCodec {
             {
                 put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
                 put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::readClientOptions));
-                put(PlatformConstants.CodecTypes.tokenDetails, new CodecPair<>(null, self::readTokenDetails));
-                put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::writeErrorInfo, null));
+//                put(PlatformConstants.CodecTypes.tokenDetails, new CodecPair<>(null, self::readTokenDetails));
+                put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
 
-                put(PlatformConstants.CodecTypes.connectionEvent, new CodecPair<>(self::writeConnectionEvent, null));
-                put(PlatformConstants.CodecTypes.connectionState, new CodecPair<>(self::writeConnectionState, null));
-                put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::writeConnectionStateChange, null));
+//                put(PlatformConstants.CodecTypes.connectionEvent, new CodecPair<>(self::writeConnectionEvent, null));
+//                put(PlatformConstants.CodecTypes.connectionState, new CodecPair<>(self::writeConnectionState, null));
+                put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
 
-                put(PlatformConstants.CodecTypes.channelEvent, new CodecPair<>(self::writeChannelEvent, null));
-                put(PlatformConstants.CodecTypes.channelState, new CodecPair<>(self::writeChannelState, null));
+//                put(PlatformConstants.CodecTypes.channelEvent, new CodecPair<>(self::writeChannelEvent, null));
+//                put(PlatformConstants.CodecTypes.channelState, new CodecPair<>(self::writeChannelState, null));
                 put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::writeChannelStateChange, null));
             }
         };
@@ -78,15 +77,28 @@ public class AblyMessageCodec extends StandardMessageCodec {
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
         CodecPair pair = codecMap.get(type);
         if(pair!=null){
-            return pair.decode(buffer);
+            Map<String, Object> jsonMap = (Map<String, Object>)readValue(buffer);
+            return pair.decode(jsonMap);
         }
         return super.readValueOfType(type, buffer);
     }
 
-    private void readValue(final ByteBuffer buffer, final Consumer<Object> consumer) {
-        final Object object = readValue(buffer);
+    private void readValueFromJson(Map<String, Object> jsonMap, String key, final Consumer<Object> consumer) {
+        final Object object = jsonMap.get(key);
         if (null != object) {
             consumer.accept(object);
+        }
+    }
+
+    private void writeValueToJson(Map<String, Object> jsonMap, String key, Object value) {
+        if (null != value) {
+            jsonMap.put(key, value);
+        }
+    }
+
+    private void writeEnumToJson(Map<String, Object> jsonMap, String key, Enum value) {
+        if (null != value) {
+            jsonMap.put(key, value.ordinal());
         }
     }
 
@@ -111,7 +123,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
         if(type!=null){
             CodecPair pair = codecMap.get(type);
             if(pair!=null) {
-                pair.encode(stream, value);
+                stream.write(type);
+                Map<String, Object> jsonMap = pair.encode(value);
+                writeValue(stream, jsonMap);
                 return;
             }
         }
@@ -123,8 +137,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
      * they are delivered as Long.
      * See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
      */
-    private Long readValueAsLong(final ByteBuffer buffer) {
-        final Object object = readValue(buffer);
+    private Long readValueAsLong(final Object object) {
         if (null == object) {
             return null;
         }
@@ -134,102 +147,119 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return (Long)object; // will java.lang.ClassCastException if object is not a Long
     }
 
-    private AblyFlutterMessage readAblyFlutterMessage(final ByteBuffer buffer) {
-        final Long handle = readValueAsLong(buffer);
-        final Object message = readValue(buffer);
+    private AblyFlutterMessage readAblyFlutterMessage(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
+        final Long handle = readValueAsLong(jsonMap.get("registrationHandle"));
+        Object messageType = jsonMap.get("type");
+        final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
+        Object message = jsonMap.get("message");
+        if(type!=null){
+            message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
+        }
         return new AblyFlutterMessage<>(handle, message);
     }
 
-    private ClientOptions readClientOptions(final ByteBuffer buffer) {
+    private ClientOptions readClientOptions(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
         final ClientOptions o = new ClientOptions();
 
         // AuthOptions (super class of ClientOptions)
-        readValue(buffer, v -> o.authUrl = (String)v);
-        readValue(buffer, v -> o.authMethod = (String)v);
-        readValue(buffer, v -> o.key = (String)v);
-        readValue(buffer, v -> o.tokenDetails = (Auth.TokenDetails)v);
-        readValue(buffer, v -> o.authHeaders = (Param[])v);
-        readValue(buffer, v -> o.authParams = (Param[])v);
-        readValue(buffer, v -> o.queryTime = (Boolean)v);
-        readValue(buffer); // o.useAuthToken
+        readValueFromJson(jsonMap, "authUrl", v -> o.authUrl = (String)v);
+        readValueFromJson(jsonMap, "authMethod", v -> o.authMethod = (String)v);
+        readValueFromJson(jsonMap, "key", v -> o.key = (String)v);
+        readValueFromJson(jsonMap, "tokenDetails", v -> o.tokenDetails = readTokenDetails((Map<String, Object>)v));
+        readValueFromJson(jsonMap, "authHeaders", v -> o.authHeaders = (Param[])v);
+        readValueFromJson(jsonMap, "authParams", v -> o.authParams = (Param[])v);
+        readValueFromJson(jsonMap, "queryTime", v -> o.queryTime = (Boolean)v);
+//        readValueFromJson(buffer); // o.useAuthToken
 
         // ClientOptions
-        readValue(buffer, v -> o.clientId = (String)v);
-        readValue(buffer, v -> o.logLevel = (Integer)v);
-        readValue(buffer, v -> o.tls = (Boolean)v);
-        readValue(buffer, v -> o.restHost = (String)v);
-        readValue(buffer, v -> o.realtimeHost = (String)v);
-        readValue(buffer, v -> o.port = (Integer)v);
-        readValue(buffer, v -> o.tlsPort = (Integer)v);
-        readValue(buffer, v -> o.autoConnect = (Boolean)v);
-        readValue(buffer, v -> o.useBinaryProtocol = (Boolean)v);
-        readValue(buffer, v -> o.queueMessages = (Boolean)v);
-        readValue(buffer, v -> o.echoMessages = (Boolean)v);
-        readValue(buffer, v -> o.recover = (String)v);
-        readValue(buffer, v -> o.environment = (String)v);
-        readValue(buffer, v -> o.idempotentRestPublishing = (Boolean)v);
-        readValue(buffer, v -> o.httpOpenTimeout = (Integer)v);
-        readValue(buffer, v -> o.httpRequestTimeout = (Integer)v);
-        readValue(buffer, v -> o.httpMaxRetryCount = (Integer)v);
-        readValue(buffer, v -> o.realtimeRequestTimeout = (Long)v);
-        readValue(buffer, v -> o.fallbackHosts = (String[])v);
-        readValue(buffer, v -> o.fallbackHostsUseDefault = (Boolean)v);
-        readValue(buffer, v -> o.fallbackRetryTimeout = (Long)v);
-        readValue(buffer, v -> o.defaultTokenParams = (Auth.TokenParams) v);
-        readValue(buffer, v -> o.channelRetryTimeout = (Integer)v);
-        readValue(buffer, v -> o.transportParams = (Param[])v);
+        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, "logLevel", v -> o.logLevel = (Integer)v);
+        readValueFromJson(jsonMap, "tls", v -> o.tls = (Boolean)v);
+        readValueFromJson(jsonMap, "restHost", v -> o.restHost = (String)v);
+        readValueFromJson(jsonMap, "realtimeHost", v -> o.realtimeHost = (String)v);
+        readValueFromJson(jsonMap, "port", v -> o.port = (Integer)v);
+        readValueFromJson(jsonMap, "tlsPort", v -> o.tlsPort = (Integer)v);
+        readValueFromJson(jsonMap, "autoConnect", v -> o.autoConnect = (Boolean)v);
+        readValueFromJson(jsonMap, "useBinaryProtocol", v -> o.useBinaryProtocol = (Boolean)v);
+        readValueFromJson(jsonMap, "queueMessages", v -> o.queueMessages = (Boolean)v);
+        readValueFromJson(jsonMap, "echoMessages", v -> o.echoMessages = (Boolean)v);
+        readValueFromJson(jsonMap, "recover", v -> o.recover = (String)v);
+        readValueFromJson(jsonMap, "environment", v -> o.environment = (String)v);
+        readValueFromJson(jsonMap, "idempotentRestPublishing", v -> o.idempotentRestPublishing = (Boolean)v);
+        readValueFromJson(jsonMap, "httpOpenTimeout", v -> o.httpOpenTimeout = (Integer)v);
+        readValueFromJson(jsonMap, "httpRequestTimeout", v -> o.httpRequestTimeout = (Integer)v);
+        readValueFromJson(jsonMap, "httpMaxRetryCount", v -> o.httpMaxRetryCount = (Integer)v);
+        readValueFromJson(jsonMap, "realtimeRequestTimeout", v -> o.realtimeRequestTimeout = (Long)v);
+        readValueFromJson(jsonMap, "fallbackHosts", v -> o.fallbackHosts = (String[])v);
+        readValueFromJson(jsonMap, "fallbackHostsUseDefault", v -> o.fallbackHostsUseDefault = (Boolean)v);
+        readValueFromJson(jsonMap, "fallbackRetryTimeout", v -> o.fallbackRetryTimeout = (Long)v);
+        readValueFromJson(jsonMap, "defaultTokenParams", v -> o.defaultTokenParams = readTokenParams((Map<String, Object>)v));
+        readValueFromJson(jsonMap, "channelRetryTimeout", v -> o.channelRetryTimeout = (Integer)v);
+        readValueFromJson(jsonMap, "transportParams", v -> o.transportParams = (Param[])v);
         return o;
     }
 
-    private TokenDetails readTokenDetails(final ByteBuffer buffer) {
+    private TokenDetails readTokenDetails(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
         final TokenDetails o = new TokenDetails();
-
-        readValue(buffer, v -> o.token = (String)v);
-        readValue(buffer, v -> o.expires = (int)v);
-        readValue(buffer, v -> o.issued = (int)v);
-        readValue(buffer, v -> o.capability = (String)v);
-        readValue(buffer, v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, "token", v -> o.token = (String)v);
+        readValueFromJson(jsonMap, "expires", v -> o.expires = (int)v);
+        readValueFromJson(jsonMap, "issued", v -> o.issued = (int)v);
+        readValueFromJson(jsonMap, "capability", v -> o.capability = (String)v);
+        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
 
         return o;
     }
 
-
-    //HANDLING WRITE
-    private void writeErrorInfo(ByteArrayOutputStream stream, ErrorInfo e){
-        stream.write(PlatformConstants.CodecTypes.errorInfo);
-        writeValue(stream, e.code);
-        writeValue(stream, e.message);
-        writeValue(stream, e.statusCode);
-        writeValue(stream, e.href);
-        writeValue(stream, null); //requestId - not available in ably-java
-        writeValue(stream, null); //cause - not available in ably-java
+    private Auth.TokenParams readTokenParams(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
+        final Auth.TokenParams o = new Auth.TokenParams();
+        readValueFromJson(jsonMap, "capability", v -> o.capability = (String)v);
+        readValueFromJson(jsonMap, "clientId", v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, "timestamp", v -> o.timestamp = (int)v);
+        readValueFromJson(jsonMap, "ttl", v -> o.ttl = (long)v);
+        //nonce is not supported in ably-java
+        return o;
     }
 
-    private void writeConnectionEvent(ByteArrayOutputStream stream, ConnectionEvent e){ writeEnum(stream, PlatformConstants.CodecTypes.connectionEvent, e); }
-    private void writeConnectionState(ByteArrayOutputStream stream, ConnectionState e){ writeEnum(stream, PlatformConstants.CodecTypes.connectionState, e); }
-    private void writeConnectionStateChange(ByteArrayOutputStream stream, ConnectionStateListener.ConnectionStateChange c){
-        stream.write(PlatformConstants.CodecTypes.connectionStateChange);
-        writeValue(stream, c.current);
-        writeValue(stream, c.previous);
-        writeValue(stream, c.event);
-        writeValue(stream, c.retryIn);
-        writeValue(stream, c.reason);
+//===============================================================
+//=====================HANDLING WRITE============================
+//===============================================================
+
+    private Map<String, Object> encodeErrorInfo(ErrorInfo c){
+        if(c==null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeValueToJson(jsonMap, "code", c.code);
+        writeValueToJson(jsonMap, "message", c.message);
+        writeValueToJson(jsonMap, "statusCode", c.statusCode);
+        writeValueToJson(jsonMap, "href", c.href);
+        //requestId and cause - not available in ably-java
+        return jsonMap;
     }
 
-    private void writeChannelEvent(ByteArrayOutputStream stream, ChannelEvent e){ writeEnum(stream, PlatformConstants.CodecTypes.channelEvent, e); }
-    private void writeChannelState(ByteArrayOutputStream stream, ChannelState e){ writeEnum(stream, PlatformConstants.CodecTypes.channelState, e); }
-    private void writeChannelStateChange(ByteArrayOutputStream stream, ChannelStateListener.ChannelStateChange c){
-        stream.write(PlatformConstants.CodecTypes.channelStateChange);
-        writeValue(stream, c.current);
-        writeValue(stream, c.previous);
-        writeValue(stream, c.event);
-        writeValue(stream, c.resumed);
-        writeValue(stream, c.reason);
+    private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c){
+        if(c==null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeEnumToJson(jsonMap, "current", c.current);
+        writeEnumToJson(jsonMap, "previous", c.previous);
+        writeEnumToJson(jsonMap, "event", c.event);
+        writeValueToJson(jsonMap, "retryIn", c.retryIn);
+        writeValueToJson(jsonMap, "reason", encodeErrorInfo(c.reason));
+        return jsonMap;
     }
 
-    private void writeEnum(ByteArrayOutputStream stream, int eventCode, Enum e){
-        stream.write(eventCode);
-        writeValue(stream, e.ordinal());
+    private Map<String, Object> writeChannelStateChange(ChannelStateListener.ChannelStateChange c){
+        if(c==null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeEnumToJson(jsonMap, "current", c.current);
+        writeEnumToJson(jsonMap, "previous", c.previous);
+        writeEnumToJson(jsonMap, "event", c.event);
+        writeValueToJson(jsonMap, "resumed", c.resumed);
+        writeValueToJson(jsonMap, "reason", encodeErrorInfo(c.reason));
+        return jsonMap;
     }
+
 
 }

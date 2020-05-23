@@ -75,7 +75,7 @@ abstract class StatsMessageTraffic {
   StatsMessageTypes webhook;
 }
 
-abstract class TokenParams {
+class TokenParams {
   String  capability;
   String clientId;
   String nonce;

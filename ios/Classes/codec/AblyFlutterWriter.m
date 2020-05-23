@@ -10,53 +10,62 @@
 
 - (void)writeValue:(id)value {
     if([value isKindOfClass:[ARTErrorInfo class]]){
-        [self writeErrorInfo: value];
+        [self writeByte:errorInfoCodecType];
+        [self writeValue: [self encodeErrorInfo: value]];
         return;
     }else if([value isKindOfClass:[ARTConnectionStateChange class]]){
-        [self writeConnectionStateChange: value];
+        [self writeByte:connectionStateChangeCodecType];
+        [self writeValue: [self encodeConnectionStateChange: value]];
         return;
     }else if([value isKindOfClass:[ARTChannelStateChange class]]){
-        [self writeConnectionStateChange: value];
+        [self writeByte:channelStateChangeCodecType];
+        [self writeValue: [self encodeChannelStateChange: value]];
         return;
     }
     [super writeValue:value];
 }
 
-- (void) writeEnum:(UInt8) type enumValue: (int const) enumValue{
-    [self writeByte:type];
-    [self writeValue: [NSNumber numberWithInt:enumValue]];
+#define WRITE_VALUE(JSON_DICT, JSON_KEY, VALUE) { \
+    if (VALUE) { \
+        [JSON_DICT setObject:VALUE forKey:JSON_KEY]; \
+    } \
 }
 
-- (void) writeErrorInfo:(ARTErrorInfo *const) e{
-    [self writeByte:errorInfoCodecType];
-    [self writeValue: nil];    //code - not available in ably-cocoa
-    [self writeValue: [e message]];
-    [self writeValue: @([e statusCode])];
-    [self writeValue: nil]; //href - not available in ably-cocoa
-    [self writeValue: nil]; //requestId - not available in ably-java
-    [self writeValue: nil]; //cause - not available in ably-java
+#define WRITE_ENUM(JSON_DICT, JSON_KEY, ENUM_VALUE){ \
+    if (ENUM_VALUE) { \
+        WRITE_VALUE(JSON_DICT, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
+    } \
 }
 
-- (void) writeConnectState:(ARTRealtimeConnectionState const) state{ [self writeEnum:connectionStateCodecType enumValue:state]; }
-- (void) writeConnectEvent:(ARTRealtimeConnectionEvent const) event{ [self writeEnum:connectionEventCodecType enumValue:event]; }
-- (void) writeConnectionStateChange:(ARTConnectionStateChange *const) stateChange{
-    [self writeByte:connectionStateChangeCodecType];
-    [self writeConnectState: [stateChange current]];
-    [self writeConnectState: [stateChange previous]];
-    [self writeConnectEvent: [stateChange event]];
-    [self writeValue: @((int)([stateChange retryIn] * 1000))];
-    [self writeValue: [stateChange reason]];
+- (NSMutableDictionary<NSString *, NSObject *> *) encodeErrorInfo:(ARTErrorInfo *const) e{
+    NSMutableDictionary<NSString *, NSObject *> *jsonDict;
+    WRITE_VALUE(jsonDict, @"message", [e message]);
+    WRITE_VALUE(jsonDict, @"statusCode", @([e statusCode]));
+    //code - not available in ably-cocoa
+    //href - not available in ably-cocoa
+    //requestId - not available in ably-cocoa
+    //cause - not available in ably-cocoa
+    return jsonDict;
 }
 
-- (void) writeChannelState:(ARTRealtimeChannelState const) state{ [self writeEnum:channelStateCodecType enumValue:state]; }
-- (void) writeChannelEvent:(ARTChannelEvent const) event{ [self writeEnum:channelEventCodecType enumValue:event]; }
-- (void) writeChannelStateChange:(ARTChannelStateChange *const) stateChange{
-    [self writeByte:channelStateChangeCodecType];
-    [self writeChannelState: [stateChange current]];
-    [self writeChannelState: [stateChange previous]];
-    [self writeChannelEvent: [stateChange event]];
-    [self writeValue: @([stateChange resumed])];
-    [self writeValue: [stateChange reason]];
+- (NSDictionary *) encodeConnectionStateChange:(ARTConnectionStateChange *const) stateChange{
+    NSMutableDictionary<NSString *, NSObject *> *jsonDict = [[NSMutableDictionary alloc] init];
+    WRITE_ENUM(jsonDict, @"current", [stateChange current]);
+    WRITE_ENUM(jsonDict, @"previous", [stateChange previous]);
+    WRITE_ENUM(jsonDict, @"event", [stateChange event]);
+    WRITE_VALUE(jsonDict, @"retryIn", @((int)([stateChange retryIn] * 1000)));
+    WRITE_VALUE(jsonDict, @"reason", [self encodeErrorInfo: [stateChange reason]]);
+    return jsonDict;
+}
+
+- (NSDictionary *) encodeChannelStateChange:(ARTChannelStateChange *const) stateChange{
+    NSMutableDictionary<NSString *, NSObject *> *jsonDict;
+    WRITE_ENUM(jsonDict, @"current", [stateChange current]);
+    WRITE_ENUM(jsonDict, @"previous", [stateChange previous]);
+    WRITE_ENUM(jsonDict, @"event", [stateChange event]);
+    WRITE_VALUE(jsonDict, @"resumed", @([stateChange resumed]));
+    WRITE_VALUE(jsonDict, @"reason", [self encodeErrorInfo: [stateChange reason]]);
+    return jsonDict;
 }
 
 
