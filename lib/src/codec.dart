@@ -58,8 +58,6 @@ class Codec extends StandardMessageCodec {
   int getCodecType(final dynamic value){
     if (value is ClientOptions) {
       return CodecTypes.clientOptions;
-    } else if (value is TokenDetails) {
-      return CodecTypes.tokenDetails;
     } else if (value is ErrorInfo) {
       return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {

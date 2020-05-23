@@ -6,11 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import io.ably.lib.realtime.ChannelEvent;
-import io.ably.lib.realtime.ChannelState;
+import io.ably.flutter.plugin.gen.PlatformConstants;
 import io.ably.lib.realtime.ChannelStateListener;
-import io.ably.lib.realtime.ConnectionEvent;
-import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
@@ -18,7 +15,6 @@ import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
-import io.ably.flutter.plugin.gen.PlatformConstants;
 
 public class AblyMessageCodec extends StandardMessageCodec {
 
@@ -59,15 +55,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             {
                 put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
                 put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::readClientOptions));
-//                put(PlatformConstants.CodecTypes.tokenDetails, new CodecPair<>(null, self::readTokenDetails));
                 put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
-
-//                put(PlatformConstants.CodecTypes.connectionEvent, new CodecPair<>(self::writeConnectionEvent, null));
-//                put(PlatformConstants.CodecTypes.connectionState, new CodecPair<>(self::writeConnectionState, null));
                 put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
-
-//                put(PlatformConstants.CodecTypes.channelEvent, new CodecPair<>(self::writeChannelEvent, null));
-//                put(PlatformConstants.CodecTypes.channelState, new CodecPair<>(self::writeChannelState, null));
                 put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::writeChannelStateChange, null));
             }
         };
@@ -107,16 +96,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         Byte type = null;
         if(value instanceof ErrorInfo){
             type = PlatformConstants.CodecTypes.errorInfo;
-        }else if(value instanceof ConnectionEvent){
-            type = PlatformConstants.CodecTypes.connectionEvent;
-        }else if(value instanceof ConnectionState){
-            type = PlatformConstants.CodecTypes.connectionState;
         }else if(value instanceof ConnectionStateListener.ConnectionStateChange){
             type = PlatformConstants.CodecTypes.connectionStateChange;
-        }else if(value instanceof ChannelEvent){
-            type = PlatformConstants.CodecTypes.channelEvent;
-        }else if(value instanceof ChannelState){
-            type = PlatformConstants.CodecTypes.channelState;
         }else if(value instanceof ChannelStateListener.ChannelStateChange){
             type = PlatformConstants.CodecTypes.channelStateChange;
         }
