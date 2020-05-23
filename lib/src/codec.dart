@@ -1,27 +1,29 @@
-import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/gen/platformconstants.dart';
+import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../ably.dart';
 
 
-typedef CodecEncoder<T>(final WriteBuffer buffer, final T value);
-typedef T CodecDecoder<T>(ReadBuffer buffer);
+typedef CodecEncoder<T>(final T value);
+typedef T CodecDecoder<T>(Map<String, dynamic> jsonMap);
 class CodecPair<T>{
 
   final CodecEncoder<T> encoder;
   final CodecDecoder<T> decoder;
   CodecPair(this.encoder, this.decoder);
 
-  encode(final WriteBuffer buffer, final dynamic value){
+  Map<String, dynamic> encode(final dynamic value){
     if (this.encoder==null) throw AblyException("Codec encoder not defined");
-    return this.encoder(buffer, value as T);
+    if(value==null) return null;
+    return this.encoder(value as T);
   }
 
-  T decode(ReadBuffer buffer){
+  T decode(Map<String, dynamic> jsonMap){
     if (this.decoder==null) throw AblyException("Codec decoder not defined");
-    return this.decoder(buffer);
+    if(jsonMap==null) return null;
+    return this.decoder(jsonMap);
   }
 
 }
@@ -38,22 +40,22 @@ class Codec extends StandardMessageCodec {
 
       //Other ably objects
       CodecTypes.clientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
-      CodecTypes.tokenDetails: CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
       CodecTypes.errorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
 
       //Events - Connection
-      CodecTypes.connectionEvent: CodecPair<ConnectionEvent>(null, decodeConnectionEvent),
-      CodecTypes.connectionState: CodecPair<ConnectionState>(null, decodeConnectionState),
       CodecTypes.connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
 
       //Events - Channel
-      CodecTypes.channelEvent: CodecPair<ChannelEvent>(null, decodeChannelEvent),
-      CodecTypes.channelState: CodecPair<ChannelState>(null, decodeChannelState),
       CodecTypes.channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
     };
   }
 
-  getCodecType(final dynamic value){
+  Map<String, dynamic> toJsonMap(Map<dynamic, dynamic> value){
+    if(value==null) return null;
+    return Map.castFrom<dynamic, dynamic, String, dynamic>(value);
+  }
+
+  int getCodecType(final dynamic value){
     if (value is ClientOptions) {
       return CodecTypes.clientOptions;
     } else if (value is TokenDetails) {
@@ -63,6 +65,7 @@ class Codec extends StandardMessageCodec {
     } else if (value is AblyMessage) {
       return CodecTypes.ablyMessage;
     }
+    return null;
   }
 
   @override
@@ -72,163 +75,222 @@ class Codec extends StandardMessageCodec {
       super.writeValue(buffer, value);
     } else {
       buffer.putUint8(type);
-      codecMap[type].encode(buffer, value);
+      writeValue(buffer, codecMap[type].encode(value));
     }
   }
 
   dynamic readValueOfType(int type, ReadBuffer buffer) {
     CodecPair pair = codecMap[type];
     if (pair==null) {
-      return super.readValueOfType(type, buffer);
+      var x = super.readValueOfType(type, buffer);
+      return x;
     } else {
-      return pair.decode(buffer);
+      Map<String, dynamic> map = toJsonMap(readValue(buffer));
+      return pair.decode(map);
     }
   }
 
   // =========== ENCODERS ===========
-  encodeClientOptions(final WriteBuffer buffer, final ClientOptions v){
+  writeToJson(Map<String, dynamic> map, key, value){
+    if(value==null) return;
+    map[key] = value;
+  }
+
+  Map<String, dynamic> encodeClientOptions(final ClientOptions v){
+    if(v==null) return null;
+    Map<String, dynamic> jsonMap = {};
     // AuthOptions (super class of ClientOptions)
-    writeValue(buffer, v.authUrl);
-    writeValue(buffer, v.authMethod);
-    writeValue(buffer, v.key);
-    writeValue(buffer, v.tokenDetails);
-    writeValue(buffer, v.authHeaders);
-    writeValue(buffer, v.authParams);
-    writeValue(buffer, v.queryTime);
-    writeValue(buffer, v.useTokenAuth);
+    writeToJson(jsonMap, "authUrl", v.authUrl);
+    writeToJson(jsonMap, "authMethod", v.authMethod);
+    writeToJson(jsonMap, "key", v.key);
+    writeToJson(jsonMap, "tokenDetails", encodeTokenDetails(v.tokenDetails));
+    writeToJson(jsonMap, "authHeaders", v.authHeaders);
+    writeToJson(jsonMap, "authParams", v.authParams);
+    writeToJson(jsonMap, "queryTime", v.queryTime);
+    writeToJson(jsonMap, "useTokenAuth", v.useTokenAuth);
 
     // ClientOptions
-    writeValue(buffer, v.clientId);
-    writeValue(buffer, v.logLevel);
+    writeToJson(jsonMap, "clientId", v.clientId);
+    writeToJson(jsonMap, "logLevel", v.logLevel);
     //TODO handle logHandler
-    writeValue(buffer, v.tls);
-    writeValue(buffer, v.restHost);
-    writeValue(buffer, v.realtimeHost);
-    writeValue(buffer, v.port);
-    writeValue(buffer, v.tlsPort);
-    writeValue(buffer, v.autoConnect);
-    writeValue(buffer, v.useBinaryProtocol);
-    writeValue(buffer, v.queueMessages);
-    writeValue(buffer, v.echoMessages);
-    writeValue(buffer, v.recover);
-    writeValue(buffer, v.environment);
-    writeValue(buffer, v.idempotentRestPublishing);
-    writeValue(buffer, v.httpOpenTimeout);
-    writeValue(buffer, v.httpRequestTimeout);
-    writeValue(buffer, v.httpMaxRetryCount);
-    writeValue(buffer, v.realtimeRequestTimeout);
-    writeValue(buffer, v.fallbackHosts);
-    writeValue(buffer, v.fallbackHostsUseDefault);
-    writeValue(buffer, v.fallbackRetryTimeout);
-    writeValue(buffer, v.defaultTokenParams);
-    writeValue(buffer, v.channelRetryTimeout);
-    writeValue(buffer, v.transportParams);
+    writeToJson(jsonMap, "tls", v.tls);
+    writeToJson(jsonMap, "restHost", v.restHost);
+    writeToJson(jsonMap, "realtimeHost", v.realtimeHost);
+    writeToJson(jsonMap, "port", v.port);
+    writeToJson(jsonMap, "tlsPort", v.tlsPort);
+    writeToJson(jsonMap, "autoConnect", v.autoConnect);
+    writeToJson(jsonMap, "useBinaryProtocol", v.useBinaryProtocol);
+    writeToJson(jsonMap, "queueMessages", v.queueMessages);
+    writeToJson(jsonMap, "echoMessages", v.echoMessages);
+    writeToJson(jsonMap, "recover", v.recover);
+    writeToJson(jsonMap, "environment", v.environment);
+    writeToJson(jsonMap, "idempotentRestPublishing", v.idempotentRestPublishing);
+    writeToJson(jsonMap, "httpOpenTimeout", v.httpOpenTimeout);
+    writeToJson(jsonMap, "httpRequestTimeout", v.httpRequestTimeout);
+    writeToJson(jsonMap, "httpMaxRetryCount", v.httpMaxRetryCount);
+    writeToJson(jsonMap, "realtimeRequestTimeout", v.realtimeRequestTimeout);
+    writeToJson(jsonMap, "fallbackHosts", v.fallbackHosts);
+    writeToJson(jsonMap, "fallbackHostsUseDefault", v.fallbackHostsUseDefault);
+    writeToJson(jsonMap, "fallbackRetryTimeout", v.fallbackRetryTimeout);
+    writeToJson(jsonMap, "defaultTokenParams", encodeTokenParams(v.defaultTokenParams));
+    writeToJson(jsonMap, "channelRetryTimeout", v.channelRetryTimeout);
+    writeToJson(jsonMap, "transportParams", v.transportParams);
+    return jsonMap;
   }
 
-  encodeTokenDetails(final WriteBuffer buffer, final TokenDetails v){
-    writeValue(buffer, v.token);
-    writeValue(buffer, v.expires);
-    writeValue(buffer, v.issued);
-    writeValue(buffer, v.capability);
-    writeValue(buffer, v.clientId);
+  Map<String, dynamic> encodeTokenDetails(final TokenDetails v){
+    if(v==null) return null;
+    return {
+      "token":  v.token,
+      "expires":  v.expires,
+      "issued":  v.issued,
+      "capability":  v.capability,
+      "clientId":  v.clientId,
+    };
   }
 
-  encodeAblyMessage(final WriteBuffer buffer, final AblyMessage v){
-    writeValue(buffer, v.registrationHandle);
-    writeValue(buffer, v.message);
+  Map<String, dynamic> encodeTokenParams(final TokenParams v){
+    if(v==null) return null;
+    Map<String, dynamic> jsonMap = {};
+    writeToJson(jsonMap, "capability", v.capability);
+    writeToJson(jsonMap, "clientId", v.clientId);
+    writeToJson(jsonMap, "nonce", v.nonce);
+    writeToJson(jsonMap, "timestamp", v.timestamp);
+    writeToJson(jsonMap, "ttl", v.ttl);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> encodeAblyMessage(final AblyMessage v){
+    if(v==null) return null;
+    int codecType = getCodecType(v.message);
+    dynamic message = (v.message==null)?null:(codecType == null)?v.message:codecMap[codecType].encode(v.message);
+    Map<String, dynamic> jsonMap = {};
+    writeToJson(jsonMap, "registrationHandle", v.registrationHandle);
+    writeToJson(jsonMap, "type", codecType);
+    writeToJson(jsonMap, "message", message);
+    return jsonMap;
   }
 
 
   // =========== DECODERS ===========
-  ClientOptions decodeClientOptions(ReadBuffer buffer){
-    final ClientOptions v = ClientOptions();
+  T readFromJson<T>(Map<String, dynamic> jsonMap, String key){
+    dynamic value = jsonMap[key];
+    if(value==null) return null;
+    return value as T;
+  }
+  
+  ClientOptions decodeClientOptions(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
 
+    final ClientOptions v = ClientOptions();
     // AuthOptions (super class of ClientOptions)
-    v.authUrl = readValue(buffer) as String;
-    v.authMethod = readValue(buffer) as HTTPMethods;
-    v.key = readValue(buffer) as String;
-    v.tokenDetails = readValue(buffer) as TokenDetails;
-    v.authHeaders = readValue(buffer) as Map<String, String>;
-    v.authParams = readValue(buffer) as Map<String, String>;
-    v.queryTime = readValue(buffer) as bool;
-    v.useTokenAuth = readValue(buffer) as bool;
+    v.authUrl = readFromJson<String>(jsonMap, "authUrl");
+    v.authMethod = readFromJson<HTTPMethods>(jsonMap, "authMethod");
+    v.key = readFromJson<String>(jsonMap, "key");
+    v.tokenDetails = decodeTokenDetails(toJsonMap(jsonMap["tokenDetails"]));
+    v.authHeaders = readFromJson<Map<String, String>>(jsonMap, "authHeaders");
+    v.authParams = readFromJson<Map<String, String>>(jsonMap, "authParams");
+    v.queryTime = readFromJson<bool>(jsonMap, "queryTime");
+    v.useTokenAuth = readFromJson<bool>(jsonMap, "useTokenAuth");
 
     // ClientOptions
-    v.clientId = readValue(buffer) as String;
-    v.logLevel = readValue(buffer) as int;
+    v.clientId = readFromJson<String>(jsonMap, "clientId");
+    v.logLevel = readFromJson<int>(jsonMap, "logLevel");
     //TODO handle logHandler
-    v.tls = readValue(buffer) as bool;
-    v.restHost = readValue(buffer) as String;
-    v.realtimeHost = readValue(buffer) as String;
-    v.port = readValue(buffer) as int;
-    v.tlsPort = readValue(buffer) as int;
-    v.autoConnect = readValue(buffer) as bool;
-    v.useBinaryProtocol = readValue(buffer) as bool;
-    v.queueMessages = readValue(buffer) as bool;
-    v.echoMessages = readValue(buffer) as bool;
-    v.recover = readValue(buffer) as String;
-    v.environment = readValue(buffer) as String;
-    v.idempotentRestPublishing = readValue(buffer) as bool;
-    v.httpOpenTimeout = readValue(buffer) as int;
-    v.httpRequestTimeout = readValue(buffer) as int;
-    v.httpMaxRetryCount = readValue(buffer) as int;
-    v.realtimeRequestTimeout = readValue(buffer) as int;
-    v.fallbackHosts = readValue(buffer) as List<String>;
-    v.fallbackHostsUseDefault = readValue(buffer) as bool;
-    v.fallbackRetryTimeout = readValue(buffer) as int;
-    v.defaultTokenParams = readValue(buffer) as TokenParams;
-    v.channelRetryTimeout = readValue(buffer) as int;
-    v.transportParams = readValue(buffer) as Map<String, String>;
+    v.tls = readFromJson<bool>(jsonMap, "tls");
+    v.restHost = readFromJson<String>(jsonMap, "restHost");
+    v.realtimeHost = readFromJson<String>(jsonMap, "realtimeHost");
+    v.port = readFromJson<int>(jsonMap, "port");
+    v.tlsPort = readFromJson<int>(jsonMap, "tlsPort");
+    v.autoConnect = readFromJson<bool>(jsonMap, "autoConnect");
+    v.useBinaryProtocol = readFromJson<bool>(jsonMap, "useBinaryProtocol");
+    v.queueMessages = readFromJson<bool>(jsonMap, "queueMessages");
+    v.echoMessages = readFromJson<bool>(jsonMap, "echoMessages");
+    v.recover = readFromJson<String>(jsonMap, "recover");
+    v.environment = readFromJson<String>(jsonMap, "environment");
+    v.idempotentRestPublishing = readFromJson<bool>(jsonMap, "idempotentRestPublishing");
+    v.httpOpenTimeout = readFromJson<int>(jsonMap, "httpOpenTimeout");
+    v.httpRequestTimeout = readFromJson<int>(jsonMap, "httpRequestTimeout");
+    v.httpMaxRetryCount = readFromJson<int>(jsonMap, "httpMaxRetryCount");
+    v.realtimeRequestTimeout = readFromJson<int>(jsonMap, "realtimeRequestTimeout");
+    v.fallbackHosts = readFromJson<List<String>>(jsonMap, "fallbackHosts");
+    v.fallbackHostsUseDefault = readFromJson<bool>(jsonMap, "fallbackHostsUseDefault");
+    v.fallbackRetryTimeout = readFromJson<int>(jsonMap, "fallbackRetryTimeout");
+    v.defaultTokenParams = decodeTokenParams(toJsonMap(jsonMap["defaultTokenParams"]));
+    v.channelRetryTimeout = readFromJson<int>(jsonMap, "channelRetryTimeout");
+    v.transportParams = readFromJson<Map<String, String>>(jsonMap, "transportParams");
     return v;
   }
 
-  TokenDetails decodeTokenDetails(ReadBuffer buffer){
-    TokenDetails t = TokenDetails(readValue(buffer));
-    t.expires = readValue(buffer) as int;
-    t.issued = readValue(buffer) as int;
-    t.capability = readValue(buffer) as String;
-    t.clientId = readValue(buffer) as String;
-    return t;
+  TokenDetails decodeTokenDetails(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
+    TokenDetails v = TokenDetails(jsonMap["token"]);
+    v.expires = readFromJson<int>(jsonMap, "expires");
+    v.issued = readFromJson<int>(jsonMap, "issued");
+    v.capability = readFromJson<String>(jsonMap, "capability");
+    v.clientId = readFromJson<String>(jsonMap, "clientId");
+    return v;
   }
 
-  AblyMessage decodeAblyMessage(ReadBuffer buffer){
+  TokenParams decodeTokenParams(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
+    TokenParams v = TokenParams();
+    v.capability = readFromJson<String>(jsonMap, "capability");
+    v.clientId = readFromJson<String>(jsonMap, "clientId");
+    v.nonce = readFromJson<String>(jsonMap, "nonce");
+    v.timestamp = readFromJson<DateTime>(jsonMap, "timestamp");
+    v.ttl = readFromJson<int>(jsonMap, "ttl");
+    return v;
+  }
+
+  AblyMessage decodeAblyMessage(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
+    int type = readFromJson<int>(jsonMap, "type");
+    dynamic message = jsonMap["message"];
+    if(type!=null){
+      message = codecMap[type].decode(toJsonMap(jsonMap["message"]));
+    }
     return AblyMessage(
-      readValue(buffer) as int,
-      readValue(buffer),
+        jsonMap["registrationHandle"] as int,
+        message,
+        type: type
     );
   }
 
-  ErrorInfo decodeErrorInfo(ReadBuffer buffer){
+  ErrorInfo decodeErrorInfo(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
     return ErrorInfo(
-        code: readValue(buffer) as int,
-        message: readValue(buffer) as String,
-        statusCode: readValue(buffer) as int,
-        href: readValue(buffer) as String,
-        requestId: readValue(buffer) as String,
-        cause: readValue(buffer) as ErrorInfo
+        code: jsonMap["code"] as int,
+        message: jsonMap["message"] as String,
+        statusCode: jsonMap["statusCode"] as int,
+        href: jsonMap["href"] as String,
+        requestId: jsonMap["requestId"] as String,
+        cause: jsonMap["cause"] as ErrorInfo
     );
   }
 
-  ConnectionEvent decodeConnectionEvent(ReadBuffer buffer) => ConnectionEvent.values[readValue(buffer) as int];
-  ConnectionState decodeConnectionState(ReadBuffer buffer) => ConnectionState.values[readValue(buffer) as int];
-  ChannelEvent decodeChannelEvent(ReadBuffer buffer) => ChannelEvent.values[readValue(buffer) as int];
-  ChannelState decodeChannelState(ReadBuffer buffer) => ChannelState.values[readValue(buffer) as int];
+  ConnectionEvent decodeConnectionEvent(int index) => (index==null)?null:ConnectionEvent.values[index];
+  ConnectionState decodeConnectionState(int index) => (index==null)?null:ConnectionState.values[index];
+  ChannelEvent decodeChannelEvent(int index) => (index==null)?null:ChannelEvent.values[index];
+  ChannelState decodeChannelState(int index) => (index==null)?null:ChannelState.values[index];
 
-  ConnectionStateChange decodeConnectionStateChange(ReadBuffer buffer){
-    ConnectionState current = readValue(buffer) as ConnectionState;
-    ConnectionState previous = readValue(buffer) as ConnectionState;
-    ConnectionEvent event = readValue(buffer) as ConnectionEvent;
-    int retryIn = readValue(buffer) as int;
-    ErrorInfo reason = readValue(buffer) as ErrorInfo;
+  ConnectionStateChange decodeConnectionStateChange(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
+    ConnectionState current = decodeConnectionState(readFromJson<int>(jsonMap, "current"));
+    ConnectionState previous = decodeConnectionState(readFromJson<int>(jsonMap, "previous"));
+    ConnectionEvent event = decodeConnectionEvent(readFromJson<int>(jsonMap, "event"));
+    int retryIn = readFromJson<int>(jsonMap, "retryIn");
+    ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap["reason"]));
     return ConnectionStateChange(current, previous, event, retryIn: retryIn, reason: reason);
   }
 
-  ChannelStateChange decodeChannelStateChange(ReadBuffer buffer){
-    ChannelState current = readValue(buffer) as ChannelState;
-    ChannelState previous = readValue(buffer) as ChannelState;
-    ChannelEvent event = readValue(buffer) as ChannelEvent;
-    bool resumed = readValue(buffer) as bool;
-    ErrorInfo reason = readValue(buffer) as ErrorInfo;
+  ChannelStateChange decodeChannelStateChange(Map<String, dynamic> jsonMap){
+    if(jsonMap==null) return null;
+    ChannelState current = decodeChannelState(readFromJson<int>(jsonMap, "current"));
+    ChannelState previous = decodeChannelState(readFromJson<int>(jsonMap, "previous"));
+    ChannelEvent event = decodeChannelEvent(readFromJson<int>(jsonMap, "event"));
+    bool resumed = readFromJson<bool>(jsonMap, "resumed");
+    ErrorInfo reason = decodeErrorInfo(jsonMap["reason"]);
     return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);
   }
 
