@@ -41,10 +41,112 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"}
 ];
 
+List<Map<String, dynamic>> objects = [
+  {
+    "name": "AblyMessage",
+    "properties": <String>[
+      "registrationHandle",
+      "type",
+      "message"
+    ]
+  },
+  {
+    "name": "ErrorInfo",
+    "properties": <String>[
+      "code",
+      "message",
+      "statusCode",
+      "href",
+      "requestId",
+      "cause"
+    ]
+  },
+  {
+    "name": "ClientOptions",
+    "properties": <String>[
+      //Auth options
+      "authUrl",
+      "authMethod",
+      "key",
+      "tokenDetails",
+      "authHeaders",
+      "authParams",
+      "queryTime",
+      "useTokenAuth",
+      // ClientOptions
+      "clientId",
+      "logLevel",
+      "tls",
+      "restHost",
+      "realtimeHost",
+      "port",
+      "tlsPort",
+      "autoConnect",
+      "useBinaryProtocol",
+      "queueMessages",
+      "echoMessages",
+      "recover",
+      "environment",
+      "idempotentRestPublishing",
+      "httpOpenTimeout",
+      "httpRequestTimeout",
+      "httpMaxRetryCount",
+      "realtimeRequestTimeout",
+      "fallbackHosts",
+      "fallbackHostsUseDefault",
+      "fallbackRetryTimeout",
+      "defaultTokenParams",
+      "channelRetryTimeout",
+      "transportParams",
+    ]
+  },
+  {
+    "name": "TokenDetails",
+    "properties": <String>[
+      "token",
+      "expires",
+      "issued",
+      "capability",
+      "clientId"
+    ]
+  },
+  {
+    "name": "TokenParams",
+    "properties": <String>[
+      "capability",
+      "clientId",
+      "nonce",
+      "timestamp",
+      "ttl"
+    ]
+  },
+  {
+    "name": "ConnectionStateChange",
+    "properties": <String>[
+      "current",
+      "previous",
+      "event",
+      "retryIn",
+      "reason"
+    ]
+  },
+  {
+    "name": "ChannelStateChange",
+    "properties": <String>[
+      "current",
+      "previous",
+      "event",
+      "resumed",
+      "reason"
+    ]
+  }
+];
+
 
 //exporting all the constants as a single map
 // which can be directly fed to template as context
 Map<String, dynamic> context = {
   "types": _types,
-  "methods": _platformMethods
+  "methods": _platformMethods,
+  "objects": objects
 };
