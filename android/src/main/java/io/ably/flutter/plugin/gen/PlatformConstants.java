@@ -11,14 +11,9 @@ public class PlatformConstants{
   public class CodecTypes {
     public static final byte ablyMessage = (byte)128;
     public static final byte clientOptions = (byte)129;
-    public static final byte tokenDetails = (byte)130;
     public static final byte errorInfo = (byte)144;
-    public static final byte connectionEvent = (byte)201;
-    public static final byte connectionState = (byte)202;
-    public static final byte connectionStateChange = (byte)203;
-    public static final byte channelEvent = (byte)204;
-    public static final byte channelState = (byte)205;
-    public static final byte channelStateChange = (byte)206;
+    public static final byte connectionStateChange = (byte)201;
+    public static final byte channelStateChange = (byte)202;
     
   }
 

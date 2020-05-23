@@ -14,16 +14,11 @@ List<Map<String, dynamic>> _types = [
 
   //Other ably objects
   {"name": "clientOptions", "value": 129},
-  {"name": "tokenDetails", "value": 130},
   {"name": "errorInfo", "value": 144},
 
   // Events
-  {"name": "connectionEvent", "value": 201},
-  {"name": "connectionState", "value": 202},
-  {"name": "connectionStateChange", "value": 203},
-  {"name": "channelEvent", "value": 204},
-  {"name": "channelState", "value": 205},
-  {"name": "channelStateChange", "value": 206}
+  {"name": "connectionStateChange", "value": 201},
+  {"name": "channelStateChange", "value": 202}
 ];
 
 ///Platform method names

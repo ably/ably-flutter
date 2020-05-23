@@ -9,14 +9,9 @@ typedef NS_ENUM(UInt8, _Value) {
 
   ablyMessageCodecType = 128,
   clientOptionsCodecType = 129,
-  tokenDetailsCodecType = 130,
   errorInfoCodecType = 144,
-  connectionEventCodecType = 201,
-  connectionStateCodecType = 202,
-  connectionStateChangeCodecType = 203,
-  channelEventCodecType = 204,
-  channelStateCodecType = 205,
-  channelStateChangeCodecType = 206,
+  connectionStateChangeCodecType = 201,
+  channelStateChangeCodecType = 202,
   
 };
 
