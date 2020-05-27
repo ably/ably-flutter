@@ -51,8 +51,8 @@ final ably.Ably ablyPlugin = ably.Ably();
 
 ```dart
 final clientOptions = ably.ClientOptions.fromKey("<YOUR APP KEY>");
-clientOptions.environment = 'sandbox';
-clientOptions.logLevel = ably.LogLevel.verbose;
+clientOptions.environment = '<your env>';       //optional
+clientOptions.logLevel = ably.LogLevel.verbose; //optional
 ```
 
 ##### Rest API
