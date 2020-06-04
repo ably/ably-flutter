@@ -18,7 +18,11 @@ static ARTLogLevel _logLevel(NSNumber *const number) {
     return ARTLogLevelWarn;
 }
 
-typedef id (^AblyCodecDecoder)(NSDictionary * jsonDict);
+NS_ASSUME_NONNULL_BEGIN
+
+typedef id (^AblyCodecDecoder)(NSDictionary * dictionary);
+
+NS_ASSUME_NONNULL_END
 
 @implementation AblyFlutterReader
 
