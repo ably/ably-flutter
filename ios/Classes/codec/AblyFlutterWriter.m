@@ -11,7 +11,7 @@
 - (void)writeValue:(id)value {
     if([value isKindOfClass:[ARTErrorInfo class]]){
         [self writeByte:errorInfoCodecType];
-        [self writeValue: [self encodeErrorInfo: value]];
+        [self writeValue:[self encodeErrorInfo: value]];
         return;
     }else if([value isKindOfClass:[ARTConnectionStateChange class]]){
         [self writeByte:connectionStateChangeCodecType];
