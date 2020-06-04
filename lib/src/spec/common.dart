@@ -234,7 +234,7 @@ abstract class EventListener<E> {
 abstract class EventEmitter<E, G> {
 
   // Remove all listener registrations, irrespective of type.
-  //Future<void> off();
+  // Future<void> off();
 
   /// Create a listener, with which registrations may be made.
   Stream<G> on([E event]);

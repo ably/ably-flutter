@@ -9,7 +9,7 @@ List<Map<String, dynamic>> _types = [
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
 
-  //Ably flutter plugin protocol message
+  // Ably flutter plugin protocol message
   {"name": "ablyMessage", "value": 128},
 
   //Other ably objects
@@ -36,7 +36,7 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "connectRealtime", "value": "connectRealtime"},
   {"name": "closeRealtime", "value": "closeRealtime"},
 
-  //Realtime events
+  // Realtime events
   {"name": "onRealtimeConnectionStateChanged", "value": "onRealtimeConnectionStateChanged"},
   {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"}
 ];
@@ -64,7 +64,7 @@ List<Map<String, dynamic>> objects = [
   {
     "name": "ClientOptions",
     "properties": <String>[
-      //Auth options
+      // Auth options
       "authUrl",
       "authMethod",
       "key",
@@ -143,7 +143,7 @@ List<Map<String, dynamic>> objects = [
 ];
 
 
-//exporting all the constants as a single map
+// exporting all the constants as a single map
 // which can be directly fed to template as context
 Map<String, dynamic> context = {
   "types": _types,

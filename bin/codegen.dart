@@ -11,7 +11,7 @@ typedef String Template(Map<String, dynamic> context);
 String projectRoot = "../";
 
 Map<Template, String> toGenerate = {
-  //input template method vs output file path
+  // input template method vs output file path
   dart_template.$: "${projectRoot}lib/src/gen/platformconstants.dart",
   java_template.$: "${projectRoot}android/src/main/java/io/ably/flutter/plugin/gen/PlatformConstants.java",
   objc_header_template.$: "${projectRoot}ios/Classes/codec/AblyPlatformConstants.h",

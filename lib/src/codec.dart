@@ -35,17 +35,17 @@ class Codec extends StandardMessageCodec {
 
   Codec():super(){
     this.codecMap = {
-      //Ably flutter plugin protocol message
+      // Ably flutter plugin protocol message
       CodecTypes.ablyMessage: CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
 
-      //Other ably objects
+      // Other ably objects
       CodecTypes.clientOptions: CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
       CodecTypes.errorInfo: CodecPair<ErrorInfo>(null, decodeErrorInfo),
 
-      //Events - Connection
+      // Events - Connection
       CodecTypes.connectionStateChange: CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
 
-      //Events - Channel
+      // Events - Channel
       CodecTypes.channelStateChange: CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
     };
   }

@@ -101,7 +101,7 @@ class ClientOptions extends AuthOptions {
   ///Use this only if you have been provided a dedicated environment by Ably
   String environment;	//optional
 
-  //Fallbacks
+  // Fallbacks
   List<String> fallbackHosts;	//optional
   bool fallbackHostsUseDefault;	//optional
 
