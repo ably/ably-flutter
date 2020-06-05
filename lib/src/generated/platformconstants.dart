@@ -4,7 +4,7 @@
 //
 
 class CodecTypes{
-  static const int ablyMessage = 128;
+	static const int ablyMessage = 128;
 	static const int clientOptions = 129;
 	static const int errorInfo = 144;
 	static const int connectionStateChange = 201;
@@ -12,7 +12,7 @@ class CodecTypes{
 }
 
 class PlatformMethod {
-  static const String getPlatformVersion = 'getPlatformVersion';
+	static const String getPlatformVersion = 'getPlatformVersion';
 	static const String getVersion = 'getVersion';
 	static const String registerAbly = 'registerAbly';
 	static const String createRestWithOptions = 'createRestWithOptions';
@@ -25,13 +25,13 @@ class PlatformMethod {
 }
 
 class TxAblyMessage{
-  static const String registrationHandle = "registrationHandle";
+	static const String registrationHandle = "registrationHandle";
 	static const String type = "type";
 	static const String message = "message";
 }
 
 class TxErrorInfo{
-  static const String code = "code";
+	static const String code = "code";
 	static const String message = "message";
 	static const String statusCode = "statusCode";
 	static const String href = "href";
@@ -40,7 +40,7 @@ class TxErrorInfo{
 }
 
 class TxClientOptions{
-  static const String authUrl = "authUrl";
+	static const String authUrl = "authUrl";
 	static const String authMethod = "authMethod";
 	static const String key = "key";
 	static const String tokenDetails = "tokenDetails";
@@ -75,7 +75,7 @@ class TxClientOptions{
 }
 
 class TxTokenDetails{
-  static const String token = "token";
+	static const String token = "token";
 	static const String expires = "expires";
 	static const String issued = "issued";
 	static const String capability = "capability";
@@ -83,7 +83,7 @@ class TxTokenDetails{
 }
 
 class TxTokenParams{
-  static const String capability = "capability";
+	static const String capability = "capability";
 	static const String clientId = "clientId";
 	static const String nonce = "nonce";
 	static const String timestamp = "timestamp";
@@ -91,7 +91,7 @@ class TxTokenParams{
 }
 
 class TxConnectionStateChange{
-  static const String current = "current";
+	static const String current = "current";
 	static const String previous = "previous";
 	static const String event = "event";
 	static const String retryIn = "retryIn";
@@ -99,7 +99,7 @@ class TxConnectionStateChange{
 }
 
 class TxChannelStateChange{
-  static const String current = "current";
+	static const String current = "current";
 	static const String previous = "previous";
 	static const String event = "event";
 	static const String resumed = "resumed";
