@@ -45,12 +45,12 @@ NS_ASSUME_NONNULL_END
 }
 
 static AblyCodecDecoder readAblyFlutterMessage = ^AblyFlutterMessage*(NSDictionary *const jsonDict) {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [jsonDict objectForKey:TxAblyMessage.type]]];
-    id message = [jsonDict objectForKey:TxAblyMessage.message];
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [jsonDict objectForKey:TxAblyMessage_type]]];
+    id message = [jsonDict objectForKey:TxAblyMessage_message];
     if(decoder){
         message = decoder(message);
     }
-    return [[AblyFlutterMessage alloc] initWithHandle:[jsonDict objectForKey:TxAblyMessage.registrationHandle] message:message];
+    return [[AblyFlutterMessage alloc] initWithHandle:[jsonDict objectForKey:TxAblyMessage_registrationHandle] message:message];
 };
 
 /**
@@ -92,45 +92,37 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterMessage*(NSDictionary *c
     ARTClientOptions *const o = [ARTClientOptions new];
 
     // AuthOptions (super class of ClientOptions)
-    READ_VALUE(o, authUrl, jsonDict, TxClientOptions.authUrl);
-    READ_VALUE(o, authMethod, jsonDict, TxClientOptions.authMethod);
-    READ_VALUE(o, key, jsonDict, TxClientOptions.key);
-    ON_VALUE(^(const id value) { o.tokenDetails = [AblyFlutterReader readTokenDetails: value]; }, jsonDict, TxClientOptions.tokenDetails);
-    READ_VALUE(o, authHeaders, jsonDict, TxClientOptions.authHeaders);
-    READ_VALUE(o, authParams, jsonDict, TxClientOptions.authParams);
-    READ_VALUE(o, queryTime, jsonDict, TxClientOptions.queryTime);
+    READ_VALUE(o, authUrl, jsonDict, TxClientOptions_authUrl);
+    READ_VALUE(o, authMethod, jsonDict, TxClientOptions_authMethod);
+    READ_VALUE(o, key, jsonDict, TxClientOptions_key);
+    ON_VALUE(^(const id value) { o.tokenDetails = [AblyFlutterReader readTokenDetails: value]; }, jsonDict, TxClientOptions_tokenDetails);
+    READ_VALUE(o, authHeaders, jsonDict, TxClientOptions_authHeaders);
+    READ_VALUE(o, authParams, jsonDict, TxClientOptions_authParams);
+    READ_VALUE(o, queryTime, jsonDict, TxClientOptions_queryTime);
 
     // ClientOptions
-    READ_VALUE(o, clientId, jsonDict, TxClientOptions.clientId);
-    ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); }, jsonDict, TxClientOptions.logLevel);
-    //TODO log handler
-    READ_VALUE(o, tls, jsonDict, TxClientOptions.tls);
-    READ_VALUE(o, restHost, jsonDict, TxClientOptions.restHost);
-    READ_VALUE(o, realtimeHost, jsonDict, TxClientOptions.realtimeHost);
-    READ_BOOL(o, autoConnect, jsonDict, TxClientOptions.autoConnect);
-    READ_VALUE(o, useBinaryProtocol, jsonDict, TxClientOptions.useBinaryProtocol);
-    READ_VALUE(o, queueMessages, jsonDict, TxClientOptions.queueMessages);
-    READ_VALUE(o, echoMessages, jsonDict, TxClientOptions.echoMessages);
-    READ_VALUE(o, recover, jsonDict, TxClientOptions.recover);
-    READ_VALUE(o, environment, jsonDict, TxClientOptions.environment);
-    READ_VALUE(o, idempotentRestPublishing, jsonDict, TxClientOptions.idempotentRestPublishing);
-    READ_VALUE(o, fallbackHosts, jsonDict, TxClientOptions.fallbackHosts);
-    READ_VALUE(o, fallbackHostsUseDefault, jsonDict, TxClientOptions.fallbackHostsUseDefault);
-    ON_VALUE(^(const id value) { o.defaultTokenParams = [AblyFlutterReader readTokenParams: value]; }, jsonDict, TxClientOptions.defaultTokenParams);
-    READ_VALUE(o, defaultTokenParams, jsonDict, TxClientOptions.defaultTokenParams);
-    //Following properties not supported by Objective C library
-    // READ_VALUE(o, useAuthToken); // property not found
-    // READ_VALUE(o, port); // NSInteger
-    // READ_VALUE(o, tlsPort); // NSInteger
-    // READ_VALUE(o, httpOpenTimeout); // NSTimeInterval
-    // READ_VALUE(o, httpRequestTimeout); // NSTimeInterval
-    // READ_VALUE(o, httpMaxRetryCount); // NSUInteger
-    // READ_VALUE(o, realtimeRequestTimeout); // NSTimeInterval
-    // READ_VALUE(o, fallbackRetryTimeout); // property not found
-    // READ_VALUE(o, channelRetryTimeout); // NSTimeInterval
-    // READ_VALUE(o, transportParams); // property not found
-    // READ_VALUE(o, asyncHttpThreadpoolSize); // property not found
-    // READ_VALUE(o, pushFullWait);
+    READ_VALUE(o, clientId, jsonDict, TxClientOptions_clientId);
+    ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); }, jsonDict, TxClientOptions_logLevel);
+    // TODO log handler
+    READ_VALUE(o, tls, jsonDict, TxClientOptions_tls);
+    READ_VALUE(o, restHost, jsonDict, TxClientOptions_restHost);
+    READ_VALUE(o, realtimeHost, jsonDict, TxClientOptions_realtimeHost);
+    READ_BOOL(o, autoConnect, jsonDict, TxClientOptions_autoConnect);
+    READ_VALUE(o, useBinaryProtocol, jsonDict, TxClientOptions_useBinaryProtocol);
+    READ_VALUE(o, queueMessages, jsonDict, TxClientOptions_queueMessages);
+    READ_VALUE(o, echoMessages, jsonDict, TxClientOptions_echoMessages);
+    READ_VALUE(o, recover, jsonDict, TxClientOptions_recover);
+    READ_VALUE(o, environment, jsonDict, TxClientOptions_environment);
+    READ_VALUE(o, idempotentRestPublishing, jsonDict, TxClientOptions_idempotentRestPublishing);
+    READ_VALUE(o, fallbackHosts, jsonDict, TxClientOptions_fallbackHosts);
+    READ_VALUE(o, fallbackHostsUseDefault, jsonDict, TxClientOptions_fallbackHostsUseDefault);
+    ON_VALUE(^(const id value) { o.defaultTokenParams = [AblyFlutterReader readTokenParams: value]; }, jsonDict, TxClientOptions_defaultTokenParams);
+    READ_VALUE(o, defaultTokenParams, jsonDict, TxClientOptions_defaultTokenParams);
+    // Following properties not supported by Objective C library
+    // useAuthToken, port, tlsPort, httpOpenTimeout, httpRequestTimeout,
+    // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
+    // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
+    // track @ https://github.com/ably/ably-flutter/issues/14
     
     return o;
 };
@@ -142,11 +134,11 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterMessage*(NSDictionary *c
     __block NSString *capability = nil;
     __block NSString *clientId = nil;
     
-    ON_VALUE(^(const id value) { token = value; }, jsonDict, TxTokenDetails.token);
-    ON_VALUE(^(const id value) { expires = value; }, jsonDict, TxTokenDetails.expires);
-    ON_VALUE(^(const id value) { issued = value; }, jsonDict, TxTokenDetails.issued);
-    ON_VALUE(^(const id value) { capability = value; }, jsonDict, TxTokenDetails.capability);
-    ON_VALUE(^(const id value) { clientId = value; }, jsonDict, TxTokenDetails.clientId);
+    ON_VALUE(^(const id value) { token = value; }, jsonDict, TxTokenDetails_token);
+    ON_VALUE(^(const id value) { expires = value; }, jsonDict, TxTokenDetails_expires);
+    ON_VALUE(^(const id value) { issued = value; }, jsonDict, TxTokenDetails_issued);
+    ON_VALUE(^(const id value) { capability = value; }, jsonDict, TxTokenDetails_capability);
+    ON_VALUE(^(const id value) { clientId = value; }, jsonDict, TxTokenDetails_clientId);
 
     ARTTokenDetails *const o = [ARTTokenDetails new];
     [o initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
@@ -157,14 +149,14 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterMessage*(NSDictionary *c
     __block NSString *clientId = nil;
     __block NSString *nonce = nil;
     
-    ON_VALUE(^(const id value) { clientId = value; }, jsonDict, TxTokenParams.clientId);
-    ON_VALUE(^(const id value) { nonce = value; }, jsonDict, TxTokenParams.nonce);
+    ON_VALUE(^(const id value) { clientId = value; }, jsonDict, TxTokenParams_clientId);
+    ON_VALUE(^(const id value) { nonce = value; }, jsonDict, TxTokenParams_nonce);
     
     ARTTokenParams *const o = [ARTTokenParams new];
     [o initWithClientId: clientId nonce: nonce];
-    READ_VALUE(o, ttl, jsonDict, TxTokenParams.ttl);
-    READ_VALUE(o, capability, jsonDict, TxTokenParams.capability);
-    READ_VALUE(o, timestamp, jsonDict, TxTokenParams.timestamp);
+    READ_VALUE(o, ttl, jsonDict, TxTokenParams_ttl);
+    READ_VALUE(o, capability, jsonDict, TxTokenParams_capability);
+    READ_VALUE(o, timestamp, jsonDict, TxTokenParams_timestamp);
     return o;
 }
 

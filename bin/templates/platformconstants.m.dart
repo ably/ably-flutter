@@ -1,17 +1,16 @@
 String $(c) {
   return '''
-#import <Foundation/Foundation.h>
 #import "AblyPlatformConstants.h"
 
 
 @implementation AblyPlatformMethod
-${c['methods'].map((_) => '+ (NSString*) ${_['name']} { return @"${_['value']}"; }').join('\n')}
+${c['methods'].map((_) => 'NSString *const AblyPlatformMethod_${_['name']}= @"${_['value']}";').join('\n')}
 @end
 
 ${c['objects'].map((_) {
     return '''
 @implementation Tx${_['name']}
-${_['properties'].map((_) => '+ (NSString*) ${_} { return @"${_}"; }').join('\n')}
+${_['properties'].map((name) => 'NSString *const Tx${_['name']}_${name} = @"${name}";').join('\n')}
 @end
 ''';
   }).join('\n')}''';

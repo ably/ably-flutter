@@ -3,7 +3,7 @@
 // source file can be found at bin/templates'
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
   ablyMessageCodecType = 128,
@@ -15,96 +15,96 @@ typedef NS_ENUM(UInt8, _Value) {
 
 
 @interface AblyPlatformMethod : NSObject
-@property (class, nonatomic, assign, readonly) NSString *getPlatformVersion;
-@property (class, nonatomic, assign, readonly) NSString *getVersion;
-@property (class, nonatomic, assign, readonly) NSString *registerAbly;
-@property (class, nonatomic, assign, readonly) NSString *createRestWithOptions;
-@property (class, nonatomic, assign, readonly) NSString *publish;
-@property (class, nonatomic, assign, readonly) NSString *createRealtimeWithOptions;
-@property (class, nonatomic, assign, readonly) NSString *connectRealtime;
-@property (class, nonatomic, assign, readonly) NSString *closeRealtime;
-@property (class, nonatomic, assign, readonly) NSString *onRealtimeConnectionStateChanged;
-@property (class, nonatomic, assign, readonly) NSString *onRealtimeChannelStateChanged;
+extern NSString *const AblyPlatformMethod_getPlatformVersion;
+extern NSString *const AblyPlatformMethod_getVersion;
+extern NSString *const AblyPlatformMethod_registerAbly;
+extern NSString *const AblyPlatformMethod_createRestWithOptions;
+extern NSString *const AblyPlatformMethod_publish;
+extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
+extern NSString *const AblyPlatformMethod_connectRealtime;
+extern NSString *const AblyPlatformMethod_closeRealtime;
+extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
+extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 @end
 
 @interface TxAblyMessage : NSObject
-@property (class, nonatomic, assign, readonly) NSString *registrationHandle;
-@property (class, nonatomic, assign, readonly) NSString *type;
-@property (class, nonatomic, assign, readonly) NSString *message;
+extern NSString *const TxAblyMessage_registrationHandle;
+extern NSString *const TxAblyMessage_type;
+extern NSString *const TxAblyMessage_message;
 @end
 
 @interface TxErrorInfo : NSObject
-@property (class, nonatomic, assign, readonly) NSString *code;
-@property (class, nonatomic, assign, readonly) NSString *message;
-@property (class, nonatomic, assign, readonly) NSString *statusCode;
-@property (class, nonatomic, assign, readonly) NSString *href;
-@property (class, nonatomic, assign, readonly) NSString *requestId;
-@property (class, nonatomic, assign, readonly) NSString *cause;
+extern NSString *const TxErrorInfo_code;
+extern NSString *const TxErrorInfo_message;
+extern NSString *const TxErrorInfo_statusCode;
+extern NSString *const TxErrorInfo_href;
+extern NSString *const TxErrorInfo_requestId;
+extern NSString *const TxErrorInfo_cause;
 @end
 
 @interface TxClientOptions : NSObject
-@property (class, nonatomic, assign, readonly) NSString *authUrl;
-@property (class, nonatomic, assign, readonly) NSString *authMethod;
-@property (class, nonatomic, assign, readonly) NSString *key;
-@property (class, nonatomic, assign, readonly) NSString *tokenDetails;
-@property (class, nonatomic, assign, readonly) NSString *authHeaders;
-@property (class, nonatomic, assign, readonly) NSString *authParams;
-@property (class, nonatomic, assign, readonly) NSString *queryTime;
-@property (class, nonatomic, assign, readonly) NSString *useTokenAuth;
-@property (class, nonatomic, assign, readonly) NSString *clientId;
-@property (class, nonatomic, assign, readonly) NSString *logLevel;
-@property (class, nonatomic, assign, readonly) NSString *tls;
-@property (class, nonatomic, assign, readonly) NSString *restHost;
-@property (class, nonatomic, assign, readonly) NSString *realtimeHost;
-@property (class, nonatomic, assign, readonly) NSString *port;
-@property (class, nonatomic, assign, readonly) NSString *tlsPort;
-@property (class, nonatomic, assign, readonly) NSString *autoConnect;
-@property (class, nonatomic, assign, readonly) NSString *useBinaryProtocol;
-@property (class, nonatomic, assign, readonly) NSString *queueMessages;
-@property (class, nonatomic, assign, readonly) NSString *echoMessages;
-@property (class, nonatomic, assign, readonly) NSString *recover;
-@property (class, nonatomic, assign, readonly) NSString *environment;
-@property (class, nonatomic, assign, readonly) NSString *idempotentRestPublishing;
-@property (class, nonatomic, assign, readonly) NSString *httpOpenTimeout;
-@property (class, nonatomic, assign, readonly) NSString *httpRequestTimeout;
-@property (class, nonatomic, assign, readonly) NSString *httpMaxRetryCount;
-@property (class, nonatomic, assign, readonly) NSString *realtimeRequestTimeout;
-@property (class, nonatomic, assign, readonly) NSString *fallbackHosts;
-@property (class, nonatomic, assign, readonly) NSString *fallbackHostsUseDefault;
-@property (class, nonatomic, assign, readonly) NSString *fallbackRetryTimeout;
-@property (class, nonatomic, assign, readonly) NSString *defaultTokenParams;
-@property (class, nonatomic, assign, readonly) NSString *channelRetryTimeout;
-@property (class, nonatomic, assign, readonly) NSString *transportParams;
+extern NSString *const TxClientOptions_authUrl;
+extern NSString *const TxClientOptions_authMethod;
+extern NSString *const TxClientOptions_key;
+extern NSString *const TxClientOptions_tokenDetails;
+extern NSString *const TxClientOptions_authHeaders;
+extern NSString *const TxClientOptions_authParams;
+extern NSString *const TxClientOptions_queryTime;
+extern NSString *const TxClientOptions_useTokenAuth;
+extern NSString *const TxClientOptions_clientId;
+extern NSString *const TxClientOptions_logLevel;
+extern NSString *const TxClientOptions_tls;
+extern NSString *const TxClientOptions_restHost;
+extern NSString *const TxClientOptions_realtimeHost;
+extern NSString *const TxClientOptions_port;
+extern NSString *const TxClientOptions_tlsPort;
+extern NSString *const TxClientOptions_autoConnect;
+extern NSString *const TxClientOptions_useBinaryProtocol;
+extern NSString *const TxClientOptions_queueMessages;
+extern NSString *const TxClientOptions_echoMessages;
+extern NSString *const TxClientOptions_recover;
+extern NSString *const TxClientOptions_environment;
+extern NSString *const TxClientOptions_idempotentRestPublishing;
+extern NSString *const TxClientOptions_httpOpenTimeout;
+extern NSString *const TxClientOptions_httpRequestTimeout;
+extern NSString *const TxClientOptions_httpMaxRetryCount;
+extern NSString *const TxClientOptions_realtimeRequestTimeout;
+extern NSString *const TxClientOptions_fallbackHosts;
+extern NSString *const TxClientOptions_fallbackHostsUseDefault;
+extern NSString *const TxClientOptions_fallbackRetryTimeout;
+extern NSString *const TxClientOptions_defaultTokenParams;
+extern NSString *const TxClientOptions_channelRetryTimeout;
+extern NSString *const TxClientOptions_transportParams;
 @end
 
 @interface TxTokenDetails : NSObject
-@property (class, nonatomic, assign, readonly) NSString *token;
-@property (class, nonatomic, assign, readonly) NSString *expires;
-@property (class, nonatomic, assign, readonly) NSString *issued;
-@property (class, nonatomic, assign, readonly) NSString *capability;
-@property (class, nonatomic, assign, readonly) NSString *clientId;
+extern NSString *const TxTokenDetails_token;
+extern NSString *const TxTokenDetails_expires;
+extern NSString *const TxTokenDetails_issued;
+extern NSString *const TxTokenDetails_capability;
+extern NSString *const TxTokenDetails_clientId;
 @end
 
 @interface TxTokenParams : NSObject
-@property (class, nonatomic, assign, readonly) NSString *capability;
-@property (class, nonatomic, assign, readonly) NSString *clientId;
-@property (class, nonatomic, assign, readonly) NSString *nonce;
-@property (class, nonatomic, assign, readonly) NSString *timestamp;
-@property (class, nonatomic, assign, readonly) NSString *ttl;
+extern NSString *const TxTokenParams_capability;
+extern NSString *const TxTokenParams_clientId;
+extern NSString *const TxTokenParams_nonce;
+extern NSString *const TxTokenParams_timestamp;
+extern NSString *const TxTokenParams_ttl;
 @end
 
 @interface TxConnectionStateChange : NSObject
-@property (class, nonatomic, assign, readonly) NSString *current;
-@property (class, nonatomic, assign, readonly) NSString *previous;
-@property (class, nonatomic, assign, readonly) NSString *event;
-@property (class, nonatomic, assign, readonly) NSString *retryIn;
-@property (class, nonatomic, assign, readonly) NSString *reason;
+extern NSString *const TxConnectionStateChange_current;
+extern NSString *const TxConnectionStateChange_previous;
+extern NSString *const TxConnectionStateChange_event;
+extern NSString *const TxConnectionStateChange_retryIn;
+extern NSString *const TxConnectionStateChange_reason;
 @end
 
 @interface TxChannelStateChange : NSObject
-@property (class, nonatomic, assign, readonly) NSString *current;
-@property (class, nonatomic, assign, readonly) NSString *previous;
-@property (class, nonatomic, assign, readonly) NSString *event;
-@property (class, nonatomic, assign, readonly) NSString *resumed;
-@property (class, nonatomic, assign, readonly) NSString *reason;
+extern NSString *const TxChannelStateChange_current;
+extern NSString *const TxChannelStateChange_previous;
+extern NSString *const TxChannelStateChange_event;
+extern NSString *const TxChannelStateChange_resumed;
+extern NSString *const TxChannelStateChange_reason;
 @end

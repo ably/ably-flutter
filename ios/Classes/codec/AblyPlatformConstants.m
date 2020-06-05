@@ -3,101 +3,100 @@
 // source file can be found at bin/templates'
 //
 
-#import <Foundation/Foundation.h>
 #import "AblyPlatformConstants.h"
 
 
 @implementation AblyPlatformMethod
-+ (NSString*) getPlatformVersion { return @"getPlatformVersion"; }
-+ (NSString*) getVersion { return @"getVersion"; }
-+ (NSString*) registerAbly { return @"registerAbly"; }
-+ (NSString*) createRestWithOptions { return @"createRestWithOptions"; }
-+ (NSString*) publish { return @"publish"; }
-+ (NSString*) createRealtimeWithOptions { return @"createRealtimeWithOptions"; }
-+ (NSString*) connectRealtime { return @"connectRealtime"; }
-+ (NSString*) closeRealtime { return @"closeRealtime"; }
-+ (NSString*) onRealtimeConnectionStateChanged { return @"onRealtimeConnectionStateChanged"; }
-+ (NSString*) onRealtimeChannelStateChanged { return @"onRealtimeChannelStateChanged"; }
+NSString *const AblyPlatformMethod_getPlatformVersion= @"getPlatformVersion";
+NSString *const AblyPlatformMethod_getVersion= @"getVersion";
+NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
+NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
+NSString *const AblyPlatformMethod_publish= @"publish";
+NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
+NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
+NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
+NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
+NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 @end
 
 @implementation TxAblyMessage
-+ (NSString*) registrationHandle { return @"registrationHandle"; }
-+ (NSString*) type { return @"type"; }
-+ (NSString*) message { return @"message"; }
+NSString *const TxAblyMessage_registrationHandle = @"registrationHandle";
+NSString *const TxAblyMessage_type = @"type";
+NSString *const TxAblyMessage_message = @"message";
 @end
 
 @implementation TxErrorInfo
-+ (NSString*) code { return @"code"; }
-+ (NSString*) message { return @"message"; }
-+ (NSString*) statusCode { return @"statusCode"; }
-+ (NSString*) href { return @"href"; }
-+ (NSString*) requestId { return @"requestId"; }
-+ (NSString*) cause { return @"cause"; }
+NSString *const TxErrorInfo_code = @"code";
+NSString *const TxErrorInfo_message = @"message";
+NSString *const TxErrorInfo_statusCode = @"statusCode";
+NSString *const TxErrorInfo_href = @"href";
+NSString *const TxErrorInfo_requestId = @"requestId";
+NSString *const TxErrorInfo_cause = @"cause";
 @end
 
 @implementation TxClientOptions
-+ (NSString*) authUrl { return @"authUrl"; }
-+ (NSString*) authMethod { return @"authMethod"; }
-+ (NSString*) key { return @"key"; }
-+ (NSString*) tokenDetails { return @"tokenDetails"; }
-+ (NSString*) authHeaders { return @"authHeaders"; }
-+ (NSString*) authParams { return @"authParams"; }
-+ (NSString*) queryTime { return @"queryTime"; }
-+ (NSString*) useTokenAuth { return @"useTokenAuth"; }
-+ (NSString*) clientId { return @"clientId"; }
-+ (NSString*) logLevel { return @"logLevel"; }
-+ (NSString*) tls { return @"tls"; }
-+ (NSString*) restHost { return @"restHost"; }
-+ (NSString*) realtimeHost { return @"realtimeHost"; }
-+ (NSString*) port { return @"port"; }
-+ (NSString*) tlsPort { return @"tlsPort"; }
-+ (NSString*) autoConnect { return @"autoConnect"; }
-+ (NSString*) useBinaryProtocol { return @"useBinaryProtocol"; }
-+ (NSString*) queueMessages { return @"queueMessages"; }
-+ (NSString*) echoMessages { return @"echoMessages"; }
-+ (NSString*) recover { return @"recover"; }
-+ (NSString*) environment { return @"environment"; }
-+ (NSString*) idempotentRestPublishing { return @"idempotentRestPublishing"; }
-+ (NSString*) httpOpenTimeout { return @"httpOpenTimeout"; }
-+ (NSString*) httpRequestTimeout { return @"httpRequestTimeout"; }
-+ (NSString*) httpMaxRetryCount { return @"httpMaxRetryCount"; }
-+ (NSString*) realtimeRequestTimeout { return @"realtimeRequestTimeout"; }
-+ (NSString*) fallbackHosts { return @"fallbackHosts"; }
-+ (NSString*) fallbackHostsUseDefault { return @"fallbackHostsUseDefault"; }
-+ (NSString*) fallbackRetryTimeout { return @"fallbackRetryTimeout"; }
-+ (NSString*) defaultTokenParams { return @"defaultTokenParams"; }
-+ (NSString*) channelRetryTimeout { return @"channelRetryTimeout"; }
-+ (NSString*) transportParams { return @"transportParams"; }
+NSString *const TxClientOptions_authUrl = @"authUrl";
+NSString *const TxClientOptions_authMethod = @"authMethod";
+NSString *const TxClientOptions_key = @"key";
+NSString *const TxClientOptions_tokenDetails = @"tokenDetails";
+NSString *const TxClientOptions_authHeaders = @"authHeaders";
+NSString *const TxClientOptions_authParams = @"authParams";
+NSString *const TxClientOptions_queryTime = @"queryTime";
+NSString *const TxClientOptions_useTokenAuth = @"useTokenAuth";
+NSString *const TxClientOptions_clientId = @"clientId";
+NSString *const TxClientOptions_logLevel = @"logLevel";
+NSString *const TxClientOptions_tls = @"tls";
+NSString *const TxClientOptions_restHost = @"restHost";
+NSString *const TxClientOptions_realtimeHost = @"realtimeHost";
+NSString *const TxClientOptions_port = @"port";
+NSString *const TxClientOptions_tlsPort = @"tlsPort";
+NSString *const TxClientOptions_autoConnect = @"autoConnect";
+NSString *const TxClientOptions_useBinaryProtocol = @"useBinaryProtocol";
+NSString *const TxClientOptions_queueMessages = @"queueMessages";
+NSString *const TxClientOptions_echoMessages = @"echoMessages";
+NSString *const TxClientOptions_recover = @"recover";
+NSString *const TxClientOptions_environment = @"environment";
+NSString *const TxClientOptions_idempotentRestPublishing = @"idempotentRestPublishing";
+NSString *const TxClientOptions_httpOpenTimeout = @"httpOpenTimeout";
+NSString *const TxClientOptions_httpRequestTimeout = @"httpRequestTimeout";
+NSString *const TxClientOptions_httpMaxRetryCount = @"httpMaxRetryCount";
+NSString *const TxClientOptions_realtimeRequestTimeout = @"realtimeRequestTimeout";
+NSString *const TxClientOptions_fallbackHosts = @"fallbackHosts";
+NSString *const TxClientOptions_fallbackHostsUseDefault = @"fallbackHostsUseDefault";
+NSString *const TxClientOptions_fallbackRetryTimeout = @"fallbackRetryTimeout";
+NSString *const TxClientOptions_defaultTokenParams = @"defaultTokenParams";
+NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
+NSString *const TxClientOptions_transportParams = @"transportParams";
 @end
 
 @implementation TxTokenDetails
-+ (NSString*) token { return @"token"; }
-+ (NSString*) expires { return @"expires"; }
-+ (NSString*) issued { return @"issued"; }
-+ (NSString*) capability { return @"capability"; }
-+ (NSString*) clientId { return @"clientId"; }
+NSString *const TxTokenDetails_token = @"token";
+NSString *const TxTokenDetails_expires = @"expires";
+NSString *const TxTokenDetails_issued = @"issued";
+NSString *const TxTokenDetails_capability = @"capability";
+NSString *const TxTokenDetails_clientId = @"clientId";
 @end
 
 @implementation TxTokenParams
-+ (NSString*) capability { return @"capability"; }
-+ (NSString*) clientId { return @"clientId"; }
-+ (NSString*) nonce { return @"nonce"; }
-+ (NSString*) timestamp { return @"timestamp"; }
-+ (NSString*) ttl { return @"ttl"; }
+NSString *const TxTokenParams_capability = @"capability";
+NSString *const TxTokenParams_clientId = @"clientId";
+NSString *const TxTokenParams_nonce = @"nonce";
+NSString *const TxTokenParams_timestamp = @"timestamp";
+NSString *const TxTokenParams_ttl = @"ttl";
 @end
 
 @implementation TxConnectionStateChange
-+ (NSString*) current { return @"current"; }
-+ (NSString*) previous { return @"previous"; }
-+ (NSString*) event { return @"event"; }
-+ (NSString*) retryIn { return @"retryIn"; }
-+ (NSString*) reason { return @"reason"; }
+NSString *const TxConnectionStateChange_current = @"current";
+NSString *const TxConnectionStateChange_previous = @"previous";
+NSString *const TxConnectionStateChange_event = @"event";
+NSString *const TxConnectionStateChange_retryIn = @"retryIn";
+NSString *const TxConnectionStateChange_reason = @"reason";
 @end
 
 @implementation TxChannelStateChange
-+ (NSString*) current { return @"current"; }
-+ (NSString*) previous { return @"previous"; }
-+ (NSString*) event { return @"event"; }
-+ (NSString*) resumed { return @"resumed"; }
-+ (NSString*) reason { return @"reason"; }
+NSString *const TxChannelStateChange_current = @"current";
+NSString *const TxChannelStateChange_previous = @"previous";
+NSString *const TxChannelStateChange_event = @"event";
+NSString *const TxChannelStateChange_resumed = @"resumed";
+NSString *const TxChannelStateChange_reason = @"reason";
 @end

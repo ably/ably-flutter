@@ -1,6 +1,6 @@
 String $(c) {
   return '''
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
   ${c['types'].map((_) => '${_['name']}CodecType = ${_['value']},').join('\n  ')}
@@ -8,13 +8,13 @@ typedef NS_ENUM(UInt8, _Value) {
 
 
 @interface AblyPlatformMethod : NSObject
-${c['methods'].map((_) => '@property (class, nonatomic, assign, readonly) NSString *${_['name']};').join('\n')}
+${c['methods'].map((_) => 'extern NSString *const AblyPlatformMethod_${_['name']};').join('\n')}
 @end
 
 ${c['objects'].map((_) {
     return '''
 @interface Tx${_['name']} : NSObject
-${_['properties'].map((_) => '@property (class, nonatomic, assign, readonly) NSString *${_};').join('\n')}
+${_['properties'].map((name) => 'extern NSString *const Tx${_['name']}_${name};').join('\n')}
 @end
 ''';
   }).join('\n')}''';

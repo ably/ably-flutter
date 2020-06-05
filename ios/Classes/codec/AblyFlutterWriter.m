@@ -39,32 +39,30 @@
 
 - (NSMutableDictionary<NSString *, NSObject *> *) encodeErrorInfo:(ARTErrorInfo *const) e{
     NSMutableDictionary<NSString *, NSObject *> *jsonDict;
-    WRITE_VALUE(jsonDict, TxErrorInfo.message, [e message]);
-    WRITE_VALUE(jsonDict, TxErrorInfo.statusCode, @([e statusCode]));
-    //code - not available in ably-cocoa
-    //href - not available in ably-cocoa
-    //requestId - not available in ably-cocoa
-    //cause - not available in ably-cocoa
+    WRITE_VALUE(jsonDict, TxErrorInfo_message, [e message]);
+    WRITE_VALUE(jsonDict, TxErrorInfo_statusCode, @([e statusCode]));
+    // code, href, requestId and cause - not available in ably-cocoa
+    // track @ https://github.com/ably/ably-flutter/issues/14
     return jsonDict;
 }
 
 - (NSDictionary *) encodeConnectionStateChange:(ARTConnectionStateChange *const) stateChange{
     NSMutableDictionary<NSString *, NSObject *> *jsonDict = [[NSMutableDictionary alloc] init];
-    WRITE_ENUM(jsonDict, TxConnectionStateChange.current, [stateChange current]);
-    WRITE_ENUM(jsonDict, TxConnectionStateChange.previous, [stateChange previous]);
-    WRITE_ENUM(jsonDict, TxConnectionStateChange.event, [stateChange event]);
-    WRITE_VALUE(jsonDict, TxConnectionStateChange.retryIn, @((int)([stateChange retryIn] * 1000)));
-    WRITE_VALUE(jsonDict, TxConnectionStateChange.reason, [self encodeErrorInfo: [stateChange reason]]);
+    WRITE_ENUM(jsonDict, TxConnectionStateChange_current, [stateChange current]);
+    WRITE_ENUM(jsonDict, TxConnectionStateChange_previous, [stateChange previous]);
+    WRITE_ENUM(jsonDict, TxConnectionStateChange_event, [stateChange event]);
+    WRITE_VALUE(jsonDict, TxConnectionStateChange_retryIn, @((int)([stateChange retryIn] * 1000)));
+    WRITE_VALUE(jsonDict, TxConnectionStateChange_reason, [self encodeErrorInfo: [stateChange reason]]);
     return jsonDict;
 }
 
 - (NSDictionary *) encodeChannelStateChange:(ARTChannelStateChange *const) stateChange{
     NSMutableDictionary<NSString *, NSObject *> *jsonDict;
-    WRITE_ENUM(jsonDict, TxChannelStateChange.current, [stateChange current]);
-    WRITE_ENUM(jsonDict, TxChannelStateChange.previous, [stateChange previous]);
-    WRITE_ENUM(jsonDict, TxChannelStateChange.event, [stateChange event]);
-    WRITE_VALUE(jsonDict, TxChannelStateChange.resumed, @([stateChange resumed]));
-    WRITE_VALUE(jsonDict, TxChannelStateChange.reason, [self encodeErrorInfo: [stateChange reason]]);
+    WRITE_ENUM(jsonDict, TxChannelStateChange_current, [stateChange current]);
+    WRITE_ENUM(jsonDict, TxChannelStateChange_previous, [stateChange previous]);
+    WRITE_ENUM(jsonDict, TxChannelStateChange_event, [stateChange event]);
+    WRITE_VALUE(jsonDict, TxChannelStateChange_resumed, @([stateChange resumed]));
+    WRITE_VALUE(jsonDict, TxChannelStateChange_reason, [self encodeErrorInfo: [stateChange reason]]);
     return jsonDict;
 }
 

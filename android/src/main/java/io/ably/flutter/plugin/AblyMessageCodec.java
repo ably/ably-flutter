@@ -152,7 +152,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, v -> o.authHeaders = (Param[])v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[])v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean)v);
-//        readValueFromJson(buffer); // o.useAuthToken
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> o.useTokenAuth = (Boolean)v);
 
         // ClientOptions
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String)v);
@@ -201,7 +201,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.clientId, v -> o.clientId = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.timestamp, v -> o.timestamp = (int)v);
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = (long)v);
-        //nonce is not supported in ably-java
+        // nonce is not supported in ably-java
+        // Track @ https://github.com/ably/ably-flutter/issues/14
         return o;
     }
 
@@ -216,7 +217,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.message, c.message);
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.statusCode, c.statusCode);
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.href, c.href);
-        //requestId and cause - not available in ably-java
+        // requestId and cause - not available in ably-java
+        // track @ https://github.com/ably/ably-flutter/issues/14
         return jsonMap;
     }
 
