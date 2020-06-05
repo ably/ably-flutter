@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/interface.dart';
 import 'package:flutter/services.dart';
-import 'package:ably_flutter_plugin/src/gen/platformconstants.dart' show PlatformMethod;
+import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
 import 'package:streams_channel/streams_channel.dart';
 import '../ably.dart';
 import 'codec.dart';

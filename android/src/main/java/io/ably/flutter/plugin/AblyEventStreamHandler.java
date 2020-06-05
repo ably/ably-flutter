@@ -3,7 +3,7 @@ package io.ably.flutter.plugin;
 import android.os.Handler;
 import android.os.Looper;
 
-import io.ably.flutter.plugin.gen.PlatformConstants;
+import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.flutter.plugin.common.EventChannel;
@@ -50,14 +50,11 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         }
 
         @Override
-        public void endOfStream() {
-            //TODO work on this if required, or remove this TODO once all features are covered
-        }
+        public void endOfStream() {}
     }
 
     // Listeners
     private PluginConnectionStateListener connectionStateListener;
-    private PluginChannelStateListener channelStateListener;
 
     private class Listener{
         EventChannel.EventSink eventSink;
@@ -67,13 +64,6 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
         PluginConnectionStateListener(EventChannel.EventSink eventSink){super(eventSink);}
         public void onConnectionStateChanged(ConnectionStateChange stateChange){
-            eventSink.success(stateChange);
-        }
-    }
-
-    private class PluginChannelStateListener extends Listener implements ChannelStateListener {
-        PluginChannelStateListener(EventChannel.EventSink eventSink){super(eventSink);}
-        public void onChannelStateChanged(io.ably.lib.realtime.ChannelStateListener.ChannelStateChange stateChange){
             eventSink.success(stateChange);
         }
     }
@@ -88,10 +78,6 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     connectionStateListener = new PluginConnectionStateListener(eventSink);
                     ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
                     return;
-                case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
-                    // channelStateListener = new PluginChannelStateListener(eventSink);
-                    // ablyLibrary.getRealtime(message.handle).connection.on(channelStateListener);
-                    // return;
                 default:
                     eventSink.error("unhandled event", null, null);
             }

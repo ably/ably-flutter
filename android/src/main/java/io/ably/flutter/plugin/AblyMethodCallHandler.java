@@ -16,7 +16,7 @@ import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.ably.flutter.plugin.gen.PlatformConstants;
+import io.ably.flutter.plugin.generated.PlatformConstants;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private static AblyMethodCallHandler _instance;

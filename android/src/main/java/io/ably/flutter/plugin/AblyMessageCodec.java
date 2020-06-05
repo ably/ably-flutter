@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import io.ably.flutter.plugin.gen.PlatformConstants;
+import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
