@@ -136,14 +136,14 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     }
     
     _handlers = @{
-        AblyPlatformMethod.getPlatformVersion: _getPlatformVersion,
-        AblyPlatformMethod.getVersion: _getVersion,
-        AblyPlatformMethod.registerAbly: _register,
-        AblyPlatformMethod.createRestWithOptions: _createRestWithOptions,
-        AblyPlatformMethod.publish: _publishRestMessage,
-        AblyPlatformMethod.createRealtimeWithOptions: _createRealtimeWithOptions,
-        AblyPlatformMethod.connectRealtime: _connectRealtime,
-        AblyPlatformMethod.closeRealtime: _closeRealtime
+        AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
+        AblyPlatformMethod_getVersion: _getVersion,
+        AblyPlatformMethod_registerAbly: _register,
+        AblyPlatformMethod_createRestWithOptions: _createRestWithOptions,
+        AblyPlatformMethod_publish: _publishRestMessage,
+        AblyPlatformMethod_createRealtimeWithOptions: _createRealtimeWithOptions,
+        AblyPlatformMethod_connectRealtime: _connectRealtime,
+        AblyPlatformMethod_closeRealtime: _closeRealtime
     };
     
     _nextRegistration = 1;

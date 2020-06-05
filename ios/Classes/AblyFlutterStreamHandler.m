@@ -31,11 +31,11 @@
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
 
-    if([AblyPlatformMethod.onRealtimeConnectionStateChanged isEqual: eventName]) {
+    if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
         listener = [[ably realtimeWithHandle: message.handle].connection  on: ^(ARTConnectionStateChange * const stateChange) {
             emitter(stateChange);
         }];
-    } else if([AblyPlatformMethod.onRealtimeChannelStateChanged isEqual: eventName]) {
+    } else if([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
         
     }
 }
@@ -45,9 +45,9 @@
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
     
-    if([AblyPlatformMethod.onRealtimeConnectionStateChanged isEqual: eventName]) {
+    if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
         [[ably realtimeWithHandle: message.handle].connection  off: listener];
-    } else if([AblyPlatformMethod.onRealtimeChannelStateChanged isEqual: eventName]) {
+    } else if([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
             
     }
 }
