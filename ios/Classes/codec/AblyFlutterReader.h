@@ -8,8 +8,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutterReader : FlutterStandardReader
 
-+(ARTTokenDetails *)readTokenDetails: (NSDictionary *) jsonDict;
-+(ARTTokenParams *)readTokenParams: (NSDictionary *) jsonDict;
++(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary;
++(ARTTokenParams *)tokenParamsFromDictionary: (NSDictionary *) dictionary;
 
 @end
 
