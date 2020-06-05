@@ -28,12 +28,13 @@ final public class PlatformConstants{
 	public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
 	public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
   }
-
+  
   final public class TxAblyMessage{
     public static final String registrationHandle = "registrationHandle";
 	public static final String type = "type";
 	public static final String message = "message";
   }
+  
   final public class TxErrorInfo{
     public static final String code = "code";
 	public static final String message = "message";
@@ -42,6 +43,7 @@ final public class PlatformConstants{
 	public static final String requestId = "requestId";
 	public static final String cause = "cause";
   }
+  
   final public class TxClientOptions{
     public static final String authUrl = "authUrl";
 	public static final String authMethod = "authMethod";
@@ -76,6 +78,7 @@ final public class PlatformConstants{
 	public static final String channelRetryTimeout = "channelRetryTimeout";
 	public static final String transportParams = "transportParams";
   }
+  
   final public class TxTokenDetails{
     public static final String token = "token";
 	public static final String expires = "expires";
@@ -83,6 +86,7 @@ final public class PlatformConstants{
 	public static final String capability = "capability";
 	public static final String clientId = "clientId";
   }
+  
   final public class TxTokenParams{
     public static final String capability = "capability";
 	public static final String clientId = "clientId";
@@ -90,6 +94,7 @@ final public class PlatformConstants{
 	public static final String timestamp = "timestamp";
 	public static final String ttl = "ttl";
   }
+  
   final public class TxConnectionStateChange{
     public static final String current = "current";
 	public static final String previous = "previous";
@@ -97,6 +102,7 @@ final public class PlatformConstants{
 	public static final String retryIn = "retryIn";
 	public static final String reason = "reason";
   }
+  
   final public class TxChannelStateChange{
     public static final String current = "current";
 	public static final String previous = "previous";
@@ -104,4 +110,5 @@ final public class PlatformConstants{
 	public static final String resumed = "resumed";
 	public static final String reason = "reason";
   }
+  
 }

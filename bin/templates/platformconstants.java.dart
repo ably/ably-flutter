@@ -17,7 +17,8 @@ ${c['objects'].map((_) {
       return '''
   final public class Tx${_['name']}{
     ${_['properties'].map((_p) => 'public static final String ${_p} = "${_p}";').join('\n\t')}
-  }''';
+  }
+  ''';
     }).join('\n')}
 }
 ''';
