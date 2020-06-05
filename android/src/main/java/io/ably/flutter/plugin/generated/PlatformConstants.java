@@ -3,12 +3,12 @@
 // source file can be found at bin/templates'
 //
 
-package io.ably.flutter.plugin.gen;
+package io.ably.flutter.plugin.generated;
 
 
-public class PlatformConstants{
+final public class PlatformConstants{
 
-  public class CodecTypes {
+  final public class CodecTypes {
     public static final byte ablyMessage = (byte)128;
 	public static final byte clientOptions = (byte)129;
 	public static final byte errorInfo = (byte)144;
@@ -16,7 +16,7 @@ public class PlatformConstants{
 	public static final byte channelStateChange = (byte)202;
   }
 
-  public class PlatformMethod {
+  final public class PlatformMethod {
     public static final String getPlatformVersion = "getPlatformVersion";
 	public static final String getVersion = "getVersion";
 	public static final String registerAbly = "registerAbly";
@@ -28,13 +28,13 @@ public class PlatformConstants{
 	public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
 	public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
   }
-  
-  public class TxAblyMessage{
+
+  final public class TxAblyMessage{
     public static final String registrationHandle = "registrationHandle";
 	public static final String type = "type";
 	public static final String message = "message";
   }
-  public class TxErrorInfo{
+  final public class TxErrorInfo{
     public static final String code = "code";
 	public static final String message = "message";
 	public static final String statusCode = "statusCode";
@@ -42,7 +42,7 @@ public class PlatformConstants{
 	public static final String requestId = "requestId";
 	public static final String cause = "cause";
   }
-  public class TxClientOptions{
+  final public class TxClientOptions{
     public static final String authUrl = "authUrl";
 	public static final String authMethod = "authMethod";
 	public static final String key = "key";
@@ -76,28 +76,28 @@ public class PlatformConstants{
 	public static final String channelRetryTimeout = "channelRetryTimeout";
 	public static final String transportParams = "transportParams";
   }
-  public class TxTokenDetails{
+  final public class TxTokenDetails{
     public static final String token = "token";
 	public static final String expires = "expires";
 	public static final String issued = "issued";
 	public static final String capability = "capability";
 	public static final String clientId = "clientId";
   }
-  public class TxTokenParams{
+  final public class TxTokenParams{
     public static final String capability = "capability";
 	public static final String clientId = "clientId";
 	public static final String nonce = "nonce";
 	public static final String timestamp = "timestamp";
 	public static final String ttl = "ttl";
   }
-  public class TxConnectionStateChange{
+  final public class TxConnectionStateChange{
     public static final String current = "current";
 	public static final String previous = "previous";
 	public static final String event = "event";
 	public static final String retryIn = "retryIn";
 	public static final String reason = "reason";
   }
-  public class TxChannelStateChange{
+  final public class TxChannelStateChange{
     public static final String current = "current";
 	public static final String previous = "previous";
 	public static final String event = "event";

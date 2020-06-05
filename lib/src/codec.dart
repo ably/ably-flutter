@@ -1,4 +1,4 @@
-import 'package:ably_flutter_plugin/src/gen/platformconstants.dart';
+import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';

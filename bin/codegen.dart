@@ -12,8 +12,8 @@ String projectRoot = "../";
 
 Map<Template, String> toGenerate = {
   // input template method vs output file path
-  dart_template.$: "${projectRoot}lib/src/gen/platformconstants.dart",
-  java_template.$: "${projectRoot}android/src/main/java/io/ably/flutter/plugin/gen/PlatformConstants.java",
+  dart_template.$: "${projectRoot}lib/src/generated/platformconstants.dart",
+  java_template.$: "${projectRoot}android/src/main/java/io/ably/flutter/plugin/generated/PlatformConstants.java",
   objc_header_template.$: "${projectRoot}ios/Classes/codec/AblyPlatformConstants.h",
   objc_impl_template.$: "${projectRoot}ios/Classes/codec/AblyPlatformConstants.m",
 };
