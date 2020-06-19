@@ -110,6 +110,48 @@ realtime.connect();     //connect to realtime
 realtime.disconnect();  //disconnect from realtime
 ```
 
+## Caveats
+
+#### RTE6a compliance
+
+Using Streams based approach doesn't fully conform with [RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a) from the spec.
+
+##### Problem
+
+```dart
+StreamSubscription subscriptionToBeCancelled;
+
+//Listener registered 1st
+realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+  if (stateChange.event == ably.ConnectionEvent.connected) {
+    await subscriptionToBeCancelled.cancel();       //Cancelling 2nd listener
+  }
+});
+
+//Listener registered 2nd
+subscriptionToBeCancelled = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+  print('State changed');
+});
+```
+
+In the example above, 2nd listener is cancelled when 1st listener is notified about the "connected" event.
+As per RTE6a, 2nd listener should also be triggered, but it will not be as 2nd listener is registered after 1st listener and  stream subscription is cancelled immediately after first listener is triggered.
+
+This wouldn't have happened if 2nd listener was registered before the 1st.
+
+However, using a neat little trick will fix this.
+
+##### Suggestion - Cancelling using delay.
+
+Instead of `await subscriptionToBeCancelled.cancel();`, use
+
+```dart
+Future.delayed(Duration.zero, (){
+    subscriptionToBeCancelled.cancel();
+});
+```
+
+
 ## Contributing
 
 We have some [Developer Notes](DeveloperNotes.md), but we're still learning too so they'll only help you so far, in fact there's probably a lot you can teach us!
