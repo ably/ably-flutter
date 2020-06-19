@@ -141,7 +141,7 @@ This wouldn't have happened if 2nd listener was registered before the 1st.
 
 However, using a neat little trick will fix this.
 
-##### Suggestion - Cancelling using delay.
+##### Suggestion - Cancelling using delay
 
 Instead of `await subscriptionToBeCancelled.cancel();`, use
 
@@ -150,7 +150,6 @@ Future.delayed(Duration.zero, (){
     subscriptionToBeCancelled.cancel();
 });
 ```
-
 
 ## Contributing
 
