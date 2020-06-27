@@ -137,7 +137,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         if(type!=null){
             message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
         }
-        return new AblyFlutterMessage<>(handle, message);
+        return new AblyFlutterMessage<>(message, handle);
     }
 
     private ClientOptions readClientOptions(Map<String, Object> jsonMap) {

@@ -1,8 +1,13 @@
 import 'ably_implementation.dart';
-import 'spec/spec.dart' show Realtime, ClientOptions, Rest;
+import 'spec/spec.dart' as spec;
 
-abstract class Ably {
-  factory Ably() => AblyImplementation();
+abstract class AblyLibrary {
+
+  static final AblyLibrary _instance = AblyImplementation();
+  factory AblyLibrary() => _instance;
+
+  /// Invokes a platform method
+  Future<T> invoke<T>(String method, [dynamic arguments]);
 
   /// Returns platform version
   Future<String> get platformVersion;
@@ -12,16 +17,18 @@ abstract class Ably {
 
   /// Creates a [Realtime] instance either with [options] or with [key]
   /// obtained from Ably dashboard
-  Future<Realtime> createRealtime({
-    ClientOptions options,
+  spec.Realtime Realtime({
+    spec.ClientOptions options,
     final String key
   });
 
   /// Creates a [Rest] instance either with [options] or with [key]
   /// obtained from Ably dashboard
-  Future<Rest> createRest({
-    ClientOptions options,
+  spec.Rest Rest({
+    spec.ClientOptions options,
     final String key
   });
 
 }
+
+final AblyLibrary Ably = AblyLibrary();

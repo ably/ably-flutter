@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:ably_flutter_plugin/src/impl/message.dart';
+
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
@@ -8,15 +10,21 @@ import 'channels.dart';
 
 class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatformChannels> {
 
-  RestPlatformObject(int ablyHandle, Ably ablyPlugin, int handle, {
+  RestPlatformObject({
     ClientOptions options,
     final String key
-  })
-      :assert(options!=null || key!=null),
-        super(ablyHandle, ablyPlugin, handle){
-    this.options = (options==null)?ClientOptions.fromKey(key):options;
-    this.channels = RestPlatformChannels(ablyHandle, ablyPlugin, handle, this);
+  }) :
+      assert(options!=null || key!=null),
+      this.options = (options==null)?ClientOptions.fromKey(key):options,
+      super()
+  {
+    this.channels = RestPlatformChannels(this);
   }
+
+  Future<int> createPlatformInstance() async => await Ably.invoke<int>(
+    PlatformMethod.createRestWithOptions,
+    AblyMessage(options)
+  );
 
   @override
   Auth auth;

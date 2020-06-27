@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
 import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
@@ -21,8 +22,15 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   @override
   spec.RealtimePresence presence;
 
-  RealtimePlatformChannel(int ablyHandle, Ably ablyPlugin, int restHandle, this.ably, this.name, this.options)
-      : super(ablyHandle, ablyPlugin, restHandle);
+  RealtimePlatformChannel(this.ably, this.name, this.options): super();
+
+  RealtimePlatformObject get realtimePlatformObject => this.ably as RealtimePlatformObject;
+
+  /// createPlatformInstance will return realtimePlatformObject's handle
+  /// as that is what will be required in platforms end to find realtime instance
+  /// and send message to channel
+  @override
+  Future<int> createPlatformInstance() async => await realtimePlatformObject.handle;
 
   @override
   Future<spec.PaginatedResult<spec.Message>> history([spec.RealtimeHistoryParams params]) {
@@ -113,15 +121,11 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
 class RealtimePlatformChannels extends spec.RealtimeChannels<RealtimePlatformChannel>{
 
-  int ablyHandle;
-  Ably ablyPlugin;
-  int restHandle;
-
-  RealtimePlatformChannels(this.ablyHandle, this.ablyPlugin, this.restHandle, spec.AblyBase ably): super(ably);
+  RealtimePlatformChannels(RealtimePlatformObject ably): super(ably);
 
   @override
   RealtimePlatformChannel createChannel(name, options){
-    return RealtimePlatformChannel(ablyHandle, ablyPlugin, restHandle, ably, name, options);
+    return RealtimePlatformChannel(this.ably, name, options);
   }
 
 }

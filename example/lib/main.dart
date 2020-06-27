@@ -26,7 +26,6 @@ class _MyAppState extends State<MyApp> {
   provisioning.AppKey _appKey;
   OpState _realtimeCreationState = OpState.NotStarted;
   OpState _restCreationState = OpState.NotStarted;
-  ably.Ably _ablyPlugin;
   ably.Realtime _realtime;
   ably.Rest _rest;
   ably.ConnectionState _realtimeConnectionState;
@@ -41,19 +40,17 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     print('initPlatformState()');
 
-    final ably.Ably ablyPlugin = ably.Ably();
-
     String platformVersion;
     String ablyVersion;
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await ablyPlugin.platformVersion;
+      platformVersion = await ably.Ably.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
-      ablyVersion = await ablyPlugin.version;
+      ablyVersion = await ably.Ably.version;
     } on PlatformException {
       ablyVersion = 'Failed to get Ably version.';
     }
@@ -68,7 +65,6 @@ class _MyAppState extends State<MyApp> {
       print('set state');
       _platformVersion = platformVersion;
       _ablyVersion = ablyVersion;
-      _ablyPlugin = ablyPlugin;
     });
   }
 
@@ -102,7 +98,7 @@ class _MyAppState extends State<MyApp> {
 
     ably.Rest rest;
     try{
-      rest = await _ablyPlugin.createRest(options: clientOptions);
+      rest = ably.Ably.Rest(options: clientOptions);
     } catch (error) {
       print('Error creating Ably Rest: ${error}');
       setState(() { _restCreationState = OpState.Failed; });
@@ -141,18 +137,19 @@ class _MyAppState extends State<MyApp> {
 
     ably.Realtime realtime;
     try {
-      realtime = await _ablyPlugin.createRealtime(options: clientOptions);
+      realtime = ably.Ably.Realtime(options: clientOptions);
 
       //One can listen from multiple listeners on the same event,
       // and must cancel each subscription one by one
       //RETAINING LISTENER - α
+      print("starting α listener");
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
         setState(() { _realtimeConnectionState = stateChange.current; });
       });
 
       //DISPOSE ON CONNECTED
-      Stream<ably.ConnectionStateChange> stream = realtime.connection.on();
+      Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
       StreamSubscription subscription;
       subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
         print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
@@ -164,18 +161,22 @@ class _MyAppState extends State<MyApp> {
       //RETAINING LISTENER - β
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
-        //NESTED LISTENER - ξ
-        realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
-          //k ξ listeners will be registered and each listener will be called `n-k` times respectively if listener β is called `n` times
-          print('NESTED LISTENER ξ: ${stateChangeX.event}');
+        // NESTED LISTENER - ξ
+        // will be registered only when connected event is received by β listener
+        realtime.connection.on().listen((
+          ably.ConnectionStateChange stateChange) async {
+          // k ξ listeners will be registered
+          // and each listener will be called `n-k` times respectively
+          // if listener β is called `n` times
+          print('NESTED LISTENER ξ: ${stateChange.event}');
         });
       });
 
       StreamSubscription preZetaSubscription;
       StreamSubscription postZetaSubscription;
-      preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
+      preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         //This listener "pre ζ" will be cancelled from γ
-        print('NESTED LISTENER "pre ζ": ${stateChangeX.event}');
+        print('NESTED LISTENER "pre ζ": ${stateChange.event}');
       });
 
 
@@ -188,9 +189,9 @@ class _MyAppState extends State<MyApp> {
         }
       });
 
-      postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChangeX) async {
+      postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         //This listener "post ζ" will be cancelled from γ
-        print('NESTED LISTENER "post ζ": ${stateChangeX.event}');
+        print('NESTED LISTENER "post ζ": ${stateChange.event}');
       });
 
       setState(() {
@@ -256,8 +257,8 @@ class _MyAppState extends State<MyApp> {
     onPressed: () async {
       print('Sendimg rest message...');
       await _rest.channels.get('test').publish(
-          name: 'Hello',
-          data: 'Flutter ${++msgCounter}'
+        name: 'Hello',
+        data: 'Flutter ${++msgCounter}'
       );
       print('Rest message sent.');
       setState(() {});
@@ -277,23 +278,23 @@ class _MyAppState extends State<MyApp> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 36.0),
             child: Column(
-                children: [
-                  Text('Running on: $_platformVersion\n'),
-                  Text('Ably version: $_ablyVersion\n'),
-                  provisionButton(),
-                  Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
-                  Divider(),
-                  createRealtimeButton(),
-                  Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-                  Text('Connection Status: $_realtimeConnectionState'),
-                  createRTCConnectButton(),
-                  createRTCloseButton(),
-                  Divider(),
-                  createRestButton(),
-                  Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
-                  sendRestMessage(),
-                  Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
-                ]
+              children: [
+                Text('Running on: $_platformVersion\n'),
+                Text('Ably version: $_ablyVersion\n'),
+                provisionButton(),
+                Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
+                Divider(),
+                createRealtimeButton(),
+                Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+                Text('Connection Status: $_realtimeConnectionState'),
+                createRTCConnectButton(),
+                createRTCloseButton(),
+                Divider(),
+                createRestButton(),
+                Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
+                sendRestMessage(),
+                Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
+              ]
             ),
           ),
         ),

@@ -1,7 +1,11 @@
 class AblyMessage {
-  final int registrationHandle;
+
+  final int handle;
   final int type;
   final dynamic message;
 
-  AblyMessage(this.registrationHandle, this.message, {this.type});
+  AblyMessage(dynamic message, {this.handle, this.type}):
+      assert(message!=null),
+      this.message = message;
+
 }
