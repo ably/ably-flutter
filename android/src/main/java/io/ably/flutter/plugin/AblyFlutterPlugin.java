@@ -2,7 +2,6 @@ package io.ably.flutter.plugin;
 
 import androidx.annotation.NonNull;
 
-import app.loup.streams_channel.StreamsChannel;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
@@ -35,14 +34,17 @@ public class AblyFlutterPlugin implements FlutterPlugin {
 
     private static void setupChannels(BinaryMessenger messenger){
         MethodCodec codec = createCodec();
-        AblyMethodCallHandler methodCallHandler = AblyMethodCallHandler.getInstance();
-
-        final MethodChannel channel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
-        channel.setMethodCallHandler(methodCallHandler);
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
-        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(methodCallHandler));
+        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler());
 
+        AblyMethodCallHandler methodCallHandler = AblyMethodCallHandler.getInstance(
+                // Streams channel will be created on `register` method call
+                // and also on every hot-reload
+                streamsChannel::reset
+        );
+        final MethodChannel channel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
+        channel.setMethodCallHandler(methodCallHandler);
     }
 
     @Override

@@ -18,23 +18,30 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 
+
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private static AblyMethodCallHandler _instance;
 
-    static synchronized AblyMethodCallHandler getInstance() {
+    public interface OnHotRestart {
+        // this method will be called on every fresh start and on every hot restart
+        void trigger();
+    }
+
+    private OnHotRestart onHotRestartListener;
+
+    static synchronized AblyMethodCallHandler getInstance(OnHotRestart listener) {
         // TODO decide why singleton instance is required!
         if (null == _instance) {
-            _instance = new AblyMethodCallHandler();
+            _instance = new AblyMethodCallHandler(listener);
         }
         return _instance;
     }
 
     private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
-    private AblyLibrary _ably;
-    private Long _ablyHandle;
-    private long _nextRegistration = 1;
+    private AblyLibrary _ably = AblyLibrary.getInstance();
 
-    private AblyMethodCallHandler() {
+    private AblyMethodCallHandler(OnHotRestart listener) {
+        this.onHotRestartListener = listener;
         _map = new HashMap<>();
         _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
         _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
@@ -48,7 +55,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
         _map.put(PlatformConstants.PlatformMethod.connectRealtime, this::connectRealtime);
         _map.put(PlatformConstants.PlatformMethod.closeRealtime, this::closeRealtime);
-
     }
 
     // MethodChannel.Result wrapper that responds on the platform thread.
@@ -69,36 +75,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
         @Override
         public void success(final Object result) {
-            handler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            methodResult.success(result);
-                        }
-                    });
+            handler.post(() -> methodResult.success(result));
         }
 
         @Override
         public void error(
                 final String errorCode, final String errorMessage, final Object errorDetails) {
-            handler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            methodResult.error(errorCode, errorMessage, errorDetails);
-                        }
-                    });
+            handler.post(() -> methodResult.error(errorCode, errorMessage, errorDetails));
         }
 
         @Override
         public void notImplemented() {
-            handler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            methodResult.notImplemented();
-                        }
-                    });
+            handler.post(() -> methodResult.notImplemented());
         }
     }
 
@@ -117,26 +105,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final Long handle = _nextRegistration++;
-
-        if (null != _ablyHandle) {
-            System.out.println("Disposing of previous Ably instance (# " + _ablyHandle + ").");
-        }
-
-        // Setting _ablyHandle to null when _ably is not null indicates that we're in the process
-        // of asynchronously disposing of the old instance.
-        _ablyHandle = null;
-
-        // TODO actually do this next bit asynchronously like we do for iOS
-        if (null != _ably) {
-            _ably.dispose();
-        }
-
-        System.out.println("Creating new Ably instance (# " + handle + ").");
-        _ably = new AblyLibrary();
-        _ablyHandle = handle;
-
-        result.success(handle);
+        System.out.println("Registering library instance to clean up any existing instnaces");
+        onHotRestartListener.trigger();
+        _ably.dispose();
+        result.success(null);
     }
 
     private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
@@ -202,11 +174,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
-    public <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
-        if (!message.handle.equals(_ablyHandle)) {
-            // TODO an error response, perhaps? or allow Dart side to understand null response?
-            return;
-        }
+    <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
         consumer.accept(_ably, (Arguments)message.message);
     }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
 
 import '../platform_object.dart';
 import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
@@ -8,8 +9,12 @@ import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
 
 class ConnectionPlatformObject extends PlatformObject implements Connection {
 
-  ConnectionPlatformObject(int ablyHandle, Ably ablyPlugin, int realtimeHandle)
-      : super(ablyHandle, ablyPlugin, realtimeHandle);
+  RealtimePlatformObject realtimePlatformObject;
+
+  ConnectionPlatformObject(this.realtimePlatformObject);
+
+  @override
+  Future<int> createPlatformInstance() async => await realtimePlatformObject.handle;
 
   @override
   ErrorInfo errorReason;

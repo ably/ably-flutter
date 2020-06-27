@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:ably_flutter_plugin/src/impl/message.dart';
+
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
@@ -8,18 +10,28 @@ import 'connection.dart';
 
 class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
 
-  RealtimePlatformObject(int ablyHandle, Ably ablyPlugin, int handle, {
+  RealtimePlatformObject({
     ClientOptions options,
     final String key
-  })
-      :assert(options!=null || key!=null),
-        connection = ConnectionPlatformObject(ablyHandle, ablyPlugin, handle),
-        super(ablyHandle, ablyPlugin, handle) {
-    this.options = (options==null)?ClientOptions.fromKey(key):options;
+  }) :
+      assert(options!=null || key!=null),
+      this.options = (options==null)?ClientOptions.fromKey(key):options,
+      super()
+  {
+    connection = ConnectionPlatformObject(this);
   }
 
   @override
-  final Connection connection;
+  Future<int> createPlatformInstance() async => await Ably.invoke<int>(
+    PlatformMethod.createRealtimeWithOptions,
+    AblyMessage(options)
+  );
+
+  // The _connection instance keeps a reference to this platform object.
+  // Ideally connection would be final, but that would need 'late final' which is coming.
+  // https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
+  @override
+  Connection connection;
 
   @override
   Auth auth;

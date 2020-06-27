@@ -198,7 +198,7 @@ class Codec extends StandardMessageCodec {
         int codecType = getCodecType(v.message);
         dynamic message = (v.message==null)?null:(codecType == null)?v.message:codecMap[codecType].encode(v.message);
         Map<String, dynamic> jsonMap = {};
-        writeToJson(jsonMap, TxAblyMessage.registrationHandle, v.registrationHandle);
+        writeToJson(jsonMap, TxAblyMessage.registrationHandle, v.handle);
         writeToJson(jsonMap, TxAblyMessage.type, codecType);
         writeToJson(jsonMap, TxAblyMessage.message, message);
         return jsonMap;
@@ -294,8 +294,8 @@ class Codec extends StandardMessageCodec {
             message = codecMap[type].decode(toJsonMap(jsonMap[TxAblyMessage.message]));
         }
         return AblyMessage(
-            jsonMap[TxAblyMessage.registrationHandle] as int,
             message,
+            handle: jsonMap[TxAblyMessage.registrationHandle] as int,
             type: type
         );
     }

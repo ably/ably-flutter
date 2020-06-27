@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
-import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.flutter.plugin.common.EventChannel;
 
@@ -16,15 +15,13 @@ import io.flutter.plugin.common.EventChannel;
  * ref: https://api.flutter.dev/javadoc/io/flutter/plugin/common/EventChannel.StreamHandler.html
  * */
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
-    private final AblyMethodCallHandler methodCallHandler;
 
     /**
-     * Constructor requiring methodCallHandler, as it is a singleton and has all instances stored
-     * Event listening can be started on an instance picked from the stored instances
+     * Creating an ablyLibrary instance.
+     * As ablyLibrary is a singleton,
+     * all ably object instance will be accessible
      * */
-    AblyEventStreamHandler(AblyMethodCallHandler methodCallHandler){
-        this.methodCallHandler = methodCallHandler;
-    }
+    private final AblyLibrary ablyLibrary = AblyLibrary.getInstance();
 
     /**
      * Refer to the comments on AblyMethodCallHandler.MethodResultWrapper
@@ -62,26 +59,35 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     }
 
     private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
-        PluginConnectionStateListener(EventChannel.EventSink eventSink){super(eventSink);}
+
+        PluginConnectionStateListener(EventChannel.EventSink eventSink){
+            super(eventSink);
+        }
+
         public void onConnectionStateChanged(ConnectionStateChange stateChange){
             eventSink.success(stateChange);
         }
+
+    }
+
+    // Casting stream creation arguments from `Object` into `AblyMessage`
+    private AblyFlutterMessage<String> getMessage(Object message){
+        return ((AblyFlutterMessage<AblyFlutterMessage<String>>)message).message;
     }
 
     @Override
     public void onListen(Object object, EventChannel.EventSink uiThreadEventSink) {
         MainThreadEventSink eventSink = new MainThreadEventSink(uiThreadEventSink);
-        methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
-            String eventName = message.message;
-            switch(eventName) {
-                case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-                    connectionStateListener = new PluginConnectionStateListener(eventSink);
-                    ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
-                    return;
-                default:
-                    eventSink.error("unhandled event", null, null);
-            }
-        });
+        AblyFlutterMessage<String> message = getMessage(object);
+        String eventName = message.message;
+        switch(eventName) {
+            case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
+                connectionStateListener = new PluginConnectionStateListener(eventSink);
+                ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
+                return;
+            default:
+                eventSink.error("unhandled event", null, null);
+        }
     }
 
     @Override
@@ -90,15 +96,12 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
             System.out.println("Cannot process null input on cancel");
             return;
         }
-        methodCallHandler.<AblyFlutterMessage<String>>ablyDo((AblyFlutterMessage)object, (ablyLibrary, message) -> {
-            String eventName = message.message;
-            switch (eventName) {
-                case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-                    ablyLibrary.getRealtime(message.handle).connection.off(connectionStateListener);
-                case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
-                    // ablyLibrary.getRealtime(handle).connection.off(connectionStateListener);
-            }
-        });
+        AblyFlutterMessage<String> message = getMessage(object);
+        String eventName = message.message;
+        switch (eventName) {
+            case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
+                ablyLibrary.getRealtime(message.handle).connection.off(connectionStateListener);
+        }
     }
 
 }

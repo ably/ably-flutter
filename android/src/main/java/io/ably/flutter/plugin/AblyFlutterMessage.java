@@ -4,10 +4,7 @@ class AblyFlutterMessage<T> {
     final Long handle;
     final T message;
 
-    AblyFlutterMessage(final Long handle, final T message) {
-        if (null == handle) {
-            throw new NullPointerException("handle cannot be null.");
-        }
+    AblyFlutterMessage(final T message, final Long handle) {
         if (null == message) {
             throw new NullPointerException("message cannot be null.");
         }

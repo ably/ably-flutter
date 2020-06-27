@@ -41,11 +41,9 @@ site to discuss privately.
 import 'package:ably_flutter_plugin/ably.dart' as ably;
 ```
 
-##### Create an Ably instance
+##### Accessing Ably instance
 
-```dart
-final ably.Ably ablyPlugin = ably.Ably();
-```
+Ably library instance can be accessed as `ably.Ably`
 
 ##### create a ClientOptions
 
@@ -57,7 +55,7 @@ clientOptions.logLevel = ably.LogLevel.verbose; //optional
 ##### Rest API
 
 ```dart
-ably.Rest rest = await ablyPlugin.createRest(options: clientOptions);
+ably.Rest rest = ably.Ably.Rest(options: clientOptions);
 ```
 
 Getting a channel instance
@@ -69,20 +67,24 @@ ably.RestChannel channel = rest.channels.get('test');
 Publish rest messages
 
 ```dart
-//passing both name and data
-await channel.publish(name: "Hello", data: "Ably");
-//passing just name
-await channel.publish(name: "Hello");
-//passing just data
-await channel.publish(data: "Ably");
-//publishing an empty message
-await channel.publish();
+void publishMessages() async {
+    //passing both name and data
+    await channel.publish(name: "Hello", data: "Ably");
+    //passing just name
+    await channel.publish(name: "Hello");
+    //passing just data
+    await channel.publish(data: "Ably");
+    //publishing an empty message
+    await channel.publish();
+}
+
+publishMessages();
 ```
 
 ##### Realtime API
 
 ```dart
-ably.Realtime realtime = await ablyPlugin.createRealtime(options: clientOptions);
+ably.Realtime realtime = ably.Ably.Realtime(options: clientOptions);
 ```
 
 Listen to connection state change event
