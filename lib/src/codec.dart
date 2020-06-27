@@ -6,19 +6,19 @@ import 'package:flutter/services.dart';
 import '../ably.dart';
 
 
-/// a [_CodecEncoder] encodes custom type and converts it to a Map which will
+/// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
-typedef Map<String, dynamic> _CodecEncoder<T>(final T value);
+typedef Map<String, dynamic> _Encoder<T>(final T value);
 
-/// a [_CodecDecoder] decodes Map received from platform side and converts to
+/// a [_Decoder] decodes Map received from platform side and converts to
 /// to respective dart types
-typedef T _CodecDecoder<T>(Map<String, dynamic> jsonMap);
+typedef T _Decoder<T>(Map<String, dynamic> jsonMap);
 
 /// A class to manage encoding/decoding by provided encoder/decoder functions.
 class _CodecPair<T>{
 
-    final _CodecEncoder<T> _encoder;
-    final _CodecDecoder<T> _decoder;
+    final _Encoder<T> _encoder;
+    final _Decoder<T> _decoder;
     _CodecPair(this._encoder, this._decoder);
 
     /// Convert properties from an ably library object instance (dart) to Map.
