@@ -1,10 +1,11 @@
 name: ably_flutter_plugin
 description: A wrapper around Ably's Cocoa and Java client library SDKs, providing iOS and Android support.
 version: 0.0.1
-homepage: https://github.com/ably/ably-flutter-plugin
+repository: https://github.com/ably/ably-flutter
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
   flutter:
@@ -22,15 +23,11 @@ dev_dependencies:
   # Stricter Linting
   pedantic: ^1.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The androidPackage and pluginClass identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
   plugin:
-    androidPackage: io.ably.flutter.plugin
-    pluginClass: AblyFlutterPlugin
+    platforms:
+      android:
+        package: io.ably.flutter.plugin
+        pluginClass: AblyFlutterPlugin
+      ios:
+        pluginClass: AblyFlutterPlugin
