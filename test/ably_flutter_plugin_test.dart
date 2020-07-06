@@ -44,9 +44,6 @@ void main() {
         case PlatformMethod.connectRealtime:
         default:
           return null;
-      //  eventsOff,
-      //  eventsOn,
-      //  eventOnce,
       }
     });
   });
