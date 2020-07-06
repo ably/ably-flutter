@@ -25,8 +25,17 @@ abstract class PlatformObject {
 
   bool _registering = false;
   Future<int> get handle async {
+    // This handle can be required simultaneously or with less time difference
+    // as a result of asynchronous invocations (from app code). There is
+    // a very high probability that the handle is not acquired from
+    // platform side yet, but another initiator is requesting the handle.
+    // `_registering` serves as a flag to avoid another method call
+    // to platform side. These initiators need to be server after platform
+    // has responded with proper handle, so a short hold and re-check will
+    // return the handle whenever it is available.
+    // 250ms is arbitrarily set as delay duration considering that is a fairly
+    // reasonable timeout for platform to respond.
     if(_registering){
-      //if handle is queried while already being fetched from remote, it must be put on hold..
       await Future.delayed(Duration(milliseconds: 250));
       return await this.handle;
     }
