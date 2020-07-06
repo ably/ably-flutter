@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/src/interface.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
+import 'package:ably_flutter_plugin/src/interface.dart';
+import 'package:flutter/services.dart';
 import 'package:streams_channel/streams_channel.dart';
-import 'spec/spec.dart' as spec;
+
 import 'codec.dart';
 import 'impl/platform_object.dart';
 import 'impl/realtime/realtime.dart';
 import 'impl/rest/rest.dart';
+import 'spec/spec.dart' as spec;
 
 
 /// Ably plugin implementation
