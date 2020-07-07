@@ -51,12 +51,20 @@ class AblyImplementation implements AblyLibrary {
     if(_initialized) return;
     _init();
     // if `_initialized` is false => initialization is in progress.
-    // Let's wait for 250ms and retry
+    // Let's wait for 10ms and retry. If the total time exceeds 2 seconds,
+    // a TimeoutException is raised
     //
     // this is required as many asynchronous `_initialize` calls
     // will be invoked from different Ably instances
     while(true){
-      await Future.delayed(Duration(milliseconds: 250));
+      bool _registrationFailed = false;
+      Future.delayed(Duration(seconds: 2), (){
+        _registrationFailed = true;
+      });
+      await Future.delayed(Duration(milliseconds: 10));
+      if(_registrationFailed){
+        throw TimeoutException("Handle aquiring timed out");
+      }
       if(_initialized) return;
     }
   }

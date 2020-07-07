@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/src/interface.dart';
 import 'package:ably_flutter_plugin/src/ably_implementation.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:ably_flutter_plugin/src/interface.dart';
 import 'package:flutter/services.dart';
 import 'package:streams_channel/streams_channel.dart';
 
@@ -30,14 +30,27 @@ abstract class PlatformObject {
     // a very high probability that the handle is not acquired from
     // platform side yet, but another initiator is requesting the handle.
     // `_registering` serves as a flag to avoid another method call
-    // to platform side. These initiators need to be server after platform
+    // to platform side. These initiators need to be served after platform
     // has responded with proper handle, so a short hold and re-check will
     // return the handle whenever it is available.
-    // 250ms is arbitrarily set as delay duration considering that is a fairly
-    // reasonable timeout for platform to respond.
+    // 10ms is set as delay duration based on the conversation here
+    // https://github.com/ably/ably-flutter/pull/18#discussion_r450699980.
+    //
+    // If the total time exceeds 2 seconds, a TimeoutException is raised
     if(_registering){
-      await Future.delayed(Duration(milliseconds: 250));
-      return await this.handle;
+      bool _registrationFailed = false;
+      Future.delayed(Duration(seconds: 2), (){
+        _registrationFailed = true;
+      });
+      while(true){
+        await Future.delayed(Duration(milliseconds: 10));
+        if(_registrationFailed){
+          throw TimeoutException("Handle aquiring timed out");
+        }
+        if(_handle!=null){
+          return _handle;
+        }
+      }
     }
     if(_handle == null) {
       _registering = true;
