@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/src/ably_implementation.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/interface.dart';
+import 'package:ably_flutter_plugin/src/platform.dart' as platform;
 import 'package:flutter/services.dart';
 import 'package:streams_channel/streams_channel.dart';
 
@@ -60,22 +59,26 @@ abstract class PlatformObject {
     return _handle;
   }
 
-  AblyImplementation get _ablyPlugin => (Ably as AblyImplementation);
-  MethodChannel get methodChannel => _ablyPlugin.methodChannel;
-  StreamsChannel get eventChannel => _ablyPlugin.streamsChannel;
+  MethodChannel get methodChannel => platform.methodChannel;
+  StreamsChannel get eventChannel => platform.streamsChannel;
 
   static Future<int> dispose() async {
     //TODO implement or convert to abstract!
     return null;
   }
 
-  /// Call a method.
-  Future<dynamic> invoke(final String method, [final dynamic argument]) async {
+  /// invoke platform method channel without AblyMessage encapsulation
+  Future<T> invokeRaw<T>(final String method, [final dynamic arguments]) async {
+    return await platform.invoke<T>(method, arguments);
+  }
+
+  /// invoke platform method channel with AblyMessage encapsulation
+  Future<T> invoke<T>(final String method, [final dynamic argument]) async {
     int _handle = await handle;
     final message = (null != argument)
       ? AblyMessage(AblyMessage(argument, handle: _handle))
       : AblyMessage(_handle);
-    return await Ably.invoke(method, message);
+    return await invokeRaw<T>(method, message);
   }
 
   Future<Stream<dynamic>> _listen(final String method) async {

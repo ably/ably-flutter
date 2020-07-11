@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:ably_flutter_plugin/ably.dart' as ably;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'provisioning.dart' as provisioning;
 
 void main() => runApp(MyApp());
@@ -26,8 +27,8 @@ class _MyAppState extends State<MyApp> {
   provisioning.AppKey _appKey;
   OpState _realtimeCreationState = OpState.NotStarted;
   OpState _restCreationState = OpState.NotStarted;
-  ably.Realtime _realtime;
-  ably.Rest _rest;
+  ably.RealtimeInterface _realtime;
+  ably.RestInterface _rest;
   ably.ConnectionState _realtimeConnectionState;
 
   @override
@@ -45,12 +46,12 @@ class _MyAppState extends State<MyApp> {
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await ably.Ably.platformVersion;
+      platformVersion = await ably.platformVersion();
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
-      ablyVersion = await ably.Ably.version;
+      ablyVersion = await ably.version();
     } on PlatformException {
       ablyVersion = 'Failed to get Ably version.';
     }
@@ -96,9 +97,9 @@ class _MyAppState extends State<MyApp> {
       print("Custom logger :: $msg $exception");
     };
 
-    ably.Rest rest;
+    ably.RestInterface rest;
     try{
-      rest = ably.Ably.Rest(options: clientOptions);
+      rest = ably.Rest(options: clientOptions);
     } catch (error) {
       print('Error creating Ably Rest: ${error}');
       setState(() { _restCreationState = OpState.Failed; });
@@ -135,9 +136,9 @@ class _MyAppState extends State<MyApp> {
     };
     clientOptions.autoConnect = false;
 
-    ably.Realtime realtime;
+    ably.RealtimeInterface realtime;
     try {
-      realtime = ably.Ably.Realtime(options: clientOptions);
+      realtime = ably.Realtime(options: clientOptions);
 
       //One can listen from multiple listeners on the same event,
       // and must cancel each subscription one by one

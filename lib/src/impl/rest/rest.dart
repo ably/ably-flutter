@@ -8,9 +8,9 @@ import '../platform_object.dart';
 import 'channels.dart';
 
 
-class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatformChannels> {
+class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChannels> {
 
-  RestPlatformObject({
+  Rest({
     ClientOptions options,
     final String key
   }) :
@@ -21,7 +21,7 @@ class RestPlatformObject extends PlatformObject implements spec.Rest<RestPlatfor
     this.channels = RestPlatformChannels(this);
   }
 
-  Future<int> createPlatformInstance() async => await Ably.invoke<int>(
+  Future<int> createPlatformInstance() async => await invokeRaw<int>(
     PlatformMethod.createRestWithOptions,
     AblyMessage(options)
   );

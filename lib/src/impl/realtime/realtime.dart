@@ -8,9 +8,9 @@ import '../platform_object.dart';
 import 'connection.dart';
 
 
-class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
+class Realtime extends PlatformObject implements spec.RealtimeInterface {
 
-  RealtimePlatformObject({
+  Realtime({
     ClientOptions options,
     final String key
   }) :
@@ -22,7 +22,7 @@ class RealtimePlatformObject extends PlatformObject implements spec.Realtime {
   }
 
   @override
-  Future<int> createPlatformInstance() async => await Ably.invoke<int>(
+  Future<int> createPlatformInstance() async => await invokeRaw<int>(
     PlatformMethod.createRealtimeWithOptions,
     AblyMessage(options)
   );
