@@ -4,6 +4,7 @@ import 'package:ably_flutter_plugin/ably.dart';
 import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
+
 import '../platform_object.dart';
 
 
@@ -23,7 +24,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
 
   RestPlatformChannel(this.ably, this.name, this.options);
 
-  RestPlatformObject get restPlatformObject => this.ably as RestPlatformObject;
+  Rest get restPlatformObject => this.ably as Rest;
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
@@ -54,7 +55,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
 
 class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel>{
 
-  RestPlatformChannels(RestPlatformObject ably): super(ably);
+  RestPlatformChannels(Rest ably): super(ably);
 
   @override
   RestPlatformChannel createChannel(name, options){

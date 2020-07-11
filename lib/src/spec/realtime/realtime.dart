@@ -4,9 +4,9 @@ import '../rest/options.dart';
 import 'channels.dart';
 
 
-abstract class Realtime extends AblyBase {
+abstract class RealtimeInterface extends AblyBase {
 
-  Realtime({
+  RealtimeInterface({
     ClientOptions options,
     final String key
   }): connection=null,  //To be assigned as required on implementation

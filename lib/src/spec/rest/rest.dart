@@ -1,7 +1,6 @@
 //import 'package:flutter/foundation.dart';
 
 import '../auth.dart';
-//import '../common.dart';
 import '../push/push.dart';
 import '../rest/ably_base.dart';
 import '../rest/options.dart';
@@ -10,13 +9,13 @@ import 'channels.dart';
 import 'options.dart';
 
 
-abstract class Rest<C extends RestChannels> extends AblyBase {
+abstract class RestInterface<C extends RestChannels> extends AblyBase {
 
   Auth auth;
   Push push;
   C channels;
 
-  Rest({
+  RestInterface({
     ClientOptions options,
     final String key
   }): super(options: options, key: key);

@@ -5,6 +5,7 @@ import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
 import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
+
 import '../platform_object.dart';
 
 
@@ -24,7 +25,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
   RealtimePlatformChannel(this.ably, this.name, this.options): super();
 
-  RealtimePlatformObject get realtimePlatformObject => this.ably as RealtimePlatformObject;
+  Realtime get realtimePlatformObject => this.ably as Realtime;
 
   /// createPlatformInstance will return realtimePlatformObject's handle
   /// as that is what will be required in platforms end to find realtime instance
@@ -121,7 +122,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
 class RealtimePlatformChannels extends spec.RealtimeChannels<RealtimePlatformChannel>{
 
-  RealtimePlatformChannels(RealtimePlatformObject ably): super(ably);
+  RealtimePlatformChannels(Realtime ably): super(ably);
 
   @override
   RealtimePlatformChannel createChannel(name, options){
