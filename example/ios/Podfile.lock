@@ -75,14 +75,11 @@ PODS:
   - msgpack (0.3.1)
   - SAMKeychain (1.5.3)
   - SocketRocketAblyFork (0.5.2-ably-4)
-  - streams_channel (0.0.1):
-    - Flutter
   - ULID (1.1.0)
 
 DEPENDENCIES:
   - ably_flutter_plugin (from `.symlinks/plugins/ably_flutter_plugin/ios`)
   - Flutter (from `Flutter`)
-  - streams_channel (from `.symlinks/plugins/streams_channel/ios`)
 
 SPEC REPOS:
   trunk:
@@ -98,8 +95,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/ably_flutter_plugin/ios"
   Flutter:
     :path: Flutter
-  streams_channel:
-    :path: ".symlinks/plugins/streams_channel/ios"
 
 SPEC CHECKSUMS:
   Ably: b8dd747b116787f0759844dc1a045046ef9a2c7a
@@ -109,7 +104,6 @@ SPEC CHECKSUMS:
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SocketRocketAblyFork: ed717517ed5cb5217878987c84bc415890582bb3
-  streams_channel: 16855ffd0568eded9563b2fec6a1bfa94420b353
   ULID: b4714891a02819364faecd574a53e391c4c6de9d
 
 PODFILE CHECKSUM: 49ec7d4076524b7e225c38b98147173651ac4b9d
