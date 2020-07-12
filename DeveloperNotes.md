@@ -57,3 +57,22 @@ Some files in the project are generated to maintain sync between
   Generated file paths are configured as values in `bin/codegen.dart` for `toGenerate` Map
 
 [Read about generation of platform specific constant files](bin/README.md)
+
+
+## Static plugin code analyzer
+
+The new flutter analyzer does a great job at analyzing complete flutter package.
+
+Running `flutter analyze` in project root will analyze dart files in complete project,
+ i.e., plugin code and example code
+
+
+Or, use the good old dart analyzer
+
+```bash
+cd <root>/lib/
+dartanalyzer --fatal-warnings **/*.dart
+
+cd <root>/example/lib/
+dartanalyzer --fatal-warnings **/*.dart
+```
