@@ -86,12 +86,6 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   }
 
   @override
-  Future<void> off() {
-    // TODO: implement off
-    return null;
-  }
-
-  @override
   void setOptions(spec.ChannelOptions options) {
     // TODO: implement setOptions
   }
