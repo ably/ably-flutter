@@ -8,10 +8,10 @@
     ARTEventListener *listener;
 }
 
-@synthesize plugin = _plugin;
+@synthesize ably = _ably;
 
-- (instancetype)initWithAbly:(AblyFlutterPlugin *const)plugin {
-    _plugin = plugin;
+- (instancetype)init{
+    _ably = [AblyFlutter instance];
     listener = [ARTEventListener new];
     return self;
 }
@@ -27,28 +27,27 @@
 }
 
 - (void) startListening:(AblyFlutterMessage *const)message emitter:(FlutterEventSink)emitter {
-    AblyFlutter *const ably = [_plugin ablyWithHandle: message.handle];
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
+    NSNumber *const handle = _message.handle;
 
     if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
-        listener = [[ably realtimeWithHandle: message.handle].connection  on: ^(ARTConnectionStateChange * const stateChange) {
+        ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
+        listener = [realtimeWithHandle.connection  on: ^(ARTConnectionStateChange * const stateChange) {
             emitter(stateChange);
         }];
-    } else if([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
-        
+    } else {
+        emitter([FlutterError errorWithCode:@"error" message:[NSString stringWithFormat:@"Invalid event name: %@", eventName] details:nil]);
     }
 }
 
 - (void) cancelListening:(AblyFlutterMessage *const)message {
-    AblyFlutter *const ably = [_plugin ablyWithHandle: message.handle];
     AblyFlutterMessage *const _message = message.message;
     NSString *const eventName = _message.message;
+    NSNumber *const handle = _message.handle;
     
     if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
-        [[ably realtimeWithHandle: message.handle].connection  off: listener];
-    } else if([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
-            
+        [[_ably realtimeWithHandle: handle].connection  off: listener];
     }
 }
 

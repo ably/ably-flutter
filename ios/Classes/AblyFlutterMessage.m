@@ -5,10 +5,7 @@
 @synthesize handle = _handle;
 @synthesize message = _message;
 
--(instancetype)initWithHandle:(NSNumber *const)handle message:(const id)message {
-    if (!handle) {
-        [NSException raise:NSInvalidArgumentException format:@"handle cannot be nil."];
-    }
+-(instancetype)initWithMessage:(const id)message handle:(NSNumber *const)handle  {
     if (!message) {
         [NSException raise:NSInvalidArgumentException format:@"message cannot be nil."];
     }

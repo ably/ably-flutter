@@ -50,7 +50,7 @@ static AblyCodecDecoder readAblyFlutterMessage = ^AblyFlutterMessage*(NSDictiona
     if(decoder){
         message = decoder(message);
     }
-    return [[AblyFlutterMessage alloc] initWithHandle:[dictionary objectForKey:TxAblyMessage_registrationHandle] message:message];
+    return [[AblyFlutterMessage alloc] initWithMessage:message handle: [dictionary objectForKey:TxAblyMessage_registrationHandle]];
 };
 
 /**
