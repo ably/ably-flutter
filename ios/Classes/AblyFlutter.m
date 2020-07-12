@@ -6,10 +6,19 @@
 
 
 @implementation AblyFlutter {
-    BOOL _disposed;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
     long long _nextHandle;
+}
+
++ (id)instance {
+    static AblyFlutter *sharedInstance = nil;
+    @synchronized(self) {
+        if (sharedInstance == nil) {
+            sharedInstance = [[self alloc] init];
+        }
+    }
+    return sharedInstance;
 }
 
 -(instancetype)init {
@@ -25,18 +34,10 @@
     return self;
 }
 
-#define ASSERT_NOT_DISPOSED \
-    if (_disposed) { \
-        [NSException raise:NSInternalInconsistencyException \
-                    format:@"Instance disposed."]; \
-    }
-
 -(NSNumber *)createRestWithOptions:(ARTClientOptions *const)options {
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
-    
-    ASSERT_NOT_DISPOSED
     
     ARTRest *const instance = [[ARTRest alloc] initWithOptions:options];
     NSNumber *const handle = @(_nextHandle++);
@@ -53,8 +54,6 @@
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
     
-    ASSERT_NOT_DISPOSED
-    
     ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options];
     NSNumber *const handle = @(_nextHandle++);
     [_realtimeInstances setObject:instance forKey:handle];
@@ -70,15 +69,12 @@
         [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
 
-    ASSERT_NOT_DISPOSED
-
     // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
     // dispatch_assert_queue(dispatch_get_main_queue());
     
     // This is contrived for now but the point is that we can introduce a clean,
     // asynchronous close via a background queue here if required.
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self dispose];
         completionHandler();
     });
@@ -89,6 +85,7 @@
         [r close];
     }
     [_realtimeInstances removeAllObjects];
+    [_restInstances removeAllObjects];
 }
 
 @end

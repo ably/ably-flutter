@@ -8,7 +8,7 @@
 #import "AblyFlutterMessage.h"
 #import "AblyFlutter.h"
 #import "AblyFlutterStreamHandler.h"
-#import "FlutterStreamsChannel.h"
+#import "AblyStreamsChannel.h"
 #import "codec/AblyPlatformConstants.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
@@ -24,7 +24,6 @@ typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * c
  */
 @interface AblyFlutterPlugin ()
 -(void)registerWithCompletionHandler:(FlutterResult)completionHandler;
--(nullable AblyFlutter *)ablyWithHandle:(NSNumber *)handle;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -43,16 +42,13 @@ static FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, Flutter
 
 static FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    LOG(@"message for handle %@", message.handle);
-    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
-    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    AblyFlutter *const ably = [plugin ably];
     result([ably createRestWithOptions:message.message]);
 };
 
 static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    LOG(@"message for handle %@", message.handle);
-    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    AblyFlutter *const ably = [plugin ably];
     AblyFlutterMessage *const messageData = message.message;
     NSMutableDictionary<NSString *, NSObject *>* _dataMap = messageData.message;
     NSString *channelName = (NSString*)[_dataMap objectForKey:@"channel"];
@@ -77,17 +73,13 @@ static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugi
 
 static FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    LOG(@"message for handle %@", message.handle);
-    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
-    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    AblyFlutter *const ably = [plugin ably];
     result([ably createRealtimeWithOptions:message.message]);
 };
 
 static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    LOG(@"message for handle %@", message.handle);
-    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
-    // TODO if ably is nil here then an error response, perhaps? or allow Dart side to understand null response?
+    AblyFlutter *const ably = [plugin ably];
     NSNumber *const handle = message.message;
     [[ably realtimeWithHandle:handle] connect];
     result(nil);
@@ -95,8 +87,7 @@ static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, 
 
 static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    LOG(@"message for handle %@", message.handle);
-    AblyFlutter *const ably = [plugin ablyWithHandle:message.handle];
+    AblyFlutter *const ably = [plugin ably];
     NSNumber *const handle = message.message;
     [[ably realtimeWithHandle:handle] close];
     result(nil);
@@ -105,35 +96,43 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
-    NSNumber* _ablyHandle;
-    AblyFlutter* _ably;
+    AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
 }
 
+@synthesize ably = _ably;
+
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     LOG(@"registrar: %@", [registrar class]);
+
+    // Initializing reader writer and method codecs
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
     FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
     
-    FlutterMethodChannel *const channel =
-        [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
-    AblyFlutterPlugin *const plugin =
-        [[AblyFlutterPlugin alloc] initWithChannel:channel];
+    // initializing event channel for event listeners
+    AblyStreamsChannel *const streamsChannel = [AblyStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream" binaryMessenger:registrar.messenger codec: methodCodec];
     
+    // initializing method channel for round-trip method calls
+    FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
+    AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel];
+    
+    // regustering method channel with registrar
     [registrar addMethodCallDelegate:plugin channel:channel];
-
-    FlutterStreamsChannel *const eventChannel = [FlutterStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream" binaryMessenger:registrar.messenger codec: methodCodec];
-    [eventChannel setStreamHandlerFactory:^NSObject<FlutterStreamHandler> *(id arguments) {
-        return [[AblyFlutterStreamHandler alloc] initWithAbly: plugin];
+    
+    // setting up stream handler factory for eventChannel to handle multiple listeners
+    [streamsChannel setStreamHandlerFactory:^NSObject<FlutterStreamHandler> *(id arguments) {
+        return [AblyFlutterStreamHandler new];
     }];
     
 }
 
--(instancetype)initWithChannel:(FlutterMethodChannel *const)channel {
+-(instancetype)initWithChannel:(FlutterMethodChannel *const)channel streamsChannel:(AblyStreamsChannel *const)streamsChannel {
     self = [super init];
     if (!self) {
         return nil;
     }
+    _ably = [AblyFlutter instance];
+    self->_streamsChannel = streamsChannel;
     
     _handlers = @{
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
@@ -166,52 +165,12 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
 
 -(void)registerWithCompletionHandler:(const FlutterResult)completionHandler {
     if (!completionHandler) {
-        [NSException raise:NSInvalidArgumentException
-                    format:@"completionHandler cannot be nil."];
+        [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
-    
-    if (_ably && !_ablyHandle) {
-        // TODO could this ever happen and, in which case, do we need to cater for it?
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"Registration request received when still not finished processing last request."];
-    }
-    
-    // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
-    // dispatch_assert_queue(dispatch_get_main_queue());
-    
-    NSNumber *const handle = @(_nextRegistration++);
-
-    if (_ablyHandle) {
-        LOG(@"Disposing of previous Ably instance (# %@).", _ablyHandle);
-    }
-
-    // Setting _ablyHandle to nil when _ably is not nil indicates that we're
-    // in the process of asynchronously disposing of the old instance.
-    _ablyHandle = nil;
-    
-    const dispatch_block_t createNew = ^
-    {
-        LOG(@"Creating new Ably instance (# %@).", handle);
-        self->_ably = [AblyFlutter new];
-        self->_ablyHandle = handle;
-        completionHandler(handle);
-    };
-    
-    if (_ably) {
-        [_ably disposeWithCompletionHandler:^
-        {
-            createNew();
-        }];
-    } else {
-        createNew();
-    }
-}
-
--(AblyFlutter *)ablyWithHandle:(NSNumber *)handle {
-    if (![handle isEqualToNumber:_ablyHandle]) {
-        return nil;
-    }
-    return _ably;
+    [_ably disposeWithCompletionHandler:^{
+        [self->_streamsChannel reset];
+        completionHandler(nil);
+    }];
 }
 
 @end
