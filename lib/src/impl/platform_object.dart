@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/platform.dart' as platform;
 import 'package:flutter/services.dart';
-import 'package:streams_channel/streams_channel.dart';
+
+import 'streams_channel.dart';
 
 
 /// An object which has a live counterpart in the Platform client library SDK,

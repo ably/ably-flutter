@@ -27,8 +27,8 @@ class _MyAppState extends State<MyApp> {
   provisioning.AppKey _appKey;
   OpState _realtimeCreationState = OpState.NotStarted;
   OpState _restCreationState = OpState.NotStarted;
-  ably.RealtimeInterface _realtime;
-  ably.RestInterface _rest;
+  ably.Realtime _realtime;
+  ably.Rest _rest;
   ably.ConnectionState _realtimeConnectionState;
 
   @override
@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
       print("Custom logger :: $msg $exception");
     };
 
-    ably.RestInterface rest;
+    ably.Rest rest;
     try{
       rest = ably.Rest(options: clientOptions);
     } catch (error) {
@@ -123,6 +123,10 @@ class _MyAppState extends State<MyApp> {
       print(e.errorInfo);
     }
     print('Message published');
+
+    // set state here as handle will have been acquired before calling
+    // publish on channels above...
+    setState(() {});
   }
 
   void createAblyRealtime() async {
@@ -136,14 +140,13 @@ class _MyAppState extends State<MyApp> {
     };
     clientOptions.autoConnect = false;
 
-    ably.RealtimeInterface realtime;
+    ably.Realtime realtime;
     try {
       realtime = ably.Realtime(options: clientOptions);
 
       //One can listen from multiple listeners on the same event,
       // and must cancel each subscription one by one
       //RETAINING LISTENER - α
-      print("starting α listener");
       realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
         print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
         setState(() { _realtimeConnectionState = stateChange.current; });

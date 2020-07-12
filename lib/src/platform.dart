@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
 import 'package:flutter/services.dart';
-import 'package:streams_channel/streams_channel.dart';
 
 import 'codec.dart';
+import 'impl/streams_channel.dart';
 
 
 /// instance of [StandardMethodCodec] with custom [MessageCodec] for
