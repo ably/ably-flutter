@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import app.loup.streams_channel.BuildConfig;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.BinaryMessenger.BinaryMessageHandler;
 import io.flutter.plugin.common.BinaryMessenger.BinaryReply;
