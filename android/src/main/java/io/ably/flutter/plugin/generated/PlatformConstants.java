@@ -26,6 +26,9 @@ final public class PlatformConstants{
 	public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
 	public static final String connectRealtime = "connectRealtime";
 	public static final String closeRealtime = "closeRealtime";
+	public static final String attachRealtimeChannel = "attachRealtimeChannel";
+	public static final String detachRealtimeChannel = "detachRealtimeChannel";
+	public static final String setRealtimeChannelOptions = "setRealtimeChannelOptions";
 	public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
 	public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
   }

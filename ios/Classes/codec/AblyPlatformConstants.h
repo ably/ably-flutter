@@ -24,6 +24,9 @@ extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
+extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
+extern NSString *const AblyPlatformMethod_detachRealtimeChannel;
+extern NSString *const AblyPlatformMethod_setRealtimeChannelOptions;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 @end

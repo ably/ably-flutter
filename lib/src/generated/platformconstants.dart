@@ -21,6 +21,9 @@ class PlatformMethod {
 	static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
 	static const String connectRealtime = 'connectRealtime';
 	static const String closeRealtime = 'closeRealtime';
+	static const String attachRealtimeChannel = 'attachRealtimeChannel';
+	static const String detachRealtimeChannel = 'detachRealtimeChannel';
+	static const String setRealtimeChannelOptions = 'setRealtimeChannelOptions';
 	static const String onRealtimeConnectionStateChanged = 'onRealtimeConnectionStateChanged';
 	static const String onRealtimeChannelStateChanged = 'onRealtimeChannelStateChanged';
 }
