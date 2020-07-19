@@ -116,7 +116,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                         channelStateListener = new PluginChannelStateListener(eventSink);
                         channel.on(channelStateListener);
                     } catch (AblyException ablyException) {
-                        eventSink.error("unhandled event", null, ablyException.errorInfo);
+                        eventSink.error(ablyException.errorInfo.message, null, ablyException.errorInfo);
                     }
                     break;
                 default:
