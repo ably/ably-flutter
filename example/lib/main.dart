@@ -143,72 +143,87 @@ class _MyAppState extends State<MyApp> {
     ably.Realtime realtime;
     try {
       realtime = ably.Realtime(options: clientOptions);
-
-      //One can listen from multiple listeners on the same event,
-      // and must cancel each subscription one by one
-      //RETAINING LISTENER - α
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
-        setState(() { _realtimeConnectionState = stateChange.current; });
-      });
-
-      //DISPOSE ON CONNECTED
-      Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
-      StreamSubscription subscription;
-      subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
-        print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
-        if (stateChange.event == ably.ConnectionEvent.connected) {
-          await subscription.cancel();
-        }
-      });
-
-      //RETAINING LISTENER - β
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
-        // NESTED LISTENER - ξ
-        // will be registered only when connected event is received by β listener
-        realtime.connection.on().listen((
-          ably.ConnectionStateChange stateChange) async {
-          // k ξ listeners will be registered
-          // and each listener will be called `n-k` times respectively
-          // if listener β is called `n` times
-          print('NESTED LISTENER ξ: ${stateChange.event}');
-        });
-      });
-
-      StreamSubscription preZetaSubscription;
-      StreamSubscription postZetaSubscription;
-      preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        //This listener "pre ζ" will be cancelled from γ
-        print('NESTED LISTENER "pre ζ": ${stateChange.event}');
-      });
-
-
-      //RETAINING LISTENER - γ
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
-        if (stateChange.event == ably.ConnectionEvent.connected) {
-          await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
-          await postZetaSubscription.cancel(); //by the time this cancel is triggered, postZeta hasn't received the event yet. And will never receive as it is cancelled.
-        }
-      });
-
-      postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        //This listener "post ζ" will be cancelled from γ
-        print('NESTED LISTENER "post ζ": ${stateChange.event}');
-      });
-
-      setState(() {
-        _realtime = realtime;
-        _realtimeCreationState = OpState.Succeeded;
-      });
-
+      listenRealtimeConnection(realtime);
+      ably.RealtimeChannel channel = realtime.channels.get("test-channel");
+      listenRealtimeChannel(channel);
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });
       rethrow;
     }
 
+  }
+
+  listenRealtimeConnection(ably.Realtime realtime) async {
+    //One can listen from multiple listeners on the same event,
+    // and must cancel each subscription one by one
+    //RETAINING LISTENER - α
+    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
+      setState(() { _realtimeConnectionState = stateChange.current; });
+    });
+
+    //DISPOSE ON CONNECTED
+    Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
+    StreamSubscription subscription;
+    subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
+      print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
+      if (stateChange.event == ably.ConnectionEvent.connected) {
+        await subscription.cancel();
+      }
+    });
+
+    //RETAINING LISTENER - β
+    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
+      // NESTED LISTENER - ξ
+      // will be registered only when connected event is received by β listener
+      realtime.connection.on().listen((
+        ably.ConnectionStateChange stateChange) async {
+        // k ξ listeners will be registered
+        // and each listener will be called `n-k` times respectively
+        // if listener β is called `n` times
+        print('NESTED LISTENER ξ: ${stateChange.event}');
+      });
+    });
+
+    StreamSubscription preZetaSubscription;
+    StreamSubscription postZetaSubscription;
+    preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      //This listener "pre ζ" will be cancelled from γ
+      print('NESTED LISTENER "pre ζ": ${stateChange.event}');
+    });
+
+
+    //RETAINING LISTENER - γ
+    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
+      if (stateChange.event == ably.ConnectionEvent.connected) {
+        await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
+        await postZetaSubscription.cancel(); //by the time this cancel is triggered, postZeta hasn't received the event yet. And will never receive as it is cancelled.
+      }
+    });
+
+    postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      //This listener "post ζ" will be cancelled from γ
+      print('NESTED LISTENER "post ζ": ${stateChange.event}');
+    });
+
+    setState(() {
+      _realtime = realtime;
+      _realtimeCreationState = OpState.Succeeded;
+    });
+  }
+
+  listenRealtimeChannel(ably.RealtimeChannel channel) async {
+    StreamSubscription<ably.ChannelStateChange> subscription;
+    subscription =  channel.on().listen((ably.ChannelStateChange stateChange){
+      print("New channel state: ${stateChange.current}");
+      //stop listening on detach
+      if(stateChange.current == ably.ChannelState.detached){
+        subscription.cancel();
+      }
+    });
   }
 
   // https://github.com/dart-lang/sdk/issues/37498
