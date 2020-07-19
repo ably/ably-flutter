@@ -362,7 +362,7 @@ class Codec extends StandardMessageCodec {
         ChannelState previous = decodeChannelState(readFromJson<int>(jsonMap, TxChannelStateChange.previous));
         ChannelEvent event = decodeChannelEvent(readFromJson<int>(jsonMap, TxChannelStateChange.event));
         bool resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
-        ErrorInfo reason = decodeErrorInfo(jsonMap[TxChannelStateChange.reason]);
+        ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxChannelStateChange.reason]));
         return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);
     }
 
