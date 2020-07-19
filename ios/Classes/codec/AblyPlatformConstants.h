@@ -7,7 +7,8 @@
 
 typedef NS_ENUM(UInt8, _Value) {
   ablyMessageCodecType = 128,
-  clientOptionsCodecType = 129,
+  ablyEventMessageCodecType = 129,
+  clientOptionsCodecType = 130,
   errorInfoCodecType = 144,
   connectionStateChangeCodecType = 201,
   channelStateChangeCodecType = 202,
@@ -31,6 +32,12 @@ extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const TxAblyMessage_registrationHandle;
 extern NSString *const TxAblyMessage_type;
 extern NSString *const TxAblyMessage_message;
+@end
+
+@interface TxAblyEventMessage : NSObject
+extern NSString *const TxAblyEventMessage_eventName;
+extern NSString *const TxAblyEventMessage_type;
+extern NSString *const TxAblyEventMessage_message;
 @end
 
 @interface TxErrorInfo : NSObject

@@ -10,7 +10,8 @@ final public class PlatformConstants{
 
   final public class CodecTypes {
     public static final byte ablyMessage = (byte)128;
-	public static final byte clientOptions = (byte)129;
+	public static final byte ablyEventMessage = (byte)129;
+	public static final byte clientOptions = (byte)130;
 	public static final byte errorInfo = (byte)144;
 	public static final byte connectionStateChange = (byte)201;
 	public static final byte channelStateChange = (byte)202;
@@ -31,6 +32,12 @@ final public class PlatformConstants{
   
   final public class TxAblyMessage{
     public static final String registrationHandle = "registrationHandle";
+	public static final String type = "type";
+	public static final String message = "message";
+  }
+  
+  final public class TxAblyEventMessage{
+    public static final String eventName = "eventName";
 	public static final String type = "type";
 	public static final String message = "message";
   }
