@@ -36,6 +36,9 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "createRealtimeWithOptions", "value": "createRealtimeWithOptions"},
   {"name": "connectRealtime", "value": "connectRealtime"},
   {"name": "closeRealtime", "value": "closeRealtime"},
+  {"name": "attachRealtimeChannel", "value": "attachRealtimeChannel"},
+  {"name": "detachRealtimeChannel", "value": "detachRealtimeChannel"},
+  {"name": "setRealtimeChannelOptions", "value": "setRealtimeChannelOptions"},
 
   // Realtime events
   {"name": "onRealtimeConnectionStateChanged", "value": "onRealtimeConnectionStateChanged"},
