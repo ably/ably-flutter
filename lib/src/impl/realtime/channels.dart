@@ -39,6 +39,11 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     return null;
   }
 
+  Map<String, dynamic> get _payload => {
+    "channel": this.name,
+    "options": this.options
+  };
+
   @override
   Future<void> publish({
     spec.Message message,
@@ -49,7 +54,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     try {
       await this.invoke(PlatformMethod.publish, {
         //TODO support Message and List<Message>
-        "channel": this.name,
+        ..._payload,
         "name": name,
         "message": data
       });
@@ -91,11 +96,18 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   }
 
   @override
-  Stream<ChannelStateChange> on([ChannelEvent state]) {
-    // TODO: implement on
-    Stream<ChannelStateChange> stream = listen(PlatformMethod.onRealtimeChannelStateChanged);
-    if (state!=null) {
-      return stream.takeWhile((ChannelStateChange _stateChange) => _stateChange.event==state);
+  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) {
+    Stream<ChannelStateChange> stream = listen(PlatformMethod.onRealtimeChannelStateChanged, _payload).transform<ChannelStateChange>(
+      StreamTransformer.fromHandlers(
+        handleData: (dynamic value, EventSink<ChannelStateChange> sink){
+          ChannelStateChange stateChange = value as ChannelStateChange;
+          this.state = stateChange.current;
+          sink.add(stateChange);
+        }
+      )
+    );
+    if (channelEvent!=null) {
+      return stream.takeWhile((ChannelStateChange _stateChange) => _stateChange.event==channelEvent);
     }
     return stream;
   }

@@ -100,13 +100,30 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
         AblyEventMessage<Object> eventMessage = ablyMessage.message;
         String eventName = eventMessage.eventName;
-        switch (eventName) {
-            case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-                connectionStateListener = new PluginConnectionStateListener(eventSink);
-                ablyLibrary.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
-                break;
-            default:
-                eventSink.error("unhandled event", eventName, null);
+        try {
+            switch (eventName) {
+                case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
+                    connectionStateListener = new PluginConnectionStateListener(eventSink);
+                    ablyLibrary.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
+                    break;
+                case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
+                    assert eventMessage.message!=null : "event message is missing";
+                    Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
+                    String channelName = (String) eventPayload.get("channel");
+                    ChannelOptions channelOptions = (ChannelOptions) eventPayload.get("options");
+                    try {
+                        Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName, channelOptions);
+                        channelStateListener = new PluginChannelStateListener(eventSink);
+                        channel.on(channelStateListener);
+                    } catch (AblyException ablyException) {
+                        eventSink.error("unhandled event", null, ablyException.errorInfo);
+                    }
+                    break;
+                default:
+                    eventSink.error("unhandled event", eventName, null);
+            }
+        } catch(AssertionError assertionError) {
+            eventSink.error(assertionError.getMessage(), null, null);
         }
     }
 
@@ -122,6 +139,14 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         switch (eventName) {
             case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
                 ablyLibrary.getRealtime(ablyMessage.handle).connection.off(connectionStateListener);
+                break;
+            case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
+                // Note: this and all other assert statements in this onCancel method are
+                // left as is as there is no way of propagating this error to flutter side
+                assert eventMessage.message!=null : "event message is missing";
+                Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
+                String channelName = (String) eventPayload.get("channel");
+                ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName).off(channelStateListener);
                 break;
         }
     }

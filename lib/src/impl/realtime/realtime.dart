@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:ably_flutter_plugin/src/impl/realtime/channels.dart';
 
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
@@ -19,6 +20,7 @@ class Realtime extends PlatformObject implements spec.RealtimeInterface {
       super()
   {
     connection = ConnectionPlatformObject(this);
+    channels = RealtimePlatformChannels(this);
   }
 
   @override
