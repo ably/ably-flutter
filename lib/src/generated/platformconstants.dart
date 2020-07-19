@@ -5,7 +5,8 @@
 
 class CodecTypes{
 	static const int ablyMessage = 128;
-	static const int clientOptions = 129;
+	static const int ablyEventMessage = 129;
+	static const int clientOptions = 130;
 	static const int errorInfo = 144;
 	static const int connectionStateChange = 201;
 	static const int channelStateChange = 202;
@@ -26,6 +27,12 @@ class PlatformMethod {
 
 class TxAblyMessage{
 	static const String registrationHandle = "registrationHandle";
+	static const String type = "type";
+	static const String message = "message";
+}
+
+class TxAblyEventMessage{
+	static const String eventName = "eventName";
 	static const String type = "type";
 	static const String message = "message";
 }

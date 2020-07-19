@@ -11,9 +11,10 @@ List<Map<String, dynamic>> _types = [
 
   // Ably flutter plugin protocol message
   {"name": "ablyMessage", "value": 128},
+  {"name": "ablyEventMessage", "value": 129},
 
   //Other ably objects
-  {"name": "clientOptions", "value": 129},
+  {"name": "clientOptions", "value": 130},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -46,6 +47,14 @@ List<Map<String, dynamic>> objects = [
     "name": "AblyMessage",
     "properties": <String>[
       "registrationHandle",
+      "type",
+      "message"
+    ]
+  },
+  {
+    "name": "AblyEventMessage",
+    "properties": <String>[
+      "eventName",
       "type",
       "message"
     ]

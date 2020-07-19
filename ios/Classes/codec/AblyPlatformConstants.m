@@ -25,6 +25,12 @@ NSString *const TxAblyMessage_type = @"type";
 NSString *const TxAblyMessage_message = @"message";
 @end
 
+@implementation TxAblyEventMessage
+NSString *const TxAblyEventMessage_eventName = @"eventName";
+NSString *const TxAblyEventMessage_type = @"type";
+NSString *const TxAblyEventMessage_message = @"message";
+@end
+
 @implementation TxErrorInfo
 NSString *const TxErrorInfo_code = @"code";
 NSString *const TxErrorInfo_message = @"message";
