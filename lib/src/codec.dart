@@ -53,6 +53,7 @@ class Codec extends StandardMessageCodec {
         this.codecMap = {
             // Ably flutter plugin protocol message
             CodecTypes.ablyMessage: _CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
+            CodecTypes.ablyEventMessage: _CodecPair<AblyEventMessage>(encodeAblyEventMessage, null),
 
             // Other ably objects
             CodecTypes.clientOptions: _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
@@ -82,6 +83,8 @@ class Codec extends StandardMessageCodec {
             return CodecTypes.errorInfo;
         } else if (value is AblyMessage) {
             return CodecTypes.ablyMessage;
+        } else if (value is AblyEventMessage) {
+          return CodecTypes.ablyEventMessage;
         }
         return null;
     }
@@ -202,6 +205,19 @@ class Codec extends StandardMessageCodec {
         writeToJson(jsonMap, TxAblyMessage.type, codecType);
         writeToJson(jsonMap, TxAblyMessage.message, message);
         return jsonMap;
+    }
+
+    /// Encodes [AblyEventMessage] to a Map
+    /// returns null of passed value [v] is null
+    Map<String, dynamic> encodeAblyEventMessage(final AblyEventMessage v){
+      if(v==null) return null;
+      int codecType = getCodecType(v.message);
+      dynamic message = (v.message==null)?null:(codecType == null)?v.message:codecMap[codecType].encode(v.message);
+      Map<String, dynamic> jsonMap = {};
+      writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
+      writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
+      writeToJson(jsonMap, TxAblyEventMessage.message, message);
+      return jsonMap;
     }
 
 

@@ -54,6 +54,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         codecMap = new HashMap<Byte, CodecPair>(){
             {
                 put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
+                put(PlatformConstants.CodecTypes.ablyEventMessage, new CodecPair<>(null, self::readAblyFlutterEventMessage));
                 put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::readClientOptions));
                 put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
                 put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
@@ -138,6 +139,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
             message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
         }
         return new AblyFlutterMessage<>(message, handle);
+    }
+
+    private AblyEventMessage readAblyFlutterEventMessage(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
+        final String eventName = (String) jsonMap.get(PlatformConstants.TxAblyEventMessage.eventName);
+        Object messageType = jsonMap.get(PlatformConstants.TxAblyEventMessage.type);
+        final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
+        Object message = jsonMap.get(PlatformConstants.TxAblyEventMessage.message);
+        if(type!=null){
+            message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
+        }
+        return new AblyEventMessage<>(eventName, message);
     }
 
     private ClientOptions readClientOptions(Map<String, Object> jsonMap) {

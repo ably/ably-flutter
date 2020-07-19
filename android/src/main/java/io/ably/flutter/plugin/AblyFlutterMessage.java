@@ -5,10 +5,21 @@ class AblyFlutterMessage<T> {
     final T message;
 
     AblyFlutterMessage(final T message, final Long handle) {
-        if (null == message) {
-            throw new NullPointerException("message cannot be null.");
-        }
+        assert message != null : "message cannot be null";
         this.handle = handle;
         this.message = message;
     }
+}
+
+
+class AblyEventMessage<T> {
+    final String eventName;
+    final T message;
+
+    AblyEventMessage(final String eventName, final T message) {
+        assert eventName != null : "eventName cannot be null";
+        this.eventName = eventName;
+        this.message = message;
+    }
+
 }

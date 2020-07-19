@@ -9,3 +9,14 @@ class AblyMessage {
       this.message = message;
 
 }
+
+class AblyEventMessage {
+
+  final String eventName;
+  final dynamic message;
+
+  AblyEventMessage(String eventName, [this.message]):
+    assert(eventName!=null, "eventName cannot be null"),
+    this.eventName = eventName;
+
+}
