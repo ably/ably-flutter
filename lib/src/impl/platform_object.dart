@@ -82,16 +82,16 @@ abstract class PlatformObject {
     return await invokeRaw<T>(method, message);
   }
 
-  Future<Stream<dynamic>> _listen(final String method) async {
+  Future<Stream<dynamic>> _listen(final String eventName, [final dynamic payload]) async {
     return eventChannel.receiveBroadcastStream(
-      AblyMessage(AblyMessage(method, handle: await handle))
+      AblyMessage(AblyEventMessage(eventName, payload), handle: await handle)
     );
   }
 
   /// Listen for events
-  Stream<dynamic> listen(final String method){
+  Stream<dynamic> listen(final String method, [final dynamic payload]){
     StreamController<dynamic> controller = StreamController<dynamic>();
-    _listen(method).then(controller.addStream);
+    _listen(method, payload).then(controller.addStream);
     return controller.stream;
   }
 

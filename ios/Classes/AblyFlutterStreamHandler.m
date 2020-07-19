@@ -27,9 +27,9 @@
 }
 
 - (void) startListening:(AblyFlutterMessage *const)message emitter:(FlutterEventSink)emitter {
-    AblyFlutterMessage *const _message = message.message;
-    NSString *const eventName = _message.message;
-    NSNumber *const handle = _message.handle;
+    AblyFlutterEventMessage *const eventMessage = message.message;
+    NSNumber *const handle = message.handle;
+    NSString *const eventName = eventMessage.eventName;
 
     if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
         ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
@@ -42,9 +42,9 @@
 }
 
 - (void) cancelListening:(AblyFlutterMessage *const)message {
-    AblyFlutterMessage *const _message = message.message;
-    NSString *const eventName = _message.message;
-    NSNumber *const handle = _message.handle;
+    AblyFlutterEventMessage *const eventMessage = message.message;
+    NSNumber *const handle = message.handle;
+    NSString *const eventName = eventMessage.eventName;
     
     if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
         [[_ably realtimeWithHandle: handle].connection  off: listener];
