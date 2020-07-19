@@ -3,8 +3,14 @@ package io.ably.flutter.plugin;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Map;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.lib.realtime.Channel;
+import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
+import io.ably.lib.types.AblyException;
+import io.ably.lib.types.ChannelOptions;
 import io.flutter.plugin.common.EventChannel;
 
 
@@ -52,6 +58,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     // Listeners
     private PluginConnectionStateListener connectionStateListener;
+    private PluginChannelStateListener channelStateListener;
 
     private class Listener{
         EventChannel.EventSink eventSink;
@@ -70,23 +77,36 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     }
 
+    private class PluginChannelStateListener extends Listener implements ChannelStateListener {
+
+        PluginChannelStateListener(EventChannel.EventSink eventSink){
+            super(eventSink);
+        }
+
+        public void onChannelStateChanged(ChannelStateChange stateChange){
+            eventSink.success(stateChange);
+        }
+
+    }
+
     // Casting stream creation arguments from `Object` into `AblyMessage`
-    private AblyFlutterMessage<String> getMessage(Object message){
-        return ((AblyFlutterMessage<AblyFlutterMessage<String>>)message).message;
+    private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message){
+        return (AblyFlutterMessage<AblyEventMessage<Object>>)message;
     }
 
     @Override
     public void onListen(Object object, EventChannel.EventSink uiThreadEventSink) {
         MainThreadEventSink eventSink = new MainThreadEventSink(uiThreadEventSink);
-        AblyFlutterMessage<String> message = getMessage(object);
-        String eventName = message.message;
-        switch(eventName) {
+        AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
+        AblyEventMessage<Object> eventMessage = ablyMessage.message;
+        String eventName = eventMessage.eventName;
+        switch (eventName) {
             case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
                 connectionStateListener = new PluginConnectionStateListener(eventSink);
-                ablyLibrary.getRealtime(message.handle).connection.on(connectionStateListener);
-                return;
+                ablyLibrary.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
+                break;
             default:
-                eventSink.error("unhandled event", null, null);
+                eventSink.error("unhandled event", eventName, null);
         }
     }
 
@@ -96,11 +116,13 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
             System.out.println("Cannot process null input on cancel");
             return;
         }
-        AblyFlutterMessage<String> message = getMessage(object);
-        String eventName = message.message;
+        AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
+        AblyEventMessage<Object> eventMessage = ablyMessage.message;
+        String eventName = eventMessage.eventName;
         switch (eventName) {
             case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-                ablyLibrary.getRealtime(message.handle).connection.off(connectionStateListener);
+                ablyLibrary.getRealtime(ablyMessage.handle).connection.off(connectionStateListener);
+                break;
         }
     }
 
