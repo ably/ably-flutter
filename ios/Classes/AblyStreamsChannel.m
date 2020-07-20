@@ -82,8 +82,8 @@
 }
 
 - (void) reset{
-    for (NSString* key in self->_streams) {
-        AblyStreamsChannelStream *stream = self->_streams[key];
+    for (NSString* key in _streams) {
+        AblyStreamsChannelStream *stream = _streams[key];
         [stream.handler onCancelWithArguments:nil];
         [_streams removeObjectForKey:key];
         [_listenerArguments removeObjectForKey:key];
@@ -111,16 +111,16 @@
   
   FlutterError* error = [stream.handler onListenWithArguments:call.arguments eventSink:stream.sink];
   if (error) {
-    callback([self->_codec encodeErrorEnvelope:error]);
+    callback([_codec encodeErrorEnvelope:error]);
   } else {
-    callback([self->_codec encodeSuccessEnvelope:nil]);
+    callback([_codec encodeSuccessEnvelope:nil]);
   }
 }
   
 - (void)cancelForCall:(FlutterMethodCall*)call withKey:(NSNumber*)key usingCallback:(FlutterBinaryReply)callback andFactory:(NSObject<FlutterStreamHandler> *(^)(id))factory {
   AblyStreamsChannelStream *stream = [_streams objectForKey:key];
   if(!stream) {
-    callback([self->_codec encodeErrorEnvelope:[FlutterError errorWithCode:@"error" message:@"No active stream to cancel" details:nil]]);
+    callback([_codec encodeErrorEnvelope:[FlutterError errorWithCode:@"error" message:@"No active stream to cancel" details:nil]]);
     return;
   }
   
@@ -129,9 +129,9 @@
   
   FlutterError* error = [stream.handler onCancelWithArguments:call.arguments];
   if (error) {
-    callback([self->_codec encodeErrorEnvelope:error]);
+    callback([_codec encodeErrorEnvelope:error]);
   } else {
-    callback([self->_codec encodeSuccessEnvelope:nil]);
+    callback([_codec encodeSuccessEnvelope:nil]);
   }
 }
 

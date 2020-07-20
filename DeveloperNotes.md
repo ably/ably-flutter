@@ -70,9 +70,7 @@ Running `flutter analyze` in project root will analyze dart files in complete pr
 Or, use the good old dart analyzer
 
 ```bash
-cd <root>/lib/
-dartanalyzer --fatal-warnings **/*.dart
+dartanalyzer --fatal-warnings lib/**/*.dart
 
-cd <root>/example/lib/
-dartanalyzer --fatal-warnings **/*.dart
+dartanalyzer --fatal-warnings example/lib/**/*.dart
 ```

@@ -11,7 +11,7 @@
 @synthesize ably = _ably;
 
 - (instancetype)init{
-    _ably = [AblyFlutter instance];
+    _ably = [AblyFlutter sharedInstance];
     listener = [ARTEventListener new];
     return self;
 }

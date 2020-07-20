@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
 
-+ (id)instance;
++ (instancetype)sharedInstance;
 
 -(NSNumber *)createRestWithOptions:(ARTClientOptions *)options;
 
@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
  platform objects have been closed down cleanly.
  */
 -(void)disposeWithCompletionHandler:(dispatch_block_t)completionHandler;
--(void)dispose;
 
 @end
 
