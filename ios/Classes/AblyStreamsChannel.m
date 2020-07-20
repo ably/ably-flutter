@@ -109,12 +109,8 @@
   [_streams setObject:stream forKey:key];
   [_listenerArguments setObject:call.arguments forKey:key];
   
-  FlutterError* error = [stream.handler onListenWithArguments:call.arguments eventSink:stream.sink];
-  if (error) {
-    callback([_codec encodeErrorEnvelope:error]);
-  } else {
-    callback([_codec encodeSuccessEnvelope:nil]);
-  }
+  [self triggerCallback:callback
+                  error:[stream.handler onListenWithArguments:call.arguments eventSink:stream.sink]];
 }
   
 - (void)cancelForCall:(FlutterMethodCall*)call withKey:(NSNumber*)key usingCallback:(FlutterBinaryReply)callback andFactory:(NSObject<FlutterStreamHandler> *(^)(id))factory {
@@ -127,12 +123,15 @@
   [_streams removeObjectForKey:key];
   [_listenerArguments removeObjectForKey:key];
   
-  FlutterError* error = [stream.handler onCancelWithArguments:call.arguments];
-  if (error) {
-    callback([_codec encodeErrorEnvelope:error]);
-  } else {
-    callback([_codec encodeSuccessEnvelope:nil]);
-  }
+  [self triggerCallback:callback error:[stream.handler onCancelWithArguments:call.arguments]];
+}
+
+- (void) triggerCallback:(FlutterBinaryReply)callback error:(FlutterError *const) error {
+    if (error) {
+      callback([_codec encodeErrorEnvelope:error]);
+    } else {
+      callback([_codec encodeSuccessEnvelope:nil]);
+    }
 }
 
 @end
