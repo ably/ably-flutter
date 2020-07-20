@@ -36,7 +36,7 @@
             listener = [realtimeWithHandle.connection  on: ^(ARTConnectionStateChange * const stateChange) {
                 emitter(stateChange);
             }];
-        } else if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
+        } else if([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
             NSAssert(eventMessage.message, @"event message is missing");
             NSMutableDictionary<NSString *, NSObject *>* eventPayload = eventMessage.message;
             ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
