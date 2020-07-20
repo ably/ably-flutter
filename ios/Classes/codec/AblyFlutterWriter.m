@@ -38,7 +38,7 @@
 }
 
 - (NSMutableDictionary<NSString *, NSObject *> *) encodeErrorInfo:(ARTErrorInfo *const) e{
-    NSMutableDictionary<NSString *, NSObject *> *dictionary;
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_VALUE(dictionary, TxErrorInfo_message, [e message]);
     WRITE_VALUE(dictionary, TxErrorInfo_statusCode, @([e statusCode]));
     // code, href, requestId and cause - not available in ably-cocoa
@@ -57,7 +57,7 @@
 }
 
 - (NSDictionary *) encodeChannelStateChange:(ARTChannelStateChange *const) stateChange{
-    NSMutableDictionary<NSString *, NSObject *> *dictionary;
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_ENUM(dictionary, TxChannelStateChange_current, [stateChange current]);
     WRITE_ENUM(dictionary, TxChannelStateChange_previous, [stateChange previous]);
     WRITE_ENUM(dictionary, TxChannelStateChange_event, [stateChange event]);
