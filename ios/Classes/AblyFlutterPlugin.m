@@ -110,7 +110,10 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
     
     // initializing event channel for event listeners
-    AblyStreamsChannel *const streamsChannel = [AblyStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream" binaryMessenger:registrar.messenger codec: methodCodec];
+    AblyStreamsChannel *const streamsChannel =
+        [AblyStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream"
+                                   binaryMessenger:registrar.messenger
+                                             codec:methodCodec];
     
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
@@ -131,7 +134,7 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     if (!self) {
         return nil;
     }
-    _ably = [AblyFlutter instance];
+    _ably = [AblyFlutter sharedInstance];
     self->_streamsChannel = streamsChannel;
     
     _handlers = @{

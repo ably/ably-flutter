@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype)init NS_UNAVAILABLE;
 
 -(instancetype)initWithMessage:(id)message
-                      handle:(NSNumber *)handle NS_DESIGNATED_INITIALIZER;
+                        handle:(NSNumber *)handle NS_DESIGNATED_INITIALIZER;
 
 @property(nonatomic, readonly) NSNumber * handle;
 @property(nonatomic, readonly) id message;

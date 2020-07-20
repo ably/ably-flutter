@@ -11,7 +11,7 @@
     long long _nextHandle;
 }
 
-+ (id)instance {
++ (instancetype)sharedInstance {
     static AblyFlutter *sharedInstance = nil;
     @synchronized(self) {
         if (sharedInstance == nil) {
