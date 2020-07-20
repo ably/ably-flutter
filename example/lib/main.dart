@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.error;
+    clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
@@ -146,6 +146,14 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       ably.RealtimeChannel channel = realtime.channels.get("test-channel");
       listenRealtimeChannel(channel);
+      Future.delayed(Duration(seconds: 3), () async {
+        print("Attaching to channel ${channel.name}: Current state ${channel.state}");
+        await channel.attach();
+        print("attach call complete!");
+        await Future.delayed(Duration(seconds: 5));
+        print("Detaching from channel ${channel.name}: Current state ${channel.state}");
+        await channel.detach();
+      });
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });
@@ -219,6 +227,9 @@ class _MyAppState extends State<MyApp> {
     StreamSubscription<ably.ChannelStateChange> subscription;
     subscription =  channel.on().listen((ably.ChannelStateChange stateChange){
       print("New channel state: ${stateChange.current}");
+      if(stateChange.reason!=null){
+        print("stateChange.reason: ${stateChange.reason}");
+      }
       //stop listening on detach
       if(stateChange.current == ably.ChannelState.detached){
         subscription.cancel();

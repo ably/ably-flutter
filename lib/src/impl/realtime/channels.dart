@@ -23,7 +23,11 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   @override
   spec.RealtimePresence presence;
 
-  RealtimePlatformChannel(this.ably, this.name, this.options): super();
+  RealtimePlatformChannel(this.ably, this.name, this.options): super() {
+    this.handle.then((value){
+      this.state = spec.ChannelState.initialized;
+    });
+  }
 
   Realtime get realtimePlatformObject => this.ably as Realtime;
 
@@ -39,10 +43,15 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     return null;
   }
 
-  Map<String, dynamic> get _payload => {
-    "channel": this.name,
-    "options": this.options
-  };
+  Map<String, dynamic> get _payload {
+    Map<String, dynamic> payload = {
+      "channel": this.name
+    };
+    if(options!=null){
+      payload["options"] = options;
+    }
+    return payload;
+  }
 
   @override
   Future<void> publish({
@@ -79,20 +88,33 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   spec.ChannelState state;
 
   @override
-  Future<void> attach() {
-    // TODO: implement attach
-    return null;
+  Future<void> attach() async {
+    try {
+      await this.invoke(PlatformMethod.attachRealtimeChannel, _payload);
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message, pe.details);
+    }
   }
 
   @override
-  Future<void> detach() {
-    // TODO: implement detach
-    return null;
+  Future<void> detach() async {
+    try {
+      await this.invoke(PlatformMethod.detachRealtimeChannel, _payload);
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message, pe.details);
+    }
   }
 
   @override
-  void setOptions(spec.ChannelOptions options) {
-    // TODO: implement setOptions
+  Future<void> setOptions(spec.ChannelOptions options) async {
+    try {
+      // send payload with new options
+      await this.invoke(PlatformMethod.setRealtimeChannelOptions, {..._payload, "options": options});
+      // update local channel instance with new options on success response
+      this.options = options;
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message, pe.details);
+    }
   }
 
   @override

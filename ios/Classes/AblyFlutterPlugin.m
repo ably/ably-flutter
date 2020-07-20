@@ -93,6 +93,66 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     result(nil);
 };
 
+static FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const data = message.message;
+    NSNumber *const realtimeHandle = data.handle;
+    ARTRealtime* realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
+    
+    NSDictionary *const realtimePayload = data.message;
+    NSString *channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
+    ARTChannelOptions *channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
+    ARTRealtimeChannel *channel;
+    channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    [channel attach:^(ARTErrorInfo *_Nullable error){
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            result(nil);
+        }
+    }];
+//    result(nil);
+};
+
+static FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const data = message.message;
+    NSNumber *const realtimeHandle = data.handle;
+    ARTRealtime* realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
+    
+    NSDictionary *const realtimePayload = data.message;
+    NSString *channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
+    ARTChannelOptions *channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
+    ARTRealtimeChannel *channel;
+    channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    [channel detach:^(ARTErrorInfo *_Nullable error){
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            result(nil);
+        }
+    }];
+//    result(nil);
+};
+
+static FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    // cocoa library doesn't support setOptions yet!
+    result(nil);
+};
+
+
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
@@ -145,7 +205,10 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
         AblyPlatformMethod_publish: _publishRestMessage,
         AblyPlatformMethod_createRealtimeWithOptions: _createRealtimeWithOptions,
         AblyPlatformMethod_connectRealtime: _connectRealtime,
-        AblyPlatformMethod_closeRealtime: _closeRealtime
+        AblyPlatformMethod_closeRealtime: _closeRealtime,
+        AblyPlatformMethod_attachRealtimeChannel: _attachRealtimeChannel,
+        AblyPlatformMethod_detachRealtimeChannel: _detachRealtimeChannel,
+        AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions
     };
     
     _nextRegistration = 1;
