@@ -30,11 +30,23 @@ class _MyAppState extends State<MyApp> {
   ably.Realtime _realtime;
   ably.Rest _rest;
   ably.ConnectionState _realtimeConnectionState;
+  ably.ChannelState _realtimeChannelState;
+  List<StreamSubscription<ably.ConnectionStateChange>> connectionStateChangeSubscriptions;
+  StreamSubscription<ably.ChannelStateChange> channelStateChangeSubscription;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+  }
+
+  @override
+  void dispose() {
+    channelStateChangeSubscription.cancel();
+    connectionStateChangeSubscriptions.forEach((StreamSubscription<ably.ConnectionStateChange> subscription) {
+      subscription.cancel();
+    });
+    super.dispose();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -146,14 +158,6 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       ably.RealtimeChannel channel = realtime.channels.get("test-channel");
       listenRealtimeChannel(channel);
-      Future.delayed(Duration(seconds: 3), () async {
-        print("Attaching to channel ${channel.name}: Current state ${channel.state}");
-        await channel.attach();
-        print("attach call complete!");
-        await Future.delayed(Duration(seconds: 5));
-        print("Detaching from channel ${channel.name}: Current state ${channel.state}");
-        await channel.detach();
-      });
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });
@@ -166,37 +170,38 @@ class _MyAppState extends State<MyApp> {
     //One can listen from multiple listeners on the same event,
     // and must cancel each subscription one by one
     //RETAINING LISTENER - α
-    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    StreamSubscription<ably.ConnectionStateChange> alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
       setState(() { _realtimeConnectionState = stateChange.current; });
     });
 
     //DISPOSE ON CONNECTED
     Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
-    StreamSubscription subscription;
-    subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
+    StreamSubscription<ably.ConnectionStateChange> omegaSubscription;
+    omegaSubscription = stream.listen((ably.ConnectionStateChange stateChange) async {
       print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
       if (stateChange.event == ably.ConnectionEvent.connected) {
-        await subscription.cancel();
+        await omegaSubscription.cancel();
       }
     });
 
     //RETAINING LISTENER - β
-    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    StreamSubscription<ably.ConnectionStateChange> betaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
       // NESTED LISTENER - ξ
       // will be registered only when connected event is received by β listener
-      realtime.connection.on().listen((
+      StreamSubscription<ably.ConnectionStateChange> etaSubscription = realtime.connection.on().listen((
         ably.ConnectionStateChange stateChange) async {
         // k ξ listeners will be registered
         // and each listener will be called `n-k` times respectively
         // if listener β is called `n` times
         print('NESTED LISTENER ξ: ${stateChange.event}');
       });
+      connectionStateChangeSubscriptions.add(etaSubscription);
     });
 
-    StreamSubscription preZetaSubscription;
-    StreamSubscription postZetaSubscription;
+    StreamSubscription<ably.ConnectionStateChange> preZetaSubscription;
+    StreamSubscription<ably.ConnectionStateChange> postZetaSubscription;
     preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       //This listener "pre ζ" will be cancelled from γ
       print('NESTED LISTENER "pre ζ": ${stateChange.event}');
@@ -204,7 +209,7 @@ class _MyAppState extends State<MyApp> {
 
 
     //RETAINING LISTENER - γ
-    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    StreamSubscription<ably.ConnectionStateChange> gammaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
       if (stateChange.event == ably.ConnectionEvent.connected) {
         await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
@@ -217,6 +222,15 @@ class _MyAppState extends State<MyApp> {
       print('NESTED LISTENER "post ζ": ${stateChange.event}');
     });
 
+    connectionStateChangeSubscriptions = [
+      alphaSubscription,
+      betaSubscription,
+      gammaSubscription,
+      omegaSubscription,
+      preZetaSubscription,
+      postZetaSubscription
+    ];
+
     setState(() {
       _realtime = realtime;
       _realtimeCreationState = OpState.Succeeded;
@@ -224,16 +238,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   listenRealtimeChannel(ably.RealtimeChannel channel) async {
-    StreamSubscription<ably.ChannelStateChange> subscription;
-    subscription =  channel.on().listen((ably.ChannelStateChange stateChange){
+    channelStateChangeSubscription =  channel.on().listen((ably.ChannelStateChange stateChange){
       print("New channel state: ${stateChange.current}");
       if(stateChange.reason!=null){
         print("stateChange.reason: ${stateChange.reason}");
       }
-      //stop listening on detach
-      if(stateChange.current == ably.ChannelState.detached){
-        subscription.cancel();
-      }
+      setState((){
+        _realtimeChannelState = channel.state;
+        print("_realtimeChannelState $_realtimeChannelState");
+      });
     });
   }
 
@@ -278,8 +291,30 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget createRTCloseButton() => FlatButton(
-    onPressed: _realtime?.close,
+    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?_realtime?.close:null,
     child: Text('Close Connection'),
+  );
+
+  Widget createChannelAttachButton() => FlatButton(
+    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?() {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      Future.delayed(Duration(seconds: 3), () async {
+        print("Attaching to channel ${channel.name}: Current state ${channel.state}");
+        await channel.attach();
+        print("Attached");
+      });
+    }:null,
+    child: Text('Attach to Channel'),
+  );
+
+  Widget createChannelDetachButton() => FlatButton(
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      print("Detaching from channel ${channel.name}: Current state ${channel.state}");
+      channel.detach();
+      print("Detached");
+    }:null,
+    child: Text('Detach from channel'),
   );
 
   int msgCounter = 0;
@@ -317,8 +352,18 @@ class _MyAppState extends State<MyApp> {
                 createRealtimeButton(),
                 Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
                 Text('Connection Status: $_realtimeConnectionState'),
-                createRTCConnectButton(),
-                createRTCloseButton(),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: createRTCConnectButton(),),
+                    Expanded(child: createRTCloseButton(), )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: createChannelAttachButton()),
+                    Expanded(child: createChannelDetachButton()),
+                  ],
+                ),
                 Divider(),
                 createRestButton(),
                 Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
