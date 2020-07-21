@@ -199,7 +199,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                                     }
                                 }
                         );
-//                result.success(null);
             }catch(AblyException e){
                 handleAblyException(result, e);
             }
@@ -231,7 +230,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                                     }
                                 }
                         );
-//                result.success(null);
             }catch(AblyException e){
                 handleAblyException(result, e);
             }
