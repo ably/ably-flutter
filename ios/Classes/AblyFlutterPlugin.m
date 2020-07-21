@@ -117,7 +117,6 @@ static FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const pl
             result(nil);
         }
     }];
-//    result(nil);
 };
 
 static FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -144,7 +143,6 @@ static FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const pl
             result(nil);
         }
     }];
-//    result(nil);
 };
 
 static FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {

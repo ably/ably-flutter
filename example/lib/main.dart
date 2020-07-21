@@ -42,6 +42,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    // This dispose would not effective in this example, but subscriptions must
+    // be disposed when listeners are implemented in the actual application
     channelStateChangeSubscription.cancel();
     connectionStateChangeSubscriptions.forEach((StreamSubscription<ably.ConnectionStateChange> subscription) {
       subscription.cancel();
@@ -296,13 +298,15 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget createChannelAttachButton() => FlatButton(
-    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?() {
+    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?() async {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
-      Future.delayed(Duration(seconds: 3), () async {
-        print("Attaching to channel ${channel.name}: Current state ${channel.state}");
+      print("Attaching to channel ${channel.name}: Current state ${channel.state}");
+      try {
         await channel.attach();
         print("Attached");
-      });
+      } on ably.AblyException catch (e) {
+        print("Unable to attach to channel: ${e.errorInfo}");
+      }
     }:null,
     child: Text('Attach to Channel'),
   );
