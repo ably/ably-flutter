@@ -112,7 +112,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   Future<void> setOptions(spec.ChannelOptions options) async {
     throw AblyException(
       null,
-      "Realtime chanel options are not supported yet. Kindly raise an issue."
+      "Realtime chanel options are not supported yet."
     );
   }
 
