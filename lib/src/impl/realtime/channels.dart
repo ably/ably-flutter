@@ -107,14 +107,10 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
   @override
   Future<void> setOptions(spec.ChannelOptions options) async {
-    try {
-      // send payload with new options
-      await this.invoke(PlatformMethod.setRealtimeChannelOptions, {..._payload, "options": options});
-      // update local channel instance with new options on success response
-      this.options = options;
-    } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
-    }
+    throw AblyException(
+      null,
+      "Realtime chanel options are not supported yet. Kindly raise an issue."
+    );
   }
 
   @override
