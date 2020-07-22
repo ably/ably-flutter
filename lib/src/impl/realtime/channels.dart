@@ -24,8 +24,11 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   spec.RealtimePresence presence;
 
   RealtimePlatformChannel(this.ably, this.name, this.options): super() {
-    this.handle.then((value){
-      this.state = spec.ChannelState.initialized;
+    this.handle;  //proactively acquiring handle
+    this.state = spec.ChannelState.initialized;
+    this.on().listen((ChannelStateChange event) {
+      this.state = event.current;
+      print("updating state! ${this.state}");
     });
   }
 
@@ -119,7 +122,6 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
       StreamTransformer.fromHandlers(
         handleData: (dynamic value, EventSink<ChannelStateChange> sink){
           ChannelStateChange stateChange = value as ChannelStateChange;
-          this.state = stateChange.current;
           sink.add(stateChange);
         }
       )
