@@ -1,6 +1,5 @@
 import 'enums.dart';
 import 'rest/ably_base.dart';
-import 'rest/channels.dart';
 
 //==============================================================================
 //==========================    ABSTRACT CLASSES    ============================
@@ -279,9 +278,9 @@ abstract class Channels<ChannelType> {
 
   ChannelType createChannel(name, options);
 
-  ChannelType get(String name, [ChannelOptions options]) {
+  ChannelType get(String name) {  //TODO add ChannelOptions as optional argument here, and pass it on to createChannel
     if (_channels[name]==null) {
-      _channels[name] = createChannel(name, options);
+      _channels[name] = createChannel(name, null);
     }
     return _channels[name];
   }
