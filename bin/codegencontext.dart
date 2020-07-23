@@ -15,6 +15,7 @@ List<Map<String, dynamic>> _types = [
 
   //Other ably objects
   {"name": "clientOptions", "value": 130},
+  {"name": "message", "value": 131},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -42,7 +43,8 @@ List<Map<String, dynamic>> _platformMethods = [
 
   // Realtime events
   {"name": "onRealtimeConnectionStateChanged", "value": "onRealtimeConnectionStateChanged"},
-  {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"}
+  {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"},
+  {"name": "onRealtimeChannelMessage", "value": "onRealtimeChannelMessage"},
 ];
 
 List<Map<String, dynamic>> objects = [
@@ -150,6 +152,19 @@ List<Map<String, dynamic>> objects = [
       "event",
       "resumed",
       "reason"
+    ]
+  },
+  {
+    "name": "Message",
+    "properties": <String>[
+      "id",
+      "timestamp",
+      "clientId",
+      "connectionId",
+      "encoding",
+      "data",
+      "name",
+      "extras"
     ]
   }
 ];
