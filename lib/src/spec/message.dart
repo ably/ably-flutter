@@ -2,16 +2,40 @@ import 'enums.dart';
 import 'rest/channels.dart';
 
 class Message {
-  Message.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
-  Message.fromEncodedArray(List<Map> jsonArray, ChannelOptions channelOptions);
-  String clientId;
-  String connectionId;
-  dynamic data;
-  String encoding;
-  dynamic extras;
+
+  /// A unique ID for this message
   String id;
-  String name;
+
+  /// The timestamp for this message
   DateTime timestamp;
+
+  /// The id of the publisher of this message
+  String clientId;
+
+  /// The connection id of the publisher of this message
+  String connectionId;
+
+  /// Any transformation applied to the data for this message
+  String encoding;
+
+  /// The message payload
+  dynamic data;
+
+  /// The event name, if available
+  String name;
+
+  /// Extras, if available
+  Map extras;
+
+  Message({this.name, this.data, this.clientId});  // TM2
+
+  @override
+  String toString() {
+    return 'Message id=$id timestamp=$timestamp clientId=$clientId'
+      ' connectionId=$connectionId encoding=$encoding name=$name'
+      ' data=$data extras=$extras';
+  }
+
 }
 
 abstract class MessageStatic {  //TODO why is this class required?
