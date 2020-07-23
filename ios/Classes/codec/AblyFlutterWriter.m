@@ -21,6 +21,10 @@
         [self writeByte:channelStateChangeCodecType];
         [self writeValue: [self encodeChannelStateChange: value]];
         return;
+    }else if([value isKindOfClass:[ARTMessage class]]){
+        [self writeByte:messageCodecType];
+        [self writeValue: [self encodeChannelMessage: value]];
+        return;
     }
     [super writeValue:value];
 }
@@ -66,5 +70,21 @@
     return dictionary;
 }
 
+- (NSDictionary *) encodeChannelMessage:(ARTMessage *const) message{
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    
+    WRITE_VALUE(dictionary, TxMessage_id, [message id]);
+    WRITE_VALUE(dictionary, TxMessage_name, [message name]);
+    WRITE_VALUE(dictionary, TxMessage_clientId, [message clientId]);
+    WRITE_VALUE(dictionary, TxMessage_connectionId, [message connectionId]);
+    WRITE_VALUE(dictionary, TxMessage_encoding, [message encoding]);
+    WRITE_VALUE(dictionary, TxMessage_extras, [message extras]);
+    WRITE_VALUE(dictionary, TxMessage_data, (NSObject *)[message data]);
+        
+    NSTimeInterval seconds = [[message timestamp] timeIntervalSince1970];
+    WRITE_VALUE(dictionary, TxMessage_timestamp, @((long)(seconds*1000)));
+    
+    return dictionary;
+}
 
 @end
