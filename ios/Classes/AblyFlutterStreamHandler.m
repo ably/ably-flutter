@@ -48,6 +48,18 @@
             listener = [channel on: ^(ARTChannelStateChange * const stateChange) {
                 emitter(stateChange);
             }];
+        } else if([AblyPlatformMethod_onRealtimeChannelMessage isEqual: eventName]) {
+            NSAssert(eventMessage.message, @"event message is missing");
+            NSMutableDictionary<NSString *, NSObject *>* eventPayload = eventMessage.message;
+            ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
+            
+            NSString *channelName = (NSString*)[eventPayload objectForKey:@"channel"];
+            ARTChannelOptions *channelOptions = (ARTChannelOptions*)[eventPayload objectForKey:@"options"];
+            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+            
+            listener = [channel subscribe: ^(ARTMessage * const message) {
+                emitter(message);
+            }];
         } else {
             emitter([FlutterError errorWithCode:@"error" message:[NSString stringWithFormat:@"Invalid event name: %@", eventName] details:nil]);
         }
@@ -73,6 +85,14 @@
         NSString *channelName = (NSString*)[eventPayload objectForKey:@"channel"];
         ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
         [channel off: listener];
+    } else if([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
+        NSAssert(eventMessage.message, @"event message is missing");
+        NSMutableDictionary<NSString *, NSObject *>* eventPayload = eventMessage.message;
+        ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
+
+        NSString *channelName = (NSString*)[eventPayload objectForKey:@"channel"];
+        ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
+        [channel unsubscribe: listener];
     }
 }
 
