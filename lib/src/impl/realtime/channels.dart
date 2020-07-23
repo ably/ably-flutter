@@ -136,14 +136,24 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   }
 
   @override
-  Future<void> subscribe({String event, List<String> events, spec.EventListener<spec.Message> listener}) {
-    // TODO: implement subscribe
-    return null;
-  }
-
-  @override
-  void unsubscribe({String event, List<String> events, spec.EventListener<spec.Message> listener}) {
-    // TODO: implement unsubscribe
+  Stream<spec.Message> subscribe({
+    String event,
+    List<String> events
+  }) {
+    Stream<spec.Message> stream = listen(PlatformMethod.onRealtimeChannelMessage, _payload).transform<spec.Message>(
+      StreamTransformer.fromHandlers(
+        handleData: (dynamic value, EventSink<spec.Message> sink){
+          spec.Message message = value as spec.Message;
+          sink.add(message);
+        }
+      )
+    );
+    if (events!=null && events.isNotEmpty){
+      return stream.takeWhile((spec.Message _message) => events.contains(_message.name));
+    } else if (event!=null) {
+      return stream.takeWhile((spec.Message _message) => _message.name==event);
+    }
+    return stream;
   }
 
 }

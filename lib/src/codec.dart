@@ -58,6 +58,7 @@ class Codec extends StandardMessageCodec {
             // Other ably objects
             CodecTypes.clientOptions: _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
+            CodecTypes.message: _CodecPair<Message>(null, decodeChannelMessage),
 
             // Events - Connection
             CodecTypes.connectionStateChange: _CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
@@ -364,6 +365,21 @@ class Codec extends StandardMessageCodec {
         bool resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
         ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxChannelStateChange.reason]));
         return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);
+    }
+
+    Message decodeChannelMessage(Map<String, dynamic> jsonMap){
+      if(jsonMap==null) return null;
+      Message message = Message(
+        name: readFromJson<String>(jsonMap, TxMessage.name),
+        clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
+        data: readFromJson<dynamic>(jsonMap, TxMessage.data),
+      );
+      message.id = readFromJson<String>(jsonMap, TxMessage.id);
+      message.timestamp = DateTime.fromMillisecondsSinceEpoch(readFromJson<int>(jsonMap, TxMessage.timestamp));
+      message.connectionId = readFromJson<String>(jsonMap, TxMessage.connectionId);
+      message.encoding = readFromJson<String>(jsonMap, TxMessage.encoding);
+      message.extras = readFromJson<Map>(jsonMap, TxMessage.extras);
+      return message;
     }
 
 }

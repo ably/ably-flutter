@@ -34,15 +34,9 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
     String name,
     dynamic data
   });
-  Future<void> subscribe({
+  Stream<Message> subscribe({
     String event,
     List<String> events,
-    EventListener<Message> listener
-  });
-  void unsubscribe({
-    String event,
-    List<String> events,
-    EventListener<Message> listener //TODO check if this is the type that is expected
   });
   void setOptions(ChannelOptions options);
 }
