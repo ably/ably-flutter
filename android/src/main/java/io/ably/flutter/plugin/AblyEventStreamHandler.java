@@ -3,6 +3,12 @@ package io.ably.flutter.plugin;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import java.lang.reflect.Array;
 import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
@@ -11,6 +17,8 @@ import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
+import io.ably.lib.types.Message;
+import io.ably.lib.types.MessageDecodeException;
 import io.flutter.plugin.common.EventChannel;
 
 
@@ -58,7 +66,14 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     // Listeners
     private PluginConnectionStateListener connectionStateListener;
+
+    private ChannelOptions channelOptions;
     private PluginChannelStateListener channelStateListener;
+    private PluginChannelMessageListener channelMessageListener;
+
+    void handleAblyException(EventChannel.EventSink eventSink, AblyException ablyException){
+        eventSink.error(ablyException.errorInfo.message, null, ablyException.errorInfo);
+    }
 
     private class Listener{
         EventChannel.EventSink eventSink;
@@ -89,6 +104,35 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     }
 
+    private class PluginChannelMessageListener extends Listener implements Channel.MessageListener {
+
+        PluginChannelMessageListener(EventChannel.EventSink eventSink){
+            super(eventSink);
+        }
+
+        public void onMessage(Message message){
+            System.out.print("message received with data: ");
+            System.out.println(message.data);
+            try {
+//                if(message.data instanceof JsonElement){
+//                   if(message.data instanceof JsonObject){
+//                       message.data.toMap();
+//                   }
+//                }
+//                {@link JsonObject
+//                }, a
+//                        * {@link JsonArray}, a {@link JsonPrimitive
+//                } or a {@link JsonNull
+//                }
+                message.decode(null);
+                eventSink.success(message);
+            }catch (MessageDecodeException e){
+                handleAblyException(eventSink, e);
+            }
+        }
+
+    }
+
     // Casting stream creation arguments from `Object` into `AblyFlutterMessage<AblyEventMessage>`
     private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message){
         return (AblyFlutterMessage<AblyEventMessage<Object>>)message;
@@ -108,15 +152,28 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     break;
                 case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
                     assert eventMessage.message!=null : "event message is missing";
-                    final Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
-                    final String channelName = (String) eventPayload.get("channel");
-                    final ChannelOptions channelOptions = (ChannelOptions) eventPayload.get("options");
+                    Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
+                    String channelName = (String) eventPayload.get("channel");
+                    channelOptions = (ChannelOptions) eventPayload.get("options");
                     try {
                         final Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName, channelOptions);
                         channelStateListener = new PluginChannelStateListener(eventSink);
                         channel.on(channelStateListener);
                     } catch (AblyException ablyException) {
-                        eventSink.error(ablyException.errorInfo.message, null, ablyException.errorInfo);
+                        handleAblyException(eventSink, ablyException);
+                    }
+                    break;
+                case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
+                    assert eventMessage.message!=null : "event message is missing";
+                    Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
+                    String messageChannelName = (String) messagePayload.get("channel");
+                    channelOptions = (ChannelOptions) messagePayload.get("options");
+                    try {
+                        Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName, channelOptions);
+                        channelMessageListener = new PluginChannelMessageListener(eventSink);
+                        channel.subscribe(channelMessageListener);
+                    } catch (AblyException ablyException) {
+                        handleAblyException(eventSink, ablyException);
                     }
                     break;
                 default:
@@ -147,6 +204,12 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                 final Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
                 final String channelName = (String) eventPayload.get("channel");
                 ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName).off(channelStateListener);
+                break;
+            case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
+                assert eventMessage.message!=null : "event message is missing";
+                Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
+                String messageChannelName = (String) messagePayload.get("channel");
+                ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName).unsubscribe(channelMessageListener);
                 break;
         }
     }
