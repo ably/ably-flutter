@@ -33,6 +33,8 @@ class _MyAppState extends State<MyApp> {
   ably.ChannelState _realtimeChannelState;
   List<StreamSubscription<ably.ConnectionStateChange>> connectionStateChangeSubscriptions;
   StreamSubscription<ably.ChannelStateChange> channelStateChangeSubscription;
+  StreamSubscription<ably.Message> channelMessageSubscription;
+  ably.Message channelMessage;
 
   @override
   void initState() {
@@ -90,6 +92,7 @@ class _MyAppState extends State<MyApp> {
     provisioning.AppKey appKey;
     try {
       appKey = await provisioning.provision('sandbox-');
+      print("App key acquired! `$appKey`");
     } catch (error) {
       print('Error provisioning Ably: ${error}');
       setState(() { _provisioningState = OpState.Failed; });
@@ -289,16 +292,19 @@ class _MyAppState extends State<MyApp> {
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
   Widget createRTCConnectButton() => FlatButton(
+    padding: EdgeInsets.zero,
     onPressed: _realtime?.connect,
     child: Text('Connect'),
   );
 
   Widget createRTCloseButton() => FlatButton(
+    padding: EdgeInsets.zero,
     onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?_realtime?.close:null,
     child: Text('Close Connection'),
   );
 
   Widget createChannelAttachButton() => FlatButton(
+    padding: EdgeInsets.zero,
     onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?() async {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
       print("Attaching to channel ${channel.name}: Current state ${channel.state}");
@@ -313,6 +319,7 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget createChannelDetachButton() => FlatButton(
+    padding: EdgeInsets.zero,
     onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
       print("Detaching from channel ${channel.name}: Current state ${channel.state}");
@@ -320,6 +327,34 @@ class _MyAppState extends State<MyApp> {
       print("Detached");
     }:null,
     child: Text('Detach from channel'),
+  );
+
+  Widget createChannelSubscribeButton() => FlatButton(
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      Stream<ably.Message> messageStream = channel.subscribe();
+      channelMessageSubscription = messageStream.listen((ably.Message message){
+        print("Channel message recieved: $message\n"
+          "\tisNull: ${message.data == null}\n"
+          "\tisString ${message.data is String}\n"
+          "\tisMap ${message.data is Map}\n"
+          "\tisList ${message.data is List}\n");
+        setState((){
+          channelMessage = message;
+        });
+      });
+      print("Channel messages subscribed");
+      setState((){});
+    }:null,
+    child: Text('Subscribe'),
+  );
+
+  Widget createChannelUnSubscribeButton() => FlatButton(
+    onPressed: (channelMessageSubscription!=null)?() async {
+      await channelMessageSubscription.cancel();
+      print("Channel messages ubsubscribed");
+    }:null,
+    child: Text('Unsubscribe'),
   );
 
   int msgCounter = 0;
@@ -345,37 +380,42 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Ably Plugin Example App'),
         ),
         body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 36.0),
-            child: Column(
-              children: [
-                Text('Running on: $_platformVersion\n'),
-                Text('Ably version: $_ablyVersion\n'),
-                provisionButton(),
-                Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
-                Divider(),
-                createRealtimeButton(),
-                Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-                Text('Connection Status: $_realtimeConnectionState'),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: createRTCConnectButton(),),
-                    Expanded(child: createRTCloseButton(), )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: createChannelAttachButton()),
-                    Expanded(child: createChannelDetachButton()),
-                  ],
-                ),
-                Divider(),
-                createRestButton(),
-                Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
-                sendRestMessage(),
-                Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
-              ]
-            ),
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 36.0),
+            children: [
+              Text('Running on: $_platformVersion\n'),
+              Text('Ably version: $_ablyVersion\n'),
+              provisionButton(),
+              Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
+              Divider(),
+              createRealtimeButton(),
+              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+              Text('Connection Status: $_realtimeConnectionState'),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createRTCConnectButton(),),
+                  Expanded(child: createRTCloseButton(), )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createChannelAttachButton()),
+                  Expanded(child: createChannelDetachButton()),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createChannelSubscribeButton()),
+                  Expanded(child: createChannelUnSubscribeButton()),
+                ],
+              ),
+              Text('Message from channel: ${((channelMessage == null) ? '-' : channelMessage.data)}'),
+              Divider(),
+              createRestButton(),
+              Text('Rest: ${((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())}'),
+              sendRestMessage(),
+              Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
+            ]
           ),
         ),
       ),
