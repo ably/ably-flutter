@@ -42,8 +42,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    // This dispose would not effective in this example, but subscriptions must
-    // be disposed when listeners are implemented in the actual application
+    // This dispose would not be effective in this example as this is a single view
+    // but subscriptions must be disposed when listeners are
+    // implemented in the actual application
+    //
+    // See: https://api.flutter.dev/flutter/widgets/State/dispose.html
     channelStateChangeSubscription.cancel();
     connectionStateChangeSubscriptions.forEach((StreamSubscription<ably.ConnectionStateChange> subscription) {
       subscription.cancel();
