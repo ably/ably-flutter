@@ -89,7 +89,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     }
 
-    // Casting stream creation arguments from `Object` into `AblyMessage`
+    // Casting stream creation arguments from `Object` into `AblyFlutterMessage<AblyEventMessage>`
     private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message){
         return (AblyFlutterMessage<AblyEventMessage<Object>>)message;
     }
