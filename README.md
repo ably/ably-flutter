@@ -134,6 +134,23 @@ Detaching from channel
 await channel.detach();
 ```
 
+Subscribing to channel messages
+
+```dart
+Stream<ably.Message> messageStream = channel.subscribe();
+StreamSubscription<ably.Message> channelMessageSubscription = messageStream.listen((ably.Message message){
+  print("New message arrived ${message.data}");
+});
+```
+
+_use `channel.subscribe(name: "shifu")` or `channel.subscribe(names: ["shifu", "oogway"])` to listen to specific named messages_
+
+UnSubscribing from channel messages
+
+```dart
+await channelMessageSubscription.cancel();
+```
+
 ## Caveats
 
 #### RTE6a compliance
