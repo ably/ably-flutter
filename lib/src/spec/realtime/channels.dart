@@ -35,8 +35,8 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
     dynamic data
   });
   Stream<Message> subscribe({
-    String event,
-    List<String> events,
+    String name,
+    List<String> names,
   });
   void setOptions(ChannelOptions options);
 }
