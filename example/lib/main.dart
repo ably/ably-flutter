@@ -332,9 +332,9 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget createChannelSubscribeButton() => FlatButton(
-    onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() {
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached && channelMessageSubscription==null)?() {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
-      Stream<ably.Message> messageStream = channel.subscribe();
+      Stream<ably.Message> messageStream = channel.subscribe(name: 'message-data');
       channelMessageSubscription = messageStream.listen((ably.Message message){
         print("Channel message recieved: $message\n"
           "\tisNull: ${message.data == null}\n"
@@ -355,6 +355,9 @@ class _MyAppState extends State<MyApp> {
     onPressed: (channelMessageSubscription!=null)?() async {
       await channelMessageSubscription.cancel();
       print("Channel messages ubsubscribed");
+      setState((){
+        channelMessageSubscription = null;
+      });
     }:null,
     child: Text('Unsubscribe'),
   );

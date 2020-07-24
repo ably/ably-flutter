@@ -137,22 +137,27 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
   @override
   Stream<spec.Message> subscribe({
-    String event,
-    List<String> events
+    String name,
+    List<String> names
   }) {
     Stream<spec.Message> stream = listen(PlatformMethod.onRealtimeChannelMessage, _payload).transform<spec.Message>(
       StreamTransformer.fromHandlers(
         handleData: (dynamic value, EventSink<spec.Message> sink){
           spec.Message message = value as spec.Message;
-          sink.add(message);
+          if (names!=null){
+            if(names.contains(message.name)){
+              sink.add(message);
+            }
+          } else if (name!=null) {
+            if(message.name==name){
+              sink.add(message);
+            }
+          } else {
+            sink.add(message);
+          }
         }
       )
     );
-    if (events!=null && events.isNotEmpty){
-      return stream.takeWhile((spec.Message _message) => events.contains(_message.name));
-    } else if (event!=null) {
-      return stream.takeWhile((spec.Message _message) => _message.name==event);
-    }
     return stream;
   }
 
