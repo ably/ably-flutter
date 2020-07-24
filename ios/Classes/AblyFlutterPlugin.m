@@ -206,7 +206,7 @@ static FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *cons
         AblyPlatformMethod_closeRealtime: _closeRealtime,
         AblyPlatformMethod_attachRealtimeChannel: _attachRealtimeChannel,
         AblyPlatformMethod_detachRealtimeChannel: _detachRealtimeChannel,
-        AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions
+        AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
     };
     
     _nextRegistration = 1;
