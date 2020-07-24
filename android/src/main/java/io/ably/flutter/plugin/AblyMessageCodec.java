@@ -1,11 +1,14 @@
 package io.ably.flutter.plugin;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -118,7 +121,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 return;
             }
         }
+        if(value instanceof JsonElement){
+            WriteJsonElement(stream, (JsonElement) value);
+            return;
+        }
         super.writeValue(stream, value);
+    }
+
+    private void WriteJsonElement(ByteArrayOutputStream stream, JsonElement value){
+        if(value instanceof JsonObject){
+            super.writeValue(stream, (new Gson()).fromJson(value, Map.class));
+        } else if(value instanceof JsonArray){
+            super.writeValue(stream, (new Gson()).fromJson(value, ArrayList.class));
+        }
     }
 
     /**
@@ -270,15 +285,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.id, c.id);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.clientId, c.clientId);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.connectionId, c.connectionId);
-        writeValueToJson(jsonMap, PlatformConstants.TxMessage.timestamp, new Date(c.timestamp));
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.timestamp, c.timestamp);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.name, c.name);
-        System.out.println("MESAAGE DATA FROM ANDROID");
-        System.out.println(c.data);
-        System.out.println(c.data instanceof Number);
-        System.out.println(c.data instanceof String);
-        System.out.println(c.data instanceof Array);
-        System.out.println(c.data instanceof List);
-        System.out.println(c.data instanceof Map);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.data, c.data);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.encoding, c.encoding);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.extras, c.extras);
