@@ -122,13 +122,16 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
       StreamTransformer.fromHandlers(
         handleData: (dynamic value, EventSink<ChannelStateChange> sink){
           ChannelStateChange stateChange = value as ChannelStateChange;
-          sink.add(stateChange);
+          if (channelEvent!=null) {
+            if (stateChange.event==channelEvent) {
+              sink.add(stateChange);
+            }
+          } else {
+            sink.add(stateChange);
+          }
         }
       )
     );
-    if (channelEvent!=null) {
-      return stream.takeWhile((ChannelStateChange _stateChange) => _stateChange.event==channelEvent);
-    }
     return stream;
   }
 

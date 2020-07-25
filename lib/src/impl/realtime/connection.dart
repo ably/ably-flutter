@@ -46,13 +46,17 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
         StreamTransformer.fromHandlers(
             handleData: (dynamic value, EventSink<ConnectionStateChange> sink){
               ConnectionStateChange stateChange = value as ConnectionStateChange;
-              sink.add(stateChange);
+              if (connectionEvent!=null) {
+                if (stateChange.event==connectionEvent) {
+                  sink.add(stateChange);
+                }
+              } else {
+                sink.add(stateChange);
+              }
+
             }
         )
     );
-    if (connectionEvent!=null) {
-      return stream.takeWhile((ConnectionStateChange _stateChange) => _stateChange.event==connectionEvent);
-    }
     return stream;
   }
 
