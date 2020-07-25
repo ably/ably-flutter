@@ -12,6 +12,7 @@ final public class PlatformConstants{
 		public static final byte ablyMessage = (byte)128;
 		public static final byte ablyEventMessage = (byte)129;
 		public static final byte clientOptions = (byte)130;
+		public static final byte message = (byte)131;
 		public static final byte errorInfo = (byte)144;
 		public static final byte connectionStateChange = (byte)201;
 		public static final byte channelStateChange = (byte)202;
@@ -31,6 +32,7 @@ final public class PlatformConstants{
 		public static final String setRealtimeChannelOptions = "setRealtimeChannelOptions";
 		public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
 		public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
+		public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
 	}
   
 	final public class TxAblyMessage{
@@ -119,6 +121,17 @@ final public class PlatformConstants{
 		public static final String event = "event";
 		public static final String resumed = "resumed";
 		public static final String reason = "reason";
+	}
+
+	final public class TxMessage{
+		public static final String id = "id";
+		public static final String timestamp = "timestamp";
+		public static final String clientId = "clientId";
+		public static final String connectionId = "connectionId";
+		public static final String encoding = "encoding";
+		public static final String data = "data";
+		public static final String name = "name";
+		public static final String extras = "extras";
 	}
 
 }
