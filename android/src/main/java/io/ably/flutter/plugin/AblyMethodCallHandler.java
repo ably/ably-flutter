@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
+import io.ably.lib.types.Message;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.ably.flutter.plugin.generated.PlatformConstants;
@@ -59,6 +61,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.attachRealtimeChannel, this::attachRealtimeChannel);
         _map.put(PlatformConstants.PlatformMethod.detachRealtimeChannel, this::detachRealtimeChannel);
         _map.put(PlatformConstants.PlatformMethod.setRealtimeChannelOptions, this::setRealtimeChannelOptions);
+        _map.put(PlatformConstants.PlatformMethod.publishRealtimeChannelMessage, this::publishRealtimeChannelMessage);
     }
 
     // MethodChannel.Result wrapper that responds on the platform thread.
@@ -249,6 +252,49 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         .channels
                         .get(channelName)
                         .setOptions(channelOptions);
+                result.success(null);
+            }catch(AblyException e){
+                handleAblyException(result, e);
+            }
+        });
+    }
+
+    private void publishRealtimeChannelMessage(
+            @NonNull MethodCall call, @NonNull MethodChannel.Result result
+    ) {
+        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
+            try {
+                String channelName = (String) ablyMessage.message.get("channel");
+                ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
+                Channel channel = ablyLibrary
+                        .getRealtime(ablyMessage.handle)
+                        .channels
+                        .get(channelName, channelOptions);
+
+                Message channelMessage = (Message) ablyMessage.message.get("message");
+                Message[] channelMessages = (Message[]) ablyMessage.message.get("messages");
+                String name = (String) ablyMessage.message.get("name");
+                Object data = ablyMessage.message.get("data");
+                CompletionListener listener = new CompletionListener() {
+                    @Override
+                    public void onSuccess() {
+                        result.success(null);
+                    }
+
+                    @Override
+                    public void onError(ErrorInfo reason) {
+                        handleAblyException(result, AblyException.fromErrorInfo(reason));
+                    }
+                };
+
+                if(channelMessage != null) {
+                    channel.publish(channelMessage, listener);
+                } else if(channelMessages != null) {
+                    channel.publish(channelMessages, listener);
+                } else {
+                    channel.publish(name, data, listener);
+                }
                 result.success(null);
             }catch(AblyException e){
                 handleAblyException(result, e);
