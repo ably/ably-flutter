@@ -18,6 +18,7 @@ NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
 NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChannel";
 NSString *const AblyPlatformMethod_detachRealtimeChannel= @"detachRealtimeChannel";
 NSString *const AblyPlatformMethod_setRealtimeChannelOptions= @"setRealtimeChannelOptions";
+NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
