@@ -58,7 +58,7 @@ class Codec extends StandardMessageCodec {
             // Other ably objects
             CodecTypes.clientOptions: _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
-            CodecTypes.message: _CodecPair<Message>(null, decodeChannelMessage),
+            CodecTypes.message: _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
 
             // Events - Connection
             CodecTypes.connectionStateChange: _CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
@@ -218,6 +218,20 @@ class Codec extends StandardMessageCodec {
       writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
       writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
       writeToJson(jsonMap, TxAblyEventMessage.message, message);
+      return jsonMap;
+    }
+
+    Map<String, dynamic> encodeChannelMessage(final Message v){
+      if(v==null) return null;
+      Map<String, dynamic> jsonMap = {};
+      writeToJson(jsonMap, TxMessage.name, v.name);
+      writeToJson(jsonMap, TxMessage.clientId, v.clientId);
+      writeToJson(jsonMap, TxMessage.data, v.data);
+      writeToJson(jsonMap, TxMessage.id, v.id);
+      writeToJson(jsonMap, TxMessage.timestamp, v.timestamp.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxMessage.connectionId, v.connectionId);
+      writeToJson(jsonMap, TxMessage.encoding, v.encoding);
+      writeToJson(jsonMap, TxMessage.extras, v.extras);
       return jsonMap;
     }
 
