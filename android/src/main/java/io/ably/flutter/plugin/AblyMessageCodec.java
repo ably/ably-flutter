@@ -67,7 +67,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 put(PlatformConstants.CodecTypes.ablyEventMessage, new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
                 put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::decodeClientOptions));
                 put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
-                put(PlatformConstants.CodecTypes.message, new CodecPair<>(self::encodeChannelMessage, null));
+                put(PlatformConstants.CodecTypes.message, new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
                 put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
                 put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::encodeChannelStateChange, null));
             }
@@ -137,6 +137,20 @@ public class AblyMessageCodec extends StandardMessageCodec {
         } else if(value instanceof JsonArray){
             super.writeValue(stream, (new Gson()).fromJson(value, ArrayList.class));
         }
+    }
+
+    /**
+     * Converts Map to JsonObject, ArrayList to JsonArray and
+     * returns null if these 2 types are a no-match
+     * */
+    private JsonElement readValueAsJsonElement(final Object object) {
+        Gson gson = new Gson();
+        if(object instanceof Map) {
+            return gson.fromJson(gson.toJson(object, Map.class), JsonObject.class);
+        } else if (object instanceof ArrayList){
+            return gson.fromJson(gson.toJson(object, ArrayList.class), JsonArray.class);
+        }
+        return null;
     }
 
     /**
@@ -241,6 +255,26 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = (long)v);
         // nonce is not supported in ably-java
         // Track @ https://github.com/ably/ably-flutter/issues/14
+        return o;
+    }
+
+    private Message decodeChannelMessage(Map<String, Object> jsonMap){
+        if(jsonMap==null) return null;
+        final Message o = new Message();
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.id, v -> o.id = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.clientId, v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.connectionId, v -> o.connectionId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.timestamp, v -> o.timestamp = (long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> {
+            JsonElement json = readValueAsJsonElement(v);
+            o.data = (json==null)?v:json;
+        });
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.encoding, v -> o.encoding = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> {
+            Gson gson = new Gson();
+            o.extras = gson.fromJson(gson.toJson(v, Map.class), JsonObject.class);
+        });
         return o;
     }
 

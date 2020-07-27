@@ -64,12 +64,12 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     dynamic data
   }) async {
     try {
-      await this.invoke(PlatformMethod.publish, {
-        //TODO support Message and List<Message>
-        ..._payload,
-        "name": name,
-        "message": data
-      });
+      Map<String, dynamic> eventPayload = {..._payload};
+      if(message!=null) eventPayload['message'] = message;
+      if(messages!=null) eventPayload['messages'] = messages;
+      if(name!=null) eventPayload['name'] = name;
+      if(data!=null) eventPayload['data'] = data;
+      await this.invoke(PlatformMethod.publishRealtimeChannelMessage, data);
     } on PlatformException catch (pe) {
       throw spec.AblyException(pe.code, pe.message, pe.details);
     }
