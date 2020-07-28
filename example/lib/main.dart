@@ -427,7 +427,8 @@ class _MyAppState extends State<MyApp> {
               Divider(),
               createRealtimeButton(),
               Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-              Text('Connection Status: $_realtimeConnectionState'),
+              Text('Connection State: $_realtimeConnectionState'),
+              Text('Channel State: $_realtimeChannelState'),
               Row(
                 children: <Widget>[
                   Expanded(child: createRTCConnectButton(),),
