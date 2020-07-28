@@ -151,6 +151,14 @@ UnSubscribing from channel messages
 await channelMessageSubscription.cancel();
 ```
 
+Publishing channel messages
+
+```dart
+await channel.publish(name: "oogway", data: "Yesterday is history, tomorrow is a mystery, but today is a gift");
+await channel.publish(name: "oogway", data: {"Yesterday": "history", "tomorrow": "mystery", "today": "gift"});
+await channel.publish(name: "oogway", data: [{"Yesterday": {"is": "history"}, "tomorrow": {"mystery": true}, "day_after": null}, "today", "gift"]);
+```
+
 ## Caveats
 
 #### RTE6a compliance
