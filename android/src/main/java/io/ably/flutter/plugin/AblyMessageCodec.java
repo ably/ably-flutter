@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
@@ -143,7 +142,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
      * Converts Map to JsonObject, ArrayList to JsonArray and
      * returns null if these 2 types are a no-match
      * */
-    private JsonElement readValueAsJsonElement(final Object object) {
+    static JsonElement readValueAsJsonElement(final Object object) {
         Gson gson = new Gson();
         if(object instanceof Map) {
             return gson.fromJson(gson.toJson(object, Map.class), JsonObject.class);
