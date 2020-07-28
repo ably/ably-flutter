@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
         [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
         [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
+        [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -99,7 +100,7 @@ static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(
     ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
 }
 
-static AblyCodecDecoder readClientOptions = ^AblyFlutterMessage*(NSDictionary *const dictionary) {
+static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *const dictionary) {
     ARTClientOptions *const o = [ARTClientOptions new];
 
     // AuthOptions (super class of ClientOptions)
@@ -170,5 +171,16 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterMessage*(NSDictionary *c
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
     return o;
 }
+
+static AblyCodecDecoder readChannelMessage = ^ARTMessage*(NSDictionary *const dictionary) {
+    ARTMessage *const o = [ARTMessage new];
+    READ_VALUE(o, id, dictionary, TxMessage_id);
+    READ_VALUE(o, name, dictionary, TxMessage_name);
+    READ_VALUE(o, clientId, dictionary, TxMessage_clientId);
+    READ_VALUE(o, encoding, dictionary, TxMessage_encoding);
+    READ_VALUE(o, extras, dictionary, TxMessage_extras);
+    READ_VALUE(o, data, dictionary, TxMessage_data);
+    return o;
+};
 
 @end

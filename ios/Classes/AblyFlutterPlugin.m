@@ -143,6 +143,40 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *co
     }];
 };
 
+static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const data = message.message;
+    NSNumber *const realtimeHandle = data.handle;
+    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
+
+    NSDictionary *const realtimePayload = data.message;
+    NSString *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
+    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            result(nil);
+        }
+    };
+
+    NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*)[realtimePayload objectForKey:@"messages"];
+    if(messages){
+        [channel publish:messages callback:callback];
+    }else{
+        [channel publish:(NSString*)[realtimePayload objectForKey:@"name"]
+                    data:(NSString*)[realtimePayload objectForKey:@"data"]
+                callback:callback];
+    }
+};
+
 static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     // cocoa library doesn't support setOptions yet!
     result(nil);
@@ -205,6 +239,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
         AblyPlatformMethod_attachRealtimeChannel: _attachRealtimeChannel,
         AblyPlatformMethod_detachRealtimeChannel: _detachRealtimeChannel,
         AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
+        AblyPlatformMethod_publishRealtimeChannelMessage: _publishRealtimeChannelMessage,
     };
     
     _nextRegistration = 1;
