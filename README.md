@@ -154,9 +154,20 @@ await channelMessageSubscription.cancel();
 Publishing channel messages
 
 ```dart
+//publish name and data
 await channel.publish(name: "oogway", data: "Yesterday is history, tomorrow is a mystery, but today is a gift");
 await channel.publish(name: "oogway", data: {"Yesterday": "history", "tomorrow": "mystery", "today": "gift"});
 await channel.publish(name: "oogway", data: [{"Yesterday": {"is": "history"}, "tomorrow": {"mystery": true}, "day_after": null}, "today", "gift"]);
+
+//publish single message
+await channel.publish(message: ably.Message()..name = "oogway"..data = {"hello": "world"});
+
+//publish multiple messages
+await channel.publish(messages: [
+  ably.Message()..name="oogway"..data = {"yesterday": "history"},
+  ably.Message()..name="oogway"..data = {"tomorrow": "mystery"},
+  ably.Message()..name="oogway"..data = {"today": "gift"}
+]);
 ```
 
 ## Caveats
