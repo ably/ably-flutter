@@ -80,6 +80,8 @@ class Codec extends StandardMessageCodec {
     int getCodecType(final dynamic value){
         if (value is ClientOptions) {
             return CodecTypes.clientOptions;
+        } else if (value is Message) {
+          return CodecTypes.message;
         } else if (value is ErrorInfo) {
             return CodecTypes.errorInfo;
         } else if (value is AblyMessage) {
@@ -228,7 +230,7 @@ class Codec extends StandardMessageCodec {
       writeToJson(jsonMap, TxMessage.clientId, v.clientId);
       writeToJson(jsonMap, TxMessage.data, v.data);
       writeToJson(jsonMap, TxMessage.id, v.id);
-      writeToJson(jsonMap, TxMessage.timestamp, v.timestamp.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxMessage.timestamp, v.timestamp?.millisecondsSinceEpoch);
       writeToJson(jsonMap, TxMessage.connectionId, v.connectionId);
       writeToJson(jsonMap, TxMessage.encoding, v.encoding);
       writeToJson(jsonMap, TxMessage.extras, v.extras);
