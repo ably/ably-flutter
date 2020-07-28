@@ -65,8 +65,11 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   }) async {
     try {
       Map<String, dynamic> eventPayload = {..._payload};
-      if(message!=null) eventPayload['message'] = message;
-      if(messages!=null) eventPayload['messages'] = messages;
+      if(messages!=null) {
+        eventPayload['messages'] = messages;
+      } else if(message!=null) {
+        eventPayload['messages'] = [message];
+      }
       if(name!=null) eventPayload['name'] = name;
       if(data!=null) eventPayload['data'] = data;
       await this.invoke(PlatformMethod.publishRealtimeChannelMessage, eventPayload);

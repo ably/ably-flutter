@@ -275,10 +275,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         .channels
                         .get(channelName, channelOptions);
 
-                Message channelMessage = (Message) ablyMessage.message.get("message");
-                ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
-                String name = (String) ablyMessage.message.get("name");
-                Object data = ablyMessage.message.get("data");
                 CompletionListener listener = new CompletionListener() {
                     @Override
                     public void onSuccess() {
@@ -290,13 +286,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         handleAblyException(result, AblyException.fromErrorInfo(reason));
                     }
                 };
-                if(channelMessage != null) {
-                    channel.publish(channelMessage, listener);
-                } else if(channelMessages != null) {
+
+                ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
+                if(channelMessages != null) {
                     Message[] messages = new Message[channelMessages.size()];
                     messages = channelMessages.toArray(messages);
                     channel.publish(messages, listener);
                 } else {
+                    String name = (String) ablyMessage.message.get("name");
+                    Object data = ablyMessage.message.get("data");
                     JsonElement json = (data==null)?null:AblyMessageCodec.readValueAsJsonElement(data);
                     channel.publish(name, (json==null)?data:json, listener);
                 }
