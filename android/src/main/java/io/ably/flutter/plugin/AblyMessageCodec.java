@@ -262,8 +262,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final Message o = new Message();
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.id, v -> o.id = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.clientId, v -> o.clientId = (String)v);
-        readValueFromJson(jsonMap, PlatformConstants.TxMessage.connectionId, v -> o.connectionId = (String)v);
-        readValueFromJson(jsonMap, PlatformConstants.TxMessage.timestamp, v -> o.timestamp = (long)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> {
             JsonElement json = readValueAsJsonElement(v);
