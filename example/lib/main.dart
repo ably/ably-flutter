@@ -36,6 +36,14 @@ class _MyAppState extends State<MyApp> {
   StreamSubscription<ably.Message> channelMessageSubscription;
   ably.Message channelMessage;
 
+  //Storing different message types here to be publishable
+  List<dynamic> messagesToPublish = [
+    null,
+    "A simple panda...",
+    {"I am": null, "and": {"also": "nested", "too": {"deep": true}}},
+    [42, {"are": "you"}, "ok?", false, {"I am": null, "and": {"also": "nested", "too": {"deep": true}}}]
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -332,7 +340,7 @@ class _MyAppState extends State<MyApp> {
   Widget createChannelSubscribeButton() => FlatButton(
     onPressed: (_realtimeChannelState==ably.ChannelState.attached && channelMessageSubscription==null)?() {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
-      Stream<ably.Message> messageStream = channel.subscribe(name: 'message-data');
+      Stream<ably.Message> messageStream = channel.subscribe(names: ['message-data', 'Hello']);
       channelMessageSubscription = messageStream.listen((ably.Message message){
         print("Channel message recieved: $message\n"
           "\tisNull: ${message.data == null}\n"
@@ -357,6 +365,30 @@ class _MyAppState extends State<MyApp> {
       });
     }:null,
     child: Text('Unsubscribe'),
+  );
+
+  int typeCounter = 0;
+  int realtimePublishCounter = 0;
+  Widget createChannelPublishButton() => FlatButton(
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() async {
+      print('Sendimg rest message...');
+      dynamic data = messagesToPublish[(realtimePublishCounter++ % messagesToPublish.length)];
+      ably.Message m = ably.Message()..data=data..name='Hello';
+      if(typeCounter%3 == 0){
+        await _realtime.channels.get('test-channel').publish(name: 'Hello', data: data);
+      } else if (typeCounter%3 == 1) {
+        await _realtime.channels.get('test-channel').publish(message: m);
+      } else if (typeCounter%3 == 2) {
+        await _realtime.channels.get('test-channel').publish(messages: [m, m]);
+      }
+      if(realtimePublishCounter!=0 && realtimePublishCounter % messagesToPublish.length == 0){
+        typeCounter++;
+      }
+      print('Realtime message sent.');
+      setState(() {});
+    }:null,
+    color: Colors.yellow,
+    child: Text('Publish: ${messagesToPublish[(realtimePublishCounter % messagesToPublish.length)]}'),
   );
 
   int msgCounter = 0;
@@ -412,6 +444,7 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
               Text('Message from channel: ${((channelMessage == null) ? '-' : channelMessage.data)}'),
+              createChannelPublishButton(),
               Divider(),
               createRestButton(),
               Text('Rest: ${((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())}'),
