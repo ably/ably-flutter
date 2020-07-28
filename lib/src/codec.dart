@@ -226,12 +226,12 @@ class Codec extends StandardMessageCodec {
     Map<String, dynamic> encodeChannelMessage(final Message v){
       if(v==null) return null;
       Map<String, dynamic> jsonMap = {};
+      // Note: connectionId and timestamp are automatically set by platform
+      // So they are suppressed on dart side
       writeToJson(jsonMap, TxMessage.name, v.name);
       writeToJson(jsonMap, TxMessage.clientId, v.clientId);
       writeToJson(jsonMap, TxMessage.data, v.data);
       writeToJson(jsonMap, TxMessage.id, v.id);
-      writeToJson(jsonMap, TxMessage.timestamp, v.timestamp?.millisecondsSinceEpoch);
-      writeToJson(jsonMap, TxMessage.connectionId, v.connectionId);
       writeToJson(jsonMap, TxMessage.encoding, v.encoding);
       writeToJson(jsonMap, TxMessage.extras, v.extras);
       return jsonMap;
