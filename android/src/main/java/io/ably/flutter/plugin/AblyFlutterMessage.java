@@ -1,5 +1,7 @@
 package io.ably.flutter.plugin;
 
+import androidx.annotation.NonNull;
+
 class AblyFlutterMessage<T> {
     final Long handle;
     final T message;
@@ -11,6 +13,13 @@ class AblyFlutterMessage<T> {
         this.handle = handle;
         this.message = message;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "{message=" + (message.toString()) + ", handle=" + (handle==null?"":handle.toString()) + "}";
+    }
+
 }
 
 
