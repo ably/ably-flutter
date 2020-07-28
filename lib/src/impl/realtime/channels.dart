@@ -64,7 +64,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
       if(messages!=null) eventPayload['messages'] = messages;
       if(name!=null) eventPayload['name'] = name;
       if(data!=null) eventPayload['data'] = data;
-      await this.invoke(PlatformMethod.publishRealtimeChannelMessage, data);
+      await this.invoke(PlatformMethod.publishRealtimeChannelMessage, eventPayload);
     } on PlatformException catch (pe) {
       throw spec.AblyException(pe.code, pe.message, pe.details);
     }
