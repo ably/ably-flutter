@@ -28,34 +28,34 @@ typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * c
 
 NS_ASSUME_NONNULL_END
 
-static FlutterHandler _getPlatformVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getPlatformVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
 };
 
-static FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
-static FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     [plugin registerWithCompletionHandler:result];
 };
 
-static FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     result([ably createRestWithOptions:message.message]);
 };
 
-static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterMessage *const messageData = message.message;
-    NSMutableDictionary<NSString *, NSObject *>* _dataMap = messageData.message;
-    NSString *channelName = (NSString*)[_dataMap objectForKey:@"channel"];
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey:@"channel"];
     NSString *const eventName = (NSString*)[_dataMap objectForKey:@"name"];
     NSObject *const eventData = (NSString*)[_dataMap objectForKey:@"message"];
-    ARTRest *client = [ably getRest:messageData.handle];
-    ARTRestChannel *channel = [client.channels get:channelName];
+    ARTRest *const client = [ably getRest:messageData.handle];
+    ARTRestChannel *const channel = [client.channels get:channelName];
 
     [channel publish:eventName data:eventData callback:^(ARTErrorInfo *_Nullable error){
         if(error){
@@ -71,13 +71,13 @@ static FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const plugi
     }];
 };
 
-static FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     result([ably createRealtimeWithOptions:message.message]);
 };
 
-static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     NSNumber *const handle = message.message;
@@ -85,7 +85,7 @@ static FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, 
     result(nil);
 };
 
-static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     NSNumber *const handle = message.message;
@@ -93,18 +93,17 @@ static FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, Fl
     result(nil);
 };
 
-static FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterMessage *const data = message.message;
     NSNumber *const realtimeHandle = data.handle;
-    ARTRealtime* realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
+    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
     
     NSDictionary *const realtimePayload = data.message;
-    NSString *channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
-    ARTChannelOptions *channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
-    ARTRealtimeChannel *channel;
-    channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    NSString *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
+    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     [channel attach:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
@@ -119,18 +118,17 @@ static FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const pl
     }];
 };
 
-static FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterMessage *const data = message.message;
     NSNumber *const realtimeHandle = data.handle;
-    ARTRealtime* realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
+    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
     
     NSDictionary *const realtimePayload = data.message;
-    NSString *channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
-    ARTChannelOptions *channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
-    ARTRealtimeChannel *channel;
-    channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    NSString  *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
+    ARTChannelOptions  *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     [channel detach:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
@@ -145,7 +143,7 @@ static FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const pl
     }];
 };
 
-static FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     // cocoa library doesn't support setOptions yet!
     result(nil);
 };
