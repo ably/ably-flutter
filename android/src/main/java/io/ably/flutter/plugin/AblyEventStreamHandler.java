@@ -111,24 +111,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         }
 
         public void onMessage(Message message){
-            System.out.print("message received with data: ");
-            System.out.println(message.data);
-            try {
-//                if(message.data instanceof JsonElement){
-//                   if(message.data instanceof JsonObject){
-//                       message.data.toMap();
-//                   }
-//                }
-//                {@link JsonObject
-//                }, a
-//                        * {@link JsonArray}, a {@link JsonPrimitive
-//                } or a {@link JsonNull
-//                }
-                message.decode(null);
-                eventSink.success(message);
-            }catch (MessageDecodeException e){
-                handleAblyException(eventSink, e);
-            }
+            eventSink.success(message);
         }
 
     }
