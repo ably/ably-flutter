@@ -143,7 +143,7 @@ StreamSubscription<ably.Message> channelMessageSubscription = messageStream.list
 });
 ```
 
-_use `channel.subscribe(name: "shifu")` or `channel.subscribe(names: ["shifu", "oogway"])` to listen to specific named messages_
+_use `channel.subscribe(name: "event1")` or `channel.subscribe(names: ["event1", "event2"])` to listen to specific named messages_
 
 UnSubscribing from channel messages
 
