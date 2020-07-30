@@ -8,6 +8,8 @@ List<Map<String, dynamic>> _types = [
   // by a subtype value - perhaps of a wider type.
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
+  //
+  // NOTE: "value" must be unique across types
 
   // Ably flutter plugin protocol message
   {"name": "ablyMessage", "value": 128},
