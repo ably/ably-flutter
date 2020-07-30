@@ -155,18 +155,17 @@ Publishing channel messages
 
 ```dart
 //publish name and data
-await channel.publish(name: "oogway", data: "Yesterday is history, tomorrow is a mystery, but today is a gift");
-await channel.publish(name: "oogway", data: {"Yesterday": "history", "tomorrow": "mystery", "today": "gift"});
-await channel.publish(name: "oogway", data: [{"Yesterday": {"is": "history"}, "tomorrow": {"mystery": true}, "day_after": null}, "today", "gift"]);
+await channel.publish(name: "event1", data: "hello world");
+await channel.publish(name: "event1", data: {"hello": "world", "hey": "ably"});
+await channel.publish(name: "event1", data: [{"hello": {"great": "world"}, "ably": {"serious": true, "realtime": true}, "key3": null}, "string4", "string5"]);
 
 //publish single message
-await channel.publish(message: ably.Message()..name = "oogway"..data = {"hello": "world"});
+await channel.publish(message: ably.Message()..name = "event1"..data = {"hello": "world"});
 
 //publish multiple messages
 await channel.publish(messages: [
-  ably.Message()..name="oogway"..data = {"yesterday": "history"},
-  ably.Message()..name="oogway"..data = {"tomorrow": "mystery"},
-  ably.Message()..name="oogway"..data = {"today": "gift"}
+  ably.Message()..name="event1"..data = {"hello": "ably"},
+  ably.Message()..name="event1"..data = {"hello": "world"}
 ]);
 ```
 
