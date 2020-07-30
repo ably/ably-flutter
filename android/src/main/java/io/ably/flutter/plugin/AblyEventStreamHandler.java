@@ -152,8 +152,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     break;
                 case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
                     assert eventMessage.message!=null : "event message is missing";
-                    Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
-                    String channelName = (String) eventPayload.get("channel");
+                    final Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
+                    final String channelName = (String) eventPayload.get("channel");
                     channelOptions = (ChannelOptions) eventPayload.get("options");
                     try {
                         final Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName, channelOptions);
@@ -165,11 +165,11 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     break;
                 case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
                     assert eventMessage.message!=null : "event message is missing";
-                    Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
-                    String messageChannelName = (String) messagePayload.get("channel");
+                    final Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
+                    final String messageChannelName = (String) messagePayload.get("channel");
                     channelOptions = (ChannelOptions) messagePayload.get("options");
                     try {
-                        Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName, channelOptions);
+                        final Channel channel = ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName, channelOptions);
                         channelMessageListener = new PluginChannelMessageListener(eventSink);
                         channel.subscribe(channelMessageListener);
                     } catch (AblyException ablyException) {
@@ -207,8 +207,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                 break;
             case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
                 assert eventMessage.message!=null : "event message is missing";
-                Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
-                String messageChannelName = (String) messagePayload.get("channel");
+                final Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
+                final String messageChannelName = (String) messagePayload.get("channel");
                 ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName).unsubscribe(channelMessageListener);
                 break;
         }
