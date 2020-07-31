@@ -28,7 +28,6 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     this.state = spec.ChannelState.initialized;
     this.on().listen((ChannelStateChange event) {
       this.state = event.current;
-      print("updating state! ${this.state}");
     });
   }
 
