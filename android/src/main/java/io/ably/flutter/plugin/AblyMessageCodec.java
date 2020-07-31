@@ -221,10 +221,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpOpenTimeout, v -> o.httpOpenTimeout = (Integer)v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> o.httpRequestTimeout = (Integer)v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> o.httpMaxRetryCount = (Integer)v);
-        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> o.realtimeRequestTimeout = (Long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> o.realtimeRequestTimeout = readValueAsLong(v));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> o.fallbackHosts = (String[])v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> o.fallbackHostsUseDefault = (Boolean)v);
-        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = (Long)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = readValueAsLong(v));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = readTokenParams((Map<String, Object>)v));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer)v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[])v);
