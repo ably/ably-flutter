@@ -137,8 +137,8 @@ await channel.detach();
 Subscribing to channel messages
 
 ```dart
-Stream<ably.Message> messageStream = channel.subscribe();
-StreamSubscription<ably.Message> channelMessageSubscription = messageStream.listen((ably.Message message){
+var messageStream = channel.subscribe();
+var channelMessageSubscription = messageStream.listen((ably.Message message){
   print("New message arrived ${message.data}");
 });
 ```
