@@ -1,4 +1,5 @@
-import 'dart:async';
+// NOTE: this file is not being used anywhere, yet
+// this could serve as a reference for writing nested listeners
 
 import 'package:ably_flutter_plugin/ably.dart' as ably;
 
@@ -12,14 +13,14 @@ listenRealtimeConnection(ably.Realtime realtime) async {
   //One can listen from multiple listeners on the same event,
   // and must cancel each subscription one by one
   //RETAINING LISTENER - α
-  StreamSubscription<ably.ConnectionStateChange> alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+  var alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
     print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}'
       '\nReason: ${stateChange.reason}');
   });
 
   //DISPOSE ON CONNECTED
-    Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
-    StreamSubscription<ably.ConnectionStateChange> omegaSubscription;
+    var stream = await realtime.connection.on();
+    var omegaSubscription;
     omegaSubscription = stream.listen((ably.ConnectionStateChange stateChange) async {
       print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
       if (stateChange.event == ably.ConnectionEvent.connected) {
@@ -28,11 +29,11 @@ listenRealtimeConnection(ably.Realtime realtime) async {
     });
 
     //RETAINING LISTENER - β
-    StreamSubscription<ably.ConnectionStateChange> betaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    var betaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
       // NESTED LISTENER - ξ
       // will be registered only when connected event is received by β listener
-      StreamSubscription<ably.ConnectionStateChange> etaSubscription = realtime.connection.on().listen((
+      var etaSubscription = realtime.connection.on().listen((
         ably.ConnectionStateChange stateChange) async {
         // k ξ listeners will be registered
         // and each listener will be called `n-k` times respectively
@@ -41,8 +42,8 @@ listenRealtimeConnection(ably.Realtime realtime) async {
       });
     });
 
-    StreamSubscription<ably.ConnectionStateChange> preZetaSubscription;
-    StreamSubscription<ably.ConnectionStateChange> postZetaSubscription;
+    var preZetaSubscription;
+    var postZetaSubscription;
     preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       //This listener "pre ζ" will be cancelled from γ
       print('NESTED LISTENER "pre ζ": ${stateChange.event}');
@@ -50,7 +51,7 @@ listenRealtimeConnection(ably.Realtime realtime) async {
 
 
     //RETAINING LISTENER - γ
-    StreamSubscription<ably.ConnectionStateChange> gammaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    var gammaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
       if (stateChange.event == ably.ConnectionEvent.connected) {
         await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
