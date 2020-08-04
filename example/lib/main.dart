@@ -48,9 +48,7 @@ class _MyAppState extends State<MyApp> {
     //
     // See: https://api.flutter.dev/flutter/widgets/State/dispose.html
     channelStateChangeSubscription.cancel();
-    connectionStateChangeSubscriptions.forEach((StreamSubscription<ably.ConnectionStateChange> subscription) {
-      subscription.cancel();
-    });
+    connectionStateChangeSubscriptions.forEach((s) => s.cancel());
     super.dispose();
   }
 
