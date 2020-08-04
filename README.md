@@ -157,7 +157,7 @@ Publishing channel messages
 //publish name and data
 await channel.publish(name: "event1", data: "hello world");
 await channel.publish(name: "event1", data: {"hello": "world", "hey": "ably"});
-await channel.publish(name: "event1", data: [{"hello": {"world": true}, "ably": {"serious": "realtime"}, "key3": null}]);
+await channel.publish(name: "event1", data: [{"hello": {"world": true}, "ably": {"serious": "realtime"}]);
 
 //publish single message
 await channel.publish(message: ably.Message()..name = "event1"..data = {"hello": "world"});
