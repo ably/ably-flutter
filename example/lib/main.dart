@@ -312,14 +312,21 @@ class _MyAppState extends State<MyApp> {
       dynamic data = messagesToPublish[(realtimePublishCounter++ % messagesToPublish.length)];
       ably.Message m = ably.Message()..data=data..name='Hello';
       try {
-        if (typeCounter % 3 == 0) {
-          await _realtime.channels.get('test-channel').publish(
-            name: 'Hello', data: data);
-        } else if (typeCounter % 3 == 1) {
-          await _realtime.channels.get('test-channel').publish(message: m);
-        } else if (typeCounter % 3 == 2) {
-          await _realtime.channels.get('test-channel').publish(
-            messages: [m, m]);
+        switch(typeCounter % 3){
+          case 0:
+            await _realtime.channels
+              .get('test-channel')
+              .publish(name: 'Hello', data: data);
+            break;
+          case 1:
+            await _realtime.channels
+              .get('test-channel')
+              .publish(message: m);
+            break;
+          case 2:
+            await _realtime.channels
+              .get('test-channel')
+              .publish(messages: [m, m]);
         }
         if (realtimePublishCounter != 0 &&
           realtimePublishCounter % messagesToPublish.length == 0) {
