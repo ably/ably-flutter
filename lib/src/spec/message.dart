@@ -19,7 +19,7 @@ class Message {
   String encoding;
 
   /// The message payload
-  dynamic data;
+  Object data;
 
   /// The event name, if available
   String name;
