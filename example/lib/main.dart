@@ -164,9 +164,8 @@ class _MyAppState extends State<MyApp> {
     };
     clientOptions.autoConnect = false;
 
-    ably.Realtime realtime;
     try {
-      realtime = ably.Realtime(options: clientOptions);
+      ably.Realtime realtime = ably.Realtime(options: clientOptions);
       listenRealtimeConnection(realtime);
       ably.RealtimeChannel channel = realtime.channels.get("test-channel");
       listenRealtimeChannel(channel);
