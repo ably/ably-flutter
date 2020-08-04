@@ -115,21 +115,9 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) {
-    Stream<ChannelStateChange> stream = listen(PlatformMethod.onRealtimeChannelStateChanged, _payload).transform<ChannelStateChange>(
-      StreamTransformer.fromHandlers(
-        handleData: (dynamic value, EventSink<ChannelStateChange> sink){
-          ChannelStateChange stateChange = value as ChannelStateChange;
-          if (channelEvent!=null) {
-            if (stateChange.event==channelEvent) {
-              sink.add(stateChange);
-            }
-          } else {
-            sink.add(stateChange);
-          }
-        }
-      )
-    );
-    return stream;
+    return listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
+      .map((stateChange) => stateChange as ChannelStateChange)
+      .where((stateChange) => channelEvent==null || stateChange.event==channelEvent);
   }
 
   @override
@@ -137,25 +125,12 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     String name,
     List<String> names
   }) {
-    Stream<spec.Message> stream = listen(PlatformMethod.onRealtimeChannelMessage, _payload).transform<spec.Message>(
-      StreamTransformer.fromHandlers(
-        handleData: (dynamic value, EventSink<spec.Message> sink){
-          spec.Message message = value as spec.Message;
-          if (names!=null){
-            if(names.contains(message.name)){
-              sink.add(message);
-            }
-          } else if (name!=null) {
-            if(message.name==name){
-              sink.add(message);
-            }
-          } else {
-            sink.add(message);
-          }
-        }
-      )
-    );
-    return stream;
+    final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
+    return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
+      .map((message) => message as spec.Message)
+      .where((message) =>
+          subscribedNames.isEmpty ||
+          subscribedNames.any((n) => n == message.name));
   }
 
 }
