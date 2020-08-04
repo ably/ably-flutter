@@ -344,7 +344,6 @@ class _MyAppState extends State<MyApp> {
         });
       });
       print("Channel messages subscribed");
-      setState((){});
     }:null,
     child: Text('Subscribe'),
   );
