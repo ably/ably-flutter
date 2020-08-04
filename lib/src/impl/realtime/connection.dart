@@ -42,22 +42,10 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   @override
   Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) {
-    Stream<ConnectionStateChange> stream = listen(PlatformMethod.onRealtimeConnectionStateChanged).transform<ConnectionStateChange>(
-        StreamTransformer.fromHandlers(
-            handleData: (dynamic value, EventSink<ConnectionStateChange> sink){
-              ConnectionStateChange stateChange = value as ConnectionStateChange;
-              if (connectionEvent!=null) {
-                if (stateChange.event==connectionEvent) {
-                  sink.add(stateChange);
-                }
-              } else {
-                sink.add(stateChange);
-              }
-
-            }
-        )
-    );
-    return stream;
+    return listen(PlatformMethod.onRealtimeConnectionStateChanged)
+      .map((connectionEvent) => connectionEvent as ConnectionStateChange)
+      .where((connectionStateChange) =>
+        connectionEvent==null || connectionStateChange.event==connectionEvent);
   }
 
   @override
