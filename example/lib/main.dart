@@ -31,9 +31,8 @@ class _MyAppState extends State<MyApp> {
   ably.Rest _rest;
   ably.ConnectionState _realtimeConnectionState;
   ably.ChannelState _realtimeChannelState;
-  List<StreamSubscription<ably.ConnectionStateChange>> connectionStateChangeSubscriptions;
-  StreamSubscription<ably.ChannelStateChange> channelStateChangeSubscription;
-  StreamSubscription<ably.Message> channelMessageSubscription;
+  var _subscriptionsToDispose = <StreamSubscription>[];
+  StreamSubscription<ably.Message> _channelMessageSubscription;
   ably.Message channelMessage;
 
   //Storing different message types here to be publishable
@@ -57,8 +56,7 @@ class _MyAppState extends State<MyApp> {
     // implemented in the actual application
     //
     // See: https://api.flutter.dev/flutter/widgets/State/dispose.html
-    channelStateChangeSubscription.cancel();
-    connectionStateChangeSubscriptions.forEach((s) => s.cancel());
+    _subscriptionsToDispose.forEach((s) => s.cancel());
     super.dispose();
   }
 
@@ -185,22 +183,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   listenRealtimeConnection(ably.Realtime realtime) async {
-    StreamSubscription<ably.ConnectionStateChange> alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    var alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('${DateTime.now()} : ConnectionStateChange event: ${stateChange.event}'
         '\nReason: ${stateChange.reason}');
       setState(() { _realtimeConnectionState = stateChange.current; });
     });
-    connectionStateChangeSubscriptions = [ alphaSubscription ];
+    _subscriptionsToDispose.add(alphaSubscription);
   }
 
   listenRealtimeChannel(ably.RealtimeChannel channel) async {
-    channelStateChangeSubscription =  channel.on().listen((ably.ChannelStateChange stateChange){
+    var _channelStateChangeSubscription =  channel.on().listen((ably.ChannelStateChange stateChange){
       print("ChannelStateChange: ${stateChange.current}"
         "\nReason: ${stateChange.reason}");
       setState((){
         _realtimeChannelState = channel.state;
       });
     });
+    _subscriptionsToDispose.add(_channelStateChangeSubscription);
   }
 
   // https://github.com/dart-lang/sdk/issues/37498
@@ -276,10 +275,10 @@ class _MyAppState extends State<MyApp> {
   );
 
   Widget createChannelSubscribeButton() => FlatButton(
-    onPressed: (_realtimeChannelState==ably.ChannelState.attached && channelMessageSubscription==null)?() {
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached && _channelMessageSubscription==null)?() {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
       Stream<ably.Message> messageStream = channel.subscribe(names: ['message-data', 'Hello']);
-      channelMessageSubscription = messageStream.listen((ably.Message message){
+      _channelMessageSubscription = messageStream.listen((ably.Message message){
         print("Channel message recieved: $message\n"
           "\tisNull: ${message.data == null}\n"
           "\tisString ${message.data is String}\n"
@@ -290,16 +289,17 @@ class _MyAppState extends State<MyApp> {
         });
       });
       print("Channel messages subscribed");
+      _subscriptionsToDispose.add(_channelMessageSubscription);
     }:null,
     child: Text('Subscribe'),
   );
 
   Widget createChannelUnSubscribeButton() => FlatButton(
-    onPressed: (channelMessageSubscription!=null)?() async {
-      await channelMessageSubscription.cancel();
+    onPressed: (_channelMessageSubscription!=null)?() async {
+      await _channelMessageSubscription.cancel();
       print("Channel messages ubsubscribed");
       setState((){
-        channelMessageSubscription = null;
+        _channelMessageSubscription = null;
       });
     }:null,
     child: Text('Unsubscribe'),
