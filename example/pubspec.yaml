@@ -22,6 +22,12 @@ dev_dependencies:
   ably_flutter_plugin:
     path: ../
 
+  # Integration tests
+  flutter_driver:
+    sdk: flutter
+
+  test: any
+
   # Stricter Linting
   pedantic: ^1.0.0
 
