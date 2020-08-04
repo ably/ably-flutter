@@ -46,15 +46,10 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     return null;
   }
 
-  Map<String, dynamic> get _payload {
-    Map<String, dynamic> payload = {
-      "channel": this.name
-    };
-    if(options!=null){
-      payload["options"] = options;
-    }
-    return payload;
-  }
+  Map<String, dynamic> get _payload => {
+    "channel": this.name,
+    if(options!=null) "options": options
+  };
 
   @override
   Future<void> publish({
