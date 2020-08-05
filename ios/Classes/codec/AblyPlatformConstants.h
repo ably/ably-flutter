@@ -6,13 +6,15 @@
 @import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
-    ablyMessageCodecType = 128,
-    ablyEventMessageCodecType = 129,
-    clientOptionsCodecType = 130,
-    messageCodecType = 131,
-    errorInfoCodecType = 144,
-    connectionStateChangeCodecType = 201,
-    channelStateChangeCodecType = 202,
+  ablyMessageCodecType = 128,
+  ablyEventMessageCodecType = 129,
+  clientOptionsCodecType = 130,
+  messageCodecType = 131,
+  tokenParamsCodecType = 132,
+  tokenDetailsCodecType = 133,
+  errorInfoCodecType = 144,
+  connectionStateChangeCodecType = 201,
+  channelStateChangeCodecType = 202,
 };
 
 
@@ -20,6 +22,7 @@ typedef NS_ENUM(UInt8, _Value) {
 extern NSString *const AblyPlatformMethod_getPlatformVersion;
 extern NSString *const AblyPlatformMethod_getVersion;
 extern NSString *const AblyPlatformMethod_registerAbly;
+extern NSString *const AblyPlatformMethod_authCallback;
 extern NSString *const AblyPlatformMethod_createRestWithOptions;
 extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
@@ -64,6 +67,7 @@ extern NSString *const TxClientOptions_authHeaders;
 extern NSString *const TxClientOptions_authParams;
 extern NSString *const TxClientOptions_queryTime;
 extern NSString *const TxClientOptions_useTokenAuth;
+extern NSString *const TxClientOptions_hasAuthCallback;
 extern NSString *const TxClientOptions_clientId;
 extern NSString *const TxClientOptions_logLevel;
 extern NSString *const TxClientOptions_tls;
