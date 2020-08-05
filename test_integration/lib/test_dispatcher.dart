@@ -59,7 +59,6 @@ class TestDispatcherState extends State<TestDispatcher> {
         case 'provision':
           testWidget = ProvisionTest(this);
           break;
-          break;
         default:
           completeTest({
             'error': 'Test ${message?.testName ?? 'N/A'} is not implemented'

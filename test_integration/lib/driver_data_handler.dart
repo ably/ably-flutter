@@ -18,7 +18,7 @@ class TestControlMessage {
   const TestControlMessage(
     this.testName,
     this.payload,
-  );
+  ) : assert(testName != null && testName.length != null);
 
   final String testName;
   final Map<String, dynamic> payload;
@@ -30,7 +30,6 @@ class TestControlMessage {
     if (value is String) {
       value = json.decode(value as String);
     }
-    // print('jsonValue: $value, ${value.runtimeType}');
 
     return TestControlMessage(
       value['testName'] as String,
