@@ -13,6 +13,8 @@ final public class PlatformConstants{
 		public static final byte ablyEventMessage = (byte)129;
 		public static final byte clientOptions = (byte)130;
 		public static final byte message = (byte)131;
+		public static final byte tokenParams = (byte)132;
+		public static final byte tokenDetails = (byte)133;
 		public static final byte errorInfo = (byte)144;
 		public static final byte connectionStateChange = (byte)201;
 		public static final byte channelStateChange = (byte)202;
@@ -22,6 +24,7 @@ final public class PlatformConstants{
 		public static final String getPlatformVersion = "getPlatformVersion";
 		public static final String getVersion = "getVersion";
 		public static final String registerAbly = "registerAbly";
+		public static final String authCallback = "authCallback";
 		public static final String createRestWithOptions = "createRestWithOptions";
 		public static final String publish = "publish";
 		public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
@@ -66,6 +69,7 @@ final public class PlatformConstants{
 		public static final String authParams = "authParams";
 		public static final String queryTime = "queryTime";
 		public static final String useTokenAuth = "useTokenAuth";
+		public static final String hasAuthCallback = "hasAuthCallback";
 		public static final String clientId = "clientId";
 		public static final String logLevel = "logLevel";
 		public static final String tls = "tls";
