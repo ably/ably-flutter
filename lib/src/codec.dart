@@ -57,6 +57,9 @@ class Codec extends StandardMessageCodec {
 
             // Other ably objects
             CodecTypes.clientOptions: _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
+            CodecTypes.tokenParams: _CodecPair<TokenParams>(encodeTokenParams, decodeTokenParams),
+            CodecTypes.tokenDetails: _CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
+
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
             CodecTypes.message: _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
 
@@ -80,6 +83,10 @@ class Codec extends StandardMessageCodec {
     int getCodecType(final dynamic value){
         if (value is ClientOptions) {
             return CodecTypes.clientOptions;
+        } else if (value is TokenDetails) {
+          return CodecTypes.tokenDetails;
+        } else if (value is TokenParams) {
+          return CodecTypes.tokenParams;
         } else if (value is Message) {
           return CodecTypes.message;
         } else if (value is ErrorInfo) {
@@ -141,6 +148,7 @@ class Codec extends StandardMessageCodec {
         writeToJson(jsonMap, TxClientOptions.authParams, v.authParams);
         writeToJson(jsonMap, TxClientOptions.queryTime, v.queryTime);
         writeToJson(jsonMap, TxClientOptions.useTokenAuth, v.useTokenAuth);
+        writeToJson(jsonMap, TxClientOptions.hasAuthCallback, v.authCallback!=null);
 
         // ClientOptions
         writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
@@ -312,7 +320,7 @@ class Codec extends StandardMessageCodec {
         v.capability = readFromJson<String>(jsonMap, TxTokenParams.capability);
         v.clientId = readFromJson<String>(jsonMap, TxTokenParams.clientId);
         v.nonce = readFromJson<String>(jsonMap, TxTokenParams.nonce);
-        v.timestamp = readFromJson<DateTime>(jsonMap, TxTokenParams.timestamp);
+        v.timestamp = DateTime.fromMillisecondsSinceEpoch(readFromJson<int>(jsonMap, TxTokenParams.timestamp));
         v.ttl = readFromJson<int>(jsonMap, TxTokenParams.ttl);
         return v;
     }
@@ -323,6 +331,7 @@ class Codec extends StandardMessageCodec {
         if(jsonMap==null) return null;
         int type = readFromJson<int>(jsonMap, TxAblyMessage.type);
         dynamic message = jsonMap[TxAblyMessage.message];
+        print("type $type message $message");
         if(type!=null){
             message = codecMap[type].decode(toJsonMap(jsonMap[TxAblyMessage.message]));
         }
