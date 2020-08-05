@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
+import 'package:ably_flutter_plugin/src/method_call_handler.dart';
 import 'package:flutter/services.dart';
 
 import 'codec.dart';
@@ -22,6 +23,7 @@ final StreamsChannel streamsChannel = StreamsChannel('io.ably.flutter.stream', c
 bool _initialized = false;
 
 void _init(){
+  AblyMethodCallHandler(methodChannel);
   methodChannel.invokeMethod(PlatformMethod.registerAbly).then((_){
     _initialized = true;
   });
