@@ -8,6 +8,8 @@ class CodecTypes{
 	static const int ablyEventMessage = 129;
 	static const int clientOptions = 130;
 	static const int message = 131;
+	static const int tokenParams = 132;
+	static const int tokenDetails = 133;
 	static const int errorInfo = 144;
 	static const int connectionStateChange = 201;
 	static const int channelStateChange = 202;
@@ -17,6 +19,7 @@ class PlatformMethod {
 	static const String getPlatformVersion = 'getPlatformVersion';
 	static const String getVersion = 'getVersion';
 	static const String registerAbly = 'registerAbly';
+	static const String authCallback = 'authCallback';
 	static const String createRestWithOptions = 'createRestWithOptions';
 	static const String publish = 'publish';
 	static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
@@ -61,6 +64,7 @@ class TxClientOptions{
 	static const String authParams = "authParams";
 	static const String queryTime = "queryTime";
 	static const String useTokenAuth = "useTokenAuth";
+	static const String hasAuthCallback = "hasAuthCallback";
 	static const String clientId = "clientId";
 	static const String logLevel = "logLevel";
 	static const String tls = "tls";
