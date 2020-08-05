@@ -18,6 +18,8 @@ List<Map<String, dynamic>> _types = [
   //Other ably objects
   {"name": "clientOptions", "value": 130},
   {"name": "message", "value": 131},
+  {"name": "tokenParams", "value": 132},
+  {"name": "tokenDetails", "value": 133},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -30,6 +32,9 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "getPlatformVersion", "value": "getPlatformVersion"},
   {"name": "getVersion", "value": "getVersion"},
   {"name": "registerAbly", "value": "registerAbly"},
+
+  // Auth
+  {"name": "authCallback", "value": "authCallback"},
 
   // Rest
   {"name": "createRestWithOptions", "value": "createRestWithOptions"},
@@ -90,6 +95,7 @@ List<Map<String, dynamic>> objects = [
       "authParams",
       "queryTime",
       "useTokenAuth",
+      "hasAuthCallback",
       // ClientOptions
       "clientId",
       "logLevel",

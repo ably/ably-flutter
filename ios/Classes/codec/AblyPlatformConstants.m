@@ -10,6 +10,7 @@
 NSString *const AblyPlatformMethod_getPlatformVersion= @"getPlatformVersion";
 NSString *const AblyPlatformMethod_getVersion= @"getVersion";
 NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
+NSString *const AblyPlatformMethod_authCallback= @"authCallback";
 NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
 NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
@@ -54,6 +55,7 @@ NSString *const TxClientOptions_authHeaders = @"authHeaders";
 NSString *const TxClientOptions_authParams = @"authParams";
 NSString *const TxClientOptions_queryTime = @"queryTime";
 NSString *const TxClientOptions_useTokenAuth = @"useTokenAuth";
+NSString *const TxClientOptions_hasAuthCallback = @"hasAuthCallback";
 NSString *const TxClientOptions_clientId = @"clientId";
 NSString *const TxClientOptions_logLevel = @"logLevel";
 NSString *const TxClientOptions_tls = @"tls";
