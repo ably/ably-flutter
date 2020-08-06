@@ -7,6 +7,7 @@ import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'channels.dart';
 
+Map<int, Rest> restInstances = {};
 
 class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChannels> {
 
@@ -21,10 +22,14 @@ class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChan
     this.channels = RestPlatformChannels(this);
   }
 
-  Future<int> createPlatformInstance() async => await invokeRaw<int>(
-    PlatformMethod.createRestWithOptions,
-    AblyMessage(options)
-  );
+  Future<int> createPlatformInstance() async {
+    int handle = await invokeRaw<int>(
+      PlatformMethod.createRestWithOptions,
+      AblyMessage(options)
+    );
+    restInstances[handle] = this;
+    return handle;
+  }
 
   @override
   Auth auth;

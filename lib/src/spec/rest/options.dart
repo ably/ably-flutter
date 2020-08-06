@@ -1,15 +1,15 @@
 import 'package:ably_flutter_plugin/ably.dart';
 
-import '../enums.dart';
 import '../common.dart';
+import '../enums.dart';
 
 
 /// Function-type alias implemented by a function that provides either tokens,
 /// or signed token requests, in response to a request with given token params.
 ///
 /// Java: io.ably.lib.rest.Auth.TokenCallback.getTokenRequest(TokenParams)
-/// returns either [TokenDetails] or [TokenRequest]
-typedef dynamic AuthCallback(TokenParams params);
+/// returns either a [String] token or [TokenDetails] or [TokenRequest]
+typedef Future<dynamic> AuthCallback(TokenParams params);
 abstract class AuthOptions {
 
   AuthOptions();
