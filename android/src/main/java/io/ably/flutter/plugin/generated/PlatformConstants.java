@@ -15,6 +15,7 @@ final public class PlatformConstants {
 		public static final byte message = (byte)131;
 		public static final byte tokenParams = (byte)132;
 		public static final byte tokenDetails = (byte)133;
+		public static final byte tokenRequest = (byte)134;
 		public static final byte errorInfo = (byte)144;
 		public static final byte connectionStateChange = (byte)201;
 		public static final byte channelStateChange = (byte)202;
@@ -104,13 +105,23 @@ final public class PlatformConstants {
         public static final String clientId = "clientId";
     }
 
-    final public class TxTokenParams {
-        public static final String capability = "capability";
-        public static final String clientId = "clientId";
-        public static final String nonce = "nonce";
-        public static final String timestamp = "timestamp";
-        public static final String ttl = "ttl";
-    }
+	final public class TxTokenParams{
+		public static final String capability = "capability";
+		public static final String clientId = "clientId";
+		public static final String nonce = "nonce";
+		public static final String timestamp = "timestamp";
+		public static final String ttl = "ttl";
+	}
+
+	final public class TxTokenRequest{
+		public static final String capability = "capability";
+		public static final String clientId = "clientId";
+		public static final String keyName = "keyName";
+		public static final String mac = "mac";
+		public static final String nonce = "nonce";
+		public static final String timestamp = "timestamp";
+		public static final String ttl = "ttl";
+	}
 
     final public class TxConnectionStateChange {
         public static final String current = "current";
