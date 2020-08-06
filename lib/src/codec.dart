@@ -219,7 +219,7 @@ class Codec extends StandardMessageCodec {
       writeToJson(jsonMap, TxTokenRequest.keyName, v.keyName);
       writeToJson(jsonMap, TxTokenRequest.mac, v.mac);
       writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
-      writeToJson(jsonMap, TxTokenRequest.timestamp, v.timestamp.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
       writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
       return jsonMap;
     }
