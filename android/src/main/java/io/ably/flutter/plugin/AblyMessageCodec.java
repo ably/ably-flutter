@@ -289,8 +289,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.keyName, v -> o.keyName = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.nonce, v -> o.nonce = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.mac, v -> o.mac = (String)v);
-        // capability, clientId, timestamp, ttl are not supported in ably-java
-        // Track @ https://github.com/ably/ably-flutter/issues/14
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.capability, v -> o.capability = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.clientId, v -> o.clientId = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.timestamp, v -> o.timestamp = readValueAsLong(v));
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.ttl, v -> o.ttl = readValueAsLong(v));
         return o;
     }
 
