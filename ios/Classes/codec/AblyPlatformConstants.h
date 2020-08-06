@@ -12,6 +12,7 @@ typedef NS_ENUM(UInt8, _Value) {
   messageCodecType = 131,
   tokenParamsCodecType = 132,
   tokenDetailsCodecType = 133,
+  tokenRequestCodecType = 134,
   errorInfoCodecType = 144,
   connectionStateChangeCodecType = 201,
   channelStateChangeCodecType = 202,
@@ -108,6 +109,16 @@ extern NSString *const TxTokenParams_clientId;
 extern NSString *const TxTokenParams_nonce;
 extern NSString *const TxTokenParams_timestamp;
 extern NSString *const TxTokenParams_ttl;
+@end
+
+@interface TxTokenRequest : NSObject
+extern NSString *const TxTokenRequest_capability;
+extern NSString *const TxTokenRequest_clientId;
+extern NSString *const TxTokenRequest_keyName;
+extern NSString *const TxTokenRequest_mac;
+extern NSString *const TxTokenRequest_nonce;
+extern NSString *const TxTokenRequest_timestamp;
+extern NSString *const TxTokenRequest_ttl;
 @end
 
 @interface TxConnectionStateChange : NSObject
