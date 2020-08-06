@@ -82,23 +82,108 @@ class TokenParams {
   int ttl;
 }
 
+/// TokenDetails is a type containing the token request
+/// response from the REST requestToken endpoint
+///
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
 class TokenDetails {
   TokenDetails(this.token);
   String capability;
+
+  /// clientId assigned to the token. If clientId is not set (i.e. null),
+  /// then the token is prohibited from assuming a clientId in any operations,
+  /// however if clientId is a wildcard string '*', then the token is
+  /// permitted to assume any clientId. Any other string value for clientId
+  /// implies that the clientId is both enforced and assumed
+  /// for all operations for this token
+  ///
+  /// TD6
   String clientId;
-  int expires;
-  int issued;
-  String token;
+
+  TokenDetails(this.token, {
+    this.expires,
+    this.issued,
+    this.capability,
+    this.clientId
+  });
+
+  /// TD7
+  TokenDetails.fromMap(Map<String, dynamic> map){
+    this.token = map['token'] as String;
+    this.expires = map['expires'] as int;
+    this.issued = map['issued'] as int;
+    this.capability = map['capability'] as String;
+    this.clientId = map['clientId'] as String;
+  }
+
 }
 
-abstract class TokenRequest {
-  String capability;
-  String clientId;
+/// TokenRequest is a type containing the token request
+/// details sent to the REST requestToken endpoint
+///
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TE1
+class TokenRequest {
+
+  /// The keyName of the key against which this request is made.
+  ///
+  /// TE2
   String keyName;
-  String mac;
+
+  /// An opaque nonce string of at least 16 characters to ensure
+  ///	uniqueness of this request. Any subsequent request using the
+  ///	same nonce will be rejected.
+  ///
+  /// TE2, TE5
   String nonce;
+
+  /// The Message Authentication Code for this request. See the Ably
+  ///	Authentication documentation for more details.
+  ///
+  /// TE2
+  String mac;
+
+  /// stringified capabilities JSON
+  ///
+  /// TE3
+  String capability;
+
+  /// TE2
+  String clientId;
+
+  /// timestamp long – The timestamp (in milliseconds since the epoch)
+  /// of this request. Timestamps, in conjunction with the nonce,
+  /// are used to prevent requests from being replayed
+  ///
+  /// TE5
   DateTime timestamp;
+
+  /// ttl attribute represents time to live (expiry)
+  /// of this token in milliseconds
+  ///
+  /// TE4
   int ttl;
+
+  TokenRequest({
+    this.keyName,
+    this.nonce,
+    this.clientId,
+    this.mac,
+    this.capability,
+    this.timestamp,
+    this.ttl
+  });
+
+  /// TE7
+  TokenRequest.fromMap(Map<String, dynamic> map){
+    this.keyName = map["keyName"] as String;
+    this.nonce = map["nonce"] as String;
+    this.mac = map["mac"] as String;
+    this.capability = map["capability"] as String;
+    this.clientId = map["clientId"] as String;
+    this.timestamp = DateTime.fromMillisecondsSinceEpoch(map["timestamp"] as int);
+    this.ttl = map["ttl"] as int;
+  }
+
 }
 
 
