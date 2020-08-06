@@ -25,12 +25,13 @@ class AblyLibrary {
     //    using LongSparseArray as suggested by Studio
     //    and as per this answer https://stackoverflow.com/a/31413003
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
-    private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
+    private final LongSparseArray<Object> _restTokens = new LongSparseArray<>();
 
-    long createRealtime(final ClientOptions clientOptions) throws AblyException {
-        final AblyRealtime realtime = new AblyRealtime(clientOptions);
-        _realtimeInstances.put(_nextHandle, realtime);
-        return _nextHandle++;
+    private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
+    private final LongSparseArray<Object> _realtimeTokens = new LongSparseArray<>();
+
+    long getCurrentHandle(){
+        return _nextHandle;
     }
 
     long createRest(final ClientOptions clientOptions) throws AblyException {
@@ -39,12 +40,39 @@ class AblyLibrary {
         return _nextHandle++;
     }
 
+    AblyRest getRest(final long handle){
+        return _restInstances.get(handle);
+    }
+
+    void setRestToken(long handle, Object tokenDetails){
+        _restTokens.put(handle, tokenDetails);
+    }
+
+    Object getRestToken(long handle){
+        Object token = _restTokens.get(handle);
+        _restTokens.remove(handle);
+        return token;
+    }
+
+
+    long createRealtime(final ClientOptions clientOptions) throws AblyException {
+        final AblyRealtime realtime = new AblyRealtime(clientOptions);
+        _realtimeInstances.put(_nextHandle, realtime);
+        return _nextHandle++;
+    }
+
     AblyRealtime getRealtime(final long handle) {
         return _realtimeInstances.get(handle);
     }
 
-    AblyRest getRest(final long handle){
-        return _restInstances.get(handle);
+    void setRealtimeToken(long handle, Object tokenDetails){
+        _realtimeTokens.put(handle, tokenDetails);
+    }
+
+    Object getRealtimeToken(long handle){
+        Object token = _realtimeTokens.get(handle);
+        _realtimeTokens.remove(handle);
+        return token;
     }
 
     void dispose() {

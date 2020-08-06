@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.JsonElement;
 
@@ -13,8 +14,10 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
+import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
@@ -33,20 +36,20 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         void trigger();
     }
 
-    private OnHotRestart onHotRestartListener;
-
-    static synchronized AblyMethodCallHandler getInstance(OnHotRestart listener) {
-        // TODO decide why singleton instance is required!
+    static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel, final OnHotRestart listener) {
         if (null == _instance) {
-            _instance = new AblyMethodCallHandler(listener);
+            _instance = new AblyMethodCallHandler(channel, listener);
         }
         return _instance;
     }
 
+    private final MethodChannel channel;
+    private final OnHotRestart onHotRestartListener;
     private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
     private AblyLibrary _ably = AblyLibrary.getInstance();
 
-    private AblyMethodCallHandler(OnHotRestart listener) {
+    private AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener) {
+        this.channel = channel;
         this.onHotRestartListener = listener;
         _map = new HashMap<>();
         _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -119,7 +122,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        System.out.println("Registering library instance to clean up any existing instnaces");
+        System.out.println("Registering library instance to clean up any existing instances");
         onHotRestartListener.trigger();
         _ably.dispose();
         result.success(null);
@@ -127,8 +130,37 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
-        this.<ClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
+        this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
+                final long handle = ablyLibrary.getCurrentHandle();
+                if(clientOptions.hasAuthCallback) {
+                    clientOptions.authCallback = (Auth.TokenParams params) -> {
+                        Object token = ablyLibrary.getRestToken(handle);
+                        if (token != null) return token;
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            AblyFlutterMessage channelMessage = new AblyFlutterMessage<>(params, handle);
+                            channel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
+                                @Override
+                                public void success(@Nullable Object result) {
+                                    ablyLibrary.setRestToken(handle, result);
+                                }
+
+                                @Override
+                                public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
+                                    System.out.println(errorDetails);
+                                    //Do nothing, let another request go to flutter side!
+                                }
+
+                                @Override
+                                public void notImplemented() {
+                                    System.out.println("`authCallback` Method not implemented on dart side");
+                                }
+                            });
+                        });
+
+                        return null;
+                    };
+                }
                 result.success(ablyLibrary.createRest(clientOptions));
             } catch (final AblyException e) {
                 handleAblyException(result, e);
