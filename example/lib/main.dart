@@ -345,13 +345,16 @@ class _MyAppState extends State<MyApp> {
   int msgCounter = 0;
   Widget sendRestMessage() => FlatButton(
     onPressed: () async {
-      print('Sendimg rest message...');
-      await _rest.channels.get('test').publish(
-        name: 'Hello',
-        data: 'Flutter ${++msgCounter}'
-      );
-      print('Rest message sent.');
-      setState(() {});
+      print('Sending rest message');
+      try {
+        await _rest.channels.get('test').publish(
+          name: 'Hello',
+          data: 'Flutter ${++msgCounter}'
+        );
+        print('Rest message sent.');
+      }on ably.AblyException catch (e){
+        print("Rest message sending failed:: $e :: ${e.errorInfo}");
+      }
     },
     color: Colors.yellow,
     child: Text('Publish'),
