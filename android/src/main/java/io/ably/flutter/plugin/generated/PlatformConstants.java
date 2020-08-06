@@ -6,9 +6,9 @@
 package io.ably.flutter.plugin.generated;
 
 
-final public class PlatformConstants {
+final public class PlatformConstants{
 
-	final public class CodecTypes {
+	static final public class CodecTypes {
 		public static final byte ablyMessage = (byte)128;
 		public static final byte ablyEventMessage = (byte)129;
 		public static final byte clientOptions = (byte)130;
@@ -21,7 +21,7 @@ final public class PlatformConstants {
 		public static final byte channelStateChange = (byte)202;
 	}
 
-	final public class PlatformMethod {
+	static final public class PlatformMethod {
 		public static final String getPlatformVersion = "getPlatformVersion";
 		public static final String getVersion = "getVersion";
 		public static final String registerAbly = "registerAbly";
@@ -40,28 +40,28 @@ final public class PlatformConstants {
 		public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
 	}
   
-    final public class TxAblyMessage {
-        public static final String registrationHandle = "registrationHandle";
-        public static final String type = "type";
-        public static final String message = "message";
-    }
+	static final public class TxAblyMessage{
+		public static final String registrationHandle = "registrationHandle";
+		public static final String type = "type";
+		public static final String message = "message";
+	}
 
-    final public class TxAblyEventMessage {
-        public static final String eventName = "eventName";
-        public static final String type = "type";
-        public static final String message = "message";
-    }
+	static final public class TxAblyEventMessage{
+		public static final String eventName = "eventName";
+		public static final String type = "type";
+		public static final String message = "message";
+	}
 
-    final public class TxErrorInfo {
-        public static final String code = "code";
-        public static final String message = "message";
-        public static final String statusCode = "statusCode";
-        public static final String href = "href";
-        public static final String requestId = "requestId";
-        public static final String cause = "cause";
-    }
+	static final public class TxErrorInfo{
+		public static final String code = "code";
+		public static final String message = "message";
+		public static final String statusCode = "statusCode";
+		public static final String href = "href";
+		public static final String requestId = "requestId";
+		public static final String cause = "cause";
+	}
 
-	final public class TxClientOptions{
+	static final public class TxClientOptions{
 		public static final String authUrl = "authUrl";
 		public static final String authMethod = "authMethod";
 		public static final String key = "key";
@@ -97,15 +97,15 @@ final public class PlatformConstants {
 		public static final String transportParams = "transportParams";
 	}
 
-    final public class TxTokenDetails {
-        public static final String token = "token";
-        public static final String expires = "expires";
-        public static final String issued = "issued";
-        public static final String capability = "capability";
-        public static final String clientId = "clientId";
-    }
+	static final public class TxTokenDetails{
+		public static final String token = "token";
+		public static final String expires = "expires";
+		public static final String issued = "issued";
+		public static final String capability = "capability";
+		public static final String clientId = "clientId";
+	}
 
-	final public class TxTokenParams{
+	static final public class TxTokenParams{
 		public static final String capability = "capability";
 		public static final String clientId = "clientId";
 		public static final String nonce = "nonce";
@@ -113,7 +113,7 @@ final public class PlatformConstants {
 		public static final String ttl = "ttl";
 	}
 
-	final public class TxTokenRequest{
+	static final public class TxTokenRequest{
 		public static final String capability = "capability";
 		public static final String clientId = "clientId";
 		public static final String keyName = "keyName";
@@ -123,31 +123,31 @@ final public class PlatformConstants {
 		public static final String ttl = "ttl";
 	}
 
-    final public class TxConnectionStateChange {
-        public static final String current = "current";
-        public static final String previous = "previous";
-        public static final String event = "event";
-        public static final String retryIn = "retryIn";
-        public static final String reason = "reason";
-    }
+	static final public class TxConnectionStateChange{
+		public static final String current = "current";
+		public static final String previous = "previous";
+		public static final String event = "event";
+		public static final String retryIn = "retryIn";
+		public static final String reason = "reason";
+	}
 
-    final public class TxChannelStateChange {
-        public static final String current = "current";
-        public static final String previous = "previous";
-        public static final String event = "event";
-        public static final String resumed = "resumed";
-        public static final String reason = "reason";
-    }
+	static final public class TxChannelStateChange{
+		public static final String current = "current";
+		public static final String previous = "previous";
+		public static final String event = "event";
+		public static final String resumed = "resumed";
+		public static final String reason = "reason";
+	}
 
-    final public class TxMessage {
-        public static final String id = "id";
-        public static final String timestamp = "timestamp";
-        public static final String clientId = "clientId";
-        public static final String connectionId = "connectionId";
-        public static final String encoding = "encoding";
-        public static final String data = "data";
-        public static final String name = "name";
-        public static final String extras = "extras";
-    }
+	static final public class TxMessage{
+		public static final String id = "id";
+		public static final String timestamp = "timestamp";
+		public static final String clientId = "clientId";
+		public static final String connectionId = "connectionId";
+		public static final String encoding = "encoding";
+		public static final String data = "data";
+		public static final String name = "name";
+		public static final String extras = "extras";
+	}
 
 }
