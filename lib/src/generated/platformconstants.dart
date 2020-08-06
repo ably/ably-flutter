@@ -10,6 +10,7 @@ class CodecTypes{
 	static const int message = 131;
 	static const int tokenParams = 132;
 	static const int tokenDetails = 133;
+	static const int tokenRequest = 134;
 	static const int errorInfo = 144;
 	static const int connectionStateChange = 201;
 	static const int channelStateChange = 202;
@@ -105,6 +106,16 @@ class TxTokenParams {
     static const String nonce = "nonce";
     static const String timestamp = "timestamp";
     static const String ttl = "ttl";
+}
+
+class TxTokenRequest{
+	static const String capability = "capability";
+	static const String clientId = "clientId";
+	static const String keyName = "keyName";
+	static const String mac = "mac";
+	static const String nonce = "nonce";
+	static const String timestamp = "timestamp";
+	static const String ttl = "ttl";
 }
 
 class TxConnectionStateChange {

@@ -20,6 +20,7 @@ List<Map<String, dynamic>> _types = [
   {"name": "message", "value": 131},
   {"name": "tokenParams", "value": 132},
   {"name": "tokenDetails", "value": 133},
+  {"name": "tokenRequest", "value": 134},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -138,6 +139,18 @@ List<Map<String, dynamic>> objects = [
     "properties": <String>[
       "capability",
       "clientId",
+      "nonce",
+      "timestamp",
+      "ttl"
+    ]
+  },
+  {
+    "name": "TokenRequest",
+    "properties": <String>[
+      "capability",
+      "clientId",
+      "keyName",
+      "mac",
       "nonce",
       "timestamp",
       "ttl"
