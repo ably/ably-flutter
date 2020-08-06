@@ -61,7 +61,6 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     // Listeners
     private PluginConnectionStateListener connectionStateListener;
 
-    private ChannelOptions channelOptions;
     private PluginChannelStateListener channelStateListener;
     private PluginChannelMessageListener channelMessageListener;
 
@@ -69,7 +68,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         eventSink.error(ablyException.errorInfo.message, null, ablyException.errorInfo);
     }
 
-    private class Listener {
+    static private class Listener {
         EventChannel.EventSink eventSink;
 
         Listener(EventChannel.EventSink eventSink) {
@@ -77,7 +76,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         }
     }
 
-    private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
+    static private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
 
         PluginConnectionStateListener(EventChannel.EventSink eventSink) {
             super(eventSink);
@@ -89,7 +88,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     }
 
-    private class PluginChannelStateListener extends Listener implements ChannelStateListener {
+    static private class PluginChannelStateListener extends Listener implements ChannelStateListener {
 
         PluginChannelStateListener(EventChannel.EventSink eventSink) {
             super(eventSink);
@@ -101,7 +100,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     }
 
-    private class PluginChannelMessageListener extends Listener implements Channel.MessageListener {
+    static private class PluginChannelMessageListener extends Listener implements Channel.MessageListener {
 
         PluginChannelMessageListener(EventChannel.EventSink eventSink) {
             super(eventSink);
@@ -125,6 +124,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         final AblyEventMessage<Object> eventMessage = ablyMessage.message;
         final String eventName = eventMessage.eventName;
         try {
+            ChannelOptions channelOptions;
             switch (eventName) {
                 case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
                     connectionStateListener = new PluginConnectionStateListener(eventSink);
