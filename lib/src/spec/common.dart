@@ -74,12 +74,59 @@ abstract class StatsMessageTraffic {
   StatsMessageTypes webhook;
 }
 
+/// A class providing parameters of a token request.
+/// These params are used when invoking
+/// Auth#authorize, Auth#requestToken and Auth#createTokenRequest
+///
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TK1
 class TokenParams {
+
+  /// Capability of the token. If the token request is successful,
+  ///	the capability of the returned token will be the intersection of
+  ///	this capability with the capability of the issuing key.
+  ///
+  /// Ref: TK2b
   String  capability;
+
+  /// A clientId to associate with this token. The generated token
+  ///	may be used to authenticate as this clientId.
+  ///
+  /// Ref: TK2c
   String clientId;
+
+  ///
+  /// An opaque nonce string of at least 16 characters to ensure
+  ///	uniqueness. Timestamps, in conjunction with the nonce,
+  /// are used to prevent requests from being replayed
+  ///
+  /// ref: TK2d
   String nonce;
+
+  /// The timestamp (in millis since the epoch) of this request.
+  ///	Timestamps, in conjunction with the nonce, are used to prevent
+  ///	token requests from being replayed.
+  ///
+  /// ref: TK2d
   DateTime timestamp;
+
+  /// Requested time to live for the token. If the token request
+  /// is successful, the TTL of the returned token will be less
+  /// than or equal to this value depending on application settings
+  /// and the attributes of the issuing key.
+  ///
+  /// 0 means Ably will set it to the default value
+  ///
+  /// Ref: TK2a
   int ttl;
+
+  TokenParams({
+    this.capability,
+    this.clientId,
+    this.nonce,
+    this.timestamp,
+    this.ttl
+  });
+
 }
 
 /// TokenDetails is a type containing the token request
@@ -87,7 +134,23 @@ class TokenParams {
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
 class TokenDetails {
-  TokenDetails(this.token);
+
+  /// TD2
+  String token;
+
+  /// Token expiry time in milliseconds
+  ///
+  /// TD3
+  int expires;
+
+  /// the time the token was issued in milliseconds
+  ///
+  /// TD4
+  int issued;
+
+  /// stringified capabilities JSON
+  ///
+  /// TD5
   String capability;
 
   /// clientId assigned to the token. If clientId is not set (i.e. null),
