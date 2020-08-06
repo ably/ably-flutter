@@ -98,6 +98,16 @@ NSString *const TxTokenParams_timestamp = @"timestamp";
 NSString *const TxTokenParams_ttl = @"ttl";
 @end
 
+@implementation TxTokenRequest
+NSString *const TxTokenRequest_capability = @"capability";
+NSString *const TxTokenRequest_clientId = @"clientId";
+NSString *const TxTokenRequest_keyName = @"keyName";
+NSString *const TxTokenRequest_mac = @"mac";
+NSString *const TxTokenRequest_nonce = @"nonce";
+NSString *const TxTokenRequest_timestamp = @"timestamp";
+NSString *const TxTokenRequest_ttl = @"ttl";
+@end
+
 @implementation TxConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";
 NSString *const TxConnectionStateChange_previous = @"previous";
