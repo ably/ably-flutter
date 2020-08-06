@@ -59,6 +59,7 @@ class Codec extends StandardMessageCodec {
             CodecTypes.clientOptions: _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
             CodecTypes.tokenParams: _CodecPair<TokenParams>(encodeTokenParams, decodeTokenParams),
             CodecTypes.tokenDetails: _CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
+            CodecTypes.tokenRequest: _CodecPair<TokenRequest>(encodeTokenRequest, null),
 
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
             CodecTypes.message: _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
@@ -87,6 +88,8 @@ class Codec extends StandardMessageCodec {
           return CodecTypes.tokenDetails;
         } else if (value is TokenParams) {
           return CodecTypes.tokenParams;
+        } else if (value is TokenRequest) {
+          return CodecTypes.tokenRequest;
         } else if (value is Message) {
           return CodecTypes.message;
         } else if (value is ErrorInfo) {
@@ -204,6 +207,21 @@ class Codec extends StandardMessageCodec {
         writeToJson(jsonMap, TxTokenParams.timestamp, v.timestamp);
         writeToJson(jsonMap, TxTokenParams.ttl, v.ttl);
         return jsonMap;
+    }
+
+    /// Encodes [TokenRequest] to a Map
+    /// returns null of passed value [v] is null
+    Map<String, dynamic> encodeTokenRequest(final TokenRequest v){
+      if(v==null) return null;
+      Map<String, dynamic> jsonMap = {};
+      writeToJson(jsonMap, TxTokenRequest.capability, v.capability);
+      writeToJson(jsonMap, TxTokenRequest.clientId, v.clientId);
+      writeToJson(jsonMap, TxTokenRequest.keyName, v.keyName);
+      writeToJson(jsonMap, TxTokenRequest.mac, v.mac);
+      writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
+      writeToJson(jsonMap, TxTokenRequest.timestamp, v.timestamp.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
+      return jsonMap;
     }
 
     /// Encodes [AblyMessage] to a Map

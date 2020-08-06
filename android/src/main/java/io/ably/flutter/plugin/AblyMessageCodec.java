@@ -34,7 +34,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         T decode(Map<String, Object> jsonMap);
     }
 
-    class CodecPair<T> {
+    private static class CodecPair<T> {
 
         final CodecEncoder<T> encoder;
         final CodecDecoder<T> decoder;
@@ -67,15 +67,26 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final AblyMessageCodec self = this;
         codecMap = new HashMap<Byte, CodecPair>() {
             {
-                put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
-                put(PlatformConstants.CodecTypes.ablyEventMessage, new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
-                put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::decodeClientOptions));
-                put(PlatformConstants.CodecTypes.tokenParams, new CodecPair<>(self::encodeTokenParams, null));
-                put(PlatformConstants.CodecTypes.tokenDetails, new CodecPair<>(null, self::decodeTokenDetails));
-                put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
-                put(PlatformConstants.CodecTypes.message, new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
-                put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
-                put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::encodeChannelStateChange, null));
+                put(PlatformConstants.CodecTypes.ablyMessage,
+                        new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
+                put(PlatformConstants.CodecTypes.ablyEventMessage,
+                        new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
+                put(PlatformConstants.CodecTypes.clientOptions,
+                        new CodecPair<>(null, self::decodeClientOptions));
+                put(PlatformConstants.CodecTypes.tokenParams,
+                        new CodecPair<>(self::encodeTokenParams, null));
+                put(PlatformConstants.CodecTypes.tokenDetails,
+                        new CodecPair<>(null, self::decodeTokenDetails));
+                put(PlatformConstants.CodecTypes.tokenRequest,
+                        new CodecPair<>(null, self::decodeTokenRequest));
+                put(PlatformConstants.CodecTypes.errorInfo,
+                        new CodecPair<>(self::encodeErrorInfo, null));
+                put(PlatformConstants.CodecTypes.message,
+                        new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
+                put(PlatformConstants.CodecTypes.connectionStateChange,
+                        new CodecPair<>(self::encodeConnectionStateChange, null));
+                put(PlatformConstants.CodecTypes.channelStateChange,
+                        new CodecPair<>(self::encodeChannelStateChange, null));
             }
         };
     }
@@ -83,8 +94,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     @Override
     protected Object readValueOfType(final byte type, final ByteBuffer buffer) {
         CodecPair pair = codecMap.get(type);
-        if (pair != null) {
-            Map<String, Object> jsonMap = (Map<String, Object>) readValue(buffer);
+        if(pair!=null){
+            Map<String, Object> jsonMap = (Map<String, Object>)readValue(buffer);
             return pair.decode(jsonMap);
         }
         return super.readValueOfType(type, buffer);
@@ -268,6 +279,17 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.timestamp, v -> o.timestamp = readValueAsLong(v));
         readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = readValueAsLong(v));
         // nonce is not supported in ably-java
+        // Track @ https://github.com/ably/ably-flutter/issues/14
+        return o;
+    }
+
+    private Auth.TokenRequest decodeTokenRequest(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
+        final Auth.TokenRequest o = new Auth.TokenRequest();
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.keyName, v -> o.keyName = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.nonce, v -> o.nonce = (String)v);
+        readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.mac, v -> o.mac = (String)v);
+        // capability, clientId, timestamp, ttl are not supported in ably-java
         // Track @ https://github.com/ably/ably-flutter/issues/14
         return o;
     }
