@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 const _capabilitySpec = {
   // Allow us to publish and subscribe to any channel.
@@ -37,17 +37,25 @@ class AppKey {
   String toString() => _keyStr;
 }
 
-Future<AppKey> provision(final String environmentPrefix) async {
+Future<Map> _provisionApp(final String environmentPrefix) async {
   final url = 'https://' + environmentPrefix + 'rest.ably.io/apps';
   final body = jsonEncode(_appSpec);
   final response = await http.post(url, body: body, headers: _requestHeaders);
   if (response.statusCode != HttpStatus.created) {
     throw HttpException('Server didn\'t return success. Status: ' + response.statusCode.toString());
   }
+  return jsonDecode(response.body);
+}
 
-  // Cherry pick the pieces from the JSON response that we need.
-  final Map result = jsonDecode(response.body);
-  final List keys = result['keys'];
-  final Map key = keys[0];
+Future<AppKey> provision(final String environmentPrefix) async {
+  final Map result = await _provisionApp(environmentPrefix);
+  final Map key = result['keys'][0];
   return AppKey(key['keyName'], key['keySecret'], key['keyStr']);
+}
+
+Future<Map> getTokenRequest() async {
+  // NOTE: This doesn't work with sandbox. The URL can point to test-harness's
+  // tokenRequest express server's `/auth` endpoint
+  http.Response r = await http.get("https://www.ably.io/ably-auth/token-request/demos");
+  return jsonDecode(r.body) as Map;
 }
