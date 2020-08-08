@@ -4,6 +4,7 @@
     "publish": "node publish.js"
   },
   "dependencies": {
-    "ably": "^1.2.1"
+    "ably": "^1.2.1",
+    "express": "^4.17.1"
   }
 }
