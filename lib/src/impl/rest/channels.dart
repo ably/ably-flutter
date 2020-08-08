@@ -10,6 +10,7 @@ import '../platform_object.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
 
+  /// [Rest] instance
   @override
   spec.AblyBase ably;
 
@@ -38,6 +39,8 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
     return null;
   }
 
+  bool authCallbackInProgress = false;
+
   @override
   Future<void> publish({
     Message message,
@@ -45,6 +48,10 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
     String name,
     dynamic data,
   }) async {
+    bool hasAuthCallback = ably.options.authCallback!=null;
+    while (hasAuthCallback && authCallbackInProgress) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
     try {
       if(messages == null){
         if (message != null) {
@@ -63,8 +70,17 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
         'messages': messages
       });
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      if (hasAuthCallback && pe.code == "80019") {
+        authCallbackInProgress = true;
+        await publish(name: name, data: data);
+      } else {
+        throw spec.AblyException(pe.code, pe.message, pe.details);
+      }
     }
+  }
+
+  void authUpdateComplete() {
+    authCallbackInProgress = false;
   }
 
 }
@@ -76,7 +92,7 @@ class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel>{
 
   @override
   RestPlatformChannel createChannel(name, options){
-    return RestPlatformChannel(this.ably, name, options);
+    return RestPlatformChannel(ably, name, options);
   }
 
 }
