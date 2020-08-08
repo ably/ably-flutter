@@ -426,6 +426,8 @@ abstract class Channels<ChannelType> {
 
   ChannelType createChannel(name, options);
 
+  Iterable<ChannelType> get all => _channels.values;
+
   ChannelType get(String name) {  //TODO add ChannelOptions as optional argument here, and pass it on to createChannel
     if (_channels[name]==null) {
       _channels[name] = createChannel(name, null);

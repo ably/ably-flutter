@@ -17,7 +17,12 @@ class AblyMethodCallHandler{
 
   onAuthCallback(AblyMessage message) async {
     ably.TokenParams tokenParams = message.message as ably.TokenParams;
-    return await ably.restInstances[message.handle].options.authCallback(tokenParams);
+    ably.Rest rest = ably.restInstances[message.handle];
+    Object callbackResponse = await rest.options.authCallback(tokenParams);
+    Future.delayed(Duration.zero, (){
+      rest.channels.all.forEach((c) => c.authUpdateComplete());
+    });
+    return callbackResponse;
   }
 
 }
