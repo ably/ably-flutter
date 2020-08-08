@@ -143,11 +143,10 @@ class _MyAppState extends State<MyApp> {
       await rest.channels.get('test').publish(name: name);
       await rest.channels.get('test').publish(data: data);
       await rest.channels.get('test').publish();
+      print('Messages published');
     } on ably.AblyException catch(e) {
       print(e.errorInfo);
     }
-    print('Message published');
-
     // set state here as handle will have been acquired before calling
     // publish on channels above...
     setState(() {});
@@ -342,16 +341,17 @@ class _MyAppState extends State<MyApp> {
     child: Text('Publish: ${messagesToPublish[(realtimePublishCounter % messagesToPublish.length)]}'),
   );
 
-  int msgCounter = 0;
+  int msgCounter = 1;
   Widget sendRestMessage() => FlatButton(
     onPressed: () async {
       print('Sending rest message');
       try {
         await _rest.channels.get('test').publish(
           name: 'Hello',
-          data: 'Flutter ${++msgCounter}'
+          data: 'Flutter $msgCounter'
         );
         print('Rest message sent.');
+        setState((){ ++msgCounter; });
       }on ably.AblyException catch (e){
         print("Rest message sending failed:: $e :: ${e.errorInfo}");
       }
@@ -404,7 +404,7 @@ class _MyAppState extends State<MyApp> {
               createRestButton(),
               Text('Rest: ${((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())}'),
               sendRestMessage(),
-              Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
+              Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter}"'),
             ]
           ),
         ),
