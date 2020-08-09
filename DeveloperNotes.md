@@ -73,7 +73,7 @@ Generate platform constants and continue
 6. update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
  so new encoder/decoder is assigned for new type
 7. add new codec encoder method in [ios.Classes.codec.AblyFlutterWriter](ios/Classes/codec/AblyFlutterWriter.m)
- and update `writeValue` so that new codec encoder is called
+ and update `getType` and `getEncoder` so that new codec encoder is called
 8. add new codec encoder method in [ios.classes.codec.AblyFlutterReader](ios/Classes/codec/AblyFlutterReader.m)
  and update `getDecoder` so that new codec decoder is called
 
