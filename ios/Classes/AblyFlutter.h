@@ -3,12 +3,15 @@
 @class ARTRest;
 @class ARTRealtime;
 @class ARTClientOptions;
+#import <Flutter/Flutter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
 
 + (instancetype)sharedInstance;
+
+-(instancetype) setChannel:(FlutterMethodChannel *const)channel;
 
 -(NSNumber *)createRestWithOptions:(ARTClientOptions *)options;
 

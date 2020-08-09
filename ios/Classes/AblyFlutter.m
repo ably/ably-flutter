@@ -21,6 +21,11 @@
     return sharedInstance;
 }
 
+-(instancetype) setChannel:(FlutterMethodChannel *const)channel  {
+    _channel = channel;
+    return self;
+}
+
 -(instancetype)init {
     self = [super init];
     if (!self) {
