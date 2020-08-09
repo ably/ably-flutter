@@ -26,10 +26,10 @@ class AblyLibrary {
     //    using LongSparseArray as suggested by Studio
     //    and as per this answer https://stackoverflow.com/a/31413003
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _restTokens = new LongSparseArray<>();
+    private final LongSparseArray<Object> _restTokenData = new LongSparseArray<>();
 
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _realtimeTokens = new LongSparseArray<>();
+    private final LongSparseArray<Object> _realtimeTokenData = new LongSparseArray<>();
 
     long getCurrentHandle(){
         return _nextHandle;
@@ -46,12 +46,12 @@ class AblyLibrary {
     }
 
     void setRestToken(long handle, Object tokenDetails){
-        _restTokens.put(handle, tokenDetails);
+        _restTokenData.put(handle, tokenDetails);
     }
 
     Object getRestToken(long handle){
-        Object token = _restTokens.get(handle);
-        _restTokens.remove(handle);
+        Object token = _restTokenData.get(handle);
+        _restTokenData.remove(handle);
         return token;
     }
 
@@ -67,12 +67,12 @@ class AblyLibrary {
     }
 
     void setRealtimeToken(long handle, Object tokenDetails){
-        _realtimeTokens.put(handle, tokenDetails);
+        _realtimeTokenData.put(handle, tokenDetails);
     }
 
     Object getRealtimeToken(long handle){
-        Object token = _realtimeTokens.get(handle);
-        _realtimeTokens.remove(handle);
+        Object token = _realtimeTokenData.get(handle);
+        _realtimeTokenData.remove(handle);
         return token;
     }
 
