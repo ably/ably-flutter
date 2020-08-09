@@ -41,7 +41,7 @@ public class AblyFlutterPlugin implements FlutterPlugin {
         final MethodChannel channel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
         AblyMethodCallHandler methodCallHandler = AblyMethodCallHandler.getInstance(
                 channel,
-                // Streams channel will be created on `register` method call
+                // Streams channel will be reset on `register` method call
                 // and also on every hot-reload
                 streamsChannel::reset
         );
