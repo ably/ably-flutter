@@ -1,5 +1,6 @@
 #import "AblyFlutterReader.h"
 #import "Ably.h"
+#import "ARTClientOptions+AblyFlutterClientOptions.h"
 #import "AblyFlutterMessage.h"
 #import "AblyPlatformConstants.h"
 #import "ARTTokenDetails.h"
@@ -33,6 +34,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
         [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
+        [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
+        [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -111,6 +114,8 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, authHeaders, dictionary, TxClientOptions_authHeaders);
     READ_VALUE(o, authParams, dictionary, TxClientOptions_authParams);
     READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
+    READ_VALUE(o, hasAuthCallback, dictionary, TxClientOptions_hasAuthCallback);
+    ON_VALUE(^(const id value) { o.hasAuthCallback = value; }, dictionary, TxClientOptions_hasAuthCallback);
 
     // ClientOptions
     READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
@@ -135,7 +140,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
     // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
-    
+
     return o;
 };
 
@@ -152,9 +157,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenDetails_capability);
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenDetails_clientId);
 
-    ARTTokenDetails *const o = [ARTTokenDetails new];
-    [o initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
-    return o;
+    return [[ARTTokenDetails new] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
 }
 
 +(ARTTokenParams *)tokenParamsFromDictionary: (NSDictionary *) dictionary {
@@ -163,9 +166,8 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenParams_clientId);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenParams_nonce);
-    
-    ARTTokenParams *const o = [ARTTokenParams new];
-    [o initWithClientId: clientId nonce: nonce];
+
+    ARTTokenParams *const o = [[ARTTokenParams new] initWithClientId: clientId nonce: nonce];
     READ_VALUE(o, ttl, dictionary, TxTokenParams_ttl);
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
@@ -181,6 +183,36 @@ static AblyCodecDecoder readChannelMessage = ^ARTMessage*(NSDictionary *const di
     READ_VALUE(o, extras, dictionary, TxMessage_extras);
     READ_VALUE(o, data, dictionary, TxMessage_data);
     return o;
+};
+
+static AblyCodecDecoder readTokenDetails = ^ARTTokenDetails*(NSDictionary *const dictionary) {
+    return [AblyFlutterReader tokenDetailsFromDictionary: dictionary];
+};
+
+static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const dictionary) {
+    __block NSString *mac = nil;
+    __block NSNumber *ttl = nil;
+    __block NSString *nonce = nil;
+    __block NSString *keyName = nil;
+    __block NSString *clientId = nil;
+    __block NSDate *timestamp = nil;
+    __block NSString *capability = nil;
+    
+    ON_VALUE(^(const id value) { mac = value; }, dictionary, TxTokenRequest_mac);
+    ON_VALUE(^(const id value) { ttl = value; }, dictionary, TxTokenRequest_ttl);
+    ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenRequest_nonce);
+    ON_VALUE(^(const id value) { keyName = value; }, dictionary, TxTokenRequest_keyName);
+    ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenRequest_clientId);
+    ON_VALUE(^(const id value) { timestamp = value; }, dictionary, TxTokenRequest_timestamp);
+    ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenRequest_capability);
+    
+    ARTTokenParams *const params = [[ARTTokenParams new] initWithClientId:clientId nonce:nonce];
+    params.ttl = ttl;
+    params.clientId = clientId;
+    params.timestamp = timestamp;
+    params.capability = capability;
+    
+    return [[ARTTokenRequest new] initWithTokenParams:params keyName:keyName nonce:nonce mac:mac];
 };
 
 @end
