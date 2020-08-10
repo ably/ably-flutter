@@ -114,12 +114,15 @@ class _MyAppState extends State<MyApp> {
   void createAblyRest() async {
     setState(() { _restCreationState = OpState.InProgress; });
 
-    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
-    clientOptions.environment = 'sandbox';
+    final clientOptions = ably.ClientOptions();
+    clientOptions.tokenDetails = ably.TokenDetails(_appKey.secret);
     clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
+    clientOptions.defaultTokenParams = ably.TokenParams(ttl: 20000);
+    clientOptions.authCallback = (ably.TokenParams params) async
+      => ably.TokenRequest.fromMap(await provisioning.getTokenRequest());
 
     ably.Rest rest;
     try{
