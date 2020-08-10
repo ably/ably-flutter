@@ -3,9 +3,13 @@
 // TODO work out why importing Ably as a module does not work like this:
 //   @import Ably;
 #import "Ably.h"
+#import "AblyFlutterMessage.h"
+#import "ARTClientOptions+AblyFlutterClientOptions.h"
+#import "codec/AblyPlatformConstants.h"
 
 
 @implementation AblyFlutter {
+    FlutterMethodChannel* _channel;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
     long long _nextHandle;
@@ -43,9 +47,30 @@
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
-    
-    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options];
     NSNumber *const handle = @(_nextHandle++);
+    if(options.hasAuthCallback){
+        options.authCallback =
+        ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
+            AblyFlutterMessage *const message
+                = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            [self->_channel invokeMethod:AblyPlatformMethod_authCallback
+                               arguments:message
+                                  result:^(id tokenData){
+                if (!tokenData) {
+                    NSLog(@"No token data recieved %@", tokenData);
+                    callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
+                                                      code:ARTCodeErrorAuthConfiguredProviderFailure
+                                                  userInfo:nil]); //TODO check if this is okay!
+                } if ([tokenData isKindOfClass:[FlutterError class]]) {
+                    NSLog(@"Error getting token data %@", tokenData);
+                    callback(nil, tokenData);
+                } else {
+                    callback(tokenData, nil);
+                }
+            }];
+        };
+    }
+    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options];
     [_restInstances setObject:instance forKey:handle];
     return handle;
 }
