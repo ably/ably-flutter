@@ -130,8 +130,9 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, idempotentRestPublishing, dictionary, TxClientOptions_idempotentRestPublishing);
     READ_VALUE(o, fallbackHosts, dictionary, TxClientOptions_fallbackHosts);
     READ_VALUE(o, fallbackHostsUseDefault, dictionary, TxClientOptions_fallbackHostsUseDefault);
-    ON_VALUE(^(const id value) { o.defaultTokenParams = [AblyFlutterReader tokenParamsFromDictionary: value]; }, dictionary, TxClientOptions_defaultTokenParams);
-    READ_VALUE(o, defaultTokenParams, dictionary, TxClientOptions_defaultTokenParams);
+    ON_VALUE(^(const id value) {
+        o.defaultTokenParams = [AblyFlutterReader tokenParamsFromDictionary: value];
+    }, dictionary, TxClientOptions_defaultTokenParams);
     // Following properties not supported by Objective C library
     // useAuthToken, port, tlsPort, httpOpenTimeout, httpRequestTimeout,
     // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
