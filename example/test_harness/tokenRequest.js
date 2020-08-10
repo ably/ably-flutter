@@ -38,7 +38,7 @@ app.get('/auth', function (req, res) {
       console.log(message);
       res.status(500).send(message);
     } else {
-      console.log("token request successful");
+      console.log("token request successful\n", JSON.stringify(tokenRequest, null, 2));
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(tokenRequest));
     }
