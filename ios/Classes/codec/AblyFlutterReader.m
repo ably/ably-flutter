@@ -171,6 +171,9 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, ttl, dictionary, TxTokenParams_ttl);
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
+    ON_VALUE(^(const id value) {
+        o.timestamp = [NSDate dateWithTimeIntervalSince1970:[value integerValue]/1000];
+    }, dictionary, TxTokenParams_timestamp);
     return o;
 }
 
@@ -191,28 +194,18 @@ static AblyCodecDecoder readTokenDetails = ^ARTTokenDetails*(NSDictionary *const
 
 static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const dictionary) {
     __block NSString *mac = nil;
-    __block NSNumber *ttl = nil;
     __block NSString *nonce = nil;
     __block NSString *keyName = nil;
-    __block NSString *clientId = nil;
-    __block NSDate *timestamp = nil;
-    __block NSString *capability = nil;
 
     ON_VALUE(^(const id value) { mac = value; }, dictionary, TxTokenRequest_mac);
-    ON_VALUE(^(const id value) { ttl = value; }, dictionary, TxTokenRequest_ttl);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenRequest_nonce);
     ON_VALUE(^(const id value) { keyName = value; }, dictionary, TxTokenRequest_keyName);
-    ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenRequest_clientId);
-    ON_VALUE(^(const id value) { timestamp = value; }, dictionary, TxTokenRequest_timestamp);
-    ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenRequest_capability);
 
-    ARTTokenParams *const params = [[ARTTokenParams new] initWithClientId:clientId nonce:nonce];
-    params.ttl = ttl;
-    params.clientId = clientId;
-    params.timestamp = timestamp;
-    params.capability = capability;
-
-    return [[ARTTokenRequest new] initWithTokenParams:params keyName:keyName nonce:nonce mac:mac];
+    ARTTokenParams *const params = [AblyFlutterReader tokenParamsFromDictionary: dictionary];
+    return [[ARTTokenRequest new] initWithTokenParams:params
+                                              keyName:keyName
+                                                nonce:nonce
+                                                  mac:mac];
 };
 
 @end
