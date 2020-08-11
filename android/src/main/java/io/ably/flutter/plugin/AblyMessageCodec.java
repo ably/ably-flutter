@@ -141,7 +141,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
      * returns null if these 2 types are a no-match
      * */
     static JsonElement readValueAsJsonElement(final Object object) {
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
         if(object instanceof Map) {
             return gson.fromJson(gson.toJson(object, Map.class), JsonObject.class);
         } else if (object instanceof ArrayList){
