@@ -14,7 +14,7 @@ abstract class PlatformObject {
 
   static const _acquireHandleTimeout = Duration(seconds: 2);
   Future<int> _handle;
-  int _handleValue;
+  int _handleValue;  // Only for logging. Otherwise use _handle instead.
 
   PlatformObject(){
     this._handle = _acquireHandle();
