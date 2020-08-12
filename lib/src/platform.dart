@@ -18,37 +18,16 @@ final MethodChannel methodChannel = MethodChannel('io.ably.flutter.plugin', code
 /// instance of method channel to listen to android/ios events
 final StreamsChannel streamsChannel = StreamsChannel('io.ably.flutter.stream', codec);
 
-
-bool _initialized = false;
-
-void _init(){
-  methodChannel.invokeMethod(PlatformMethod.registerAbly).then((_){
-    _initialized = true;
-  });
-}
-
 /// Initializing ably on platform side by invoking `register` platform method.
 /// Register will clear any stale instances on platform.
+const _initializeTimeout = Duration(seconds: 2);
+Future _initializer;
 Future _initialize() async {
-  if(_initialized) return;
-  _init();
-  // if `_initialized` is false => initialization is in progress.
-  // Let's wait for 10ms and retry. If the total time exceeds 2 seconds,
-  // a TimeoutException is raised
-  //
-  // this is required as many asynchronous `_initialize` calls
-  // will be invoked from different Ably instances
-  while(true){
-    bool _registrationFailed = false;
-    Future.delayed(Duration(seconds: 2), (){
-      _registrationFailed = true;
-    });
-    await Future.delayed(Duration(milliseconds: 10));
-    if(_registrationFailed){
-      throw TimeoutException("Handle aquiring timed out");
-    }
-    if(_initialized) return;
-  }
+  return _initializer ??=  methodChannel.invokeMethod(PlatformMethod.registerAbly)
+    .timeout(_initializeTimeout, onTimeout: () {
+    _initializer = null;
+    throw TimeoutException('Initialization timed out.', _initializeTimeout);
+  });
 }
 
 Future<T> invoke<T>(String method, [dynamic arguments]) async {
