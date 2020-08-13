@@ -11,7 +11,13 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   Realtime realtimePlatformObject;
 
-  ConnectionPlatformObject(this.realtimePlatformObject);
+  ConnectionPlatformObject(this.realtimePlatformObject) {
+    this.handle;  //proactively acquiring handle
+    this.state = ConnectionState.initialized;
+    this.on().listen((ConnectionStateChange event) {
+      this.state = event.current;
+    });
+  }
 
   @override
   Future<int> createPlatformInstance() async => await realtimePlatformObject.handle;
@@ -35,18 +41,11 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   ConnectionState state;
 
   @override
-  Stream<ConnectionStateChange> on([ConnectionEvent state]) {
-    Stream<ConnectionStateChange> stream = listen(PlatformMethod.onRealtimeConnectionStateChanged).transform<ConnectionStateChange>(
-        StreamTransformer.fromHandlers(
-            handleData: (dynamic value, EventSink<ConnectionStateChange> sink){
-              sink.add(value as ConnectionStateChange);
-            }
-        )
-    );
-    if (state!=null) {
-      return stream.takeWhile((ConnectionStateChange _stateChange) => _stateChange.event==state);
-    }
-    return stream;
+  Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) {
+    return listen(PlatformMethod.onRealtimeConnectionStateChanged)
+      .map((connectionEvent) => connectionEvent as ConnectionStateChange)
+      .where((connectionStateChange) =>
+        connectionEvent==null || connectionStateChange.event==connectionEvent);
   }
 
   @override

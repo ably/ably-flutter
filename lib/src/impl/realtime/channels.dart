@@ -23,7 +23,14 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   @override
   spec.RealtimePresence presence;
 
-  RealtimePlatformChannel(this.ably, this.name, this.options): super();
+  RealtimePlatformChannel(this.ably, this.name, this.options): super() {
+    this.handle;  //proactively acquiring handle
+    this.state = spec.ChannelState.initialized;
+    this.on().listen((ChannelStateChange event) {
+      this.state = event.current;
+      print("updating state! ${this.state}");
+    });
+  }
 
   Realtime get realtimePlatformObject => this.ably as Realtime;
 
@@ -39,6 +46,13 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     return null;
   }
 
+  Map<String,dynamic> __payload;
+  Map<String, dynamic> get _payload => __payload ??=
+  {
+    "channel": name,
+    if(options != null) "options": options
+  };
+
   @override
   Future<void> publish({
     spec.Message message,
@@ -49,7 +63,7 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     try {
       await this.invoke(PlatformMethod.publish, {
         //TODO support Message and List<Message>
-        "channel": this.name,
+        ..._payload,
         "name": name,
         "message": data
       });
@@ -74,41 +88,49 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
   spec.ChannelState state;
 
   @override
-  Future<void> attach() {
-    // TODO: implement attach
-    return null;
-  }
-
-  @override
-  Future<void> detach() {
-    // TODO: implement detach
-    return null;
-  }
-
-  @override
-  void setOptions(spec.ChannelOptions options) {
-    // TODO: implement setOptions
-  }
-
-  @override
-  Stream<ChannelStateChange> on([ChannelEvent state]) {
-    // TODO: implement on
-    Stream<ChannelStateChange> stream = listen(PlatformMethod.onRealtimeChannelStateChanged);
-    if (state!=null) {
-      return stream.takeWhile((ChannelStateChange _stateChange) => _stateChange.event==state);
+  Future<void> attach() async {
+    try {
+      await this.invoke(PlatformMethod.attachRealtimeChannel, _payload);
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message, pe.details);
     }
-    return stream;
   }
 
   @override
-  Future<void> subscribe({String event, List<String> events, spec.EventListener<spec.Message> listener}) {
-    // TODO: implement subscribe
-    return null;
+  Future<void> detach() async {
+    try {
+      await this.invoke(PlatformMethod.detachRealtimeChannel, _payload);
+    } on PlatformException catch (pe) {
+      throw spec.AblyException(pe.code, pe.message, pe.details);
+    }
   }
 
   @override
-  void unsubscribe({String event, List<String> events, spec.EventListener<spec.Message> listener}) {
-    // TODO: implement unsubscribe
+  Future<void> setOptions(spec.ChannelOptions options) async {
+    throw AblyException(
+      null,
+      "Realtime chanel options are not supported yet."
+    );
+  }
+
+  @override
+  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) {
+    return listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
+      .map((stateChange) => stateChange as ChannelStateChange)
+      .where((stateChange) => channelEvent==null || stateChange.event==channelEvent);
+  }
+
+  @override
+  Stream<spec.Message> subscribe({
+    String name,
+    List<String> names
+  }) {
+    final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
+    return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
+      .map((message) => message as spec.Message)
+      .where((message) =>
+          subscribedNames.isEmpty ||
+          subscribedNames.any((n) => n == message.name));
   }
 
 }

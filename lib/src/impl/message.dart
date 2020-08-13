@@ -2,10 +2,19 @@ class AblyMessage {
 
   final int handle;
   final int type;
-  final dynamic message;
+  final Object message;
 
-  AblyMessage(dynamic message, {this.handle, this.type}):
-      assert(message!=null),
-      this.message = message;
+  AblyMessage(this.message, {this.handle, this.type}):
+      assert(message!=null);
+
+}
+
+class AblyEventMessage {
+
+  final String eventName;
+  final Object message;
+
+  AblyEventMessage(this.eventName, [this.message]):
+    assert(eventName!=null, "eventName cannot be null");
 
 }

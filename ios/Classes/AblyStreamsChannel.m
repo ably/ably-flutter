@@ -99,7 +99,7 @@
 }
 
 - (void) reset{
-    for (NSString* key in [_streams mutableCopy]) {
+    for (NSString* key in [_streams copy]) {
         AblyStreamsChannelStream *stream = _streams[key];
         [stream.handler onCancelWithArguments:nil];
         [_streams removeObjectForKey:key];

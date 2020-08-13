@@ -5,7 +5,9 @@
 
 class CodecTypes{
 	static const int ablyMessage = 128;
-	static const int clientOptions = 129;
+	static const int ablyEventMessage = 129;
+	static const int clientOptions = 130;
+	static const int message = 131;
 	static const int errorInfo = 144;
 	static const int connectionStateChange = 201;
 	static const int channelStateChange = 202;
@@ -20,12 +22,22 @@ class PlatformMethod {
 	static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
 	static const String connectRealtime = 'connectRealtime';
 	static const String closeRealtime = 'closeRealtime';
+	static const String attachRealtimeChannel = 'attachRealtimeChannel';
+	static const String detachRealtimeChannel = 'detachRealtimeChannel';
+	static const String setRealtimeChannelOptions = 'setRealtimeChannelOptions';
 	static const String onRealtimeConnectionStateChanged = 'onRealtimeConnectionStateChanged';
 	static const String onRealtimeChannelStateChanged = 'onRealtimeChannelStateChanged';
+	static const String onRealtimeChannelMessage = 'onRealtimeChannelMessage';
 }
 
 class TxAblyMessage{
 	static const String registrationHandle = "registrationHandle";
+	static const String type = "type";
+	static const String message = "message";
+}
+
+class TxAblyEventMessage{
+	static const String eventName = "eventName";
 	static const String type = "type";
 	static const String message = "message";
 }
@@ -104,5 +116,16 @@ class TxChannelStateChange{
 	static const String event = "event";
 	static const String resumed = "resumed";
 	static const String reason = "reason";
+}
+
+class TxMessage{
+	static const String id = "id";
+	static const String timestamp = "timestamp";
+	static const String clientId = "clientId";
+	static const String connectionId = "connectionId";
+	static const String encoding = "encoding";
+	static const String data = "data";
+	static const String name = "name";
+	static const String extras = "extras";
 }
 

@@ -101,11 +101,54 @@ realtime.connection.on(ably.ConnectionEvent.connected).listen((ably.ConnectionSt
 });
 ```
 
-Connect and disconnect to a realtime instance
+Connect and disconnect to a Realtime instance
 
 ```dart
 realtime.connect();     //connect to realtime
 realtime.disconnect();  //disconnect from realtime
+```
+
+Creating a Realtime channel
+
+```dart
+ably.RealtimeChannel channel = realtime.channels.get('channel-name');
+```
+
+Listening to channel events
+
+```dart
+channel.on().listen((ably.ChannelStateChange stateChange){
+  print("Channel state changed: ${stateChange.current}");
+});
+```
+
+Attaching to channel
+
+```dart
+await channel.attach();
+```
+
+Detaching from channel
+
+```dart
+await channel.detach();
+```
+
+Subscribing to channel messages
+
+```dart
+var messageStream = channel.subscribe();
+var channelMessageSubscription = messageStream.listen((ably.Message message){
+  print("New message arrived ${message.data}");
+});
+```
+
+_use `channel.subscribe(name: "event1")` or `channel.subscribe(names: ["event1", "event2"])` to listen to specific named messages_
+
+UnSubscribing from channel messages
+
+```dart
+await channelMessageSubscription.cancel();
 ```
 
 ## Caveats

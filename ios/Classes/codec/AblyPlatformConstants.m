@@ -15,14 +15,24 @@ NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
 NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
 NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
+NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChannel";
+NSString *const AblyPlatformMethod_detachRealtimeChannel= @"detachRealtimeChannel";
+NSString *const AblyPlatformMethod_setRealtimeChannelOptions= @"setRealtimeChannelOptions";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
+NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
 @end
 
 @implementation TxAblyMessage
 NSString *const TxAblyMessage_registrationHandle = @"registrationHandle";
 NSString *const TxAblyMessage_type = @"type";
 NSString *const TxAblyMessage_message = @"message";
+@end
+
+@implementation TxAblyEventMessage
+NSString *const TxAblyEventMessage_eventName = @"eventName";
+NSString *const TxAblyEventMessage_type = @"type";
+NSString *const TxAblyEventMessage_message = @"message";
 @end
 
 @implementation TxErrorInfo
@@ -99,4 +109,15 @@ NSString *const TxChannelStateChange_previous = @"previous";
 NSString *const TxChannelStateChange_event = @"event";
 NSString *const TxChannelStateChange_resumed = @"resumed";
 NSString *const TxChannelStateChange_reason = @"reason";
+@end
+
+@implementation TxMessage
+NSString *const TxMessage_id = @"id";
+NSString *const TxMessage_timestamp = @"timestamp";
+NSString *const TxMessage_clientId = @"clientId";
+NSString *const TxMessage_connectionId = @"connectionId";
+NSString *const TxMessage_encoding = @"encoding";
+NSString *const TxMessage_data = @"data";
+NSString *const TxMessage_name = @"name";
+NSString *const TxMessage_extras = @"extras";
 @end

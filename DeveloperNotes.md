@@ -58,6 +58,30 @@ Some files in the project are generated to maintain sync between
 
 [Read about generation of platform specific constant files](bin/README.md)
 
+## Implementing new codec types
+
+1. Add new type along with value in `_types` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+2. Add an object definition  with object name and its properties to `objects` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+ This will create `Tx<ObjectName>` under which all properties are accessible.
+ 
+Generate platform constants and continue
+
+3. update `getCodecType` in [lib.src.codec.Codec](lib/src/codec.dart) so new codec type is returned based on runtime type
+4. update `codecPair` in [lib.src.codec.Codec](lib/src/codec.dart)  so new encoder/decoder is assigned for new type
+5. update `writeValue` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
+ so new codec type is obtained from runtime type
+6. update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
+ so new encoder/decoder is assigned for new type
+7. add new codec encoder method in [ios.Classes.codec.AblyFlutterWriter](ios/Classes/codec/AblyFlutterWriter.m)
+ and update `writeValue` so that new codec encoder is called
+8. add new codec encoder method in [ios.classes.codec.AblyFlutterReader](ios/Classes/codec/AblyFlutterReader.m)
+ and update `getDecoder` so that new codec decoder is called
+
+## Implementing new platform methods
+
+1. Add new method name in `_platformMethods` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+
+Generate platform constants and use wherever required
 
 ## Static plugin code analyzer
 

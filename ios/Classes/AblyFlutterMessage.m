@@ -22,3 +22,27 @@
 }
 
 @end
+
+
+@implementation AblyFlutterEventMessage
+
+@synthesize eventName = _eventName;
+@synthesize message = _message;
+
+-(instancetype)initWithEventName:(NSString *const)eventName message:(const id)message {
+    if (!eventName) {
+        [NSException raise:NSInvalidArgumentException format:@"eventName cannot be nil."];
+    }
+
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+
+    _eventName = eventName;
+    _message = message;
+
+    return self;
+}
+
+@end

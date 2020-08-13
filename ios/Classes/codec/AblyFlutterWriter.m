@@ -21,6 +21,10 @@
         [self writeByte:channelStateChangeCodecType];
         [self writeValue: [self encodeChannelStateChange: value]];
         return;
+    }else if([value isKindOfClass:[ARTMessage class]]){
+        [self writeByte:messageCodecType];
+        [self writeValue: [self encodeChannelMessage: value]];
+        return;
     }
     [super writeValue:value];
 }
@@ -38,7 +42,7 @@
 }
 
 - (NSMutableDictionary<NSString *, NSObject *> *) encodeErrorInfo:(ARTErrorInfo *const) e{
-    NSMutableDictionary<NSString *, NSObject *> *dictionary;
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_VALUE(dictionary, TxErrorInfo_message, [e message]);
     WRITE_VALUE(dictionary, TxErrorInfo_statusCode, @([e statusCode]));
     // code, href, requestId and cause - not available in ably-cocoa
@@ -57,7 +61,7 @@
 }
 
 - (NSDictionary *) encodeChannelStateChange:(ARTChannelStateChange *const) stateChange{
-    NSMutableDictionary<NSString *, NSObject *> *dictionary;
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_ENUM(dictionary, TxChannelStateChange_current, [stateChange current]);
     WRITE_ENUM(dictionary, TxChannelStateChange_previous, [stateChange previous]);
     WRITE_ENUM(dictionary, TxChannelStateChange_event, [stateChange event]);
@@ -66,5 +70,21 @@
     return dictionary;
 }
 
+- (NSDictionary *) encodeChannelMessage:(ARTMessage *const) message{
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    
+    WRITE_VALUE(dictionary, TxMessage_id, [message id]);
+    WRITE_VALUE(dictionary, TxMessage_name, [message name]);
+    WRITE_VALUE(dictionary, TxMessage_clientId, [message clientId]);
+    WRITE_VALUE(dictionary, TxMessage_connectionId, [message connectionId]);
+    WRITE_VALUE(dictionary, TxMessage_encoding, [message encoding]);
+    WRITE_VALUE(dictionary, TxMessage_extras, [message extras]);
+    WRITE_VALUE(dictionary, TxMessage_data, (NSObject *)[message data]);
+        
+    NSTimeInterval seconds = [[message timestamp] timeIntervalSince1970];
+    WRITE_VALUE(dictionary, TxMessage_timestamp, @((long)(seconds*1000)));
+    
+    return dictionary;
+}
 
 @end

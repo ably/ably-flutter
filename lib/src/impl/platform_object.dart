@@ -12,53 +12,26 @@ import 'streams_channel.dart';
 /// implementation.
 abstract class PlatformObject {
 
-  int _handle;
+  static const _acquireHandleTimeout = Duration(seconds: 2);
+  Future<int> _handle;
+  int _handleValue;  // Only for logging. Otherwise use _handle instead.
 
   PlatformObject(){
-    this.handle;  //fetching asynchronous handle proactively...
+    this._handle = _acquireHandle();
   }
 
   @override
-  String toString() => 'Ably Platform Object $_handle';
+  String toString() => 'Ably Platform Object $_handleValue';
 
   Future<int> createPlatformInstance();
 
-  bool _registering = false;
-  Future<int> get handle async {
-    // This handle can be required simultaneously or with less time difference
-    // as a result of asynchronous invocations (from app code). There is
-    // a very high probability that the handle is not acquired from
-    // platform side yet, but another initiator is requesting the handle.
-    // `_registering` serves as a flag to avoid another method call
-    // to platform side. These initiators need to be served after platform
-    // has responded with proper handle, so a short hold and re-check will
-    // return the handle whenever it is available.
-    // 10ms is set as delay duration based on the conversation here
-    // https://github.com/ably/ably-flutter/pull/18#discussion_r450699980.
-    //
-    // If the total time exceeds 2 seconds, a TimeoutException is raised
-    if(_registering){
-      bool _registrationFailed = false;
-      Future.delayed(Duration(seconds: 2), (){
-        _registrationFailed = true;
-      });
-      while(true){
-        await Future.delayed(Duration(milliseconds: 10));
-        if(_registrationFailed){
-          throw TimeoutException("Handle aquiring timed out");
-        }
-        if(_handle!=null){
-          return _handle;
-        }
-      }
-    }
-    if(_handle == null) {
-      _registering = true;
-      _handle = await createPlatformInstance();
-      _registering = false;
-    }
-    return _handle;
-  }
+  Future<int> get handle async => _handle ??= _acquireHandle();
+
+  Future<int> _acquireHandle() => createPlatformInstance().timeout(
+    _acquireHandleTimeout, onTimeout: () {
+    _handle = null;
+    throw TimeoutException('Acquiring handle timed out.', _acquireHandleTimeout);
+  }).then((value) => _handleValue=value);
 
   MethodChannel get methodChannel => platform.methodChannel;
   StreamsChannel get eventChannel => platform.streamsChannel;
@@ -69,12 +42,12 @@ abstract class PlatformObject {
   }
 
   /// invoke platform method channel without AblyMessage encapsulation
-  Future<T> invokeRaw<T>(final String method, [final dynamic arguments]) async {
+  Future<T> invokeRaw<T>(final String method, [final Object arguments]) async {
     return await platform.invoke<T>(method, arguments);
   }
 
   /// invoke platform method channel with AblyMessage encapsulation
-  Future<T> invoke<T>(final String method, [final dynamic argument]) async {
+  Future<T> invoke<T>(final String method, [final Object argument]) async {
     int _handle = await handle;
     final message = (null != argument)
       ? AblyMessage(AblyMessage(argument, handle: _handle))
@@ -82,16 +55,16 @@ abstract class PlatformObject {
     return await invokeRaw<T>(method, message);
   }
 
-  Future<Stream<dynamic>> _listen(final String method) async {
+  Future<Stream<dynamic>> _listen(final String eventName, [final Object payload]) async {
     return eventChannel.receiveBroadcastStream(
-      AblyMessage(AblyMessage(method, handle: await handle))
+      AblyMessage(AblyEventMessage(eventName, payload), handle: await handle)
     );
   }
 
   /// Listen for events
-  Stream<dynamic> listen(final String method){
+  Stream<dynamic> listen(final String method, [final Object payload]){
     StreamController<dynamic> controller = StreamController<dynamic>();
-    _listen(method).then(controller.addStream);
+    _listen(method, payload).then(controller.addStream);
     return controller.stream;
   }
 

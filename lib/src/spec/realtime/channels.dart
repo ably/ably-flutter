@@ -14,8 +14,8 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
 
   AblyBase ably;
 
-  String name;              //Not in IDL
-  ChannelOptions options;   //Not in IDL
+  final String name;              //Not in IDL
+  final ChannelOptions options;   //Not in IDL
 
   ErrorInfo errorReason;
   ChannelState state;
@@ -34,15 +34,9 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
     String name,
     dynamic data
   });
-  Future<void> subscribe({
-    String event,
-    List<String> events,
-    EventListener<Message> listener
-  });
-  void unsubscribe({
-    String event,
-    List<String> events,
-    EventListener<Message> listener //TODO check if this is the type that is expected
+  Stream<Message> subscribe({
+    String name,
+    List<String> names,
   });
   void setOptions(ChannelOptions options);
 }

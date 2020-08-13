@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_END
 + (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
         [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
+        [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
         [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
@@ -51,6 +52,16 @@ static AblyCodecDecoder readAblyFlutterMessage = ^AblyFlutterMessage*(NSDictiona
         message = decoder(message);
     }
     return [[AblyFlutterMessage alloc] initWithMessage:message handle: [dictionary objectForKey:TxAblyMessage_registrationHandle]];
+};
+
+static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(NSDictionary *const dictionary) {
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [dictionary objectForKey:TxAblyEventMessage_type]]];
+    NSString* eventName = [dictionary objectForKey:TxAblyEventMessage_eventName];
+    id message = [dictionary objectForKey:TxAblyEventMessage_message];
+    if(decoder){
+        message = decoder(message);
+    }
+    return [[AblyFlutterEventMessage alloc] initWithEventName:eventName message:message];
 };
 
 /**

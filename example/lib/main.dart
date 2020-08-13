@@ -30,11 +30,28 @@ class _MyAppState extends State<MyApp> {
   ably.Realtime _realtime;
   ably.Rest _rest;
   ably.ConnectionState _realtimeConnectionState;
+  ably.ChannelState _realtimeChannelState;
+  List<StreamSubscription<ably.ConnectionStateChange>> connectionStateChangeSubscriptions;
+  StreamSubscription<ably.ChannelStateChange> channelStateChangeSubscription;
+  StreamSubscription<ably.Message> channelMessageSubscription;
+  ably.Message channelMessage;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+  }
+
+  @override
+  void dispose() {
+    // This dispose would not be effective in this example as this is a single view
+    // but subscriptions must be disposed when listeners are
+    // implemented in the actual application
+    //
+    // See: https://api.flutter.dev/flutter/widgets/State/dispose.html
+    channelStateChangeSubscription.cancel();
+    connectionStateChangeSubscriptions.forEach((s) => s.cancel());
+    super.dispose();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -75,6 +92,7 @@ class _MyAppState extends State<MyApp> {
     provisioning.AppKey appKey;
     try {
       appKey = await provisioning.provision('sandbox-');
+      print("App key acquired! `$appKey`");
     } catch (error) {
       print('Error provisioning Ably: ${error}');
       setState(() { _provisioningState = OpState.Failed; });
@@ -134,7 +152,7 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString());
     clientOptions.environment = 'sandbox';
-    clientOptions.logLevel = ably.LogLevel.error;
+    clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
     };
@@ -143,72 +161,99 @@ class _MyAppState extends State<MyApp> {
     ably.Realtime realtime;
     try {
       realtime = ably.Realtime(options: clientOptions);
-
-      //One can listen from multiple listeners on the same event,
-      // and must cancel each subscription one by one
-      //RETAINING LISTENER - α
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
-        setState(() { _realtimeConnectionState = stateChange.current; });
-      });
-
-      //DISPOSE ON CONNECTED
-      Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
-      StreamSubscription subscription;
-      subscription = stream.listen((ably.ConnectionStateChange stateChange) async {
-        print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
-        if (stateChange.event == ably.ConnectionEvent.connected) {
-          await subscription.cancel();
-        }
-      });
-
-      //RETAINING LISTENER - β
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
-        // NESTED LISTENER - ξ
-        // will be registered only when connected event is received by β listener
-        realtime.connection.on().listen((
-          ably.ConnectionStateChange stateChange) async {
-          // k ξ listeners will be registered
-          // and each listener will be called `n-k` times respectively
-          // if listener β is called `n` times
-          print('NESTED LISTENER ξ: ${stateChange.event}');
-        });
-      });
-
-      StreamSubscription preZetaSubscription;
-      StreamSubscription postZetaSubscription;
-      preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        //This listener "pre ζ" will be cancelled from γ
-        print('NESTED LISTENER "pre ζ": ${stateChange.event}');
-      });
-
-
-      //RETAINING LISTENER - γ
-      realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
-        if (stateChange.event == ably.ConnectionEvent.connected) {
-          await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
-          await postZetaSubscription.cancel(); //by the time this cancel is triggered, postZeta hasn't received the event yet. And will never receive as it is cancelled.
-        }
-      });
-
-      postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-        //This listener "post ζ" will be cancelled from γ
-        print('NESTED LISTENER "post ζ": ${stateChange.event}');
-      });
-
-      setState(() {
-        _realtime = realtime;
-        _realtimeCreationState = OpState.Succeeded;
-      });
-
+      listenRealtimeConnection(realtime);
+      ably.RealtimeChannel channel = realtime.channels.get("test-channel");
+      listenRealtimeChannel(channel);
     } catch (error) {
       print('Error creating Ably Realtime: ${error}');
       setState(() { _realtimeCreationState = OpState.Failed; });
       rethrow;
     }
 
+  }
+
+  listenRealtimeConnection(ably.Realtime realtime) async {
+    //One can listen from multiple listeners on the same event,
+    // and must cancel each subscription one by one
+    //RETAINING LISTENER - α
+    StreamSubscription<ably.ConnectionStateChange> alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}');
+      setState(() { _realtimeConnectionState = stateChange.current; });
+    });
+
+    //DISPOSE ON CONNECTED
+    Stream<ably.ConnectionStateChange> stream = await realtime.connection.on();
+    StreamSubscription<ably.ConnectionStateChange> omegaSubscription;
+    omegaSubscription = stream.listen((ably.ConnectionStateChange stateChange) async {
+      print('DISPOSABLE LISTENER ω :: Change event arrived!: ${stateChange.event}');
+      if (stateChange.event == ably.ConnectionEvent.connected) {
+        await omegaSubscription.cancel();
+      }
+    });
+
+    //RETAINING LISTENER - β
+    StreamSubscription<ably.ConnectionStateChange> betaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
+      // NESTED LISTENER - ξ
+      // will be registered only when connected event is received by β listener
+      StreamSubscription<ably.ConnectionStateChange> etaSubscription = realtime.connection.on().listen((
+        ably.ConnectionStateChange stateChange) async {
+        // k ξ listeners will be registered
+        // and each listener will be called `n-k` times respectively
+        // if listener β is called `n` times
+        print('NESTED LISTENER ξ: ${stateChange.event}');
+      });
+      connectionStateChangeSubscriptions.add(etaSubscription);
+    });
+
+    StreamSubscription<ably.ConnectionStateChange> preZetaSubscription;
+    StreamSubscription<ably.ConnectionStateChange> postZetaSubscription;
+    preZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      //This listener "pre ζ" will be cancelled from γ
+      print('NESTED LISTENER "pre ζ": ${stateChange.event}');
+    });
+
+
+    //RETAINING LISTENER - γ
+    StreamSubscription<ably.ConnectionStateChange> gammaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
+      if (stateChange.event == ably.ConnectionEvent.connected) {
+        await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
+        await postZetaSubscription.cancel(); //by the time this cancel is triggered, postZeta hasn't received the event yet. And will never receive as it is cancelled.
+      }
+    });
+
+    postZetaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+      //This listener "post ζ" will be cancelled from γ
+      print('NESTED LISTENER "post ζ": ${stateChange.event}');
+    });
+
+    connectionStateChangeSubscriptions = [
+      alphaSubscription,
+      betaSubscription,
+      gammaSubscription,
+      omegaSubscription,
+      preZetaSubscription,
+      postZetaSubscription
+    ];
+
+    setState(() {
+      _realtime = realtime;
+      _realtimeCreationState = OpState.Succeeded;
+    });
+  }
+
+  listenRealtimeChannel(ably.RealtimeChannel channel) async {
+    channelStateChangeSubscription =  channel.on().listen((ably.ChannelStateChange stateChange){
+      print("New channel state: ${stateChange.current}");
+      if(stateChange.reason!=null){
+        print("stateChange.reason: ${stateChange.reason}");
+      }
+      setState((){
+        _realtimeChannelState = channel.state;
+        print("_realtimeChannelState $_realtimeChannelState");
+      });
+    });
   }
 
   // https://github.com/dart-lang/sdk/issues/37498
@@ -247,13 +292,71 @@ class _MyAppState extends State<MyApp> {
   Widget createRealtimeButton() => button(_realtimeCreationState, createAblyRealtime, 'Create Ably Realtime', 'Creating Ably Realtime', 'Ably Realtime Created');
 
   Widget createRTCConnectButton() => FlatButton(
+    padding: EdgeInsets.zero,
     onPressed: _realtime?.connect,
     child: Text('Connect'),
   );
 
   Widget createRTCloseButton() => FlatButton(
-    onPressed: _realtime?.close,
+    padding: EdgeInsets.zero,
+    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?_realtime?.close:null,
     child: Text('Close Connection'),
+  );
+
+  Widget createChannelAttachButton() => FlatButton(
+    padding: EdgeInsets.zero,
+    onPressed: (_realtimeConnectionState==ably.ConnectionState.connected)?() async {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      print("Attaching to channel ${channel.name}: Current state ${channel.state}");
+      try {
+        await channel.attach();
+        print("Attached");
+      } on ably.AblyException catch (e) {
+        print("Unable to attach to channel: ${e.errorInfo}");
+      }
+    }:null,
+    child: Text('Attach to Channel'),
+  );
+
+  Widget createChannelDetachButton() => FlatButton(
+    padding: EdgeInsets.zero,
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      print("Detaching from channel ${channel.name}: Current state ${channel.state}");
+      channel.detach();
+      print("Detached");
+    }:null,
+    child: Text('Detach from channel'),
+  );
+
+  Widget createChannelSubscribeButton() => FlatButton(
+    onPressed: (_realtimeChannelState==ably.ChannelState.attached && channelMessageSubscription==null)?() {
+      ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
+      Stream<ably.Message> messageStream = channel.subscribe(name: 'message-data');
+      channelMessageSubscription = messageStream.listen((ably.Message message){
+        print("Channel message recieved: $message\n"
+          "\tisNull: ${message.data == null}\n"
+          "\tisString ${message.data is String}\n"
+          "\tisMap ${message.data is Map}\n"
+          "\tisList ${message.data is List}\n");
+        setState((){
+          channelMessage = message;
+        });
+      });
+      print("Channel messages subscribed");
+    }:null,
+    child: Text('Subscribe'),
+  );
+
+  Widget createChannelUnSubscribeButton() => FlatButton(
+    onPressed: (channelMessageSubscription!=null)?() async {
+      await channelMessageSubscription.cancel();
+      print("Channel messages ubsubscribed");
+      setState((){
+        channelMessageSubscription = null;
+      });
+    }:null,
+    child: Text('Unsubscribe'),
   );
 
   int msgCounter = 0;
@@ -279,27 +382,42 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Ably Plugin Example App'),
         ),
         body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 36.0),
-            child: Column(
-              children: [
-                Text('Running on: $_platformVersion\n'),
-                Text('Ably version: $_ablyVersion\n'),
-                provisionButton(),
-                Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
-                Divider(),
-                createRealtimeButton(),
-                Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
-                Text('Connection Status: $_realtimeConnectionState'),
-                createRTCConnectButton(),
-                createRTCloseButton(),
-                Divider(),
-                createRestButton(),
-                Text('Rest: ' + ((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())),
-                sendRestMessage(),
-                Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
-              ]
-            ),
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 36.0),
+            children: [
+              Text('Running on: $_platformVersion\n'),
+              Text('Ably version: $_ablyVersion\n'),
+              provisionButton(),
+              Text('App Key: ' + ((_appKey == null) ? 'Ably not provisioned yet.' : _appKey.toString())),
+              Divider(),
+              createRealtimeButton(),
+              Text('Realtime: ' + ((_realtime == null) ? 'Ably Realtime not created yet.' : _realtime.toString())),
+              Text('Connection Status: $_realtimeConnectionState'),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createRTCConnectButton(),),
+                  Expanded(child: createRTCloseButton(), )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createChannelAttachButton()),
+                  Expanded(child: createChannelDetachButton()),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(child: createChannelSubscribeButton()),
+                  Expanded(child: createChannelUnSubscribeButton()),
+                ],
+              ),
+              Text('Message from channel: ${((channelMessage == null) ? '-' : channelMessage.data)}'),
+              Divider(),
+              createRestButton(),
+              Text('Rest: ${((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())}'),
+              sendRestMessage(),
+              Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter+1}"'),
+            ]
           ),
         ),
       ),

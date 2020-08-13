@@ -7,7 +7,9 @@
 
 typedef NS_ENUM(UInt8, _Value) {
   ablyMessageCodecType = 128,
-  clientOptionsCodecType = 129,
+  ablyEventMessageCodecType = 129,
+  clientOptionsCodecType = 130,
+  messageCodecType = 131,
   errorInfoCodecType = 144,
   connectionStateChangeCodecType = 201,
   channelStateChangeCodecType = 202,
@@ -23,14 +25,24 @@ extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
+extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
+extern NSString *const AblyPlatformMethod_detachRealtimeChannel;
+extern NSString *const AblyPlatformMethod_setRealtimeChannelOptions;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
+extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
 @end
 
 @interface TxAblyMessage : NSObject
 extern NSString *const TxAblyMessage_registrationHandle;
 extern NSString *const TxAblyMessage_type;
 extern NSString *const TxAblyMessage_message;
+@end
+
+@interface TxAblyEventMessage : NSObject
+extern NSString *const TxAblyEventMessage_eventName;
+extern NSString *const TxAblyEventMessage_type;
+extern NSString *const TxAblyEventMessage_message;
 @end
 
 @interface TxErrorInfo : NSObject
@@ -107,4 +119,15 @@ extern NSString *const TxChannelStateChange_previous;
 extern NSString *const TxChannelStateChange_event;
 extern NSString *const TxChannelStateChange_resumed;
 extern NSString *const TxChannelStateChange_reason;
+@end
+
+@interface TxMessage : NSObject
+extern NSString *const TxMessage_id;
+extern NSString *const TxMessage_timestamp;
+extern NSString *const TxMessage_clientId;
+extern NSString *const TxMessage_connectionId;
+extern NSString *const TxMessage_encoding;
+extern NSString *const TxMessage_data;
+extern NSString *const TxMessage_name;
+extern NSString *const TxMessage_extras;
 @end

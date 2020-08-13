@@ -1,7 +1,13 @@
 package io.ably.flutter.plugin;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -13,6 +19,7 @@ import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
+import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
 
@@ -53,11 +60,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
         AblyMessageCodec self = this;
         codecMap = new HashMap<Byte, CodecPair>(){
             {
-                put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::readAblyFlutterMessage));
-                put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::readClientOptions));
+                put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::decodeAblyFlutterMessage));
+                put(PlatformConstants.CodecTypes.ablyEventMessage, new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
+                put(PlatformConstants.CodecTypes.clientOptions, new CodecPair<>(null, self::decodeClientOptions));
                 put(PlatformConstants.CodecTypes.errorInfo, new CodecPair<>(self::encodeErrorInfo, null));
+                put(PlatformConstants.CodecTypes.message, new CodecPair<>(self::encodeChannelMessage, null));
                 put(PlatformConstants.CodecTypes.connectionStateChange, new CodecPair<>(self::encodeConnectionStateChange, null));
-                put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::writeChannelStateChange, null));
+                put(PlatformConstants.CodecTypes.channelStateChange, new CodecPair<>(self::encodeChannelStateChange, null));
             }
         };
     }
@@ -100,6 +109,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             type = PlatformConstants.CodecTypes.connectionStateChange;
         }else if(value instanceof ChannelStateListener.ChannelStateChange){
             type = PlatformConstants.CodecTypes.channelStateChange;
+        }else if(value instanceof Message){
+            type = PlatformConstants.CodecTypes.message;
         }
         if(type!=null){
             CodecPair pair = codecMap.get(type);
@@ -110,7 +121,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 return;
             }
         }
+        if(value instanceof JsonElement){
+            WriteJsonElement(stream, (JsonElement) value);
+            return;
+        }
         super.writeValue(stream, value);
+    }
+
+    private void WriteJsonElement(ByteArrayOutputStream stream, JsonElement value){
+        if(value instanceof JsonObject){
+            super.writeValue(stream, (new Gson()).fromJson(value, Map.class));
+        } else if(value instanceof JsonArray){
+            super.writeValue(stream, (new Gson()).fromJson(value, ArrayList.class));
+        }
     }
 
     /**
@@ -128,7 +151,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return (Long)object; // will java.lang.ClassCastException if object is not a Long
     }
 
-    private AblyFlutterMessage readAblyFlutterMessage(Map<String, Object> jsonMap) {
+    private AblyFlutterMessage decodeAblyFlutterMessage(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final Long handle = readValueAsLong(jsonMap.get(PlatformConstants.TxAblyMessage.registrationHandle));
         Object messageType = jsonMap.get(PlatformConstants.TxAblyMessage.type);
@@ -140,7 +163,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return new AblyFlutterMessage<>(message, handle);
     }
 
-    private ClientOptions readClientOptions(Map<String, Object> jsonMap) {
+    private AblyEventMessage decodeAblyFlutterEventMessage(Map<String, Object> jsonMap) {
+        if(jsonMap==null) return null;
+        final String eventName = (String) jsonMap.get(PlatformConstants.TxAblyEventMessage.eventName);
+        Object messageType = jsonMap.get(PlatformConstants.TxAblyEventMessage.type);
+        final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
+        Object message = jsonMap.get(PlatformConstants.TxAblyEventMessage.message);
+        if(type!=null){
+            message = codecMap.get((byte)(int)type).decode((Map<String, Object>)message);
+        }
+        return new AblyEventMessage<>(eventName, message);
+    }
+
+    private ClientOptions decodeClientOptions(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final ClientOptions o = new ClientOptions();
 
@@ -233,7 +268,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return jsonMap;
     }
 
-    private Map<String, Object> writeChannelStateChange(ChannelStateListener.ChannelStateChange c){
+    private Map<String, Object> encodeChannelStateChange(ChannelStateListener.ChannelStateChange c){
         if(c==null) return null;
         HashMap<String, Object> jsonMap = new HashMap<>();
         writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, c.current);
@@ -244,5 +279,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return jsonMap;
     }
 
+    private Map<String, Object> encodeChannelMessage(Message c){
+        if(c==null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.id, c.id);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.clientId, c.clientId);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.connectionId, c.connectionId);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.timestamp, c.timestamp);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.name, c.name);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.data, c.data);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.encoding, c.encoding);
+        writeValueToJson(jsonMap, PlatformConstants.TxMessage.extras, c.extras);
+        return jsonMap;
+    }
 
 }
