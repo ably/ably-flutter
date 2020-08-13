@@ -9,6 +9,7 @@ emulators.
 Run the bash script in the project root directory
 
 ``` shell
+cd test_integration
 ./test_driver.sh
 ```
 
