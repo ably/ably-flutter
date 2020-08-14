@@ -117,8 +117,7 @@ void main() {
     expect(messageData['channel'], 'test');
     expect(messageData['name'], 'name');
     expect(messageData['message'], 'data2');
-    // });
-  }, timeout: Timeout.none);
+  });
 
   test('publish message with authCallback timing out', () async {
     // setup
@@ -168,8 +167,7 @@ void main() {
         expect(messageData['message'], 'data3-2');
       }),
     );
-    // });
-  }, timeout: Timeout.none);
+  });
 
   test('publish 2 message with authCallback', () async {
     // setup
