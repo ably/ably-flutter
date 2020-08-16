@@ -57,6 +57,9 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   }
 
   Future<void> _publishInternal() async {
+    if (_authCallBackCompleter != null) {
+      return;
+    }
     while (_publishQueue.isNotEmpty) {
       final item = _publishQueue.first;
       // This is the only place where failed items are removed from the queue.
@@ -93,6 +96,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
                     e.completer.completeError(
                         TimeoutException('Timed out', defaultPublishTimout));
                   }));
+          _authCallBackCompleter = null;
         } else {
           _publishQueue.remove(item);
           if (!item.completer.isCompleted) {
