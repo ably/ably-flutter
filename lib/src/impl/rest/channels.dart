@@ -9,6 +9,9 @@ import 'package:flutter/services.dart';
 import '../platform_object.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
+  static const String clientConfiguredAuthenticationProviderRequestFailed =
+      '80019';
+
   /// [Rest] instance
   @override
   spec.AblyBase ably;
@@ -87,16 +90,19 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           item.completer.complete();
         }
       } on PlatformException catch (pe) {
-        if (pe.code == '80019') {
+        if (pe.code == clientConfiguredAuthenticationProviderRequestFailed) {
           _authCallBackCompleter = Completer<void>();
-          await _authCallBackCompleter.future.timeout(defaultPublishTimout,
-              onTimeout: () => _publishQueue
-                      .where((e) => !e.completer.isCompleted)
-                      .forEach((e) {
-                    e.completer.completeError(
-                        TimeoutException('Timed out', defaultPublishTimout));
-                  }));
-          _authCallBackCompleter = null;
+          try {
+            await _authCallBackCompleter.future.timeout(defaultPublishTimout,
+                onTimeout: () => _publishQueue
+                        .where((e) => !e.completer.isCompleted)
+                        .forEach((e) {
+                      e.completer.completeError(
+                          TimeoutException('Timed out', defaultPublishTimout));
+                    }));
+          } finally {
+            _authCallBackCompleter = null;
+          }
         } else {
           _publishQueue.remove(item);
           if (!item.completer.isCompleted) {
