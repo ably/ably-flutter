@@ -32,7 +32,7 @@ public class AblyFlutterPlugin implements FlutterPlugin {
         AblyFlutterPlugin.setupChannels(registrar.messenger());
     }
 
-    private static void setupChannels(BinaryMessenger messenger){
+    private static void setupChannels(BinaryMessenger messenger) {
         final MethodCodec codec = createCodec();
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
