@@ -13,7 +13,8 @@ class AblyLibrary {
     private long _nextHandle = 1;
 
     // privatizing default constructor to enforce usage of getInstance
-    private AblyLibrary(){}
+    private AblyLibrary() {
+    }
 
     static synchronized AblyLibrary getInstance() {
         if (null == _instance) {
@@ -43,12 +44,12 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
-    AblyRest getRest(final long handle){
+    AblyRest getRest(final long handle) {
         return _restInstances.get(handle);
     }
 
     void dispose() {
-        for(int i=0; i<_realtimeInstances.size(); i++){
+        for (int i = 0; i < _realtimeInstances.size(); i++) {
             long key = _realtimeInstances.keyAt(i);
             AblyRealtime r = _realtimeInstances.get(key);
             try {

@@ -1,7 +1,7 @@
 /*
  * This file is derivative of work derived from original work at:
  * https://github.com/loup-v/streams_channel
- * 
+ *
  * Copyright 2018 Loup Inc.
  * Copyright 2020 Ably Real-time Ltd (ably.com)
  *
@@ -73,7 +73,7 @@ final class StreamsChannel {
         messenger.setMessageHandler(name, incomingStreamRequestHandler);
     }
 
-    void reset(){
+    void reset() {
         incomingStreamRequestHandler.clearAll();
     }
 
@@ -139,18 +139,20 @@ final class StreamsChannel {
             if (oldStream != null) {
                 try {
                     oldStream.handler.onCancel(arguments);
-                    if(callback!=null) callback.reply(codec.encodeSuccessEnvelope(null));
+                    if (callback != null) callback.reply(codec.encodeSuccessEnvelope(null));
                 } catch (RuntimeException e) {
                     logError(id, "Failed to close event stream", e);
-                    if(callback!=null) callback.reply(codec.encodeErrorEnvelope("error", e.getMessage(), null));
+                    if (callback != null)
+                        callback.reply(codec.encodeErrorEnvelope("error", e.getMessage(), null));
                 }
             } else {
-                if(callback!=null) callback.reply(codec.encodeErrorEnvelope("error", "No active stream to cancel", null));
+                if (callback != null)
+                    callback.reply(codec.encodeErrorEnvelope("error", "No active stream to cancel", null));
             }
         }
 
-        void clearAll(){
-            for (ConcurrentHashMap.Entry<Integer, StreamsChannel.Stream> entry : incomingStreamRequestHandler.streams.entrySet()){
+        void clearAll() {
+            for (ConcurrentHashMap.Entry<Integer, StreamsChannel.Stream> entry : incomingStreamRequestHandler.streams.entrySet()) {
                 int id = entry.getKey();
                 Object arguments = listenerArguments.get(id);
                 this.onCancel(id, arguments, null);
