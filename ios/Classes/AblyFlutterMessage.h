@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype)init NS_UNAVAILABLE;
 
 -(instancetype)initWithEventName:(NSString *)eventName
-                      message:(id)message NS_DESIGNATED_INITIALIZER;
+                         message:(id)message NS_DESIGNATED_INITIALIZER;
 
 @property(nonatomic, readonly) NSString * eventName;
 @property(nonatomic, readonly) id message;

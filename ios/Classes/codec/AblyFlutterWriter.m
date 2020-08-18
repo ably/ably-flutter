@@ -30,15 +30,15 @@
 }
 
 #define WRITE_VALUE(DICTIONARY, JSON_KEY, VALUE) { \
-    if (VALUE) { \
-        [DICTIONARY setObject:VALUE forKey:JSON_KEY]; \
-    } \
+if (VALUE) { \
+[DICTIONARY setObject:VALUE forKey:JSON_KEY]; \
+} \
 }
 
 #define WRITE_ENUM(DICTIONARY, JSON_KEY, ENUM_VALUE){ \
-    if (ENUM_VALUE) { \
-        WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
-    } \
+if (ENUM_VALUE) { \
+WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
+} \
 }
 
 - (NSMutableDictionary<NSString *, NSObject *> *) encodeErrorInfo:(ARTErrorInfo *const) e{
@@ -80,7 +80,7 @@
     WRITE_VALUE(dictionary, TxMessage_encoding, [message encoding]);
     WRITE_VALUE(dictionary, TxMessage_extras, [message extras]);
     WRITE_VALUE(dictionary, TxMessage_data, (NSObject *)[message data]);
-        
+    
     NSTimeInterval seconds = [[message timestamp] timeIntervalSince1970];
     WRITE_VALUE(dictionary, TxMessage_timestamp, @((long)(seconds*1000)));
     

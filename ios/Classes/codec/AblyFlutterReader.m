@@ -83,26 +83,26 @@ static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(
  set to an id value of nil.
  */
 #define ON_VALUE(BLOCK, DICTIONARY, JSON_KEY) { \
-    const id value = [DICTIONARY objectForKey: JSON_KEY]; \
-    if (value) { \
-        BLOCK(value); \
-    } \
+const id value = [DICTIONARY objectForKey: JSON_KEY]; \
+if (value) { \
+BLOCK(value); \
+} \
 }
 
 #define READ_VALUE(OBJECT, PROPERTY, DICTIONARY, JSON_KEY) { \
-    ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); \
+ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); \
 }
 
 /**
  Where an NSNumber has been decoded and the property to be set is BOOL.
  */
 #define READ_BOOL(OBJECT, PROPERTY, DICTIONARY, JSON_KEY) { \
-    ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
+ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
 }
 
 static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *const dictionary) {
     ARTClientOptions *const o = [ARTClientOptions new];
-
+    
     // AuthOptions (super class of ClientOptions)
     READ_VALUE(o, authUrl, dictionary, TxClientOptions_authUrl);
     READ_VALUE(o, authMethod, dictionary, TxClientOptions_authMethod);
@@ -111,7 +111,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, authHeaders, dictionary, TxClientOptions_authHeaders);
     READ_VALUE(o, authParams, dictionary, TxClientOptions_authParams);
     READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
-
+    
     // ClientOptions
     READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
     ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); }, dictionary, TxClientOptions_logLevel);
@@ -151,7 +151,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     ON_VALUE(^(const id value) { issued = value; }, dictionary, TxTokenDetails_issued);
     ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenDetails_capability);
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenDetails_clientId);
-
+    
     ARTTokenDetails *const o = [ARTTokenDetails new];
     [o initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
     return o;
