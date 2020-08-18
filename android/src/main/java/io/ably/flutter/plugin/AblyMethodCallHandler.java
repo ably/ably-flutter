@@ -129,11 +129,11 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
                 final long handle = ablyLibrary.getCurrentHandle();
-                if(clientOptions.hasAuthCallback) {
+                if (clientOptions.hasAuthCallback) {
                     clientOptions.authCallback = (Auth.TokenParams params) -> {
                         Object token = ablyLibrary.getRestToken(handle);
                         if (token != null) return token;
