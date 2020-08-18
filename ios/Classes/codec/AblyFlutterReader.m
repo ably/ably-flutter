@@ -105,7 +105,7 @@ ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONAR
 
 static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *const dictionary) {
     ARTClientOptions *const o = [ARTClientOptions new];
-
+    
     // AuthOptions (super class of ClientOptions)
     READ_VALUE(o, authUrl, dictionary, TxClientOptions_authUrl);
     READ_VALUE(o, authMethod, dictionary, TxClientOptions_authMethod);
@@ -116,7 +116,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
     READ_VALUE(o, hasAuthCallback, dictionary, TxClientOptions_hasAuthCallback);
     ON_VALUE(^(const id value) { o.hasAuthCallback = value; }, dictionary, TxClientOptions_hasAuthCallback);
-
+    
     // ClientOptions
     READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
     ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); }, dictionary, TxClientOptions_logLevel);
@@ -141,7 +141,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
     // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
-
+    
     return o;
 };
 
@@ -157,7 +157,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     ON_VALUE(^(const id value) { issued = value; }, dictionary, TxTokenDetails_issued);
     ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenDetails_capability);
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenDetails_clientId);
-
+    
     return [[ARTTokenDetails new] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
 }
 
@@ -167,7 +167,7 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenParams_clientId);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenParams_nonce);
-
+    
     ARTTokenParams *const o = [[ARTTokenParams new] initWithClientId: clientId nonce: nonce];
     READ_VALUE(o, ttl, dictionary, TxTokenParams_ttl);
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
@@ -197,11 +197,11 @@ static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const
     __block NSString *mac = nil;
     __block NSString *nonce = nil;
     __block NSString *keyName = nil;
-
+    
     ON_VALUE(^(const id value) { mac = value; }, dictionary, TxTokenRequest_mac);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenRequest_nonce);
     ON_VALUE(^(const id value) { keyName = value; }, dictionary, TxTokenRequest_keyName);
-
+    
     ARTTokenParams *const params = [AblyFlutterReader tokenParamsFromDictionary: dictionary];
     return [[ARTTokenRequest new] initWithTokenParams:params
                                               keyName:keyName
