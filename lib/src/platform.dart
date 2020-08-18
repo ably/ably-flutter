@@ -24,12 +24,15 @@ final StreamsChannel streamsChannel = StreamsChannel('io.ably.flutter.stream', c
 const _initializeTimeout = Duration(seconds: 2);
 Future _initializer;
 Future _initialize() async {
-  AblyMethodCallHandler(methodChannel);
-  return _initializer ??=  methodChannel.invokeMethod(PlatformMethod.registerAbly)
-    .timeout(_initializeTimeout, onTimeout: () {
-    _initializer = null;
-    throw TimeoutException('Initialization timed out.', _initializeTimeout);
-  });
+  if (_initializer==null) {
+    AblyMethodCallHandler(methodChannel);
+    _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly)
+      .timeout(_initializeTimeout, onTimeout: () {
+      _initializer = null;
+      throw TimeoutException('Initialization timed out.', _initializeTimeout);
+    });
+  }
+  return _initializer;
 }
 
 Future<T> invoke<T>(String method, [dynamic arguments]) async {
