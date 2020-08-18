@@ -3,10 +3,10 @@ String $(c) {
 package io.ably.flutter.plugin.generated;
 
 
-final public class PlatformConstants{
+final public class PlatformConstants {
 
 \tfinal public class CodecTypes {
-\t\t${c['types'].map((_) => 'public static final byte ${_['name']} = (byte)${_['value']};').join('\n\t\t')}
+\t\t${c['types'].map((_) => 'public static final byte ${_['name']} = (byte) ${_['value']};').join('\n\t\t')}
 \t}
 
 \tfinal public class PlatformMethod {
@@ -15,7 +15,7 @@ final public class PlatformConstants{
   
 ${c['objects'].map((_) {
       return '''
-\tfinal public class Tx${_['name']}{
+\tfinal public class Tx${_['name']} {
 \t\t${_['properties'].map((_p) => 'public static final String ${_p} = "${_p}";').join('\n\t\t')}
 \t}
 ''';
