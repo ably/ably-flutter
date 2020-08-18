@@ -12,7 +12,7 @@ final public class PlatformConstants {
 \tstatic final public class PlatformMethod {
 \t\t${c['methods'].map((_) => 'public static final String ${_['name']} = "${_['value']}";').join('\n\t\t')}
 \t}
-  
+
 ${c['objects'].map((_) {
       return '''
 \tstatic final public class Tx${_['name']} {
