@@ -119,16 +119,16 @@ static AblyCodecEncoder encodeChannelMessage = ^NSMutableDictionary*(ARTMessage 
     WRITE_VALUE(dictionary, TxMessage_encoding, [message encoding]);
     WRITE_VALUE(dictionary, TxMessage_extras, [message extras]);
     WRITE_VALUE(dictionary, TxMessage_data, (NSObject *)[message data]);
-        
+    
     WRITE_VALUE(dictionary, TxMessage_timestamp,
                 [message timestamp]?@((long)([[message timestamp] timeIntervalSince1970]*1000)):nil);
-
+    
     return dictionary;
 };
 
 static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams *const params) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-
+    
     WRITE_VALUE(dictionary, TxTokenParams_ttl, [params ttl]);
     WRITE_VALUE(dictionary, TxTokenParams_nonce, [params nonce]);
     WRITE_VALUE(dictionary, TxTokenParams_clientId, [params clientId]);
