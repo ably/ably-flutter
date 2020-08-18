@@ -39,7 +39,7 @@ final public class PlatformConstants {
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
     }
-  
+
     static final public class TxAblyMessage {
         public static final String registrationHandle = "registrationHandle";
         public static final String type = "type";
