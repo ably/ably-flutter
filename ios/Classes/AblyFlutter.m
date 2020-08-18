@@ -30,7 +30,7 @@
     _realtimeInstances = [NSMutableDictionary new];
     _restInstances = [NSMutableDictionary new];
     _nextHandle = 1;
-
+    
     return self;
 }
 
@@ -68,7 +68,7 @@
     if (!completionHandler) {
         [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
-
+    
     // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
     // dispatch_assert_queue(dispatch_get_main_queue());
     

@@ -1,7 +1,7 @@
 /*
  * This file is derivative of work derived from original work at:
  * https://github.com/loup-v/streams_channel
- * 
+ *
  * Copyright 2018 Loup Inc.
  * Copyright 2020 Ably Real-time Ltd (ably.com)
  *
@@ -25,19 +25,18 @@
 @interface AblyStreamsChannel : NSObject
 
 + (nonnull instancetype)streamsChannelWithName:(NSString* _Nonnull)name
-                     binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger;
+                               binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger;
 
 + (nonnull instancetype)streamsChannelWithName:(NSString* _Nonnull)name
-                     binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger
-                               codec:(NSObject<FlutterMethodCodec>* _Nonnull)codec;
+                               binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger
+                                         codec:(NSObject<FlutterMethodCodec>* _Nonnull)codec;
 
 - (nonnull instancetype)initWithName:(NSString* _Nonnull)name
-             binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger
-                       codec:(NSObject<FlutterMethodCodec>* _Nonnull)codec;
+                     binaryMessenger:(NSObject<FlutterBinaryMessenger>* _Nonnull)messenger
+                               codec:(NSObject<FlutterMethodCodec>* _Nonnull)codec;
 
 - (void)setStreamHandlerFactory:(NSObject<FlutterStreamHandler>* _Nullable (^ _Nonnull)(id _Nonnull))factory;
 
 - (void) reset;
 
 @end
-

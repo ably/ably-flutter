@@ -9,7 +9,7 @@
     if (!message) {
         [NSException raise:NSInvalidArgumentException format:@"message cannot be nil."];
     }
-
+    
     self = [super init];
     if (!self) {
         return nil;
@@ -33,15 +33,15 @@
     if (!eventName) {
         [NSException raise:NSInvalidArgumentException format:@"eventName cannot be nil."];
     }
-
+    
     self = [super init];
     if (!self) {
         return nil;
     }
-
+    
     _eventName = eventName;
     _message = message;
-
+    
     return self;
 }
 

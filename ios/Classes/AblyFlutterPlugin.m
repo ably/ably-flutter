@@ -56,7 +56,7 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
     NSObject *const eventData = (NSString*)[_dataMap objectForKey:@"message"];
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-
+    
     [channel publish:eventName data:eventData callback:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
@@ -149,7 +149,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     AblyFlutterMessage *const data = message.message;
     NSNumber *const realtimeHandle = data.handle;
     ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
-
+    
     NSDictionary *const realtimePayload = data.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
@@ -165,7 +165,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
             result(nil);
         }
     };
-
+    
     NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*)[realtimePayload objectForKey:@"messages"];
     if(messages){
         [channel publish:messages callback:callback];
@@ -193,16 +193,16 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     LOG(@"registrar: %@", [registrar class]);
-
+    
     // Initializing reader writer and method codecs
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
     FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
     
     // initializing event channel for event listeners
     AblyStreamsChannel *const streamsChannel =
-        [AblyStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream"
-                                   binaryMessenger:registrar.messenger
-                                             codec:methodCodec];
+    [AblyStreamsChannel streamsChannelWithName:@"io.ably.flutter.stream"
+                               binaryMessenger:registrar.messenger
+                                         codec:methodCodec];
     
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];

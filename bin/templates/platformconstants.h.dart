@@ -3,7 +3,7 @@ String $(c) {
 @import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
-  ${c['types'].map((_) => '${_['name']}CodecType = ${_['value']},').join('\n  ')}
+\t${c['types'].map((_) => '${_['name']}CodecType = ${_['value']},').join('\n\t')}
 };
 
 

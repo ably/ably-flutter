@@ -6,13 +6,13 @@
 @import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
-  ablyMessageCodecType = 128,
-  ablyEventMessageCodecType = 129,
-  clientOptionsCodecType = 130,
-  messageCodecType = 131,
-  errorInfoCodecType = 144,
-  connectionStateChangeCodecType = 201,
-  channelStateChangeCodecType = 202,
+    ablyMessageCodecType = 128,
+    ablyEventMessageCodecType = 129,
+    clientOptionsCodecType = 130,
+    messageCodecType = 131,
+    errorInfoCodecType = 144,
+    connectionStateChangeCodecType = 201,
+    channelStateChangeCodecType = 202,
 };
 
 
