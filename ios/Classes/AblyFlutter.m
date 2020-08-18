@@ -52,7 +52,7 @@
         options.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
-                = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
             [self->_channel invokeMethod:AblyPlatformMethod_authCallback
                                arguments:message
                                   result:^(id tokenData){
