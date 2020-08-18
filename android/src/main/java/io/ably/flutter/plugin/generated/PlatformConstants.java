@@ -40,19 +40,19 @@ final public class PlatformConstants {
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
     }
   
-    static final public class TxAblyMessage{
+    static final public class TxAblyMessage {
         public static final String registrationHandle = "registrationHandle";
         public static final String type = "type";
         public static final String message = "message";
     }
 
-    static final public class TxAblyEventMessage{
+    static final public class TxAblyEventMessage {
         public static final String eventName = "eventName";
         public static final String type = "type";
         public static final String message = "message";
     }
 
-    static final public class TxErrorInfo{
+    static final public class TxErrorInfo {
         public static final String code = "code";
         public static final String message = "message";
         public static final String statusCode = "statusCode";
@@ -61,7 +61,7 @@ final public class PlatformConstants {
         public static final String cause = "cause";
     }
 
-    static final public class TxClientOptions{
+    static final public class TxClientOptions {
         public static final String authUrl = "authUrl";
         public static final String authMethod = "authMethod";
         public static final String key = "key";
@@ -97,7 +97,7 @@ final public class PlatformConstants {
         public static final String transportParams = "transportParams";
     }
 
-    static final public class TxTokenDetails{
+    static final public class TxTokenDetails {
         public static final String token = "token";
         public static final String expires = "expires";
         public static final String issued = "issued";
@@ -105,7 +105,7 @@ final public class PlatformConstants {
         public static final String clientId = "clientId";
     }
 
-    static final public class TxTokenParams{
+    static final public class TxTokenParams {
         public static final String capability = "capability";
         public static final String clientId = "clientId";
         public static final String nonce = "nonce";
@@ -113,7 +113,7 @@ final public class PlatformConstants {
         public static final String ttl = "ttl";
     }
 
-    static final public class TxTokenRequest{
+    static final public class TxTokenRequest {
         public static final String capability = "capability";
         public static final String clientId = "clientId";
         public static final String keyName = "keyName";
@@ -123,7 +123,7 @@ final public class PlatformConstants {
         public static final String ttl = "ttl";
     }
 
-    static final public class TxConnectionStateChange{
+    static final public class TxConnectionStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
         public static final String event = "event";
@@ -131,7 +131,7 @@ final public class PlatformConstants {
         public static final String reason = "reason";
     }
 
-    static final public class TxChannelStateChange{
+    static final public class TxChannelStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
         public static final String event = "event";
@@ -139,7 +139,7 @@ final public class PlatformConstants {
         public static final String reason = "reason";
     }
 
-    static final public class TxMessage{
+    static final public class TxMessage {
         public static final String id = "id";
         public static final String timestamp = "timestamp";
         public static final String clientId = "clientId";
