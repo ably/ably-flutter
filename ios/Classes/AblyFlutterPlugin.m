@@ -156,12 +156,11 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
         if(error){
-            result([
-                    FlutterError
-                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
-                    details:error
-                    ]);
+            result(
+                   [FlutterError errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                                       message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                                       details:error]
+                   );
         }else{
             result(nil);
         }
