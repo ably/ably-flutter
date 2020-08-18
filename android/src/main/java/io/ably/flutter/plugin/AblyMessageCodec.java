@@ -57,7 +57,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private Map<Byte, CodecPair> codecMap;
 
     AblyMessageCodec(){
-        AblyMessageCodec self = this;
+        final AblyMessageCodec self = this;
         codecMap = new HashMap<Byte, CodecPair>(){
             {
                 put(PlatformConstants.CodecTypes.ablyMessage, new CodecPair<>(null, self::decodeAblyFlutterMessage));
@@ -168,7 +168,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private AblyFlutterMessage decodeAblyFlutterMessage(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final Long handle = readValueAsLong(jsonMap.get(PlatformConstants.TxAblyMessage.registrationHandle));
-        Object messageType = jsonMap.get(PlatformConstants.TxAblyMessage.type);
+        final Object messageType = jsonMap.get(PlatformConstants.TxAblyMessage.type);
         final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
         Object message = jsonMap.get(PlatformConstants.TxAblyMessage.message);
         if(type!=null){
@@ -180,7 +180,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private AblyEventMessage decodeAblyFlutterEventMessage(Map<String, Object> jsonMap) {
         if(jsonMap==null) return null;
         final String eventName = (String) jsonMap.get(PlatformConstants.TxAblyEventMessage.eventName);
-        Object messageType = jsonMap.get(PlatformConstants.TxAblyEventMessage.type);
+        final Object messageType = jsonMap.get(PlatformConstants.TxAblyEventMessage.type);
         final Integer type = (messageType==null)?null:Integer.parseInt(messageType.toString());
         Object message = jsonMap.get(PlatformConstants.TxAblyEventMessage.message);
         if(type!=null){
@@ -262,12 +262,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.clientId, v -> o.clientId = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> {
-            JsonElement json = readValueAsJsonElement(v);
+            final JsonElement json = readValueAsJsonElement(v);
             o.data = (json==null)?v:json;
         });
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.encoding, v -> o.encoding = (String)v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> {
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
             o.extras = gson.fromJson(gson.toJson(v, Map.class), JsonObject.class);
         });
         return o;
@@ -279,7 +279,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private Map<String, Object> encodeErrorInfo(ErrorInfo c){
         if(c==null) return null;
-        HashMap<String, Object> jsonMap = new HashMap<>();
+        final HashMap<String, Object> jsonMap = new HashMap<>();
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.code, c.code);
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.message, c.message);
         writeValueToJson(jsonMap, PlatformConstants.TxErrorInfo.statusCode, c.statusCode);
@@ -291,7 +291,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c){
         if(c==null) return null;
-        HashMap<String, Object> jsonMap = new HashMap<>();
+        final HashMap<String, Object> jsonMap = new HashMap<>();
         writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, c.current);
         writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, c.previous);
         writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, c.event);
@@ -302,7 +302,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private Map<String, Object> encodeChannelStateChange(ChannelStateListener.ChannelStateChange c){
         if(c==null) return null;
-        HashMap<String, Object> jsonMap = new HashMap<>();
+        final HashMap<String, Object> jsonMap = new HashMap<>();
         writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, c.current);
         writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.previous, c.previous);
         writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, c.event);
@@ -313,7 +313,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     private Map<String, Object> encodeChannelMessage(Message c){
         if(c==null) return null;
-        HashMap<String, Object> jsonMap = new HashMap<>();
+        final HashMap<String, Object> jsonMap = new HashMap<>();
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.id, c.id);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.clientId, c.clientId);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.connectionId, c.connectionId);

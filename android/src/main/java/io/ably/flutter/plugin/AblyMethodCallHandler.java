@@ -106,7 +106,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
-        MethodChannel.Result result = new MethodResultWrapper(rawResult);
+        final MethodChannel.Result result = new MethodResultWrapper(rawResult);
         System.out.println("Ably Plugin handle: " + call.method);
         final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
         if (null == handler) {
@@ -139,10 +139,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private void publishRestMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
-            Map<String, Object> map = messageData.message;
-            String channelName = (String)map.get("channel");
-            String name = (String)map.get("name");
-            Object data = map.get("message");
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String)map.get("channel");
+            final String name = (String)map.get("name");
+            final Object data = map.get("message");
             System.out.println("pushing... NAME " + name + ", DATA " + ((data==null)?"-":data.toString()));
             ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(name, data, new CompletionListener() {
                 @Override
@@ -186,8 +186,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
             try {
-                String channelName = (String) ablyMessage.message.get("channel");
-                ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
+                final String channelName = (String) ablyMessage.message.get("channel");
+                final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
                 ablyLibrary
                         .getRealtime(ablyMessage.handle)
                         .channels
@@ -217,8 +217,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
             try {
-                String channelName = (String) ablyMessage.message.get("channel");
-                ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
+                final String channelName = (String) ablyMessage.message.get("channel");
+                final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
                 ablyLibrary
                         .getRealtime(ablyMessage.handle)
                         .channels
@@ -248,8 +248,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
             try {
-                String channelName = (String) ablyMessage.message.get("channel");
-                ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
+                final String channelName = (String) ablyMessage.message.get("channel");
+                final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
                 ablyLibrary
                         .getRealtime(ablyMessage.handle)
                         .channels
@@ -268,14 +268,14 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage)call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
             try {
-                String channelName = (String) ablyMessage.message.get("channel");
-                ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
-                Channel channel = ablyLibrary
+                final String channelName = (String) ablyMessage.message.get("channel");
+                final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get("options");
+                final Channel channel = ablyLibrary
                         .getRealtime(ablyMessage.handle)
                         .channels
                         .get(channelName, channelOptions);
 
-                CompletionListener listener = new CompletionListener() {
+                final CompletionListener listener = new CompletionListener() {
                     @Override
                     public void onSuccess() {
                         result.success(null);
@@ -287,15 +287,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                     }
                 };
 
-                ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
+                final ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
                 if(channelMessages != null) {
                     Message[] messages = new Message[channelMessages.size()];
                     messages = channelMessages.toArray(messages);
                     channel.publish(messages, listener);
                 } else {
-                    String name = (String) ablyMessage.message.get("name");
-                    Object data = ablyMessage.message.get("data");
-                    JsonElement json = (data==null)?null:AblyMessageCodec.readValueAsJsonElement(data);
+                    final String name = (String) ablyMessage.message.get("name");
+                    final Object data = ablyMessage.message.get("data");
+                    final JsonElement json = (data==null)?null:AblyMessageCodec.readValueAsJsonElement(data);
                     channel.publish(name, (json==null)?data:json, listener);
                 }
             }catch(AblyException e){
