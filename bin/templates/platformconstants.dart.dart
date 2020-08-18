@@ -1,6 +1,6 @@
 String $(c) {
   return '''
-class CodecTypes{
+class CodecTypes {
 \t${c['types'].map((_) => "static const int ${_['name']} = ${_['value']};").join('\n\t')}
 }
 
@@ -10,9 +10,8 @@ class PlatformMethod {
 
 ${c['objects'].map((_) {
     return '''
-class Tx${_['name']}{
+class Tx${_['name']} {
 \t${_['properties'].map((_p) => 'static const String ${_p} = "${_p}";').join('\n\t')}
 }
-''';}).join('\n')}
-''';
+''';}).join('\n')}''';
 }
