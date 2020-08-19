@@ -115,7 +115,6 @@ class _MyAppState extends State<MyApp> {
     setState(() { _restCreationState = OpState.InProgress; });
 
     final clientOptions = ably.ClientOptions();
-    clientOptions.tokenDetails = ably.TokenDetails(_appKey.secret);
     clientOptions.logLevel = ably.LogLevel.verbose;
     clientOptions.logHandler = ({String msg, ably.AblyException exception}){
       print("Custom logger :: $msg $exception");
