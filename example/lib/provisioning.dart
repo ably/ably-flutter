@@ -57,5 +57,6 @@ Future<Map> getTokenRequest() async {
   // NOTE: This doesn't work with sandbox. The URL can point to test-harness's
   // tokenRequest express server's `/auth` endpoint
   http.Response r = await http.get("https://www.ably.io/ably-auth/token-request/demos");
+  print("tokenRequest from tokenRequest server: ${r.body}");
   return jsonDecode(r.body) as Map;
 }
