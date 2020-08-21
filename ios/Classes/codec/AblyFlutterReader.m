@@ -169,9 +169,11 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenParams_nonce);
     
     ARTTokenParams *const o = [[ARTTokenParams new] initWithClientId: clientId nonce: nonce];
-    READ_VALUE(o, ttl, dictionary, TxTokenParams_ttl);
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
+    ON_VALUE(^(const id value) {
+        o.ttl = [NSNumber numberWithDouble:[value doubleValue]/1000];
+    }, dictionary, TxTokenParams_ttl);
     ON_VALUE(^(const id value) {
         o.timestamp = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxTokenParams_timestamp);
