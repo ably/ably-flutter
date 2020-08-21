@@ -81,7 +81,7 @@
         NSAssert(eventMessage.message, @"event message is missing");
         NSMutableDictionary<NSString *, NSObject *>* eventPayload = eventMessage.message;
         ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
-
+        
         NSString *channelName = (NSString*)[eventPayload objectForKey:@"channel"];
         ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
         [channel off: listener];
@@ -89,7 +89,7 @@
         NSAssert(eventMessage.message, @"event message is missing");
         NSMutableDictionary<NSString *, NSObject *>* eventPayload = eventMessage.message;
         ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
-
+        
         NSString *channelName = (NSString*)[eventPayload objectForKey:@"channel"];
         ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
         [channel unsubscribe: listener];

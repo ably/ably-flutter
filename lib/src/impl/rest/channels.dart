@@ -43,7 +43,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();
-  Completer<void> _authCallBackCompleter;
+  Completer<void> _authCallbackCompleter;
 
   static const defaultPublishTimout = Duration(seconds: 30);
 
@@ -60,7 +60,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   }
 
   Future<void> _publishInternal() async {
-    if (_authCallBackCompleter != null) {
+    if (_authCallbackCompleter != null) {
       return;
     }
     while (_publishQueue.isNotEmpty) {
@@ -91,9 +91,9 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
         }
       } on PlatformException catch (pe) {
         if (pe.code == clientConfiguredAuthenticationProviderRequestFailed) {
-          _authCallBackCompleter = Completer<void>();
+          _authCallbackCompleter = Completer<void>();
           try {
-            await _authCallBackCompleter.future.timeout(defaultPublishTimout,
+            await _authCallbackCompleter.future.timeout(defaultPublishTimout,
                 onTimeout: () => _publishQueue
                         .where((e) => !e.completer.isCompleted)
                         .forEach((e) {
@@ -101,7 +101,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
                           TimeoutException('Timed out', defaultPublishTimout));
                     }));
           } finally {
-            _authCallBackCompleter = null;
+            _authCallbackCompleter = null;
           }
         } else {
           _publishQueue.remove(item);
@@ -115,7 +115,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   }
 
   void authUpdateComplete() {
-    _authCallBackCompleter.complete();
+    _authCallbackCompleter.complete();
   }
 }
 

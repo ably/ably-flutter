@@ -13,7 +13,8 @@ class AblyLibrary {
     private long _nextHandle = 1;
 
     // privatizing default constructor to enforce usage of getInstance
-    private AblyLibrary(){}
+    private AblyLibrary() {
+    }
 
     static synchronized AblyLibrary getInstance() {
         if (null == _instance) {
@@ -30,7 +31,7 @@ class AblyLibrary {
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
     private final LongSparseArray<Object> _realtimeTokenData = new LongSparseArray<>();
 
-    long getCurrentHandle(){
+    long getCurrentHandle() {
         return _nextHandle;
     }
 
@@ -40,15 +41,15 @@ class AblyLibrary {
         return _nextHandle++;
     }
 
-    AblyRest getRest(final long handle){
+    AblyRest getRest(final long handle) {
         return _restInstances.get(handle);
     }
 
-    void setRestToken(long handle, Object tokenDetails){
+    void setRestToken(long handle, Object tokenDetails) {
         _restTokenData.put(handle, tokenDetails);
     }
 
-    Object getRestToken(long handle){
+    Object getRestToken(long handle) {
         Object token = _restTokenData.get(handle);
         _restTokenData.remove(handle);
         return token;
@@ -65,18 +66,18 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
-    void setRealtimeToken(long handle, Object tokenDetails){
+    void setRealtimeToken(long handle, Object tokenDetails) {
         _realtimeTokenData.put(handle, tokenDetails);
     }
 
-    Object getRealtimeToken(long handle){
+    Object getRealtimeToken(long handle) {
         Object token = _realtimeTokenData.get(handle);
         _realtimeTokenData.remove(handle);
         return token;
     }
 
     void dispose() {
-        for(int i=0; i<_realtimeInstances.size(); i++){
+        for (int i = 0; i < _realtimeInstances.size(); i++) {
             long key = _realtimeInstances.keyAt(i);
             AblyRealtime r = _realtimeInstances.get(key);
             try {

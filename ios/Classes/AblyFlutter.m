@@ -39,7 +39,7 @@
     _realtimeInstances = [NSMutableDictionary new];
     _restInstances = [NSMutableDictionary new];
     _nextHandle = 1;
-
+    
     return self;
 }
 
@@ -52,7 +52,7 @@
         options.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
-                = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
             [self->_channel invokeMethod:AblyPlatformMethod_authCallback
                                arguments:message
                                   result:^(id tokenData){
@@ -98,7 +98,7 @@
     if (!completionHandler) {
         [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
-
+    
     // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
     // dispatch_assert_queue(dispatch_get_main_queue());
     

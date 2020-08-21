@@ -14,8 +14,8 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
 
   AblyBase ably;
 
-  String name;              //Not in IDL
-  ChannelOptions options;   //Not in IDL
+  final String name;              //Not in IDL
+  final ChannelOptions options;   //Not in IDL
 
   ErrorInfo errorReason;
   ChannelState state;

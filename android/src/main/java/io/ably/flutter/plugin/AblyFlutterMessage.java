@@ -17,7 +17,7 @@ class AblyFlutterMessage<T> {
     @NonNull
     @Override
     public String toString() {
-        return "{message=" + (message.toString()) + ", handle=" + (handle==null?"":handle.toString()) + "}";
+        return "{message=" + (message.toString()) + ", handle=" + (handle == null ? "" : handle.toString()) + "}";
     }
 
 }

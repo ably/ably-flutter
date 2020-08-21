@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'codegencontext.dart' show context;
 import 'templates/platformconstants.dart.dart' as dart_template;
-import 'templates/platformconstants.java.dart' as java_template;
 import 'templates/platformconstants.h.dart' as objc_header_template;
+import 'templates/platformconstants.java.dart' as java_template;
 import 'templates/platformconstants.m.dart' as objc_impl_template;
 
 
@@ -20,7 +21,7 @@ Map<Template, String> toGenerate = {
 
 void main() async {
   for(MapEntry<Template, String> entry in toGenerate.entries){
-    String source = entry.key(context);
+    String source = entry.key(context).replaceAll(RegExp(r'\t'), '    ');
     File(entry.value).writeAsStringSync(
         '''//
 // Generated code. Do not modify.

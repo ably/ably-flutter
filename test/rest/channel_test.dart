@@ -61,7 +61,9 @@ void main() {
                 TokenParams(timestamp: DateTime.now()),
                 handle: handle));
             isAuthenticated = true;
-            throw PlatformException(code: '80019');
+            throw PlatformException(
+                code: RestPlatformChannel
+                    .clientConfiguredAuthenticationProviderRequestFailed);
           }
 
           publishedMessages.add(message);

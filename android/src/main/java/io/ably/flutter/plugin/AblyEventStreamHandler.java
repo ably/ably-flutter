@@ -3,12 +3,6 @@ package io.ably.flutter.plugin;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import java.lang.reflect.Array;
 import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
@@ -18,29 +12,28 @@ import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.Message;
-import io.ably.lib.types.MessageDecodeException;
 import io.flutter.plugin.common.EventChannel;
 
 
 /**
  * Dart side can listen to Event Streams by pushing data to eventSink available in onListen method.
  * Event listening can be cancelled when stream subscription is cancelled on dart side
- *
+ * <p>
  * ref: https://api.flutter.dev/javadoc/io/flutter/plugin/common/EventChannel.StreamHandler.html
- * */
+ */
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     /**
      * Creating an ablyLibrary instance.
      * As ablyLibrary is a singleton,
      * all ably object instance will be accessible
-     * */
+     */
     private final AblyLibrary ablyLibrary = AblyLibrary.getInstance();
 
     /**
      * Refer to the comments on AblyMethodCallHandler.MethodResultWrapper
      * on why this customized EventSink is required
-     * */
+     */
     private static class MainThreadEventSink implements EventChannel.EventSink {
         private EventChannel.EventSink eventSink;
         private Handler handler;
@@ -61,7 +54,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         }
 
         @Override
-        public void endOfStream() {}
+        public void endOfStream() {
+        }
     }
 
     // Listeners
@@ -70,22 +64,25 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     private PluginChannelStateListener channelStateListener;
     private PluginChannelMessageListener channelMessageListener;
 
-    void handleAblyException(EventChannel.EventSink eventSink, AblyException ablyException){
+    void handleAblyException(EventChannel.EventSink eventSink, AblyException ablyException) {
         eventSink.error(ablyException.errorInfo.message, null, ablyException.errorInfo);
     }
 
-    static private class Listener{
+    static private class Listener {
         EventChannel.EventSink eventSink;
-        Listener(EventChannel.EventSink eventSink){ this.eventSink = eventSink; }
+
+        Listener(EventChannel.EventSink eventSink) {
+            this.eventSink = eventSink;
+        }
     }
 
     static private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
 
-        PluginConnectionStateListener(EventChannel.EventSink eventSink){
+        PluginConnectionStateListener(EventChannel.EventSink eventSink) {
             super(eventSink);
         }
 
-        public void onConnectionStateChanged(ConnectionStateChange stateChange){
+        public void onConnectionStateChanged(ConnectionStateChange stateChange) {
             eventSink.success(stateChange);
         }
 
@@ -93,11 +90,11 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     static private class PluginChannelStateListener extends Listener implements ChannelStateListener {
 
-        PluginChannelStateListener(EventChannel.EventSink eventSink){
+        PluginChannelStateListener(EventChannel.EventSink eventSink) {
             super(eventSink);
         }
 
-        public void onChannelStateChanged(ChannelStateChange stateChange){
+        public void onChannelStateChanged(ChannelStateChange stateChange) {
             eventSink.success(stateChange);
         }
 
@@ -105,19 +102,19 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
     static private class PluginChannelMessageListener extends Listener implements Channel.MessageListener {
 
-        PluginChannelMessageListener(EventChannel.EventSink eventSink){
+        PluginChannelMessageListener(EventChannel.EventSink eventSink) {
             super(eventSink);
         }
 
-        public void onMessage(Message message){
+        public void onMessage(Message message) {
             eventSink.success(message);
         }
 
     }
 
     // Casting stream creation arguments from `Object` into `AblyFlutterMessage<AblyEventMessage>`
-    private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message){
-        return (AblyFlutterMessage<AblyEventMessage<Object>>)message;
+    private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message) {
+        return (AblyFlutterMessage<AblyEventMessage<Object>>) message;
     }
 
     @Override
@@ -134,7 +131,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     ablyLibrary.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
                     break;
                 case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
-                    assert eventMessage.message!=null : "event message is missing";
+                    assert eventMessage.message != null : "event message is missing";
                     final Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
                     final String channelName = (String) eventPayload.get("channel");
                     channelOptions = (ChannelOptions) eventPayload.get("options");
@@ -147,7 +144,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                     }
                     break;
                 case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
-                    assert eventMessage.message!=null : "event message is missing";
+                    assert eventMessage.message != null : "event message is missing";
                     final Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
                     final String messageChannelName = (String) messagePayload.get("channel");
                     channelOptions = (ChannelOptions) messagePayload.get("options");
@@ -162,14 +159,14 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
                 default:
                     eventSink.error("unhandled event", eventName, null);
             }
-        } catch(AssertionError assertionError) {
+        } catch (AssertionError assertionError) {
             eventSink.error(assertionError.getMessage(), null, null);
         }
     }
 
     @Override
     public void onCancel(Object object) {
-        if(object==null){
+        if (object == null) {
             System.out.println("Cannot process null input on cancel");
             return;
         }
@@ -183,13 +180,13 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
             case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
                 // Note: this and all other assert statements in this onCancel method are
                 // left as is as there is no way of propagating this error to flutter side
-                assert eventMessage.message!=null : "event message is missing";
+                assert eventMessage.message != null : "event message is missing";
                 final Map<String, Object> eventPayload = (Map<String, Object>) eventMessage.message;
                 final String channelName = (String) eventPayload.get("channel");
                 ablyLibrary.getRealtime(ablyMessage.handle).channels.get(channelName).off(channelStateListener);
                 break;
             case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
-                assert eventMessage.message!=null : "event message is missing";
+                assert eventMessage.message != null : "event message is missing";
                 final Map<String, Object> messagePayload = (Map<String, Object>) eventMessage.message;
                 final String messageChannelName = (String) messagePayload.get("channel");
                 ablyLibrary.getRealtime(ablyMessage.handle).channels.get(messageChannelName).unsubscribe(channelMessageListener);

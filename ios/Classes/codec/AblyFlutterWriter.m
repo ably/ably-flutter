@@ -56,15 +56,15 @@ NS_ASSUME_NONNULL_END
 }
 
 #define WRITE_VALUE(DICTIONARY, JSON_KEY, VALUE) { \
-    if (VALUE) { \
-        [DICTIONARY setObject:VALUE forKey:JSON_KEY]; \
-    } \
+if (VALUE) { \
+[DICTIONARY setObject:VALUE forKey:JSON_KEY]; \
+} \
 }
 
 #define WRITE_ENUM(DICTIONARY, JSON_KEY, ENUM_VALUE){ \
-    if (ENUM_VALUE) { \
-        WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
-    } \
+if (ENUM_VALUE) { \
+WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
+} \
 }
 
 static AblyCodecEncoder encodeAblyMessage = ^NSMutableDictionary*(AblyFlutterMessage *const message) {
@@ -120,7 +120,7 @@ static AblyCodecEncoder encodeChannelMessage = ^NSMutableDictionary*(ARTMessage 
     WRITE_VALUE(dictionary, TxMessage_encoding, [message encoding]);
     WRITE_VALUE(dictionary, TxMessage_extras, [message extras]);
     WRITE_VALUE(dictionary, TxMessage_data, (NSObject *)[message data]);
-        
+    
     WRITE_VALUE(dictionary, TxMessage_timestamp,
                 [message timestamp]?@((long)([[message timestamp] timeIntervalSince1970]*1000)):nil);
     
