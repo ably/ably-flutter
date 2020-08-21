@@ -350,7 +350,6 @@ class Codec extends StandardMessageCodec {
         if(jsonMap==null) return null;
         int type = readFromJson<int>(jsonMap, TxAblyMessage.type);
         dynamic message = jsonMap[TxAblyMessage.message];
-        print("type $type message $message");
         if(type!=null){
             message = codecMap[type].decode(toJsonMap(jsonMap[TxAblyMessage.message]));
         }
