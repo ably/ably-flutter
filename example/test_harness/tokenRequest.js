@@ -30,6 +30,7 @@ app.get('/auth', function (req, res) {
        and configure the token without an identity (anonymous) */
     tokenParams = {
       'capability': { '*': ['publish', 'subscribe'] },
+      'ttl': 30000
     };
   }
   rest.auth.createTokenRequest(tokenParams, function(err, tokenRequest) {
