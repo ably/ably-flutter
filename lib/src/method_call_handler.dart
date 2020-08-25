@@ -9,6 +9,8 @@ class AblyMethodCallHandler {
       switch (call.method) {
         case PlatformMethod.authCallback:
           return await onAuthCallback(call.arguments);
+        case PlatformMethod.realtimeAuthCallback:
+          return await onRealtimeAuthCallback(call.arguments);
         default:
           throw PlatformException(
             code: 'invalid_method', message: 'No such method ${call.method}');
@@ -25,4 +27,21 @@ class AblyMethodCallHandler {
     });
     return callbackResponse;
   }
+
+  bool realtimeAuthInProgress = false;
+  onRealtimeAuthCallback(AblyMessage message) async {
+    if(realtimeAuthInProgress){
+      return null;
+    }
+    realtimeAuthInProgress = true;
+    ably.TokenParams tokenParams = message.message as ably.TokenParams;
+    ably.Realtime realtime = ably.realtimeInstances[message.handle];
+    Object callbackResponse = await realtime.options.authCallback(tokenParams);
+    Future.delayed(Duration.zero, (){
+      realtime.authUpdateComplete();
+    });
+    realtimeAuthInProgress = false;
+    return callbackResponse;
+  }
+
 }

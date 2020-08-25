@@ -15,6 +15,10 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
     this.handle;  //proactively acquiring handle
     this.state = ConnectionState.initialized;
     this.on().listen((ConnectionStateChange event) {
+      if (event.reason?.code == ErrorCodes.authCallbackFailure) {
+        this.realtimePlatformObject.authCallbackInProgress = true;
+        this.realtimePlatformObject.connect();  //try connecting immediately which waits for authCallback completion
+      }
       this.state = event.current;
     });
   }
