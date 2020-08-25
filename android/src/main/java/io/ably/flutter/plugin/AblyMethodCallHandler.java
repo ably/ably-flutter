@@ -21,7 +21,6 @@ import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
-import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.flutter.plugin.common.MethodCall;
@@ -201,6 +200,36 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
+                final long handle = ablyLibrary.getCurrentHandle();
+                if (clientOptions.hasAuthCallback) {
+                    clientOptions.options.authCallback = (Auth.TokenParams params) -> {
+                        Object token = ablyLibrary.getRealtimeToken(handle);
+                        if (token != null) return token;
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            AblyFlutterMessage channelMessage = new AblyFlutterMessage<>(params, handle);
+                            channel.invokeMethod(PlatformConstants.PlatformMethod.realtimeAuthCallback, channelMessage, new MethodChannel.Result() {
+                                @Override
+                                public void success(@Nullable Object result) {
+                                    if(result!=null){
+                                        ablyLibrary.setRealtimeToken(handle, result);
+                                    }
+                                }
+
+                                @Override
+                                public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
+                                    System.out.println(errorDetails);
+                                    //Do nothing, let another request go to flutter side!
+                                }
+
+                                @Override
+                                public void notImplemented() {
+                                    System.out.println("`authCallback` Method not implemented on dart side");
+                                }
+                            });
+                        });
+                        return null;
+                    };
+                }
                 result.success(ablyLibrary.createRealtime(clientOptions.options));
             } catch (final AblyException e) {
                 handleAblyException(result, e);

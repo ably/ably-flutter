@@ -24,6 +24,7 @@ extern NSString *const AblyPlatformMethod_getPlatformVersion;
 extern NSString *const AblyPlatformMethod_getVersion;
 extern NSString *const AblyPlatformMethod_registerAbly;
 extern NSString *const AblyPlatformMethod_authCallback;
+extern NSString *const AblyPlatformMethod_realtimeAuthCallback;
 extern NSString *const AblyPlatformMethod_createRestWithOptions;
 extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
