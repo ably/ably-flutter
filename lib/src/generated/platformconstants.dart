@@ -21,6 +21,7 @@ class PlatformMethod {
     static const String getVersion = 'getVersion';
     static const String registerAbly = 'registerAbly';
     static const String authCallback = 'authCallback';
+    static const String realtimeAuthCallback = 'realtimeAuthCallback';
     static const String createRestWithOptions = 'createRestWithOptions';
     static const String publish = 'publish';
     static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
