@@ -59,6 +59,10 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
     String name,
     dynamic data
   }) async {
+    bool hasAuthCallback = this.ably.options.authCallback!=null;
+    while (hasAuthCallback && this.realtimePlatformObject.authCallbackInProgress) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
     try {
       if(messages == null){
         if (message != null) {
@@ -77,7 +81,12 @@ class RealtimePlatformChannel extends PlatformObject implements spec.RealtimeCha
         'messages': messages,
       });
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      if (hasAuthCallback && pe.code == ErrorCodes.authCallbackFailure.toString()) {
+        this.realtimePlatformObject.authCallbackInProgress = true;
+        await publish(name: name, data: data);
+      } else {
+        throw spec.AblyException(pe.code, pe.message, pe.details);
+      }
     }
   }
 

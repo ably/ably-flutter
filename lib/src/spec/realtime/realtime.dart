@@ -4,7 +4,7 @@ import '../rest/options.dart';
 import 'channels.dart';
 
 
-abstract class RealtimeInterface extends AblyBase {
+abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
 
   RealtimeInterface({
     ClientOptions options,
@@ -16,6 +16,6 @@ abstract class RealtimeInterface extends AblyBase {
   void close();
   void connect();
   final Connection connection;
-  RealtimeChannels channels;
+  C channels;
 
 }

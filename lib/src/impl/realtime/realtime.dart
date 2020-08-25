@@ -8,8 +8,9 @@ import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'connection.dart';
 
+Map<int, Realtime> realtimeInstances = {};
 
-class Realtime extends PlatformObject implements spec.RealtimeInterface {
+class Realtime extends PlatformObject implements spec.RealtimeInterface<RealtimePlatformChannels> {
 
   Realtime({
     ClientOptions options,
@@ -24,10 +25,14 @@ class Realtime extends PlatformObject implements spec.RealtimeInterface {
   }
 
   @override
-  Future<int> createPlatformInstance() async => await invokeRaw<int>(
-    PlatformMethod.createRealtimeWithOptions,
-    AblyMessage(options)
-  );
+  Future<int> createPlatformInstance() async {
+    int handle = await invokeRaw<int>(
+      PlatformMethod.createRealtimeWithOptions,
+      AblyMessage(options)
+    );
+    realtimeInstances[handle] = this;
+    return handle;
+  }
 
   // The _connection instance keeps a reference to this platform object.
   // Ideally connection would be final, but that would need 'late final' which is coming.
@@ -48,13 +53,25 @@ class Realtime extends PlatformObject implements spec.RealtimeInterface {
   Push push;
 
   @override
-  RealtimeChannels channels;
+  RealtimePlatformChannels channels;
 
   @override
   Future<void> close() async => await invoke(PlatformMethod.closeRealtime);
 
+  bool authCallbackInProgress = false;
+
   @override
-  Future<void> connect() async => await invoke(PlatformMethod.connectRealtime);
+  Future<void> connect() async {
+    bool hasAuthCallback = this.options.authCallback!=null;
+    while (hasAuthCallback && authCallbackInProgress) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+    await invoke(PlatformMethod.connectRealtime);
+  }
+
+  authUpdateComplete() {
+    authCallbackInProgress = false;
+  }
 
   @override
   Future<HttpPaginatedResponse> request({String method, String path, Map<String, dynamic> params, body, Map<String, String> headers}) {
