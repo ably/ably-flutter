@@ -26,6 +26,7 @@ final public class PlatformConstants {
         public static final String getVersion = "getVersion";
         public static final String registerAbly = "registerAbly";
         public static final String authCallback = "authCallback";
+        public static final String realtimeAuthCallback = "realtimeAuthCallback";
         public static final String createRestWithOptions = "createRestWithOptions";
         public static final String publish = "publish";
         public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
