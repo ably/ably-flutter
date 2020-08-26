@@ -3,26 +3,23 @@ import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/services.dart';
 
-
-class AblyMethodCallHandler{
-
-  AblyMethodCallHandler(MethodChannel channel){
+class AblyMethodCallHandler {
+  AblyMethodCallHandler(MethodChannel channel) {
     channel.setMethodCallHandler((call) async {
-      switch(call.method){
+      switch (call.method) {
         case PlatformMethod.authCallback:
           return await onAuthCallback(call.arguments);
       }
     });
   }
 
-  onAuthCallback(AblyMessage message) async {
+  Future onAuthCallback(AblyMessage message) async {
     ably.TokenParams tokenParams = message.message as ably.TokenParams;
     ably.Rest rest = ably.restInstances[message.handle];
-    Object callbackResponse = await rest.options.authCallback(tokenParams);
-    Future.delayed(Duration.zero, (){
+    await rest.options.authCallback(tokenParams);
+    Future.delayed(Duration.zero, () {
       rest.channels.all.forEach((c) => c.authUpdateComplete());
     });
-    return callbackResponse;
+    return;
   }
-
 }
