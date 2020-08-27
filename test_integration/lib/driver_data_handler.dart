@@ -1,48 +1,65 @@
 import 'dart:convert' show json;
+import 'package:flutter_driver/flutter_driver.dart';
 
-/// Passed to `enableFlutterDriverExtension` to handle messages from the driving
-/// tests.
+/// Send a message to run a widget test and receive a response.
+///
+/// Helper to minimize repeatedly used code in driver tests.
+Future<TestControlMessage> getTestResponse(
+    FlutterDriver driver, TestControlMessage message) async {
+  final result = await driver.requestData(message.toJsonEncoded());
+  return TestControlMessage.fromJsonEncoded(result);
+}
+
+/// Passed to `enableFlutterDriverExtension` to receive messages sent by the
+/// driver tests.
 class DriverDataHandler {
-  Future<String> call(String message) async {
+  /// Handler for a message sent from the driver test to the test widget.
+  Future<String> call(String encodedMessage) async {
     if (callback != null) {
-      return json.encode(await callback(TestControlMessage.fromJson(message)));
+      final message = TestControlMessage.fromJson(json.decode(encodedMessage));
+      final response = await callback(message);
+      return json.encode(response);
     }
+
     return Future.error('No callback registered.');
   }
 
+  /// The test dispacher can register a callback to get notified about messages.
   Future<TestControlMessage> Function(TestControlMessage message) callback;
 }
 
-/// Used to pass messages from driver test to the driven app and back.
+/// Used to encode and decode messages between driver test and test widget.
 class TestControlMessage {
   const TestControlMessage(
     this.testName,
-    this.payload,
-  ) : assert(testName != null && testName.length != null);
+    this.payload, {
+    this.log,
+  }) : assert(testName != null && testName.length != null);
 
   static const testNameKey = 'testName';
   static const payloadKey = 'payload';
   static const errorKey = 'error';
+  static const logKey = 'log';
 
   final String testName;
   final Map<String, dynamic> payload;
+  final List<dynamic> log;
 
-  factory TestControlMessage.fromJson(String jsonValue) {
-    var value = json.decode(jsonValue);
-    // TODO(zoechi) no idea why this is necessary (where it got encoded a 2nd time)
-    // I'm sure it's my fault, but I need to investigate another time.
-    if (value is String) {
-      value = json.decode(value as String);
-    }
-
-    return TestControlMessage(
-      value[testNameKey] as String,
-      value[payloadKey] as Map<String, dynamic>,
-    );
+  factory TestControlMessage.fromJsonEncoded(String encoded) {
+    return TestControlMessage.fromJson(json.decode(encoded));
   }
 
-  String toJson() => json.encode({
+  factory TestControlMessage.fromJson(Map jsonValue) => TestControlMessage(
+        jsonValue[testNameKey] as String,
+        jsonValue[payloadKey] as Map<String, dynamic>,
+        log: jsonValue[logKey] as List<dynamic>,
+      );
+
+  Map<String, dynamic> toJson() => {
         testNameKey: testName,
         payloadKey: payload,
-      });
+        logKey: log,
+      };
+
+  String toJsonEncoded() => json.encode(toJson());
 }

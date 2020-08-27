@@ -15,6 +15,9 @@ class TestHelperFlutterErrorTest extends StatefulWidget {
 class TestHelperFlutterErrorTestState
     extends State<TestHelperFlutterErrorTest> {
   @override
-  Widget build(BuildContext context) =>
-      throw 'Should become a FlutterError response';
+  Widget build(BuildContext context) {
+    FlutterError.reportError(FlutterErrorDetails(
+        exception: 'Should become a FlutterError response'));
+    return Container();
+  }
 }

@@ -17,29 +17,29 @@ void main() {
     }
   });
 
-  test('Should report FlutterError', () async {
+  test('Realtime publish', () async {
     final data = <String, dynamic>{};
-    final message =
-        TestControlMessage(TestName.testHelperFlutterErrorTest, data);
+    final message = TestControlMessage(TestName.realtimePublish, data);
 
     final response = await getTestResponse(driver, message);
 
     expect(response.testName, message.testName);
 
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('FlutterError'));
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
   });
 
-  test('Should report unhandled exception', () async {
+  test('Realtime events', () async {
     final data = <String, dynamic>{};
-    final message =
-        TestControlMessage(TestName.testHelperUnhandledExceptionTest, data);
+    final message = TestControlMessage(TestName.realtimeEvents, data);
 
     final response = await getTestResponse(driver, message);
 
     expect(response.testName, message.testName);
 
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('Unhandled'));
+    // TODO(zoechi) check more events
+    expect(
+        ((response.payload['connectionStates'] as List).last as Map)['current'],
+        'connected');
   });
 }
