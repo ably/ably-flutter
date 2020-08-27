@@ -3,16 +3,16 @@ import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
 
-class VersionTest extends StatefulWidget {
+class PlatformAndAblyVersionTest extends StatefulWidget {
   final TestDispatcherState dispatcher;
 
-  const VersionTest(this.dispatcher, {Key key}) : super(key: key);
+  const PlatformAndAblyVersionTest(this.dispatcher, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => VersionTestState();
+  State<StatefulWidget> createState() => PlatformAndAblyVersionTestState();
 }
 
-class VersionTestState extends State<VersionTest> {
+class PlatformAndAblyVersionTestState extends State<PlatformAndAblyVersionTest> {
   @override
   void initState() {
     super.initState();
@@ -23,7 +23,7 @@ class VersionTestState extends State<VersionTest> {
     final platformVersion = await ably.platformVersion();
     final ablyVersion = await ably.version();
 
-    widget.dispatcher.completeTest({
+    widget.dispatcher.reportTestCompletion({
       'platformVersion': platformVersion,
       'ablyVersion': ablyVersion,
     });

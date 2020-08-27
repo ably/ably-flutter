@@ -6,11 +6,19 @@ emulators.
 
 ## Execute the Flutter Driver Tests
 
+### Run all Driver Tests
 Run the bash script in the project root directory
 
 ``` shell
 cd test_integration
 ./test_driver.sh
+```
+
+### Run a single Driver Test file
+
+```shell
+cd test_integration
+flutter driver test_driver/app.dart.dart
 ```
 
 ## `flutter drive` execution
@@ -86,7 +94,19 @@ allows any JSON-serializable value.
 `TestDispatcher` is a minimal application widget that invokes tests
 depending on the name in the received message.
 
-Every test needs an entry in the `switch`/`case` added manually.
+A mapping from test name to a test widget factory needs to be passed
+to `lib.main(...)`.
+
+Example:
+
+``` dart
+final testFactory = <String, TestFactory>{
+  TestName.platformAndAblyVersion: (d) => PlatformAndAblyVersionTest(d),
+  TestName.appKeyProvisioning: (d) => AppKeyProvisionTest(d),
+};
+
+void main() => app.main(testFactory);
+```
 
 ### Sending responses from the app to the test
 
