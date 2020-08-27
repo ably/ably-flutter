@@ -5,4 +5,6 @@ class TestName {
   static const String testHelperFlutterErrorTest = 'testHelperFlutterErrorTest';
   static const String testHelperUnhandledExceptionTest =
       'testHelperUnhandledExceptionTest';
+
+  static const String restPublish = 'restPublish';
 }
