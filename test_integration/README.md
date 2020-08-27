@@ -119,7 +119,7 @@ Exceptions need to be handled by the test code in the app and
 communicated to the test using the `completeTest()` method.
 
 ## Limitations
-
+### Dependencies between tests
 If an app contains multiple tests, they will have some dependency
 between them, because the app is not restarted for each test which
 results for example in the plugin to keep the state from the previous
@@ -130,6 +130,13 @@ To have truely independent tests, each test needs to have its own
 directory.  
 They can all call the same `lib/main.dart` though, because
 for each `xxx_test.dart` file the app will be closed and restarted.
+
+### One message and response per test
+Currently sending a message from the driver test to the app starts a
+new test and completing a test sends a response.
+
+It would be possible to support multiple messages per test in both
+directions, but it is not yet clear if this is actually required.
 
 ## Widget per test
 

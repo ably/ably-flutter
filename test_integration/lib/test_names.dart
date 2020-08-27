@@ -7,4 +7,7 @@ class TestName {
       'testHelperUnhandledExceptionTest';
 
   static const String restPublish = 'restPublish';
+
+  static const String realtimePublish = 'realtimePublish';
+  static const String realtimeEvents = 'realtimeEvents';
 }

@@ -31,8 +31,7 @@ void main() {
       final data = {'message': 'foo'};
       final message = TestControlMessage(TestName.platformAndAblyVersion, data);
 
-      final result = await driver.requestData(message.toJson());
-      final response = TestControlMessage.fromJson(result);
+      final response = await getTestResponse(driver, message);
 
       expect(response.testName, message.testName);
 
@@ -46,8 +45,7 @@ void main() {
       final data = {'message': 'foo'};
       final message = TestControlMessage(TestName.appKeyProvisioning, data);
 
-      final result = await driver.requestData(message.toJson());
-      final response = TestControlMessage.fromJson(result);
+      final response = await getTestResponse(driver, message);
 
       expect(response.testName, message.testName);
 

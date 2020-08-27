@@ -17,17 +17,23 @@ void main() {
     }
   });
 
-  test('Rest publish', () async {
-    final data = <String,dynamic>{};
-    final message = TestControlMessage(TestName.restPublish, data);
+  test('Rest publish', () => testImplementation(driver));
 
-    final result = await driver.requestData(message.toJson());
-    final response = TestControlMessage.fromJson(result);
+  test('Rest publish should also succeed when run twice',
+      () => testImplementation(driver));
+}
 
-    print(response.payload);
-    expect(response.testName, message.testName);
+Future testImplementation(FlutterDriver driver) async {
+  final data = <String, dynamic>{};
+  final message = TestControlMessage(TestName.restPublish, data);
 
-    expect(response.payload['handle'], isA<int>());
-    expect(response.payload['handle'], greaterThan(0));
-  });
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+
+  // TODO(zoechi) there probably should be log messages
+  // expect(response.payload['log'], isNotEmpty);
 }

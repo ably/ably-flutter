@@ -11,14 +11,14 @@ void main(Map<String, TestFactory> tests) {
   // This line enables the extension.
   enableFlutterDriverExtension(handler: dataHandler);
 
-  final flutterErrorHandler = FlutterErrorHandler();
+  final flutterErrorHandler = ErrorHandler();
   FlutterError.onError = flutterErrorHandler.onFlutterError;
 
   runZonedGuarded(
       () => runApp(TestDispatcher(
             testFactory: tests,
             driverDataHandler: dataHandler,
-            flutterErrorHandler: flutterErrorHandler,
+            errorHandler: flutterErrorHandler,
           )),
-      flutterErrorHandler.onError);
+      flutterErrorHandler.onException);
 }

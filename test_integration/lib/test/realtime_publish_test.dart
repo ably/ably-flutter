@@ -4,16 +4,16 @@ import 'package:flutter/widgets.dart';
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class RestPublishTest extends StatefulWidget {
+class RealtimePublishTest extends StatefulWidget {
   final TestDispatcherState dispatcher;
 
-  const RestPublishTest(this.dispatcher, {Key key}) : super(key: key);
+  const RealtimePublishTest(this.dispatcher, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => RestPublishTestState();
+  State<StatefulWidget> createState() => RealtimePublishTestState();
 }
 
-class RestPublishTestState extends State<RestPublishTest> {
+class RealtimePublishTestState extends State<RealtimePublishTest> {
   @override
   void initState() {
     super.initState();
@@ -21,30 +21,32 @@ class RestPublishTestState extends State<RestPublishTest> {
   }
 
   Future<void> init() async {
-    widget.dispatcher.reportLog('init start');
     final appKey = await provision('sandbox-');
     final logMessages = <List<String>>[];
 
-    final rest = Rest(
-      options: ClientOptions.fromKey(appKey.toString())
+    final realtime = Realtime(
+      options: ClientOptions.fromKey('$appKey')
         ..environment = 'sandbox'
         ..clientId = 'someClientId'
         ..logLevel = LogLevel.verbose
         ..logHandler =
-            ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+            ({msg, exception}) => logMessages.add([msg, '$exception']),
     );
+
+    final channel = await realtime.channels.get('publish-test');
 
     final name = 'Hello';
     final data = 'Flutter';
 
-    final channel = rest.channels.get('test');
     await channel.publish(name: name, data: data);
     await channel.publish(name: name);
     await channel.publish(data: data);
     await channel.publish();
 
+    await realtime.connection.close();
+
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'handle': await rest.handle,
+      'handle': await realtime.handle,
       'log': logMessages,
     });
   }
