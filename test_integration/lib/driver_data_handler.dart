@@ -20,25 +20,29 @@ class TestControlMessage {
     this.payload,
   ) : assert(testName != null && testName.length != null);
 
+  static const testNameKey = 'testName';
+  static const payloadKey = 'payload';
+  static const errorKey = 'error';
+
   final String testName;
   final Map<String, dynamic> payload;
 
   factory TestControlMessage.fromJson(String jsonValue) {
     var value = json.decode(jsonValue);
-    // TODO(zoechi) no idea why this is necessary (where it got encoded twice)
+    // TODO(zoechi) no idea why this is necessary (where it got encoded a 2nd time)
     // I'm sure it's my fault, but I need to investigate another time.
     if (value is String) {
       value = json.decode(value as String);
     }
 
     return TestControlMessage(
-      value['testName'] as String,
-      value['payload'] as Map<String, dynamic>,
+      value[testNameKey] as String,
+      value[payloadKey] as Map<String, dynamic>,
     );
   }
 
   String toJson() => json.encode({
-        'testName': testName,
-        'payload': payload,
+        testNameKey: testName,
+        payloadKey: payload,
       });
 }

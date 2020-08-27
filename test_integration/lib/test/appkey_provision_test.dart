@@ -1,18 +1,18 @@
 import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
-import 'provision_helper.dart';
+import 'appkey_provision_helper.dart';
 
-class ProvisionTest extends StatefulWidget {
+class AppKeyProvisionTest extends StatefulWidget {
   final TestDispatcherState dispatcher;
 
-  const ProvisionTest(this.dispatcher, {Key key}) : super(key: key);
+  const AppKeyProvisionTest(this.dispatcher, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ProvisionTestState();
+  State<StatefulWidget> createState() => AppKeyProvisionTestState();
 }
 
-class ProvisionTestState extends State<ProvisionTest> {
+class AppKeyProvisionTestState extends State<AppKeyProvisionTest> {
   @override
   void initState() {
     super.initState();
@@ -22,7 +22,7 @@ class ProvisionTestState extends State<ProvisionTest> {
   Future<void> init() async {
     final appKey = await provision('sandbox-');
 
-    widget.dispatcher.completeTest(<String, dynamic>{
+    widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'appKey': appKey.name,
     });
   }

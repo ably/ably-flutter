@@ -1,4 +1,5 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:ably_flutter_integration_test/test_names.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -17,30 +18,30 @@ void main() {
       }
     });
 
-    test('version', () async {
+    test('Platform and Ably version', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage('version', data);
+      final message = TestControlMessage(TestName.platformAndAblyVersion, data);
 
       final result = await driver.requestData(message.toJson());
       final response = TestControlMessage.fromJson(result);
 
       expect(response.testName, message.testName);
 
-      // Use the `driver.getText` method to verify the counter starts at 0.
-      expect(response.payload['platformVersion'], 'Android 10');
-      expect(response.payload['ablyVersion'], 'android-1.1.10');
+      expect(response.payload['platformVersion'], isA<String>());
+      expect(response.payload['platformVersion'], isNot(isEmpty));
+      expect(response.payload['ablyVersion'], isA<String>());
+      expect(response.payload['ablyVersion'], isNot(isEmpty));
     });
 
-    test('provision ', () async {
+    test('AppKey provision', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage('provision', data);
+      final message = TestControlMessage(TestName.appKeyProvisioning, data);
 
-      final response = TestControlMessage.fromJson(
-          await driver.requestData(message.toJson()));
+      final result = await driver.requestData(message.toJson());
+      final response = TestControlMessage.fromJson(result);
 
       expect(response.testName, message.testName);
 
-      // Use the `driver.getText` method to verify the counter starts at 0.
       expect(response.payload['appKey'], isA<String>());
       expect(response.payload['appKey'], isNotEmpty);
     });
