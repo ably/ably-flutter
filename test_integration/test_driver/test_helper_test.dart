@@ -17,19 +17,6 @@ void main() {
     }
   });
 
-  test('Should report FlutterError', () async {
-    final data = <String, dynamic>{};
-    final message =
-        TestControlMessage(TestName.testHelperFlutterErrorTest, data);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('FlutterError'));
-  });
-
   test('Should report unhandled exception', () async {
     final data = <String, dynamic>{};
     final message =
@@ -41,5 +28,20 @@ void main() {
 
     expect(response.payload['error']['exceptionType'], 'String');
     expect(response.payload['error']['exception'], contains('Unhandled'));
+  });
+
+  // FlutterError seems to break the test app
+  // and needs to be run last
+  test('Should report FlutterError', () async {
+    final data = <String, dynamic>{};
+    final message =
+        TestControlMessage(TestName.testHelperFlutterErrorTest, data);
+
+    final response = await getTestResponse(driver, message);
+
+    expect(response.testName, message.testName);
+
+    expect(response.payload['error']['exceptionType'], 'String');
+    expect(response.payload['error']['exception'], contains('FlutterError'));
   });
 }
