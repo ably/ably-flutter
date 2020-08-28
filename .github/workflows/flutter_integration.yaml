@@ -40,8 +40,8 @@ jobs:
       matrix:
         device:
         - "pixel"
-        - "pixel_xl"
-        - "pixel_c"
+        # - "pixel_xl"
+        # - "pixel_c"
         - "Nexus 6"
       fail-fast: false
     runs-on: "macos-latest"
