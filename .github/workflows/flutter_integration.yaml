@@ -8,6 +8,7 @@ jobs:
       matrix:
         device:
         - "iPhone 8 (13.1)"
+        - "iPhone 11 (13.6)"
       fail-fast: false
     runs-on: "macos-latest"
     steps:
@@ -16,11 +17,10 @@ jobs:
     - name: "Start Simulator"
       run: |
         UUID=$(
-          xcrun  instruments -s |
+          xcrun instruments -s |
           awk \
             -F ' *[][]' \
-            -V 'device=${{ matrix.device }}' \
-            '$1 == device { print $2 }'
+            '{ if($1 == ${{ matrix.device }}) { print $2 }}'
         )
         xcrun simctl boot "${UUID:?No Simulator with this name found}"
     - uses: actions/checkout@v1
@@ -68,8 +68,6 @@ jobs:
         profile: ${{ matrix.device }}
         script: |
           /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
-          ./scripts/setenv.sh
-          cd ./photochatapp
           flutter pub get
           cd test_integration
           run_driver_tests.sh
