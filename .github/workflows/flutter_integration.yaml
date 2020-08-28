@@ -24,10 +24,12 @@ jobs:
         )
         xcrun simctl boot "${UUID:?No Simulator with this name found}"
     - uses: actions/checkout@v1
+
 # Set up Flutter environment
     - uses: subosito/flutter-action@v1
       with:
         channel: "stable"
+
     - name: "Run Flutter Driver tests"
       run: |
         cd test_integration \
@@ -49,12 +51,15 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '8.x'
+
+# Set up Flutter environment
     - uses: subosito/flutter-action@v1
       with:
         channel: "stable"
+
     - name: "Run Flutter Driver tests"
       timeout-minutes: 30
-      uses: reactivecircus/android-emulator-runner@v2
+    - uses: reactivecircus/android-emulator-runner@v2
       # env:
       #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
       #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
