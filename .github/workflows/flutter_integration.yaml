@@ -39,10 +39,10 @@ jobs:
     strategy:
       matrix:
         device:
-          - "pixel"
-          - "pixel_xl"
-          - "pixel_c"
-          - "Nexus 6"
+        - "pixel"
+        - "pixel_xl"
+        - "pixel_c"
+        - "Nexus 6"
       fail-fast: false
     runs-on: "macos-latest"
     steps:
@@ -58,7 +58,7 @@ jobs:
 
     - name: "Run Flutter Driver tests"
       timeout-minutes: 30
-    - uses: reactivecircus/android-emulator-runner@v2
+      uses: reactivecircus/android-emulator-runner@v2
       # env:
       #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
       #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
