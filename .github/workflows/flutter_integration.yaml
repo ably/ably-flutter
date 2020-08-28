@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         device:
-        - "iPhone 8 (13.1)"
+        - "iPhone 8 (13.6)"
         - "iPhone 11 (13.6)"
       fail-fast: false
     runs-on: "macos-latest"
