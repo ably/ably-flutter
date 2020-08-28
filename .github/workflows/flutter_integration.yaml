@@ -20,7 +20,7 @@ jobs:
           xcrun instruments -s |
           awk \
             -F ' *[][]' \
-            '{ if($1 == ${{ matrix.device }}) { print $2 }}'
+            '{ if($1 == "${{ matrix.device }}") { print $2 }}'
         )
         xcrun simctl boot "${UUID:?No Simulator with this name found}"
     - uses: actions/checkout@v1
