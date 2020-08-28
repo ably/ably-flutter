@@ -1,0 +1,72 @@
+name: flutter_integration
+on:
+- push
+- pull_request
+jobs:
+  ios:
+    strategy:
+      matrix:
+        device:
+        - "iPhone 8 (13.1)"
+      fail-fast: false
+    runs-on: "macos-latest"
+    steps:
+    - name: "List simulators"
+      run: "xcrun instruments -s"
+    - name: "Start Simulator"
+      run: |
+        UUID=$(
+          xcrun  instruments -s |
+          awk \
+            -F ' *[][]' \
+            -V 'device=${{ matrix.device }}' \
+            '$1 == device { print $2 }'
+        )
+        xcrun simctl boot "${UUID:?No Simulator with this name found}"
+    - uses: actions/checkout@v1
+# Set up Flutter environment
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: "stable"
+    - name: "Run Flutter Driver tests"
+      run: |
+        cd test_integration \
+        run_driver_tests.sh
+
+  android:
+    strategy:
+      matrix:
+        device:
+          - "pixel"
+          - "pixel_xl"
+          - "pixel_c"
+          - "Nexus 6"
+      fail-fast: false
+    runs-on: "macos-latest"
+    steps:
+    - name: "Start Emulator"
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '8.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: "stable"
+    - name: "Run Flutter Driver tests"
+      timeout-minutes: 30
+      uses: reactivecircus/android-emulator-runner@v2
+      # env:
+      #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
+      #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
+      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
+      with:
+        api-level: 29
+        profile: ${{ matrix.device }}
+        script: |
+          /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
+          ./scripts/setenv.sh
+          cd ./photochatapp
+          flutter pub get
+          cd test_integration
+          run_driver_tests.sh
+
