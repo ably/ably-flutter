@@ -11,7 +11,7 @@ Run the bash script in the project root directory
 
 ``` shell
 cd test_integration
-./test_driver.sh
+./run_integration_tests.sh
 ```
 
 ### Run a single Driver Test file
