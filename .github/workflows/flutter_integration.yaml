@@ -33,7 +33,7 @@ jobs:
     - name: "Run Flutter Driver tests"
       run: |
         cd test_integration \
-        run_integration_tests.sh
+        ./run_integration_tests.sh
 
   android:
     strategy:
@@ -70,5 +70,5 @@ jobs:
           /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
           flutter pub get
           cd test_integration
-          run_integration_tests.sh
+          ./run_integration_tests.sh
 
