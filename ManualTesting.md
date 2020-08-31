@@ -92,7 +92,7 @@ result: As expected
 Created a temporary app on web console and deleted that after connection is established.
 Connection disconnected, and eventually status changed to failed after 1 retry.
 
-```
+```js
 2020-07-31 18:14:26.818151 : ConnectionStateChange event: ConnectionEvent.connecting
                              Reason: null
 2020-07-31 18:14:27.057491 : ConnectionStateChange event: ConnectionEvent.connected
@@ -110,7 +110,7 @@ result: As expected
 
 Trying to attach to a channel with an API key with restricted access
 
-```
+```js
 2020-07-31 19:40:59.586416 : ConnectionStateChange event: ConnectionEvent.connecting
                              Reason: null
 2020-07-31 19:41:00.463867 : ConnectionStateChange event: ConnectionEvent.connected
@@ -129,7 +129,7 @@ result: As expected
 
 The above, with updated API key settings to remove restrictions and trying a fresh connection again by `realtime.connect()` on same realtime instance:
 
-```
+```js
 2020-07-31 19:45:58.041846 : ConnectionStateChange event: ConnectionEvent.connecting
                              Reason: null
 2020-07-31 19:45:58.315391 : ConnectionStateChange event: ConnectionEvent.connected
