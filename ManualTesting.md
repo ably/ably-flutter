@@ -66,6 +66,8 @@ logs
 ```
 result: As expected
 
+## [RTN15](https://docs.ably.io/client-lib-development-guide/features/#RTN15)
+
 ### RTN15h, RTN15h1, RTN15h2  ✅ 
 
 #### Temporary key ✅ 
