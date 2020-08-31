@@ -139,7 +139,10 @@ The above, with updated API key settings to remove restrictions and trying a fre
                              Attaching to channel test-channel: Current state ChannelState.suspended
 ```
 
-result: **Unexpected behavior** ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ 
+result: **Unexpected behavior** 
+
+⚠️ ⚠️ ⚠️ ⚠️ ⚠️ 
+
 reason:
 `ConnectionState` changes to `connected` but with a reason **"Connection Unavailable"**.
 This isn't expected
