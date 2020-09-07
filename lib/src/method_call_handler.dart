@@ -13,13 +13,13 @@ class AblyMethodCallHandler {
     });
   }
 
-  Future onAuthCallback(AblyMessage message) async {
+  Future<dynamic> onAuthCallback(AblyMessage message) async {
     ably.TokenParams tokenParams = message.message as ably.TokenParams;
     ably.Rest rest = ably.restInstances[message.handle];
-    await rest.options.authCallback(tokenParams);
+    final callbackResponse = await rest.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, () {
       rest.channels.all.forEach((c) => c.authUpdateComplete());
     });
-    return;
+    return callbackResponse;
   }
 }
