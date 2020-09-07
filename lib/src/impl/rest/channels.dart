@@ -9,9 +9,6 @@ import 'package:flutter/services.dart';
 import '../platform_object.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
-  static const String clientConfiguredAuthenticationProviderRequestFailed =
-      '80019';
-
   /// [Rest] instance
   @override
   spec.AblyBase ably;
@@ -107,7 +104,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           item.completer.complete();
         }
       } on PlatformException catch (pe) {
-        if (pe.code == clientConfiguredAuthenticationProviderRequestFailed) {
+        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
           if (_authCallbackCompleter != null) {
             return;
           }
