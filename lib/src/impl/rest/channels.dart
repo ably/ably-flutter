@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:collection';
+import 'package:pedantic/pedantic.dart';
 import 'package:ably_flutter_plugin/ably.dart';
 import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
@@ -7,9 +8,7 @@ import 'package:flutter/services.dart';
 
 import '../platform_object.dart';
 
-
-class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
-
+class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   /// [Rest] instance
   @override
   spec.AblyBase ably;
@@ -31,51 +30,106 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel{
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
   @override
-  Future<int> createPlatformInstance() async  => await restPlatformObject.handle;
+  Future<int> createPlatformInstance() async => await restPlatformObject.handle;
 
   @override
-  Future<spec.PaginatedResult<spec.Message>> history([spec.RestHistoryParams params]) {
+  Future<spec.PaginatedResult<spec.Message>> history(
+      [spec.RestHistoryParams params]) {
     // TODO: implement history
     return null;
   }
 
-  bool authCallbackInProgress = false;
+  final _publishQueue = Queue<_PublishQueueItem>();
+  Completer<void> _authCallbackCompleter;
+
+  static const defaultPublishTimout = Duration(seconds: 30);
 
   @override
   Future<void> publish({String name, Object data}) async {
-    bool hasAuthCallback = this.ably.options.authCallback!=null;
-    while (hasAuthCallback && authCallbackInProgress) {
-      await Future.delayed(Duration(milliseconds: 100));
+    final queueItem = _PublishQueueItem(Completer<void>(), name, data);
+    _publishQueue.add(queueItem);
+    unawaited(_publishInternal());
+    return queueItem.completer.future;
+  }
+
+  Future<void> _publishInternal() async {
+    if (_authCallbackCompleter != null) {
+      // An authCallback is being awaited and that will drive the while loop
+      // below forward when it is completed or after it failed.
+      // So nothing more to do here.
+      return;
     }
-    try {
-      Map _map = { "channel": this.name, };
-      if (name!=null) _map["name"] = name;
-      if (data!=null) _map["message"] = data;
-      await this.invoke(PlatformMethod.publish, _map);
-    } on PlatformException catch (pe) {
-      if (hasAuthCallback && pe.code == "80019") {
-        authCallbackInProgress = true;
-        await publish(name: name, data: data);
-      } else {
-        throw spec.AblyException(pe.code, pe.message, pe.details);
+
+    while (_publishQueue.isNotEmpty) {
+      final item = _publishQueue.first;
+      // This is the only place where failed items are removed from the queue.
+      // In all other places (timeout exceptions) only the Completer is
+      // completed with an error but left in the queue.  Other attempts became a
+      // bit unwieldy.
+      if (item.completer.isCompleted) {
+        _publishQueue.remove(item);
+        continue;
+      }
+
+      try {
+        final _map = <String, Object>{
+          'channel': name,
+          if (name != null) 'name': item.name,
+          if (item.data != null) 'message': item.data,
+        };
+
+        await invoke(PlatformMethod.publish, _map);
+        _publishQueue.remove(item);
+
+        // The Completer could have timed out in the meantime and completing a
+        // completed Completer would cause an exception, so we check first.
+        if (!item.completer.isCompleted) {
+          item.completer.complete();
+        }
+      } on PlatformException catch (pe) {
+        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
+          if (_authCallbackCompleter != null) {
+            return;
+          }
+          _authCallbackCompleter = Completer<void>();
+          try {
+            await _authCallbackCompleter.future.timeout(defaultPublishTimout,
+                onTimeout: () => _publishQueue
+                    .where((e) => !e.completer.isCompleted)
+                    .forEach((e) => e.completer.completeError(
+                        TimeoutException('Timed out', defaultPublishTimout))));
+          } finally {
+            _authCallbackCompleter = null;
+          }
+        } else {
+          _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
+              e.completer.completeError(
+                  spec.AblyException(pe.code, pe.message, pe.details)));
+        }
       }
     }
   }
 
-  authUpdateComplete() {
-    authCallbackInProgress = false;
+  void authUpdateComplete() {
+    _authCallbackCompleter?.complete();
   }
-
 }
 
-
-class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel>{
-
-  RestPlatformChannels(Rest ably): super(ably);
+class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel> {
+  RestPlatformChannels(Rest ably) : super(ably);
 
   @override
-  RestPlatformChannel createChannel(name, options){
+  RestPlatformChannel createChannel(name, options) {
     return RestPlatformChannel(this.ably, name, options);
   }
+}
 
+/// An item for used to enqueue a message to be published after an ongoing
+/// authCallback is completed
+class _PublishQueueItem {
+  final String name;
+  final Object data;
+  final Completer<void> completer;
+
+  _PublishQueueItem(this.completer, this.name, this.data);
 }
