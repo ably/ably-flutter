@@ -55,8 +55,7 @@ void main() {
                     handle: handle));
             isAuthenticated = true;
             throw PlatformException(
-                code: RestPlatformChannel
-                    .clientConfiguredAuthenticationProviderRequestFailed);
+                code: ErrorCodes.authCallbackFailure.toString());
           }
 
           publishedMessages.add(message);
