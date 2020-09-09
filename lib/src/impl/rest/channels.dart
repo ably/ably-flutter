@@ -52,13 +52,13 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
     return queueItem.completer.future;
   }
 
+  bool _publishInternalRunning = false;
+
   Future<void> _publishInternal() async {
-    if (_authCallbackCompleter != null) {
-      // An authCallback is being awaited and that will drive the while loop
-      // below forward when it is completed or after it failed.
-      // So nothing more to do here.
+    if (_publishInternalRunning) {
       return;
     }
+    _publishInternalRunning = true;
 
     while (_publishQueue.isNotEmpty) {
       final item = _publishQueue.first;
@@ -79,6 +79,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
         };
 
         await invoke(PlatformMethod.publish, _map);
+
         _publishQueue.remove(item);
 
         // The Completer could have timed out in the meantime and completing a
@@ -108,6 +109,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
         }
       }
     }
+    _publishInternalRunning = false;
   }
 
   void authUpdateComplete() {
