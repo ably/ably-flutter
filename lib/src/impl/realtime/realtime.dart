@@ -10,26 +10,20 @@ import 'connection.dart';
 
 Map<int, Realtime> realtimeInstances = {};
 
-class Realtime extends PlatformObject implements spec.RealtimeInterface<RealtimePlatformChannels> {
-
-  Realtime({
-    ClientOptions options,
-    final String key
-  }) :
-      assert(options!=null || key!=null),
-      this.options = (options==null)?ClientOptions.fromKey(key):options,
-      super()
-  {
+class Realtime extends PlatformObject
+    implements spec.RealtimeInterface<RealtimePlatformChannels> {
+  Realtime({ClientOptions options, final String key})
+      : assert(options != null || key != null),
+        options = (options == null) ? ClientOptions.fromKey(key) : options,
+        super() {
     connection = ConnectionPlatformObject(this);
     channels = RealtimePlatformChannels(this);
   }
 
   @override
   Future<int> createPlatformInstance() async {
-    int handle = await invokeRaw<int>(
-      PlatformMethod.createRealtimeWithOptions,
-      AblyMessage(options)
-    );
+    var handle = await invokeRaw<int>(
+        PlatformMethod.createRealtimeWithOptions, AblyMessage(options));
     realtimeInstances[handle] = this;
     return handle;
   }
@@ -62,19 +56,24 @@ class Realtime extends PlatformObject implements spec.RealtimeInterface<Realtime
 
   @override
   Future<void> connect() async {
-    bool hasAuthCallback = this.options.authCallback!=null;
+    var hasAuthCallback = options.authCallback != null;
     while (hasAuthCallback && authCallbackInProgress) {
       await Future.delayed(Duration(milliseconds: 100));
     }
     await invoke(PlatformMethod.connectRealtime);
   }
 
-  authUpdateComplete() {
+  void authUpdateComplete() {
     authCallbackInProgress = false;
   }
 
   @override
-  Future<HttpPaginatedResponse> request({String method, String path, Map<String, dynamic> params, body, Map<String, String> headers}) {
+  Future<HttpPaginatedResponse> request(
+      {String method,
+      String path,
+      Map<String, dynamic> params,
+      body,
+      Map<String, String> headers}) {
     // TODO: implement request
     return null;
   }

@@ -6,25 +6,24 @@ import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
 import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
 import '../platform_object.dart';
 
-
 class ConnectionPlatformObject extends PlatformObject implements Connection {
-
   Realtime realtimePlatformObject;
 
-  ConnectionPlatformObject(this.realtimePlatformObject) {
-    this.handle;  //proactively acquiring handle
-    this.state = ConnectionState.initialized;
-    this.on().listen((ConnectionStateChange event) {
+  ConnectionPlatformObject(this.realtimePlatformObject) : super() {
+    state = ConnectionState.initialized;
+    on().listen((ConnectionStateChange event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {
-        this.realtimePlatformObject.authCallbackInProgress = true;
-        this.realtimePlatformObject.connect();  //try connecting immediately which waits for authCallback completion
+        realtimePlatformObject.authCallbackInProgress = true;
+        realtimePlatformObject
+            .connect(); //try connecting immediately which waits for authCallback completion
       }
-      this.state = event.current;
+      state = event.current;
     });
   }
 
   @override
-  Future<int> createPlatformInstance() async => await realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async =>
+      await realtimePlatformObject.handle;
 
   @override
   ErrorInfo errorReason;
@@ -47,9 +46,10 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   @override
   Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) {
     return listen(PlatformMethod.onRealtimeConnectionStateChanged)
-      .map((connectionEvent) => connectionEvent as ConnectionStateChange)
-      .where((connectionStateChange) =>
-        connectionEvent==null || connectionStateChange.event==connectionEvent);
+        .map((connectionEvent) => connectionEvent as ConnectionStateChange)
+        .where((connectionStateChange) =>
+            connectionEvent == null ||
+            connectionStateChange.event == connectionEvent);
   }
 
   @override
@@ -67,5 +67,4 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
     // TODO: implement ping
     return null;
   }
-
 }
