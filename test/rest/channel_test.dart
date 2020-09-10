@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ably_flutter_plugin/ably.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/impl/rest/channels.dart';
 import 'package:ably_flutter_plugin/src/method_call_handler.dart';
 import 'package:ably_flutter_plugin/src/platform.dart' as platform;
 import 'package:fake_async/fake_async.dart';
@@ -116,7 +115,7 @@ void main() {
   test('publish message with authCallback timing out', () async {
     // setup
     final tooMuchDelay =
-        RestPlatformChannel.defaultPublishTimout + Duration(seconds: 2);
+        Timeouts.retryOperationOnAuthFailure + Duration(seconds: 2);
     var authCallbackCounter = 0;
 
     Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
