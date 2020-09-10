@@ -141,8 +141,10 @@ class _MyAppState extends State<MyApp> {
     dynamic data = "Flutter";
     print('publishing messages... name "$name", message "$data"');
     try {
-      await rest.channels.get('test').publish(name: name, data: data);
-      await rest.channels.get('test').publish(name: name);
+      await Future.wait([
+        rest.channels.get('test').publish(name: name, data: data),
+        rest.channels.get('test').publish(name: name)
+      ]);
       await rest.channels.get('test').publish(data: data);
       await rest.channels.get('test').publish();
       print('Messages published');
@@ -279,7 +281,7 @@ class _MyAppState extends State<MyApp> {
       ably.RealtimeChannel channel = _realtime.channels.get("test-channel");
       Stream<ably.Message> messageStream = channel.subscribe(names: ['message-data', 'Hello']);
       _channelMessageSubscription = messageStream.listen((ably.Message message){
-        print("Channel message recieved: $message\n"
+        print("Channel message received: $message\n"
           "\tisNull: ${message.data == null}\n"
           "\tisString ${message.data is String}\n"
           "\tisMap ${message.data is Map}\n"
@@ -297,7 +299,7 @@ class _MyAppState extends State<MyApp> {
   Widget createChannelUnSubscribeButton() => FlatButton(
     onPressed: (_channelMessageSubscription!=null)?() async {
       await _channelMessageSubscription.cancel();
-      print("Channel messages ubsubscribed");
+      print("Channel messages unsubscribed");
       setState((){
         _channelMessageSubscription = null;
       });
@@ -309,7 +311,7 @@ class _MyAppState extends State<MyApp> {
   int realtimePublishCounter = 0;
   Widget createChannelPublishButton() => FlatButton(
     onPressed: (_realtimeChannelState==ably.ChannelState.attached)?() async {
-      print('Sendimg rest message...');
+      print('Sending rest message...');
       dynamic data = messagesToPublish[(realtimePublishCounter++ % messagesToPublish.length)];
       ably.Message m = ably.Message()..data=data..name='Hello';
       try {
