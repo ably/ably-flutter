@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/impl/realtime/channels.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
@@ -52,19 +54,67 @@ class Realtime extends PlatformObject
   @override
   Future<void> close() async => await invoke(PlatformMethod.closeRealtime);
 
-  bool authCallbackInProgress = false;
+  final _connectQueue = Queue<Completer<void>>();
+  Completer<void> _authCallbackCompleter;
 
   @override
   Future<void> connect() async {
-    var hasAuthCallback = options.authCallback != null;
-    while (hasAuthCallback && authCallbackInProgress) {
-      await Future.delayed(Duration(milliseconds: 100));
+    final queueItem = Completer<void>();
+    _connectQueue.add(queueItem);
+    unawaited(_connect());
+    return queueItem.future;
+  }
+
+  bool _connecting = false;
+
+  Future<void> _connect() async {
+    if (_connecting) {
+      return;
     }
-    await invoke(PlatformMethod.connectRealtime);
+    _connecting = true;
+    while (_connectQueue.isNotEmpty) {
+      final item = _connectQueue.first;
+      // This is the only place where failed items are removed from the queue.
+      // In all other places (timeout exceptions) only the Completer is
+      // completed with an error but left in the queue.  Other attempts became a
+      // bit unwieldy.
+      if (item.isCompleted) {
+        _connectQueue.remove(item);
+        continue;
+      }
+      await invoke(PlatformMethod.connectRealtime);
+
+      _connectQueue.remove(item);
+
+      // The Completer could have timed out in the meantime and completing a
+      // completed Completer would cause an exception, so we check first.
+      if (!item.isCompleted) {
+        item.complete();
+      }
+    }
+    _connecting = false;
+  }
+
+  void awaitAuthUpdateAndReconnect() async {
+    if (_authCallbackCompleter != null) {
+      return;
+    }
+    _authCallbackCompleter = Completer<void>();
+    try {
+      await _authCallbackCompleter.future.timeout(
+          Timeouts.retryOperationOnAuthFailure,
+          onTimeout: () => _connectQueue.where((e) => !e.isCompleted).forEach(
+              (e) => e.completeError(TimeoutException(
+                  'Timed out', Timeouts.retryOperationOnAuthFailure))));
+    } finally {
+      _authCallbackCompleter = null;
+    }
+    await connect();
   }
 
   void authUpdateComplete() {
-    authCallbackInProgress = false;
+    _authCallbackCompleter?.complete();
+    channels.all.forEach((c) => c.authUpdateComplete());
   }
 
   @override

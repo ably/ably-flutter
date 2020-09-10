@@ -13,9 +13,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
     state = ConnectionState.initialized;
     on().listen((ConnectionStateChange event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {
-        realtimePlatformObject.authCallbackInProgress = true;
-        realtimePlatformObject
-            .connect(); //try connecting immediately which waits for authCallback completion
+        realtimePlatformObject.awaitAuthUpdateAndReconnect();
       }
       state = event.current;
     });
