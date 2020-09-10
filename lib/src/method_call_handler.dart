@@ -18,30 +18,26 @@ class AblyMethodCallHandler {
     });
   }
 
-  Future<dynamic> onAuthCallback(AblyMessage message) async {
+  Future<Object> onAuthCallback(AblyMessage message) async {
     ably.TokenParams tokenParams = message.message as ably.TokenParams;
     ably.Rest rest = ably.restInstances[message.handle];
     final callbackResponse = await rest.options.authCallback(tokenParams);
-    Future.delayed(Duration.zero, () {
-      rest.channels.all.forEach((c) => c.authUpdateComplete());
-    });
+    Future.delayed(Duration.zero, () => rest.authUpdateComplete());
     return callbackResponse;
   }
 
   bool realtimeAuthInProgress = false;
-  onRealtimeAuthCallback(AblyMessage message) async {
-    if(realtimeAuthInProgress){
+
+  Future<Object> onRealtimeAuthCallback(AblyMessage message) async {
+    if (realtimeAuthInProgress) {
       return null;
     }
     realtimeAuthInProgress = true;
     ably.TokenParams tokenParams = message.message as ably.TokenParams;
     ably.Realtime realtime = ably.realtimeInstances[message.handle];
     Object callbackResponse = await realtime.options.authCallback(tokenParams);
-    Future.delayed(Duration.zero, (){
-      realtime.authUpdateComplete();
-    });
+    Future.delayed(Duration.zero, () => realtime.authUpdateComplete());
     realtimeAuthInProgress = false;
     return callbackResponse;
   }
-
 }

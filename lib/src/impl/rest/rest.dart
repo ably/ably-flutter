@@ -22,7 +22,7 @@ class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChan
       this.options = (options==null)?ClientOptions.fromKey(key):options,
       super()
   {
-    this.channels = RestPlatformChannels(this);
+    channels = RestPlatformChannels(this);
   }
 
   Future<int> createPlatformInstance() async {
@@ -32,6 +32,10 @@ class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChan
     );
     _restInstances[handle] = this;
     return handle;
+  }
+
+  authUpdateComplete() {
+    channels.all.forEach((c) => c.authUpdateComplete());
   }
 
   @override
