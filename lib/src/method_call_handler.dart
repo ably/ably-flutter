@@ -19,8 +19,8 @@ class AblyMethodCallHandler {
   }
 
   Future<Object> onAuthCallback(AblyMessage message) async {
-    ably.TokenParams tokenParams = message.message as ably.TokenParams;
-    ably.Rest rest = ably.restInstances[message.handle];
+    var tokenParams = message.message as ably.TokenParams;
+    var rest = ably.restInstances[message.handle];
     final callbackResponse = await rest.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, () => rest.authUpdateComplete());
     return callbackResponse;
@@ -33,8 +33,8 @@ class AblyMethodCallHandler {
       return null;
     }
     realtimeAuthInProgress = true;
-    ably.TokenParams tokenParams = message.message as ably.TokenParams;
-    ably.Realtime realtime = ably.realtimeInstances[message.handle];
+    var tokenParams = message.message as ably.TokenParams;
+    var realtime = ably.realtimeInstances[message.handle];
     Object callbackResponse = await realtime.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, () => realtime.authUpdateComplete());
     realtimeAuthInProgress = false;
