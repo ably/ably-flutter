@@ -43,8 +43,6 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   final _publishQueue = Queue<_PublishQueueItem>();
   Completer<void> _authCallbackCompleter;
 
-  static const defaultPublishTimeout = Duration(seconds: 30);
-
   @override
   Future<void> publish({String name, Object data}) async {
     final queueItem = _PublishQueueItem(Completer<void>(), name, data);
@@ -95,11 +93,12 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           }
           _authCallbackCompleter = Completer<void>();
           try {
-            await _authCallbackCompleter.future.timeout(defaultPublishTimeout,
+            await _authCallbackCompleter.future.timeout(
+                Timeouts.retryOperationOnAuthFailure,
                 onTimeout: () => _publishQueue
                     .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(
-                        TimeoutException('Timed out', defaultPublishTimeout))));
+                    .forEach((e) => e.completer.completeError(TimeoutException(
+                        'Timed out', Timeouts.retryOperationOnAuthFailure))));
           } finally {
             _authCallbackCompleter = null;
           }
