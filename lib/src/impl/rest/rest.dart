@@ -16,7 +16,7 @@ class Rest extends PlatformObject
     implements spec.RestInterface<RestPlatformChannels> {
   Rest({ClientOptions options, final String key})
       : assert(options != null || key != null),
-        options = (options == null) ? ClientOptions.fromKey(key) : options,
+        options = options ?? ClientOptions.fromKey(key),
         super() {
     channels = RestPlatformChannels(this);
   }
