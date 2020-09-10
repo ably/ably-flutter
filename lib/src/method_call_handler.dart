@@ -22,7 +22,7 @@ class AblyMethodCallHandler {
     var tokenParams = message.message as ably.TokenParams;
     var rest = ably.restInstances[message.handle];
     final callbackResponse = await rest.options.authCallback(tokenParams);
-    Future.delayed(Duration.zero, () => rest.authUpdateComplete());
+    Future.delayed(Duration.zero, rest.authUpdateComplete);
     return callbackResponse;
   }
 
@@ -36,7 +36,7 @@ class AblyMethodCallHandler {
     var tokenParams = message.message as ably.TokenParams;
     var realtime = ably.realtimeInstances[message.handle];
     Object callbackResponse = await realtime.options.authCallback(tokenParams);
-    Future.delayed(Duration.zero, () => realtime.authUpdateComplete());
+    Future.delayed(Duration.zero, realtime.authUpdateComplete);
     realtimeAuthInProgress = false;
     return callbackResponse;
   }
