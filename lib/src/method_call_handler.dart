@@ -26,18 +26,18 @@ class AblyMethodCallHandler {
     return callbackResponse;
   }
 
-  bool realtimeAuthInProgress = false;
+  bool _realtimeAuthInProgress = false;
 
   Future<Object> onRealtimeAuthCallback(AblyMessage message) async {
-    if (realtimeAuthInProgress) {
+    if (_realtimeAuthInProgress) {
       return null;
     }
-    realtimeAuthInProgress = true;
+    _realtimeAuthInProgress = true;
     var tokenParams = message.message as ably.TokenParams;
     var realtime = ably.realtimeInstances[message.handle];
     Object callbackResponse = await realtime.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, realtime.authUpdateComplete);
-    realtimeAuthInProgress = false;
+    _realtimeAuthInProgress = false;
     return callbackResponse;
   }
 }
