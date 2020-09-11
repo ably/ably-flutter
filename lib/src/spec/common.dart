@@ -1,3 +1,4 @@
+import 'auth.dart';
 import 'enums.dart';
 import 'rest/ably_base.dart';
 
@@ -75,44 +76,52 @@ abstract class StatsMessageTraffic {
 }
 
 /// A class providing parameters of a token request.
-/// These params are used when invoking
-/// Auth#authorize, Auth#requestToken and Auth#createTokenRequest
+///
+/// Parameters for a token request
+///
+/// [Auth.authorize], [Auth.requestToken] and [Auth.createTokenRequest]
+/// accept an instance of TokenParams as a parameter
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK1
 class TokenParams {
 
-  /// Capability of the token. If the token request is successful,
-  ///	the capability of the returned token will be the intersection of
-  ///	this capability with the capability of the issuing key.
+  /// Capability of the token.
+  ///
+  /// If the token request is successful, the capability of the
+  /// returned token will be the intersection of this capability
+  /// with the capability of the issuing key.
   ///
   /// Ref: TK2b
   String  capability;
 
-  /// A clientId to associate with this token. The generated token
-  ///	may be used to authenticate as this clientId.
+  /// A clientId to associate with this token.
+  ///
+  /// The generated token may be used to authenticate as this clientId.
   ///
   /// Ref: TK2c
   String clientId;
 
+  /// An opaque nonce string of at least 16 characters to ensure uniqueness.
   ///
-  /// An opaque nonce string of at least 16 characters to ensure
-  ///	uniqueness. Timestamps, in conjunction with the nonce,
+  /// Timestamps, in conjunction with the nonce,
   /// are used to prevent requests from being replayed
   ///
   /// ref: TK2d
   String nonce;
 
   /// The timestamp (in millis since the epoch) of this request.
+  ///
   ///	Timestamps, in conjunction with the nonce, are used to prevent
   ///	token requests from being replayed.
   ///
   /// ref: TK2d
   DateTime timestamp;
 
-  /// Requested time to live for the token. If the token request
-  /// is successful, the TTL of the returned token will be less
-  /// than or equal to this value depending on application settings
-  /// and the attributes of the issuing key.
+  /// Requested time to live for the token.
+  ///
+  /// If the token request is successful, the TTL of the returned
+  /// token will be less than or equal to this value depending on
+  /// application settings and the attributes of the issuing key.
   ///
   /// 0 means Ably will set it to the default value
   ///
@@ -130,6 +139,7 @@ class TokenParams {
 }
 
 /// TokenDetails is a type containing the token request
+///
 /// response from the REST requestToken endpoint
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
@@ -153,12 +163,13 @@ class TokenDetails {
   /// TD5
   String capability;
 
-  /// clientId assigned to the token. If clientId is not set (i.e. null),
-  /// then the token is prohibited from assuming a clientId in any operations,
-  /// however if clientId is a wildcard string '*', then the token is
-  /// permitted to assume any clientId. Any other string value for clientId
-  /// implies that the clientId is both enforced and assumed
-  /// for all operations for this token
+  /// clientId assigned to the token.
+  ///
+  /// If clientId is not set (i.e. null), then the token is prohibited
+  /// from assuming a clientId in any operations, however if clientId
+  /// is a wildcard string '*', then the token is permitted to assume
+  /// any clientId. Any other string value for clientId implies that the
+  /// clientId is both enforced and assumed for all operations for this token
   ///
   /// TD6
   String clientId;
@@ -172,11 +183,11 @@ class TokenDetails {
 
   /// TD7
   TokenDetails.fromMap(Map<String, dynamic> map){
-    this.token = map['token'] as String;
-    this.expires = map['expires'] as int;
-    this.issued = map['issued'] as int;
-    this.capability = map['capability'] as String;
-    this.clientId = map['clientId'] as String;
+    token = map['token'] as String;
+    expires = map['expires'] as int;
+    issued = map['issued'] as int;
+    capability = map['capability'] as String;
+    clientId = map['clientId'] as String;
   }
 
 }
