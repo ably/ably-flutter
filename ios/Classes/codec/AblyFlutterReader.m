@@ -100,7 +100,7 @@ ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); 
 ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
 }
 
-static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *const dictionary) {
+static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDictionary *const dictionary) {
     ARTClientOptions *const o = [ARTClientOptions new];
     
     // AuthOptions (super class of ClientOptions)
@@ -111,8 +111,6 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     READ_VALUE(o, authHeaders, dictionary, TxClientOptions_authHeaders);
     READ_VALUE(o, authParams, dictionary, TxClientOptions_authParams);
     READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
-    READ_VALUE(o, hasAuthCallback, dictionary, TxClientOptions_hasAuthCallback);
-    ON_VALUE(^(const id value) { o.hasAuthCallback = value; }, dictionary, TxClientOptions_hasAuthCallback);
     
     // ClientOptions
     READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
@@ -139,7 +137,12 @@ static AblyCodecDecoder readClientOptions = ^ARTClientOptions*(NSDictionary *con
     // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
     
-    return o;
+    AblyFlutterClientOptions *const co = [AblyFlutterClientOptions new];
+    ON_VALUE(^(const id value) {
+        [co initWithClientOptions: o hasAuthCallback: value];
+    }, dictionary, TxClientOptions_hasAuthCallback);
+
+    return co;
 };
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary {

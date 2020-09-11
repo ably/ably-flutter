@@ -4,7 +4,7 @@
 //   @import Ably;
 #import "Ably.h"
 #import "AblyFlutterMessage.h"
-#import "ARTClientOptions+AblyFlutterClientOptions.h"
+#import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
 
 
@@ -42,13 +42,13 @@
     return self;
 }
 
--(NSNumber *)createRestWithOptions:(ARTClientOptions *const)options {
+-(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *const)options {
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
     NSNumber *const handle = @(_nextHandle++);
     if(options.hasAuthCallback){
-        options.authCallback =
+        options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
             = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
@@ -69,7 +69,7 @@
             }];
         };
     }
-    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options];
+    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options.clientOptions];
     [_restInstances setObject:instance forKey:handle];
     return handle;
 }
@@ -78,12 +78,12 @@
     return [_restInstances objectForKey:handle];
 }
 
--(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *const)options {
+-(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *const)options {
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
     
-    ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options];
+    ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
     NSNumber *const handle = @(_nextHandle++);
     [_realtimeInstances setObject:instance forKey:handle];
     return handle;
