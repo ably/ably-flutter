@@ -216,9 +216,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return new AblyEventMessage<>(eventName, message);
     }
 
-    private ClientOptions decodeClientOptions(Map<String, Object> jsonMap) {
+    private PlatformClientOptions decodeClientOptions(Map<String, Object> jsonMap) {
         if (jsonMap == null) return null;
-        final PlatformClientOptions o = new PlatformClientOptions();
+        final ClientOptions o = new ClientOptions();
 
         // AuthOptions (super class of ClientOptions)
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, v -> o.authUrl = (String) v);
@@ -229,7 +229,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[]) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> o.useTokenAuth = (Boolean) v);
-        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.hasAuthCallback, v -> o.hasAuthCallback = (Boolean) v);
 
         // ClientOptions
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String) v);
@@ -256,7 +255,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[]) v);
-        return o;
+
+        return new PlatformClientOptions(o, (boolean) jsonMap.getOrDefault(PlatformConstants.TxClientOptions.hasAuthCallback, false));
     }
 
     private TokenDetails decodeTokenDetails(Map<String, Object> jsonMap) {

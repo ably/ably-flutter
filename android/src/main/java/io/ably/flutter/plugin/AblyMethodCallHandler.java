@@ -134,7 +134,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             try {
                 final long handle = ablyLibrary.getCurrentHandle();
                 if (clientOptions.hasAuthCallback) {
-                    clientOptions.authCallback = (Auth.TokenParams params) -> {
+                    clientOptions.options.authCallback = (Auth.TokenParams params) -> {
                         Object token = ablyLibrary.getRestToken(handle);
                         if (token != null) return token;
                         new Handler(Looper.getMainLooper()).post(() -> {
@@ -161,7 +161,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         return null;
                     };
                 }
-                result.success(ablyLibrary.createRest(clientOptions));
+                result.success(ablyLibrary.createRest(clientOptions.options));
             } catch (final AblyException e) {
                 handleAblyException(result, e);
             }
@@ -192,9 +192,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        this.<ClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
+        this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
-                result.success(ablyLibrary.createRealtime(clientOptions));
+                result.success(ablyLibrary.createRealtime(clientOptions.options));
             } catch (final AblyException e) {
                 handleAblyException(result, e);
             }
