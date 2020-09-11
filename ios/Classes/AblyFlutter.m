@@ -82,6 +82,8 @@
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
+    
+    ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
     NSNumber *const handle = @(_nextHandle++);
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =
