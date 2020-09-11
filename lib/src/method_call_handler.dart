@@ -9,6 +9,9 @@ class AblyMethodCallHandler {
       switch (call.method) {
         case PlatformMethod.authCallback:
           return await onAuthCallback(call.arguments);
+        default:
+          throw PlatformException(
+            code: 'invalid_method', message: 'No such method ${call.method}');
       }
     });
   }
