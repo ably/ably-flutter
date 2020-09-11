@@ -52,11 +52,14 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
     AblyFlutterMessage *const messageData = message.message;
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*)[_dataMap objectForKey:@"channel"];
-    NSString *const eventName = (NSString*)[_dataMap objectForKey:@"name"];
+    NSString * eventName = (NSString*)[_dataMap objectForKey:@"name"];
+    if(eventName==[NSNull null]){
+        eventName = @"";
+    }
     NSObject *const eventData = (NSString*)[_dataMap objectForKey:@"message"];
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    
+
     [channel publish:eventName data:eventData callback:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
