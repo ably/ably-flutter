@@ -111,8 +111,6 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     READ_VALUE(o, authHeaders, dictionary, TxClientOptions_authHeaders);
     READ_VALUE(o, authParams, dictionary, TxClientOptions_authParams);
     READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
-    READ_VALUE(o, hasAuthCallback, dictionary, TxClientOptions_hasAuthCallback);
-    ON_VALUE(^(const id value) { o.hasAuthCallback = value; }, dictionary, TxClientOptions_hasAuthCallback);
 
     // ClientOptions
     READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
