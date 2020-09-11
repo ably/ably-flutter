@@ -1,9 +1,9 @@
 @import Foundation;
+@import Flutter;
 
 @class ARTRest;
 @class ARTRealtime;
 @class ARTClientOptions;
-#import <Flutter/Flutter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
--(instancetype) setChannel:(FlutterMethodChannel *const)channel;
+-(void) setChannel:(FlutterMethodChannel *)channel;
 
 -(NSNumber *)createRestWithOptions:(ARTClientOptions *)options;
 

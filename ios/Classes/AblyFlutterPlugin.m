@@ -217,7 +217,8 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
     if (!self) {
         return nil;
     }
-    _ably = [[AblyFlutter sharedInstance] setChannel: channel];
+    _ably = [AblyFlutter sharedInstance];
+    [_ably setChannel: channel];
     self->_streamsChannel = streamsChannel;
     
     _handlers = @{
