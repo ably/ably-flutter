@@ -1,8 +1,9 @@
 This document aims to list our all the inputs from how some features are tested manually
 and feasible tests can be converted to automated tests. 
 
-This document currently targets **RTN14** and **RTN15**
- sections of the [spec](https://docs.ably.io/client-lib-development-guide/features/#idl), partially
+This document currently targets **[RTN14](https://docs.ably.io/client-lib-development-guide/features/#RTN14)**
+ and **[RTN15](https://docs.ably.io/client-lib-development-guide/features/#RTN15)**
+ sections of the spec, partially
 
 ## [RTN14](https://docs.ably.io/client-lib-development-guide/features/#RTN14)
 
