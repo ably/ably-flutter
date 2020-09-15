@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version          = '0.0.2'
   s.summary          = 'Ably Cocoa platform support for our Flutter plugin.'
   s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
+  s.license          = 'Apache 2.0'
   s.author           = { 'Ably' => 'support@ably.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
