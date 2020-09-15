@@ -6,9 +6,6 @@ Pod::Spec.new do |s|
   s.name             = 'ably_flutter_plugin'
   s.version          = '0.0.2'
   s.summary          = 'Ably Cocoa platform support for our Flutter plugin.'
-  s.description      = <<-DESC
-Ably Cocoa platform support for our Flutter plugin.
-                       DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Ably' => 'support@ably.io' }
