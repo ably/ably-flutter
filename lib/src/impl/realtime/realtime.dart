@@ -23,8 +23,8 @@ class Realtime extends PlatformObject
       : assert(options != null || key != null),
         options = options ?? ClientOptions.fromKey(key),
         super() {
-    connection = ConnectionPlatformObject(this);
-    channels = RealtimePlatformChannels(this);
+    _connection = ConnectionPlatformObject(this);
+    _channels = RealtimePlatformChannels(this);
   }
 
   @override
@@ -38,8 +38,10 @@ class Realtime extends PlatformObject
   // The _connection instance keeps a reference to this platform object.
   // Ideally connection would be final, but that would need 'late final' which is coming.
   // https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
+  Connection _connection;
+
   @override
-  Connection connection;
+  Connection get connection => _connection;
 
   @override
   Auth auth;
@@ -53,8 +55,10 @@ class Realtime extends PlatformObject
   @override
   Push push;
 
+  RealtimePlatformChannels _channels;
+
   @override
-  RealtimePlatformChannels channels;
+  RealtimePlatformChannels get channels => _channels;
 
   @override
   Future<void> close() async => await invoke(PlatformMethod.closeRealtime);
