@@ -49,8 +49,10 @@ class RealtimePlatformChannel extends PlatformObject
 
   Map<String, dynamic> __payload;
 
-  Map<String, dynamic> get _payload =>
-      __payload ??= {'channel': name, if (options != null) 'options': options};
+  Map<String, dynamic> get _payload => __payload ??= {
+        'channel': name,
+        if (options != null) 'options': options
+      };
 
   final _publishQueue = Queue<_RealtimePublishQueueItem>();
   Completer<void> _authCallbackCompleter;
