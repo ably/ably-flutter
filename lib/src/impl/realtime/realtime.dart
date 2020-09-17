@@ -10,7 +10,12 @@ import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'connection.dart';
 
-Map<int, Realtime> realtimeInstances = {};
+Map<int, Realtime> _realtimeInstances = {};
+Map<int, Realtime> _realtimeInstancesUnmodifiableView;
+
+Map<int, Realtime> get realtimeInstances =>
+    _realtimeInstancesUnmodifiableView ??=
+        UnmodifiableMapView(_realtimeInstances);
 
 class Realtime extends PlatformObject
     implements spec.RealtimeInterface<RealtimePlatformChannels> {
@@ -26,7 +31,7 @@ class Realtime extends PlatformObject
   Future<int> createPlatformInstance() async {
     var handle = await invokeRaw<int>(
         PlatformMethod.createRealtimeWithOptions, AblyMessage(options));
-    realtimeInstances[handle] = this;
+    _realtimeInstances[handle] = this;
     return handle;
   }
 
