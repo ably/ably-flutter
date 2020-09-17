@@ -10,7 +10,9 @@ import 'channels.dart';
 
 Map<int, Rest> _restInstances = {};
 Map<int, Rest> _restInstancesUnmodifiableView;
-Map<int, Rest> get restInstances => _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
+
+Map<int, Rest> get restInstances =>
+    _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 class Rest extends PlatformObject
     implements spec.RestInterface<RestPlatformChannels> {
