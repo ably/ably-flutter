@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'ably_flutter_plugin'
-  s.version          = '0.0.4'
+  s.version          = '0.0.5'
   s.summary          = 'Ably Cocoa platform support for our Flutter plugin.'
   s.homepage         = 'https://www.ably.io/'
   s.license          = 'Apache 2.0'
