@@ -1,8 +1,7 @@
 @import Foundation;
 @import Flutter;
-#import "ARTTokenDetails.h"
-#import "ARTTokenParams.h"
-
+@import Ably.ARTTokenDetails;
+@import Ably.ARTTokenParams;
 
 NS_ASSUME_NONNULL_BEGIN
 
