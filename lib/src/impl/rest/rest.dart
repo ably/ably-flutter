@@ -47,20 +47,17 @@ class Rest extends PlatformObject
       Map<String, dynamic> params,
       body,
       Map<String, String> headers}) {
-    // TODO: implement request
-    return null;
+    throw UnimplementedError();
   }
 
   @override
   Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]) {
-    // TODO: implement stats
-    return null;
+    throw UnimplementedError();
   }
 
   @override
   Future<DateTime> time() {
-    // TODO: implement time
-    return null;
+    throw UnimplementedError();
   }
 
   @override
