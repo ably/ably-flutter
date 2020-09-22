@@ -26,7 +26,7 @@ abstract class RealtimeChannel extends EventEmitter<ChannelEvent, ChannelStateCh
 
   Future<void> attach();
   Future<void> detach();
-  Future<PaginatedResult<Message>> history([RealtimeHistoryParams params]);
+  Future<PaginatedResultInterface<Message>> history([RealtimeHistoryParams params]);
   Future<void> publish({
     Message message,
     List<Message> messages,
