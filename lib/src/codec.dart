@@ -1,5 +1,6 @@
 import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:ably_flutter_plugin/src/impl/paginated_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -60,6 +61,7 @@ class Codec extends StandardMessageCodec {
             CodecTypes.tokenParams: _CodecPair<TokenParams>(encodeTokenParams, decodeTokenParams),
             CodecTypes.tokenDetails: _CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
             CodecTypes.tokenRequest: _CodecPair<TokenRequest>(encodeTokenRequest, null),
+            CodecTypes.paginatedResult: _CodecPair<PaginatedResult>(null, decodePaginatedResult),
 
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
             CodecTypes.message: _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
@@ -428,4 +430,10 @@ class Codec extends StandardMessageCodec {
       return message;
     }
 
+    PaginatedResult decodePaginatedResult(Map<String, dynamic> jsonMap) {
+      if (jsonMap == null) return null;
+      return PaginatedResult(
+          readFromJson(jsonMap, TxPaginatedResult.items) as List,
+          readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
+    }
 }

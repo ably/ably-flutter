@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/src/impl/message.dart';
+import 'package:ably_flutter_plugin/src/impl/paginated_result.dart';
 import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
@@ -34,10 +36,14 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   Future<int> createPlatformInstance() async => await restPlatformObject.handle;
 
   @override
-  Future<spec.PaginatedResult<spec.Message>> history(
-      [spec.RestHistoryParams params]) {
-    // TODO: implement history
-    return null;
+  Future<PaginatedResult<spec.Message>> history(
+      [spec.RestHistoryParams params]) async {
+    var message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
+      'channel': name
+    });
+    var result = message.message as PaginatedResult<Message>;
+    result.setPageHandle(message.handle);
+    return result;
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();
