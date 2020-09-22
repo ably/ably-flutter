@@ -5,5 +5,5 @@ abstract class PushChannel{
   Future<void> subscribeClient(); // RSH7b
   Future<void> unsubscribeDevice(); // RSH7c
   Future<void> unsubscribeClient(); // RSH7d
-  Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(); // RSH7e
+  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(); // RSH7e
 }

@@ -398,17 +398,31 @@ abstract class EventEmitter<E, G> {
   Stream<G> on([E event]);
 }
 
-abstract class PaginatedResult<T> {
-  List<T> items();
-  Future<PaginatedResult<T>> first();
-  Future<PaginatedResult<T>> next();
-  Future<PaginatedResult<T>> current();
+/// PaginatedResult [TG1](https://docs.ably.io/client-lib-development-guide/features/#TG1)
+///
+/// A type that represents page results from a paginated query.
+/// The response is accompanied by metadata that indicates the
+/// relative queries available.
+abstract class PaginatedResultInterface<T> {
+  /// items contain page of results (TG3)
+  List<T> items;
+
+  /// returns a new PaginatedResult loaded with the next page of results. (TG4)
+  ///
+  /// If there are no further pages, then null is returned
+  Future<PaginatedResultInterface<T>> next();
+
+  /// returns a new PaginatedResult for the first page of results (TG5)
+  Future<PaginatedResultInterface<T>> first();
+
+  /// returns true if there are further pages (TG6)
   bool hasNext();
+
+  /// returns true if this page is the last page (TG7)
   bool isLast();
 }
 
-abstract class HttpPaginatedResponse extends PaginatedResult<String> {
-  List<String> items();
+abstract class HttpPaginatedResponse extends PaginatedResultInterface<String> {
   int statusCode;
   bool success;
   int errorCode;

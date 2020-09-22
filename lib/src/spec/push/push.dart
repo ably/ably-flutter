@@ -3,8 +3,8 @@ import '../common.dart';
 
 abstract class PushChannelSubscriptions {
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
-  Future<PaginatedResult<PushChannelSubscription>> list(PushChannelsParams params);
-  Future<PaginatedResult<String>> listChannels(PushChannelsParams params);
+  Future<PaginatedResultInterface<PushChannelSubscription>> list(PushChannelsParams params);
+  Future<PaginatedResultInterface<String>> listChannels(PushChannelsParams params);
   Future<void> remove(PushChannelsParams params);
   Future<void> removeWhere(PushChannelSubscriptionParams params);
 }
@@ -14,7 +14,7 @@ abstract class PushDeviceRegistrations {
   Future<DeviceDetails> get({
     DeviceDetails deviceDetails, String deviceId
   });
-  Future<PaginatedResult<DeviceDetails>> list(DeviceRegistrationParams params);
+  Future<PaginatedResultInterface<DeviceDetails>> list(DeviceRegistrationParams params);
   Future<void> remove({
     DeviceDetails deviceDetails, String deviceId
   });
