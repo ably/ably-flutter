@@ -13,6 +13,7 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenParamsCodecType = 132,
     tokenDetailsCodecType = 133,
     tokenRequestCodecType = 134,
+    paginatedResultCodecType = 135,
     errorInfoCodecType = 144,
     connectionStateChangeCodecType = 201,
     channelStateChangeCodecType = 202,
@@ -37,6 +38,10 @@ extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
+extern NSString *const AblyPlatformMethod_restHistory;
+extern NSString *const AblyPlatformMethod_realtimeHistory;
+extern NSString *const AblyPlatformMethod_nextPage;
+extern NSString *const AblyPlatformMethod_firstPage;
 @end
 
 @interface TxAblyMessage : NSObject
@@ -147,4 +152,9 @@ extern NSString *const TxMessage_encoding;
 extern NSString *const TxMessage_data;
 extern NSString *const TxMessage_name;
 extern NSString *const TxMessage_extras;
+@end
+
+@interface TxPaginatedResult : NSObject
+extern NSString *const TxPaginatedResult_items;
+extern NSString *const TxPaginatedResult_hasNext;
 @end
