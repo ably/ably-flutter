@@ -34,6 +34,7 @@ class _MyAppState extends State<MyApp> {
   var _subscriptionsToDispose = <StreamSubscription>[];
   StreamSubscription<ably.Message> _channelMessageSubscription;
   ably.Message channelMessage;
+  ably.PaginatedResult<ably.Message> _restHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -364,6 +365,27 @@ class _MyAppState extends State<MyApp> {
     child: Text('Publish'),
   );
 
+  Widget getRestChannelHistory() => FlatButton(
+    onPressed: () async {
+      bool next = _restHistory?.hasNext() ?? false;
+      print('Rest history: getting ${next?'next':'first'} page');
+      try {
+        if(next){
+          _restHistory = await _restHistory.next();
+        }else{
+          ably.PaginatedResult<ably.Message> result = await _rest.channels.get('test').history();
+          setState((){
+            _restHistory = result;
+          });
+        }
+      }on ably.AblyException catch (e){
+        print("failed to get history:: $e :: ${e.errorInfo}");
+      }
+    },
+    color: Colors.yellow,
+    child: Text('Get history'),
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -409,6 +431,8 @@ class _MyAppState extends State<MyApp> {
               Text('Rest: ${((_rest == null) ? 'Ably Rest not created yet.' : _rest.toString())}'),
               sendRestMessage(),
               Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter}"'),
+              getRestChannelHistory(),
+              Text('History: ${_restHistory.items.map((m) => m.data?.toString())}'),
             ]
           ),
         ),
