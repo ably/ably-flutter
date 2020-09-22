@@ -41,10 +41,9 @@ class RealtimePlatformChannel extends PlatformObject
       await realtimePlatformObject.handle;
 
   @override
-  Future<spec.PaginatedResult<spec.Message>> history(
+  Future<PaginatedResult<spec.Message>> history(
       [spec.RealtimeHistoryParams params]) {
-    // TODO: implement history
-    return null;
+    throw UnimplementedError();
   }
 
   Map<String, dynamic> __payload;

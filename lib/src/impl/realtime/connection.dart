@@ -52,17 +52,16 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   @override
   void close() {
-    // TODO: implement close
+    throw UnimplementedError();
   }
 
   @override
   void connect() {
-    // TODO: implement connect
+    throw UnimplementedError();
   }
 
   @override
   Future<int> ping() {
-    // TODO: implement ping
-    return null;
+    throw UnimplementedError();
   }
 }
