@@ -23,6 +23,8 @@ import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
+import io.ably.lib.types.PaginatedResult;
+import io.ably.lib.types.Param;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -67,6 +69,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.detachRealtimeChannel, this::detachRealtimeChannel);
         _map.put(PlatformConstants.PlatformMethod.setRealtimeChannelOptions, this::setRealtimeChannelOptions);
         _map.put(PlatformConstants.PlatformMethod.publishRealtimeChannelMessage, this::publishRealtimeChannelMessage);
+
+        // history
+        _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
+
+        // paginated results
+        _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
+        _map.put(PlatformConstants.PlatformMethod.firstPage, this::getFirstPage);
     }
 
     // MethodChannel.Result wrapper that responds on the platform thread.
@@ -196,6 +205,50 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
+    private void getRestHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get("channel");
+            try {
+                PaginatedResult<Message> paginatedResult = ablyLibrary
+                        .getRest(messageData.handle)
+                        .channels.get(channelName)
+                        .history(new Param[0]);
+                long paginatedResultHandle = ablyLibrary.setPaginatedResult(paginatedResult);
+                result.success(new AblyFlutterMessage<>(paginatedResult, paginatedResultHandle));
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
+    private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            try {
+                PaginatedResult<Object> paginatedResult = ablyLibrary.getPaginatedResult(message.handle).next();
+                ablyLibrary.setPaginatedResult(message.handle, paginatedResult);
+                result.success(new AblyFlutterMessage<>(paginatedResult, message.handle));
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
+    private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            try {
+                PaginatedResult<Object> paginatedResult = ablyLibrary.getPaginatedResult(message.handle).first();
+                ablyLibrary.setPaginatedResult(message.handle, paginatedResult);
+                result.success(new AblyFlutterMessage<>(paginatedResult, message.handle));
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
@@ -210,7 +263,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                             channel.invokeMethod(PlatformConstants.PlatformMethod.realtimeAuthCallback, channelMessage, new MethodChannel.Result() {
                                 @Override
                                 public void success(@Nullable Object result) {
-                                    if(result!=null){
+                                    if (result != null) {
                                         ablyLibrary.setRealtimeToken(handle, result);
                                     }
                                 }

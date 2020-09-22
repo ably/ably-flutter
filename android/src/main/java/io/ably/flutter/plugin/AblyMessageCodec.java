@@ -25,6 +25,7 @@ import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
+import io.ably.lib.types.PaginatedResult;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
 
@@ -83,6 +84,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         new CodecPair<>(null, self::decodeTokenDetails));
                 put(PlatformConstants.CodecTypes.tokenRequest,
                         new CodecPair<>(null, self::decodeTokenRequest));
+                put(PlatformConstants.CodecTypes.paginatedResult,
+                        new CodecPair<>(self::encodePaginatedResult, null));
                 put(PlatformConstants.CodecTypes.errorInfo,
                         new CodecPair<>(self::encodeErrorInfo, null));
                 put(PlatformConstants.CodecTypes.message,
@@ -443,6 +446,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
             default:
                 return null;
         }
+    }
+
+    private Map<String, Object> encodePaginatedResult(PaginatedResult<Object> c) {
+        if (c == null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, c.items());
+        writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.hasNext, c.hasNext());
+        return jsonMap;
     }
 
     private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c) {

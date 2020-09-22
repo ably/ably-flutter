@@ -6,6 +6,7 @@ import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.ClientOptions;
+import io.ably.lib.types.PaginatedResult;
 
 class AblyLibrary {
 
@@ -30,6 +31,8 @@ class AblyLibrary {
 
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
     private final LongSparseArray<Object> _realtimeTokenData = new LongSparseArray<>();
+
+    private final LongSparseArray<PaginatedResult<Object>> _paginatedResults = new LongSparseArray<>();
 
     long getCurrentHandle() {
         return _nextHandle;
@@ -74,6 +77,20 @@ class AblyLibrary {
         Object token = _realtimeTokenData.get(handle);
         _realtimeTokenData.remove(handle);
         return token;
+    }
+
+    long setPaginatedResult(PaginatedResult result){
+        setPaginatedResult(_nextHandle, result);
+        return _nextHandle++;
+    }
+
+    long setPaginatedResult(long handle, PaginatedResult<Object> result){
+        _paginatedResults.put(handle, result);
+        return handle;
+    }
+
+    PaginatedResult<Object> getPaginatedResult(long handle){
+        return _paginatedResults.get(handle);
     }
 
     void dispose() {
