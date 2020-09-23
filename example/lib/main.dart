@@ -370,13 +370,15 @@ class _MyAppState extends State<MyApp> {
       bool next = _restHistory?.hasNext() ?? false;
       print('Rest history: getting ${next?'next':'first'} page');
       try {
-        if(next){
-          _restHistory = await _restHistory.next();
-        }else{
+        if(_restHistory==null){
           ably.PaginatedResult<ably.Message> result = await _rest.channels.get('test').history();
           setState((){
             _restHistory = result;
           });
+        } else if(next) {
+          _restHistory = await _restHistory.next();
+        } else {
+          _restHistory = await _restHistory.first();
         }
       }on ably.AblyException catch (e){
         print("failed to get history:: $e :: ${e.errorInfo}");
@@ -432,7 +434,7 @@ class _MyAppState extends State<MyApp> {
               sendRestMessage(),
               Text('Rest: press this button to publish a new message with data "Flutter ${msgCounter}"'),
               getRestChannelHistory(),
-              Text('History: ${_restHistory.items.map((m) => m.data?.toString())}'),
+              Text('History: ${_restHistory?.items?.map((m) => m.data?.toString())}'),
             ]
           ),
         ),
