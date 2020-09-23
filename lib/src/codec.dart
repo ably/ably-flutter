@@ -430,7 +430,7 @@ class Codec extends StandardMessageCodec {
       return message;
     }
 
-    PaginatedResult decodePaginatedResult(Map<String, dynamic> jsonMap) {
+    PaginatedResult<Object> decodePaginatedResult(Map<String, dynamic> jsonMap) {
       if (jsonMap == null) return null;
       return PaginatedResult(
           readFromJson(jsonMap, TxPaginatedResult.items) as List,
