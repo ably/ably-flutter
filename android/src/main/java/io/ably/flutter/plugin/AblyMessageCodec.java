@@ -8,8 +8,11 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
@@ -22,10 +25,10 @@ import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
+import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
-import io.ably.lib.types.PaginatedResult;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.StandardMessageCodec;
 
@@ -128,6 +131,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             return PlatformConstants.CodecTypes.errorInfo;
         } else if (value instanceof Auth.TokenParams) {
             return PlatformConstants.CodecTypes.tokenParams;
+        } else if (value instanceof AsyncPaginatedResult) {
+            return PlatformConstants.CodecTypes.paginatedResult;
         } else if (value instanceof ConnectionStateListener.ConnectionStateChange) {
             return PlatformConstants.CodecTypes.connectionStateChange;
         } else if (value instanceof ChannelStateListener.ChannelStateChange) {
@@ -448,10 +453,26 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
     }
 
-    private Map<String, Object> encodePaginatedResult(PaginatedResult<Object> c) {
+    private Map<String, Object> encodePaginatedResult(AsyncPaginatedResult<Object> c) {
         if (c == null) return null;
         HashMap<String, Object> jsonMap = new HashMap<>();
-        writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, c.items());
+        Object[] items = c.items();
+        if (items.length > 0) {
+            Byte type = getType(items[0]);
+            CodecPair pair = codecMap.get(type);
+            if (type != null && pair != null) {
+                writeValueToJson(
+                        jsonMap,
+                        PlatformConstants.TxPaginatedResult.items,
+                        Arrays
+                                .stream(items)
+                                .map((Function<Object, Map>) pair::encode)
+                                .collect(Collectors.toList())
+                );
+            }
+        } else {
+            writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, new Map[0]);
+        }
         writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.hasNext, c.hasNext());
         return jsonMap;
     }
