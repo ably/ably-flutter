@@ -1,6 +1,5 @@
+@import Ably;
 #import "AblyFlutterWriter.h"
-#import "Ably.h"
-#import "ARTTypes.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
 #import "AblyPlatformConstants.h"

@@ -5,7 +5,7 @@ PODS:
     - SAMKeychain (= 1.5.3)
     - SocketRocketAblyFork (= 0.5.2-ably-4)
     - ULID (= 1.1.0)
-  - ably_flutter_plugin (0.0.2):
+  - ably_flutter_plugin (0.0.4):
     - Ably
     - Flutter
   - Flutter (1.0.0)
@@ -98,7 +98,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ably: b8dd747b116787f0759844dc1a045046ef9a2c7a
-  ably_flutter_plugin: 72069121d750b83f093f89c212380021297fa135
+  ably_flutter_plugin: c8e303077249732c5543591d8d8b0afdbff9a073
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   KSCrashAblyFork: c9f408f9abe1e781753b4bfb6c30e01037287c08
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
@@ -106,6 +106,6 @@ SPEC CHECKSUMS:
   SocketRocketAblyFork: ed717517ed5cb5217878987c84bc415890582bb3
   ULID: b4714891a02819364faecd574a53e391c4c6de9d
 
-PODFILE CHECKSUM: 49ec7d4076524b7e225c38b98147173651ac4b9d
+PODFILE CHECKSUM: 07b700b6a089503d3913fe771b135d30d991e2ea
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

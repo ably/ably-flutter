@@ -1,5 +1,4 @@
-#import <Flutter/Flutter.h>
-#import <UIKit/UIKit.h>
+@import Flutter;
 #import "AppDelegate.h"
 
 int main(int argc, char* argv[]) {
