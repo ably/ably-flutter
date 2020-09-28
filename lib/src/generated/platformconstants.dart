@@ -169,5 +169,6 @@ class TxMessage {
 
 class TxPaginatedResult {
     static const String items = "items";
+    static const String type = "type";
     static const String hasNext = "hasNext";
 }
