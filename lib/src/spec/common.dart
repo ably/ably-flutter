@@ -288,9 +288,14 @@ class RestHistoryParams {
   final int limit;
 
   RestHistoryParams(
-      {this.start, this.end, String direction = 'backwards', this.limit = 100})
+      {DateTime start,
+      DateTime end,
+      String direction = 'backwards',
+      this.limit = 100})
       : assert(direction == 'backwards' || direction == 'forwards'),
-        direction = direction;
+        direction = direction,
+        start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
+        end = end ?? DateTime.now();
 }
 
 /// https://docs.ably.io/client-lib-development-guide/features/#RTL10
