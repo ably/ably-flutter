@@ -158,6 +158,7 @@ final public class PlatformConstants {
 
     static final public class TxPaginatedResult {
         public static final String items = "items";
+        public static final String type = "type";
         public static final String hasNext = "hasNext";
     }
 

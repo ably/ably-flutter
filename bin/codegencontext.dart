@@ -203,6 +203,7 @@ List<Map<String, dynamic>> objects = [
     "name": "PaginatedResult",
     "properties": <String>[
       "items",
+      "type",
       "hasNext"
     ]
   }

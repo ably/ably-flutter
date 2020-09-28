@@ -156,5 +156,6 @@ extern NSString *const TxMessage_extras;
 
 @interface TxPaginatedResult : NSObject
 extern NSString *const TxPaginatedResult_items;
+extern NSString *const TxPaginatedResult_type;
 extern NSString *const TxPaginatedResult_hasNext;
 @end
