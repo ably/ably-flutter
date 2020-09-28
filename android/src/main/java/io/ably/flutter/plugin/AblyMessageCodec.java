@@ -310,29 +310,22 @@ public class AblyMessageCodec extends StandardMessageCodec {
         if (jsonMap == null) return null;
         Param[] params = new Param[jsonMap.size()];
         int index = 0;
-        System.out.println("JMAP!!::"+jsonMap);
         final Object start = jsonMap.get(PlatformConstants.TxRestHistoryParams.start);
         final Object end = jsonMap.get(PlatformConstants.TxRestHistoryParams.end);
         final Object limit = jsonMap.get(PlatformConstants.TxRestHistoryParams.limit);
         final Object direction = jsonMap.get(PlatformConstants.TxRestHistoryParams.direction);
-        System.out.println("start!!::"+start+"::end::"+end+"::limit::"+limit+"::direction::"+direction);
         if(start!=null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.start, readValueAsLong(start));
-//            params = Param.push(params, new Param(PlatformConstants.TxRestHistoryParams.start, readValueAsLong(start)));
         }
         if(end!=null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.end, readValueAsLong(end));
-//            params = Param.push(params, new Param(PlatformConstants.TxRestHistoryParams.end, readValueAsLong(end)));
         }
         if(limit!=null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.limit, (Integer) limit);
-//            params = Param.push(params, new Param(PlatformConstants.TxRestHistoryParams.limit, (Integer) limit));
         }
         if(direction!=null) {
             params[index] = new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction);
-//            params = Param.push(params, new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction));
         }
-        System.out.println("JMAP222"+ Arrays.toString(params));
         return params;
     }
 
