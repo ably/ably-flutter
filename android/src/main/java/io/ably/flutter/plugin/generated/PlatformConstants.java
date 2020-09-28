@@ -17,6 +17,7 @@ final public class PlatformConstants {
         public static final byte tokenDetails = (byte) 133;
         public static final byte tokenRequest = (byte) 134;
         public static final byte paginatedResult = (byte) 135;
+        public static final byte restHistoryParams = (byte) 136;
         public static final byte errorInfo = (byte) 144;
         public static final byte connectionStateChange = (byte) 201;
         public static final byte channelStateChange = (byte) 202;
@@ -176,6 +177,18 @@ final public class PlatformConstants {
         public static final String items = "items";
         public static final String type = "type";
         public static final String hasNext = "hasNext";
+    }
+
+    static final public class TxRestHistoryArguments {
+        public static final String channelName = "channelName";
+        public static final String params = "params";
+    }
+
+    static final public class TxRestHistoryParams {
+        public static final String start = "start";
+        public static final String end = "end";
+        public static final String direction = "direction";
+        public static final String limit = "limit";
     }
 
 }

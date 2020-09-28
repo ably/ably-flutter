@@ -14,6 +14,7 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenDetailsCodecType = 133,
     tokenRequestCodecType = 134,
     paginatedResultCodecType = 135,
+    restHistoryParamsCodecType = 136,
     errorInfoCodecType = 144,
     connectionStateChangeCodecType = 201,
     channelStateChangeCodecType = 202,
@@ -174,4 +175,16 @@ extern NSString *const TxMessage_extras;
 extern NSString *const TxPaginatedResult_items;
 extern NSString *const TxPaginatedResult_type;
 extern NSString *const TxPaginatedResult_hasNext;
+@end
+
+@interface TxRestHistoryArguments : NSObject
+extern NSString *const TxRestHistoryArguments_channelName;
+extern NSString *const TxRestHistoryArguments_params;
+@end
+
+@interface TxRestHistoryParams : NSObject
+extern NSString *const TxRestHistoryParams_start;
+extern NSString *const TxRestHistoryParams_end;
+extern NSString *const TxRestHistoryParams_direction;
+extern NSString *const TxRestHistoryParams_limit;
 @end
