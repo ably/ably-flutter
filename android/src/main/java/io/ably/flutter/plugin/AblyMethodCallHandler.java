@@ -199,6 +199,21 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
+    private <T> Callback<AsyncPaginatedResult<T>> paginatedResponseHandler(@NonNull MethodChannel.Result result, Integer handle) {
+        return new Callback<AsyncPaginatedResult<T>>() {
+            @Override
+            public void onSuccess(AsyncPaginatedResult<T> paginatedResult) {
+                long paginatedResultHandle = _ably.setPaginatedResult(paginatedResult, handle);
+                result.success(new AblyFlutterMessage<>(paginatedResult, paginatedResultHandle));
+            }
+
+            @Override
+            public void onError(ErrorInfo reason) {
+                handleAblyException(result, AblyException.fromErrorInfo(reason));
+            }
+        };
+    }
+
     private void getRestHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
@@ -207,60 +222,26 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             ablyLibrary
                     .getRest(messageData.handle)
                     .channels.get(channelName)
-                    .historyAsync(new Param[0], new Callback<AsyncPaginatedResult<Message>>() {
-                        @Override
-                        public void onSuccess(AsyncPaginatedResult<Message> paginatedResult) {
-                            long paginatedResultHandle = ablyLibrary.setPaginatedResult(paginatedResult);
-                            result.success(new AblyFlutterMessage<>(paginatedResult, paginatedResultHandle));
-                        }
-
-                        @Override
-                        public void onError(ErrorInfo reason) {
-                            handleAblyException(result, AblyException.fromErrorInfo(reason));
-                        }
-                    });
+                    .historyAsync(new Param[0], this.paginatedResponseHandler(result, null));
         });
     }
 
     private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(
+        this.<Integer>ablyDo(
                 message,
-                (ablyLibrary, messageData) -> ablyLibrary
-                        .getPaginatedResult(message.handle)
-                        .next(new Callback<AsyncPaginatedResult<Object>>() {
-                            @Override
-                            public void onSuccess(AsyncPaginatedResult<Object> paginatedResult) {
-                                ablyLibrary.setPaginatedResult(message.handle, paginatedResult);
-                                result.success(new AblyFlutterMessage<>(paginatedResult, message.handle));
-                            }
-
-                            @Override
-                            public void onError(ErrorInfo reason) {
-                                handleAblyException(result, AblyException.fromErrorInfo(reason));
-                            }
-                        }));
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .next(this.paginatedResponseHandler(result, pageHandle)));
     }
 
     private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(
+        this.<Integer>ablyDo(
                 message,
-                (ablyLibrary, messageData) -> ablyLibrary
-                        .getPaginatedResult(message.handle)
-                        .first(new Callback<AsyncPaginatedResult<Object>>() {
-                                  @Override
-                                  public void onSuccess(AsyncPaginatedResult<Object> paginatedResult) {
-                                      ablyLibrary.setPaginatedResult(message.handle, paginatedResult);
-                                      result.success(new AblyFlutterMessage<>(paginatedResult, message.handle));
-                                  }
-
-                                  @Override
-                                  public void onError(ErrorInfo reason) {
-                                      handleAblyException(result, AblyException.fromErrorInfo(reason));
-                                  }
-                              }
-                        ));
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .first(this.paginatedResponseHandler(result, pageHandle)));
     }
 
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
