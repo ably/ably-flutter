@@ -158,5 +158,6 @@ NSString *const TxMessage_extras = @"extras";
 
 @implementation TxPaginatedResult
 NSString *const TxPaginatedResult_items = @"items";
+NSString *const TxPaginatedResult_type = @"type";
 NSString *const TxPaginatedResult_hasNext = @"hasNext";
 @end
