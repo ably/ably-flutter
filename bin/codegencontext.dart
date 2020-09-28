@@ -22,6 +22,7 @@ List<Map<String, dynamic>> _types = [
   {"name": "tokenDetails", "value": 133},
   {"name": "tokenRequest", "value": 134},
   {"name": "paginatedResult", "value": 135},
+  {"name": "restHistoryParams", "value": 136},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -205,6 +206,22 @@ List<Map<String, dynamic>> objects = [
       "items",
       "type",
       "hasNext"
+    ]
+  },
+  {
+    "name": "RestHistoryArguments",
+    "properties": <String>[
+      "channelName",
+      "params"
+    ]
+  },
+  {
+    "name": "RestHistoryParams",
+    "properties": <String>[
+      "start",
+      "end",
+      "direction",
+      "limit",
     ]
   }
 ];

@@ -12,6 +12,7 @@ class CodecTypes {
     static const int tokenDetails = 133;
     static const int tokenRequest = 134;
     static const int paginatedResult = 135;
+    static const int restHistoryParams = 136;
     static const int errorInfo = 144;
     static const int connectionStateChange = 201;
     static const int channelStateChange = 202;
@@ -155,4 +156,16 @@ class TxPaginatedResult {
     static const String items = "items";
     static const String type = "type";
     static const String hasNext = "hasNext";
+}
+
+class TxRestHistoryArguments {
+    static const String channelName = "channelName";
+    static const String params = "params";
+}
+
+class TxRestHistoryParams {
+    static const String start = "start";
+    static const String end = "end";
+    static const String direction = "direction";
+    static const String limit = "limit";
 }
