@@ -376,12 +376,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         PlatformConstants.TxPaginatedResult.items,
                         Arrays
                                 .stream(items)
-                                .map((Function<Object, Map>) pair::encode)
+                                .map((Function<Object, Map<String, Object>>) pair::encode)
                                 .collect(Collectors.toList())
                 );
+                writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.type, type & 0xff);
             }
         } else {
-            writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, new Map[0]);
+            writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, null);
         }
         writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.hasNext, c.hasNext());
         return jsonMap;
