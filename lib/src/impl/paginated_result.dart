@@ -24,11 +24,18 @@ class PaginatedResult<T> extends PlatformObject
   @override
   List<T> items;
 
-  final bool _hasNext;
+  bool _hasNext;
 
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
-  PaginatedResult(this.items, bool hasNext) : _hasNext = hasNext;
+  PaginatedResult(this.items, bool hasNext) : _hasNext = hasNext, super(false);
+
+  PaginatedResult.fromAblyMessage(AblyMessage message): super(false){
+    var rawResult = message.message as PaginatedResult<Object>;
+    items = rawResult.items.map<T>((e) => e).toList();
+    _hasNext = rawResult.hasNext();
+    _pageHandle = message.handle;
+  }
 
   @override
   Future<int> createPlatformInstance() async => _pageHandle;
@@ -37,18 +44,14 @@ class PaginatedResult<T> extends PlatformObject
   @override
   Future<PaginatedResult<T>> next() async {
     var message = await invoke<AblyMessage>(PlatformMethod.nextPage);
-    var result = message.message as PaginatedResult<T>;
-    result.setPageHandle(message.handle);
-    return result;
+    return PaginatedResult<T>.fromAblyMessage(message);
   }
 
   /// returns a new PaginatedResult containing items of first page
   @override
   Future<PaginatedResult<T>> first() async {
     var message = await invoke<AblyMessage>(PlatformMethod.firstPage);
-    var result = message.message as PaginatedResult<T>;
-    result.setPageHandle(message.handle);
-    return result;
+    return PaginatedResult<T>.fromAblyMessage(message);
   }
 
   /// returns whether there is a next page
