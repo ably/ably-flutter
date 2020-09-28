@@ -226,7 +226,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             final Map<String, Object> map = messageData.message;
             final String channelName = (String) map.get(PlatformConstants.TxRestHistoryArguments.channelName);
             Param[] params = (Param[]) map.get(PlatformConstants.TxRestHistoryArguments.params);
-            System.out.println("params::java::"+ Arrays.toString(params));
             if(params == null){
                 params = new Param[0];
             }
