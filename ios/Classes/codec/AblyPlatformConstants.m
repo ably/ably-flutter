@@ -161,3 +161,15 @@ NSString *const TxPaginatedResult_items = @"items";
 NSString *const TxPaginatedResult_type = @"type";
 NSString *const TxPaginatedResult_hasNext = @"hasNext";
 @end
+
+@implementation TxRestHistoryArguments
+NSString *const TxRestHistoryArguments_channelName = @"channelName";
+NSString *const TxRestHistoryArguments_params = @"params";
+@end
+
+@implementation TxRestHistoryParams
+NSString *const TxRestHistoryParams_start = @"start";
+NSString *const TxRestHistoryParams_end = @"end";
+NSString *const TxRestHistoryParams_direction = @"direction";
+NSString *const TxRestHistoryParams_limit = @"limit";
+@end
