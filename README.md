@@ -76,6 +76,32 @@ void publishMessages() async {
 publishMessages();
 ```
 
+Get rest history
+
+```dart
+void getHistory([ably.RestHistoryParams params]) async {
+    // getting channel history, by passing or omitting the optional params
+    var result = await channel.history(params);
+
+    var messages = result.items; //get messages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){    
+      result = result.next();  //fetches next page results
+      messages = result.items;
+    }
+    if(!hasNextPage){
+      result = result.first();  //fetches first page results
+      messages = result.items;
+    }
+}
+
+// history with default params
+getHistory();
+
+// sorted and filtered history
+getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
+```
+
 ##### Realtime API
 
 ```dart
