@@ -101,8 +101,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is Message) {
       return CodecTypes.message;
-    } else if (value is RestHistoryParams) {
-      return CodecTypes.restHistoryParams;
+        } else if (value is RestHistoryParams) {
+          return CodecTypes.restHistoryParams;
     } else if (value is ErrorInfo) {
       return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {
