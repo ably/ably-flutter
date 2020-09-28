@@ -80,14 +80,15 @@ class AblyLibrary {
         return token;
     }
 
-    long setPaginatedResult(AsyncPaginatedResult result){
-        setPaginatedResult(_nextHandle, result);
-        return _nextHandle++;
-    }
-
-    long setPaginatedResult(long handle, AsyncPaginatedResult<Object> result){
-        _paginatedResults.put(handle, result);
-        return handle;
+    long setPaginatedResult(AsyncPaginatedResult result, Integer handle){
+        long longHandle;
+        if(handle==null){
+            longHandle = _nextHandle++;
+        }else {
+            longHandle = handle.longValue();
+        }
+        _paginatedResults.put(longHandle, result);
+        return longHandle;
     }
 
     AsyncPaginatedResult<Object> getPaginatedResult(long handle){
