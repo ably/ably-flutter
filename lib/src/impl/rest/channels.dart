@@ -37,7 +37,10 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   Future<PaginatedResult<spec.Message>> history(
       [spec.RestHistoryParams params]) async {
     var message = await invoke<AblyMessage>(
-        PlatformMethod.restHistory, {'channel': name});
+        PlatformMethod.restHistory, {
+          TxRestHistoryArguments.channelName: name,
+          if (params!=null) TxRestHistoryArguments.params: params
+        });
     return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
