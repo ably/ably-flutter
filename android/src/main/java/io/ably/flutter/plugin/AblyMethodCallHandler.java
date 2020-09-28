@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -225,11 +226,16 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
             final Map<String, Object> map = messageData.message;
-            final String channelName = (String) map.get("channel");
+            final String channelName = (String) map.get(PlatformConstants.TxRestHistoryArguments.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxRestHistoryArguments.params);
+            System.out.println("params::java::"+ Arrays.toString(params));
+            if(params == null){
+                params = new Param[0];
+            }
             ablyLibrary
                     .getRest(messageData.handle)
                     .channels.get(channelName)
-                    .historyAsync(new Param[0], this.paginatedResponseHandler(result, null));
+                    .historyAsync(params, this.paginatedResponseHandler(result, null));
         });
     }
 
