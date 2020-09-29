@@ -86,11 +86,11 @@ void getHistory([ably.RestHistoryParams params]) async {
     var messages = result.items; //get messages
     var hasNextPage = result.hasNext(); //tells whether there are more results
     if(hasNextPage){    
-      result = result.next();  //fetches next page results
+      result = await result.next();  //fetches next page results
       messages = result.items;
     }
     if(!hasNextPage){
-      result = result.first();  //fetches first page results
+      result = await result.first();  //fetches first page results
       messages = result.items;
     }
 }
