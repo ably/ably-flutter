@@ -74,6 +74,75 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
     }];
 };
 
+static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxRestHistoryArguments_channelName];
+    ARTDataQuery *const dataQuery = (ARTDataQuery*)[_dataMap objectForKey: TxRestHistoryArguments_params];
+    ARTRest *const client = [ably getRest:messageData.handle];
+    ARTRestChannel *const channel = [client.channels get:channelName];
+    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    };
+    if (dataQuery) {
+        [channel history:dataQuery callback:cbk error: nil];
+    } else {
+        [channel history:cbk];
+    }
+};
+
+static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    NSNumber *const handle = message.message;
+    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
+    [paginatedResult next:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to get next page; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    }];
+};
+
+static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    NSNumber *const handle = message.message;
+    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
+    [paginatedResult first:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to get first page; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    }];
+};
+
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
@@ -243,6 +312,9 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
         AblyPlatformMethod_detachRealtimeChannel: _detachRealtimeChannel,
         AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
         AblyPlatformMethod_publishRealtimeChannelMessage: _publishRealtimeChannelMessage,
+        AblyPlatformMethod_restHistory: _getRestHistory,
+        AblyPlatformMethod_nextPage: _getNextPage,
+        AblyPlatformMethod_firstPage: _getFirstPage,
     };
     
     _nextRegistration = 1;

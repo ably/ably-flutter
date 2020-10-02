@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_END
         return messageCodecType;
     }else if([value isKindOfClass:[ARTTokenParams class]]){
         return tokenParamsCodecType;
+    }else if([value isKindOfClass:[ARTPaginatedResult class]]){
+        return paginatedResultCodecType;
     }
     return 0;
 }
@@ -39,6 +41,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", channelStateChangeCodecType]: encodeChannelStateChange,
         [NSString stringWithFormat:@"%d", messageCodecType]: encodeChannelMessage,
         [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
+        [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -135,6 +138,24 @@ static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams
     WRITE_VALUE(dictionary, TxTokenParams_timestamp,
                 [params timestamp]?@((long)([[params timestamp] timeIntervalSince1970]*1000)):nil);
     WRITE_VALUE(dictionary, TxTokenParams_capability, [params capability]);
+    
+    return dictionary;
+};
+
+static AblyCodecEncoder encodePaginatedResult = ^NSMutableDictionary*(ARTPaginatedResult *const result) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    NSArray* items = [result items];
+    UInt8 type = [AblyFlutterWriter getType:items[0]];
+    if(type != 0){
+        AblyCodecEncoder encoder = [AblyFlutterWriter getEncoder: [NSString stringWithFormat:@"%d", type]];
+        NSMutableArray *result = [NSMutableArray arrayWithCapacity:[items count]];
+        [items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [result addObject: encoder(obj)];
+        }];
+        WRITE_VALUE(dictionary, TxPaginatedResult_type, [NSNumber numberWithInt:type]);
+        WRITE_VALUE(dictionary, TxPaginatedResult_items, result);
+    }
+    WRITE_VALUE(dictionary, TxPaginatedResult_hasNext, @([result hasNext]));
     
     return dictionary;
 };
