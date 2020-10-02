@@ -21,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
 
+-(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(nullable NSNumber *)handle;
+
+-(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle;
+
 /**
  This method must be called from the main dispatch queue. It may only be called
  once.
