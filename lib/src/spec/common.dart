@@ -279,10 +279,9 @@ class RestHistoryParams {
   RestHistoryParams(
       {DateTime start,
       DateTime end,
-      String direction = 'backwards',
+      this.direction = 'backwards',
       this.limit = 100})
       : assert(direction == 'backwards' || direction == 'forwards'),
-        direction = direction,
         start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
         end = end ?? DateTime.now();
 }
@@ -471,7 +470,7 @@ abstract class Channels<ChannelType> {
   Channels(this.ably);
 
   AblyBase ably;
-  Map<String, ChannelType> _channels = {};
+  final _channels = <String, ChannelType>{};
 
   ChannelType createChannel(String name, ChannelOptions options);
 
@@ -491,6 +490,6 @@ abstract class Channels<ChannelType> {
   Iterable<ChannelType> iterate() => _channels.values;
 
   void release(String str) {
-    // TODO: implement release
+    throw UnimplementedError();
   }
 }
