@@ -61,7 +61,7 @@ class Realtime extends PlatformObject
   RealtimePlatformChannels get channels => _channels;
 
   @override
-  Future<void> close() async => await invoke(PlatformMethod.closeRealtime);
+  Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   final _connectQueue = Queue<Completer<void>>();
   Completer<void> _authCallbackCompleter;
