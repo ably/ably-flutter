@@ -111,6 +111,7 @@ class Codec extends StandardMessageCodec {
     } else if (value is AblyEventMessage) {
       return CodecTypes.ablyEventMessage;
     }
+    // ignore: avoid_returning_null
     return null;
   }
 
