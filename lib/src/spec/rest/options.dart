@@ -7,7 +7,7 @@ import '../enums.dart';
 ///
 /// Java: io.ably.lib.rest.Auth.TokenCallback.getTokenRequest(TokenParams)
 /// returns either a [String] token or [TokenDetails] or [TokenRequest]
-typedef Future<dynamic> AuthCallback(TokenParams params);
+typedef AuthCallback = Future<dynamic> Function(TokenParams params);
 
 abstract class AuthOptions {
   AuthOptions();
@@ -47,7 +47,7 @@ abstract class AuthOptions {
   bool useTokenAuth; //optional
 }
 
-typedef void LogHandler({String msg, AblyException exception});
+typedef LogHandler = void Function({String msg, AblyException exception});
 
 class ClientOptions extends AuthOptions {
   ClientOptions() {
