@@ -1,5 +1,3 @@
-import 'package:ably_flutter_plugin/src/spec/rest/ably_base.dart';
-
 import '../common.dart';
 import '../message.dart';
 import 'ably_base.dart';

@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-
 import '../../../ably.dart';
 import '../../spec/spec.dart' as spec;
+import '../message.dart';
 import '../platform_object.dart';
 import 'channels.dart';
 

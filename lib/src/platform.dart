@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart'
-    show PlatformMethod;
-import 'package:ably_flutter_plugin/src/method_call_handler.dart';
 import 'package:flutter/services.dart';
 
 import 'codec.dart';
+import 'generated/platformconstants.dart' show PlatformMethod;
 import 'impl/streams_channel.dart';
+import 'method_call_handler.dart';
 
 /// instance of [StandardMethodCodec] with custom [MessageCodec] for
 /// exchanging Ably types with platform via platform channels

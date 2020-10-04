@@ -1,10 +1,10 @@
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/impl/paginated_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../ably.dart';
+import 'generated/platformconstants.dart';
+import 'impl/message.dart';
+import 'impl/paginated_result.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side

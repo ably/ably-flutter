@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/ably.dart';
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/impl/paginated_result.dart';
-import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
-import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../../../ably.dart';
+import '../../spec/spec.dart' as spec;
+import '../message.dart';
+import '../paginated_result.dart';
 import '../platform_object.dart';
+import 'rest.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   /// [Rest] instance

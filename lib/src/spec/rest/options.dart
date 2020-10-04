@@ -1,5 +1,4 @@
-import 'package:ably_flutter_plugin/ably.dart';
-
+import '../../../ably.dart';
 import '../common.dart';
 import '../enums.dart';
 

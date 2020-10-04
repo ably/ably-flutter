@@ -1,10 +1,9 @@
-import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
-import 'package:ably_flutter_plugin/src/spec/rest/ably_base.dart';
-import 'package:ably_flutter_plugin/src/spec/rest/channels.dart';
-
 import '../common.dart';
 import '../enums.dart';
 import '../message.dart';
+import '../push/channels.dart';
+import '../rest/ably_base.dart';
+import '../rest/channels.dart';
 import 'presence.dart';
 
 abstract class RealtimeChannel

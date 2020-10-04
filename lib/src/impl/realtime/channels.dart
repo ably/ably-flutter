@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/ably.dart';
-import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
-import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
-import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../../../ably.dart';
+import '../../spec/push/channels.dart';
+import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
+import 'realtime.dart';
 
 class RealtimePlatformChannel extends PlatformObject
     implements spec.RealtimeChannel {
