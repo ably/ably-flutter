@@ -239,14 +239,14 @@ class TokenRequest {
 
   /// TE7
   TokenRequest.fromMap(Map<String, dynamic> map) {
-    this.keyName = map["keyName"] as String;
-    this.nonce = map["nonce"] as String;
-    this.mac = map["mac"] as String;
-    this.capability = map["capability"] as String;
-    this.clientId = map["clientId"] as String;
-    this.timestamp =
+    keyName = map["keyName"] as String;
+    nonce = map["nonce"] as String;
+    mac = map["mac"] as String;
+    capability = map["capability"] as String;
+    clientId = map["clientId"] as String;
+    timestamp =
         DateTime.fromMillisecondsSinceEpoch(map["timestamp"] as int);
-    this.ttl = map["ttl"] as int;
+    ttl = map["ttl"] as int;
   }
 }
 
