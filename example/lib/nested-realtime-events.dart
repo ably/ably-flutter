@@ -13,7 +13,8 @@ listenRealtimeConnection(ably.Realtime realtime) async {
   //One can listen from multiple listeners on the same event,
   // and must cancel each subscription one by one
   //RETAINING LISTENER - α
-  var alphaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+  // var alphaSubscription =
+  realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
     print('RETAINING LISTENER α :: Change event arrived!: ${stateChange.event}'
       '\nReason: ${stateChange.reason}');
   });
@@ -29,11 +30,13 @@ listenRealtimeConnection(ably.Realtime realtime) async {
     });
 
     //RETAINING LISTENER - β
-    var betaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    //var betaSubscription =
+    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER β :: Change event arrived!: ${stateChange.event}');
       // NESTED LISTENER - ξ
       // will be registered only when connected event is received by β listener
-      var etaSubscription = realtime.connection.on().listen((
+      //var etaSubscription =
+      realtime.connection.on().listen((
         ably.ConnectionStateChange stateChange) async {
         // k ξ listeners will be registered
         // and each listener will be called `n-k` times respectively
@@ -51,7 +54,8 @@ listenRealtimeConnection(ably.Realtime realtime) async {
 
 
     //RETAINING LISTENER - γ
-    var gammaSubscription = realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
+    //var gammaSubscription =
+    realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
       print('RETAINING LISTENER γ :: Change event arrived!: ${stateChange.event}');
       if (stateChange.event == ably.ConnectionEvent.connected) {
         await preZetaSubscription.cancel();  //by the time this cancel is triggered, preZeta will already have received current event.
