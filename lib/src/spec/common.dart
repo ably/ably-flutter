@@ -239,14 +239,14 @@ class TokenRequest {
 
   /// TE7
   TokenRequest.fromMap(Map<String, dynamic> map) {
-    keyName = map["keyName"] as String;
-    nonce = map["nonce"] as String;
-    mac = map["mac"] as String;
-    capability = map["capability"] as String;
-    clientId = map["clientId"] as String;
+    keyName = map['keyName'] as String;
+    nonce = map['nonce'] as String;
+    mac = map['mac'] as String;
+    capability = map['capability'] as String;
+    clientId = map['clientId'] as String;
     timestamp =
-        DateTime.fromMillisecondsSinceEpoch(map["timestamp"] as int);
-    ttl = map["ttl"] as int;
+        DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
+    ttl = map['ttl'] as int;
   }
 }
 
@@ -333,8 +333,8 @@ class AblyException implements Exception {
 
   @override
   String toString() {
-    if (message == null) return "AblyException";
-    return "AblyException: $message (${(code == null) ? "" : '$code '})";
+    if (message == null) return 'AblyException';
+    return 'AblyException: $message (${(code == null) ? "" : '$code '})';
   }
 }
 
