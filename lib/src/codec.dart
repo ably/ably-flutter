@@ -130,7 +130,7 @@ class Codec extends StandardMessageCodec {
         if (pair==null) {
             return super.readValueOfType(type, buffer);
         } else {
-            Map<String, dynamic> map = toJsonMap(readValue(buffer));
+            Map<String, dynamic> map = toJsonMap(readValue(buffer) as Map);
             return pair.decode(map);
         }
     }
@@ -299,7 +299,7 @@ class Codec extends StandardMessageCodec {
         v.authUrl = readFromJson<String>(jsonMap, TxClientOptions.authUrl);
         v.authMethod = readFromJson<HTTPMethods>(jsonMap, TxClientOptions.authMethod);
         v.key = readFromJson<String>(jsonMap, TxClientOptions.key);
-        v.tokenDetails = decodeTokenDetails(toJsonMap(jsonMap[TxClientOptions.tokenDetails]));
+        v.tokenDetails = decodeTokenDetails(toJsonMap(readFromJson<Map>(jsonMap, TxClientOptions.tokenDetails)));
         v.authHeaders = readFromJson<Map<String, String>>(jsonMap, TxClientOptions.authHeaders);
         v.authParams = readFromJson<Map<String, String>>(jsonMap, TxClientOptions.authParams);
         v.queryTime = readFromJson<bool>(jsonMap, TxClientOptions.queryTime);
@@ -328,7 +328,7 @@ class Codec extends StandardMessageCodec {
         v.fallbackHosts = readFromJson<List<String>>(jsonMap, TxClientOptions.fallbackHosts);
         v.fallbackHostsUseDefault = readFromJson<bool>(jsonMap, TxClientOptions.fallbackHostsUseDefault);
         v.fallbackRetryTimeout = readFromJson<int>(jsonMap, TxClientOptions.fallbackRetryTimeout);
-        v.defaultTokenParams = decodeTokenParams(toJsonMap(jsonMap[TxClientOptions.defaultTokenParams]));
+        v.defaultTokenParams = decodeTokenParams(toJsonMap(readFromJson<Map>(jsonMap, TxClientOptions.defaultTokenParams)));
         v.channelRetryTimeout = readFromJson<int>(jsonMap, TxClientOptions.channelRetryTimeout);
         v.transportParams = readFromJson<Map<String, String>>(jsonMap, TxClientOptions.transportParams);
         return v;
@@ -338,7 +338,7 @@ class Codec extends StandardMessageCodec {
     /// returns null if [jsonMap] is null
     TokenDetails decodeTokenDetails(Map<String, dynamic> jsonMap){
         if(jsonMap==null) return null;
-        TokenDetails v = TokenDetails(jsonMap[TxTokenDetails.token]);
+        TokenDetails v = TokenDetails(readFromJson<String>(jsonMap, TxTokenDetails.token));
         v.expires = readFromJson<int>(jsonMap, TxTokenDetails.expires);
         v.issued = readFromJson<int>(jsonMap, TxTokenDetails.issued);
         v.capability = readFromJson<String>(jsonMap, TxTokenDetails.capability);
@@ -366,7 +366,7 @@ class Codec extends StandardMessageCodec {
         int type = readFromJson<int>(jsonMap, TxAblyMessage.type);
         dynamic message = jsonMap[TxAblyMessage.message];
         if(type!=null){
-            message = codecMap[type].decode(toJsonMap(jsonMap[TxAblyMessage.message]));
+            message = codecMap[type].decode(toJsonMap(readFromJson<Map>(jsonMap, TxAblyMessage.message)));
         }
         return AblyMessage(
             message,
@@ -409,7 +409,7 @@ class Codec extends StandardMessageCodec {
         ConnectionState previous = decodeConnectionState(readFromJson<int>(jsonMap, TxConnectionStateChange.previous));
         ConnectionEvent event = decodeConnectionEvent(readFromJson<int>(jsonMap, TxConnectionStateChange.event));
         int retryIn = readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
-        ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxConnectionStateChange.reason]));
+        ErrorInfo reason = decodeErrorInfo(toJsonMap(readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
         return ConnectionStateChange(current, previous, event, retryIn: retryIn, reason: reason);
     }
 
@@ -421,7 +421,7 @@ class Codec extends StandardMessageCodec {
         ChannelState previous = decodeChannelState(readFromJson<int>(jsonMap, TxChannelStateChange.previous));
         ChannelEvent event = decodeChannelEvent(readFromJson<int>(jsonMap, TxChannelStateChange.event));
         bool resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
-        ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxChannelStateChange.reason]));
+        ErrorInfo reason = decodeErrorInfo(toJsonMap(readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
         return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);
     }
 
@@ -446,7 +446,7 @@ class Codec extends StandardMessageCodec {
     PaginatedResult<Object> decodePaginatedResult(Map<String, dynamic> jsonMap) {
       if (jsonMap == null) return null;
       var type = readFromJson<int>(jsonMap, TxPaginatedResult.type);
-      var items = readFromJson<List>(jsonMap, TxPaginatedResult.items)
+      var items = readFromJson<List<Map>>(jsonMap, TxPaginatedResult.items)
               ?.map((e) => codecMap[type].decode(toJsonMap(e)))
               ?.toList() ??
           [];

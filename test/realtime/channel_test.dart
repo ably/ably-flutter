@@ -15,7 +15,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   // Used to generate unique handle ids
-  var handleCounter;
+  int handleCounter;
 
   // Keep created channel instances associated with its handle.
   final channels = <int, AblyMessage>{};

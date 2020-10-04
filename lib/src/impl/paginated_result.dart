@@ -29,7 +29,7 @@ class PaginatedResult<T> extends PlatformObject
 
   PaginatedResult.fromAblyMessage(AblyMessage message): super(false){
     var rawResult = message.message as PaginatedResult<Object>;
-    items = rawResult.items.map<T>((e) => e).toList();
+    items = rawResult.items.map<T>((e) => e as T).toList();
     _hasNext = rawResult.hasNext();
     _pageHandle = message.handle;
   }

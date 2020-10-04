@@ -124,7 +124,7 @@ class RealtimePlatformChannel extends PlatformObject
         } else {
           _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
               e.completer.completeError(
-                  spec.AblyException(pe.code, pe.message, pe.details)));
+                  spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo)));
         }
       }
     }
@@ -155,7 +155,7 @@ class RealtimePlatformChannel extends PlatformObject
     try {
       await invoke(PlatformMethod.attachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
@@ -164,7 +164,7 @@ class RealtimePlatformChannel extends PlatformObject
     try {
       await invoke(PlatformMethod.detachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
@@ -197,7 +197,7 @@ class RealtimePlatformChannels
   RealtimePlatformChannels(Realtime ably) : super(ably);
 
   @override
-  RealtimePlatformChannel createChannel(name, options) {
+  RealtimePlatformChannel createChannel(String name, ChannelOptions options) {
     return RealtimePlatformChannel(ably, name, options);
   }
 }

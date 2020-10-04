@@ -111,7 +111,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
         } else {
           _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
               e.completer.completeError(
-                  spec.AblyException(pe.code, pe.message, pe.details)));
+                  spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo)));
         }
       }
     }
@@ -127,7 +127,7 @@ class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel> {
   RestPlatformChannels(Rest ably) : super(ably);
 
   @override
-  RestPlatformChannel createChannel(name, options) =>
+  RestPlatformChannel createChannel(String name, ChannelOptions options) =>
       RestPlatformChannel(ably, name, options);
 }
 
