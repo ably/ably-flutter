@@ -32,7 +32,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
   @override
-  Future<int> createPlatformInstance() async => await restPlatformObject.handle;
+  Future<int> createPlatformInstance() async => restPlatformObject.handle;
 
   @override
   Future<PaginatedResult<spec.Message>> history(

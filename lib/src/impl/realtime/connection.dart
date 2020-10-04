@@ -19,8 +19,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   }
 
   @override
-  Future<int> createPlatformInstance() async =>
-      await realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
 
   @override
   ErrorInfo errorReason;
