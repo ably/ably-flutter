@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:test/test.dart';
 import 'package:collection/collection.dart';
+import 'package:test/test.dart';
 
 
 typedef int Injector(int id);
@@ -29,7 +29,7 @@ class MockEmitter{
   List<Stream<int>> streams;
 
   int emitCount = 0;
-  int injector(id){
+  int injector(int id){
     if(indexes[id] >= injectables.length) return null;
     int ret = injectables[indexes[id]];
     indexes[id]++;

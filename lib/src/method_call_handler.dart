@@ -9,9 +9,9 @@ class AblyMethodCallHandler {
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case PlatformMethod.authCallback:
-          return await onAuthCallback(call.arguments);
+          return await onAuthCallback(call.arguments as AblyMessage);
         case PlatformMethod.realtimeAuthCallback:
-          return await onRealtimeAuthCallback(call.arguments);
+          return await onRealtimeAuthCallback(call.arguments as AblyMessage);
         default:
           throw PlatformException(
             code: 'invalid_method', message: 'No such method ${call.method}');

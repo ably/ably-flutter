@@ -1,3 +1,5 @@
+import 'package:ably_flutter_plugin/src/spec/spec.dart';
+
 import 'auth.dart';
 import 'enums.dart';
 import 'rest/ably_base.dart';
@@ -494,7 +496,7 @@ abstract class Channels<ChannelType> {
   AblyBase ably;
   Map<String, ChannelType> _channels = {};
 
-  ChannelType createChannel(name, options);
+  ChannelType createChannel(String name, ChannelOptions options);
 
   Iterable<ChannelType> get all => _channels.values;
 
