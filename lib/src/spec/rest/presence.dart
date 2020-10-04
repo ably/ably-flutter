@@ -4,13 +4,11 @@ import '../message.dart';
 class Presence {
   Future<PaginatedResultInterface<PresenceMessage>> get(
       [RestPresenceParams params]) {
-    //TODO impl
-    return null;
+    throw UnimplementedError();
   }
 
   Future<PaginatedResultInterface<PresenceMessage>> history(
       [RestHistoryParams params]) {
-    //TODO impl
-    return null;
+    throw UnimplementedError();
   }
 }
