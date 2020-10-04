@@ -59,7 +59,7 @@ class RealtimePlatformChannel extends PlatformObject
       {spec.Message message,
       List<spec.Message> messages,
       String name,
-        Object data}) async {
+      Object data}) async {
     final queueItem = _RealtimePublishQueueItem(
         Completer<void>(), message, messages, name, data);
     _publishQueue.add(queueItem);
@@ -172,12 +172,11 @@ class RealtimePlatformChannel extends PlatformObject
   }
 
   @override
-  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) {
-    return listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
-        .map((stateChange) => stateChange as ChannelStateChange)
-        .where((stateChange) =>
-            channelEvent == null || stateChange.event == channelEvent);
-  }
+  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
+      listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
+          .map((stateChange) => stateChange as ChannelStateChange)
+          .where((stateChange) =>
+              channelEvent == null || stateChange.event == channelEvent);
 
   @override
   Stream<spec.Message> subscribe({String name, List<String> names}) {
@@ -195,9 +194,8 @@ class RealtimePlatformChannels
   RealtimePlatformChannels(Realtime ably) : super(ably);
 
   @override
-  RealtimePlatformChannel createChannel(String name, ChannelOptions options) {
-    return RealtimePlatformChannel(ably, name, options);
-  }
+  RealtimePlatformChannel createChannel(String name, ChannelOptions options) =>
+      RealtimePlatformChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

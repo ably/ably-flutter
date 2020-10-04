@@ -36,10 +36,8 @@ class ErrorInfo {
       this.requestId});
 
   @override
-  String toString() {
-    return 'ErrorInfo message=$message code=$code '
-        'statusCode=$statusCode href=$href';
-  }
+  String toString() => 'ErrorInfo message=$message code=$code '
+      'statusCode=$statusCode href=$href';
 }
 
 abstract class StatsMessageCount {
@@ -244,8 +242,7 @@ class TokenRequest {
     mac = map['mac'] as String;
     capability = map['capability'] as String;
     clientId = map['clientId'] as String;
-    timestamp =
-        DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
+    timestamp = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
     ttl = map['ttl'] as int;
   }
 }
@@ -489,13 +486,9 @@ abstract class Channels<ChannelType> {
     return _channels[name];
   }
 
-  bool exists(String name) {
-    return _channels[name] != null;
-  }
+  bool exists(String name) => _channels[name] != null;
 
-  Iterable<ChannelType> iterate() {
-    return _channels.values;
-  }
+  Iterable<ChannelType> iterate() => _channels.values;
 
   void release(String str) {
     // TODO: implement release
