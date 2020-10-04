@@ -5,15 +5,6 @@ import 'package:ably_flutter_plugin/src/platform.dart' as platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
-///Extension to extract string name from PlatformMethod
-extension on PlatformMethod {
-
-  /// ref: https://stackoverflow.com/a/59308734/392847
-  String toName() => this.toString().split('.').last;
-
-}
-
 void main() {
 
   MethodChannel channel = platform.methodChannel;
