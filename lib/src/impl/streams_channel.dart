@@ -58,7 +58,7 @@ class StreamsChannel {
       });
       try {
         await methodChannel.invokeMethod('listen#$id', arguments);
-      } catch (exception, stack) {
+      } on Exception catch (exception, stack) {
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
@@ -72,7 +72,7 @@ class StreamsChannel {
           .setMessageHandler(handlerName, null);
       try {
         await methodChannel.invokeMethod('cancel#$id', arguments);
-      } catch (exception, stack) {
+      } on Exception catch (exception, stack) {
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
