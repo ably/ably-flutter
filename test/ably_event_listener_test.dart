@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:test/test.dart';
 
-typedef int Injector(int id);
+typedef Injector = int Function(int id);
 
 Stream<int> emitter(int id, Injector injector) async* {
   int injectable = injector(id);

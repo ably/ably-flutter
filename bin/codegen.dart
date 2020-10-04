@@ -6,7 +6,7 @@ import 'templates/platformconstants.h.dart' as objc_header_template;
 import 'templates/platformconstants.java.dart' as java_template;
 import 'templates/platformconstants.m.dart' as objc_impl_template;
 
-typedef String Template(Map<String, dynamic> context);
+typedef Template = String Function(Map<String, dynamic> context);
 
 String projectRoot = '../';
 

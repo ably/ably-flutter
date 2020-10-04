@@ -7,11 +7,11 @@ import '../src/impl/message.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
-typedef Map<String, dynamic> _Encoder<T>(final T value);
+typedef _Encoder<T> = Map<String, dynamic> Function(T value);
 
 /// a [_Decoder] decodes Map received from platform side and converts to
 /// to respective dart types
-typedef T _Decoder<T>(Map<String, dynamic> jsonMap);
+typedef _Decoder<T> = T Function(Map<String, dynamic> jsonMap);
 
 /// A class to manage encoding/decoding by provided encoder/decoder functions.
 class _CodecPair<T> {
