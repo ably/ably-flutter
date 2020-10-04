@@ -101,8 +101,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is Message) {
       return CodecTypes.message;
-        } else if (value is RestHistoryParams) {
-          return CodecTypes.restHistoryParams;
+    } else if (value is RestHistoryParams) {
+      return CodecTypes.restHistoryParams;
     } else if (value is ErrorInfo) {
       return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {
@@ -323,7 +323,7 @@ class Codec extends StandardMessageCodec {
     if (jsonMap == null) return null;
 
     return ClientOptions()
-      // AuthOptions (super class of ClientOptions)
+    // AuthOptions (super class of ClientOptions)
       ..authUrl = readFromJson<String>(jsonMap, TxClientOptions.authUrl)
       ..authMethod =
           readFromJson<HTTPMethods>(jsonMap, TxClientOptions.authMethod)
@@ -337,10 +337,10 @@ class Codec extends StandardMessageCodec {
       ..queryTime = readFromJson<bool>(jsonMap, TxClientOptions.queryTime)
       ..useTokenAuth = readFromJson<bool>(jsonMap, TxClientOptions.useTokenAuth)
 
-      // ClientOptions
+    // ClientOptions
       ..clientId = readFromJson<String>(jsonMap, TxClientOptions.clientId)
       ..logLevel = readFromJson<int>(jsonMap, TxClientOptions.logLevel)
-      //TODO handle logHandler
+    //TODO handle logHandler
       ..tls = readFromJson<bool>(jsonMap, TxClientOptions.tls)
       ..restHost = readFromJson<String>(jsonMap, TxClientOptions.restHost)
       ..realtimeHost =
@@ -561,8 +561,8 @@ class Codec extends StandardMessageCodec {
   Message decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final message = Message(
-        name: readFromJson<String>(jsonMap, TxMessage.name),
-        clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
+      name: readFromJson<String>(jsonMap, TxMessage.name),
+      clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
         data: readFromJson<dynamic>(jsonMap, TxMessage.data))
       ..id = readFromJson<String>(jsonMap, TxMessage.id)
       ..connectionId = readFromJson<String>(jsonMap, TxMessage.connectionId)
