@@ -104,7 +104,7 @@ class Realtime extends PlatformObject
     _connecting = false;
   }
 
-  void awaitAuthUpdateAndReconnect() async {
+  Future<void> awaitAuthUpdateAndReconnect() async {
     if (_authCallbackCompleter != null) {
       return;
     }

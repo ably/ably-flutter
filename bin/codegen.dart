@@ -21,7 +21,7 @@ Map<Template, String> toGenerate = {
       "${projectRoot}ios/Classes/codec/AblyPlatformConstants.m",
 };
 
-void main() async {
+void main() {
   for (MapEntry<Template, String> entry in toGenerate.entries) {
     String source = entry.key(context).replaceAll(RegExp(r'\t'), '    ');
     File(entry.value).writeAsStringSync('''//
