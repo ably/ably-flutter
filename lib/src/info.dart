@@ -1,7 +1,7 @@
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
+import 'package:ably_flutter_plugin/src/generated/platformconstants.dart'
+    show PlatformMethod;
 
 import 'platform.dart' show invoke;
-
 
 /// Get android/iOS platform version
 Future<String> platformVersion() async {

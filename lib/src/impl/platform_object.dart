@@ -16,7 +16,7 @@ abstract class PlatformObject {
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
   PlatformObject([bool fetchHandle = true]) {
-    if(fetchHandle) {
+    if (fetchHandle) {
       _handle = _acquireHandle();
     }
   }

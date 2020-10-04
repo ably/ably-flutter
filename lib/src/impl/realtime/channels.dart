@@ -34,8 +34,8 @@ class RealtimePlatformChannel extends PlatformObject
   Realtime get realtimePlatformObject => ably as Realtime;
 
   /// createPlatformInstance will return realtimePlatformObject's handle
-  /// as that is what will be required in platforms end to find realtime instance
-  /// and send message to channel
+  /// as that is what will be required in platforms end to find realtime
+  /// instance and send message to channel
   @override
   Future<int> createPlatformInstance() async =>
       await realtimePlatformObject.handle;
@@ -48,10 +48,8 @@ class RealtimePlatformChannel extends PlatformObject
 
   Map<String, dynamic> __payload;
 
-  Map<String, dynamic> get _payload => __payload ??= {
-        'channel': name,
-        if (options != null) 'options': options
-      };
+  Map<String, dynamic> get _payload =>
+      __payload ??= {'channel': name, if (options != null) 'options': options};
 
   final _publishQueue = Queue<_RealtimePublishQueueItem>();
   Completer<void> _authCallbackCompleter;
@@ -123,8 +121,8 @@ class RealtimePlatformChannel extends PlatformObject
           }
         } else {
           _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-              e.completer.completeError(
-                  spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo)));
+              e.completer.completeError(spec.AblyException(
+                  pe.code, pe.message, pe.details as ErrorInfo)));
         }
       }
     }

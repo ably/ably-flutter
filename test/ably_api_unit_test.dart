@@ -1,8 +1,9 @@
-import 'package:test/test.dart';
 import 'package:ably_flutter_plugin/ably.dart';
+import 'package:test/test.dart';
 
 void main() {
-  /// We are leaving it up to the platform client library SDK to supply defaults.
+  /// We are leaving it up to the platform client library SDK to supply defaults
+  ///
   /// This test ensures that the default ClientOptions created on Dart side has
   /// null for all properties so that this works.
   test('Default ClientOptions', () { 

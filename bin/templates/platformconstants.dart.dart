@@ -13,5 +13,6 @@ ${c['objects'].map((_) {
 class Tx${_['name']} {
 \t${_['properties'].map((_p) => 'static const String ${_p} = "${_p}";').join('\n\t')}
 }
-''';}).join('\n')}''';
+''';
+  }).join('\n')}''';
 }
