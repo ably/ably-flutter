@@ -13,7 +13,7 @@ enum ChannelMode {
   presence,
   publish,
   subscribe,
-  presence_subscribe
+  presenceSubscribe
 }
 
 enum ChannelEvent {
@@ -54,13 +54,13 @@ enum PresenceAction { absent, present, enter, leave, update }
 
 enum StatsIntervalGranularity { minute, hour, day, month }
 
-enum HTTPMethods { POST, GET }
+enum HTTPMethods { post, get }
 
 /// Java: io.ably.lib.http.HttpAuth.Type
 enum HttpAuthType {
-  BASIC,
-  DIGEST,
-  X_ABLY_TOKEN,
+  basic,
+  digest,
+  xAblyToken,
 }
 
 enum DevicePushState { active, failing, failed }
