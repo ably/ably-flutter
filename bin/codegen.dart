@@ -31,6 +31,7 @@ void main() {
 //
 
 $source''');
+    // ignore: avoid_print
     print('File written: ${entry.value} ✔');
   }
 }
