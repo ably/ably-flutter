@@ -15,7 +15,7 @@ abstract class PlatformObject {
   Future<int> _handle;
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
-  PlatformObject([bool fetchHandle = true]) {
+  PlatformObject({bool fetchHandle = true}) {
     if (fetchHandle) {
       _handle = _acquireHandle();
     }
