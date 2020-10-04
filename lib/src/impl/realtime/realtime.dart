@@ -123,7 +123,9 @@ class Realtime extends PlatformObject
 
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
-    channels.all.forEach((c) => c.authUpdateComplete());
+    for(final channel in channels.all){
+      channel.authUpdateComplete();
+    }
   }
 
   @override
