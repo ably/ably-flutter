@@ -28,7 +28,7 @@ void main() {
     handleCounter = 0;
     var isAuthenticated = false;
 
-    methodChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+    methodChannel.setMockMethodCallHandler((methodCall) async {
       switch (methodCall.method) {
         case PlatformMethod.registerAbly:
           return true;
