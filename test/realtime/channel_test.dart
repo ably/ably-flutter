@@ -85,7 +85,7 @@ void main() {
     expect(publishedMessages.length, 3);
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
-    print("messageData $messageData");
+    print('messageData $messageData');
     expect(messageData['channel'], 'test');
     expect(messageData['name'], 'name');
     expect(messageData['data'], 'data1');

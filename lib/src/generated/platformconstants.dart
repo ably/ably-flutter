@@ -46,86 +46,86 @@ class PlatformMethod {
 }
 
 class TxAblyMessage {
-  static const String registrationHandle = "registrationHandle";
-  static const String type = "type";
-  static const String message = "message";
+  static const String registrationHandle = 'registrationHandle';
+  static const String type = 'type';
+  static const String message = 'message';
 }
 
 class TxAblyEventMessage {
-  static const String eventName = "eventName";
-  static const String type = "type";
-  static const String message = "message";
+  static const String eventName = 'eventName';
+  static const String type = 'type';
+  static const String message = 'message';
 }
 
 class TxErrorInfo {
-  static const String code = "code";
-  static const String message = "message";
-  static const String statusCode = "statusCode";
-  static const String href = "href";
-  static const String requestId = "requestId";
-  static const String cause = "cause";
+  static const String code = 'code';
+  static const String message = 'message';
+  static const String statusCode = 'statusCode';
+  static const String href = 'href';
+  static const String requestId = 'requestId';
+  static const String cause = 'cause';
 }
 
 class TxClientOptions {
-  static const String authUrl = "authUrl";
-  static const String authMethod = "authMethod";
-  static const String key = "key";
-  static const String tokenDetails = "tokenDetails";
-  static const String authHeaders = "authHeaders";
-  static const String authParams = "authParams";
-  static const String queryTime = "queryTime";
-  static const String useTokenAuth = "useTokenAuth";
-  static const String hasAuthCallback = "hasAuthCallback";
-  static const String clientId = "clientId";
-  static const String logLevel = "logLevel";
-  static const String tls = "tls";
-  static const String restHost = "restHost";
-  static const String realtimeHost = "realtimeHost";
-  static const String port = "port";
-  static const String tlsPort = "tlsPort";
-  static const String autoConnect = "autoConnect";
-  static const String useBinaryProtocol = "useBinaryProtocol";
-  static const String queueMessages = "queueMessages";
-  static const String echoMessages = "echoMessages";
-  static const String recover = "recover";
-  static const String environment = "environment";
-  static const String idempotentRestPublishing = "idempotentRestPublishing";
-  static const String httpOpenTimeout = "httpOpenTimeout";
-  static const String httpRequestTimeout = "httpRequestTimeout";
-  static const String httpMaxRetryCount = "httpMaxRetryCount";
-  static const String realtimeRequestTimeout = "realtimeRequestTimeout";
-  static const String fallbackHosts = "fallbackHosts";
-  static const String fallbackHostsUseDefault = "fallbackHostsUseDefault";
-  static const String fallbackRetryTimeout = "fallbackRetryTimeout";
-  static const String defaultTokenParams = "defaultTokenParams";
-  static const String channelRetryTimeout = "channelRetryTimeout";
-  static const String transportParams = "transportParams";
+  static const String authUrl = 'authUrl';
+  static const String authMethod = 'authMethod';
+  static const String key = 'key';
+  static const String tokenDetails = 'tokenDetails';
+  static const String authHeaders = 'authHeaders';
+  static const String authParams = 'authParams';
+  static const String queryTime = 'queryTime';
+  static const String useTokenAuth = 'useTokenAuth';
+  static const String hasAuthCallback = 'hasAuthCallback';
+  static const String clientId = 'clientId';
+  static const String logLevel = 'logLevel';
+  static const String tls = 'tls';
+  static const String restHost = 'restHost';
+  static const String realtimeHost = 'realtimeHost';
+  static const String port = 'port';
+  static const String tlsPort = 'tlsPort';
+  static const String autoConnect = 'autoConnect';
+  static const String useBinaryProtocol = 'useBinaryProtocol';
+  static const String queueMessages = 'queueMessages';
+  static const String echoMessages = 'echoMessages';
+  static const String recover = 'recover';
+  static const String environment = 'environment';
+  static const String idempotentRestPublishing = 'idempotentRestPublishing';
+  static const String httpOpenTimeout = 'httpOpenTimeout';
+  static const String httpRequestTimeout = 'httpRequestTimeout';
+  static const String httpMaxRetryCount = 'httpMaxRetryCount';
+  static const String realtimeRequestTimeout = 'realtimeRequestTimeout';
+  static const String fallbackHosts = 'fallbackHosts';
+  static const String fallbackHostsUseDefault = 'fallbackHostsUseDefault';
+  static const String fallbackRetryTimeout = 'fallbackRetryTimeout';
+  static const String defaultTokenParams = 'defaultTokenParams';
+  static const String channelRetryTimeout = 'channelRetryTimeout';
+  static const String transportParams = 'transportParams';
 }
 
 class TxTokenDetails {
-  static const String token = "token";
-  static const String expires = "expires";
-  static const String issued = "issued";
-  static const String capability = "capability";
-  static const String clientId = "clientId";
+  static const String token = 'token';
+  static const String expires = 'expires';
+  static const String issued = 'issued';
+  static const String capability = 'capability';
+  static const String clientId = 'clientId';
 }
 
 class TxTokenParams {
-  static const String capability = "capability";
-  static const String clientId = "clientId";
-  static const String nonce = "nonce";
-  static const String timestamp = "timestamp";
-  static const String ttl = "ttl";
+  static const String capability = 'capability';
+  static const String clientId = 'clientId';
+  static const String nonce = 'nonce';
+  static const String timestamp = 'timestamp';
+  static const String ttl = 'ttl';
 }
 
 class TxTokenRequest {
-  static const String capability = "capability";
-  static const String clientId = "clientId";
-  static const String keyName = "keyName";
-  static const String mac = "mac";
-  static const String nonce = "nonce";
-  static const String timestamp = "timestamp";
-  static const String ttl = "ttl";
+  static const String capability = 'capability';
+  static const String clientId = 'clientId';
+  static const String keyName = 'keyName';
+  static const String mac = 'mac';
+  static const String nonce = 'nonce';
+  static const String timestamp = 'timestamp';
+  static const String ttl = 'ttl';
 }
 
 class TxEnumConstants {
@@ -145,46 +145,46 @@ class TxEnumConstants {
 }
 
 class TxConnectionStateChange {
-  static const String current = "current";
-  static const String previous = "previous";
-  static const String event = "event";
-  static const String retryIn = "retryIn";
-  static const String reason = "reason";
+  static const String current = 'current';
+  static const String previous = 'previous';
+  static const String event = 'event';
+  static const String retryIn = 'retryIn';
+  static const String reason = 'reason';
 }
 
 class TxChannelStateChange {
-  static const String current = "current";
-  static const String previous = "previous";
-  static const String event = "event";
-  static const String resumed = "resumed";
-  static const String reason = "reason";
+  static const String current = 'current';
+  static const String previous = 'previous';
+  static const String event = 'event';
+  static const String resumed = 'resumed';
+  static const String reason = 'reason';
 }
 
 class TxMessage {
-  static const String id = "id";
-  static const String timestamp = "timestamp";
-  static const String clientId = "clientId";
-  static const String connectionId = "connectionId";
-  static const String encoding = "encoding";
-  static const String data = "data";
-  static const String name = "name";
-  static const String extras = "extras";
+  static const String id = 'id';
+  static const String timestamp = 'timestamp';
+  static const String clientId = 'clientId';
+  static const String connectionId = 'connectionId';
+  static const String encoding = 'encoding';
+  static const String data = 'data';
+  static const String name = 'name';
+  static const String extras = 'extras';
 }
 
 class TxPaginatedResult {
-  static const String items = "items";
-  static const String type = "type";
-  static const String hasNext = "hasNext";
+  static const String items = 'items';
+  static const String type = 'type';
+  static const String hasNext = 'hasNext';
 }
 
 class TxRestHistoryArguments {
-  static const String channelName = "channelName";
-  static const String params = "params";
+  static const String channelName = 'channelName';
+  static const String params = 'params';
 }
 
 class TxRestHistoryParams {
-  static const String start = "start";
-  static const String end = "end";
-  static const String direction = "direction";
-  static const String limit = "limit";
+  static const String start = 'start';
+  static const String end = 'end';
+  static const String direction = 'direction';
+  static const String limit = 'limit';
 }

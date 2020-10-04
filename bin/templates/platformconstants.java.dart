@@ -1,5 +1,4 @@
-String $(c) {
-  return '''
+String $(Map<String, dynamic> c) => '''
 package io.ably.flutter.plugin.generated;
 
 
@@ -13,13 +12,10 @@ final public class PlatformConstants {
 \t\t${c['methods'].map((_) => 'public static final String ${_['name']} = "${_['value']}";').join('\n\t\t')}
 \t}
 
-${c['objects'].map((_) {
-    return '''
+${c['objects'].map((_) => '''
 \tstatic final public class Tx${_['name']} {
 \t\t${_['properties'].map((_p) => 'public static final String $_p = "$_p";').join('\n\t\t')}
 \t}
-''';
-  }).join('\n')}
+''').join('\n')}
 }
 ''';
-}
