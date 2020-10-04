@@ -10,7 +10,7 @@ ${c['methods'].map((_) => 'NSString *const AblyPlatformMethod_${_['name']}= @"${
 ${c['objects'].map((_) {
     return '''
 @implementation Tx${_['name']}
-${_['properties'].map((name) => 'NSString *const Tx${_['name']}_${name} = @"${name}";').join('\n')}
+${_['properties'].map((name) => 'NSString *const Tx${_['name']}_$name = @"$name";').join('\n')}
 @end
 ''';
   }).join('\n')}''';

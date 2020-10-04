@@ -16,7 +16,7 @@ final public class PlatformConstants {
 ${c['objects'].map((_) {
     return '''
 \tstatic final public class Tx${_['name']} {
-\t\t${_['properties'].map((_p) => 'public static final String ${_p} = "${_p}";').join('\n\t\t')}
+\t\t${_['properties'].map((_p) => 'public static final String $_p = "$_p";').join('\n\t\t')}
 \t}
 ''';
   }).join('\n')}
