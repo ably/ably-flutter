@@ -11,219 +11,219 @@ List<Map<String, dynamic>> _types = [
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
   //
-  // NOTE: "value" must be unique across types
+  // NOTE: 'value' must be unique across types
 
   // Ably flutter plugin protocol message
-  {"name": "ablyMessage", "value": 128},
-  {"name": "ablyEventMessage", "value": 129},
+  {'name': 'ablyMessage', 'value': 128},
+  {'name': 'ablyEventMessage', 'value': 129},
 
   //Other ably objects
-  {"name": "clientOptions", "value": 130},
-  {"name": "message", "value": 131},
-  {"name": "tokenParams", "value": 132},
-  {"name": "tokenDetails", "value": 133},
-  {"name": "tokenRequest", "value": 134},
-  {"name": "paginatedResult", "value": 135},
-  {"name": "restHistoryParams", "value": 136},
-  {"name": "errorInfo", "value": 144},
+  {'name': 'clientOptions', 'value': 130},
+  {'name': 'message', 'value': 131},
+  {'name': 'tokenParams', 'value': 132},
+  {'name': 'tokenDetails', 'value': 133},
+  {'name': 'tokenRequest', 'value': 134},
+  {'name': 'paginatedResult', 'value': 135},
+  {'name': 'restHistoryParams', 'value': 136},
+  {'name': 'errorInfo', 'value': 144},
 
   // Events
-  {"name": "connectionStateChange", "value": 201},
-  {"name": "channelStateChange", "value": 202}
+  {'name': 'connectionStateChange', 'value': 201},
+  {'name': 'channelStateChange', 'value': 202}
 ];
 
 ///Platform method names
 List<Map<String, dynamic>> _platformMethods = [
-  {"name": "getPlatformVersion", "value": "getPlatformVersion"},
-  {"name": "getVersion", "value": "getVersion"},
-  {"name": "registerAbly", "value": "registerAbly"},
+  {'name': 'getPlatformVersion', 'value': 'getPlatformVersion'},
+  {'name': 'getVersion', 'value': 'getVersion'},
+  {'name': 'registerAbly', 'value': 'registerAbly'},
 
   // Auth
-  {"name": "authCallback", "value": "authCallback"},
-  {"name": "realtimeAuthCallback", "value": "realtimeAuthCallback"},
+  {'name': 'authCallback', 'value': 'authCallback'},
+  {'name': 'realtimeAuthCallback', 'value': 'realtimeAuthCallback'},
 
   // Rest
-  {"name": "createRestWithOptions", "value": "createRestWithOptions"},
-  {"name": "publish", "value": "publish"},
+  {'name': 'createRestWithOptions', 'value': 'createRestWithOptions'},
+  {'name': 'publish', 'value': 'publish'},
 
   // Realtime
-  {"name": "createRealtimeWithOptions", "value": "createRealtimeWithOptions"},
-  {"name": "connectRealtime", "value": "connectRealtime"},
-  {"name": "closeRealtime", "value": "closeRealtime"},
-  {"name": "attachRealtimeChannel", "value": "attachRealtimeChannel"},
-  {"name": "detachRealtimeChannel", "value": "detachRealtimeChannel"},
-  {"name": "setRealtimeChannelOptions", "value": "setRealtimeChannelOptions"},
+  {'name': 'createRealtimeWithOptions', 'value': 'createRealtimeWithOptions'},
+  {'name': 'connectRealtime', 'value': 'connectRealtime'},
+  {'name': 'closeRealtime', 'value': 'closeRealtime'},
+  {'name': 'attachRealtimeChannel', 'value': 'attachRealtimeChannel'},
+  {'name': 'detachRealtimeChannel', 'value': 'detachRealtimeChannel'},
+  {'name': 'setRealtimeChannelOptions', 'value': 'setRealtimeChannelOptions'},
   {
-    "name": "publishRealtimeChannelMessage",
-    "value": "publishRealtimeChannelMessage"
+    'name': 'publishRealtimeChannelMessage',
+    'value': 'publishRealtimeChannelMessage'
   },
 
   // Realtime events
   {
-    "name": "onRealtimeConnectionStateChanged",
-    "value": "onRealtimeConnectionStateChanged"
+    'name': 'onRealtimeConnectionStateChanged',
+    'value': 'onRealtimeConnectionStateChanged'
   },
   {
-    "name": "onRealtimeChannelStateChanged",
-    "value": "onRealtimeChannelStateChanged"
+    'name': 'onRealtimeChannelStateChanged',
+    'value': 'onRealtimeChannelStateChanged'
   },
-  {"name": "onRealtimeChannelMessage", "value": "onRealtimeChannelMessage"},
+  {'name': 'onRealtimeChannelMessage', 'value': 'onRealtimeChannelMessage'},
 
   // History
-  {"name": "restHistory", "value": "restHistory"},
-  {"name": "realtimeHistory", "value": "realtimeHistory"},
+  {'name': 'restHistory', 'value': 'restHistory'},
+  {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
   // Paginated results
-  {"name": "nextPage", "value": "nextPage"},
-  {"name": "firstPage", "value": "firstPage"},
+  {'name': 'nextPage', 'value': 'nextPage'},
+  {'name': 'firstPage', 'value': 'firstPage'},
 ];
 
 List<Map<String, dynamic>> objects = [
   {
-    "name": "AblyMessage",
-    "properties": <String>["registrationHandle", "type", "message"]
+    'name': 'AblyMessage',
+    'properties': <String>['registrationHandle', 'type', 'message']
   },
   {
-    "name": "AblyEventMessage",
-    "properties": <String>["eventName", "type", "message"]
+    'name': 'AblyEventMessage',
+    'properties': <String>['eventName', 'type', 'message']
   },
   {
-    "name": "ErrorInfo",
-    "properties": <String>[
-      "code",
-      "message",
-      "statusCode",
-      "href",
-      "requestId",
-      "cause"
+    'name': 'ErrorInfo',
+    'properties': <String>[
+      'code',
+      'message',
+      'statusCode',
+      'href',
+      'requestId',
+      'cause'
     ]
   },
   {
-    "name": "ClientOptions",
-    "properties": <String>[
+    'name': 'ClientOptions',
+    'properties': <String>[
       // Auth options
-      "authUrl",
-      "authMethod",
-      "key",
-      "tokenDetails",
-      "authHeaders",
-      "authParams",
-      "queryTime",
-      "useTokenAuth",
-      "hasAuthCallback",
+      'authUrl',
+      'authMethod',
+      'key',
+      'tokenDetails',
+      'authHeaders',
+      'authParams',
+      'queryTime',
+      'useTokenAuth',
+      'hasAuthCallback',
       // ClientOptions
-      "clientId",
-      "logLevel",
-      "tls",
-      "restHost",
-      "realtimeHost",
-      "port",
-      "tlsPort",
-      "autoConnect",
-      "useBinaryProtocol",
-      "queueMessages",
-      "echoMessages",
-      "recover",
-      "environment",
-      "idempotentRestPublishing",
-      "httpOpenTimeout",
-      "httpRequestTimeout",
-      "httpMaxRetryCount",
-      "realtimeRequestTimeout",
-      "fallbackHosts",
-      "fallbackHostsUseDefault",
-      "fallbackRetryTimeout",
-      "defaultTokenParams",
-      "channelRetryTimeout",
-      "transportParams",
+      'clientId',
+      'logLevel',
+      'tls',
+      'restHost',
+      'realtimeHost',
+      'port',
+      'tlsPort',
+      'autoConnect',
+      'useBinaryProtocol',
+      'queueMessages',
+      'echoMessages',
+      'recover',
+      'environment',
+      'idempotentRestPublishing',
+      'httpOpenTimeout',
+      'httpRequestTimeout',
+      'httpMaxRetryCount',
+      'realtimeRequestTimeout',
+      'fallbackHosts',
+      'fallbackHostsUseDefault',
+      'fallbackRetryTimeout',
+      'defaultTokenParams',
+      'channelRetryTimeout',
+      'transportParams',
     ]
   },
   {
-    "name": "TokenDetails",
-    "properties": <String>[
-      "token",
-      "expires",
-      "issued",
-      "capability",
-      "clientId"
+    'name': 'TokenDetails',
+    'properties': <String>[
+      'token',
+      'expires',
+      'issued',
+      'capability',
+      'clientId'
     ]
   },
   {
-    "name": "TokenParams",
-    "properties": <String>[
-      "capability",
-      "clientId",
-      "nonce",
-      "timestamp",
-      "ttl"
+    'name': 'TokenParams',
+    'properties': <String>[
+      'capability',
+      'clientId',
+      'nonce',
+      'timestamp',
+      'ttl'
     ]
   },
   {
-    "name": "TokenRequest",
-    "properties": <String>[
-      "capability",
-      "clientId",
-      "keyName",
-      "mac",
-      "nonce",
-      "timestamp",
-      "ttl"
+    'name': 'TokenRequest',
+    'properties': <String>[
+      'capability',
+      'clientId',
+      'keyName',
+      'mac',
+      'nonce',
+      'timestamp',
+      'ttl'
     ]
   },
   {
-    "name": "EnumConstants",
-    "properties": <String>[
-      "initialized",
-      "connecting",
-      "connected",
-      "disconnected",
-      "attaching",
-      "attached",
-      "detaching",
-      "detached",
-      "suspended",
-      "closing",
-      "closed",
-      "failed",
-      "update",
+    'name': 'EnumConstants',
+    'properties': <String>[
+      'initialized',
+      'connecting',
+      'connected',
+      'disconnected',
+      'attaching',
+      'attached',
+      'detaching',
+      'detached',
+      'suspended',
+      'closing',
+      'closed',
+      'failed',
+      'update',
     ]
   },
   {
-    "name": "ConnectionStateChange",
-    "properties": <String>["current", "previous", "event", "retryIn", "reason"]
+    'name': 'ConnectionStateChange',
+    'properties': <String>['current', 'previous', 'event', 'retryIn', 'reason']
   },
   {
-    "name": "ChannelStateChange",
-    "properties": <String>["current", "previous", "event", "resumed", "reason"]
+    'name': 'ChannelStateChange',
+    'properties': <String>['current', 'previous', 'event', 'resumed', 'reason']
   },
   {
-    "name": "Message",
-    "properties": <String>[
-      "id",
-      "timestamp",
-      "clientId",
-      "connectionId",
-      "encoding",
-      "data",
-      "name",
-      "extras"
+    'name': 'Message',
+    'properties': <String>[
+      'id',
+      'timestamp',
+      'clientId',
+      'connectionId',
+      'encoding',
+      'data',
+      'name',
+      'extras'
     ]
   },
   {
-    "name": "PaginatedResult",
-    "properties": <String>["items", "type", "hasNext"]
+    'name': 'PaginatedResult',
+    'properties': <String>['items', 'type', 'hasNext']
   },
   {
-    "name": "RestHistoryArguments",
-    "properties": <String>["channelName", "params"]
+    'name': 'RestHistoryArguments',
+    'properties': <String>['channelName', 'params']
   },
   {
-    "name": "RestHistoryParams",
-    "properties": <String>[
-      "start",
-      "end",
-      "direction",
-      "limit",
+    'name': 'RestHistoryParams',
+    'properties': <String>[
+      'start',
+      'end',
+      'direction',
+      'limit',
     ]
   }
 ];
@@ -231,7 +231,7 @@ List<Map<String, dynamic>> objects = [
 // exporting all the constants as a single map
 // which can be directly fed to template as context
 Map<String, dynamic> context = {
-  "types": _types,
-  "methods": _platformMethods,
-  "objects": objects
+  'types': _types,
+  'methods': _platformMethods,
+  'objects': objects
 };

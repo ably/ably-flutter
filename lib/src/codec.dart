@@ -24,7 +24,7 @@ class _CodecPair<T> {
   /// if passed [value] is null, encoder will not be called.
   /// This method will throw an [AblyException] if encoder is null.
   Map<String, dynamic> encode(final Object value) {
-    if (_encoder == null) throw AblyException("Codec encoder is null");
+    if (_encoder == null) throw AblyException('Codec encoder is null');
     if (value == null) return null;
     return _encoder(value as T);
   }
@@ -33,7 +33,7 @@ class _CodecPair<T> {
   /// if passed [jsonMap] is null, decoder will not be called.
   /// This method will throw an [AblyException] if decoder is null.
   T decode(Map<String, dynamic> jsonMap) {
-    if (_decoder == null) throw AblyException("Codec decoder is null");
+    if (_decoder == null) throw AblyException('Codec decoder is null');
     if (jsonMap == null) return null;
     return _decoder(jsonMap);
   }
@@ -144,7 +144,7 @@ class Codec extends StandardMessageCodec {
   // =========== ENCODERS ===========
   /// Writes [value] for [key] in [map] if [value] is not null
   writeToJson(Map<String, dynamic> map, String key, Object value) {
-    assert(!(value is DateTime), "`DateTime` objects cannot be encoded");
+    assert(!(value is DateTime), '`DateTime` objects cannot be encoded');
     if (value == null) return;
     map[key] = value;
   }

@@ -11,5 +11,5 @@ class AblyEventMessage {
   final Object message;
 
   AblyEventMessage(this.eventName, [this.message])
-      : assert(eventName != null, "eventName cannot be null");
+      : assert(eventName != null, 'eventName cannot be null');
 }

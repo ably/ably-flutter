@@ -26,7 +26,6 @@ void main() {
         case PlatformMethod.getVersion:
           return _nativeLibraryVersion;
 
-        case "createrestWithKey":
         case PlatformMethod.createRestWithOptions:
         case PlatformMethod.createRealtimeWithOptions:
           return ++counter;
@@ -53,28 +52,28 @@ void main() {
 
   test(PlatformMethod.createRestWithOptions, () async {
     final o = ClientOptions();
-    const host = "http://rest.ably.io/";
+    const host = 'http://rest.ably.io/';
     o.restHost = host;
     final rest = Rest(options: o);
     expect(await rest.handle, counter);
     expect(rest.options.restHost, host);
   });
 
-  test("createRestWithToken", () async {
+  test('createRestWithToken', () async {
     const key = 'TEST-KEY';
     final rest = Rest(key: key);
     expect(await rest.handle, counter);
     expect(rest.options.tokenDetails.token, key);
   });
 
-  test("createRestWithKey", () async {
+  test('createRestWithKey', () async {
     const key = 'TEST:KEY';
     final rest = Rest(key: key);
     expect(await rest.handle, counter);
     expect(rest.options.key, key);
   });
 
-  test("publishMessage", () async {
+  test('publishMessage', () async {
     final rest = Rest(key: 'TEST-KEY');
     await rest.channels.get('test').publish(name: 'name', data: 'data');
     expect(1, 1);
