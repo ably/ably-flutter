@@ -61,8 +61,8 @@ void main() {
           return null;
 
         default:
-          return throw 'Unexpected channel method call: ${methodCall.method}'
-            ' args: ${methodCall.arguments}';
+          return throw Exception('Unexpected method call: ${methodCall.method}'
+            ' args: ${methodCall.arguments}');
       }
     });
   });
