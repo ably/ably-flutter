@@ -22,8 +22,8 @@ Map<Template, String> toGenerate = {
 };
 
 void main() {
-  for (MapEntry<Template, String> entry in toGenerate.entries) {
-    String source = entry.key(context).replaceAll(RegExp(r'\t'), '    ');
+  for (final entry in toGenerate.entries) {
+    final source = entry.key(context).replaceAll(RegExp(r'\t'), '    ');
     File(entry.value).writeAsStringSync('''//
 // Generated code. Do not modify.
 // source file can be found at bin/templates'
