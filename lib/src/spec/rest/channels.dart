@@ -30,6 +30,6 @@ abstract class RestChannel {
 
 abstract class RestChannels<T extends RestChannel> extends Channels<T> {
 
-  RestChannels(ably) : super(ably);
+  RestChannels(AblyBase ably) : super(ably);
 
 }
