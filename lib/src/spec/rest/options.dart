@@ -15,8 +15,7 @@ abstract class AuthOptions {
   /// Convenience constructor, to create an AuthOptions based
   /// on the key string obtained from the application dashboard.
   /// param [key]: the full key string as obtained from the dashboard
-  AuthOptions.fromKey(String key) {
-    assert(key != null);
+  AuthOptions.fromKey(String key) : assert(key != null) {
     if (key.contains(':')) {
       this.key = key;
     } else {
