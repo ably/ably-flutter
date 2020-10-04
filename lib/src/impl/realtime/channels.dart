@@ -37,8 +37,7 @@ class RealtimePlatformChannel extends PlatformObject
   /// as that is what will be required in platforms end to find realtime
   /// instance and send message to channel
   @override
-  Future<int> createPlatformInstance() async =>
-      await realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
 
   @override
   Future<PaginatedResult<spec.Message>> history(

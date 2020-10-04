@@ -42,7 +42,7 @@ abstract class PlatformObject {
   /// invoke platform method channel without AblyMessage encapsulation
   @protected
   Future<T> invokeRaw<T>(final String method, [final Object arguments]) async =>
-      await platform.invoke<T>(method, arguments);
+      platform.invoke<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
   @protected
@@ -51,7 +51,7 @@ abstract class PlatformObject {
     final message = (null != argument)
         ? AblyMessage(AblyMessage(argument, handle: _handle))
         : AblyMessage(_handle);
-    return await invokeRaw<T>(method, message);
+    return invokeRaw<T>(method, message);
   }
 
   Future<Stream<dynamic>> _listen(final String eventName,

@@ -40,5 +40,5 @@ Future _initialize() async {
 
 Future<T> invoke<T>(String method, [Object arguments]) async {
   await _initialize();
-  return await methodChannel.invokeMethod<T>(method, arguments);
+  return methodChannel.invokeMethod<T>(method, arguments);
 }
