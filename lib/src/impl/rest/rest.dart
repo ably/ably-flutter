@@ -31,7 +31,9 @@ class Rest extends PlatformObject
   }
 
   void authUpdateComplete() {
-    channels.all.forEach((c) => c.authUpdateComplete());
+    for(final channel in channels.all){
+      channel.authUpdateComplete();
+    }
   }
 
   @override
