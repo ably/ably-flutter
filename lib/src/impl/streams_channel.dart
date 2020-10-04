@@ -35,7 +35,7 @@ class StreamsChannel {
   int _lastId = 0;
 
   Stream<dynamic> receiveBroadcastStream([Object arguments]) {
-    final MethodChannel methodChannel = MethodChannel(name, codec);
+    final methodChannel = MethodChannel(name, codec);
 
     final id = ++_lastId;
     final handlerName = '$name#$id';

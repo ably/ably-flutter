@@ -31,7 +31,7 @@ class MockEmitter{
   int emitCount = 0;
   int injector(int id){
     if(indexes[id] >= injectables.length) return null;
-    int ret = injectables[indexes[id]];
+    final ret = injectables[indexes[id]];
     indexes[id]++;
     return ret;
   }
@@ -44,12 +44,12 @@ void main() {
 
   test('RTE6a: nested cancellation of a listener', () async {
     //lists to store data received by listeners
-    List<int> resultsDefault = [];
-    List<int> resultsNestedPre = [];
-    List<int> resultsNestedPost = [];
+    final resultsDefault = <int>[];
+    final resultsNestedPre = <int>[];
+    final resultsNestedPost = <int>[];
 
-    MockEmitter emitter = MockEmitter(3, [1, 2, 3, 4, 5]);
-    List<Stream<int>> streams = emitter.streams;
+    final emitter = MockEmitter(3, [1, 2, 3, 4, 5]);
+    final streams = emitter.streams;
 
     StreamSubscription subscriptionPre;
     StreamSubscription subscriptionPost;
