@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 typedef Injector = int Function(int id);
 
 Stream<int> emitter(int id, Injector injector) async* {
-  int injectable = injector(id);
+  var injectable = injector(id);
   while (injectable != null) {
     yield injectable;
     injectable = injector(id);
@@ -16,7 +16,7 @@ Stream<int> emitter(int id, Injector injector) async* {
 class MockEmitter {
   MockEmitter(this.streamsCount, this.injectables) {
     streams = [];
-    for (int i = 0; i < streamsCount; i++) {
+    for (var i = 0; i < streamsCount; i++) {
       streams.add(emitter(i, injector));
       indexes[i] = 0;
     }
