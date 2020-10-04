@@ -20,7 +20,7 @@ void main() {
   // Keep created channel instances associated with its handle.
   final channels = <int, AblyMessage>{};
 
-  var publishedMessages = <AblyMessage>[];
+  final publishedMessages = <AblyMessage>[];
 
   setUp(() {
     channels.clear();

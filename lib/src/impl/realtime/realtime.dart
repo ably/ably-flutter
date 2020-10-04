@@ -29,7 +29,7 @@ class Realtime extends PlatformObject
 
   @override
   Future<int> createPlatformInstance() async {
-    var handle = await invokeRaw<int>(
+    final handle = await invokeRaw<int>(
         PlatformMethod.createRealtimeWithOptions, AblyMessage(options));
     _realtimeInstances[handle] = this;
     return handle;

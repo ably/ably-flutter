@@ -34,7 +34,7 @@ class PaginatedResult<T> extends PlatformObject
 
   PaginatedResult.fromAblyMessage(AblyMessage message)
       : super(fetchHandle: false) {
-    var rawResult = message.message as PaginatedResult<Object>;
+    final rawResult = message.message as PaginatedResult<Object>;
     _items = rawResult.items.map<T>((e) => e as T).toList();
     _hasNext = rawResult.hasNext();
     _pageHandle = message.handle;
@@ -46,14 +46,14 @@ class PaginatedResult<T> extends PlatformObject
   /// returns a new PaginatedResult containing items of next page
   @override
   Future<PaginatedResult<T>> next() async {
-    var message = await invoke<AblyMessage>(PlatformMethod.nextPage);
+    final message = await invoke<AblyMessage>(PlatformMethod.nextPage);
     return PaginatedResult<T>.fromAblyMessage(message);
   }
 
   /// returns a new PaginatedResult containing items of first page
   @override
   Future<PaginatedResult<T>> first() async {
-    var message = await invoke<AblyMessage>(PlatformMethod.firstPage);
+    final message = await invoke<AblyMessage>(PlatformMethod.firstPage);
     return PaginatedResult<T>.fromAblyMessage(message);
   }
 
