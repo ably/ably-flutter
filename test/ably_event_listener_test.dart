@@ -30,6 +30,7 @@ class MockEmitter {
   int emitCount = 0;
 
   int injector(int id) {
+    // ignore: avoid_returning_null
     if (indexes[id] >= injectables.length) return null;
     final ret = injectables[indexes[id]];
     indexes[id]++;

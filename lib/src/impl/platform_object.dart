@@ -63,6 +63,7 @@ abstract class PlatformObject {
   /// Listen for events
   @protected
   Stream<dynamic> listen(final String method, [final Object payload]) {
+    // ignore: close_sinks, will be closed by listener
     final controller = StreamController<dynamic>();
     _listen(method, payload).then(controller.addStream);
     return controller.stream;
