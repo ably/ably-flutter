@@ -6,19 +6,16 @@ import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 class PaginatedResult<T> extends PlatformObject
     implements spec.PaginatedResultInterface<T> {
 
-  int _pageHandle;
-
-  /// sets platform object handle for PaginatedResult
+  /// stores page handle created by platform APIs
   ///
   /// handle is updated after creating an instance as they are received
-  /// as 2 properties of AblyMessage, and this instance is instantiated
-  /// by the codec. So the platform method invoker is bound to update
-  /// [_pageHandle].
+  /// as 2 different properties of AblyMessage, and this instance is
+  /// instantiated by the codec. So the code invoking platform method
+  /// is bound to update this [_pageHandle]
   ///
-  /// See [next] and [first] methods for usages
-  void setPageHandle(int _handle){
-    _pageHandle = _handle;
-  }
+  /// [PaginatedResult.fromAblyMessage] will act as a utility to update
+  /// this property. See [next] and [first] for usages
+  int _pageHandle;
 
   /// items contain page of results
   @override
