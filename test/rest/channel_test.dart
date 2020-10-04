@@ -115,7 +115,7 @@ void main() {
   test('publish message with authCallback timing out', () async {
     // setup
     final tooMuchDelay =
-        Timeouts.retryOperationOnAuthFailure + Duration(seconds: 2);
+        Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
     var authCallbackCounter = 0;
 
     Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
