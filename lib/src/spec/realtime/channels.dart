@@ -32,7 +32,7 @@ abstract class RealtimeChannel
       [RealtimeHistoryParams params]);
 
   Future<void> publish(
-      {Message message, List<Message> messages, String name, dynamic data});
+      {Message message, List<Message> messages, String name, Object data});
 
   Stream<Message> subscribe({
     String name,
