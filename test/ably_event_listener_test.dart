@@ -54,9 +54,7 @@ void main() {
     StreamSubscription subscriptionPre;
     StreamSubscription subscriptionPost;
 
-    subscriptionPre = streams[1].listen((nestedValue){
-      resultsNestedPre.add(nestedValue);
-    });
+    subscriptionPre = streams[1].listen(resultsNestedPre.add);
 
     //subscription2
     streams[0].listen((eventValue){
@@ -68,9 +66,7 @@ void main() {
       }
     });
 
-    subscriptionPost = streams[2].listen((nestedValue){
-      resultsNestedPost.add(nestedValue);
-    });
+    subscriptionPost = streams[2].listen(resultsNestedPost.add);
 
     //Waiting for stream to end
     await Future.delayed(Duration.zero);
