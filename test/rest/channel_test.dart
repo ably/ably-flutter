@@ -74,7 +74,7 @@ void main() {
   test('publish message without authCallback', () async {
     // setup
     final rest = Rest(key: 'TEST-KEY');
-    final channel = await rest.channels.get('test');
+    final channel = rest.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data1');

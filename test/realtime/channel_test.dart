@@ -74,7 +74,7 @@ void main() {
   test('publish realtime message without authCallback', () async {
     // setup
     final realtime = Realtime(key: 'TEST-KEY');
-    final channel = await realtime.channels.get('test');
+    final channel = realtime.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data1');
