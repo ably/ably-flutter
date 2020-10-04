@@ -133,7 +133,7 @@ class Realtime extends PlatformObject
       {String method,
       String path,
       Map<String, dynamic> params,
-      body,
+      Object body,
       Map<String, String> headers}) {
     throw UnimplementedError();
   }
