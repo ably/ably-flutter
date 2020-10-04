@@ -145,7 +145,7 @@ class Codec extends StandardMessageCodec {
   // =========== ENCODERS ===========
   /// Writes [value] for [key] in [map] if [value] is not null
   writeToJson(Map<String, dynamic> map, String key, Object value) {
-    assert(!(value is DateTime), '`DateTime` objects cannot be encoded');
+    assert(value is! DateTime, '`DateTime` objects cannot be encoded');
     if (value == null) return;
     map[key] = value;
   }
