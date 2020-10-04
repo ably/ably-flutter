@@ -30,7 +30,7 @@ abstract class AblyBase {
       {@required String method,
       @required String path,
       Map<String, dynamic> params,
-      dynamic body,
+        Object body,
       Map<String, String> headers});
 
   Future<DateTime> time();

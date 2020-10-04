@@ -24,15 +24,15 @@ abstract class RealtimePresence {
           listener //TODO check if this is the type that is expected
       });
 
-  Future<void> enter([dynamic data]);
+  Future<void> enter([Object data]);
 
-  Future<void> update([dynamic data]);
+  Future<void> update([Object data]);
 
-  Future<void> leave([dynamic data]);
+  Future<void> leave([Object data]);
 
-  Future<void> enterClient({String clientId, dynamic data});
+  Future<void> enterClient({String clientId, Object data});
 
-  Future<void> updateClient({String clientId, dynamic data});
+  Future<void> updateClient({String clientId, Object data});
 
-  Future<void> leaveClient({String clientId, dynamic data});
+  Future<void> leaveClient({String clientId, Object data});
 }
