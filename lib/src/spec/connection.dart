@@ -1,9 +1,8 @@
-import 'enums.dart';
 import 'common.dart';
+import 'enums.dart';
 
-
-abstract class Connection implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
-
+abstract class Connection
+    implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
   ///current state of this connection
   ConnectionState state;
 
@@ -23,9 +22,10 @@ abstract class Connection implements EventEmitter<ConnectionEvent, ConnectionSta
 
   /// The serial number of the last message to be received on this connection.
   int serial;
+
   Future<void> close();
+
   Future<void> connect();
 
   Future<int> ping();
-
 }

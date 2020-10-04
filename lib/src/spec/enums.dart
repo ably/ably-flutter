@@ -8,7 +8,8 @@ enum ChannelState {
   failed
 }
 
-enum ChannelMode{   // TB2d
+enum ChannelMode {
+  // TB2d
   presence,
   publish,
   subscribe,
@@ -49,25 +50,11 @@ enum ConnectionEvent {
   update
 }
 
-enum PresenceAction {
-  absent,
-  present,
-  enter,
-  leave,
-  update
-}
+enum PresenceAction { absent, present, enter, leave, update }
 
-enum StatsIntervalGranularity {
-  minute,
-  hour,
-  day,
-  month
-}
+enum StatsIntervalGranularity { minute, hour, day, month }
 
-enum HTTPMethods {
-  POST,
-  GET
-}
+enum HTTPMethods { POST, GET }
 
 /// Java: io.ably.lib.http.HttpAuth.Type
 enum HttpAuthType {
@@ -76,25 +63,8 @@ enum HttpAuthType {
   X_ABLY_TOKEN,
 }
 
-enum DevicePushState{
-  active,
-  failing,
-  failed
-}
+enum DevicePushState { active, failing, failed }
 
-enum DevicePlatform{
-  android,
-  ios,
-  browser
-}
+enum DevicePlatform { android, ios, browser }
 
-enum FormFactor{
-  phone,
-  tablet,
-  desktop,
-  tv,
-  watch,
-  car,
-  embedded,
-  other
-}
+enum FormFactor { phone, tablet, desktop, tv, watch, car, embedded, other }

@@ -14,7 +14,7 @@ class AblyMethodCallHandler {
           return await onRealtimeAuthCallback(call.arguments as AblyMessage);
         default:
           throw PlatformException(
-            code: 'invalid_method', message: 'No such method ${call.method}');
+              code: 'invalid_method', message: 'No such method ${call.method}');
       }
     });
   }

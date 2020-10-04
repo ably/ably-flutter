@@ -1,4 +1,4 @@
-class LogLevel{
+class LogLevel {
   static const int none = 99;
   static const int verbose = 2;
   static const int debug = 3;
@@ -15,7 +15,6 @@ class ErrorCodes {
   /// call triggered from platform side
   static const int authCallbackFailure = 80019;
 }
-
 
 class Timeouts {
   static const retryOperationOnAuthFailure = Duration(seconds: 30);
