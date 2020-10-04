@@ -24,18 +24,18 @@ class _CodecPair<T> {
   /// if passed [value] is null, encoder will not be called.
   /// This method will throw an [AblyException] if encoder is null.
   Map<String, dynamic> encode(final Object value) {
-    if (this._encoder == null) throw AblyException("Codec encoder is null");
+    if (_encoder == null) throw AblyException("Codec encoder is null");
     if (value == null) return null;
-    return this._encoder(value as T);
+    return _encoder(value as T);
   }
 
   /// Convert Map entries to an ably library object instance (dart).
   /// if passed [jsonMap] is null, decoder will not be called.
   /// This method will throw an [AblyException] if decoder is null.
   T decode(Map<String, dynamic> jsonMap) {
-    if (this._decoder == null) throw AblyException("Codec decoder is null");
+    if (_decoder == null) throw AblyException("Codec decoder is null");
     if (jsonMap == null) return null;
-    return this._decoder(jsonMap);
+    return _decoder(jsonMap);
   }
 }
 
@@ -46,7 +46,7 @@ class Codec extends StandardMessageCodec {
   Map<int, _CodecPair> codecMap;
 
   Codec() : super() {
-    this.codecMap = {
+    codecMap = {
       // Ably flutter plugin protocol message
       CodecTypes.ablyMessage:
           _CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
