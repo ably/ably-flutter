@@ -37,11 +37,10 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   @override
   Future<PaginatedResult<spec.Message>> history(
       [spec.RestHistoryParams params]) async {
-    var message = await invoke<AblyMessage>(
-        PlatformMethod.restHistory, {
-          TxRestHistoryArguments.channelName: name,
-          if (params!=null) TxRestHistoryArguments.params: params
-        });
+    var message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
+      TxRestHistoryArguments.channelName: name,
+      if (params != null) TxRestHistoryArguments.params: params
+    });
     return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
@@ -125,8 +124,8 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           }
         } else {
           _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-            e.completer.completeError(
-                  spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo)));
+              e.completer.completeError(spec.AblyException(
+                  pe.code, pe.message, pe.details as ErrorInfo)));
         }
       }
     }

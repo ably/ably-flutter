@@ -1,11 +1,13 @@
 ///Transmission protocol custom types. Will be used by codecs
 List<Map<String, dynamic>> _types = [
-  // Custom type values must be over 127. At the time of writing the standard message
-  // codec encodes them as an unsigned byte which means the maximum type value is 255.
-  // If we get to the point of having more than that number of custom types (i.e. more
-  // than 128 [255 - 127]) then we can either roll our own codec from scratch or,
-  // perhaps easier, reserve custom type value 255 to indicate that it will be followed
-  // by a subtype value - perhaps of a wider type.
+  // Custom type values must be over 127. At the time of writing
+  // the standard message codec encodes them as an unsigned byte
+  // which means the maximum type value is 255. If we get to the
+  // point of having more than that number of custom types (i.e.
+  // more than 128 [255 - 127]) then we can either roll our own
+  // codec from scratch or, perhaps easier, reserve custom type
+  // value 255 to indicate that it will be followed by a subtype
+  // value - perhaps of a wider type.
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
   //
@@ -51,11 +53,20 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "attachRealtimeChannel", "value": "attachRealtimeChannel"},
   {"name": "detachRealtimeChannel", "value": "detachRealtimeChannel"},
   {"name": "setRealtimeChannelOptions", "value": "setRealtimeChannelOptions"},
-  {"name": "publishRealtimeChannelMessage", "value": "publishRealtimeChannelMessage"},
+  {
+    "name": "publishRealtimeChannelMessage",
+    "value": "publishRealtimeChannelMessage"
+  },
 
   // Realtime events
-  {"name": "onRealtimeConnectionStateChanged", "value": "onRealtimeConnectionStateChanged"},
-  {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"},
+  {
+    "name": "onRealtimeConnectionStateChanged",
+    "value": "onRealtimeConnectionStateChanged"
+  },
+  {
+    "name": "onRealtimeChannelStateChanged",
+    "value": "onRealtimeChannelStateChanged"
+  },
   {"name": "onRealtimeChannelMessage", "value": "onRealtimeChannelMessage"},
 
   // History
@@ -70,19 +81,11 @@ List<Map<String, dynamic>> _platformMethods = [
 List<Map<String, dynamic>> objects = [
   {
     "name": "AblyMessage",
-    "properties": <String>[
-      "registrationHandle",
-      "type",
-      "message"
-    ]
+    "properties": <String>["registrationHandle", "type", "message"]
   },
   {
     "name": "AblyEventMessage",
-    "properties": <String>[
-      "eventName",
-      "type",
-      "message"
-    ]
+    "properties": <String>["eventName", "type", "message"]
   },
   {
     "name": "ErrorInfo",
@@ -187,23 +190,11 @@ List<Map<String, dynamic>> objects = [
   },
   {
     "name": "ConnectionStateChange",
-    "properties": <String>[
-      "current",
-      "previous",
-      "event",
-      "retryIn",
-      "reason"
-    ]
+    "properties": <String>["current", "previous", "event", "retryIn", "reason"]
   },
   {
     "name": "ChannelStateChange",
-    "properties": <String>[
-      "current",
-      "previous",
-      "event",
-      "resumed",
-      "reason"
-    ]
+    "properties": <String>["current", "previous", "event", "resumed", "reason"]
   },
   {
     "name": "Message",
@@ -220,18 +211,11 @@ List<Map<String, dynamic>> objects = [
   },
   {
     "name": "PaginatedResult",
-    "properties": <String>[
-      "items",
-      "type",
-      "hasNext"
-    ]
+    "properties": <String>["items", "type", "hasNext"]
   },
   {
     "name": "RestHistoryArguments",
-    "properties": <String>[
-      "channelName",
-      "params"
-    ]
+    "properties": <String>["channelName", "params"]
   },
   {
     "name": "RestHistoryParams",
@@ -243,7 +227,6 @@ List<Map<String, dynamic>> objects = [
     ]
   }
 ];
-
 
 // exporting all the constants as a single map
 // which can be directly fed to template as context

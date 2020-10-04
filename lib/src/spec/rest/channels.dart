@@ -3,14 +3,12 @@ import '../message.dart';
 import 'ably_base.dart';
 import 'presence.dart';
 
-
 abstract class ChannelOptions {
   dynamic cipher;
 }
 
 abstract class RestChannel {
-
-  RestChannel(this.ably, this.name, this.options){
+  RestChannel(this.ably, this.name, this.options) {
     this.presence = Presence();
   }
 
@@ -18,6 +16,7 @@ abstract class RestChannel {
   String name;
   ChannelOptions options;
   Presence presence;
+
   Future<PaginatedResultInterface<Message>> history([RestHistoryParams params]);
   Future<void> publish({
     Message message,
@@ -27,9 +26,6 @@ abstract class RestChannel {
   });
 }
 
-
 abstract class RestChannels<T extends RestChannel> extends Channels<T> {
-
   RestChannels(AblyBase ably) : super(ably);
-
 }

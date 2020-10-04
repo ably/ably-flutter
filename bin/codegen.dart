@@ -6,7 +6,6 @@ import 'templates/platformconstants.h.dart' as objc_header_template;
 import 'templates/platformconstants.java.dart' as java_template;
 import 'templates/platformconstants.m.dart' as objc_impl_template;
 
-
 typedef String Template(Map<String, dynamic> context);
 
 String projectRoot = "../";
@@ -14,22 +13,23 @@ String projectRoot = "../";
 Map<Template, String> toGenerate = {
   // input template method vs output file path
   dart_template.$: "${projectRoot}lib/src/generated/platformconstants.dart",
-  java_template.$: "${projectRoot}android/src/main/java/io/ably/flutter/plugin/generated/PlatformConstants.java",
-  objc_header_template.$: "${projectRoot}ios/Classes/codec/AblyPlatformConstants.h",
-  objc_impl_template.$: "${projectRoot}ios/Classes/codec/AblyPlatformConstants.m",
+  java_template.$:
+      "${projectRoot}android/src/main/java/io/ably/flutter/plugin/generated/PlatformConstants.java",
+  objc_header_template.$:
+      "${projectRoot}ios/Classes/codec/AblyPlatformConstants.h",
+  objc_impl_template.$:
+      "${projectRoot}ios/Classes/codec/AblyPlatformConstants.m",
 };
 
 void main() async {
-  for(MapEntry<Template, String> entry in toGenerate.entries){
+  for (MapEntry<Template, String> entry in toGenerate.entries) {
     String source = entry.key(context).replaceAll(RegExp(r'\t'), '    ');
-    File(entry.value).writeAsStringSync(
-        '''//
+    File(entry.value).writeAsStringSync('''//
 // Generated code. Do not modify.
 // source file can be found at bin/templates'
 //
 
-${source}'''
-    );
+${source}''');
     print("File written: ${entry.value} ✔");
   }
 }
