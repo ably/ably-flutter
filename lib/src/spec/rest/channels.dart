@@ -9,7 +9,7 @@ abstract class ChannelOptions {
 
 abstract class RestChannel {
   RestChannel(this.ably, this.name, this.options) {
-    this.presence = Presence();
+    presence = Presence();
   }
 
   AblyBase ably;

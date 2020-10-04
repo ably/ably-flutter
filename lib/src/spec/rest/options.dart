@@ -20,7 +20,7 @@ abstract class AuthOptions {
     if (key.contains(':')) {
       this.key = key;
     } else {
-      this.tokenDetails = TokenDetails(key);
+      tokenDetails = TokenDetails(key);
     }
   }
 
