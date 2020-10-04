@@ -24,7 +24,7 @@ class _CodecPair<T> {
   /// Convert properties from an ably library object instance (dart) to Map.
   /// if passed [value] is null, encoder will not be called.
   /// This method will throw an [AblyException] if encoder is null.
-  Map<String, dynamic> encode(final dynamic value) {
+  Map<String, dynamic> encode(final Object value) {
     if (this._encoder == null) throw AblyException("Codec encoder is null");
     if (value == null) return null;
     return this._encoder(value as T);
@@ -91,7 +91,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Returns a value from [CodecTypes] based of the [Type] of [value]
-  int getCodecType(final dynamic value) {
+  int getCodecType(final Object value) {
     if (value is ClientOptions) {
       return CodecTypes.clientOptions;
     } else if (value is TokenDetails) {
@@ -118,7 +118,7 @@ class Codec extends StandardMessageCodec {
   /// obtained from [codecMap] against codecType obtained from [value].
   /// If decoder is not found, [StandardMessageCodec] is used to read value
   @override
-  void writeValue(final WriteBuffer buffer, final dynamic value) {
+  void writeValue(final WriteBuffer buffer, final Object value) {
     int type = getCodecType(value);
     if (type == null) {
       super.writeValue(buffer, value);

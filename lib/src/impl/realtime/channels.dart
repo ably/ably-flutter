@@ -59,7 +59,7 @@ class RealtimePlatformChannel extends PlatformObject
       {spec.Message message,
       List<spec.Message> messages,
       String name,
-      dynamic data}) async {
+        Object data}) async {
     final queueItem = _RealtimePublishQueueItem(
         Completer<void>(), message, messages, name, data);
     _publishQueue.add(queueItem);
