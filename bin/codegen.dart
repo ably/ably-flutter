@@ -29,7 +29,7 @@ void main() {
 // source file can be found at bin/templates'
 //
 
-${source}''');
+$source''');
     print("File written: ${entry.value} ✔");
   }
 }
