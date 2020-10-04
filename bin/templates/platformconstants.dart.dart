@@ -11,7 +11,7 @@ class PlatformMethod {
 ${c['objects'].map((_) {
     return '''
 class Tx${_['name']} {
-\t${_['properties'].map((_p) => 'static const String ${_p} = "${_p}";').join('\n\t')}
+\t${_['properties'].map((_p) => 'static const String $_p = "$_p";').join('\n\t')}
 }
 ''';
   }).join('\n')}''';
