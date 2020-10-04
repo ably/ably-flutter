@@ -29,11 +29,9 @@ class Message {
   Message({this.name, this.data, this.clientId}); // TM2
 
   @override
-  String toString() {
-    return 'Message id=$id timestamp=$timestamp clientId=$clientId'
+  String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
         ' connectionId=$connectionId encoding=$encoding name=$name'
         ' data=$data extras=$extras';
-  }
 }
 
 abstract class MessageStatic {
