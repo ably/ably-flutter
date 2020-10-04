@@ -59,7 +59,7 @@ void main() {
     });
 
     //subscription2
-    streams[0].listen((int eventValue){
+    streams[0].listen((eventValue){
       resultsDefault.add(eventValue);
       //cancelling subscriptionPre and subscriptionPost when value is 2
       if(eventValue==2){

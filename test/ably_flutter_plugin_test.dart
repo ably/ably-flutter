@@ -26,7 +26,7 @@ void main() {
   String _nativeLibraryVersion = '1.1.0';
 
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    channel.setMockMethodCallHandler((methodCall) async {
       switch(methodCall.method){
         case PlatformMethod.registerAbly:
           return true;

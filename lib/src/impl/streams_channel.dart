@@ -43,7 +43,7 @@ class StreamsChannel {
     StreamController<dynamic> controller;
     controller = StreamController<dynamic>.broadcast(onListen: () async {
       ServicesBinding.instance.defaultBinaryMessenger
-          .setMessageHandler(handlerName, (ByteData reply) async {
+          .setMessageHandler(handlerName, (reply) async {
         if (reply == null) {
           await controller.close();
         } else {
