@@ -38,7 +38,7 @@ class ErrorInfo {
   @override
   String toString() {
     return 'ErrorInfo message=$message code=$code '
-      'statusCode=$statusCode href=$href';
+        'statusCode=$statusCode href=$href';
   }
 }
 
@@ -331,6 +331,7 @@ class AblyException implements Exception {
 
   AblyException([this.code, this.message, this.errorInfo]);
 
+  @override
   String toString() {
     if (message == null) return "AblyException";
     return "AblyException: $message (${(code == null) ? "" : '$code '})";
