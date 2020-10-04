@@ -511,7 +511,7 @@ class Codec extends StandardMessageCodec {
             ?.map((e) => codecMap[type].decode(toJsonMap(e)))
             ?.toList() ??
         [];
-    return PaginatedResult(
-        items, readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
+    return PaginatedResult(items,
+        hasNext: readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
   }
 }
