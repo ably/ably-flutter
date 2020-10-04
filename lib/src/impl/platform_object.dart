@@ -47,7 +47,7 @@ abstract class PlatformObject {
   /// invoke platform method channel with AblyMessage encapsulation
   @protected
   Future<T> invoke<T>(final String method, [final Object argument]) async {
-    var _handle = await handle;
+    final _handle = await handle;
     final message = (null != argument)
         ? AblyMessage(AblyMessage(argument, handle: _handle))
         : AblyMessage(_handle);
@@ -63,7 +63,7 @@ abstract class PlatformObject {
   /// Listen for events
   @protected
   Stream<dynamic> listen(final String method, [final Object payload]) {
-    var controller = StreamController<dynamic>();
+    final controller = StreamController<dynamic>();
     _listen(method, payload).then(controller.addStream);
     return controller.stream;
   }
