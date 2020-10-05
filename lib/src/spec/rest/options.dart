@@ -46,7 +46,10 @@ abstract class AuthOptions {
   bool useTokenAuth; //optional
 }
 
-typedef LogHandler = void Function({String msg, AblyException exception});
+typedef LogHandler = void Function({
+  String msg,
+  AblyException exception,
+});
 
 class ClientOptions extends AuthOptions {
   ClientOptions() {

@@ -19,8 +19,10 @@ Map<int, Realtime> get realtimeInstances =>
 
 class Realtime extends PlatformObject
     implements spec.RealtimeInterface<RealtimePlatformChannels> {
-  Realtime({ClientOptions options, final String key})
-      : assert(options != null || key != null),
+  Realtime({
+    ClientOptions options,
+    final String key,
+  })  : assert(options != null || key != null),
         options = options ?? ClientOptions.fromKey(key),
         super() {
     _connection = ConnectionPlatformObject(this);
@@ -30,7 +32,9 @@ class Realtime extends PlatformObject
   @override
   Future<int> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
-        PlatformMethod.createRealtimeWithOptions, AblyMessage(options));
+      PlatformMethod.createRealtimeWithOptions,
+      AblyMessage(options),
+    );
     _realtimeInstances[handle] = this;
     return handle;
   }
@@ -112,9 +116,14 @@ class Realtime extends PlatformObject
     try {
       await _authCallbackCompleter.future.timeout(
           Timeouts.retryOperationOnAuthFailure,
-          onTimeout: () => _connectQueue.where((e) => !e.isCompleted).forEach(
-              (e) => e.completeError(TimeoutException(
-                  'Timed out', Timeouts.retryOperationOnAuthFailure))));
+          onTimeout: () => _connectQueue
+              .where((e) => !e.isCompleted)
+              .forEach((e) => e.completeError(
+                    TimeoutException(
+                      'Timed out',
+                      Timeouts.retryOperationOnAuthFailure,
+                    ),
+                  )));
     } finally {
       _authCallbackCompleter = null;
     }
@@ -123,18 +132,19 @@ class Realtime extends PlatformObject
 
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
-    for(final channel in channels.all){
+    for (final channel in channels.all) {
       channel.authUpdateComplete();
     }
   }
 
   @override
-  Future<HttpPaginatedResponse> request(
-      {String method,
-      String path,
-      Map<String, dynamic> params,
-      Object body,
-      Map<String, String> headers}) {
+  Future<HttpPaginatedResponse> request({
+    String method,
+    String path,
+    Map<String, dynamic> params,
+    Object body,
+    Map<String, String> headers,
+  }) {
     throw UnimplementedError();
   }
 

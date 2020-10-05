@@ -4,10 +4,12 @@ abstract class PushChannelSubscriptions {
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
 
   Future<PaginatedResultInterface<PushChannelSubscription>> list(
-      PushChannelsParams params);
+    PushChannelsParams params,
+  );
 
   Future<PaginatedResultInterface<String>> listChannels(
-      PushChannelsParams params);
+    PushChannelsParams params,
+  );
 
   Future<void> remove(PushChannelsParams params);
 
@@ -17,12 +19,19 @@ abstract class PushChannelSubscriptions {
 abstract class PushDeviceRegistrations {
   Future<DeviceDetails> save(DeviceDetails deviceDetails);
 
-  Future<DeviceDetails> get({DeviceDetails deviceDetails, String deviceId});
+  Future<DeviceDetails> get({
+    DeviceDetails deviceDetails,
+    String deviceId,
+  });
 
   Future<PaginatedResultInterface<DeviceDetails>> list(
-      DeviceRegistrationParams params);
+    DeviceRegistrationParams params,
+  );
 
-  Future<void> remove({DeviceDetails deviceDetails, String deviceId});
+  Future<void> remove({
+    DeviceDetails deviceDetails,
+    String deviceId,
+  });
 
   Future<void> removeWhere(DeviceRegistrationParams params);
 }

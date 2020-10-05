@@ -12,8 +12,10 @@ abstract class Crypto {
 
 ///io.ably.lib.rest.AblyBase
 abstract class AblyBase {
-  AblyBase({ClientOptions options, final String key})
-      : assert(options != null || key != null) {
+  AblyBase({
+    ClientOptions options,
+    final String key,
+  }) : assert(options != null || key != null) {
     this.options = (options == null) ? ClientOptions.fromKey(key) : options;
   }
 
@@ -24,14 +26,17 @@ abstract class AblyBase {
   Auth auth;
   Push push;
 
-  Future<PaginatedResultInterface<Stats>> stats([Map<String, dynamic> params]);
+  Future<PaginatedResultInterface<Stats>> stats([
+    Map<String, dynamic> params,
+  ]);
 
-  Future<HttpPaginatedResponse> request(
-      {@required String method,
-      @required String path,
-      Map<String, dynamic> params,
-        Object body,
-      Map<String, String> headers});
+  Future<HttpPaginatedResponse> request({
+    @required String method,
+    @required String path,
+    Map<String, dynamic> params,
+    Object body,
+    Map<String, String> headers,
+  });
 
   Future<DateTime> time();
 }

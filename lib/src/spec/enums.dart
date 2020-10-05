@@ -5,7 +5,7 @@ enum ChannelState {
   detaching,
   detached,
   suspended,
-  failed
+  failed,
 }
 
 enum ChannelMode {
@@ -13,7 +13,7 @@ enum ChannelMode {
   presence,
   publish,
   subscribe,
-  presenceSubscribe
+  presenceSubscribe,
 }
 
 enum ChannelEvent {
@@ -24,7 +24,7 @@ enum ChannelEvent {
   detached,
   suspended,
   failed,
-  update
+  update,
 }
 
 enum ConnectionState {
@@ -35,7 +35,7 @@ enum ConnectionState {
   suspended,
   closing,
   closed,
-  failed
+  failed,
 }
 
 enum ConnectionEvent {
@@ -47,14 +47,28 @@ enum ConnectionEvent {
   closing,
   closed,
   failed,
-  update
+  update,
 }
 
-enum PresenceAction { absent, present, enter, leave, update }
+enum PresenceAction {
+  absent,
+  present,
+  enter,
+  leave,
+  update,
+}
 
-enum StatsIntervalGranularity { minute, hour, day, month }
+enum StatsIntervalGranularity {
+  minute,
+  hour,
+  day,
+  month,
+}
 
-enum HTTPMethods { post, get }
+enum HTTPMethods {
+  post,
+  get,
+}
 
 /// Java: io.ably.lib.http.HttpAuth.Type
 enum HttpAuthType {
@@ -63,8 +77,25 @@ enum HttpAuthType {
   xAblyToken,
 }
 
-enum DevicePushState { active, failing, failed }
+enum DevicePushState {
+  active,
+  failing,
+  failed,
+}
 
-enum DevicePlatform { android, ios, browser }
+enum DevicePlatform {
+  android,
+  ios,
+  browser,
+}
 
-enum FormFactor { phone, tablet, desktop, tv, watch, car, embedded, other }
+enum FormFactor {
+  phone,
+  tablet,
+  desktop,
+  tv,
+  watch,
+  car,
+  embedded,
+  other,
+}
