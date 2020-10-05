@@ -35,8 +35,9 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   Future<int> createPlatformInstance() async => restPlatformObject.handle;
 
   @override
-  Future<PaginatedResult<spec.Message>> history(
-      [spec.RestHistoryParams params]) async {
+  Future<PaginatedResult<spec.Message>> history([
+    spec.RestHistoryParams params,
+  ]) async {
     final message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
       TxRestHistoryArguments.channelName: name,
       if (params != null) TxRestHistoryArguments.params: params
@@ -114,18 +115,27 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           _authCallbackCompleter = Completer<void>();
           try {
             await _authCallbackCompleter.future.timeout(
-                Timeouts.retryOperationOnAuthFailure,
-                onTimeout: () => _publishQueue
-                    .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(TimeoutException(
-                        'Timed out', Timeouts.retryOperationOnAuthFailure))));
+              Timeouts.retryOperationOnAuthFailure,
+              onTimeout: () => _publishQueue
+                  .where((e) => !e.completer.isCompleted)
+                  .forEach((e) => e.completer.completeError(
+                        TimeoutException(
+                          'Timed out',
+                          Timeouts.retryOperationOnAuthFailure,
+                        ),
+                      )),
+            );
           } finally {
             _authCallbackCompleter = null;
           }
         } else {
-          _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-              e.completer.completeError(spec.AblyException(
-                  pe.code, pe.message, pe.details as ErrorInfo)));
+          _publishQueue
+              .where((e) => !e.completer.isCompleted)
+              .forEach((e) => e.completer.completeError(spec.AblyException(
+                    pe.code,
+                    pe.message,
+                    pe.details as ErrorInfo,
+                  )));
         }
       }
     }

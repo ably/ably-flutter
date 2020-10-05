@@ -8,7 +8,11 @@ import 'presence.dart';
 
 abstract class RealtimeChannel
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
-  RealtimeChannel(this.ably, this.name, this.options);
+  RealtimeChannel(
+    this.ably,
+    this.name,
+    this.options,
+  );
 
   AblyBase ably;
 
@@ -28,11 +32,16 @@ abstract class RealtimeChannel
 
   Future<void> detach();
 
-  Future<PaginatedResultInterface<Message>> history(
-      [RealtimeHistoryParams params]);
+  Future<PaginatedResultInterface<Message>> history([
+    RealtimeHistoryParams params,
+  ]);
 
-  Future<void> publish(
-      {Message message, List<Message> messages, String name, Object data});
+  Future<void> publish({
+    Message message,
+    List<Message> messages,
+    String name,
+    Object data,
+  });
 
   Stream<Message> subscribe({
     String name,

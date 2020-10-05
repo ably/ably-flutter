@@ -7,8 +7,13 @@ import 'options.dart';
 abstract class RestInterface<C extends RestChannels> extends AblyBase {
   C channels;
 
-  RestInterface({ClientOptions options, final String key})
-      : super(options: options, key: key);
+  RestInterface({
+    ClientOptions options,
+    final String key,
+  }) : super(
+          options: options,
+          key: key,
+        );
 
 /*Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]){
     //TO-DO implement

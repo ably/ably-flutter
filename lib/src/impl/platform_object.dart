@@ -32,7 +32,9 @@ abstract class PlatformObject {
       createPlatformInstance().timeout(_acquireHandleTimeout, onTimeout: () {
         _handle = null;
         throw TimeoutException(
-            'Acquiring handle timed out.', _acquireHandleTimeout);
+          'Acquiring handle timed out.',
+          _acquireHandleTimeout,
+        );
       }).then((value) => _handleValue = value);
 
   MethodChannel get methodChannel => platform.methodChannel;

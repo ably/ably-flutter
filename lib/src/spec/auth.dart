@@ -6,12 +6,18 @@ class AuthBase {
 }
 
 abstract class Auth extends AuthBase {
-  Future<TokenDetails> authorize(
-      {TokenParams tokenParams, AuthOptions authOptions});
+  Future<TokenDetails> authorize({
+    TokenParams tokenParams,
+    AuthOptions authOptions,
+  });
 
-  Future<TokenRequest> createTokenRequest(
-      {TokenParams tokenParams, AuthOptions authOptions});
+  Future<TokenRequest> createTokenRequest({
+    TokenParams tokenParams,
+    AuthOptions authOptions,
+  });
 
-  Future<TokenDetails> requestToken(
-      {TokenParams tokenParams, AuthOptions authOptions});
+  Future<TokenDetails> requestToken({
+    TokenParams tokenParams,
+    AuthOptions authOptions,
+  });
 }

@@ -40,15 +40,18 @@ class RealtimePlatformChannel extends PlatformObject
   Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
 
   @override
-  Future<PaginatedResult<spec.Message>> history(
-      [spec.RealtimeHistoryParams params]) {
+  Future<PaginatedResult<spec.Message>> history([
+    spec.RealtimeHistoryParams params,
+  ]) {
     throw UnimplementedError();
   }
 
   Map<String, dynamic> __payload;
 
-  Map<String, dynamic> get _payload =>
-      __payload ??= {'channel': name, if (options != null) 'options': options};
+  Map<String, dynamic> get _payload => __payload ??= {
+        'channel': name,
+        if (options != null) 'options': options,
+      };
 
   final _publishQueue = Queue<_RealtimePublishQueueItem>();
   Completer<void> _authCallbackCompleter;
@@ -122,15 +125,23 @@ class RealtimePlatformChannel extends PlatformObject
                 Timeouts.retryOperationOnAuthFailure,
                 onTimeout: () => _publishQueue
                     .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(TimeoutException(
-                        'Timed out', Timeouts.retryOperationOnAuthFailure))));
+                    .forEach((e) => e.completer.completeError(
+                          TimeoutException(
+                            'Timed out',
+                            Timeouts.retryOperationOnAuthFailure,
+                          ),
+                        )));
           } finally {
             _authCallbackCompleter = null;
           }
         } else {
-          _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-              e.completer.completeError(spec.AblyException(
-                  pe.code, pe.message, pe.details as ErrorInfo)));
+          _publishQueue
+              .where((e) => !e.completer.isCompleted)
+              .forEach((e) => e.completer.completeError(spec.AblyException(
+                    pe.code,
+                    pe.message,
+                    pe.details as ErrorInfo,
+                  )));
         }
       }
     }
@@ -183,8 +194,10 @@ class RealtimePlatformChannel extends PlatformObject
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
       listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
           .map((stateChange) => stateChange as ChannelStateChange)
-          .where((stateChange) =>
-              channelEvent == null || stateChange.event == channelEvent);
+          .where(
+            (stateChange) =>
+                channelEvent == null || stateChange.event == channelEvent,
+          );
 
   @override
   Stream<spec.Message> subscribe({String name, List<String> names}) {

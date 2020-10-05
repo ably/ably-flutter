@@ -3,7 +3,11 @@ class AblyMessage {
   final int type;
   final Object message;
 
-  AblyMessage(this.message, {this.handle, this.type}) : assert(message != null);
+  AblyMessage(
+    this.message, {
+    this.handle,
+    this.type,
+  }) : assert(message != null);
 }
 
 class AblyEventMessage {
