@@ -8,7 +8,7 @@ import 'templates/platformconstants.m.dart' as objc_impl_template;
 
 typedef Template = String Function(Map<String, dynamic> context);
 
-String projectRoot = '../';
+const String projectRoot = '../';
 
 Map<Template, String> toGenerate = {
   // input template method vs output file path
