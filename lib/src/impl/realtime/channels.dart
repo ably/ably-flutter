@@ -26,9 +26,7 @@ class RealtimePlatformChannel extends PlatformObject
 
   RealtimePlatformChannel(this.ably, this.name, this.options) : super() {
     state = spec.ChannelState.initialized;
-    on().listen((event) {
-      state = event.current;
-    });
+    on().listen((event) => state = event.current);
   }
 
   Realtime get realtimePlatformObject => ably as Realtime;
