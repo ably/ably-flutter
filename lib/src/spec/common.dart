@@ -88,17 +88,17 @@ class TokenParams {
   /// Capability of the token.
   ///
   /// If the token request is successful, the capability of the
-  /// returned token will be the intersection of this capability
+  /// returned token will be the intersection of this [capability]
   /// with the capability of the issuing key.
   ///
-  /// Ref: TK2b
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2b
   String  capability;
 
   /// A clientId to associate with this token.
   ///
   /// The generated token may be used to authenticate as this clientId.
   ///
-  /// Ref: TK2c
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2c
   String clientId;
 
   /// An opaque nonce string of at least 16 characters to ensure uniqueness.
@@ -106,7 +106,7 @@ class TokenParams {
   /// Timestamps, in conjunction with the nonce,
   /// are used to prevent requests from being replayed
   ///
-  /// ref: TK2d
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2d
   String nonce;
 
   /// The timestamp (in millis since the epoch) of this request.
@@ -114,7 +114,7 @@ class TokenParams {
   ///	Timestamps, in conjunction with the nonce, are used to prevent
   ///	token requests from being replayed.
   ///
-  /// ref: TK2d
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2d
   DateTime timestamp;
 
   /// Requested time to live for the token.
@@ -125,7 +125,7 @@ class TokenParams {
   ///
   /// 0 means Ably will set it to the default value
   ///
-  /// Ref: TK2a
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2a
   int ttl;
 
   TokenParams({
@@ -138,29 +138,27 @@ class TokenParams {
 
 }
 
-/// TokenDetails is a type containing the token request
-///
-/// response from the REST requestToken endpoint
+/// Response to a `requestToken` request
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
 class TokenDetails {
 
-  /// TD2
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD2
   String token;
 
   /// Token expiry time in milliseconds
   ///
-  /// TD3
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD3
   int expires;
 
   /// the time the token was issued in milliseconds
   ///
-  /// TD4
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD4
   int issued;
 
   /// stringified capabilities JSON
   ///
-  /// TD5
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD5
   String capability;
 
   /// Client ID assigned to the token.
@@ -171,7 +169,7 @@ class TokenDetails {
   /// any clientId. Any other string value for clientId implies that the
   /// clientId is both enforced and assumed for all operations for this token
   ///
-  /// TD6
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD6
   String clientId;
 
   TokenDetails(this.token, {
@@ -200,25 +198,27 @@ class TokenRequest {
 
   /// The keyName of the key against which this request is made.
   ///
-  /// TE2
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
   String keyName;
 
   /// An opaque nonce string of at least 16 characters to ensure
   ///	uniqueness of this request. Any subsequent request using the
   ///	same nonce will be rejected.
   ///
-  /// TE2, TE5
+  /// spec:
+  /// https://docs.ably.io/client-lib-development-guide/features/#TE2
+  /// https://docs.ably.io/client-lib-development-guide/features/#TE5
   String nonce;
 
   /// The Message Authentication Code for this request. See the Ably
   ///	Authentication documentation for more details.
   ///
-  /// TE2
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
   String mac;
 
   /// stringified capabilities JSON
   ///
-  /// TE3
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE3
   String capability;
 
   /// TE2
@@ -228,13 +228,13 @@ class TokenRequest {
   /// of this request. Timestamps, in conjunction with the nonce,
   /// are used to prevent requests from being replayed
   ///
-  /// TE5
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE5
   DateTime timestamp;
 
   /// ttl attribute represents time to live (expiry)
   /// of this token in milliseconds
   ///
-  /// TE4
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE4
   int ttl;
 
   TokenRequest({
@@ -247,7 +247,7 @@ class TokenRequest {
     this.ttl
   });
 
-  /// TE7
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE7
   TokenRequest.fromMap(Map<String, dynamic> map){
     this.keyName = map["keyName"] as String;
     this.nonce = map["nonce"] as String;
