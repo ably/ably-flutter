@@ -163,9 +163,9 @@ class TokenDetails {
   /// TD5
   String capability;
 
-  /// clientId assigned to the token.
+  /// Client ID assigned to the token.
   ///
-  /// If clientId is not set (i.e. null), then the token is prohibited
+  /// If [clientId] is not set (i.e. null), then the token is prohibited
   /// from assuming a clientId in any operations, however if clientId
   /// is a wildcard string '*', then the token is permitted to assume
   /// any clientId. Any other string value for clientId implies that the
