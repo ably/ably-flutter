@@ -1,5 +1,5 @@
 ///Transmission protocol custom types. Will be used by codecs
-List<Map<String, dynamic>> _types = [
+const List<Map<String, dynamic>> _types = [
   // Custom type values must be over 127. At the time of writing
   // the standard message codec encodes them as an unsigned byte
   // which means the maximum type value is 255. If we get to the
@@ -33,7 +33,7 @@ List<Map<String, dynamic>> _types = [
 ];
 
 ///Platform method names
-List<Map<String, dynamic>> _platformMethods = [
+const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'getPlatformVersion', 'value': 'getPlatformVersion'},
   {'name': 'getVersion', 'value': 'getVersion'},
   {'name': 'registerAbly', 'value': 'registerAbly'},
@@ -78,7 +78,7 @@ List<Map<String, dynamic>> _platformMethods = [
   {'name': 'firstPage', 'value': 'firstPage'},
 ];
 
-List<Map<String, dynamic>> objects = [
+const List<Map<String, dynamic>> _objects = [
   {
     'name': 'AblyMessage',
     'properties': <String>['registrationHandle', 'type', 'message']
@@ -233,5 +233,5 @@ List<Map<String, dynamic>> objects = [
 Map<String, dynamic> context = {
   'types': _types,
   'methods': _platformMethods,
-  'objects': objects
+  'objects': _objects
 };
