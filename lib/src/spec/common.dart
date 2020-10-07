@@ -190,15 +190,16 @@ class TokenDetails {
 
 }
 
-/// TokenRequest is a type containing the token request
-/// details sent to the REST requestToken endpoint
-///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE1
 class TokenRequest {
 
-  /// The keyName of the key against which this request is made.
+  /// [keyName] is the first part of Ably API Key.
   ///
+  /// provided keyName will be used to authorize requests made to Ably.
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
+  ///
+  /// More details about Ably API Key:
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSA11
   String keyName;
 
   /// An opaque nonce string of at least 16 characters to ensure
@@ -210,9 +211,9 @@ class TokenRequest {
   /// https://docs.ably.io/client-lib-development-guide/features/#TE5
   String nonce;
 
-  /// The Message Authentication Code for this request. See the Ably
-  ///	Authentication documentation for more details.
+  /// The "Message Authentication Code" for this request.
   ///
+  /// See the Ably Authentication documentation for more details.
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
   String mac;
 
