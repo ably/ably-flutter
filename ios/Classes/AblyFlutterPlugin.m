@@ -56,7 +56,7 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
 
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    
+
     [channel publish:messages callback:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
