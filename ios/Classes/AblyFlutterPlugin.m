@@ -222,7 +222,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     NSDictionary *const realtimePayload = data.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
-    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
         if(error){
             result(
@@ -242,6 +242,35 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
 static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     // cocoa library doesn't support setOptions yet!
     result(nil);
+};
+
+static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*)[_dataMap objectForKey: TxTransportKeys_params];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    };
+    if (dataQuery) {
+        [channel history:dataQuery callback:cbk error: nil];
+    } else {
+        [channel history:cbk];
+    }
 };
 
 
@@ -304,6 +333,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
         AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
         AblyPlatformMethod_publishRealtimeChannelMessage: _publishRealtimeChannelMessage,
         AblyPlatformMethod_restHistory: _getRestHistory,
+        AblyPlatformMethod_realtimeHistory: _getRealtimeHistory,
         AblyPlatformMethod_nextPage: _getNextPage,
         AblyPlatformMethod_firstPage: _getFirstPage,
     };

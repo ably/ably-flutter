@@ -64,6 +64,8 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenRequest>(encodeTokenRequest, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, decodePaginatedResult),
+      CodecTypes.realtimeHistoryParams:
+          _CodecPair<RealtimeHistoryParams>(encodeRealtimeHistoryParams, null),
       CodecTypes.restHistoryParams:
           _CodecPair<RestHistoryParams>(encodeRestHistoryParams, null),
 
@@ -101,6 +103,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is Message) {
       return CodecTypes.message;
+    } else if (value is RealtimeHistoryParams) {
+      return CodecTypes.realtimeHistoryParams;
     } else if (value is RestHistoryParams) {
       return CodecTypes.restHistoryParams;
     } else if (value is ErrorInfo) {
@@ -257,6 +261,20 @@ class Codec extends StandardMessageCodec {
         jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
     writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
     writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> encodeRealtimeHistoryParams(
+      final RealtimeHistoryParams v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    writeToJson(jsonMap, TxRealtimeHistoryParams.start,
+        v.start?.millisecondsSinceEpoch);
+    writeToJson(
+        jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
     return jsonMap;
   }
 
