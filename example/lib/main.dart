@@ -490,6 +490,15 @@ class _MyAppState extends State<MyApp> {
                   print('failed to get history:: $e :: ${e.errorInfo}');
                 }
               },
+        onLongPress: (_rest == null)
+            ? null
+            : () async {
+                final result = await _rest.channels.get('test').history(
+                    ably.RestHistoryParams(direction: 'forwards', limit: 10));
+                setState(() {
+                  _restHistory = result;
+                });
+              },
         color: Colors.yellow,
         child: const Text('Get history'),
       );
@@ -518,6 +527,18 @@ class _MyAppState extends State<MyApp> {
                 } on ably.AblyException catch (e) {
                   print('failed to get history:: $e :: ${e.errorInfo}');
                 }
+              },
+        onLongPress: (_realtime == null)
+            ? null
+            : () async {
+                final result =
+                    await _realtime.channels.get('test-channel').history(
+                          ably.RealtimeHistoryParams(
+                              direction: 'forwards', limit: 10),
+                        );
+                setState(() {
+                  _realtimeHistory = result;
+                });
               },
         color: Colors.yellow,
         child: const Text('Get history'),
