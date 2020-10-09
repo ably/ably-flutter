@@ -515,7 +515,10 @@ class _MyAppState extends State<MyApp> {
                     final result =
                         await _realtime.channels.get('test-channel').history(
                               ably.RealtimeHistoryParams(
-                                  direction: 'forwards', limit: 10),
+                                direction: 'backwards',
+                                limit: 10,
+                                untilAttach: true,
+                              ),
                             );
                     _realtimeHistory = result;
                   } else if (next) {
