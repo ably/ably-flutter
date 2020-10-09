@@ -550,7 +550,9 @@ class _MyAppState extends State<MyApp> {
                   getRestChannelHistory(),
                   const Text('History'),
                   ..._restHistory?.items
-                      ?.map((m) => Text('${m.name}:${m.data?.toString()}')),
+                          ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
+                          ?.toList() ??
+                      []
                 ]),
           ),
         ),
