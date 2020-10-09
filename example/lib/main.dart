@@ -553,32 +553,6 @@ class _MyAppState extends State<MyApp> {
     }
   );
 
-  Widget getRealtimeChannelHistory() => FlatButton(
-        onPressed: () async {
-          final next = _realtimeHistory?.hasNext() ?? false;
-          print('Rest history: getting ${next ? 'next' : 'first'} page');
-          try {
-            if (_realtimeHistory == null || _realtimeHistory.items.isEmpty) {
-              final result =
-                  await _realtime.channels.get('test-channel').history(
-                        ably.RealtimeHistoryParams(
-                            direction: 'forwards', limit: 10),
-                      );
-              _realtimeHistory = result;
-            } else if (next) {
-              _realtimeHistory = await _realtimeHistory.next();
-            } else {
-              _realtimeHistory = await _realtimeHistory.first();
-            }
-            setState(() {});
-          } on ably.AblyException catch (e) {
-            print('failed to get history:: $e :: ${e.errorInfo}');
-          }
-        },
-        color: Colors.yellow,
-        child: const Text('Get history'),
-      );
-
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
