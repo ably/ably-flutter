@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/push/channels.dart';
 import '../../spec/spec.dart' as spec;
+import '../message.dart';
 import '../platform_object.dart';
 import 'realtime.dart';
 
@@ -40,8 +41,12 @@ class RealtimePlatformChannel extends PlatformObject
   @override
   Future<PaginatedResult<spec.Message>> history([
     spec.RealtimeHistoryParams params,
-  ]) {
-    throw UnimplementedError();
+  ]) async {
+    final message = await invoke<AblyMessage>(PlatformMethod.realtimeHistory, {
+      TxTransportKeys.channelName: name,
+      if (params != null) TxTransportKeys.params: params
+    });
+    return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
   Map<String, dynamic> __payload;

@@ -88,6 +88,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         new CodecPair<>(self::encodePaginatedResult, null));
                 put(PlatformConstants.CodecTypes.restHistoryParams,
                         new CodecPair<>(null, self::decodeRestHistoryParams));
+                put(PlatformConstants.CodecTypes.realtimeHistoryParams,
+                        new CodecPair<>(null, self::decodeRealtimeHistoryParams));
                 put(PlatformConstants.CodecTypes.errorInfo,
                         new CodecPair<>(self::encodeErrorInfo, null));
                 put(PlatformConstants.CodecTypes.message,
@@ -320,6 +322,33 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
         if (direction != null) {
             params[index] = new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction);
+        }
+        return params;
+    }
+
+    private Param[] decodeRealtimeHistoryParams(Map<String, Object> jsonMap) {
+        if (jsonMap == null) return null;
+        Param[] params = new Param[jsonMap.size()];
+        int index = 0;
+        final Object start = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.start);
+        final Object end = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.end);
+        final Object limit = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.limit);
+        final Object direction = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.direction);
+        final Object untilAttach = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.untilAttach);
+        if(start!=null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.start, readValueAsLong(start));
+        }
+        if(end!=null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.end, readValueAsLong(end));
+        }
+        if(limit!=null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.limit, (Integer) limit);
+        }
+        if(direction!=null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
+        }
+        if(untilAttach!=null) {
+            params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) direction);
         }
         return params;
     }
