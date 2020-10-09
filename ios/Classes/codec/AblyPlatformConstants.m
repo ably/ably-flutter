@@ -30,6 +30,11 @@ NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
 @end
 
+@implementation TxTransportKeys
+NSString *const TxTransportKeys_channelName = @"channelName";
+NSString *const TxTransportKeys_params = @"params";
+@end
+
 @implementation TxAblyMessage
 NSString *const TxAblyMessage_registrationHandle = @"registrationHandle";
 NSString *const TxAblyMessage_type = @"type";
@@ -162,14 +167,17 @@ NSString *const TxPaginatedResult_type = @"type";
 NSString *const TxPaginatedResult_hasNext = @"hasNext";
 @end
 
-@implementation TxRestHistoryArguments
-NSString *const TxRestHistoryArguments_channelName = @"channelName";
-NSString *const TxRestHistoryArguments_params = @"params";
-@end
-
 @implementation TxRestHistoryParams
 NSString *const TxRestHistoryParams_start = @"start";
 NSString *const TxRestHistoryParams_end = @"end";
 NSString *const TxRestHistoryParams_direction = @"direction";
 NSString *const TxRestHistoryParams_limit = @"limit";
+@end
+
+@implementation TxRealtimeHistoryParams
+NSString *const TxRealtimeHistoryParams_start = @"start";
+NSString *const TxRealtimeHistoryParams_end = @"end";
+NSString *const TxRealtimeHistoryParams_direction = @"direction";
+NSString *const TxRealtimeHistoryParams_limit = @"limit";
+NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
 @end

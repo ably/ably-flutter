@@ -223,9 +223,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
             final Map<String, Object> map = messageData.message;
-            final String channelName = (String) map.get(PlatformConstants.TxRestHistoryArguments.channelName);
-            Param[] params = (Param[]) map.get(PlatformConstants.TxRestHistoryArguments.params);
-            if(params == null){
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+            if (params == null) {
                 params = new Param[0];
             }
             ablyLibrary
