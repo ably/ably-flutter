@@ -1,5 +1,4 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
-import 'package:ably_flutter_integration_test/test_names.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -18,8 +17,7 @@ void main() {
   });
 
   test('Realtime publish', () async {
-    final data = <String, dynamic>{};
-    final message = TestControlMessage(TestName.realtimePublish, data);
+    final message = TestControlMessage(TestName.realtimePublish);
 
     final response = await getTestResponse(driver, message);
 
@@ -30,8 +28,7 @@ void main() {
   });
 
   test('Realtime events', () async {
-    final data = <String, dynamic>{};
-    final message = TestControlMessage(TestName.realtimeEvents, data);
+    final message = TestControlMessage(TestName.realtimeEvents);
 
     final response = await getTestResponse(driver, message);
 
