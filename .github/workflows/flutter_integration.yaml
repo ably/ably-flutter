@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
     runs-on: "macos-latest"
     steps:
-    - name: "List simulators"
+    - name: "List Simulators"
       run: "xcrun instruments -s"
     - name: "Start Simulator"
       run: |
