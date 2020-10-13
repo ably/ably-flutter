@@ -1,3 +1,5 @@
+@Timeout.factor(3)
+
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 
 import 'package:flutter_driver/flutter_driver.dart';
