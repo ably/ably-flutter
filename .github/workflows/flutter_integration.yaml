@@ -22,7 +22,7 @@ jobs:
             -F ' *[][]' \
             '{ if($1 == "${{ matrix.device }}") { print $2 }}'
         )
-        xcrun simctl boot "${UUID:?No Simulator with this name found}"
+        xcrun simctl boot "${UUID:?No Simulator with this name found}\n\n`xcrun simctl list`"
     - uses: actions/checkout@v1
 
 # Set up Flutter environment
