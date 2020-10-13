@@ -1,5 +1,4 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
-import 'package:ably_flutter_integration_test/test_names.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -20,7 +19,8 @@ void main() {
 
     test('Platform and Ably version', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage(TestName.platformAndAblyVersion, data);
+      final message =
+          TestControlMessage(TestName.platformAndAblyVersion, payload: data);
 
       final response = await getTestResponse(driver, message);
 
@@ -34,7 +34,8 @@ void main() {
 
     test('AppKey provision', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage(TestName.appKeyProvisioning, data);
+      final message =
+          TestControlMessage(TestName.appKeyProvisioning, payload: data);
 
       final response = await getTestResponse(driver, message);
 

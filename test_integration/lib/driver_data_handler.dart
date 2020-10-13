@@ -1,5 +1,8 @@
 import 'dart:convert' show json;
+
 import 'package:flutter_driver/flutter_driver.dart';
+
+export 'package:ably_flutter_integration_test/test/test_names.dart';
 
 /// Send a message to run a widget test and receive a response.
 ///
@@ -31,8 +34,8 @@ class DriverDataHandler {
 /// Used to encode and decode messages between driver test and test widget.
 class TestControlMessage {
   const TestControlMessage(
-    this.testName,
-    this.payload, {
+    this.testName, {
+    this.payload,
     this.log,
   }) : assert(testName != null && testName.length != null);
 
@@ -51,7 +54,7 @@ class TestControlMessage {
 
   factory TestControlMessage.fromJson(Map jsonValue) => TestControlMessage(
         jsonValue[testNameKey] as String,
-        jsonValue[payloadKey] as Map<String, dynamic>,
+        payload: jsonValue[payloadKey] as Map<String, dynamic>,
         log: jsonValue[logKey] as List<dynamic>,
       );
 

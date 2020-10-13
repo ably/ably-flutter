@@ -1,5 +1,4 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
-import 'package:ably_flutter_integration_test/test_names.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -24,8 +23,7 @@ void main() {
 }
 
 Future testImplementation(FlutterDriver driver) async {
-  final data = <String, dynamic>{};
-  final message = TestControlMessage(TestName.restPublish, data);
+  final message = TestControlMessage(TestName.restPublish);
 
   final response = await getTestResponse(driver, message);
 
