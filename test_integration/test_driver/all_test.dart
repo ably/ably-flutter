@@ -65,8 +65,31 @@ void main() {
 
     // TODO(zoechi) check more events
     expect(
-        ((response.payload['connectionStates'] as List).last as Map)['current'],
-        'connected');
+        (response.payload['connectionStates'] as List)
+            .map((e) => (e as Map)['event']),
+        orderedEquals(const [
+          'connecting',
+          'connected',
+        ]));
+
+    expect(
+        (response.payload['filteredConnectionStates'] as List)
+            .map((e) => (e as Map)['event']),
+        const []);
+
+    expect(
+        (response.payload['channelStates'] as List)
+            .map((e) => (e as Map)['event']),
+        orderedEquals(const [
+          'attaching',
+          'attached',
+        ]));
+    expect(
+        (response.payload['filteredChannelStates'] as List)
+            .map((e) => (e as Map)['event']),
+        orderedEquals(const [
+          'attaching',
+        ]));
   });
 
   Future testImplementation(FlutterDriver driver) async {
