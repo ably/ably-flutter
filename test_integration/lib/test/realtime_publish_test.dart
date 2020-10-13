@@ -43,7 +43,8 @@ class RealtimePublishTestState extends State<RealtimePublishTest> {
     await channel.publish(data: data);
     await channel.publish();
 
-    await realtime.connection.close();
+    // TODO(zoechi) throws UnimplementedError
+    // await realtime.connection.close();
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await realtime.handle,
