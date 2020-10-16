@@ -93,6 +93,8 @@ class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3h
   String get memberKey => '$connectionId$clientId';
 
+  PresenceMessage();
+
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   ///
   /// TODO(tiholic): decoding and decryption is not implemented as per
