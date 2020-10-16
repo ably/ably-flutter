@@ -141,22 +141,22 @@ void getPresence([ably.RestPresenceParams params]) async {
     // getting channel history, by passing or omitting the optional params
     var result = await channel.presence.get(params);
 
-    var messages = result.items; //returns PresenceMessages
+    var presenceMembers = result.items; //returns PresenceMessages
     var hasNextPage = result.hasNext(); //tells whether there are more results
     if(hasNextPage){
       result = await result.next();  //fetches next page results
-      messages = result.items;
+      presenceMembers = result.items;
     }
     if(!hasNextPage){
       result = await result.first();  //fetches first page results
-      messages = result.items;
+      presenceMembers = result.items;
     }
 }
 
-// history with default params
+// getting presence members with default params
 getPresence();
 
-// sorted and filtered history
+// filtered presence members
 getPresence(ably.RestPresenceParams(
   limit: 10,
   clientId: '<clientId>',
