@@ -21,7 +21,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   ChannelOptions options;
 
   @override
-  RestPresenceInterface presence;
+  spec.RestPresenceInterface presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   RestChannel(this.rest, this.name, this.options);

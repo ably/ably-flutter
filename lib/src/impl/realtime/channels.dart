@@ -23,7 +23,7 @@ class RealtimeChannel extends PlatformObject
   ChannelOptions options;
 
   @override
-  RealtimePresence presence;
+  spec.RealtimePresenceBase presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   ///

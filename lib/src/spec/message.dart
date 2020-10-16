@@ -55,7 +55,7 @@ class Message {
 /// An individual presence message sent or received via realtime
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TP1
-abstract class PresenceMessage {
+class PresenceMessage {
   /// unique ID for this presence message
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3a
@@ -90,13 +90,35 @@ abstract class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3h
   String get memberKey => '$connectionId:$clientId';
 
-  /// instantiates a presence message with no defaults
-  PresenceMessage();
+  /// https://docs.ably.io/client-lib-development-guide/features/#TP3h
+  String get memberKey => '$connectionId$clientId';
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
-  PresenceMessage.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+  ///
+  /// TODO(tiholic): decoding and decryption is not implemented as per
+  ///  RSL6 and RLS6b as mentioned in TP4
+  PresenceMessage.fromEncoded(
+    Map<String, dynamic> jsonObject, [
+      ChannelOptions channelOptions,
+    ]) {
+    id = jsonObject['id'] as String;
+    action = PresenceAction.values
+      .firstWhere((e) => e.toString() == jsonObject['action'] as String);
+    clientId = jsonObject['clientId'] as String;
+    connectionId = jsonObject['connectionId'] as String;
+    data = jsonObject['data'];
+    encoding = jsonObject['encoding'] as String;
+    extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
+      jsonObject['extras'] as Map);
+    timestamp = jsonObject['timestamp'] != null
+      ? DateTime.fromMillisecondsSinceEpoch(jsonObject['timestamp'] as int)
+      : null;
+  }
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
-  PresenceMessage.fromEncodedArray(
-      List jsonArray, ChannelOptions channelOptions);
+  static List<PresenceMessage> fromEncodedArray(
+    List<Map<String, dynamic>> jsonArray, [
+      ChannelOptions channelOptions,
+    ]) =>
+    jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
 }
