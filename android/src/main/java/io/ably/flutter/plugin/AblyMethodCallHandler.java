@@ -59,6 +59,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         // Rest
         _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
         _map.put(PlatformConstants.PlatformMethod.publish, this::publishRestMessage);
+        _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
+        _map.put(PlatformConstants.PlatformMethod.restPresenceGet, this::getRestPresence);
 
         //Realtime
         _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
@@ -68,9 +70,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.detachRealtimeChannel, this::detachRealtimeChannel);
         _map.put(PlatformConstants.PlatformMethod.setRealtimeChannelOptions, this::setRealtimeChannelOptions);
         _map.put(PlatformConstants.PlatformMethod.publishRealtimeChannelMessage, this::publishRealtimeChannelMessage);
-
-        // history
-        _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
         _map.put(PlatformConstants.PlatformMethod.realtimeHistory, this::getRealtimeHistory);
 
         // paginated results
@@ -252,6 +251,22 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 (ablyLibrary, pageHandle) -> ablyLibrary
                         .getPaginatedResult(pageHandle)
                         .first(this.paginatedResponseHandler(result, pageHandle)));
+    }
+
+    private void getRestPresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+            if (params == null) {
+                params = new Param[0];
+            }
+            ablyLibrary
+                    .getRest(messageData.handle)
+                    .channels.get(channelName)
+                    .presence.getAsync(params, this.paginatedResponseHandler(result, null));
+        });
     }
 
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
