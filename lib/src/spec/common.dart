@@ -450,7 +450,7 @@ abstract class EventEmitter<E, G> {
 /// relative queries available.
 abstract class PaginatedResultInterface<T> {
   /// items contain page of results (TG3)
-  List<T> items;
+  List<T> get items;
 
   /// returns a new PaginatedResult loaded with the next page of results. (TG4)
   ///
