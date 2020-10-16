@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter.dart';
 import '../message.dart';
 import '../platform_object.dart';
+import 'presence.dart';
 import 'rest.dart';
 
 /// Plugin based implementation of Rest channel
@@ -20,11 +21,15 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   ChannelOptions options;
 
-  @override
-  spec.RestPresenceInterface presence;
+  spec.RestPresenceInterface _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
-  RestChannel(this.rest, this.name, this.options);
+  RestChannel(this.rest, this.name, this.options) {
+    _presence = RestPresence(this);
+  }
+
+  @override
+  RestPresence get presence => _presence;
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
