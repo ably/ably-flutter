@@ -348,7 +348,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
         }
         if(untilAttach!=null) {
-            params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) direction);
+            params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) untilAttach);
         }
         return params;
     }
