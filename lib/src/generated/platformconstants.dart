@@ -16,6 +16,8 @@ class CodecTypes {
   static const int paginatedResult = 135;
   static const int restHistoryParams = 136;
   static const int realtimeHistoryParams = 137;
+  static const int restPresenceParams = 138;
+  static const int presenceMessage = 139;
   static const int errorInfo = 144;
   static const int connectionStateChange = 201;
   static const int channelStateChange = 202;
@@ -29,6 +31,8 @@ class PlatformMethod {
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
   static const String createRestWithOptions = 'createRestWithOptions';
   static const String publish = 'publish';
+  static const String restHistory = 'restHistory';
+  static const String restPresenceGet = 'restPresenceGet';
   static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -37,13 +41,12 @@ class PlatformMethod {
   static const String setRealtimeChannelOptions = 'setRealtimeChannelOptions';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
+  static const String realtimeHistory = 'realtimeHistory';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
       'onRealtimeChannelStateChanged';
   static const String onRealtimeChannelMessage = 'onRealtimeChannelMessage';
-  static const String restHistory = 'restHistory';
-  static const String realtimeHistory = 'realtimeHistory';
   static const String nextPage = 'nextPage';
   static const String firstPage = 'firstPage';
 }
@@ -179,6 +182,17 @@ class TxMessage {
   static const String extras = 'extras';
 }
 
+class TxPresenceMessage {
+  static const String id = 'id';
+  static const String action = 'action';
+  static const String clientId = 'clientId';
+  static const String connectionId = 'connectionId';
+  static const String data = 'data';
+  static const String encoding = 'encoding';
+  static const String extras = 'extras';
+  static const String timestamp = 'timestamp';
+}
+
 class TxPaginatedResult {
   static const String items = 'items';
   static const String type = 'type';
@@ -198,4 +212,10 @@ class TxRealtimeHistoryParams {
   static const String direction = 'direction';
   static const String limit = 'limit';
   static const String untilAttach = 'untilAttach';
+}
+
+class TxRestPresenceParams {
+  static const String limit = 'limit';
+  static const String clientId = 'clientId';
+  static const String connectionId = 'connectionId';
 }

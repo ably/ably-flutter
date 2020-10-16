@@ -14,6 +14,8 @@ NSString *const AblyPlatformMethod_authCallback= @"authCallback";
 NSString *const AblyPlatformMethod_realtimeAuthCallback= @"realtimeAuthCallback";
 NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
 NSString *const AblyPlatformMethod_publish= @"publish";
+NSString *const AblyPlatformMethod_restHistory= @"restHistory";
+NSString *const AblyPlatformMethod_restPresenceGet= @"restPresenceGet";
 NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
 NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
 NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
@@ -21,11 +23,10 @@ NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChanne
 NSString *const AblyPlatformMethod_detachRealtimeChannel= @"detachRealtimeChannel";
 NSString *const AblyPlatformMethod_setRealtimeChannelOptions= @"setRealtimeChannelOptions";
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
+NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
-NSString *const AblyPlatformMethod_restHistory= @"restHistory";
-NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
 @end
@@ -161,6 +162,17 @@ NSString *const TxMessage_name = @"name";
 NSString *const TxMessage_extras = @"extras";
 @end
 
+@implementation TxPresenceMessage
+NSString *const TxPresenceMessage_id = @"id";
+NSString *const TxPresenceMessage_action = @"action";
+NSString *const TxPresenceMessage_clientId = @"clientId";
+NSString *const TxPresenceMessage_connectionId = @"connectionId";
+NSString *const TxPresenceMessage_data = @"data";
+NSString *const TxPresenceMessage_encoding = @"encoding";
+NSString *const TxPresenceMessage_extras = @"extras";
+NSString *const TxPresenceMessage_timestamp = @"timestamp";
+@end
+
 @implementation TxPaginatedResult
 NSString *const TxPaginatedResult_items = @"items";
 NSString *const TxPaginatedResult_type = @"type";
@@ -180,4 +192,10 @@ NSString *const TxRealtimeHistoryParams_end = @"end";
 NSString *const TxRealtimeHistoryParams_direction = @"direction";
 NSString *const TxRealtimeHistoryParams_limit = @"limit";
 NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
+@end
+
+@implementation TxRestPresenceParams
+NSString *const TxRestPresenceParams_limit = @"limit";
+NSString *const TxRestPresenceParams_clientId = @"clientId";
+NSString *const TxRestPresenceParams_connectionId = @"connectionId";
 @end

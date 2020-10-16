@@ -16,6 +16,8 @@ typedef NS_ENUM(UInt8, _Value) {
     paginatedResultCodecType = 135,
     restHistoryParamsCodecType = 136,
     realtimeHistoryParamsCodecType = 137,
+    restPresenceParamsCodecType = 138,
+    presenceMessageCodecType = 139,
     errorInfoCodecType = 144,
     connectionStateChangeCodecType = 201,
     channelStateChangeCodecType = 202,
@@ -30,6 +32,8 @@ extern NSString *const AblyPlatformMethod_authCallback;
 extern NSString *const AblyPlatformMethod_realtimeAuthCallback;
 extern NSString *const AblyPlatformMethod_createRestWithOptions;
 extern NSString *const AblyPlatformMethod_publish;
+extern NSString *const AblyPlatformMethod_restHistory;
+extern NSString *const AblyPlatformMethod_restPresenceGet;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
@@ -37,11 +41,10 @@ extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_detachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_setRealtimeChannelOptions;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
+extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
-extern NSString *const AblyPlatformMethod_restHistory;
-extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
 @end
@@ -177,6 +180,17 @@ extern NSString *const TxMessage_name;
 extern NSString *const TxMessage_extras;
 @end
 
+@interface TxPresenceMessage : NSObject
+extern NSString *const TxPresenceMessage_id;
+extern NSString *const TxPresenceMessage_action;
+extern NSString *const TxPresenceMessage_clientId;
+extern NSString *const TxPresenceMessage_connectionId;
+extern NSString *const TxPresenceMessage_data;
+extern NSString *const TxPresenceMessage_encoding;
+extern NSString *const TxPresenceMessage_extras;
+extern NSString *const TxPresenceMessage_timestamp;
+@end
+
 @interface TxPaginatedResult : NSObject
 extern NSString *const TxPaginatedResult_items;
 extern NSString *const TxPaginatedResult_type;
@@ -196,4 +210,10 @@ extern NSString *const TxRealtimeHistoryParams_end;
 extern NSString *const TxRealtimeHistoryParams_direction;
 extern NSString *const TxRealtimeHistoryParams_limit;
 extern NSString *const TxRealtimeHistoryParams_untilAttach;
+@end
+
+@interface TxRestPresenceParams : NSObject
+extern NSString *const TxRestPresenceParams_limit;
+extern NSString *const TxRestPresenceParams_clientId;
+extern NSString *const TxRestPresenceParams_connectionId;
 @end
