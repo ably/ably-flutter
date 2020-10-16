@@ -71,10 +71,14 @@ class Codec extends StandardMessageCodec {
           _CodecPair<RealtimeHistoryParams>(_encodeRealtimeHistoryParams, null),
       CodecTypes.restHistoryParams:
           _CodecPair<RestHistoryParams>(_encodeRestHistoryParams, null),
+      CodecTypes.restPresenceParams:
+      _CodecPair<RestPresenceParams>(_encodeRestPresenceParams, null),
 
       CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
+      CodecTypes.presenceMessage:
+      _CodecPair<PresenceMessage>(null, _decodePresenceMessage),
 
       // Events - Connection
       CodecTypes.connectionStateChange:
@@ -110,6 +114,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.realtimeHistoryParams;
     } else if (value is RestHistoryParams) {
       return CodecTypes.restHistoryParams;
+    } else if (value is RestPresenceParams) {
+      return CodecTypes.restPresenceParams;
     } else if (value is ErrorInfo) {
       return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {
@@ -266,6 +272,15 @@ class Codec extends StandardMessageCodec {
       jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
     _writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
     _writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeRestPresenceParams(final RestPresenceParams v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRestPresenceParams.limit, v.limit);
+    _writeToJson(jsonMap, TxRestPresenceParams.clientId, v.clientId);
+    _writeToJson(jsonMap, TxRestPresenceParams.connectionId, v.connectionId);
     return jsonMap;
   }
 
@@ -677,6 +692,32 @@ class Codec extends StandardMessageCodec {
       ..encoding = _readFromJson<String>(jsonMap, TxMessage.encoding)
       ..extras = _readFromJson<Map>(jsonMap, TxMessage.extras);
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
+    if (timestamp != null) {
+      message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    }
+    return message;
+  }
+
+  PresenceAction _decodePresenceAction(int index) =>
+      (index == null) ? null : PresenceAction.values[index];
+
+  PresenceMessage _decodePresenceMessage(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    final message = PresenceMessage()
+      ..id = _readFromJson<String>(jsonMap, TxPresenceMessage.id)
+      ..action =
+          _decodePresenceAction(_readFromJson(
+            jsonMap,
+            TxPresenceMessage.action,
+          ))
+      ..clientId = _readFromJson<String>(jsonMap, TxPresenceMessage.clientId)
+      ..data = _readFromJson<dynamic>(jsonMap, TxPresenceMessage.data)
+      ..connectionId =
+          _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId)
+      ..encoding = _readFromJson<String>(jsonMap, TxPresenceMessage.encoding)
+      ..extras =
+          toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras));
+    final timestamp = _readFromJson<int>(jsonMap, TxPresenceMessage.timestamp);
     if (timestamp != null) {
       message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     }
