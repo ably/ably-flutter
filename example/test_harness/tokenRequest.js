@@ -6,7 +6,7 @@
 const Ably = require('ably');
 
 const ApiKey = process.argv[2];
-if (ApiKey.indexOf('INSERT') === 0) {
+if (!ApiKey) {
   throw 'Cannot run without an API key. Add your key to example.js';
 }
 var rest = new Ably.Rest({key: ApiKey});
