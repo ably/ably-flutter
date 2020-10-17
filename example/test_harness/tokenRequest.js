@@ -28,7 +28,7 @@ app.get('/auth', function (req, res) {
     /* Issue a token with subscribe privileges restricted to one channel
        and configure the token without an identity (anonymous) */
     tokenParams = {
-      capability: {'*': ['publish', 'subscribe']},
+      capability: {'*': ['publish', 'subscribe', 'history', 'presence']},
       ttl: 15000,
     };
   }
