@@ -21,7 +21,7 @@ app.get('/auth', function (req, res) {
     /* Issue a token request with pub & sub permissions on all channels +
        configure the token with an identity */
     tokenParams = {
-      capability: {'*': ['publish', 'subscribe']},
+      capability: {'*': ['publish', 'subscribe', 'history', 'presence']},
       clientId: req.cookies.username,
     };
   } else {
