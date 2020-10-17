@@ -62,7 +62,7 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error publishing rest message; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -85,7 +85,7 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const plu
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error getting rest channel history; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -138,7 +138,7 @@ static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *co
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error attaching to realtime channel; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -163,7 +163,7 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *co
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error detaching from realtime channel; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -187,7 +187,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
         if(error){
             result(
                    [FlutterError errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                                       message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                                       message:[NSString stringWithFormat:@"Error publishing realtime message; err = %@", [error message]]
                                        details:error]
                    );
         }else{
@@ -218,7 +218,7 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to publish message to Ably server; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error getting realtime channel history; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -243,7 +243,7 @@ static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to get next page; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error getting next page; err = %@", [error message]]
                     details:error
                     ]);
         }else{
@@ -263,7 +263,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to get first page; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error getting first page; err = %@", [error message]]
                     details:error
                     ]);
         }else{
