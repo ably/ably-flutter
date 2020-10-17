@@ -100,46 +100,6 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const plu
     }
 };
 
-static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutter *const ably = [plugin ably];
-    NSNumber *const handle = message.message;
-    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
-    [paginatedResult next:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
-        if(error){
-            result([
-                    FlutterError
-                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to get next page; err = %@", [error message]]
-                    details:error
-                    ]);
-        }else{
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
-            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
-        }
-    }];
-};
-
-static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutter *const ably = [plugin ably];
-    NSNumber *const handle = message.message;
-    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
-    [paginatedResult first:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
-        if(error){
-            result([
-                    FlutterError
-                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Unable to get first page; err = %@", [error message]]
-                    details:error
-                    ]);
-        }else{
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
-            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
-        }
-    }];
-};
-
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
@@ -272,6 +232,47 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
         [channel history:cbk];
     }
 };
+
+static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    NSNumber *const handle = message.message;
+    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
+    [paginatedResult next:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to get next page; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    }];
+};
+
+static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    NSNumber *const handle = message.message;
+    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
+    [paginatedResult first:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Unable to get first page; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    }];
+};
+
 
 
 @implementation AblyFlutterPlugin {
