@@ -235,24 +235,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
-    private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        this.<Integer>ablyDo(
-                message,
-                (ablyLibrary, pageHandle) -> ablyLibrary
-                        .getPaginatedResult(pageHandle)
-                        .next(this.paginatedResponseHandler(result, pageHandle)));
-    }
-
-    private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        this.<Integer>ablyDo(
-                message,
-                (ablyLibrary, pageHandle) -> ablyLibrary
-                        .getPaginatedResult(pageHandle)
-                        .first(this.paginatedResponseHandler(result, pageHandle)));
-    }
-
     private void getRestPresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
@@ -464,6 +446,24 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             ablyLibrary.getRealtime(realtimeHandle.longValue()).close();
             result.success(null);
         });
+    }
+
+    private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<Integer>ablyDo(
+                message,
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .next(this.paginatedResponseHandler(result, pageHandle)));
+    }
+
+    private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<Integer>ablyDo(
+                message,
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .first(this.paginatedResponseHandler(result, pageHandle)));
     }
 
     <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
