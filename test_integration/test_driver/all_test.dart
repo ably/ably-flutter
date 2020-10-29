@@ -1,9 +1,10 @@
-@Timeout.factor(3)
-
-import 'package:ably_flutter_integration_test/driver_data_handler.dart';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+
+import 'test_implementation/basic_platform_tests.dart';
+import 'test_implementation/helper_tests.dart';
+import 'test_implementation/realtime_tests.dart';
+import 'test_implementation/rest_tests.dart';
 
 void main() {
   FlutterDriver driver;
@@ -19,121 +20,24 @@ void main() {
     }
   });
 
-  test('Platform and Ably version', () async {
-    final data = {'message': 'foo'};
-    final message =
-        TestControlMessage(TestName.platformAndAblyVersion, payload: data);
+  test('Platform and Ably version', () => testPlatformAndAblyVersion(driver));
 
-    final response = await getTestResponse(driver, message);
+  test('AppKey provision', () => testAppKeyProvisioning(driver));
 
-    expect(response.testName, message.testName);
+  test('Realtime publish', () => testRealtimePublish(driver));
 
-    expect(response.payload['platformVersion'], isA<String>());
-    expect(response.payload['platformVersion'], isNot(isEmpty));
-    expect(response.payload['ablyVersion'], isA<String>());
-    expect(response.payload['ablyVersion'], isNot(isEmpty));
-  });
-
-  test('AppKey provision', () async {
-    final data = {'message': 'foo'};
-    final message =
-        TestControlMessage(TestName.appKeyProvisioning, payload: data);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['appKey'], isA<String>());
-    expect(response.payload['appKey'], isNotEmpty);
-  });
-
-  test('Realtime publish', () async {
-    final message = TestControlMessage(TestName.realtimePublish);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['handle'], isA<int>());
-    expect(response.payload['handle'], greaterThan(0));
-  });
-
-  test('Realtime events', () async {
-    final message = TestControlMessage(TestName.realtimeEvents);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    // TODO(zoechi) check more events
-    expect(
-        (response.payload['connectionStates'] as List)
-            .map((e) => (e as Map)['event']),
-        orderedEquals(const [
-          'connecting',
-          'connected',
-        ]));
-
-    expect(
-        (response.payload['filteredConnectionStates'] as List)
-            .map((e) => (e as Map)['event']),
-        const []);
-
-    expect(
-        (response.payload['channelStates'] as List)
-            .map((e) => (e as Map)['event']),
-        orderedEquals(const [
-          'attaching',
-          'attached',
-        ]));
-    expect(
-        (response.payload['filteredChannelStates'] as List)
-            .map((e) => (e as Map)['event']),
-        orderedEquals(const [
-          'attaching',
-        ]));
-  });
-
-  Future testImplementation(FlutterDriver driver) async {
-    final message = TestControlMessage(TestName.restPublish);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['handle'], isA<int>());
-    expect(response.payload['handle'], greaterThan(0));
-
-    // TODO(zoechi) there probably should be log messages
-    // expect(response.payload['log'], isNotEmpty);
-  }
+  test('Realtime events', () => testRealtimeEvents(driver));
 
   test('Rest publish', () => testImplementation(driver));
 
   test('Rest publish should also succeed when run twice',
       () => testImplementation(driver));
 
-  test('Should report unhandled exception', () async {
-    final message =
-        TestControlMessage(TestName.testHelperUnhandledExceptionTest);
+  test('Should report unhandled exception',
+      () => testShouldReportUnhandledException(driver));
 
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('Unhandled'));
-  });
-
-  // FlutterError breaks the test app and needs to be run last
-  test('Should report FlutterError', () async {
-    final message = TestControlMessage(TestName.testHelperFlutterErrorTest);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('FlutterError'));
-  });
+  // FlutterError seems to break the test app
+  // and needs to be run last
+  test(
+      'Should report FlutterError', () => testShouldReportFlutterError(driver));
 }

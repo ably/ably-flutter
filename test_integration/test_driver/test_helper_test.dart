@@ -1,6 +1,7 @@
-import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+
+import 'test_implementation/helper_tests.dart';
 
 void main() {
   FlutterDriver driver;
@@ -16,28 +17,11 @@ void main() {
     }
   });
 
-  test('Should report unhandled exception', () async {
-    final message =
-        TestControlMessage(TestName.testHelperUnhandledExceptionTest);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('Unhandled'));
-  });
+  test('Should report unhandled exception',
+      () => testShouldReportUnhandledException(driver));
 
   // FlutterError seems to break the test app
   // and needs to be run last
-  test('Should report FlutterError', () async {
-    final message = TestControlMessage(TestName.testHelperFlutterErrorTest);
-
-    final response = await getTestResponse(driver, message);
-
-    expect(response.testName, message.testName);
-
-    expect(response.payload['error']['exceptionType'], 'String');
-    expect(response.payload['error']['exception'], contains('FlutterError'));
-  });
+  test(
+      'Should report FlutterError', () => testShouldReportFlutterError(driver));
 }
