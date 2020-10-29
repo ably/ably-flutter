@@ -2,6 +2,8 @@ import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+import 'test_implementation/realtime_tests.dart';
+
 void main() {
   FlutterDriver driver;
 
@@ -16,18 +18,12 @@ void main() {
     }
   });
 
-  test('Realtime publish', () async {
-    final message = TestControlMessage(TestName.realtimePublish);
+  test('Realtime publish', () => testRealtimePublish(driver));
 
-    final response = await getTestResponse(driver, message);
+  test('Realtime events', () => testRealtimeEvents(driver));
 
-    expect(response.testName, message.testName);
-
-    expect(response.payload['handle'], isA<int>());
-    expect(response.payload['handle'], greaterThan(0));
-  });
-
-  test('Realtime events', () async {
+  // TODO(tiholic) Remove
+  test('Realtime events 2', () async {
     final message = TestControlMessage(TestName.realtimeEvents);
 
     final response = await getTestResponse(driver, message);

@@ -30,7 +30,7 @@ class TestDispatcherState extends State<TestDispatcher> {
 
   Map<String, String> _testResults;
 
-  /// To wait for the reponse of the test after a received message.
+  /// To wait for the response of the test after a received message.
   Completer<TestControlMessage> _responseCompleter;
 
   @override

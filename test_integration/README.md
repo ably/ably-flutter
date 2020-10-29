@@ -18,7 +18,7 @@ cd test_integration
 
 ```shell
 cd test_integration
-flutter driver test_driver/app.dart.dart
+flutter driver test_driver/app.dart
 ```
 
 ## `flutter drive` execution
@@ -33,7 +33,7 @@ is executed, `flutter drive` searches of pairs of files in the
 directory `test_driver/` with the names `xxx.dart` and `xxx_test.dart`  
 where `xxx.dart` is the app to be run on the device or emulator and  
 `xxx_test.dart` the unit-test like test that controls the app by
-sending commands and receiving resonses that are then evaluated with
+sending commands and receiving responses that are then evaluated with
 `expect(...)` and similar to unit tests.
 
 `flutter drive` then executes *the app* in the found *devices* (or a
@@ -112,7 +112,7 @@ void main() => app.main(testFactory);
 
 When test code in the app is done, it needs to call `completeTest()`
 with the response data to notify the test about the result.  
-The reponse data again needs to be a JSON-serializable `Map<String,
+The response data again needs to be a JSON-serializable `Map<String,
 dynamic>`.
 
 Exceptions need to be handled by the test code in the app and
@@ -125,9 +125,9 @@ between them, because the app is not restarted for each test which
 results for example in the plugin to keep the state from the previous
 test.
 
-To have truely independent tests, each test needs to have its own
+To have truly independent tests, each test needs to have its own
 `xxx.dart` and `xxx_test.dart` file pair in the `test_driver/`
-directory.  
+directory.
 They can all call the same `lib/main.dart` though, because
 for each `xxx_test.dart` file the app will be closed and restarted.
 
@@ -147,5 +147,5 @@ tests. Time should tell if this is a good approach.
 
 See
 https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54
-for how to improve developement performance by utilizing Hot
+for how to improve development performance by utilizing Hot
 Reload/Restart for Driver tests
