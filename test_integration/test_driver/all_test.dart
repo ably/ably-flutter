@@ -28,10 +28,10 @@ void main() {
 
   test('Realtime events', () => testRealtimeEvents(driver));
 
-  test('Rest publish', () => testImplementation(driver));
+  test('Rest publish', () => testRestPublish(driver));
 
   test('Rest publish should also succeed when run twice',
-      () => testImplementation(driver));
+      () => testRestPublish(driver));
 
   test('Should report unhandled exception',
       () => testShouldReportUnhandledException(driver));

@@ -17,8 +17,8 @@ void main() {
     }
   });
 
-  test('Rest publish', () => testImplementation(driver));
+  test('Rest publish', () => testRestPublish(driver));
 
   test('Rest publish should also succeed when run twice',
-      () => testImplementation(driver));
+      () => testRestPublish(driver));
 }
