@@ -52,12 +52,12 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
     AblyFlutterMessage *const messageData = message.message;
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*)[_dataMap objectForKey:@"channel"];
-    NSString *const eventName = (NSString*)[_dataMap objectForKey:@"name"];
-    NSObject *const eventData = (NSString*)[_dataMap objectForKey:@"message"];
+    NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*)[_dataMap objectForKey:@"messages"];
+    
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
     
-    [channel publish:eventName data:eventData callback:^(ARTErrorInfo *_Nullable error){
+    [channel publish:messages callback:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
                     FlutterError
@@ -167,13 +167,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     };
     
     NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*)[realtimePayload objectForKey:@"messages"];
-    if(messages){
-        [channel publish:messages callback:callback];
-    }else{
-        [channel publish:(NSString*)[realtimePayload objectForKey:@"name"]
-                    data:(NSString*)[realtimePayload objectForKey:@"data"]
-                callback:callback];
-    }
+    [channel publish:messages callback:callback];
 };
 
 static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
