@@ -14,6 +14,36 @@ class RealtimeSubscribeTest extends StatefulWidget {
 }
 
 class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
+  final messagesToPublish = [
+    [null, null],   //name and message are both null
+    [null, 'Ably'], //name is null
+    ['name1', null], //message is null
+    ['name1', 'Ably'], //message is a string
+    [
+      'name2',
+      [1, 2, 3]
+    ], //message is a numeric list
+    [
+      'name2',
+      ['hello', 'ably']
+    ], //message is a string list
+    [
+      'name3',
+      {
+        'hello': 'ably',
+        'items': ['1', 2.2, true]
+      }
+    ], //message is a map
+    [
+      'name3',
+      [
+        {'hello': 'ably'},
+        'ably',
+        'realtime'
+      ]
+    ] //message is a complex list
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -23,47 +53,42 @@ class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
 
   Future<void> init() async {
     final appKey = await provision('sandbox-');
+
+    widget.dispatcher.reportTestCompletion(<String, dynamic>{
+      'all': await getAllMessages(appKey.toString(), 'test-all'),
+      'filteredWithName': await getAllMessages(appKey.toString(), 'test-name', name: 'name1'),
+      'filteredWithNames':
+        await getAllMessages(appKey.toString(), 'test-name', names: ['name1', 'name2']),
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getAllMessages(
+    String apiKey,
+    String channelName,
+    {
+    String name,
+    List<String> names,
+  }) async {
     final messages = <Map<String, dynamic>>[];
 
     final realtime = Realtime(
-      options: ClientOptions.fromKey(appKey.toString())
+      options: ClientOptions.fromKey(apiKey)
         ..environment = 'sandbox'
         ..clientId = 'someClientId'
         ..autoConnect = false,
     );
     await realtime.connect();
 
-    final channel = await realtime.channels.get('test');
+    final channel = await realtime.channels.get(channelName);
     await channel.attach();
-    channel.subscribe().listen((message) {
+    var subscription = channel.subscribe(name: name, names: names).listen((message) {
       messages.add(messageToJson(message));
     });
-
-    final name = 'Hello';
-    final messageData = [
-      null, //null
-      'Ably', //string
-      [1, 2, 3], //numeric list
-      ['hello', 'ably'], //string list
-      {
-        'hello': 'ably',
-        'items': ['1', 2.2, true]
-      }, //map
-      [
-        {'hello': 'ably'},
-        'ably',
-        'realtime'
-      ] //list of map
-    ];
-    await channel.publish(); //publish without name and data
-    await channel.publish(data: messageData[1]); //publish without name
-    for (var data in messageData) {
-      await channel.publish(name: name, data: data);
+    for (var message in messagesToPublish) {
+      await channel.publish(name: message[0], data: message[1]);
     }
-
-    widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'messages': messages,
-    });
+    await subscription.cancel();
+    return messages;
   }
 
   Map<String, dynamic> messageToJson(Message message) {
