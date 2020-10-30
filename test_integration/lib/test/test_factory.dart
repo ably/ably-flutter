@@ -1,6 +1,7 @@
 import 'package:ably_flutter_integration_test/test/appkey_provision_test.dart';
 import 'package:ably_flutter_integration_test/test/platform_and_ably_version_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime_events_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime_listen.dart';
 import 'package:ably_flutter_integration_test/test/realtime_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/rest_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/test_helper_flutter_error_test.dart';
@@ -14,6 +15,7 @@ final testFactory = <String, TestFactory>{
   TestName.appKeyProvisioning: (d) => AppKeyProvisionTest(d),
   TestName.realtimePublish: (d) => RealtimePublishTest(d),
   TestName.realtimeEvents: (d) => RealtimeEventsTest(d),
+  TestName.realtimeSubscribe: (d) => RealtimeSubscribeTest(d),
   TestName.restPublish: (d) => RestPublishTest(d),
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),
   TestName.testHelperUnhandledExceptionTest: (d) =>
