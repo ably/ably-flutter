@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-# TODO(zoechi) for some unknown reason this does not execute all tests
+# TODO(tiholic) for some unknown reason this does not execute all tests
 # It only executes the first it finds
 # flutter drive test_driver/*
 

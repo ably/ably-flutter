@@ -20,7 +20,7 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   expect(response.testName, message.testName);
 
-// TODO(zoechi) check more events
+// TODO(tiholic) check more events
   expect(
       (response.payload['connectionStates'] as List)
           .map((e) => (e as Map)['event']),

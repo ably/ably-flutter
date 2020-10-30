@@ -69,7 +69,7 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
     widget.dispatcher.reportLog({'after channel.attetach': ''});
 
     widget.dispatcher.reportLog({'before connection.close': ''});
-    // TODO(zoechi) throws UnimplementedError
+    // TODO(tiholic) throws UnimplementedError
     // await realtime.connection.close();
     widget.dispatcher.reportLog({'after connection.close': ''});
 
