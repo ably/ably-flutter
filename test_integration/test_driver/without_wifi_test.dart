@@ -1,4 +1,4 @@
-@TestOn('android') // because disable wifi only works for Android
+@TestOn('android')
 import 'dart:io';
 
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
@@ -24,7 +24,7 @@ void main() {
       await enableWifi();
     });
 
-    // TODO(zoechi) these are not valid tests when run without wifi,
+    // TODO(tiholic) these are not valid tests when run without wifi,
     // This is just an example how such a test could be built.
     test('Platform and Ably version', () async {
       final data = {'message': 'foo'};
@@ -57,7 +57,7 @@ void main() {
 }
 
 Future disableWifi() async {
-  // TODO(zoechi)
+  // TODO(tiholic)
   // from https://stackoverflow.com/questions/10033757/how-to-turn-off-wifi-via-adb
   // but didn't work because `su` is not found on my phone
   // perhaps it's working with the emulator
