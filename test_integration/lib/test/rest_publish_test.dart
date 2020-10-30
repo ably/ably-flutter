@@ -38,7 +38,6 @@ class RestPublishTestState extends State<RestPublishTest> {
     final messageData = [
       null,   //null
       'Ably', //string
-      // TODO(tiholic) test these after implementing Message(s) for rest publish also check why we are unable to pass lists and maps as data directly
       [1, 2, 3],  //numeric list
       ['hello', 'ably'], //string list
       {'hello': 'ably', 'items': ['1', 2.2, '3 thousand']},  //map

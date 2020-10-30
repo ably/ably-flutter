@@ -30,7 +30,7 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
     final filteredChannelStates = <Map<String, dynamic>>[];
 
     final realtime = Realtime(
-      options: ClientOptions.fromKey('$appKey')
+      options: ClientOptions.fromKey(appKey.toString())
         ..environment = 'sandbox'
         ..clientId = 'someClientId'
         ..autoConnect = false,
@@ -66,7 +66,7 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
     widget.dispatcher.reportLog({'after channel.detach': ''});
     widget.dispatcher.reportLog({'before channel.attach': ''});
     await channel.attach();
-    widget.dispatcher.reportLog({'after channel.attetach': ''});
+    widget.dispatcher.reportLog({'after channel.attach': ''});
 
     widget.dispatcher.reportLog({'before connection.close': ''});
     // TODO(tiholic) throws UnimplementedError

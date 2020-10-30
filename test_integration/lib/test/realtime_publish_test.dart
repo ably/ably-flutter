@@ -25,7 +25,7 @@ class RealtimePublishTestState extends State<RealtimePublishTest> {
     final logMessages = <List<String>>[];
 
     final realtime = Realtime(
-      options: ClientOptions.fromKey('$appKey')
+      options: ClientOptions.fromKey(appKey.toString())
         ..environment = 'sandbox'
         ..clientId = 'someClientId'
         ..logLevel = LogLevel.verbose
@@ -39,7 +39,7 @@ class RealtimePublishTestState extends State<RealtimePublishTest> {
       'Ably', //string
       [1, 2, 3],  //numeric list
       ['hello', 'ably'], //string list
-      {'hello': 'ably', 'items': ['1', 2.2, '3 thousand']},  //map
+      {'hello': 'ably', 'items': ['1', 2.2, true]},  //map
       [{'hello': 'ably'}, 'ably', 'realtime'] //list of map
     ];
 

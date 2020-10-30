@@ -14,5 +14,6 @@ class TestName {
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';
+  static const String realtimeSubscribe = 'realtimeSubscribe';
 }
 

@@ -28,6 +28,8 @@ void main() {
 
   test('Realtime events', () => testRealtimeEvents(driver));
 
+  test('Realtime subscribe', () => testRealtimeSubscribe(driver));
+
   test('Rest publish', () => testRestPublish(driver));
 
   test('Rest publish should also succeed when run twice',
