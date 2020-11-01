@@ -24,10 +24,13 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
   Future<void> init() async {
     final appKey = await provision('sandbox-');
 
-    final connectionStates = <Map<String, dynamic>>[];
-    final filteredConnectionStates = <Map<String, dynamic>>[];
-    final channelStates = <Map<String, dynamic>>[];
-    final filteredChannelStates = <Map<String, dynamic>>[];
+    final connectionStates = <String>[];
+    final connectionStateChanges = <Map<String, dynamic>>[];
+    final filteredConnectionStateChanges = <Map<String, dynamic>>[];
+
+    final channelStates = <String>[];
+    final channelStateChanges = <Map<String, dynamic>>[];
+    final filteredChannelStateChanges = <Map<String, dynamic>>[];
 
     final realtime = Realtime(
       options: ClientOptions.fromKey(appKey.toString())
@@ -36,48 +39,55 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
         ..autoConnect = false,
     );
 
+    void recordConnectionState() => connectionStates
+        .add(enumValueToString(realtime.connection.state));
+
+    recordConnectionState();
     realtime.connection
         .on()
-        .listen((e) => connectionStates.add(connectionEventToJson(e)));
-
-    realtime.connection
-        .on(ConnectionEvent.closing)
-        .listen((e) => filteredConnectionStates.add(connectionEventToJson(e)));
-
-    final channel = await realtime.channels.get('events-test');
-
-    channel.on().listen((e) => channelStates.add(channelEventToJson(e)));
-
-    channel
-        .on(ChannelEvent.attaching)
-        .listen((e) => filteredChannelStates.add(channelEventToJson(e)));
-
-    final name = 'Hello';
-    final data = 'Flutter';
+        .listen((e) => connectionStateChanges.add(connectionEventToJson(e)));
+    realtime.connection.on(ConnectionEvent.connected).listen(
+        (e) => filteredConnectionStateChanges.add(connectionEventToJson(e)));
 
     widget.dispatcher.reportLog({'before realtime.connect': ''});
+    recordConnectionState();
     await realtime.connect();
     widget.dispatcher.reportLog({'after realtime.connect': ''});
-    await channel.publish(name: name, data: data);
-    await channel.publish(name: name);
+    recordConnectionState();
 
-    widget.dispatcher.reportLog({'before channel.detach': ''});
-    await channel.detach();
-    widget.dispatcher.reportLog({'after channel.detach': ''});
+    final channel = await realtime.channels.get('events-test');
+    void recordChannelState() =>
+        channelStates.add(enumValueToString(channel.state));
+
+    recordChannelState();
+    channel.on().listen((e) => channelStateChanges.add(channelEventToJson(e)));
+    channel
+        .on(ChannelEvent.attaching)
+        .listen((e) => filteredChannelStateChanges.add(channelEventToJson(e)));
+    recordChannelState();
+
     widget.dispatcher.reportLog({'before channel.attach': ''});
     await channel.attach();
+    recordChannelState();
     widget.dispatcher.reportLog({'after channel.attach': ''});
+    widget.dispatcher.reportLog({'before channel.detach': ''});
+    await channel.detach();
+    recordChannelState();
+    widget.dispatcher.reportLog({'after channel.detach': ''});
+    recordConnectionState();
 
-    widget.dispatcher.reportLog({'before connection.close': ''});
     // TODO(tiholic) throws UnimplementedError
+    // widget.dispatcher.reportLog({'before connection.close': ''});
     // await realtime.connection.close();
-    widget.dispatcher.reportLog({'after connection.close': ''});
+    // widget.dispatcher.reportLog({'after connection.close': ''});
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'connectionStates': connectionStates,
-      'filteredConnectionStates': filteredConnectionStates,
+      'connectionStateChanges': connectionStateChanges,
+      'filteredConnectionStateChanges': filteredConnectionStateChanges,
       'channelStates': channelStates,
-      'filteredChannelStates': filteredChannelStates,
+      'channelStateChanges': channelStateChanges,
+      'filteredChannelStateChanges': filteredChannelStateChanges,
     });
   }
 

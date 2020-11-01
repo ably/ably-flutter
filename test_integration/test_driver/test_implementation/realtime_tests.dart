@@ -21,33 +21,119 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   expect(response.testName, message.testName);
 
-// TODO(tiholic) check more events
+  var connectionStates = (response.payload['connectionStates'] as List)
+      .map((e) => e as String)
+      .toList();
+  var connectionStateChanges =
+      (response.payload['connectionStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+  var filteredConnectionStateChanges =
+      (response.payload['filteredConnectionStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+  var channelStates = (response.payload['channelStates'] as List)
+      .map((e) => e as String)
+      .toList();
+  var channelStateChanges =
+      (response.payload['channelStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+  var filteredChannelStateChanges =
+      (response.payload['filteredChannelStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+
+  //TODO(tiholic) this is null from iOS and 'initialized' from android
+  // remove this variable and use 'initialized' string directly once it is fixed from ably-cocoa
+  String defaultConnectionOrChannelState = connectionStateChanges[0]['previous'];
+
+  // connectionStates
+  expect(connectionStates,
+      orderedEquals(const ['initialized', 'initialized', 'initialized', 'connected']));
+
+  // connectionStateChanges
   expect(
-      (response.payload['connectionStates'] as List)
-          .map((e) => (e as Map)['event']),
+      connectionStateChanges.map((e) => e['event']),
       orderedEquals(const [
         'connecting',
         'connected',
       ]));
 
   expect(
-      (response.payload['filteredConnectionStates'] as List)
-          .map((e) => (e as Map)['event']),
-      const []);
+      connectionStateChanges.map((e) => e['current']),
+      orderedEquals(const [
+        'connecting',
+        'connected',
+      ]));
 
   expect(
-      (response.payload['channelStates'] as List)
-          .map((e) => (e as Map)['event']),
+      connectionStateChanges.map((e) => e['previous']),
+      orderedEquals([
+        defaultConnectionOrChannelState,
+        'connecting',
+      ]));
+
+  // filteredConnectionStateChanges
+  expect(filteredConnectionStateChanges.map((e) => e['event']), const [
+    'connected',
+  ]);
+
+  expect(filteredConnectionStateChanges.map((e) => e['current']), const [
+    'connected',
+  ]);
+
+  expect(filteredConnectionStateChanges.map((e) => e['previous']), const [
+    'connecting',
+  ]);
+
+  // channelStates
+  expect(
+      channelStates,
+      orderedEquals(const [
+        'initialized',
+        'initialized',
+        'attached',
+        'detached',
+      ]));
+
+  // channelStateChanges
+  expect(
+      channelStateChanges.map((e) => e['event']),
       orderedEquals(const [
         'attaching',
         'attached',
+        'detaching',
+        'detached',
       ]));
+
   expect(
-      (response.payload['filteredChannelStates'] as List)
-          .map((e) => (e as Map)['event']),
+      channelStateChanges.map((e) => e['current']),
       orderedEquals(const [
         'attaching',
+        'attached',
+        'detaching',
+        'detached',
       ]));
+
+  expect(
+      channelStateChanges.map((e) => e['previous']),
+      orderedEquals([
+        defaultConnectionOrChannelState,
+        'attaching',
+        'attached',
+        'detaching',
+      ]));
+
+  // filteredChannelStateChanges
+  expect(filteredChannelStateChanges.map((e) => e['event']),
+      orderedEquals(const ['attaching']));
+
+  expect(filteredChannelStateChanges.map((e) => e['current']),
+      orderedEquals(const ['attaching']));
+
+  expect(filteredChannelStateChanges.map((e) => e['previous']),
+      orderedEquals([defaultConnectionOrChannelState]));
 }
 
 Future testRealtimeSubscribe(FlutterDriver driver) async {
@@ -138,5 +224,4 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
 
   expect(filteredWithNames[3]['name'], 'name2');
   expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
-
 }
