@@ -1,73 +1,73 @@
+# Reference
+#  https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
+#  https://github.com/marketplace/actions/flutter-action
+
 name: flutter_integration
 on:
-- push
-- pull_request
+  - push
+  - pull_request
 jobs:
   ios:
     strategy:
       matrix:
         device:
-        - "iPhone 8 (13.7)"
-        - "iPhone 11 (13.7)"
+          - "iPhone 8 (13.7)"
+          - "iPhone 11 (13.7)"
       fail-fast: false
     runs-on: "macos-latest"
     steps:
-    - name: "List Simulators"
-      run: "xcrun instruments -s"
-    - name: "Start Simulator"
-      run: |
-        UUID=$(
-          xcrun instruments -s |
-          awk \
-            -F ' *[][]' \
-            '{ if($1 == "${{ matrix.device }}") { print $2 }}'
-        )
-        xcrun simctl boot "${UUID:?No Simulator with this name found}"
-    - uses: actions/checkout@v1
-
-# Set up Flutter environment
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: "stable"
-
-    - name: "Run Flutter Driver tests"
-      run: |
-        cd test_integration \
-        ./run_integration_tests.sh
+      - name: "List Simulators"
+        run: "xcrun instruments -s"
+      - name: "Start Simulator"
+        run: |
+          UUID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=${{ matrix.device }}' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UUID:?No Simulator with this name found}"
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1  # Sets up Flutter environment
+        with:
+          channel: "stable"
+      - name: "Run Flutter Driver tests"
+        run: |
+          flutter pub get
+          cd test_integration && ./run_integration_tests.sh
 
   android:
     strategy:
       matrix:
         device:
-        - "pixel"
-        # - "pixel_xl"
-        # - "pixel_c"
-        - "Nexus 6"
+          - "pixel"
+          # - "pixel_xl"
+          # - "pixel_c"
+          - "Nexus 6"
       fail-fast: false
     runs-on: "macos-latest"
+      # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
+      #  hardware acceleration in container is not allowed by android emulator
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '8.x'
-
-# Set up Flutter environment
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: "stable"
-
-    - name: "Run Flutter Driver tests"
-      timeout-minutes: 30
-      uses: reactivecircus/android-emulator-runner@v2
-      # env:
-      #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
-      #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
-      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
-      with:
-        api-level: 29
-        profile: ${{ matrix.device }}
-        script: |
-          /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
-          flutter pub get
-          cd test_integration && ./run_integration_tests.sh
-
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8.x'
+      - uses: subosito/flutter-action@v1  # Sets up Flutter environment
+        with:
+          channel: "stable"
+      - name: "Run Flutter Driver tests"
+        timeout-minutes: 30
+        uses: reactivecircus/android-emulator-runner@v2
+        # env:
+        #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
+        #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
+        with:
+          api-level: 29
+          profile: ${{ matrix.device }}
+          script: |
+            /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
+            flutter pub get
+            cd test_integration && ./run_integration_tests.sh
