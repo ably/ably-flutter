@@ -39,6 +39,7 @@ jobs:
   android:
     strategy:
       matrix:
+        api-level: 24, 26, 28
         device:
           - "pixel"
           # - "pixel_xl"
@@ -64,8 +65,7 @@ jobs:
         #   SECRET_REPO: ${{ secrets.SECRET_REPO }}
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
         with:
-          api-level: 29
-          profile: ${{ matrix.device }}
+          api-level: ${{ matrix.api-level }}
           script: |
             /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
             flutter pub get
