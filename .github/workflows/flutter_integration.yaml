@@ -4,7 +4,8 @@
 
 name: flutter_integration
 on:
-  - pull_request
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
 jobs:
   ios:
     if: github.event.pull_request.draft == false
