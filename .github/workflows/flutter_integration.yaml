@@ -39,12 +39,7 @@ jobs:
   android:
     strategy:
       matrix:
-        api-level: 24, 26, 28
-        device:
-          - "pixel"
-          # - "pixel_xl"
-          # - "pixel_c"
-          - "Nexus 6"
+        api-level: [24, 26, 28]
       fail-fast: false
     runs-on: "macos-latest"
     # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
