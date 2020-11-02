@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         device:
-          - "iPhone 8 (13.7)"
-          - "iPhone 11 (13.7)"
+          - "iPhone 8"  # we are not specifying the iOS version as it tends to change
+          - "iPhone 11"
       fail-fast: false
     runs-on: "macos-latest"
     steps:
@@ -20,14 +20,14 @@ jobs:
         run: "xcrun instruments -s"
       - name: "Start Simulator"
         run: |
-          UUID=$(
-            xcrun instruments -s |
-            awk \
-              -F ' *[][]' \
-              -v 'device=${{ matrix.device }}' \
-              '$1 == device { print $2 }'
-          )
-          xcrun simctl boot "${UUID:?No Simulator with this name found}"
+          # grep, extract trim `[` and `]` and pick first result, in case there are many
+               UUID=$(
+               xcrun instruments -s |
+               grep "${{ matrix.device }}" |   # Grep device(s) - can expect more than one
+               grep -Eo -m1 "\[.*\]" |         # Extract device ID of the first result
+               sed -e 's/^\[//' -e 's/\]$//'   # Trimming the square brackets surrounding UUID
+               )
+               xcrun simctl boot "${UUID:?No Simulator with this name found}"
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1  # Sets up Flutter environment
         with:
@@ -47,8 +47,8 @@ jobs:
           - "Nexus 6"
       fail-fast: false
     runs-on: "macos-latest"
-      # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
-      #  hardware acceleration in container is not allowed by android emulator
+    # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
+    #  hardware acceleration in container is not allowed by android emulator
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
