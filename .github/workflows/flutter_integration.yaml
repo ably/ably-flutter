@@ -7,6 +7,7 @@ on:
   - pull_request
 jobs:
   ios:
+    if: github.event.pull_request.draft == false
     strategy:
       matrix:
         device:
@@ -37,6 +38,7 @@ jobs:
           cd test_integration && ./run_integration_tests.sh
 
   android:
+    if: github.event.pull_request.draft == false
     strategy:
       matrix:
         api-level: [24, 26, 28]
