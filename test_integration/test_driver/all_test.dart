@@ -32,9 +32,6 @@ void main() {
 
   test('Rest publish', () => testRestPublish(driver));
 
-  test('Rest publish should also succeed when run twice',
-      () => testRestPublish(driver));
-
   test('Should report unhandled exception',
       () => testShouldReportUnhandledException(driver));
 
