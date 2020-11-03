@@ -18,7 +18,7 @@ Future testPlatformAndAblyVersion(FlutterDriver driver) async {
   expect(response.payload['ablyVersion'], isNot(isEmpty));
 }
 
-Future testAppKeyProvisioning(FlutterDriver driver) async {
+Future testDemoDependencies(FlutterDriver driver) async {
   final data = {'message': 'foo'};
   final message =
   TestControlMessage(TestName.appKeyProvisioning, payload: data);
@@ -29,4 +29,26 @@ Future testAppKeyProvisioning(FlutterDriver driver) async {
 
   expect(response.payload['appKey'], isA<String>());
   expect(response.payload['appKey'], isNotEmpty);
+
+
+  print('response.payload:: ${response.payload}');
+
+
+  var tokenRequest = response.payload['tokenRequest'];
+
+  expect(tokenRequest['keyName'], isA<String>());
+  expect(tokenRequest['keyName'], isNotEmpty);
+
+  expect(tokenRequest['nonce'], isA<String>());
+  expect(tokenRequest['nonce'], isNotEmpty);
+
+  expect(tokenRequest['mac'], isA<String>());
+  expect(tokenRequest['mac'], isNotEmpty);
+
+  expect(tokenRequest['clientId'], isA<String>());
+  expect(tokenRequest['clientId'], isNotEmpty);
+
+  expect(tokenRequest['timestamp'], isA<int>());;
+
+  expect(tokenRequest['ttl'], isA<int>());
 }
