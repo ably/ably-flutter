@@ -1,32 +1,22 @@
-import 'package:flutter/widgets.dart';
+import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class AppKeyProvisionTest extends StatefulWidget {
-  final TestDispatcherState dispatcher;
-
-  const AppKeyProvisionTest(this.dispatcher, {Key key}) : super(key: key);
+class AppKeyProvisionTest extends TestWidget {
+  AppKeyProvisionTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  State<StatefulWidget> createState() => AppKeyProvisionTestState();
+  TestWidgetState<TestWidget> createState() => _AppKeyProvisionTestState();
 }
 
-class AppKeyProvisionTestState extends State<AppKeyProvisionTest> {
+class _AppKeyProvisionTestState extends TestWidgetState<AppKeyProvisionTest> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
+  Future<void> test() async {
     final appKey = await provision('sandbox-');
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'appKey': appKey.name,
     });
   }
-
-  @override
-  Widget build(BuildContext context) => Container();
 }
