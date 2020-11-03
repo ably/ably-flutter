@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:pedantic/pedantic.dart';
+
 import 'package:ably_flutter_plugin/ably.dart';
 import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../platform_object.dart';
 
@@ -50,7 +51,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
     List<Message> messages,
     String name,
     dynamic data,
-}) async {
+  }) async {
     if(messages == null){
       if (message != null) {
         messages = [message];
@@ -91,8 +92,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
       try {
         final _map = <String, Object>{
           'channel': name,
-          if (name != null) 'name': item.name,
-          if (item.data != null) 'message': item.data,
+          'messages': item.messages
         };
 
         await invoke(PlatformMethod.publish, _map);
