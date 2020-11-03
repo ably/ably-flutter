@@ -1,21 +1,20 @@
+import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably.dart';
-import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class RealtimeSubscribeTest extends StatefulWidget {
-  final TestDispatcherState dispatcher;
-
-  const RealtimeSubscribeTest(this.dispatcher, {Key key}) : super(key: key);
+class RealtimeSubscribeTest extends TestWidget {
+  RealtimeSubscribeTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  State<StatefulWidget> createState() => RealtimeSubscribeTestState();
+  TestWidgetState<TestWidget> createState() => RealtimeSubscribeTestState();
 }
 
-class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
+class RealtimeSubscribeTestState
+    extends TestWidgetState<RealtimeSubscribeTest> {
   final messagesToPublish = [
-    [null, null],   //name and message are both null
+    [null, null], //name and message are both null
     [null, 'Ably'], //name is null
     ['name1', null], //message is null
     ['name1', 'Ably'], //message is a string
@@ -45,27 +44,21 @@ class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    widget.dispatcher.timeout(const Duration(seconds: 45));
-    init();
-  }
-
-  Future<void> init() async {
+  Future<void> test() async {
     final appKey = await provision('sandbox-');
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'all': await getAllMessages(appKey.toString(), 'test-all'),
-      'filteredWithName': await getAllMessages(appKey.toString(), 'test-name', name: 'name1'),
-      'filteredWithNames':
-        await getAllMessages(appKey.toString(), 'test-name', names: ['name1', 'name2']),
+      'filteredWithName':
+          await getAllMessages(appKey.toString(), 'test-name', name: 'name1'),
+      'filteredWithNames': await getAllMessages(appKey.toString(), 'test-name',
+          names: ['name1', 'name2']),
     });
   }
 
   Future<List<Map<String, dynamic>>> getAllMessages(
     String apiKey,
-    String channelName,
-    {
+    String channelName, {
     String name,
     List<String> names,
   }) async {
@@ -81,7 +74,8 @@ class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
 
     final channel = await realtime.channels.get(channelName);
     await channel.attach();
-    var subscription = channel.subscribe(name: name, names: names).listen((message) {
+    var subscription =
+        channel.subscribe(name: name, names: names).listen((message) {
       messages.add(messageToJson(message));
     });
     for (var message in messagesToPublish) {
@@ -103,7 +97,4 @@ class RealtimeSubscribeTestState extends State<RealtimeSubscribeTest> {
       'extras': message.extras,
     };
   }
-
-  @override
-  Widget build(BuildContext context) => Container();
 }

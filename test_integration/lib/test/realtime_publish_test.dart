@@ -1,26 +1,19 @@
+import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably.dart';
-import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class RealtimePublishTest extends StatefulWidget {
-  final TestDispatcherState dispatcher;
-
-  const RealtimePublishTest(this.dispatcher, {Key key}) : super(key: key);
+class RealtimePublishTest extends TestWidget {
+  RealtimePublishTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  State<StatefulWidget> createState() => RealtimePublishTestState();
+  TestWidgetState<TestWidget> createState() => RealtimePublishTestState();
 }
 
-class RealtimePublishTestState extends State<RealtimePublishTest> {
+class RealtimePublishTestState extends TestWidgetState<RealtimePublishTest> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
+  Future<void> test() async {
     final appKey = await provision('sandbox-');
     final logMessages = <List<String>>[];
 
@@ -35,18 +28,25 @@ class RealtimePublishTestState extends State<RealtimePublishTest> {
 
     final name = 'Hello';
     final messageData = [
-      null,   //null
+      null, //null
       'Ably', //string
-      [1, 2, 3],  //numeric list
+      [1, 2, 3], //numeric list
       ['hello', 'ably'], //string list
-      {'hello': 'ably', 'items': ['1', 2.2, true]},  //map
-      [{'hello': 'ably'}, 'ably', 'realtime'] //list of map
+      {
+        'hello': 'ably',
+        'items': ['1', 2.2, true]
+      }, //map
+      [
+        {'hello': 'ably'},
+        'ably',
+        'realtime'
+      ] //list of map
     ];
 
     final channel = await realtime.channels.get('test');
-    await channel.publish();  //publish without name and data
-    await channel.publish(data: messageData[1]);  //publish without name
-    for(var data in messageData){
+    await channel.publish(); //publish without name and data
+    await channel.publish(data: messageData[1]); //publish without name
+    for (var data in messageData) {
       await channel.publish(name: name, data: data);
     }
 
@@ -58,7 +58,4 @@ class RealtimePublishTestState extends State<RealtimePublishTest> {
       'log': logMessages,
     });
   }
-
-  @override
-  Widget build(BuildContext context) => Container();
 }

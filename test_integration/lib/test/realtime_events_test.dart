@@ -1,27 +1,19 @@
+import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably.dart';
-import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class RealtimeEventsTest extends StatefulWidget {
-  final TestDispatcherState dispatcher;
-
-  const RealtimeEventsTest(this.dispatcher, {Key key}) : super(key: key);
+class RealtimeEventsTest extends TestWidget {
+  RealtimeEventsTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  State<StatefulWidget> createState() => RealtimeEventsTestState();
+  TestWidgetState<TestWidget> createState() => RealtimeEventsTestState();
 }
 
-class RealtimeEventsTestState extends State<RealtimeEventsTest> {
+class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
   @override
-  void initState() {
-    super.initState();
-    // widget.dispatcher.timeout(const Duration(seconds: 3));
-    init();
-  }
-
-  Future<void> init() async {
+  Future<void> test() async {
     final appKey = await provision('sandbox-');
 
     final connectionStates = <String>[];
@@ -39,8 +31,8 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
         ..autoConnect = false,
     );
 
-    void recordConnectionState() => connectionStates
-        .add(enumValueToString(realtime.connection.state));
+    void recordConnectionState() =>
+        connectionStates.add(enumValueToString(realtime.connection.state));
 
     recordConnectionState();
     realtime.connection
@@ -110,9 +102,6 @@ class RealtimeEventsTestState extends State<RealtimeEventsTest> {
       'retryIn': e.retryIn,
     };
   }
-
-  @override
-  Widget build(BuildContext context) => Container();
 }
 
 String enumValueToString(dynamic value) =>
