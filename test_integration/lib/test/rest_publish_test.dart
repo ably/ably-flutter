@@ -1,26 +1,19 @@
+import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably.dart';
-import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
-class RestPublishTest extends StatefulWidget {
-  final TestDispatcherState dispatcher;
-
-  const RestPublishTest(this.dispatcher, {Key key}) : super(key: key);
+class RestPublishTest extends TestWidget {
+  RestPublishTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  State<StatefulWidget> createState() => RestPublishTestState();
+  TestWidgetState<TestWidget> createState() => RestPublishTestState();
 }
 
-class RestPublishTestState extends State<RestPublishTest> {
+class RestPublishTestState extends TestWidgetState<RestPublishTest> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
+  Future<void> test() async {
     widget.dispatcher.reportLog('init start');
     final appKey = await provision('sandbox-');
     final logMessages = <List<String>>[];
@@ -56,7 +49,4 @@ class RestPublishTestState extends State<RestPublishTest> {
       'log': logMessages,
     });
   }
-
-  @override
-  Widget build(BuildContext context) => Container();
 }
