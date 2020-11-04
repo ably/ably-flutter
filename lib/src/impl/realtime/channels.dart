@@ -58,12 +58,13 @@ class RealtimePlatformChannel extends PlatformObject
   Completer<void> _authCallbackCompleter;
 
   @override
-  Future<void> publish(
-      {spec.Message message,
-      List<spec.Message> messages,
-      String name,
-      dynamic data}) async {
-    if(messages == null){
+  Future<void> publish({
+    spec.Message message,
+    List<spec.Message> messages,
+    String name,
+    dynamic data,
+  }) async {
+    if (messages == null) {
       if (message != null) {
         messages = [message];
       } else {
