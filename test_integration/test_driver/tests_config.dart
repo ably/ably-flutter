@@ -13,10 +13,11 @@ enum TestGroup{
 final _tests = <TestGroup, Map<String, Function>>{
   TestGroup.BasicTests: {
     'should return Platform and Ably version': testPlatformAndAblyVersion,
-    'should provision AppKey': testAppKeyProvisioning,
+    'should provision AppKey': testDemoDependencies,
   },
   TestGroup.Rest: {
     'should publish': testRestPublish,
+    'should publish with AuthCallback': testRestPublishWithAuthCallback,
   },
   TestGroup.Realtime: {
     'should publish': testRealtimePublish,
