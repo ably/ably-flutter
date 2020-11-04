@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pedantic/pedantic.dart';
-import 'package:wakelock/wakelock.dart';
 
 import 'driver_data_handler.dart';
 import 'test/test_factory.dart';
@@ -37,7 +36,6 @@ class TestDispatcherState extends State<TestDispatcher> {
   @override
   void initState() {
     super.initState();
-    Wakelock.enable();
     _testResults = <String, String>{
       for (final key in testFactory.keys) key: '',
     };

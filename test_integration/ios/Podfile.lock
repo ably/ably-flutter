@@ -78,13 +78,10 @@ PODS:
   - SAMKeychain (1.5.3)
   - SocketRocketAblyFork (0.5.2-ably-7)
   - ULID (1.1.0)
-  - wakelock (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - ably_flutter_plugin (from `.symlinks/plugins/ably_flutter_plugin/ios`)
   - Flutter (from `Flutter`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   trunk:
@@ -101,8 +98,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/ably_flutter_plugin/ios"
   Flutter:
     :path: Flutter
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   Ably: fa410eadcf588f3f108ca206025d41e4057f26ff
@@ -114,7 +109,6 @@ SPEC CHECKSUMS:
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SocketRocketAblyFork: 33ff506ecb565498051b8f358d60ae44274c3981
   ULID: b4714891a02819364faecd574a53e391c4c6de9d
-  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
 
 PODFILE CHECKSUM: f047d0b88180d162f03262fe9a4804b9e52d19d2
 
