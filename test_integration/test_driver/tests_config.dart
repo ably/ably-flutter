@@ -23,6 +23,7 @@ final _tests = <TestGroup, Map<String, Function>>{
     'should publish': testRealtimePublish,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
+    'should publish with authCallback': testRealtimePublishWithAuthCallback,
   },
   // FlutterError seems to break the test app and needs to be run last
   TestGroup.HelperTests: {
