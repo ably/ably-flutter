@@ -25,30 +25,7 @@ class RealtimePublishTestState extends TestWidgetState<RealtimePublishTest> {
         ..logHandler =
             ({msg, exception}) => logMessages.add([msg, '$exception']),
     );
-
-    final name = 'Hello';
-    final messageData = [
-      null, //null
-      'Ably', //string
-      [1, 2, 3], //numeric list
-      ['hello', 'ably'], //string list
-      {
-        'hello': 'ably',
-        'items': ['1', 2.2, true]
-      }, //map
-      [
-        {'hello': 'ably'},
-        'ably',
-        'realtime'
-      ] //list of map
-    ];
-
-    final channel = await realtime.channels.get('test');
-    await channel.publish(); //publish without name and data
-    await channel.publish(data: messageData[1]); //publish without name
-    for (var data in messageData) {
-      await channel.publish(name: name, data: data);
-    }
+    await realtimeMessagesPublishUtil(realtime);
 
     // TODO(tiholic) throws UnimplementedError
     // await realtime.connection.close();
@@ -57,5 +34,31 @@ class RealtimePublishTestState extends TestWidgetState<RealtimePublishTest> {
       'handle': await realtime.handle,
       'log': logMessages,
     });
+  }
+}
+
+Future<void> realtimeMessagesPublishUtil(Realtime realtime) async {
+  final name = 'Hello';
+  final messageData = [
+    null, //null
+    'Ably', //string
+    [1, 2, 3], //numeric list
+    ['hello', 'ably'], //string list
+    {
+      'hello': 'ably',
+      'items': ['1', 2.2, true]
+    }, //map
+    [
+      {'hello': 'ably'},
+      'ably',
+      'realtime'
+    ] //list of map
+  ];
+
+  final channel = await realtime.channels.get('test');
+  await channel.publish(); //publish without name and data
+  await channel.publish(data: messageData[1]); //publish without name
+  for (var data in messageData) {
+    await channel.publish(name: name, data: data);
   }
 }

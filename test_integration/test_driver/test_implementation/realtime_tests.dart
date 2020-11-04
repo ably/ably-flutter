@@ -225,3 +225,16 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
   expect(filteredWithNames[3]['name'], 'name2');
   expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
 }
+
+Future testRealtimePublishWithAuthCallback(FlutterDriver driver) async {
+  final message = TestControlMessage(TestName.realtimePublishWithAuthCallback);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+
+  expect(response.payload['authCallbackInvoked'], isTrue);
+}

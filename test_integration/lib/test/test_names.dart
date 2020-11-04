@@ -11,10 +11,12 @@ class TestName {
       'testHelperUnhandledExceptionTest';
 
   static const String restPublish = 'restPublish';
-  static const String restPublishWithAuthCallback = 'restPublishWithAuthCallback';
+  static const String restPublishWithAuthCallback =
+      'restPublishWithAuthCallback';
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
+  static const String realtimePublishWithAuthCallback =
+      'realtimePublishWithAuthCallback';
 }
-
