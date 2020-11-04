@@ -25,4 +25,6 @@ Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
 
   expect(response.payload['handle'], isA<int>());
   expect(response.payload['handle'], greaterThan(0));
+  
+  expect(response.payload['authCallbackInvoked'], isTrue);
 }
