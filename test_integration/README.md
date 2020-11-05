@@ -6,11 +6,19 @@ emulators.
 
 ## Execute the Flutter Driver Tests
 
+### Run all Driver Tests
 Run the bash script in the project root directory
 
 ``` shell
 cd test_integration
-./test_driver.sh
+./run_integration_tests.sh
+```
+
+### Run a single Driver Test file
+
+```shell
+cd test_integration
+flutter driver test_driver/app.dart
 ```
 
 ## `flutter drive` execution
@@ -25,7 +33,7 @@ is executed, `flutter drive` searches of pairs of files in the
 directory `test_driver/` with the names `xxx.dart` and `xxx_test.dart`  
 where `xxx.dart` is the app to be run on the device or emulator and  
 `xxx_test.dart` the unit-test like test that controls the app by
-sending commands and receiving resonses that are then evaluated with
+sending commands and receiving responses that are then evaluated with
 `expect(...)` and similar to unit tests.
 
 `flutter drive` then executes *the app* in the found *devices* (or a
@@ -86,30 +94,49 @@ allows any JSON-serializable value.
 `TestDispatcher` is a minimal application widget that invokes tests
 depending on the name in the received message.
 
-Every test needs an entry in the `switch`/`case` added manually.
+A mapping from test name to a test widget factory needs to be passed
+to `lib.main(...)`.
+
+Example:
+
+``` dart
+final testFactory = <String, TestFactory>{
+  TestName.platformAndAblyVersion: (d) => PlatformAndAblyVersionTest(d),
+  TestName.appKeyProvisioning: (d) => AppKeyProvisionTest(d),
+};
+
+void main() => app.main(testFactory);
+```
 
 ### Sending responses from the app to the test
 
 When test code in the app is done, it needs to call `completeTest()`
 with the response data to notify the test about the result.  
-The reponse data again needs to be a JSON-serializable `Map<String,
+The response data again needs to be a JSON-serializable `Map<String,
 dynamic>`.
 
 Exceptions need to be handled by the test code in the app and
 communicated to the test using the `completeTest()` method.
 
 ## Limitations
-
+### Dependencies between tests
 If an app contains multiple tests, they will have some dependency
 between them, because the app is not restarted for each test which
 results for example in the plugin to keep the state from the previous
 test.
 
-To have truely independent tests, each test needs to have its own
+To have truly independent tests, each test needs to have its own
 `xxx.dart` and `xxx_test.dart` file pair in the `test_driver/`
-directory.  
+directory.
 They can all call the same `lib/main.dart` though, because
 for each `xxx_test.dart` file the app will be closed and restarted.
+
+### One message and response per test
+Currently sending a message from the driver test to the app starts a
+new test and completing a test sends a response.
+
+It would be possible to support multiple messages per test in both
+directions, but it is not yet clear if this is actually required.
 
 ## Widget per test
 
@@ -120,5 +147,5 @@ tests. Time should tell if this is a good approach.
 
 See
 https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54
-for how to improve developement performance by utilizing Hot
+for how to improve development performance by utilizing Hot
 Reload/Restart for Driver tests

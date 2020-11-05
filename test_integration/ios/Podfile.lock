@@ -1,0 +1,45 @@
+PODS:
+  - Ably (1.2.3):
+    - AblyDeltaCodec (= 1.2.0)
+    - msgpack (= 0.3.1)
+    - SocketRocketAblyFork (= 0.5.2-ably-7)
+    - ULID (= 1.1.0)
+  - ably_flutter_plugin (0.0.2):
+    - Ably
+    - Flutter
+  - AblyDeltaCodec (1.2.0)
+  - Flutter (1.0.0)
+  - msgpack (0.3.1)
+  - SocketRocketAblyFork (0.5.2-ably-7)
+  - ULID (1.1.0)
+
+DEPENDENCIES:
+  - ably_flutter_plugin (from `.symlinks/plugins/ably_flutter_plugin/ios`)
+  - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - Ably
+    - AblyDeltaCodec
+    - msgpack
+    - SocketRocketAblyFork
+    - ULID
+
+EXTERNAL SOURCES:
+  ably_flutter_plugin:
+    :path: ".symlinks/plugins/ably_flutter_plugin/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  Ably: 9f143677993cb6df20fce4551b9b6b2e55ad2f4d
+  ably_flutter_plugin: 72069121d750b83f093f89c212380021297fa135
+  AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
+  SocketRocketAblyFork: 33ff506ecb565498051b8f358d60ae44274c3981
+  ULID: b4714891a02819364faecd574a53e391c4c6de9d
+
+PODFILE CHECKSUM: 7d251af3d33bd11d1f2d86f8fb2d423bf85567b7
+
+COCOAPODS: 1.9.3

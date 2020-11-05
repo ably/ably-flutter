@@ -1,4 +1,4 @@
-@TestOn('android') // because disable wifi only works for Android
+@TestOn('android')
 import 'dart:io';
 
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
@@ -24,31 +24,32 @@ void main() {
       await enableWifi();
     });
 
-    // TODO(zoechi) these are not valid tests to be run without wifi
-    test('version', () async {
+    // TODO(tiholic) these are not valid tests when run without wifi,
+    // This is just an example how such a test could be built.
+    test('Platform and Ably version', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage('version', data);
+      final message =
+          TestControlMessage(TestName.platformAndAblyVersion, payload: data);
 
-      final result = await driver.requestData(message.toJson());
-      final response = TestControlMessage.fromJson(result);
+      final response = await getTestResponse(driver, message);
 
       expect(response.testName, message.testName);
 
-      // Use the `driver.getText` method to verify the counter starts at 0.
-      expect(response.payload['platformVersion'], 'Android 10');
-      expect(response.payload['ablyVersion'], 'android-1.1.10');
+      expect(response.payload['platformVersion'], isA<String>());
+      expect(response.payload['platformVersion'], isNot(isEmpty));
+      expect(response.payload['ablyVersion'], isA<String>());
+      expect(response.payload['ablyVersion'], isNot(isEmpty));
     });
 
-    test('provision ', () async {
+    test('AppKey provision ', () async {
       final data = {'message': 'foo'};
-      final message = TestControlMessage('provision', data);
+      final message =
+          TestControlMessage(TestName.appKeyProvisioning, payload: data);
 
-      final response = TestControlMessage.fromJson(
-          await driver.requestData(message.toJson()));
+      final response = await getTestResponse(driver, message);
 
       expect(response.testName, message.testName);
 
-      // Use the `driver.getText` method to verify the counter starts at 0.
       expect(response.payload['appKey'], isA<String>());
       expect(response.payload['appKey'], isNotEmpty);
     });
@@ -56,7 +57,7 @@ void main() {
 }
 
 Future disableWifi() async {
-  // TODO(zoechi)
+  // TODO(tiholic)
   // from https://stackoverflow.com/questions/10033757/how-to-turn-off-wifi-via-adb
   // but didn't work because `su` is not found on my phone
   // perhaps it's working with the emulator

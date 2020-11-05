@@ -141,10 +141,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
             final Map<String, Object> map = messageData.message;
             final String channelName = (String) map.get("channel");
-            final String name = (String) map.get("name");
-            final Object data = map.get("message");
-            System.out.println("pushing... NAME " + name + ", DATA " + ((data == null) ? "-" : data.toString()));
-            ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(name, data, new CompletionListener() {
+
+            final CompletionListener listener = new CompletionListener() {
                 @Override
                 public void onSuccess() {
                     result.success(null);
@@ -154,7 +152,16 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 public void onError(ErrorInfo reason) {
                     handleAblyException(result, AblyException.fromErrorInfo(reason));
                 }
-            });
+            };
+
+            final ArrayList<Message> channelMessages = (ArrayList<Message>) map.get("messages");
+            if( channelMessages == null ){
+                result.error("Messages cannot be null", null, null);
+                return;
+            }
+            Message[] messages = new Message[channelMessages.size()];
+            messages = channelMessages.toArray(messages);
+            ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(messages, listener);
         });
     }
 
@@ -288,16 +295,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 };
 
                 final ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
-                if (channelMessages != null) {
-                    Message[] messages = new Message[channelMessages.size()];
-                    messages = channelMessages.toArray(messages);
-                    channel.publish(messages, listener);
-                } else {
-                    final String name = (String) ablyMessage.message.get("name");
-                    final Object data = ablyMessage.message.get("data");
-                    final JsonElement json = (data == null) ? null : AblyMessageCodec.readValueAsJsonElement(data);
-                    channel.publish(name, (json == null) ? data : json, listener);
+                if( channelMessages == null ){
+                    result.error("Messages cannot be null", null, null);
+                    return;
                 }
+                Message[] messages = new Message[channelMessages.size()];
+                messages = channelMessages.toArray(messages);
+                channel.publish(messages, listener);
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }
