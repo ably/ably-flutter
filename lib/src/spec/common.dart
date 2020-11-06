@@ -1,3 +1,4 @@
+import 'auth.dart';
 import 'enums.dart';
 import 'rest/ably_base.dart';
 
@@ -74,31 +75,190 @@ abstract class StatsMessageTraffic {
   StatsMessageTypes webhook;
 }
 
+/// A class providing parameters of a token request.
+///
+/// Parameters for a token request
+///
+/// [Auth.authorize], [Auth.requestToken] and [Auth.createTokenRequest]
+/// accept an instance of TokenParams as a parameter
+///
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TK1
 class TokenParams {
+
+  /// Capability of the token.
+  ///
+  /// If the token request is successful, the capability of the
+  /// returned token will be the intersection of this [capability]
+  /// with the capability of the issuing key.
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2b
   String  capability;
+
+  /// A clientId to associate with this token.
+  ///
+  /// The generated token may be used to authenticate as this clientId.
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2c
   String clientId;
+
+  /// An opaque nonce string of at least 16 characters to ensure uniqueness.
+  ///
+  /// Timestamps, in conjunction with the nonce,
+  /// are used to prevent requests from being replayed
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2d
   String nonce;
+
+  /// The timestamp (in millis since the epoch) of this request.
+  ///
+  ///	Timestamps, in conjunction with the nonce, are used to prevent
+  ///	token requests from being replayed.
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2d
   DateTime timestamp;
+
+  /// Requested time to live for the token.
+  ///
+  /// If the token request is successful, the TTL of the returned
+  /// token will be less than or equal to this value depending on
+  /// application settings and the attributes of the issuing key.
+  ///
+  /// 0 means Ably will set it to the default value
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2a
   int ttl;
+
+  TokenParams({
+    this.capability,
+    this.clientId,
+    this.nonce,
+    this.timestamp,
+    this.ttl
+  });
+
 }
 
+/// Response to a `requestToken` request
+///
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
 class TokenDetails {
-  TokenDetails(this.token);
-  String capability;
-  String clientId;
-  int expires;
-  int issued;
+
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD2
   String token;
+
+  /// Token expiry time in milliseconds
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD3
+  int expires;
+
+  /// the time the token was issued in milliseconds
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD4
+  int issued;
+
+  /// stringified capabilities JSON
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD5
+  String capability;
+
+  /// Client ID assigned to the token.
+  ///
+  /// If [clientId] is not set (i.e. null), then the token is prohibited
+  /// from assuming a clientId in any operations, however if clientId
+  /// is a wildcard string '*', then the token is permitted to assume
+  /// any clientId. Any other string value for clientId implies that the
+  /// clientId is both enforced and assumed for all operations for this token
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD6
+  String clientId;
+
+  TokenDetails(this.token, {
+    this.expires,
+    this.issued,
+    this.capability,
+    this.clientId
+  });
+
+  /// TD7
+  TokenDetails.fromMap(Map<String, dynamic> map){
+    token = map['token'] as String;
+    expires = map['expires'] as int;
+    issued = map['issued'] as int;
+    capability = map['capability'] as String;
+    clientId = map['clientId'] as String;
+  }
+
 }
 
-abstract class TokenRequest {
-  String capability;
-  String clientId;
+/// spec: https://docs.ably.io/client-lib-development-guide/features/#TE1
+class TokenRequest {
+
+  /// [keyName] is the first part of Ably API Key.
+  ///
+  /// provided keyName will be used to authorize requests made to Ably.
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
+  ///
+  /// More details about Ably API Key:
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSA11
   String keyName;
-  String mac;
+
+  /// An opaque nonce string of at least 16 characters to ensure
+  ///	uniqueness of this request. Any subsequent request using the
+  ///	same nonce will be rejected.
+  ///
+  /// spec:
+  /// https://docs.ably.io/client-lib-development-guide/features/#TE2
+  /// https://docs.ably.io/client-lib-development-guide/features/#TE5
   String nonce;
+
+  /// The "Message Authentication Code" for this request.
+  ///
+  /// See the Ably Authentication documentation for more details.
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE2
+  String mac;
+
+  /// stringified capabilities JSON
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE3
+  String capability;
+
+  /// TE2
+  String clientId;
+
+  /// timestamp long – The timestamp (in milliseconds since the epoch)
+  /// of this request. Timestamps, in conjunction with the nonce,
+  /// are used to prevent requests from being replayed
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE5
   DateTime timestamp;
+
+  /// ttl attribute represents time to live (expiry)
+  /// of this token in milliseconds
+  ///
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE4
   int ttl;
+
+  TokenRequest({
+    this.keyName,
+    this.nonce,
+    this.clientId,
+    this.mac,
+    this.capability,
+    this.timestamp,
+    this.ttl
+  });
+
+  /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE7
+  TokenRequest.fromMap(Map<String, dynamic> map){
+    this.keyName = map["keyName"] as String;
+    this.nonce = map["nonce"] as String;
+    this.mac = map["mac"] as String;
+    this.capability = map["capability"] as String;
+    this.clientId = map["clientId"] as String;
+    this.timestamp = DateTime.fromMillisecondsSinceEpoch(map["timestamp"] as int);
+    this.ttl = map["ttl"] as int;
+  }
+
 }
 
 
@@ -277,6 +437,8 @@ abstract class Channels<ChannelType> {
   Map<String, ChannelType> _channels = {};
 
   ChannelType createChannel(name, options);
+
+  Iterable<ChannelType> get all => _channels.values;
 
   ChannelType get(String name) {  //TODO add ChannelOptions as optional argument here, and pass it on to createChannel
     if (_channels[name]==null) {

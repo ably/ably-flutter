@@ -8,20 +8,24 @@ package io.ably.flutter.plugin.generated;
 
 final public class PlatformConstants {
 
-    final public class CodecTypes {
+    static final public class CodecTypes {
         public static final byte ablyMessage = (byte) 128;
         public static final byte ablyEventMessage = (byte) 129;
         public static final byte clientOptions = (byte) 130;
         public static final byte message = (byte) 131;
+        public static final byte tokenParams = (byte) 132;
+        public static final byte tokenDetails = (byte) 133;
+        public static final byte tokenRequest = (byte) 134;
         public static final byte errorInfo = (byte) 144;
         public static final byte connectionStateChange = (byte) 201;
         public static final byte channelStateChange = (byte) 202;
     }
 
-    final public class PlatformMethod {
+    static final public class PlatformMethod {
         public static final String getPlatformVersion = "getPlatformVersion";
         public static final String getVersion = "getVersion";
         public static final String registerAbly = "registerAbly";
+        public static final String authCallback = "authCallback";
         public static final String createRestWithOptions = "createRestWithOptions";
         public static final String publish = "publish";
         public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
@@ -35,20 +39,20 @@ final public class PlatformConstants {
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
     }
-  
-    final public class TxAblyMessage {
+
+    static final public class TxAblyMessage {
         public static final String registrationHandle = "registrationHandle";
         public static final String type = "type";
         public static final String message = "message";
     }
 
-    final public class TxAblyEventMessage {
+    static final public class TxAblyEventMessage {
         public static final String eventName = "eventName";
         public static final String type = "type";
         public static final String message = "message";
     }
 
-    final public class TxErrorInfo {
+    static final public class TxErrorInfo {
         public static final String code = "code";
         public static final String message = "message";
         public static final String statusCode = "statusCode";
@@ -57,7 +61,7 @@ final public class PlatformConstants {
         public static final String cause = "cause";
     }
 
-    final public class TxClientOptions {
+    static final public class TxClientOptions {
         public static final String authUrl = "authUrl";
         public static final String authMethod = "authMethod";
         public static final String key = "key";
@@ -66,6 +70,7 @@ final public class PlatformConstants {
         public static final String authParams = "authParams";
         public static final String queryTime = "queryTime";
         public static final String useTokenAuth = "useTokenAuth";
+        public static final String hasAuthCallback = "hasAuthCallback";
         public static final String clientId = "clientId";
         public static final String logLevel = "logLevel";
         public static final String tls = "tls";
@@ -92,7 +97,7 @@ final public class PlatformConstants {
         public static final String transportParams = "transportParams";
     }
 
-    final public class TxTokenDetails {
+    static final public class TxTokenDetails {
         public static final String token = "token";
         public static final String expires = "expires";
         public static final String issued = "issued";
@@ -100,7 +105,7 @@ final public class PlatformConstants {
         public static final String clientId = "clientId";
     }
 
-    final public class TxTokenParams {
+    static final public class TxTokenParams {
         public static final String capability = "capability";
         public static final String clientId = "clientId";
         public static final String nonce = "nonce";
@@ -108,7 +113,17 @@ final public class PlatformConstants {
         public static final String ttl = "ttl";
     }
 
-    final public class TxConnectionStateChange {
+    static final public class TxTokenRequest {
+        public static final String capability = "capability";
+        public static final String clientId = "clientId";
+        public static final String keyName = "keyName";
+        public static final String mac = "mac";
+        public static final String nonce = "nonce";
+        public static final String timestamp = "timestamp";
+        public static final String ttl = "ttl";
+    }
+
+    static final public class TxConnectionStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
         public static final String event = "event";
@@ -116,7 +131,7 @@ final public class PlatformConstants {
         public static final String reason = "reason";
     }
 
-    final public class TxChannelStateChange {
+    static final public class TxChannelStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
         public static final String event = "event";
@@ -124,7 +139,7 @@ final public class PlatformConstants {
         public static final String reason = "reason";
     }
 
-    final public class TxMessage {
+    static final public class TxMessage {
         public static final String id = "id";
         public static final String timestamp = "timestamp";
         public static final String clientId = "clientId";

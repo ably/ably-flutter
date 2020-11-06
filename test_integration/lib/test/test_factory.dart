@@ -4,6 +4,7 @@ import 'package:ably_flutter_integration_test/test/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime_subscribe.dart';
 import 'package:ably_flutter_integration_test/test/rest_publish_test.dart';
+import 'package:ably_flutter_integration_test/test/rest_publish_with_auth_callback_test.dart';
 import 'package:ably_flutter_integration_test/test/test_helper_flutter_error_test.dart';
 import 'package:ably_flutter_integration_test/test/test_helper_unhandled_exception_test.dart';
 import 'package:ably_flutter_integration_test/test_dispatcher.dart';
@@ -17,6 +18,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimeEvents: (d) => RealtimeEventsTest(d),
   TestName.realtimeSubscribe: (d) => RealtimeSubscribeTest(d),
   TestName.restPublish: (d) => RestPublishTest(d),
+  TestName.restPublishWithAuthCallback: (d) => RestPublishWithAuthCallbackTest(d),
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),
   TestName.testHelperUnhandledExceptionTest: (d) =>
       TestHelperUnhandledExceptionTest(d),

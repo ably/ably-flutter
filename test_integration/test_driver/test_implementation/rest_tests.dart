@@ -15,3 +15,16 @@ Future testRestPublish(FlutterDriver driver) async {
   // TODO(tiholic) enable this after implementing logger
   // expect(response.payload['log'], isNotEmpty);
 }
+
+Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
+  final message = TestControlMessage(TestName.restPublishWithAuthCallback);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+  
+  expect(response.payload['authCallbackInvoked'], isTrue);
+}

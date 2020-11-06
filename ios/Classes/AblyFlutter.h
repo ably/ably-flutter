@@ -1,8 +1,9 @@
 @import Foundation;
+@import Flutter;
 
 @class ARTRest;
 @class ARTRealtime;
-@class ARTClientOptions;
+#import "AblyFlutterClientOptions.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -10,11 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
--(NSNumber *)createRestWithOptions:(ARTClientOptions *)options;
+-(void) setChannel:(FlutterMethodChannel *)channel;
+
+-(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *)options;
 
 -(nullable ARTRest *)getRest:(NSNumber *)handle;
 
--(NSNumber *)createRealtimeWithOptions:(ARTClientOptions *)options;
+-(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
 
 -(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 
@@ -7,6 +8,9 @@ import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'channels.dart';
 
+Map<int, Rest> _restInstances = {};
+Map<int, Rest> _restInstancesUnmodifiableView;
+Map<int, Rest> get restInstances => _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChannels> {
 
@@ -21,10 +25,14 @@ class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChan
     this.channels = RestPlatformChannels(this);
   }
 
-  Future<int> createPlatformInstance() async => await invokeRaw<int>(
-    PlatformMethod.createRestWithOptions,
-    AblyMessage(options)
-  );
+  Future<int> createPlatformInstance() async {
+    int handle = await invokeRaw<int>(
+      PlatformMethod.createRestWithOptions,
+      AblyMessage(options)
+    );
+    _restInstances[handle] = this;
+    return handle;
+  }
 
   @override
   Auth auth;

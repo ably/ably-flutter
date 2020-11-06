@@ -53,10 +53,10 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*)[_dataMap objectForKey:@"channel"];
     NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*)[_dataMap objectForKey:@"messages"];
-    
+
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    
+
     [channel publish:messages callback:^(ARTErrorInfo *_Nullable error){
         if(error){
             result([
@@ -218,6 +218,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
         return nil;
     }
     _ably = [AblyFlutter sharedInstance];
+    [_ably setChannel: channel];
     self->_streamsChannel = streamsChannel;
     
     _handlers = @{

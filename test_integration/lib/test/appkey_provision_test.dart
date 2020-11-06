@@ -13,10 +13,9 @@ class AppKeyProvisionTest extends TestWidget {
 class _AppKeyProvisionTestState extends TestWidgetState<AppKeyProvisionTest> {
   @override
   Future<void> test() async {
-    final appKey = await provision('sandbox-');
-
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'appKey': appKey.name,
+      'appKey': (await provision('sandbox-')).name,
+      'tokenRequest': await getTokenRequest(),
     });
   }
 }
