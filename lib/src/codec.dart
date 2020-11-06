@@ -412,13 +412,16 @@ class Codec extends StandardMessageCodec {
 
     Message decodeChannelMessage(Map<String, dynamic> jsonMap){
       if(jsonMap==null) return null;
-      Message message = Message(
+      var message = Message(
         name: readFromJson<String>(jsonMap, TxMessage.name),
         clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
         data: readFromJson<dynamic>(jsonMap, TxMessage.data),
       );
       message.id = readFromJson<String>(jsonMap, TxMessage.id);
-      message.timestamp = DateTime.fromMillisecondsSinceEpoch(readFromJson<int>(jsonMap, TxMessage.timestamp));
+      var timestamp = readFromJson<int>(jsonMap, TxMessage.timestamp);
+      if(timestamp!=null) {
+        message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      }
       message.connectionId = readFromJson<String>(jsonMap, TxMessage.connectionId);
       message.encoding = readFromJson<String>(jsonMap, TxMessage.encoding);
       message.extras = readFromJson<Map>(jsonMap, TxMessage.extras);

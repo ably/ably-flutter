@@ -10,28 +10,29 @@ import 'channels.dart';
 
 Map<int, Rest> _restInstances = {};
 Map<int, Rest> _restInstancesUnmodifiableView;
-Map<int, Rest> get restInstances => _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
-class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChannels> {
+Map<int, Rest> get restInstances =>
+    _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
-  Rest({
-    ClientOptions options,
-    final String key
-  }) :
-      assert(options!=null || key!=null),
-      this.options = (options==null)?ClientOptions.fromKey(key):options,
-      super()
-  {
-    this.channels = RestPlatformChannels(this);
+class Rest extends PlatformObject
+    implements spec.RestInterface<RestPlatformChannels> {
+  Rest({ClientOptions options, final String key})
+      : assert(options != null || key != null),
+        options = options ?? ClientOptions.fromKey(key),
+        super() {
+    channels = RestPlatformChannels(this);
   }
 
+  @override
   Future<int> createPlatformInstance() async {
-    int handle = await invokeRaw<int>(
-      PlatformMethod.createRestWithOptions,
-      AblyMessage(options)
-    );
+    var handle = await invokeRaw<int>(
+        PlatformMethod.createRestWithOptions, AblyMessage(options));
     _restInstances[handle] = this;
     return handle;
+  }
+
+  void authUpdateComplete() {
+    channels.all.forEach((c) => c.authUpdateComplete());
   }
 
   @override
@@ -41,7 +42,12 @@ class Rest extends PlatformObject implements spec.RestInterface<RestPlatformChan
   ClientOptions options;
 
   @override
-  Future<HttpPaginatedResponse> request({String method, String path, Map<String, dynamic> params, body, Map<String, String> headers}) {
+  Future<HttpPaginatedResponse> request(
+      {String method,
+      String path,
+      Map<String, dynamic> params,
+      body,
+      Map<String, String> headers}) {
     // TODO: implement request
     return null;
   }

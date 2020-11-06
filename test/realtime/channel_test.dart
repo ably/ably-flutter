@@ -29,32 +29,32 @@ void main() {
     var isAuthenticated = false;
 
     methodChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+
       switch (methodCall.method) {
         case PlatformMethod.registerAbly:
           return true;
 
-        case PlatformMethod.createRestWithOptions:
         case PlatformMethod.createRealtimeWithOptions:
           final handle = ++handleCounter;
           channels[handle] = methodCall.arguments as AblyMessage;
           return handle;
 
-        case PlatformMethod.publish:
+        case PlatformMethod.publishRealtimeChannelMessage:
           final message = methodCall.arguments as AblyMessage;
           final handle = (message.message as AblyMessage).handle;
           final ablyChannel = channels[handle];
           final clientOptions = ablyChannel.message as ClientOptions;
 
-          // `authUrl` is used to indicate the presense of an authCallback,
+          // `authUrl` is used to indicate the presence of an authCallback,
           // because function references (in `authCallback`) get dropped by the
           // PlatformChannel.
           if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-            await AblyMethodCallHandler(methodChannel).onAuthCallback(
-                AblyMessage(TokenParams(timestamp: DateTime.now()),
-                    handle: handle));
+            await AblyMethodCallHandler(methodChannel).onRealtimeAuthCallback(
+              AblyMessage(TokenParams(timestamp: DateTime.now()),
+                handle: handle));
             isAuthenticated = true;
             throw PlatformException(
-                code: ErrorCodes.authCallbackFailure.toString());
+              code: ErrorCodes.authCallbackFailure.toString());
           }
 
           publishedMessages.add(message);
@@ -62,7 +62,7 @@ void main() {
 
         default:
           return throw 'Unexpected channel method call: ${methodCall.method}'
-              ' args: ${methodCall.arguments}';
+            ' args: ${methodCall.arguments}';
       }
     });
   });
@@ -71,21 +71,24 @@ void main() {
     methodChannel.setMockMethodCallHandler(null);
   });
 
-  test('publish message without authCallback', () async {
+  test('publish realtime message without authCallback', () async {
     // setup
-    final rest = Rest(key: 'TEST-KEY');
-    final channel = await rest.channels.get('test');
+    final realtime = Realtime(key: 'TEST-KEY');
+    final channel = await realtime.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data1');
+    await channel.publish(message: Message(name: 'name', data: 'data'));
+    await channel.publish(messages: [Message(name: 'name', data: 'data')]);
 
     // verification
-    expect(publishedMessages.length, 1);
+    expect(publishedMessages.length, 3);
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
+    print("messageData $messageData");
     expect(messageData['channel'], 'test');
     expect(messageData['name'], 'name');
-    expect(messageData['message'], 'data1');
+    expect(messageData['data'], 'data1');
   });
 
   test('publish message with authCallback', () async {
@@ -95,9 +98,9 @@ void main() {
     final options = ClientOptions()
       ..authCallback = authCallback
       ..authUrl = 'hasAuthCallback';
-    final rest = Rest(options: options, key: 'TEST-KEY');
+    final realtime = Realtime(options: options, key: 'TEST-KEY');
 
-    final channel = rest.channels.get('test');
+    final channel = realtime.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data2');
@@ -109,13 +112,13 @@ void main() {
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
     expect(messageData['channel'], 'test');
     expect(messageData['name'], 'name');
-    expect(messageData['message'], 'data2');
+    expect(messageData['data'], 'data2');
   });
 
-  test('publish message with authCallback timing out', () async {
+  test('publish realtime message with authCallback timing out', () async {
     // setup
     final tooMuchDelay =
-        Timeouts.retryOperationOnAuthFailure + Duration(seconds: 2);
+      Timeouts.retryOperationOnAuthFailure + Duration(seconds: 2);
     var authCallbackCounter = 0;
 
     Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
@@ -131,8 +134,8 @@ void main() {
         final options = ClientOptions()
           ..authCallback = timingOutOnceThenSucceedsAuthCallback
           ..authUrl = 'hasAuthCallback';
-        final rest = Rest(options: options, key: 'TEST-KEY');
-        final channel = rest.channels.get('test');
+        final realtime = Realtime(options: options, key: 'TEST-KEY');
+        final channel = realtime.channels.get('test');
 
         // exercise
         final future1 = channel.publish(name: 'name', data: 'data3-1');
@@ -162,20 +165,20 @@ void main() {
         final messageData = firstMessage.message as Map<dynamic, dynamic>;
         expect(messageData['channel'], 'test');
         expect(messageData['name'], 'name');
-        expect(messageData['message'], 'data3-2');
+        expect(messageData['data'], 'data3-2');
       }),
     );
   });
 
-  test('publish 2 message with authCallback', () async {
+  test('publish 2 realtime messages with authCallback', () async {
     // setup
     final authCallback = expectAsync1((token) async {});
 
     final options = ClientOptions()
       ..authCallback = authCallback
       ..authUrl = 'hasAuthCallback';
-    final rest = Rest(options: options, key: 'TEST-KEY');
-    final channel = rest.channels.get('test');
+    final realtime = Realtime(options: options, key: 'TEST-KEY');
+    final channel = realtime.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data4');
@@ -187,13 +190,13 @@ void main() {
     final messageData0 = message0.message as Map<dynamic, dynamic>;
     expect(messageData0['channel'], 'test');
     expect(messageData0['name'], 'name');
-    expect(messageData0['message'], 'data4');
+    expect(messageData0['data'], 'data4');
 
     final message1 = publishedMessages[1].message as AblyMessage;
     final messageData1 = message1.message as Map<dynamic, dynamic>;
     expect(messageData1['channel'], 'test');
     expect(messageData1['name'], 'name');
-    expect(messageData1['message'], 'data5');
+    expect(messageData1['data'], 'data5');
 
     // });
   }, timeout: Timeout.none);

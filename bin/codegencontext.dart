@@ -36,6 +36,7 @@ List<Map<String, dynamic>> _platformMethods = [
 
   // Auth
   {"name": "authCallback", "value": "authCallback"},
+  {"name": "realtimeAuthCallback", "value": "realtimeAuthCallback"},
 
   // Rest
   {"name": "createRestWithOptions", "value": "createRestWithOptions"},

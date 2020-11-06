@@ -11,6 +11,7 @@ NSString *const AblyPlatformMethod_getPlatformVersion= @"getPlatformVersion";
 NSString *const AblyPlatformMethod_getVersion= @"getVersion";
 NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
 NSString *const AblyPlatformMethod_authCallback= @"authCallback";
+NSString *const AblyPlatformMethod_realtimeAuthCallback= @"realtimeAuthCallback";
 NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
 NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
