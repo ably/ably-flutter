@@ -25,6 +25,8 @@ Future testDemoDependencies(FlutterDriver driver) async {
 
   final response = await getTestResponse(driver, message);
 
+  print("response.payload ${response.payload}");
+
   expect(response.testName, message.testName);
 
   expect(response.payload['appKey'], isA<String>());
@@ -44,9 +46,6 @@ Future testDemoDependencies(FlutterDriver driver) async {
 
   expect(tokenRequest['mac'], isA<String>());
   expect(tokenRequest['mac'], isNotEmpty);
-
-  expect(tokenRequest['clientId'], isA<String>());
-  expect(tokenRequest['clientId'], isNotEmpty);
 
   expect(tokenRequest['timestamp'], isA<int>());;
 

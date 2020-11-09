@@ -21,7 +21,6 @@ class RealtimePublishWithAuthCallbackTestState
     var authCallbackInvoked = false;
     final realtime = Realtime(
         options: ClientOptions()
-          ..clientId = 'someClientId'
           ..logLevel = LogLevel.verbose
           ..authCallback = ((TokenParams params) async {
             authCallbackInvoked = true;
