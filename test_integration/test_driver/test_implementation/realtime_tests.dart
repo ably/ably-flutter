@@ -44,10 +44,6 @@ Future testRealtimeEvents(FlutterDriver driver) async {
           .map((e) => e as Map<String, dynamic>)
           .toList();
 
-  //TODO(tiholic) this is null from iOS and 'initialized' from android
-  // remove this variable and use 'initialized' string directly once it is fixed from ably-cocoa
-  String defaultConnectionOrChannelState = connectionStateChanges[0]['previous'];
-
   // connectionStates
   expect(connectionStates,
       orderedEquals(const ['initialized', 'initialized', 'initialized', 'connected']));
@@ -69,8 +65,8 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   expect(
       connectionStateChanges.map((e) => e['previous']),
-      orderedEquals([
-        defaultConnectionOrChannelState,
+      orderedEquals(const [
+        'initialized',
         'connecting',
       ]));
 
@@ -118,8 +114,8 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   expect(
       channelStateChanges.map((e) => e['previous']),
-      orderedEquals([
-        defaultConnectionOrChannelState,
+      orderedEquals(const [
+        'initialized',
         'attaching',
         'attached',
         'detaching',
@@ -133,7 +129,7 @@ Future testRealtimeEvents(FlutterDriver driver) async {
       orderedEquals(const ['attaching']));
 
   expect(filteredChannelStateChanges.map((e) => e['previous']),
-      orderedEquals([defaultConnectionOrChannelState]));
+      orderedEquals(const ['initialized']));
 }
 
 Future testRealtimeSubscribe(FlutterDriver driver) async {

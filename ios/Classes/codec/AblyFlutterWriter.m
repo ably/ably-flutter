@@ -61,9 +61,7 @@ if (VALUE) { \
 }
 
 #define WRITE_ENUM(DICTIONARY, JSON_KEY, ENUM_VALUE){ \
-if (ENUM_VALUE) { \
 WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
-} \
 }
 
 static AblyCodecEncoder encodeAblyMessage = ^NSMutableDictionary*(AblyFlutterMessage *const message) {
