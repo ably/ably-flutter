@@ -122,6 +122,22 @@ extern NSString *const TxTokenRequest_timestamp;
 extern NSString *const TxTokenRequest_ttl;
 @end
 
+@interface TxEnumConstants : NSObject
+extern NSString *const TxEnumConstants_initialized;
+extern NSString *const TxEnumConstants_connecting;
+extern NSString *const TxEnumConstants_connected;
+extern NSString *const TxEnumConstants_disconnected;
+extern NSString *const TxEnumConstants_attaching;
+extern NSString *const TxEnumConstants_attached;
+extern NSString *const TxEnumConstants_detaching;
+extern NSString *const TxEnumConstants_detached;
+extern NSString *const TxEnumConstants_suspended;
+extern NSString *const TxEnumConstants_closing;
+extern NSString *const TxEnumConstants_closed;
+extern NSString *const TxEnumConstants_failed;
+extern NSString *const TxEnumConstants_update;
+@end
+
 @interface TxConnectionStateChange : NSObject
 extern NSString *const TxConnectionStateChange_current;
 extern NSString *const TxConnectionStateChange_previous;

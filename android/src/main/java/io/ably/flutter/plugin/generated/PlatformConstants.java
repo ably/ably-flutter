@@ -124,6 +124,22 @@ final public class PlatformConstants {
         public static final String ttl = "ttl";
     }
 
+    static final public class TxEnumConstants {
+        public static final String initialized = "initialized";
+        public static final String connecting = "connecting";
+        public static final String connected = "connected";
+        public static final String disconnected = "disconnected";
+        public static final String attaching = "attaching";
+        public static final String attached = "attached";
+        public static final String detaching = "detaching";
+        public static final String detached = "detached";
+        public static final String suspended = "suspended";
+        public static final String closing = "closing";
+        public static final String closed = "closed";
+        public static final String failed = "failed";
+        public static final String update = "update";
+    }
+
     static final public class TxConnectionStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
