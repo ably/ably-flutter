@@ -60,10 +60,6 @@ if (VALUE) { \
 } \
 }
 
-#define WRITE_ENUM(DICTIONARY, JSON_KEY, ENUM_VALUE){ \
-WRITE_VALUE(DICTIONARY, JSON_KEY, [NSNumber numberWithInt:ENUM_VALUE]); \
-}
-
 static AblyCodecEncoder encodeAblyMessage = ^NSMutableDictionary*(AblyFlutterMessage *const message) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_VALUE(dictionary, TxAblyMessage_registrationHandle, [message handle]);
@@ -87,11 +83,102 @@ static AblyCodecEncoder encodeErrorInfo = ^NSMutableDictionary*(ARTErrorInfo *co
     return dictionary;
 };
 
++(NSString *) encodeConnectionState: (ARTRealtimeConnectionState) state {
+    switch (state) {
+        case ARTRealtimeInitialized:
+            return TxEnumConstants_initialized;
+        case ARTRealtimeConnecting:
+            return TxEnumConstants_connecting;
+        case ARTRealtimeConnected:
+            return TxEnumConstants_connected;
+        case ARTRealtimeDisconnected:
+            return TxEnumConstants_disconnected;
+        case ARTRealtimeSuspended:
+            return TxEnumConstants_suspended;
+        case ARTRealtimeClosing:
+            return TxEnumConstants_closing;
+        case ARTRealtimeClosed:
+            return TxEnumConstants_closed;
+        case ARTRealtimeFailed:
+            return TxEnumConstants_failed;
+    }
+};
+
++(NSString *) encodeConnectionEvent: (ARTRealtimeConnectionEvent) event {
+    switch(event) {
+        case ARTRealtimeConnectionEventInitialized:
+            return TxEnumConstants_initialized;
+        case ARTRealtimeConnectionEventConnecting:
+            return TxEnumConstants_connecting;
+        case ARTRealtimeConnectionEventConnected:
+            return TxEnumConstants_connected;
+        case ARTRealtimeConnectionEventDisconnected:
+            return TxEnumConstants_disconnected;
+        case ARTRealtimeConnectionEventSuspended:
+            return TxEnumConstants_suspended;
+        case ARTRealtimeConnectionEventClosing:
+            return TxEnumConstants_closing;
+        case ARTRealtimeConnectionEventClosed:
+            return TxEnumConstants_closed;
+        case ARTRealtimeConnectionEventFailed:
+            return TxEnumConstants_failed;
+        case ARTRealtimeConnectionEventUpdate:
+            return TxEnumConstants_update;
+    }
+}
+
+
++(NSString *) encodeChannelState: (ARTRealtimeChannelState) event {
+    switch(event) {
+        case ARTRealtimeChannelInitialized:
+            return TxEnumConstants_initialized;
+        case ARTRealtimeChannelAttaching:
+            return TxEnumConstants_attaching;
+        case ARTRealtimeChannelAttached:
+            return TxEnumConstants_attached;
+        case ARTRealtimeChannelDetaching:
+            return TxEnumConstants_detaching;
+        case ARTRealtimeChannelDetached:
+            return TxEnumConstants_detached;
+        case ARTRealtimeChannelSuspended:
+            return TxEnumConstants_suspended;
+        case ARTRealtimeChannelFailed:
+            return TxEnumConstants_failed;
+    }
+}
+
++(NSString *) encodeChannelEvent: (ARTChannelEvent) event {
+    switch(event) {
+        case ARTChannelEventInitialized:
+            return TxEnumConstants_initialized;
+        case ARTChannelEventAttaching:
+            return TxEnumConstants_attaching;
+        case ARTChannelEventAttached:
+            return TxEnumConstants_attached;
+        case ARTChannelEventDetaching:
+            return TxEnumConstants_detaching;
+        case ARTChannelEventDetached:
+            return TxEnumConstants_detached;
+        case ARTChannelEventSuspended:
+            return TxEnumConstants_suspended;
+        case ARTChannelEventFailed:
+            return TxEnumConstants_failed;
+        case ARTChannelEventUpdate:
+            return TxEnumConstants_update;
+    }
+}
+
 static AblyCodecEncoder encodeConnectionStateChange = ^NSMutableDictionary*(ARTConnectionStateChange *const stateChange) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-    WRITE_ENUM(dictionary, TxConnectionStateChange_current, [stateChange current]);
-    WRITE_ENUM(dictionary, TxConnectionStateChange_previous, [stateChange previous]);
-    WRITE_ENUM(dictionary, TxConnectionStateChange_event, [stateChange event]);
+    WRITE_VALUE(dictionary,
+                TxConnectionStateChange_current,
+                [AblyFlutterWriter encodeConnectionState: [stateChange current]]);
+    WRITE_VALUE(dictionary,
+                TxConnectionStateChange_previous,
+                [AblyFlutterWriter encodeConnectionState: [stateChange previous]]);
+    WRITE_VALUE(dictionary,
+                TxConnectionStateChange_event,
+                [AblyFlutterWriter encodeConnectionEvent: [stateChange event]]);
     WRITE_VALUE(dictionary, TxConnectionStateChange_retryIn, [stateChange retryIn]?@((int)([stateChange retryIn] * 1000)):nil);
     WRITE_VALUE(dictionary, TxConnectionStateChange_reason, encodeErrorInfo([stateChange reason]));
     return dictionary;
@@ -99,9 +186,16 @@ static AblyCodecEncoder encodeConnectionStateChange = ^NSMutableDictionary*(ARTC
 
 static AblyCodecEncoder encodeChannelStateChange = ^NSMutableDictionary*(ARTChannelStateChange *const stateChange) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-    WRITE_ENUM(dictionary, TxChannelStateChange_current, [stateChange current]);
-    WRITE_ENUM(dictionary, TxChannelStateChange_previous, [stateChange previous]);
-    WRITE_ENUM(dictionary, TxChannelStateChange_event, [stateChange event]);
+    WRITE_VALUE(dictionary,
+                TxChannelStateChange_current,
+                [AblyFlutterWriter encodeChannelState: [stateChange current]]);
+    WRITE_VALUE(dictionary,
+                TxChannelStateChange_previous,
+                [AblyFlutterWriter encodeChannelState: [stateChange previous]]);
+    WRITE_VALUE(dictionary,
+                TxChannelStateChange_event,
+                [AblyFlutterWriter encodeChannelEvent: [stateChange event]]);
+
     WRITE_VALUE(dictionary, TxChannelStateChange_resumed, [stateChange resumed]?@([stateChange resumed]):nil);
     WRITE_VALUE(dictionary, TxChannelStateChange_reason, encodeErrorInfo([stateChange reason]));
     return dictionary;

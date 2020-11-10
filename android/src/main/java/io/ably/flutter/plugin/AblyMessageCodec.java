@@ -14,7 +14,11 @@ import java.util.function.Consumer;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.lib.realtime.ChannelEvent;
+import io.ably.lib.realtime.ChannelState;
 import io.ably.lib.realtime.ChannelStateListener;
+import io.ably.lib.realtime.ConnectionEvent;
+import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
@@ -111,12 +115,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private void writeValueToJson(Map<String, Object> jsonMap, String key, Object value) {
         if (null != value) {
             jsonMap.put(key, value);
-        }
-    }
-
-    private void writeEnumToJson(Map<String, Object> jsonMap, String key, Enum value) {
-        if (null != value) {
-            jsonMap.put(key, value.ordinal());
         }
     }
 
@@ -354,13 +352,105 @@ public class AblyMessageCodec extends StandardMessageCodec {
         // Track @ https://github.com/ably/ably-flutter/issues/14
         return jsonMap;
     }
+    
+    private String encodeConnectionState(ConnectionState state){
+        switch (state) {
+            case initialized:
+                return PlatformConstants.TxEnumConstants.initialized;
+            case connecting:
+                return PlatformConstants.TxEnumConstants.connecting;
+            case connected:
+                return PlatformConstants.TxEnumConstants.connected;
+            case disconnected:
+                return PlatformConstants.TxEnumConstants.disconnected;
+            case suspended:
+                return PlatformConstants.TxEnumConstants.suspended;
+            case closing:
+                return PlatformConstants.TxEnumConstants.closing;
+            case closed:
+                return PlatformConstants.TxEnumConstants.closed;
+            case failed:
+                return PlatformConstants.TxEnumConstants.failed;
+            default:
+                return null;
+        }
+    }
+    
+    private String encodeConnectionEvent(ConnectionEvent event){
+        switch (event) {
+            case initialized:
+                return PlatformConstants.TxEnumConstants.initialized;
+            case connecting:
+                return PlatformConstants.TxEnumConstants.connecting;
+            case connected:
+                return PlatformConstants.TxEnumConstants.connected;
+            case disconnected:
+                return PlatformConstants.TxEnumConstants.disconnected;
+            case suspended:
+                return PlatformConstants.TxEnumConstants.suspended;
+            case closing:
+                return PlatformConstants.TxEnumConstants.closing;
+            case closed:
+                return PlatformConstants.TxEnumConstants.closed;
+            case failed:
+                return PlatformConstants.TxEnumConstants.failed;
+            case update:
+                return PlatformConstants.TxEnumConstants.update;
+            default:
+                return null;
+        }
+    }
+
+    private String encodeChannelState(ChannelState state){
+        switch (state) {
+            case initialized:
+                return PlatformConstants.TxEnumConstants.initialized;
+            case attaching:
+                return PlatformConstants.TxEnumConstants.attaching;
+            case attached:
+                return PlatformConstants.TxEnumConstants.attached;
+            case detaching:
+                return PlatformConstants.TxEnumConstants.detaching;
+            case detached:
+                return PlatformConstants.TxEnumConstants.detached;
+            case failed:
+                return PlatformConstants.TxEnumConstants.failed;
+            case suspended:
+                return PlatformConstants.TxEnumConstants.suspended;
+            default:
+                return null;
+        }
+    }
+
+    private String encodeChannelEvent(ChannelEvent event){
+        switch (event) {
+            case initialized:
+                return PlatformConstants.TxEnumConstants.initialized;
+            case attaching:
+                return PlatformConstants.TxEnumConstants.attaching;
+            case attached:
+                return PlatformConstants.TxEnumConstants.attached;
+            case detaching:
+                return PlatformConstants.TxEnumConstants.detaching;
+            case detached:
+                return PlatformConstants.TxEnumConstants.detached;
+            case failed:
+                return PlatformConstants.TxEnumConstants.failed;
+            case suspended:
+                return PlatformConstants.TxEnumConstants.suspended;
+            case update:
+                return PlatformConstants.TxEnumConstants.update;
+            default:
+                return null;
+        }
+    }
 
     private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c) {
         if (c == null) return null;
         final HashMap<String, Object> jsonMap = new HashMap<>();
-        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, c.current);
-        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, c.previous);
-        writeEnumToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, c.event);
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, encodeConnectionState(c.current));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, encodeConnectionState(c.previous));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, encodeConnectionEvent(c.event));
         writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.retryIn, c.retryIn);
         writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.reason));
         return jsonMap;
@@ -369,9 +459,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
     private Map<String, Object> encodeChannelStateChange(ChannelStateListener.ChannelStateChange c) {
         if (c == null) return null;
         final HashMap<String, Object> jsonMap = new HashMap<>();
-        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, c.current);
-        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.previous, c.previous);
-        writeEnumToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, c.event);
+        writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, encodeChannelState(c.current));
+        writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.previous, encodeChannelState(c.previous));
+        writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
         writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
         writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
         return jsonMap;
