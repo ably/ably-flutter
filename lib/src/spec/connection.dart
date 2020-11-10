@@ -23,8 +23,8 @@ abstract class Connection implements EventEmitter<ConnectionEvent, ConnectionSta
 
   /// The serial number of the last message to be received on this connection.
   int serial;
-  void close();
-  void connect();
+  Future<void> close();
+  Future<void> connect();
 
   Future<int> ping();
 
