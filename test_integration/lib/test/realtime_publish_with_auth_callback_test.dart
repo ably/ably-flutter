@@ -27,9 +27,7 @@ class RealtimePublishWithAuthCallbackTestState
             return TokenRequest.fromMap(await getTokenRequest());
           }));
     await realtimeMessagesPublishUtil(realtime);
-
-    // TODO(tiholic) throws UnimplementedError
-    // await realtime.connection.close();
+    await realtime.close();
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await realtime.handle,
