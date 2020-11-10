@@ -4,7 +4,7 @@ PODS:
     - msgpack (= 0.3.1)
     - SocketRocketAblyFork (= 0.5.2-ably-7)
     - ULID (= 1.1.0)
-  - ably_flutter_plugin (0.0.2):
+  - ably_flutter_plugin (0.0.5):
     - Ably
     - Flutter
   - AblyDeltaCodec (1.2.0)
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ably: 9f143677993cb6df20fce4551b9b6b2e55ad2f4d
-  ably_flutter_plugin: 72069121d750b83f093f89c212380021297fa135
+  ably_flutter_plugin: b68be8fea2c311f64a39132a0b70794c33e2093b
   AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
