@@ -375,24 +375,101 @@ class Codec extends StandardMessageCodec {
     }
 
     /// Decodes [index] value to [ConnectionEvent] enum if not null
-    ConnectionEvent decodeConnectionEvent(int index) => (index==null)?null:ConnectionEvent.values[index];
+    ConnectionEvent decodeConnectionEvent(String eventName) {
+      switch (eventName) {
+        case TxEnumConstants.initialized:
+          return ConnectionEvent.initialized;
+        case TxEnumConstants.connecting:
+          return ConnectionEvent.connecting;
+        case TxEnumConstants.connected:
+          return ConnectionEvent.connected;
+        case TxEnumConstants.disconnected:
+          return ConnectionEvent.disconnected;
+        case TxEnumConstants.suspended:
+          return ConnectionEvent.suspended;
+        case TxEnumConstants.closing:
+          return ConnectionEvent.closing;
+        case TxEnumConstants.closed:
+          return ConnectionEvent.closed;
+        case TxEnumConstants.failed:
+          return ConnectionEvent.failed;
+        case TxEnumConstants.update:
+          return ConnectionEvent.update;
+      }
+    }
 
-    /// Decodes [index] value to [ConnectionState] enum if not null
-    ConnectionState decodeConnectionState(int index) => (index==null)?null:ConnectionState.values[index];
+    /// Decodes [state] to [ConnectionState] enum if not null
+    ConnectionState decodeConnectionState(String state) {
+      if (state == null) return null;
+      switch (state) {
+        case TxEnumConstants.initialized:
+          return ConnectionState.initialized;
+        case TxEnumConstants.connecting:
+          return ConnectionState.connecting;
+        case TxEnumConstants.connected:
+          return ConnectionState.connected;
+        case TxEnumConstants.disconnected:
+          return ConnectionState.disconnected;
+        case TxEnumConstants.suspended:
+          return ConnectionState.suspended;
+        case TxEnumConstants.closing:
+          return ConnectionState.closing;
+        case TxEnumConstants.closed:
+          return ConnectionState.closed;
+        case TxEnumConstants.failed:
+          return ConnectionState.failed;
+      }
+    }
 
-    /// Decodes [index] value to [ChannelEvent] enum if not null
-    ChannelEvent decodeChannelEvent(int index) => (index==null)?null:ChannelEvent.values[index];
+    /// Decodes [eventName] to [ChannelEvent] enum if not null
+    ChannelEvent decodeChannelEvent(String eventName) {
+      switch (eventName) {
+        case TxEnumConstants.initialized:
+          return ChannelEvent.initialized;
+        case TxEnumConstants.attaching:
+          return ChannelEvent.attaching;
+        case TxEnumConstants.attached:
+          return ChannelEvent.attached;
+        case TxEnumConstants.detaching:
+          return ChannelEvent.detaching;
+        case TxEnumConstants.detached:
+          return ChannelEvent.detached;
+        case TxEnumConstants.suspended:
+          return ChannelEvent.suspended;
+        case TxEnumConstants.failed:
+          return ChannelEvent.failed;
+        case TxEnumConstants.update:
+          return ChannelEvent.update;
+      }
+    }
 
-    /// Decodes [index] value to [ChannelState] enum if not null
-    ChannelState decodeChannelState(int index) => (index==null)?null:ChannelState.values[index];
+    /// Decodes [state] to [ChannelState] enum if not null
+    ChannelState decodeChannelState(String state) {
+      switch (state) {
+        case TxEnumConstants.initialized:
+          return ChannelState.initialized;
+        case TxEnumConstants.attaching:
+          return ChannelState.attaching;
+        case TxEnumConstants.attached:
+          return ChannelState.attached;
+        case TxEnumConstants.detaching:
+          return ChannelState.detaching;
+        case TxEnumConstants.detached:
+          return ChannelState.detached;
+        case TxEnumConstants.suspended:
+          return ChannelState.suspended;
+        case TxEnumConstants.failed:
+          return ChannelState.failed;
+      }
+    }
 
     /// Decodes value [jsonMap] to [ConnectionStateChange]
     /// returns null if [jsonMap] is null
     ConnectionStateChange decodeConnectionStateChange(Map<String, dynamic> jsonMap){
         if(jsonMap==null) return null;
-        ConnectionState current = decodeConnectionState(readFromJson<int>(jsonMap, TxConnectionStateChange.current));
-        ConnectionState previous = decodeConnectionState(readFromJson<int>(jsonMap, TxConnectionStateChange.previous));
-        ConnectionEvent event = decodeConnectionEvent(readFromJson<int>(jsonMap, TxConnectionStateChange.event));
+        ConnectionState current = decodeConnectionState(readFromJson<String>(jsonMap, TxConnectionStateChange.current));
+        ConnectionState previous = decodeConnectionState(readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
+        ConnectionEvent event = decodeConnectionEvent(readFromJson<String>(jsonMap, TxConnectionStateChange.event));
         int retryIn = readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
         ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxConnectionStateChange.reason]));
         return ConnectionStateChange(current, previous, event, retryIn: retryIn, reason: reason);
@@ -402,9 +479,9 @@ class Codec extends StandardMessageCodec {
     /// returns null if [jsonMap] is null
     ChannelStateChange decodeChannelStateChange(Map<String, dynamic> jsonMap){
         if(jsonMap==null) return null;
-        ChannelState current = decodeChannelState(readFromJson<int>(jsonMap, TxChannelStateChange.current));
-        ChannelState previous = decodeChannelState(readFromJson<int>(jsonMap, TxChannelStateChange.previous));
-        ChannelEvent event = decodeChannelEvent(readFromJson<int>(jsonMap, TxChannelStateChange.event));
+        ChannelState current = decodeChannelState(readFromJson<String>(jsonMap, TxChannelStateChange.current));
+        ChannelState previous = decodeChannelState(readFromJson<String>(jsonMap, TxChannelStateChange.previous));
+        ChannelEvent event = decodeChannelEvent(readFromJson<String>(jsonMap, TxChannelStateChange.event));
         bool resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
         ErrorInfo reason = decodeErrorInfo(toJsonMap(jsonMap[TxChannelStateChange.reason]));
         return ChannelStateChange(current, previous, event, resumed: resumed, reason: reason);

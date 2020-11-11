@@ -158,6 +158,24 @@ List<Map<String, dynamic>> objects = [
     ]
   },
   {
+    "name": "EnumConstants",
+    "properties": <String>[
+      "initialized",
+      "connecting",
+      "connected",
+      "disconnected",
+      "attaching",
+      "attached",
+      "detaching",
+      "detached",
+      "suspended",
+      "closing",
+      "closed",
+      "failed",
+      "update",
+    ]
+  },
+  {
     "name": "ConnectionStateChange",
     "properties": <String>[
       "current",

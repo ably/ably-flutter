@@ -26,10 +26,7 @@ class RealtimePublishTestState extends TestWidgetState<RealtimePublishTest> {
             ({msg, exception}) => logMessages.add([msg, '$exception']),
     );
     await realtimeMessagesPublishUtil(realtime);
-
-    // TODO(tiholic) throws UnimplementedError
-    // await realtime.connection.close();
-
+    await realtime.close();
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await realtime.handle,
       'log': logMessages,

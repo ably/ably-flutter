@@ -51,14 +51,10 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   }
 
   @override
-  void close() {
-    // TODO: implement close
-  }
+  Future<void> close() => realtimePlatformObject.close();
 
   @override
-  void connect() {
-    // TODO: implement connect
-  }
+  Future<void> connect() => realtimePlatformObject.connect();
 
   @override
   Future<int> ping() {

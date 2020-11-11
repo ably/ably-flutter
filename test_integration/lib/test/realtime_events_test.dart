@@ -32,46 +32,54 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     );
 
     void recordConnectionState() =>
-        connectionStates.add(enumValueToString(realtime.connection.state));
+      connectionStates.add(enumValueToString(realtime.connection.state));
 
-    recordConnectionState();
+    recordConnectionState(); //connection: initialized
     realtime.connection
-        .on()
-        .listen((e) => connectionStateChanges.add(connectionEventToJson(e)));
+      .on()
+      .listen((e) => connectionStateChanges.add(connectionEventToJson(e)));
     realtime.connection.on(ConnectionEvent.connected).listen(
         (e) => filteredConnectionStateChanges.add(connectionEventToJson(e)));
 
     widget.dispatcher.reportLog({'before realtime.connect': ''});
-    recordConnectionState();
+    recordConnectionState(); //connection: initialized
     await realtime.connect();
     widget.dispatcher.reportLog({'after realtime.connect': ''});
-    recordConnectionState();
 
     final channel = await realtime.channels.get('events-test');
     void recordChannelState() =>
-        channelStates.add(enumValueToString(channel.state));
+      channelStates.add(enumValueToString(channel.state));
 
-    recordChannelState();
+    recordChannelState(); // channel: initialized
     channel.on().listen((e) => channelStateChanges.add(channelEventToJson(e)));
     channel
-        .on(ChannelEvent.attaching)
-        .listen((e) => filteredChannelStateChanges.add(channelEventToJson(e)));
-    recordChannelState();
+      .on(ChannelEvent.attaching)
+      .listen((e) => filteredChannelStateChanges.add(channelEventToJson(e)));
+    recordChannelState(); // channel: initialized
 
     widget.dispatcher.reportLog({'before channel.attach': ''});
     await channel.attach();
-    recordChannelState();
+    recordChannelState(); // channel: attached
     widget.dispatcher.reportLog({'after channel.attach': ''});
+    widget.dispatcher.reportLog({'before channel.publish': ''});
+    await channel.publish(name: 'hello', data: 'ably');
+    recordChannelState(); // channel: attached
+    recordConnectionState(); // connection: connected
+    widget.dispatcher.reportLog({'after channel.publish': ''});
     widget.dispatcher.reportLog({'before channel.detach': ''});
     await channel.detach();
-    recordChannelState();
     widget.dispatcher.reportLog({'after channel.detach': ''});
-    recordConnectionState();
-
-    // TODO(tiholic) throws UnimplementedError
-    // widget.dispatcher.reportLog({'before connection.close': ''});
-    // await realtime.connection.close();
-    // widget.dispatcher.reportLog({'after connection.close': ''});
+    recordChannelState(); // channel: detached
+    recordConnectionState(); // connection: connected
+    widget.dispatcher.reportLog({'before connection.close': ''});
+    await realtime.close();
+    await Future.delayed(Duration.zero);
+    while (realtime.connection.state != ConnectionState.closed) {
+      await Future.delayed(Duration(seconds: 2));
+    }
+    recordChannelState(); // channel: detached
+    recordConnectionState(); // connection: closed
+    widget.dispatcher.reportLog({'after connection.close': ''});
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'connectionStates': connectionStates,
@@ -105,4 +113,4 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
 }
 
 String enumValueToString(dynamic value) =>
-    value.toString().substring(value.toString().indexOf('.') + 1);
+  value.toString().substring(value.toString().indexOf('.') + 1);

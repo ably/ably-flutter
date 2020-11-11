@@ -109,6 +109,22 @@ NSString *const TxTokenRequest_timestamp = @"timestamp";
 NSString *const TxTokenRequest_ttl = @"ttl";
 @end
 
+@implementation TxEnumConstants
+NSString *const TxEnumConstants_initialized = @"initialized";
+NSString *const TxEnumConstants_connecting = @"connecting";
+NSString *const TxEnumConstants_connected = @"connected";
+NSString *const TxEnumConstants_disconnected = @"disconnected";
+NSString *const TxEnumConstants_attaching = @"attaching";
+NSString *const TxEnumConstants_attached = @"attached";
+NSString *const TxEnumConstants_detaching = @"detaching";
+NSString *const TxEnumConstants_detached = @"detached";
+NSString *const TxEnumConstants_suspended = @"suspended";
+NSString *const TxEnumConstants_closing = @"closing";
+NSString *const TxEnumConstants_closed = @"closed";
+NSString *const TxEnumConstants_failed = @"failed";
+NSString *const TxEnumConstants_update = @"update";
+@end
+
 @implementation TxConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";
 NSString *const TxConnectionStateChange_previous = @"previous";

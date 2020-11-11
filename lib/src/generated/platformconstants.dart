@@ -119,6 +119,22 @@ class TxTokenRequest {
     static const String ttl = "ttl";
 }
 
+class TxEnumConstants {
+    static const String initialized = "initialized";
+    static const String connecting = "connecting";
+    static const String connected = "connected";
+    static const String disconnected = "disconnected";
+    static const String attaching = "attaching";
+    static const String attached = "attached";
+    static const String detaching = "detaching";
+    static const String detached = "detached";
+    static const String suspended = "suspended";
+    static const String closing = "closing";
+    static const String closed = "closed";
+    static const String failed = "failed";
+    static const String update = "update";
+}
+
 class TxConnectionStateChange {
     static const String current = "current";
     static const String previous = "previous";

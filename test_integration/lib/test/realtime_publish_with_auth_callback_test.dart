@@ -21,16 +21,13 @@ class RealtimePublishWithAuthCallbackTestState
     var authCallbackInvoked = false;
     final realtime = Realtime(
         options: ClientOptions()
-          ..clientId = 'someClientId'
           ..logLevel = LogLevel.verbose
           ..authCallback = ((TokenParams params) async {
             authCallbackInvoked = true;
             return TokenRequest.fromMap(await getTokenRequest());
           }));
     await realtimeMessagesPublishUtil(realtime);
-
-    // TODO(tiholic) throws UnimplementedError
-    // await realtime.connection.close();
+    await realtime.close();
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await realtime.handle,
