@@ -3,7 +3,7 @@ import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../ably.dart';
+import '../ably_flutter_plugin.dart';
 
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will

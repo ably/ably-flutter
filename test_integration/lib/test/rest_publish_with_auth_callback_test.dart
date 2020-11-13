@@ -1,5 +1,5 @@
 import 'package:ably_flutter_integration_test/test/rest_publish_test.dart';
-import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';

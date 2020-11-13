@@ -10,6 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  meta:
+    sdk: flutter
+  pedantic:
+    sdk: flutter
+  collection:
+    sdk: flutter
 
 dev_dependencies:
   fake_async: ^1.1.0

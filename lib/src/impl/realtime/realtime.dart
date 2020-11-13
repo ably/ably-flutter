@@ -5,7 +5,7 @@ import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/impl/realtime/channels.dart';
 import 'package:pedantic/pedantic.dart';
 
-import '../../../ably.dart';
+import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'connection.dart';

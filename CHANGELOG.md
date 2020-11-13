@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0-dev.1](https://github.com/ably/ably-flutter/tree/1.0.0-dev.1)
+## [1.0.0+dev.1](https://github.com/ably/ably-flutter/tree/1.0.0-dev.1)
 
 The first, development preview of our Flutter plugin, wrapping our
 [iOS Cocoa](https://github.com/ably/ably-cocoa)

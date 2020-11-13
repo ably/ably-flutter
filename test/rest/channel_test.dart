@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:ably_flutter_plugin/src/method_call_handler.dart';
 import 'package:ably_flutter_plugin/src/platform.dart' as platform;

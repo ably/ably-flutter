@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:ably_flutter_plugin/src/impl/message.dart';
 
-import '../../../ably.dart';
+import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
 import 'channels.dart';
