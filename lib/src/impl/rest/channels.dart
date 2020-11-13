@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 import 'package:ably_flutter_plugin/src/impl/rest/rest.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
 import 'package:flutter/services.dart';

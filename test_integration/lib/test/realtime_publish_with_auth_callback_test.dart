@@ -1,6 +1,6 @@
 import 'package:ably_flutter_integration_test/test/realtime_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
-import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/ably.dart';
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
 import 'package:ably_flutter_plugin/src/spec/push/channels.dart';
 import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;

@@ -1,7 +1,7 @@
 // NOTE: this file is not being used anywhere, yet
 // this could serve as a reference for writing nested listeners
 
-import 'package:ably_flutter_plugin/ably.dart' as ably;
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
 
 
 /// This method is a demonstration on how to use multiple listeners

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/ably.dart' as ably;
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

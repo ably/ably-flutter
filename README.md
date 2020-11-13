@@ -37,7 +37,7 @@ site to discuss privately.
 ##### Import the package
 
 ```dart
-import 'package:ably_flutter_plugin/ably.dart' as ably;
+import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
 ```
 
 ##### create a ClientOptions
