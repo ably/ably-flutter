@@ -1,7 +1,8 @@
-import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
-import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/services.dart';
+
+import '../ably_flutter_plugin.dart' as ably;
+import 'generated/platformconstants.dart';
+import 'impl/message.dart';
 
 class AblyMethodCallHandler {
   AblyMethodCallHandler(MethodChannel channel) {

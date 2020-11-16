@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
-import 'package:ably_flutter_plugin/src/impl/realtime/realtime.dart';
-
+import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
 import '../platform_object.dart';
+import 'realtime.dart';
 
 class ConnectionPlatformObject extends PlatformObject implements Connection {
   Realtime realtimePlatformObject;

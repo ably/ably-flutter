@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/impl/realtime/channels.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
+import '../message.dart';
 import '../platform_object.dart';
+import 'channels.dart';
 import 'connection.dart';
 
 Map<int, Realtime> _realtimeInstances = {};

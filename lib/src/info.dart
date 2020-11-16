@@ -1,4 +1,4 @@
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart' show PlatformMethod;
+import 'generated/platformconstants.dart' show PlatformMethod;
 
 import 'platform.dart' show invoke;
 

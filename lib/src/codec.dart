@@ -1,9 +1,9 @@
-import 'package:ably_flutter_plugin/src/generated/platformconstants.dart';
-import 'package:ably_flutter_plugin/src/impl/message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../ably_flutter_plugin.dart';
+import '../src/generated/platformconstants.dart';
+import '../src/impl/message.dart';
 
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
