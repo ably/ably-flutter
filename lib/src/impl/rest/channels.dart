@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
+import '../message.dart';
 import 'rest.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
