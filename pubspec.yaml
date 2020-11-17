@@ -1,6 +1,6 @@
 name: ably_flutter_plugin
 description: A wrapper around Ably's Cocoa and Java client library SDKs, providing iOS and Android support.
-version: 1.0.0+dev.1
+version: 1.0.0+dev.2
 repository: https://github.com/ably/ably-flutter
 
 environment:
@@ -10,12 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  meta:
-    sdk: flutter
-  pedantic:
-    sdk: flutter
-  collection:
-    sdk: flutter
+  meta: ^1.2.3
+  pedantic: ^1.9.2
+  collection: ^1.14.13
 
 dev_dependencies:
   fake_async: ^1.1.0
@@ -26,8 +23,6 @@ dev_dependencies:
   # because the flutter_test package needs an older version of test_api.
   test: ^1.9.4
 
-  # Stricter Linting
-  pedantic: ^1.0.0
 
 flutter:
   plugin:

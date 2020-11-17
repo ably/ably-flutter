@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0+dev.2](https://github.com/ably/ably-flutter/tree/1.0.0-dev.2)
+
+Conforming to pub.dev recommendations, following initial upload to the platform.
+
 ## [1.0.0+dev.1](https://github.com/ably/ably-flutter/tree/1.0.0-dev.1)
 
 The first, development preview of our Flutter plugin, wrapping our
