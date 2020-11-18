@@ -1,10 +1,9 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
-
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'test_widget_abstract.dart';
 
 class AppKeyProvisionTest extends TestWidget {
-  AppKeyProvisionTest(TestDispatcherState dispatcher) : super(dispatcher);
+  const AppKeyProvisionTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
   TestWidgetState<TestWidget> createState() => _AppKeyProvisionTestState();

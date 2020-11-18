@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 Future testShouldReportUnhandledException(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.testHelperUnhandledExceptionTest);
+  const message = TestControlMessage(TestName.testHelperUnhandledExceptionTest);
 
   final response = await getTestResponse(driver, message);
 
@@ -16,7 +16,7 @@ Future testShouldReportUnhandledException(FlutterDriver driver) async {
 // FlutterError seems to break the test app
 // and needs to be run last
 Future testShouldReportFlutterError(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.testHelperFlutterErrorTest);
+  const message = TestControlMessage(TestName.testHelperFlutterErrorTest);
 
   final response = await getTestResponse(driver, message);
 

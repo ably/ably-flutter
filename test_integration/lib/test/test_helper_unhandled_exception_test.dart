@@ -7,6 +7,7 @@ class TestHelperUnhandledExceptionTest extends StatefulWidget {
 
   TestHelperUnhandledExceptionTest(this.dispatcher, {Key key})
       : super(key: key) {
+    // ignore: only_throw_errors
     throw 'Unhandled exception';
   }
 

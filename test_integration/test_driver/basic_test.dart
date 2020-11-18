@@ -1,4 +1,4 @@
 import 'tests_abstract.dart';
 import 'tests_config.dart';
 
-void main() => runTests(groupName: TestGroup.BasicTests);
+void main() => runTests(groupName: TestGroup.basicTests);

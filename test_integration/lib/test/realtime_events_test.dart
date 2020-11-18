@@ -1,11 +1,11 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'test_widget_abstract.dart';
 
 class RealtimeEventsTest extends TestWidget {
-  RealtimeEventsTest(TestDispatcherState dispatcher) : super(dispatcher);
+  const RealtimeEventsTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
   TestWidgetState<TestWidget> createState() => RealtimeEventsTestState();
@@ -46,7 +46,7 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     await realtime.connect();
     widget.dispatcher.reportLog({'after realtime.connect': ''});
 
-    final channel = await realtime.channels.get('events-test');
+    final channel = realtime.channels.get('events-test');
     void recordChannelState() =>
       channelStates.add(enumValueToString(channel.state));
 
@@ -75,7 +75,7 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     await realtime.close();
     await Future.delayed(Duration.zero);
     while (realtime.connection.state != ConnectionState.closed) {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
     }
     recordChannelState(); // channel: detached
     recordConnectionState(); // connection: closed
@@ -91,26 +91,22 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     });
   }
 
-  Map<String, dynamic> channelEventToJson(ChannelStateChange e) {
-    return {
+  Map<String, dynamic> channelEventToJson(ChannelStateChange e) => {
       'event': enumValueToString(e.event),
       'current': enumValueToString(e.current),
       'previous': enumValueToString(e.previous),
       'reason': e.reason.toString(),
       'resumed': e.resumed,
     };
-  }
 
-  Map<String, dynamic> connectionEventToJson(ConnectionStateChange e) {
-    return {
+  Map<String, dynamic> connectionEventToJson(ConnectionStateChange e) => {
       'event': enumValueToString(e.event),
       'current': enumValueToString(e.current),
       'previous': enumValueToString(e.previous),
       'reason': e.reason.toString(),
       'retryIn': e.retryIn,
     };
-  }
 }
 
-String enumValueToString(dynamic value) =>
+String enumValueToString(Object value) =>
   value.toString().substring(value.toString().indexOf('.') + 1);

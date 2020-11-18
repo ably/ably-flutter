@@ -1,3 +1,4 @@
+//ignore_for_file: avoid_print
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -60,14 +61,14 @@ class TestDispatcherState extends State<TestDispatcher> {
     return _responseCompleter.future;
   }
 
-  Null _unhandledTestExceptionAndFlutterErrorHandler(
+  void _unhandledTestExceptionAndFlutterErrorHandler(
           Map<String, String> errorMessage) =>
       reportTestCompletion({TestControlMessage.errorKey: errorMessage});
 
   final _log = <dynamic>[];
 
   /// Collect log messages.to be sent with the response at the end of the test.
-  void reportLog(dynamic log) => _log.add(log);
+  void reportLog(Object log) => _log.add(log);
 
   /// Create a response to a message from the driver reporting the test result.
   void reportTestCompletion(Map<String, dynamic> data) {
@@ -92,13 +93,12 @@ class TestDispatcherState extends State<TestDispatcher> {
   ///
   ///     widget.dispatcher.timeout(const Duration(seconds: 3));
   ///
-  void timeout(Duration duration) async {
+  void timeout(Duration duration) =>
     unawaited(_responseCompleter.future.timeout(duration, onTimeout: () {
       reportTestCompletion(
           {TestControlMessage.errorKey: 'Timed out after $duration'});
       return null;
     }));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +165,7 @@ class TestDispatcherState extends State<TestDispatcher> {
 /// Used to wire app unhandled exceptions and Flutter errors to be reported back
 /// to the test driver.
 class ErrorHandler {
-  Null Function(Map<String, String> message) callback;
+  void Function(Map<String, String> message) callback;
 
   void onFlutterError(FlutterErrorDetails details) {
     if (callback == null) {
