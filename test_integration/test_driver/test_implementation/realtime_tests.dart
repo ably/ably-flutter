@@ -4,7 +4,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 Future testRealtimePublish(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.realtimePublish);
+  const message = TestControlMessage(TestName.realtimePublish);
 
   final response = await getTestResponse(driver, message);
 
@@ -15,39 +15,38 @@ Future testRealtimePublish(FlutterDriver driver) async {
 }
 
 Future testRealtimeEvents(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.realtimeEvents);
+  const message = TestControlMessage(TestName.realtimeEvents);
 
   final response = await getTestResponse(driver, message);
 
   expect(response.testName, message.testName);
 
-  var connectionStates = (response.payload['connectionStates'] as List)
-    .map((e) => e as String)
-    .toList();
-  var connectionStateChanges =
-  (response.payload['connectionStateChanges'] as List)
-    .map((e) => e as Map<String, dynamic>)
-    .toList();
-  var filteredConnectionStateChanges =
-  (response.payload['filteredConnectionStateChanges'] as List)
-    .map((e) => e as Map<String, dynamic>)
-    .toList();
-  var channelStates = (response.payload['channelStates'] as List)
-    .map((e) => e as String)
-    .toList();
-  var channelStateChanges =
-  (response.payload['channelStateChanges'] as List)
-    .map((e) => e as Map<String, dynamic>)
-    .toList();
-  var filteredChannelStateChanges =
-  (response.payload['filteredChannelStateChanges'] as List)
-    .map((e) => e as Map<String, dynamic>)
-    .toList();
+  final connectionStates = (response.payload['connectionStates'] as List)
+      .map((e) => e as String)
+      .toList();
+  final connectionStateChanges =
+      (response.payload['connectionStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+  final filteredConnectionStateChanges =
+      (response.payload['filteredConnectionStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
+  final channelStates = (response.payload['channelStates'] as List)
+      .map((e) => e as String)
+      .toList();
+  final channelStateChanges = (response.payload['channelStateChanges'] as List)
+      .map((e) => e as Map<String, dynamic>)
+      .toList();
+  final filteredChannelStateChanges =
+      (response.payload['filteredChannelStateChanges'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList();
 
   // connectionStates
-  expect(connectionStates,
-    orderedEquals(
-      const [
+  expect(
+      connectionStates,
+      orderedEquals(const [
         'initialized',
         'initialized',
         'connected',
@@ -57,31 +56,31 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   // connectionStateChanges
   expect(
-    connectionStateChanges.map((e) => e['event']),
-    orderedEquals(const [
-      'connecting',
-      'connected',
-      'closing',
-      'closed',
-    ]));
+      connectionStateChanges.map((e) => e['event']),
+      orderedEquals(const [
+        'connecting',
+        'connected',
+        'closing',
+        'closed',
+      ]));
 
   expect(
-    connectionStateChanges.map((e) => e['current']),
-    orderedEquals(const [
-      'connecting',
-      'connected',
-      'closing',
-      'closed',
-    ]));
+      connectionStateChanges.map((e) => e['current']),
+      orderedEquals(const [
+        'connecting',
+        'connected',
+        'closing',
+        'closed',
+      ]));
 
   expect(
-    connectionStateChanges.map((e) => e['previous']),
-    orderedEquals(const [
-      'initialized',
-      'connecting',
-      'connected',
-      'closing',
-    ]));
+      connectionStateChanges.map((e) => e['previous']),
+      orderedEquals(const [
+        'initialized',
+        'connecting',
+        'connected',
+        'closing',
+      ]));
 
   // filteredConnectionStateChanges
   expect(filteredConnectionStateChanges.map((e) => e['event']), const [
@@ -98,15 +97,15 @@ Future testRealtimeEvents(FlutterDriver driver) async {
 
   // channelStates
   expect(
-    channelStates,
-    orderedEquals(const [
-      'initialized',
-      'initialized',
-      'attached',
-      'attached',
-      'detached',
-      'detached',
-    ]));
+      channelStates,
+      orderedEquals(const [
+        'initialized',
+        'initialized',
+        'attached',
+        'attached',
+        'detached',
+        'detached',
+      ]));
 
   // channelStateChanges
 
@@ -115,7 +114,8 @@ Future testRealtimeEvents(FlutterDriver driver) async {
   //  https://github.com/ably/ably-flutter/issues/63
   List<String> _stateChangeEvents;
   List<String> _stateChangePrevious;
-  if (channelStateChanges.length == 5) { // ios
+  if (channelStateChanges.length == 5) {
+    // ios
     _stateChangeEvents = const [
       'attaching',
       'attached',
@@ -145,41 +145,38 @@ Future testRealtimeEvents(FlutterDriver driver) async {
     ];
   }
 
-  expect(
-    channelStateChanges.map((e) => e['event']),
-    orderedEquals(_stateChangeEvents));
+  expect(channelStateChanges.map((e) => e['event']),
+      orderedEquals(_stateChangeEvents));
 
-  expect(
-    channelStateChanges.map((e) => e['current']),
-    orderedEquals(_stateChangeEvents));
+  expect(channelStateChanges.map((e) => e['current']),
+      orderedEquals(_stateChangeEvents));
 
-  expect(
-    channelStateChanges.map((e) => e['previous']),
-    orderedEquals(_stateChangePrevious));
+  expect(channelStateChanges.map((e) => e['previous']),
+      orderedEquals(_stateChangePrevious));
 
   // filteredChannelStateChanges
   expect(filteredChannelStateChanges.map((e) => e['event']),
-    orderedEquals(const ['attaching']));
+      orderedEquals(const ['attaching']));
 
   expect(filteredChannelStateChanges.map((e) => e['current']),
-    orderedEquals(const ['attaching']));
+      orderedEquals(const ['attaching']));
 
   expect(filteredChannelStateChanges.map((e) => e['previous']),
-    orderedEquals(const ['initialized']));
+      orderedEquals(const ['initialized']));
 }
 
 Future testRealtimeSubscribe(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.realtimeSubscribe);
+  const message = TestControlMessage(TestName.realtimeSubscribe);
 
   final response = await getTestResponse(driver, message);
 
   expect(response.testName, message.testName);
 
   // Testing realtime subscribe to all messages
-  List<Map<String, dynamic>> all = response.payload['all']
-    .map<Map<String, dynamic>>(
-      (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m))
-    .toList();
+  final all = response.payload['all']
+      .map<Map<String, dynamic>>(
+          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
+      .toList();
 
   expect(all, isA<List<Map<String, dynamic>>>());
   expect(all.length, equals(8));
@@ -204,27 +201,26 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
 
   expect(all[6]['name'], 'name3');
   expect(
-    all[6]['data'],
-    equals({
-      'hello': 'ably',
-      'items': ['1', 2.2, true]
-    }));
+      all[6]['data'],
+      equals({
+        'hello': 'ably',
+        'items': ['1', 2.2, true]
+      }));
 
   expect(all[7]['name'], 'name3');
   expect(
-    all[7]['data'],
-    equals([
-      {'hello': 'ably'},
-      'ably',
-      'realtime'
-    ]));
+      all[7]['data'],
+      equals([
+        {'hello': 'ably'},
+        'ably',
+        'realtime'
+      ]));
 
   // Testing realtime subscribe to messages filtered with name
-  List<Map<String, dynamic>> filteredWithName = response
-    .payload['filteredWithName']
-    .map<Map<String, dynamic>>(
-      (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m))
-    .toList();
+  final filteredWithName = response.payload['filteredWithName']
+      .map<Map<String, dynamic>>(
+          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
+      .toList();
 
   expect(filteredWithName, isA<List<Map<String, dynamic>>>());
   expect(filteredWithName.length, equals(2));
@@ -236,11 +232,10 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
   expect(filteredWithName[1]['data'], equals('Ably'));
 
   // Testing realtime subscribe to messages filtered with multiple names
-  List<Map<String, dynamic>> filteredWithNames = response
-    .payload['filteredWithNames']
-    .map<Map<String, dynamic>>(
-      (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m))
-    .toList();
+  final filteredWithNames = response.payload['filteredWithNames']
+      .map<Map<String, dynamic>>(
+          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
+      .toList();
 
   expect(filteredWithNames, isA<List<Map<String, dynamic>>>());
   expect(filteredWithNames.length, equals(4));
@@ -259,7 +254,7 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
 }
 
 Future testRealtimePublishWithAuthCallback(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.realtimePublishWithAuthCallback);
+  const message = TestControlMessage(TestName.realtimePublishWithAuthCallback);
 
   final response = await getTestResponse(driver, message);
 

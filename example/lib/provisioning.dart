@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const _capabilitySpec = {
-  // Allow us to publish and subscribe to any channel.
-  '*': ['publish', 'subscribe'],
+  '*': ['publish', 'subscribe', 'history', 'presence'],
 };
+const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
 // per: https://docs.ably.io/client-lib-development-guide/test-api/
 final _appSpec = Map.unmodifiable({
@@ -59,11 +59,12 @@ Future<AppKey> provision(String environmentPrefix) async {
   );
 }
 
-Future<Map> getTokenRequest() async {
+Future<Map<String, dynamic>> getTokenRequest() async {
   // NOTE: This doesn't work with sandbox. The URL can point to test-harness's
   // tokenRequest express server's `/auth` endpoint
-  final r = await http.get('https://www.ably.io/ably-auth/token-request/demos');
+  final r = await http.get(authURL);
   //ignore: avoid_print
   print('tokenRequest from tokenRequest server: ${r.body}');
-  return jsonDecode(r.body) as Map;
+  return Map.castFrom<dynamic, dynamic, String, dynamic>(
+      jsonDecode(r.body) as Map);
 }
