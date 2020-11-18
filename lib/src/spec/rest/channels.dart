@@ -26,7 +26,7 @@ abstract class RestChannel {
     Message message,
     List<Message> messages,
     String name,
-    dynamic data,
+    Object data,
   });
 }
 
