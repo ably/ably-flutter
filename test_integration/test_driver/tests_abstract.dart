@@ -8,16 +8,15 @@ void runTests({
   TestGroup groupName,
   List<TestGroup> groups,
 }) {
-  Map tests = getTestsFor(
+  final tests = getTestsFor(
     all: all,
     group: groupName,
     groups: groups,
   );
 
   for (groupName in tests.keys) {
-    var name =
+    final name =
         groupName.toString().substring(groupName.toString().indexOf('.') + 1);
-    print("GROUP:: $name");
     group(name, () {
       FlutterDriver driver;
 

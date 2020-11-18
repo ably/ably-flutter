@@ -5,7 +5,8 @@ import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
 
 class RealtimeSubscribeTest extends TestWidget {
-  RealtimeSubscribeTest(TestDispatcherState dispatcher) : super(dispatcher);
+  const RealtimeSubscribeTest(TestDispatcherState dispatcher)
+      : super(dispatcher);
 
   @override
   TestWidgetState<TestWidget> createState() => RealtimeSubscribeTestState();
@@ -72,29 +73,27 @@ class RealtimeSubscribeTestState
     );
     await realtime.connect();
 
-    final channel = await realtime.channels.get(channelName);
+    final channel = realtime.channels.get(channelName);
     await channel.attach();
-    var subscription =
+    final subscription =
         channel.subscribe(name: name, names: names).listen((message) {
       messages.add(messageToJson(message));
     });
-    for (var message in messagesToPublish) {
-      await channel.publish(name: message[0], data: message[1]);
+    for (final message in messagesToPublish) {
+      await channel.publish(name: message[0] as String, data: message[1]);
     }
     await subscription.cancel();
     return messages;
   }
 
-  Map<String, dynamic> messageToJson(Message message) {
-    return {
-      'id': message.id,
-      'timestamp': message.timestamp.toIso8601String(),
-      'clientId': message.clientId,
-      'connectionId': message.connectionId,
-      'encoding': message.encoding,
-      'data': message.data,
-      'name': message.name,
-      'extras': message.extras,
-    };
-  }
+  Map<String, dynamic> messageToJson(Message message) => {
+        'id': message.id,
+        'timestamp': message.timestamp.toIso8601String(),
+        'clientId': message.clientId,
+        'connectionId': message.connectionId,
+        'encoding': message.encoding,
+        'data': message.data,
+        'name': message.name,
+        'extras': message.extras,
+      };
 }

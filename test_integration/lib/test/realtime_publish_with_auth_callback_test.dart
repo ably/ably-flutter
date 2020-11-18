@@ -1,12 +1,12 @@
-import 'package:ably_flutter_integration_test/test/realtime_publish_test.dart';
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
 import 'appkey_provision_helper.dart';
+import 'realtime_publish_test.dart';
+import 'test_widget_abstract.dart';
 
 class RealtimePublishWithAuthCallbackTest extends TestWidget {
-  RealtimePublishWithAuthCallbackTest(TestDispatcherState dispatcher)
+  const RealtimePublishWithAuthCallbackTest(TestDispatcherState dispatcher)
       : super(dispatcher);
 
   @override
@@ -22,7 +22,7 @@ class RealtimePublishWithAuthCallbackTestState
     final realtime = Realtime(
         options: ClientOptions()
           ..logLevel = LogLevel.verbose
-          ..authCallback = ((TokenParams params) async {
+          ..authCallback = ((params) async {
             authCallbackInvoked = true;
             return TokenRequest.fromMap(await getTokenRequest());
           }));
