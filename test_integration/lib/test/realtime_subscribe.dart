@@ -1,8 +1,8 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'test_widget_abstract.dart';
 
 class RealtimeSubscribeTest extends TestWidget {
   const RealtimeSubscribeTest(TestDispatcherState dispatcher)

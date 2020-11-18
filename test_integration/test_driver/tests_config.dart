@@ -4,29 +4,29 @@ import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
 enum TestGroup{
-  BasicTests,
-  HelperTests,
-  Rest,
-  Realtime
+  basicTests,
+  helperTests,
+  rest,
+  realtime
 }
 
 final _tests = <TestGroup, Map<String, Function>>{
-  TestGroup.BasicTests: {
+  TestGroup.basicTests: {
     'should return Platform and Ably version': testPlatformAndAblyVersion,
     'should provision AppKey': testDemoDependencies,
   },
-  TestGroup.Rest: {
+  TestGroup.rest: {
     'should publish': testRestPublish,
     'should publish with AuthCallback': testRestPublishWithAuthCallback,
   },
-  TestGroup.Realtime: {
+  TestGroup.realtime: {
     'should publish': testRealtimePublish,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
     'should publish with authCallback': testRealtimePublishWithAuthCallback,
   },
   // FlutterError seems to break the test app and needs to be run last
-  TestGroup.HelperTests: {
+  TestGroup.helperTests: {
     'should report unhandled exception': testShouldReportUnhandledException,
     'should report FlutterError': testShouldReportFlutterError,
   }
@@ -38,10 +38,11 @@ Map<TestGroup, Map<String, Function>> getTestsFor({
   List<TestGroup> groups,
 }) {
   assert(group != null || groups != null || all != false);
+  List<TestGroup> _groups;
   if (all) {
-    groups = _tests.keys.toList();
+    _groups = _tests.keys.toList();
   } else if (group != null) {
-    groups = [group];
+    _groups = [group];
   }
-  return Map.from(_tests)..removeWhere((key, value) => !groups.contains(key));
+  return Map.from(_tests)..removeWhere((key, value) => !_groups.contains(key));
 }

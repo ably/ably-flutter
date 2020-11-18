@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 Future testRestPublish(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.restPublish);
+  const message = TestControlMessage(TestName.restPublish);
 
   final response = await getTestResponse(driver, message);
 
@@ -17,7 +17,7 @@ Future testRestPublish(FlutterDriver driver) async {
 }
 
 Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
-  final message = TestControlMessage(TestName.restPublishWithAuthCallback);
+  const message = TestControlMessage(TestName.restPublishWithAuthCallback);
 
   final response = await getTestResponse(driver, message);
 
@@ -25,6 +25,6 @@ Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
 
   expect(response.payload['handle'], isA<int>());
   expect(response.payload['handle'], greaterThan(0));
-  
+
   expect(response.payload['authCallbackInvoked'], isTrue);
 }
