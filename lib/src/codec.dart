@@ -430,103 +430,110 @@ class Codec extends StandardMessageCodec {
         cause: jsonMap[TxErrorInfo.cause] as ErrorInfo);
   }
 
-  /// Decodes [index] value to [ConnectionEvent] enum if not null
-    ConnectionEvent decodeConnectionEvent(String eventName) {
-      switch (eventName) {
-        case TxEnumConstants.initialized:
-          return ConnectionEvent.initialized;
-        case TxEnumConstants.connecting:
-          return ConnectionEvent.connecting;
-        case TxEnumConstants.connected:
-          return ConnectionEvent.connected;
-        case TxEnumConstants.disconnected:
-          return ConnectionEvent.disconnected;
-        case TxEnumConstants.suspended:
-          return ConnectionEvent.suspended;
-        case TxEnumConstants.closing:
-          return ConnectionEvent.closing;
-        case TxEnumConstants.closed:
-          return ConnectionEvent.closed;
-        case TxEnumConstants.failed:
-          return ConnectionEvent.failed;
-        case TxEnumConstants.update:
-          return ConnectionEvent.update;
-      }
+  /// Decodes [eventName] to [ConnectionEvent] enum if not null
+  // ignore: missing_return
+  ConnectionEvent decodeConnectionEvent(String eventName) {
+    switch (eventName) {
+      case TxEnumConstants.initialized:
+        return ConnectionEvent.initialized;
+      case TxEnumConstants.connecting:
+        return ConnectionEvent.connecting;
+      case TxEnumConstants.connected:
+        return ConnectionEvent.connected;
+      case TxEnumConstants.disconnected:
+        return ConnectionEvent.disconnected;
+      case TxEnumConstants.suspended:
+        return ConnectionEvent.suspended;
+      case TxEnumConstants.closing:
+        return ConnectionEvent.closing;
+      case TxEnumConstants.closed:
+        return ConnectionEvent.closed;
+      case TxEnumConstants.failed:
+        return ConnectionEvent.failed;
+      case TxEnumConstants.update:
+        return ConnectionEvent.update;
     }
+  }
 
-    /// Decodes [state] to [ConnectionState] enum if not null
-    ConnectionState decodeConnectionState(String state) {
-      if (state == null) return null;
-      switch (state) {
-        case TxEnumConstants.initialized:
-          return ConnectionState.initialized;
-        case TxEnumConstants.connecting:
-          return ConnectionState.connecting;
-        case TxEnumConstants.connected:
-          return ConnectionState.connected;
-        case TxEnumConstants.disconnected:
-          return ConnectionState.disconnected;
-        case TxEnumConstants.suspended:
-          return ConnectionState.suspended;
-        case TxEnumConstants.closing:
-          return ConnectionState.closing;
-        case TxEnumConstants.closed:
-          return ConnectionState.closed;
-        case TxEnumConstants.failed:
-          return ConnectionState.failed;
-      }
+  /// Decodes [state] to [ConnectionState] enum if not null
+  // ignore: missing_return
+  ConnectionState decodeConnectionState(String state) {
+    if (state == null) return null;
+    switch (state) {
+      case TxEnumConstants.initialized:
+        return ConnectionState.initialized;
+      case TxEnumConstants.connecting:
+        return ConnectionState.connecting;
+      case TxEnumConstants.connected:
+        return ConnectionState.connected;
+      case TxEnumConstants.disconnected:
+        return ConnectionState.disconnected;
+      case TxEnumConstants.suspended:
+        return ConnectionState.suspended;
+      case TxEnumConstants.closing:
+        return ConnectionState.closing;
+      case TxEnumConstants.closed:
+        return ConnectionState.closed;
+      case TxEnumConstants.failed:
+        return ConnectionState.failed;
     }
+  }
 
-    /// Decodes [eventName] to [ChannelEvent] enum if not null
-    ChannelEvent decodeChannelEvent(String eventName) {
-      switch (eventName) {
-        case TxEnumConstants.initialized:
-          return ChannelEvent.initialized;
-        case TxEnumConstants.attaching:
-          return ChannelEvent.attaching;
-        case TxEnumConstants.attached:
-          return ChannelEvent.attached;
-        case TxEnumConstants.detaching:
-          return ChannelEvent.detaching;
-        case TxEnumConstants.detached:
-          return ChannelEvent.detached;
-        case TxEnumConstants.suspended:
-          return ChannelEvent.suspended;
-        case TxEnumConstants.failed:
-          return ChannelEvent.failed;
-        case TxEnumConstants.update:
-          return ChannelEvent.update;
-      }
+  /// Decodes [eventName] to [ChannelEvent] enum if not null
+  // ignore: missing_return
+  ChannelEvent decodeChannelEvent(String eventName) {
+    switch (eventName) {
+      case TxEnumConstants.initialized:
+        return ChannelEvent.initialized;
+      case TxEnumConstants.attaching:
+        return ChannelEvent.attaching;
+      case TxEnumConstants.attached:
+        return ChannelEvent.attached;
+      case TxEnumConstants.detaching:
+        return ChannelEvent.detaching;
+      case TxEnumConstants.detached:
+        return ChannelEvent.detached;
+      case TxEnumConstants.suspended:
+        return ChannelEvent.suspended;
+      case TxEnumConstants.failed:
+        return ChannelEvent.failed;
+      case TxEnumConstants.update:
+        return ChannelEvent.update;
     }
+  }
 
-    /// Decodes [state] to [ChannelState] enum if not null
-    ChannelState decodeChannelState(String state) {
-      switch (state) {
-        case TxEnumConstants.initialized:
-          return ChannelState.initialized;
-        case TxEnumConstants.attaching:
-          return ChannelState.attaching;
-        case TxEnumConstants.attached:
-          return ChannelState.attached;
-        case TxEnumConstants.detaching:
-          return ChannelState.detaching;
-        case TxEnumConstants.detached:
-          return ChannelState.detached;
-        case TxEnumConstants.suspended:
-          return ChannelState.suspended;
-        case TxEnumConstants.failed:
-          return ChannelState.failed;
-      }
+  /// Decodes [state] to [ChannelState] enum if not null
+  // ignore: missing_return
+  ChannelState decodeChannelState(String state) {
+    switch (state) {
+      case TxEnumConstants.initialized:
+        return ChannelState.initialized;
+      case TxEnumConstants.attaching:
+        return ChannelState.attaching;
+      case TxEnumConstants.attached:
+        return ChannelState.attached;
+      case TxEnumConstants.detaching:
+        return ChannelState.detaching;
+      case TxEnumConstants.detached:
+        return ChannelState.detached;
+      case TxEnumConstants.suspended:
+        return ChannelState.suspended;
+      case TxEnumConstants.failed:
+        return ChannelState.failed;
     }
+  }
 
   /// Decodes value [jsonMap] to [ConnectionStateChange]
   /// returns null if [jsonMap] is null
   ConnectionStateChange decodeConnectionStateChange(
       Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final current = decodeConnectionState(readFromJson<String>(jsonMap, TxConnectionStateChange.current));
-    final previous = decodeConnectionState(readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
-    final event = decodeConnectionEvent(readFromJson<String>(jsonMap, TxConnectionStateChange.event));
+    final current = decodeConnectionState(
+        readFromJson<String>(jsonMap, TxConnectionStateChange.current));
+    final previous = decodeConnectionState(
+        readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
+    final event = decodeConnectionEvent(
+        readFromJson<String>(jsonMap, TxConnectionStateChange.event));
     final retryIn = readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
     final reason = decodeErrorInfo(
         toJsonMap(readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
@@ -538,9 +545,12 @@ class Codec extends StandardMessageCodec {
   /// returns null if [jsonMap] is null
   ChannelStateChange decodeChannelStateChange(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final current = decodeChannelState(readFromJson<String>(jsonMap, TxChannelStateChange.current));
-    final previous = decodeChannelState(readFromJson<String>(jsonMap, TxChannelStateChange.previous));
-    final event = decodeChannelEvent(readFromJson<String>(jsonMap, TxChannelStateChange.event));
+    final current = decodeChannelState(
+        readFromJson<String>(jsonMap, TxChannelStateChange.current));
+    final previous = decodeChannelState(
+        readFromJson<String>(jsonMap, TxChannelStateChange.previous));
+    final event = decodeChannelEvent(
+        readFromJson<String>(jsonMap, TxChannelStateChange.event));
     final resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
     final reason = decodeErrorInfo(
         toJsonMap(readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));

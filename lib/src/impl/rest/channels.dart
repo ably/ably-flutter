@@ -6,8 +6,8 @@ import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
-import '../platform_object.dart';
 import '../message.dart';
+import '../platform_object.dart';
 import 'rest.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
@@ -53,13 +53,14 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
     Message message,
     List<Message> messages,
     String name,
-    dynamic data,
+    Object data,
   }) async {
-    if(messages == null){
+    var _messages = messages;
+    if(_messages == null){
       if (message != null) {
-        messages = [message];
+        _messages = [message];
       } else {
-        messages ??= [
+        _messages ??= [
           spec.Message(
             name: name,
             data: data

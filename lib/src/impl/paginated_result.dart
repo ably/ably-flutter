@@ -1,8 +1,7 @@
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/impl/platform_object.dart';
-import 'package:ably_flutter_plugin/src/spec/spec.dart' as spec;
-
 import '../../ably_flutter_plugin.dart';
+import '../spec/spec.dart' as spec;
+import 'message.dart';
+import 'platform_object.dart';
 
 class PaginatedResult<T> extends PlatformObject
     implements spec.PaginatedResultInterface<T> {

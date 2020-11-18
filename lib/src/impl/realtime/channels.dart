@@ -59,13 +59,14 @@ class RealtimePlatformChannel extends PlatformObject
     spec.Message message,
     List<spec.Message> messages,
     String name,
-    dynamic data,
+    Object data,
   }) async {
-    if (messages == null) {
+    var _messages = messages;
+    if (_messages == null) {
       if (message != null) {
-        messages = [message];
+        _messages = [message];
       } else {
-        messages ??= [
+        _messages ??= [
           spec.Message(
             name: name,
             data: data
