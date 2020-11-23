@@ -56,19 +56,14 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
     Object data,
   }) async {
     var _messages = messages;
-    if(_messages == null){
+    if (_messages == null) {
       if (message != null) {
         _messages = [message];
       } else {
-        _messages ??= [
-          spec.Message(
-            name: name,
-            data: data
-          )
-        ];
+        _messages = [Message(name: name, data: data)];
       }
     }
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -153,7 +148,7 @@ class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel> {
 
   @override
   RestPlatformChannel createChannel(String name, ChannelOptions options) =>
-    RestPlatformChannel(ably, name, options);
+      RestPlatformChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

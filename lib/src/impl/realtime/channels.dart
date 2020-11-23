@@ -51,13 +51,13 @@ class RealtimePlatformChannel extends PlatformObject
         if (options != null) 'options': options,
       };
 
-  final _publishQueue = Queue<_RealtimePublishQueueItem>();
+  final _publishQueue = Queue<_PublishQueueItem>();
   Completer<void> _authCallbackCompleter;
 
   @override
   Future<void> publish({
-    spec.Message message,
-    List<spec.Message> messages,
+    Message message,
+    List<Message> messages,
     String name,
     Object data,
   }) async {
@@ -66,16 +66,10 @@ class RealtimePlatformChannel extends PlatformObject
       if (message != null) {
         _messages = [message];
       } else {
-        _messages ??= [
-          spec.Message(
-            name: name,
-            data: data
-          )
-        ];
+        _messages = [Message(name: name, data: data)];
       }
     }
-    final queueItem = _RealtimePublishQueueItem(
-        Completer<void>(), message, messages);
+    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -220,11 +214,9 @@ class RealtimePlatformChannels
 
 /// An item for used to enqueue a message to be published after an ongoing
 /// authCallback is completed
-class _RealtimePublishQueueItem {
-  spec.Message message;
+class _PublishQueueItem {
   List<spec.Message> messages;
   final Completer<void> completer;
 
-  _RealtimePublishQueueItem(
-      this.completer, this.message, this.messages);
+  _PublishQueueItem(this.completer, this.messages);
 }
