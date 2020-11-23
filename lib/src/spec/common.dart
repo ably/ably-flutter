@@ -357,7 +357,9 @@ class AblyException implements Exception {
 
   @override
   String toString() {
-    if (message == null) return 'AblyException';
+    if (message == null) {
+      return 'AblyException (${(code == null) ? "" : '$code '})';
+    }
     return 'AblyException: $message (${(code == null) ? "" : '$code '})';
   }
 }
