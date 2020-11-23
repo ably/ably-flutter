@@ -34,7 +34,7 @@ class RestPublishWithAuthCallbackTestState
             authCallbackInvoked = true;
             return TokenRequest.fromMap(await getTokenRequest());
           }));
-    await restMessagesPublishUtil(rest);
+    await restMessagesPublishUtil(rest.channels.get('test'));
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await rest.handle,
       'authCallbackInvoked': authCallbackInvoked
