@@ -4,6 +4,7 @@ import '../test_dispatcher.dart';
 import 'app_key_provision_helper.dart';
 import 'realtime_publish_test.dart';
 import 'test_widget_abstract.dart';
+import 'encoders.dart';
 
 class RealtimeSubscribeTest extends TestWidget {
   const RealtimeSubscribeTest(TestDispatcherState dispatcher)
@@ -49,21 +50,11 @@ class RealtimeSubscribeTestState
     await channel.attach();
     final subscription =
         channel.subscribe(name: name, names: names).listen((message) {
-      messages.add(messageToJson(message));
+      messages.add(encodeMessage(message));
     });
     await realtimeMessagesPublishUtil(channel);
     await subscription.cancel();
     return messages;
   }
 
-  Map<String, dynamic> messageToJson(Message message) => {
-        'id': message.id,
-        'timestamp': message.timestamp.toIso8601String(),
-        'clientId': message.clientId,
-        'connectionId': message.connectionId,
-        'encoding': message.encoding,
-        'data': message.data,
-        'name': message.name,
-        'extras': message.extras,
-      };
 }
