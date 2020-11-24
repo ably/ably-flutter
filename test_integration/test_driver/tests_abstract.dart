@@ -22,9 +22,12 @@ void runTests({
 
       // Connect to the Flutter driver before running any tests.
       setUpAll(() async {
-        driver = await FlutterDriver.connect(printCommunication: true);
+        driver = await FlutterDriver.connect(
+          printCommunication: true,
+          timeout: const Duration(seconds: 60),
+        );
       });
-
+      
       tearDownAll(() async {
         if (driver != null) {
           final _ = driver.close();
