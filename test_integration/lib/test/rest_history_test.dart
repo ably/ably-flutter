@@ -33,10 +33,17 @@ class RestHistoryTestState extends TestWidgetState<RestHistoryTest> {
 
     final paginatedResult = await channel.history();
     final historyDefault = await _history(channel);
+    await Future.delayed(const Duration(seconds: 2));
+
     final historyLimit4 = await _history(channel, RestHistoryParams(limit: 4));
+    await Future.delayed(const Duration(seconds: 2));
+
     final historyLimit2 = await _history(channel, RestHistoryParams(limit: 2));
+    await Future.delayed(const Duration(seconds: 2));
+
     final historyForwardLimit4 = await _history(
         channel, RestHistoryParams(direction: 'forwards', limit: 4));
+    await Future.delayed(const Duration(seconds: 2));
 
     final time1 = DateTime.now();
     await channel.publish(name: 'history', data: 'test');
