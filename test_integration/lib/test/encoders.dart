@@ -29,3 +29,19 @@ Map<String, dynamic> encodeConnectionEvent(ConnectionStateChange e) => {
       'reason': e.reason.toString(),
       'retryIn': e.retryIn,
     };
+
+List<Map<String, dynamic>> encodeList<T>(
+  List<T> items,
+  Map<String, dynamic> Function(T) typeEncoder,
+) =>
+    List<T>.from(items).map<Map<String, dynamic>>(typeEncoder).toList();
+
+Map<String, dynamic> encodePaginatedResult<T>(
+  PaginatedResult<T> paginatedResult,
+  Map<String, dynamic> Function(T) typeEncoder,
+) =>
+    {
+      'items': encodeList<T>(paginatedResult.items, typeEncoder),
+      'hasNext': paginatedResult.hasNext(),
+      'isLast': paginatedResult.isLast(),
+    };

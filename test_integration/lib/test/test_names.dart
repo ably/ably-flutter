@@ -11,8 +11,10 @@ class TestName {
       'testHelperUnhandledExceptionTest';
 
   static const String restPublish = 'restPublish';
+  static const String restHistory = 'restHistory';
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
+  // TODO(tiholic) handle restHistoryWithAuthCallback
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';

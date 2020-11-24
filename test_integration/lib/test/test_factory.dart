@@ -5,6 +5,7 @@ import 'realtime_events_test.dart';
 import 'realtime_publish_test.dart';
 import 'realtime_publish_with_auth_callback_test.dart';
 import 'realtime_subscribe.dart';
+import 'rest_history_test.dart';
 import 'rest_publish_test.dart';
 import 'rest_publish_with_auth_callback_test.dart';
 import 'test_helper_flutter_error_test.dart';
@@ -20,6 +21,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePublishWithAuthCallback: (d) =>
       RealtimePublishWithAuthCallbackTest(d),
   TestName.restPublish: (d) => RestPublishTest(d),
+  TestName.restHistory: (d) => RestHistoryTest(d),
   TestName.restPublishWithAuthCallback: (d) =>
       RestPublishWithAuthCallbackTest(d),
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),

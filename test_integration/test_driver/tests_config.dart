@@ -16,8 +16,9 @@ final _tests = <TestGroup, Map<String, Function>>{
     'should provision AppKey': testDemoDependencies,
   },
   TestGroup.rest: {
-    'should publish': testRestPublish,
-    'should publish with AuthCallback': testRestPublishWithAuthCallback,
+    // 'should publish': testRestPublish,
+    'should retrieve history': testRestHistory,
+    // 'should publish with AuthCallback': testRestPublishWithAuthCallback,
   },
   TestGroup.realtime: {
     'should publish': testRealtimePublish,
