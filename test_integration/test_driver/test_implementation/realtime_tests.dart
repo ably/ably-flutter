@@ -3,6 +3,8 @@ import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+import 'utils.dart';
+
 Future testRealtimePublish(FlutterDriver driver) async {
   const message = TestControlMessage(TestName.realtimePublish);
 
@@ -178,43 +180,7 @@ Future testRealtimeSubscribe(FlutterDriver driver) async {
           (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
       .toList();
 
-  expect(all, isA<List<Map<String, dynamic>>>());
-  expect(all.length, equals(8));
-
-  expect(all[0]['name'], isNull);
-  expect(all[0]['data'], isNull);
-
-  expect(all[1]['name'], isNull);
-  expect(all[1]['data'], equals('Ably'));
-
-  expect(all[2]['name'], 'name1');
-  expect(all[2]['data'], isNull);
-
-  expect(all[3]['name'], 'name1');
-  expect(all[3]['data'], equals('Ably'));
-
-  expect(all[4]['name'], 'name2');
-  expect(all[4]['data'], equals([1, 2, 3]));
-
-  expect(all[5]['name'], 'name2');
-  expect(all[5]['data'], equals(['hello', 'ably']));
-
-  expect(all[6]['name'], 'name3');
-  expect(
-      all[6]['data'],
-      equals({
-        'hello': 'ably',
-        'items': ['1', 2.2, true]
-      }));
-
-  expect(all[7]['name'], 'name3');
-  expect(
-      all[7]['data'],
-      equals([
-        {'hello': 'ably'},
-        'ably',
-        'realtime'
-      ]));
+  testAllPublishedMessages(all);
 
   // Testing realtime subscribe to messages filtered with name
   final filteredWithName = response.payload['filteredWithName']

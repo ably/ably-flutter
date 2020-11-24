@@ -295,6 +295,14 @@ class RestHistoryParams {
   })  : assert(direction == 'backwards' || direction == 'forwards'),
         start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
         end = end ?? DateTime.now();
+
+  @override
+  String toString() =>
+      'RestHistoryParams:'
+        ' start=$start'
+        ' end=$end'
+        ' direction=$direction'
+        ' limit=$limit';
 }
 
 /// https://docs.ably.io/client-lib-development-guide/features/#RTL10
