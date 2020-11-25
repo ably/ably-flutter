@@ -318,8 +318,8 @@ class RealtimeHistoryParams extends RestHistoryParams {
   RealtimeHistoryParams({
     DateTime start,
     DateTime end,
-    String direction,
-    int limit,
+    String direction = 'backwards',
+    int limit = 100,
     this.untilAttach,
   }) : super(
           start: start,
