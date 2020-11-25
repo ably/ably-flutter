@@ -2,9 +2,9 @@ import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
 import 'app_key_provision_helper.dart';
+import 'encoders.dart';
 import 'realtime_publish_test.dart';
 import 'test_widget_abstract.dart';
-import 'encoders.dart';
 
 class RealtimeSubscribeTest extends TestWidget {
   const RealtimeSubscribeTest(TestDispatcherState dispatcher)

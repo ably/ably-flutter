@@ -19,6 +19,8 @@ class TestName {
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
+  static const String realtimeHistory = 'realtimeHistory';
   static const String realtimePublishWithAuthCallback =
       'realtimePublishWithAuthCallback';
+  // TODO(tiholic) handle realtimeHistoryWithAuthCallback
 }
