@@ -46,11 +46,16 @@ class RestHistoryTestState extends TestWidgetState<RestHistoryTest> {
     await Future.delayed(const Duration(seconds: 2));
 
     final time1 = DateTime.now();
+    //TODO(tiholic) iOS fails without this delay
+    // - timestamp on message retrieved from history
+    // is earlier than expected when ran in CI
+    await Future.delayed(const Duration(seconds: 2));
     await channel.publish(name: 'history', data: 'test');
     //TODO(tiholic) understand why tests fail without this delay
     await Future.delayed(const Duration(seconds: 2));
 
     final time2 = DateTime.now();
+    await Future.delayed(const Duration(seconds: 2));
     await channel.publish(name: 'history', data: 'test2');
     await Future.delayed(const Duration(seconds: 2));
 
