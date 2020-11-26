@@ -15,6 +15,10 @@ abstract class PlatformObject {
   Future<int> _handle;
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
+  /// immediately instantiates an object on platform side by calling
+  /// [createPlatformInstance] if [fetchHandle] is true,
+  /// otherwise, platform instance will be created only when
+  /// [createPlatformInstance] is explicitly called.
   PlatformObject({bool fetchHandle = true}) : assert(fetchHandle != null) {
     if (fetchHandle) {
       _handle = _acquireHandle();
@@ -24,8 +28,13 @@ abstract class PlatformObject {
   @override
   String toString() => 'Ably Platform Object $_handleValue';
 
+  /// creates an instance of this object on platform side
   Future<int> createPlatformInstance();
 
+  /// returns [_handle] which will be same as handle on platform side
+  ///
+  /// if [_handle] is empty, it creates platform instance, acquires handle,
+  /// updates [_handle] and returns it.
   Future<int> get handle async => _handle ??= _acquireHandle();
 
   Future<int> _acquireHandle() =>
@@ -37,8 +46,10 @@ abstract class PlatformObject {
         );
       }).then((value) => _handleValue = value);
 
+  /// [MethodChannel] to make method calls to platform side
   MethodChannel get methodChannel => platform.methodChannel;
 
+  /// [EventChannel] to register events on platform side
   StreamsChannel get eventChannel => platform.streamsChannel;
 
   /// invoke platform method channel without AblyMessage encapsulation
