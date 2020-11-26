@@ -4,6 +4,7 @@
 .packages
 .pub/
 build/
+doc/
 
 # Flutter Version Manager
 .fvm

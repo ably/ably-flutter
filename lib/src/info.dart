@@ -1,5 +1,4 @@
 import 'generated/platformconstants.dart' show PlatformMethod;
-
 import 'platform.dart' show invoke;
 
 /// Get android/iOS platform version
