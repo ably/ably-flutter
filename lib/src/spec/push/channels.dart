@@ -1,18 +1,36 @@
 import '../common.dart';
 
+/// Channel to recieve push notificaitons on
+///
+/// https://docs.ably.io/client-lib-development-guide/features/#RSH7
 abstract class PushChannel {
-  // RSH7a
+  /// Subscribes device to push notifications on channel
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH7a
   Future<void> subscribeDevice();
 
-  // RSH7b
+  /// Subscribes client to push notifications on the channel
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH7b
   Future<void> subscribeClient();
 
-  // RSH7c
+  /// un-subscribes device from push notifications
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH7c
   Future<void> unsubscribeDevice();
 
-  // RSH7d
+  /// un-subscribes client from push notifications
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH7d
   Future<void> unsubscribeClient();
 
-  // RSH7e
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions();
+  /// Lists subscriptions
+  ///
+  /// as [PushChannelSubscription] objects encapsulated in a paginated result.
+  /// Optional filters can be passed as a [params] map
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH7e
+  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions([
+    Map<String, dynamic> params,
+  ]);
 }

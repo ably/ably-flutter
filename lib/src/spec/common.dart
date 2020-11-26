@@ -299,12 +299,11 @@ class RestHistoryParams {
         end = end ?? DateTime.now();
 
   @override
-  String toString() =>
-      'RestHistoryParams:'
-        ' start=$start'
-        ' end=$end'
-        ' direction=$direction'
-        ' limit=$limit';
+  String toString() => 'RestHistoryParams:'
+      ' start=$start'
+      ' end=$end'
+      ' direction=$direction'
+      ' limit=$limit';
 }
 
 /// https://docs.ably.io/client-lib-development-guide/features/#RTL10
@@ -478,21 +477,31 @@ abstract class EventEmitter<E, G> {
 /// The response is accompanied by metadata that indicates the
 /// relative queries available.
 abstract class PaginatedResultInterface<T> {
-  /// items contain page of results (TG3)
+  /// items contain page of results
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#TG3
   List<T> get items;
 
-  /// returns a new PaginatedResult loaded with the next page of results. (TG4)
+  /// returns a new PaginatedResult loaded with the next page of results.
   ///
-  /// If there are no further pages, then null is returned
+  /// If there are no further pages, then null is returned.
+  /// https://docs.ably.io/client-lib-development-guide/features/#TG4
   Future<PaginatedResultInterface<T>> next();
 
-  /// returns a new PaginatedResult for the first page of results (TG5)
+  /// returns a new PaginatedResult for the first page of results
+  ///
+  /// If there are no further pages, then null is returned.
+  /// https://docs.ably.io/client-lib-development-guide/features/#TG5
   Future<PaginatedResultInterface<T>> first();
 
-  /// returns true if there are further pages (TG6)
+  /// returns true if there are further pages
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#TG6
   bool hasNext();
 
-  /// returns true if this page is the last page (TG7)
+  /// returns true if this page is the last page
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#TG7
   bool isLast();
 }
 
