@@ -3,6 +3,8 @@
 // source file can be found at bin/templates'
 //
 
+// ignore_for_file: public_member_api_docs
+
 class CodecTypes {
   static const int ablyMessage = 128;
   static const int ablyEventMessage = 129;
