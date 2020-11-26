@@ -536,35 +536,35 @@ class _MyAppState extends State<MyApp> {
       });
 
   Widget getRestChannelPresenceHistory() =>
-      getPageNavigator<ably.PresenceMessage>(
-          name: 'Rest presence history',
-          enabled: _rest != null,
-          page: _restPresenceHistory,
-          query: () async => _rest.channels
-              .get(defaultChannel)
-              .presence
-              .history(ably.RestHistoryParams(limit: 10)),
-          onUpdate: (result) {
-            setState(() {
-              _restPresenceHistory = result;
-            });
-          });
-
-  Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
-      name: 'Realtime history',
-      enabled: _realtime != null,
-      page: _realtimeHistory,
-      query: () async => _realtime.channels.get(defaultChannel).history(
-            ably.RealtimeHistoryParams(
-              limit: 10,
-              untilAttach: true,
-            ),
-          ),
+    getPageNavigator<ably.PresenceMessage>(
+      name: 'Rest presence history',
+      enabled: _rest != null,
+      page: _restPresenceHistory,
+      query: () async => _rest.channels
+        .get(defaultChannel)
+        .presence
+        .history(ably.RestHistoryParams(limit: 10)),
       onUpdate: (result) {
         setState(() {
-          _realtimeHistory = result;
+          _restPresenceHistory = result;
         });
       });
+
+  Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
+    name: 'Realtime history',
+    enabled: _realtime != null,
+    page: _realtimeHistory,
+    query: () async => _realtime.channels.get(defaultChannel).history(
+      ably.RealtimeHistoryParams(
+        limit: 10,
+        untilAttach: true,
+      ),
+    ),
+    onUpdate: (result) {
+      setState(() {
+        _realtimeHistory = result;
+      });
+    });
 
   @override
   Widget build(BuildContext context) => MaterialApp(
