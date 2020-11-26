@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import 'enums.dart';
 import 'rest/channels.dart';
 
@@ -48,8 +46,8 @@ class Message {
 
   @override
   String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
-      ' connectionId=$connectionId encoding=$encoding name=$name'
-      ' data=$data extras=$extras';
+    ' connectionId=$connectionId encoding=$encoding name=$name'
+    ' data=$data extras=$extras';
 
 // TODO(tiholic) add support for fromEncoded and fromEncodedArray (TM3)
 }
@@ -107,7 +105,7 @@ class PresenceMessage {
 
   @override
   bool operator ==(Object other) =>
-      other is PresenceMessage &&
+    other is PresenceMessage &&
       other.id == id &&
       other.action == action &&
       other.clientId == clientId &&
@@ -126,25 +124,25 @@ class PresenceMessage {
   ///  RSL6 and RLS6b as mentioned in TP4
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
-    ChannelOptions channelOptions,
-  ])  : id = jsonObject['id'] as String,
-        action = PresenceAction.values.firstWhere((e) =>
-            e.toString().split('.')[1] == jsonObject['action'] as String),
-        clientId = jsonObject['clientId'] as String,
-        connectionId = jsonObject['connectionId'] as String,
-        data = jsonObject['data'],
-        encoding = jsonObject['encoding'] as String,
-        extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
-            jsonObject['extras'] as Map),
-        timestamp = jsonObject['timestamp'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                jsonObject['timestamp'] as int)
-            : null;
+      ChannelOptions channelOptions,
+    ])  : id = jsonObject['id'] as String,
+      action = PresenceAction.values.firstWhere((e) =>
+      e.toString().split('.')[1] == jsonObject['action'] as String),
+      clientId = jsonObject['clientId'] as String,
+      connectionId = jsonObject['connectionId'] as String,
+      data = jsonObject['data'],
+      encoding = jsonObject['encoding'] as String,
+      extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
+        jsonObject['extras'] as Map),
+      timestamp = jsonObject['timestamp'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+        jsonObject['timestamp'] as int)
+        : null;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-    ChannelOptions channelOptions,
-  ]) =>
-      jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
+      ChannelOptions channelOptions,
+    ]) =>
+    jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
 }
