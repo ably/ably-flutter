@@ -1,4 +1,3 @@
-//ignore_for_file: avoid_print
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';

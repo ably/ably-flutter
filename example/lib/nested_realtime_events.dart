@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 // NOTE: this file is not being used anywhere, yet
 // this could serve as a reference for writing nested listeners
 
