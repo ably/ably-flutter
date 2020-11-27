@@ -6,41 +6,43 @@ import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
 import '../../spec/push/channels.dart';
-import '../../spec/spec.dart' as spec;
 import '../message.dart';
 import '../platform_object.dart';
 import 'realtime.dart';
 
+/// Plugin based implementation of Realtime channel
 class RealtimeChannel extends PlatformObject
-    implements spec.RealtimeChannelInterface {
+    implements RealtimeChannelInterface {
   @override
-  spec.AblyBase ably;
+  RealtimeInterface realtime;
 
   @override
   String name;
 
   @override
-  spec.ChannelOptions options;
+  ChannelOptions options;
 
   @override
-  spec.RealtimePresence presence;
+  RealtimePresence presence;
 
-  RealtimeChannel(this.ably, this.name, this.options) : super() {
-    state = spec.ChannelState.initialized;
+  /// instantiates with [Rest], [name] and [ChannelOptions]
+  ///
+  /// sets default [state] to [ChannelState.initialized] and start listening
+  /// for updates to the channel [state]/
+  RealtimeChannel(this.realtime, this.name, this.options) : super() {
+    state = ChannelState.initialized;
     on().listen((event) => state = event.current);
   }
-
-  Realtime get realtimePlatformObject => ably as Realtime;
 
   /// createPlatformInstance will return realtimePlatformObject's handle
   /// as that is what will be required in platforms end to find realtime
   /// instance and send message to channel
   @override
-  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => (realtime as Realtime).handle;
 
   @override
-  Future<PaginatedResult<spec.Message>> history([
-    spec.RealtimeHistoryParams params,
+  Future<PaginatedResult<Message>> history([
+    RealtimeHistoryParams params,
   ]) async {
     final message = await invoke<AblyMessage>(PlatformMethod.realtimeHistory, {
       TxTransportKeys.channelName: name,
@@ -134,27 +136,34 @@ class RealtimeChannel extends PlatformObject
           }
         } else {
           _publishQueue
-              .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(spec.AblyException(
-                    pe.code,
-                    pe.message,
-                    pe.details as ErrorInfo,
-                  )));
+            .where((e) => !e.completer.isCompleted)
+            .forEach((e) =>
+            e.completer.completeError(AblyException(
+              pe.code,
+              pe.message,
+              pe.details as ErrorInfo,
+            )));
         }
       }
     }
     _publishInternalRunning = false;
   }
 
+  /// @internal
+  /// required due to the complications involved in the way ably-java expects
+  /// authCallback to be performed synchronously, while method channel call from
+  /// platform side to dart side is asynchronous
+  ///
+  /// discussion: https://github.com/ably/ably-flutter/issues/31
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
   }
 
   @override
-  spec.ErrorInfo errorReason;
+  ErrorInfo errorReason;
 
   @override
-  List<spec.ChannelMode> modes;
+  List<ChannelMode> modes;
 
   @override
   Map<String, String> params;
@@ -163,14 +172,14 @@ class RealtimeChannel extends PlatformObject
   PushChannel push;
 
   @override
-  spec.ChannelState state;
+  ChannelState state;
 
   @override
   Future<void> attach() async {
     try {
       await invoke(PlatformMethod.attachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
@@ -179,13 +188,13 @@ class RealtimeChannel extends PlatformObject
     try {
       await invoke(PlatformMethod.detachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
   @override
-  Future<void> setOptions(spec.ChannelOptions options) async {
-    throw AblyException(null, 'Realtime chanel options are not supported yet.');
+  Future<void> setOptions(ChannelOptions options) async {
+    throw UnimplementedError();
   }
 
   @override
@@ -198,28 +207,32 @@ class RealtimeChannel extends PlatformObject
           );
 
   @override
-  Stream<spec.Message> subscribe({String name, List<String> names}) {
+  Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
-        .map((message) => message as spec.Message)
-        .where((message) =>
-            subscribedNames.isEmpty ||
-            subscribedNames.any((n) => n == message.name));
+      .map((message) => message as Message)
+      .where((message) =>
+    subscribedNames.isEmpty ||
+      subscribedNames.any((n) => n == message.name));
   }
 }
 
-class RealtimePlatformChannels extends spec.RealtimeChannels<RealtimeChannel> {
-  RealtimePlatformChannels(Realtime ably) : super(ably);
+/// A collection of realtime channel objects
+///
+/// https://docs.ably.io/client-lib-development-guide/features/#RTS1
+class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
+  /// instantiates with the ably [Realtime] instance
+  RealtimePlatformChannels(Realtime realtime) : super(realtime);
 
   @override
   RealtimeChannel createChannel(String name, ChannelOptions options) =>
-    RealtimeChannel(ably, name, options);
+    RealtimeChannel(realtime, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing
 /// authCallback is completed
 class _PublishQueueItem {
-  List<spec.Message> messages;
+  List<Message> messages;
   final Completer<void> completer;
 
   _PublishQueueItem(this.completer, this.messages);

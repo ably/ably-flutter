@@ -13,12 +13,19 @@ import 'connection.dart';
 Map<int, Realtime> _realtimeInstances = {};
 Map<int, Realtime> _realtimeInstancesUnmodifiableView;
 
+/// Returns readonly copy of instances of all [Realtime] clients created.
 Map<int, Realtime> get realtimeInstances =>
     _realtimeInstancesUnmodifiableView ??=
         UnmodifiableMapView(_realtimeInstances);
 
+/// Ably's Realtime client
 class Realtime extends PlatformObject
     implements spec.RealtimeInterface<RealtimePlatformChannels> {
+  /// instantiates with [ClientOptions] and a String [key]
+  ///
+  /// creates client options from key if [key] is provided
+  ///
+  /// raises [AssertionError] if both [options] and [key] are null
   Realtime({
     ClientOptions options,
     final String key,
@@ -49,9 +56,6 @@ class Realtime extends PlatformObject
 
   @override
   Auth auth;
-
-  @override
-  String clientId;
 
   @override
   ClientOptions options;
@@ -108,6 +112,12 @@ class Realtime extends PlatformObject
     _connecting = false;
   }
 
+  /// @internal
+  /// required due to the complications involved in the way ably-java expects
+  /// authCallback to be performed synchronously, while method channel call from
+  /// platform side to dart side is asynchronous
+  ///
+  /// discussion: https://github.com/ably/ably-flutter/issues/31
   Future<void> awaitAuthUpdateAndReconnect() async {
     if (_authCallbackCompleter != null) {
       return;
@@ -123,13 +133,19 @@ class Realtime extends PlatformObject
                       'Timed out',
                       Timeouts.retryOperationOnAuthFailure,
                     ),
-                  )));
+          )));
     } finally {
       _authCallbackCompleter = null;
     }
     await connect();
   }
 
+  /// @internal
+  /// required due to the complications involved in the way ably-java expects
+  /// authCallback to be performed synchronously, while method channel call from
+  /// platform side to dart side is asynchronous
+  ///
+  /// discussion: https://github.com/ably/ably-flutter/issues/31
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
     for (final channel in channels.all) {

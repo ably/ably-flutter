@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 import '../impl/realtime/connection.dart';
 import 'auth.dart';
 import 'enums.dart';
-import 'rest/ably_base.dart';
 import 'spec.dart';
 
 /// params to configure encryption for a channel
@@ -468,7 +469,7 @@ class RestPresenceParams {
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c
 class RealtimePresenceParams {
-  /// When true, [Presence.get] will wait until SYNC is complete
+  /// When true, [RealtimePresence.get] will wait until SYNC is complete
   /// before returning a list of members
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c1
@@ -752,7 +753,12 @@ abstract class EventListener<E> {
 /// Interface implemented by Ably classes that can emit events,
 /// offering the capability to create listeners for those events.
 /// [E] is type of event to listen for
-/// [G] is the instance which will be passed back in streams
+/// [G] is the instance which will be passed back in streams.
+///
+///
+/// There is no `off` API as in other Ably client libraries as on returns a
+/// [Stream] which can be subscribed for, and that subscription can be cancelled
+/// using [StreamSubscription.cancel] API
 abstract class EventEmitter<E, G> {
   // Remove all listener registrations, irrespective of type.
   // Future<void> off();

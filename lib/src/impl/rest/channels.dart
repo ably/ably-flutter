@@ -5,38 +5,36 @@ import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
-import '../../spec/spec.dart' as spec;
 import '../message.dart';
 import '../platform_object.dart';
 import 'rest.dart';
 
-class RestChannel extends PlatformObject implements spec.RestChannelInterface {
-  /// [Rest] instance
+/// Plugin based implementation of Rest channel
+class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
-  spec.AblyBase ably;
+  RestInterface rest;
 
   @override
   String name;
 
   @override
-  spec.ChannelOptions options;
+  ChannelOptions options;
 
   @override
-  spec.Presence presence;
+  RestPresenceInterface presence;
 
-  RestChannel(this.ably, this.name, this.options);
-
-  Rest get restPlatformObject => ably as Rest;
+  /// instantiates with [Rest], [name] and [ChannelOptions]
+  RestChannel(this.rest, this.name, this.options);
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
   @override
-  Future<int> createPlatformInstance() async => restPlatformObject.handle;
+  Future<int> createPlatformInstance() async => (rest as Rest).handle;
 
   @override
-  Future<PaginatedResult<spec.Message>> history([
-    spec.RestHistoryParams params,
+  Future<PaginatedResult<Message>> history([
+    RestHistoryParams params,
   ]) async {
     final message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
       TxTransportKeys.channelName: name,
@@ -127,7 +125,7 @@ class RestChannel extends PlatformObject implements spec.RestChannelInterface {
         } else {
           _publishQueue
               .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(spec.AblyException(
+              .forEach((e) => e.completer.completeError(AblyException(
                     pe.code,
                     pe.message,
                     pe.details as ErrorInfo,
@@ -138,17 +136,32 @@ class RestChannel extends PlatformObject implements spec.RestChannelInterface {
     _publishInternalRunning = false;
   }
 
+  /// @internal
+  /// required due to the complications involved in the way ably-java expects
+  /// authCallback to be performed synchronously, while method channel call from
+  /// platform side to dart side is asynchronous
+  ///
+  /// discussion: https://github.com/ably/ably-flutter/issues/31
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
   }
+
+  @override
+  Future<void> setOptions(ChannelOptions options) async {
+    throw UnimplementedError();
+  }
 }
 
-class RestPlatformChannels extends spec.RestChannels<RestChannel> {
-  RestPlatformChannels(Rest ably) : super(ably);
+/// A collection of rest channel objects
+///
+/// https://docs.ably.io/client-lib-development-guide/features/#RSN1
+class RestPlatformChannels extends RestChannels<RestChannel> {
+  /// instantiates with the ably [Rest] instance
+  RestPlatformChannels(Rest rest) : super(rest);
 
   @override
   RestChannel createChannel(String name, ChannelOptions options) =>
-      RestChannel(ably, name, options);
+      RestChannel(rest, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing
