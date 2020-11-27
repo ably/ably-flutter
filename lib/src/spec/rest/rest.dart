@@ -8,7 +8,7 @@ import 'options.dart';
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSC1
 abstract class RestInterface<C extends RestChannels> extends AblyBase {
-  /// collection of [RestChannel] objects
+  /// collection of [RestChannelInterface] objects
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RSN1
   C channels;

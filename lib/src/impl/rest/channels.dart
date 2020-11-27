@@ -10,7 +10,7 @@ import '../message.dart';
 import '../platform_object.dart';
 import 'rest.dart';
 
-class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
+class RestChannel extends PlatformObject implements spec.RestChannelInterface {
   /// [Rest] instance
   @override
   spec.AblyBase ably;
@@ -24,7 +24,7 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   @override
   spec.Presence presence;
 
-  RestPlatformChannel(this.ably, this.name, this.options);
+  RestChannel(this.ably, this.name, this.options);
 
   Rest get restPlatformObject => ably as Rest;
 
@@ -143,12 +143,12 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   }
 }
 
-class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel> {
+class RestPlatformChannels extends spec.RestChannels<RestChannel> {
   RestPlatformChannels(Rest ably) : super(ably);
 
   @override
-  RestPlatformChannel createChannel(String name, ChannelOptions options) =>
-      RestPlatformChannel(ably, name, options);
+  RestChannel createChannel(String name, ChannelOptions options) =>
+      RestChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

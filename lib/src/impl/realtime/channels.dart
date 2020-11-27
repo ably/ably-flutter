@@ -11,8 +11,8 @@ import '../message.dart';
 import '../platform_object.dart';
 import 'realtime.dart';
 
-class RealtimePlatformChannel extends PlatformObject
-    implements spec.RealtimeChannel {
+class RealtimeChannel extends PlatformObject
+    implements spec.RealtimeChannelInterface {
   @override
   spec.AblyBase ably;
 
@@ -25,7 +25,7 @@ class RealtimePlatformChannel extends PlatformObject
   @override
   spec.RealtimePresence presence;
 
-  RealtimePlatformChannel(this.ably, this.name, this.options) : super() {
+  RealtimeChannel(this.ably, this.name, this.options) : super() {
     state = spec.ChannelState.initialized;
     on().listen((event) => state = event.current);
   }
@@ -208,13 +208,12 @@ class RealtimePlatformChannel extends PlatformObject
   }
 }
 
-class RealtimePlatformChannels
-    extends spec.RealtimeChannels<RealtimePlatformChannel> {
+class RealtimePlatformChannels extends spec.RealtimeChannels<RealtimeChannel> {
   RealtimePlatformChannels(Realtime ably) : super(ably);
 
   @override
-  RealtimePlatformChannel createChannel(String name, ChannelOptions options) =>
-      RealtimePlatformChannel(ably, name, options);
+  RealtimeChannel createChannel(String name, ChannelOptions options) =>
+    RealtimeChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

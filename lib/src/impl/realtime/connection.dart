@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import '../../../ably_flutter.dart';
-import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
+import '../../spec/spec.dart'
+    show ConnectionInterface, ConnectionState, ErrorInfo;
 import '../platform_object.dart';
 import 'realtime.dart';
 
-class ConnectionPlatformObject extends PlatformObject implements Connection {
+class Connection extends PlatformObject implements ConnectionInterface {
   Realtime realtimePlatformObject;
 
-  ConnectionPlatformObject(this.realtimePlatformObject) : super() {
+  Connection(this.realtimePlatformObject) : super() {
     state = ConnectionState.initialized;
     on().listen((event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {

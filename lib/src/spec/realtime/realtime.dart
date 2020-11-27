@@ -18,7 +18,7 @@ abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
 
   void connect();
 
-  Connection get connection;
+  ConnectionInterface get connection;
 
   C get channels;
 }

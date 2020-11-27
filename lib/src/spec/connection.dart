@@ -1,10 +1,10 @@
 import 'common.dart';
 import 'enums.dart';
 
-/// connects to Ably service using a [websocket](https://www.ably.io/topic/websockets) connection
+/// connects to Ably service using a [web-socket](https://www.ably.io/topic/websockets) connection
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTN1
-abstract class Connection
+abstract class ConnectionInterface
     implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
   /// current state of this connection
   ///

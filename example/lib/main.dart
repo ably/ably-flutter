@@ -236,7 +236,7 @@ class _MyAppState extends State<MyApp> {
     _subscriptionsToDispose.add(alphaSubscription);
   }
 
-  void listenRealtimeChannel(ably.RealtimeChannel channel) {
+  void listenRealtimeChannel(ably.RealtimeChannelInterface channel) {
     final _channelStateChangeSubscription = channel.on().listen((stateChange) {
       print('ChannelStateChange: ${stateChange.current}'
           '\nReason: ${stateChange.reason}');

@@ -25,7 +25,7 @@ class Realtime extends PlatformObject
   })  : assert(options != null || key != null),
         options = options ?? ClientOptions.fromKey(key),
         super() {
-    _connection = ConnectionPlatformObject(this);
+    _connection = Connection(this);
     _channels = RealtimePlatformChannels(this);
   }
 
@@ -42,10 +42,10 @@ class Realtime extends PlatformObject
   // The _connection instance keeps a reference to this platform object.
   // Ideally connection would be final, but that would need 'late final'
   // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  Connection _connection;
+  ConnectionInterface _connection;
 
   @override
-  Connection get connection => _connection;
+  ConnectionInterface get connection => _connection;
 
   @override
   Auth auth;

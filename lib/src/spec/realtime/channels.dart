@@ -6,9 +6,9 @@ import '../rest/ably_base.dart';
 import '../rest/channels.dart';
 import 'presence.dart';
 
-abstract class RealtimeChannel
+abstract class RealtimeChannelInterface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
-  RealtimeChannel(
+  RealtimeChannelInterface(
     this.ably,
     this.name,
     this.options,
@@ -51,6 +51,7 @@ abstract class RealtimeChannel
   void setOptions(ChannelOptions options);
 }
 
-abstract class RealtimeChannels<T extends RealtimeChannel> extends Channels<T> {
+abstract class RealtimeChannels<T extends RealtimeChannelInterface>
+  extends Channels<T> {
   RealtimeChannels(AblyBase ably) : super(ably);
 }

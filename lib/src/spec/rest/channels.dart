@@ -7,8 +7,8 @@ abstract class ChannelOptions {
   dynamic cipher;
 }
 
-abstract class RestChannel {
-  RestChannel(
+abstract class RestChannelInterface {
+  RestChannelInterface(
     this.ably,
     this.name,
     this.options,
@@ -31,6 +31,7 @@ abstract class RestChannel {
   });
 }
 
-abstract class RestChannels<T extends RestChannel> extends Channels<T> {
+abstract class RestChannels<T extends RestChannelInterface>
+  extends Channels<T> {
   RestChannels(AblyBase ably) : super(ably);
 }

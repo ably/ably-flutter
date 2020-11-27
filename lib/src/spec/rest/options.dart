@@ -164,7 +164,7 @@ class ClientOptions extends AuthOptions {
   /// When true will automatically connect to Ably when library is instanced.
   ///
   /// This is true by default. If false, will wait for an explicit
-  /// [Connection]#connect to be called before connecting
+  /// [ConnectionInterface]#connect to be called before connecting
   /// https://docs.ably.io/client-lib-development-guide/features/#RTC1b
   bool autoConnect;
 

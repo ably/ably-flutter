@@ -1,6 +1,6 @@
 import '../common.dart';
 
-/// Channel to recieve push notificaitons on
+/// Channel to receive push notifications on
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSH7
 abstract class PushChannel {
