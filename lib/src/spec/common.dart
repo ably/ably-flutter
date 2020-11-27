@@ -902,6 +902,8 @@ class Stats {
 
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
+///
+/// https://docs.ably.io/client-lib-development-guide/features/#RSN1
 abstract class Channels<ChannelType> {
   /// stores channel name vs instance of [ChannelType]
   final _channels = <String, ChannelType>{};
