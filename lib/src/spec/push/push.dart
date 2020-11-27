@@ -4,14 +4,14 @@ abstract class PushChannelSubscriptions {
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
 
   Future<PaginatedResultInterface<PushChannelSubscription>> list(
-    PushChannelsParams params,
+    PushChannelSubscriptionParams params,
   );
 
   Future<PaginatedResultInterface<String>> listChannels(
     PushChannelsParams params,
   );
 
-  Future<void> remove(PushChannelsParams params);
+  Future<void> remove(PushChannelSubscription subscription);
 
   Future<void> removeWhere(PushChannelSubscriptionParams params);
 }
