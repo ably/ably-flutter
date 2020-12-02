@@ -4,15 +4,17 @@ import '../message.dart';
 import '../paginated_result.dart';
 import '../platform_object.dart';
 import 'channels.dart';
+import 'rest.dart';
 
-class RestPresence extends PlatformObject implements RestPresenceBase {
-  final RestPlatformChannel _restChannel;
+/// Plugin based implementation of [RestPresenceInterface]
+class RestPresence extends PlatformObject implements RestPresenceInterface {
+  final RestChannel _restChannel;
 
+  /// instantiates with a channel
   RestPresence(this._restChannel);
 
   @override
-  Future<int> createPlatformInstance() =>
-      _restChannel.restPlatformObject.handle;
+  Future<int> createPlatformInstance() => (_restChannel.rest as Rest).handle;
 
   @override
   Future<PaginatedResult<PresenceMessage>> get([

@@ -59,38 +59,48 @@ class PresenceMessage {
   /// unique ID for this presence message
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3a
-  String id;
+  final String id;
 
   /// presence action - to update presence status of current client,
   /// or to understand presence state of another client
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3b
-  PresenceAction action;
+  final PresenceAction action;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3c
-  String clientId;
+  final String clientId;
 
   /// connection id of the source of this message
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3d
-  String connectionId;
+  final String connectionId;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3e
-  dynamic data;
+  final Object data;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
-  String encoding;
+  final String encoding;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3i
-  Map<String, dynamic> extras;
+  final Map<String, dynamic> extras;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3g
-  DateTime timestamp;
+  final DateTime timestamp;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3h
   String get memberKey => '$connectionId:$clientId';
 
-  PresenceMessage();
+  /// instantiates presence message with
+  PresenceMessage({
+    this.id,
+    this.action,
+    this.clientId,
+    this.connectionId,
+    this.data,
+    this.encoding,
+    this.extras,
+    this.timestamp,
+  });
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   ///
@@ -98,21 +108,20 @@ class PresenceMessage {
   ///  RSL6 and RLS6b as mentioned in TP4
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
-      ChannelOptions channelOptions,
-    ]) {
-    id = jsonObject['id'] as String;
-    action = PresenceAction.values
-      .firstWhere((e) => e.toString() == jsonObject['action'] as String);
-    clientId = jsonObject['clientId'] as String;
-    connectionId = jsonObject['connectionId'] as String;
-    data = jsonObject['data'];
-    encoding = jsonObject['encoding'] as String;
-    extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
-      jsonObject['extras'] as Map);
-    timestamp = jsonObject['timestamp'] != null
-      ? DateTime.fromMillisecondsSinceEpoch(jsonObject['timestamp'] as int)
-      : null;
-  }
+    ChannelOptions channelOptions,
+  ])  : id = jsonObject['id'] as String,
+        action = PresenceAction.values
+            .firstWhere((e) => e.toString() == jsonObject['action'] as String),
+        clientId = jsonObject['clientId'] as String,
+        connectionId = jsonObject['connectionId'] as String,
+        data = jsonObject['data'],
+        encoding = jsonObject['encoding'] as String,
+        extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
+            jsonObject['extras'] as Map),
+        timestamp = jsonObject['timestamp'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                jsonObject['timestamp'] as int)
+            : null;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(

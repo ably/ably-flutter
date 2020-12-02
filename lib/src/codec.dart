@@ -72,13 +72,13 @@ class Codec extends StandardMessageCodec {
       CodecTypes.restHistoryParams:
           _CodecPair<RestHistoryParams>(_encodeRestHistoryParams, null),
       CodecTypes.restPresenceParams:
-      _CodecPair<RestPresenceParams>(_encodeRestPresenceParams, null),
+          _CodecPair<RestPresenceParams>(_encodeRestPresenceParams, null),
 
       CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
       CodecTypes.presenceMessage:
-      _CodecPair<PresenceMessage>(null, _decodePresenceMessage),
+          _CodecPair<PresenceMessage>(null, _decodePresenceMessage),
 
       // Events - Connection
       CodecTypes.connectionStateChange:
@@ -703,25 +703,23 @@ class Codec extends StandardMessageCodec {
 
   PresenceMessage _decodePresenceMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final message = PresenceMessage()
-      ..id = _readFromJson<String>(jsonMap, TxPresenceMessage.id)
-      ..action =
-          _decodePresenceAction(_readFromJson(
-            jsonMap,
-            TxPresenceMessage.action,
-          ))
-      ..clientId = _readFromJson<String>(jsonMap, TxPresenceMessage.clientId)
-      ..data = _readFromJson<dynamic>(jsonMap, TxPresenceMessage.data)
-      ..connectionId =
-          _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId)
-      ..encoding = _readFromJson<String>(jsonMap, TxPresenceMessage.encoding)
-      ..extras =
-          toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras));
     final timestamp = _readFromJson<int>(jsonMap, TxPresenceMessage.timestamp);
-    if (timestamp != null) {
-      message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    }
-    return message;
+    return PresenceMessage(
+      id: _readFromJson<String>(jsonMap, TxPresenceMessage.id),
+      action: _decodePresenceAction(_readFromJson(
+        jsonMap,
+        TxPresenceMessage.action,
+      )),
+      clientId: _readFromJson<String>(jsonMap, TxPresenceMessage.clientId),
+      data: _readFromJson<dynamic>(jsonMap, TxPresenceMessage.data),
+      connectionId:
+      _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId),
+      encoding: _readFromJson<String>(jsonMap, TxPresenceMessage.encoding),
+      extras: toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras)),
+      timestamp: (timestamp == null)
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(timestamp),
+    );
   }
 
   PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
