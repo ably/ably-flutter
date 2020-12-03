@@ -33,7 +33,14 @@ class RestPresence extends PlatformObject implements RestPresenceInterface {
   @override
   Future<PaginatedResult<PresenceMessage>> history([
     RestHistoryParams params,
-  ]) {
-    throw UnimplementedError();
+  ]) async {
+    final message = await invoke<AblyMessage>(
+      PlatformMethod.restPresenceHistory,
+      {
+        TxTransportKeys.channelName: _restChannel.name,
+        if (params != null) TxTransportKeys.params: params
+      },
+    );
+    return PaginatedResult<PresenceMessage>.fromAblyMessage(message);
   }
 }
