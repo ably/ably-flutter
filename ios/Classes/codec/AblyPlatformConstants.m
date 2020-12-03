@@ -16,6 +16,7 @@ NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOption
 NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_restHistory= @"restHistory";
 NSString *const AblyPlatformMethod_restPresenceGet= @"restPresenceGet";
+NSString *const AblyPlatformMethod_restPresenceHistory= @"restPresenceHistory";
 NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
 NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
 NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
@@ -132,6 +133,10 @@ NSString *const TxEnumConstants_suspended = @"suspended";
 NSString *const TxEnumConstants_closing = @"closing";
 NSString *const TxEnumConstants_closed = @"closed";
 NSString *const TxEnumConstants_failed = @"failed";
+NSString *const TxEnumConstants_absent = @"absent";
+NSString *const TxEnumConstants_leave = @"leave";
+NSString *const TxEnumConstants_enter = @"enter";
+NSString *const TxEnumConstants_present = @"present";
 NSString *const TxEnumConstants_update = @"update";
 @end
 

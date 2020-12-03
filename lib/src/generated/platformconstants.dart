@@ -152,6 +152,10 @@ class TxEnumConstants {
   static const String closing = 'closing';
   static const String closed = 'closed';
   static const String failed = 'failed';
+  static const String absent = 'absent';
+  static const String leave = 'leave';
+  static const String enter = 'enter';
+  static const String present = 'present';
   static const String update = 'update';
 }
 

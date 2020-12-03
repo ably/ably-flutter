@@ -342,19 +342,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final Object limit = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.limit);
         final Object direction = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.direction);
         final Object untilAttach = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.untilAttach);
-        if(start!=null) {
+        if (start != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.start, readValueAsLong(start));
         }
-        if(end!=null) {
+        if (end != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.end, readValueAsLong(end));
         }
-        if(limit!=null) {
+        if (limit != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.limit, (Integer) limit);
         }
-        if(direction!=null) {
+        if (direction != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
         }
-        if(untilAttach!=null) {
+        if (untilAttach != null) {
             params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) untilAttach);
         }
         return params;
@@ -367,13 +367,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final Object limit = jsonMap.get(PlatformConstants.TxRestPresenceParams.limit);
         final Object clientId = jsonMap.get(PlatformConstants.TxRestPresenceParams.clientId);
         final Object connectionId = jsonMap.get(PlatformConstants.TxRestPresenceParams.connectionId);
-        if(limit!=null) {
+        if (limit != null) {
             params[index++] = new Param(PlatformConstants.TxRestPresenceParams.limit, (Integer) limit);
         }
-        if(clientId!=null) {
+        if (clientId != null) {
             params[index++] = new Param(PlatformConstants.TxRestPresenceParams.clientId, (String) clientId);
         }
-        if(connectionId!=null) {
+        if (connectionId != null) {
             params[index] = new Param(PlatformConstants.TxRestPresenceParams.connectionId, (String) connectionId);
         }
         return params;
@@ -592,11 +592,28 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return jsonMap;
     }
 
+    private String encodePresenceAction(PresenceMessage.Action action) {
+        switch (action) {
+            case absent:
+                return PlatformConstants.TxEnumConstants.absent;
+            case leave:
+                return PlatformConstants.TxEnumConstants.leave;
+            case enter:
+                return PlatformConstants.TxEnumConstants.enter;
+            case present:
+                return PlatformConstants.TxEnumConstants.present;
+            case update:
+                return PlatformConstants.TxEnumConstants.update;
+            default:
+                return null;
+        }
+    }
+
     private Map<String, Object> encodePresenceMessage(PresenceMessage c) {
         if (c == null) return null;
         final HashMap<String, Object> jsonMap = new HashMap<>();
         writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.id, c.id);
-        writeEnumToJson(jsonMap, PlatformConstants.TxPresenceMessage.action, c.action);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.action, encodePresenceAction(c.action));
         writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.clientId, c.clientId);
         writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.connectionId, c.connectionId);
         writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.timestamp, c.timestamp);

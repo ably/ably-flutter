@@ -553,7 +553,6 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Decodes [eventName] to [ConnectionEvent] enum if not null
-  // ignore: missing_return
   ConnectionEvent _decodeConnectionEvent(String eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
@@ -574,11 +573,12 @@ class Codec extends StandardMessageCodec {
         return ConnectionEvent.failed;
       case TxEnumConstants.update:
         return ConnectionEvent.update;
+      default:
+        return null;
     }
   }
 
   /// Decodes [state] to [ConnectionState] enum if not null
-  // ignore: missing_return
   ConnectionState _decodeConnectionState(String state) {
     if (state == null) return null;
     switch (state) {
@@ -598,11 +598,12 @@ class Codec extends StandardMessageCodec {
         return ConnectionState.closed;
       case TxEnumConstants.failed:
         return ConnectionState.failed;
+      default:
+        return null;
     }
   }
 
   /// Decodes [eventName] to [ChannelEvent] enum if not null
-  // ignore: missing_return
   ChannelEvent _decodeChannelEvent(String eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
@@ -621,11 +622,12 @@ class Codec extends StandardMessageCodec {
         return ChannelEvent.failed;
       case TxEnumConstants.update:
         return ChannelEvent.update;
+      default:
+        return null;
     }
   }
 
   /// Decodes [state] to [ChannelState] enum if not null
-  // ignore: missing_return
   ChannelState _decodeChannelState(String state) {
     switch (state) {
       case TxEnumConstants.initialized:
@@ -642,6 +644,8 @@ class Codec extends StandardMessageCodec {
         return ChannelState.suspended;
       case TxEnumConstants.failed:
         return ChannelState.failed;
+      default:
+        return null;
     }
   }
 
@@ -698,8 +702,23 @@ class Codec extends StandardMessageCodec {
     return message;
   }
 
-  PresenceAction _decodePresenceAction(int index) =>
-      (index == null) ? null : PresenceAction.values[index];
+  /// Decodes [action] to [PresenceAction] enum if not null
+  PresenceAction _decodePresenceAction(String action) {
+    switch (action) {
+      case TxEnumConstants.present:
+        return PresenceAction.present;
+      case TxEnumConstants.absent:
+        return PresenceAction.absent;
+      case TxEnumConstants.enter:
+        return PresenceAction.enter;
+      case TxEnumConstants.leave:
+        return PresenceAction.leave;
+      case TxEnumConstants.update:
+        return PresenceAction.update;
+      default:
+        return null;
+    }
+  }
 
   PresenceMessage _decodePresenceMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;

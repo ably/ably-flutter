@@ -152,6 +152,10 @@ final public class PlatformConstants {
         public static final String closing = "closing";
         public static final String closed = "closed";
         public static final String failed = "failed";
+        public static final String absent = "absent";
+        public static final String leave = "leave";
+        public static final String enter = "enter";
+        public static final String present = "present";
         public static final String update = "update";
     }
 

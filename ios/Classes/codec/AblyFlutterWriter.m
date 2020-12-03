@@ -224,11 +224,28 @@ static AblyCodecEncoder encodeChannelMessage = ^NSMutableDictionary*(ARTMessage 
     return dictionary;
 };
 
++(NSString *) encodePresenceAction: (ARTPresenceAction) action {
+    switch(action) {
+        case ARTPresenceAbsent:
+            return TxEnumConstants_absent;
+        case ARTPresencePresent:
+            return TxEnumConstants_present;
+        case ARTPresenceEnter:
+            return TxEnumConstants_enter;
+        case ARTPresenceLeave:
+            return TxEnumConstants_leave;
+        case ARTPresenceUpdate:
+            return TxEnumConstants_update;
+    }
+}
+
 static AblyCodecEncoder encodePresenceMessage = ^NSMutableDictionary*(ARTPresenceMessage *const message) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     
     WRITE_VALUE(dictionary, TxPresenceMessage_id, [message id]);
-    WRITE_ENUM(dictionary, TxPresenceMessage_action, [message action]);
+    WRITE_VALUE(dictionary,
+                TxConnectionStateChange_current,
+                [AblyFlutterWriter encodePresenceAction: [message action]]);
     WRITE_VALUE(dictionary, TxPresenceMessage_clientId, [message clientId]);
     WRITE_VALUE(dictionary, TxPresenceMessage_data, (NSObject *)[message data]);
     WRITE_VALUE(dictionary, TxPresenceMessage_connectionId, [message connectionId]);

@@ -34,6 +34,7 @@ extern NSString *const AblyPlatformMethod_createRestWithOptions;
 extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_restHistory;
 extern NSString *const AblyPlatformMethod_restPresenceGet;
+extern NSString *const AblyPlatformMethod_restPresenceHistory;
 extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
@@ -150,6 +151,10 @@ extern NSString *const TxEnumConstants_suspended;
 extern NSString *const TxEnumConstants_closing;
 extern NSString *const TxEnumConstants_closed;
 extern NSString *const TxEnumConstants_failed;
+extern NSString *const TxEnumConstants_absent;
+extern NSString *const TxEnumConstants_leave;
+extern NSString *const TxEnumConstants_enter;
+extern NSString *const TxEnumConstants_present;
 extern NSString *const TxEnumConstants_update;
 @end
 

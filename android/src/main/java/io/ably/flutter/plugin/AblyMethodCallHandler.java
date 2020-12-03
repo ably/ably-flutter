@@ -194,7 +194,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             };
 
             final ArrayList<Message> channelMessages = (ArrayList<Message>) map.get("messages");
-            if( channelMessages == null ){
+            if (channelMessages == null) {
                 result.error("Messages cannot be null", null, null);
                 return;
             }
@@ -411,7 +411,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 };
 
                 final ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
-                if( channelMessages == null ){
+                if (channelMessages == null) {
                     result.error("Messages cannot be null", null, null);
                     return;
                 }

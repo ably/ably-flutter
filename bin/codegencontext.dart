@@ -191,6 +191,10 @@ const List<Map<String, dynamic>> _objects = [
       'closing',
       'closed',
       'failed',
+      'absent',
+      'leave',
+      'enter',
+      'present',
       'update',
     ]
   },
