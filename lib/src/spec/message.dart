@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import 'enums.dart';
 import 'rest/channels.dart';
 
@@ -46,8 +48,8 @@ class Message {
 
   @override
   String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
-      ' connectionId=$connectionId encoding=$encoding name=$name'
-      ' data=$data extras=$extras';
+    ' connectionId=$connectionId encoding=$encoding name=$name'
+    ' data=$data extras=$extras';
 
 // TODO(tiholic) add support for fromEncoded and fromEncodedArray (TM3)
 }
@@ -55,6 +57,7 @@ class Message {
 /// An individual presence message sent or received via realtime
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TP1
+@immutable
 class PresenceMessage {
   /// unique ID for this presence message
   ///
@@ -91,7 +94,7 @@ class PresenceMessage {
   String get memberKey => '$connectionId:$clientId';
 
   /// instantiates presence message with
-  PresenceMessage({
+  const PresenceMessage({
     this.id,
     this.action,
     this.clientId,
@@ -102,6 +105,21 @@ class PresenceMessage {
     this.timestamp,
   });
 
+  @override
+  bool operator ==(Object other) =>
+      other is PresenceMessage &&
+      other.id == id &&
+      other.action == action &&
+      other.clientId == clientId &&
+      other.connectionId == connectionId &&
+      other.data == data &&
+      other.encoding == encoding &&
+      other.extras == extras &&
+      other.timestamp == timestamp;
+
+  @override
+  int get hashCode => '$id:$clientId:$connectionId:$timestamp'.hashCode;
+
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   ///
   /// TODO(tiholic): decoding and decryption is not implemented as per
@@ -110,8 +128,8 @@ class PresenceMessage {
     Map<String, dynamic> jsonObject, [
     ChannelOptions channelOptions,
   ])  : id = jsonObject['id'] as String,
-        action = PresenceAction.values
-            .firstWhere((e) => e.toString() == jsonObject['action'] as String),
+        action = PresenceAction.values.firstWhere((e) =>
+            e.toString().split('.')[1] == jsonObject['action'] as String),
         clientId = jsonObject['clientId'] as String,
         connectionId = jsonObject['connectionId'] as String,
         data = jsonObject['data'],
