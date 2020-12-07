@@ -45,16 +45,20 @@ void main() {
           final ablyChannel = channels[handle];
           final clientOptions = ablyChannel.message as ClientOptions;
 
-          // `authUrl` is used to indicate the presense of an authCallback,
+          // `authUrl` is used to indicate the presence of an authCallback,
           // because function references (in `authCallback`) get dropped by the
           // PlatformChannel.
           if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
             await AblyMethodCallHandler(methodChannel).onAuthCallback(
-                AblyMessage(TokenParams(timestamp: DateTime.now()),
-                    handle: handle));
+              AblyMessage(
+                TokenParams(timestamp: DateTime.now()),
+                handle: handle,
+              ),
+            );
             isAuthenticated = true;
             throw PlatformException(
-                code: ErrorCodes.authCallbackFailure.toString());
+              code: ErrorCodes.authCallbackFailure.toString(),
+            );
           }
 
           publishedMessages.add(message);
@@ -84,8 +88,10 @@ void main() {
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
     expect(messageData['channel'], 'test');
-    expect(messageData['name'], 'name');
-    expect(messageData['message'], 'data1');
+    expect(messageData['messages'], isA<List>());
+    final messages = List<Message>.from(messageData['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data1');
   });
 
   test('publish message with authCallback', () async {
@@ -108,8 +114,10 @@ void main() {
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
     expect(messageData['channel'], 'test');
-    expect(messageData['name'], 'name');
-    expect(messageData['message'], 'data2');
+    expect(messageData['messages'], isA<List>());
+    final messages = List<Message>.from(messageData['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data2');
   });
 
   test('publish message with authCallback timing out', () async {
@@ -161,8 +169,10 @@ void main() {
         final firstMessage = publishedMessages.first.message as AblyMessage;
         final messageData = firstMessage.message as Map<dynamic, dynamic>;
         expect(messageData['channel'], 'test');
-        expect(messageData['name'], 'name');
-        expect(messageData['message'], 'data3-2');
+        expect(messageData['messages'], isA<List>());
+        final messages = List<Message>.from(messageData['messages'] as List);
+        expect(messages[0].name, 'name');
+        expect(messages[0].data, 'data3-2');
       }),
     );
   });
@@ -186,15 +196,17 @@ void main() {
     final message0 = publishedMessages[0].message as AblyMessage;
     final messageData0 = message0.message as Map<dynamic, dynamic>;
     expect(messageData0['channel'], 'test');
-    expect(messageData0['name'], 'name');
-    expect(messageData0['message'], 'data4');
+    expect(messageData0['messages'], isA<List>());
+    final messages = List<Message>.from(messageData0['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data4');
 
     final message1 = publishedMessages[1].message as AblyMessage;
     final messageData1 = message1.message as Map<dynamic, dynamic>;
     expect(messageData1['channel'], 'test');
-    expect(messageData1['name'], 'name');
-    expect(messageData1['message'], 'data5');
-
-    // });
+    expect(messageData1['messages'], isA<List>());
+    final messages2 = List<Message>.from(messageData1['messages'] as List);
+    expect(messages2[0].name, 'name');
+    expect(messages2[0].data, 'data5');
   }, timeout: Timeout.none);
 }
