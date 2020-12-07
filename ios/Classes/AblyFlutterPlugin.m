@@ -129,6 +129,35 @@ static const FlutterHandler _getRestPresence = ^void(AblyFlutterPlugin *const pl
     }
 };
 
+static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    ARTPresenceQuery *const dataQuery = (ARTPresenceQuery*)[_dataMap objectForKey: TxTransportKeys_params];
+    ARTRest *const client = [ably getRest:messageData.handle];
+    ARTRestChannel *const channel = [client.channels get:channelName];
+    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if(error){
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error getting rest channel presence; err = %@", [error message]]
+                    details:error
+                    ]);
+        }else{
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    };
+    if (dataQuery) {
+        [[channel presence] history:dataQuery callback:cbk error:nil];
+    } else {
+        [[channel presence] history:cbk];
+    }
+};
+
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
@@ -357,6 +386,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_publish: _publishRestMessage,
         AblyPlatformMethod_restHistory: _getRestHistory,
         AblyPlatformMethod_restPresenceGet: _getRestPresence,
+        AblyPlatformMethod_restPresenceHistory: _getRestPresenceHistory,
         AblyPlatformMethod_createRealtimeWithOptions: _createRealtimeWithOptions,
         AblyPlatformMethod_connectRealtime: _connectRealtime,
         AblyPlatformMethod_closeRealtime: _closeRealtime,
