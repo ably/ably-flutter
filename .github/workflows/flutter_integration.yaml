@@ -14,7 +14,7 @@ jobs:
 
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta' # 'dev', 'alpha', default to: 'stable'
+          channel: 'stable' # 'dev', 'alpha', 'beta' default to: 'stable'
           # flutter-version: '1.12.x' # you can also specify exact version of flutter
 
       - name: 'Install dependencies'
@@ -28,7 +28,7 @@ jobs:
 
       - name: 'Flutter analyze help'
         run: 'flutter analyze --help'
-        
+
       - name: 'Statically analyze the Dart code for any errors'
         run: 'flutter analyze --no-pub --no-fatal-infos .'  # suppressing info - deprecated entries fall under info, and CI shouldn't fail if there are any Deprecated APIs
 
