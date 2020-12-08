@@ -33,12 +33,12 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     );
 
     void recordConnectionState() =>
-      connectionStates.add(enumValueToString(realtime.connection.state));
+        connectionStates.add(enumValueToString(realtime.connection.state));
 
     recordConnectionState(); //connection: initialized
     realtime.connection
-      .on()
-      .listen((e) => connectionStateChanges.add(encodeConnectionEvent(e)));
+        .on()
+        .listen((e) => connectionStateChanges.add(encodeConnectionEvent(e)));
     realtime.connection.on(ConnectionEvent.connected).listen(
         (e) => filteredConnectionStateChanges.add(encodeConnectionEvent(e)));
 
@@ -49,13 +49,13 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
 
     final channel = realtime.channels.get('events-test');
     void recordChannelState() =>
-      channelStates.add(enumValueToString(channel.state));
+        channelStates.add(enumValueToString(channel.state));
 
     recordChannelState(); // channel: initialized
     channel.on().listen((e) => channelStateChanges.add(encodeChannelEvent(e)));
     channel
-      .on(ChannelEvent.attaching)
-      .listen((e) => filteredChannelStateChanges.add(encodeChannelEvent(e)));
+        .on(ChannelEvent.attaching)
+        .listen((e) => filteredChannelStateChanges.add(encodeChannelEvent(e)));
     recordChannelState(); // channel: initialized
 
     widget.dispatcher.reportLog({'before channel.attach': ''});
@@ -91,5 +91,4 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
       'filteredChannelStateChanges': filteredChannelStateChanges,
     });
   }
-
 }

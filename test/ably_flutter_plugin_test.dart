@@ -5,7 +5,6 @@ import 'package:ably_flutter/src/platform.dart' as platform;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-
   final channel = platform.methodChannel;
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +16,7 @@ void main() {
 
   setUp(() {
     channel.setMockMethodCallHandler((methodCall) async {
-      switch(methodCall.method){
+      switch (methodCall.method) {
         case PlatformMethod.registerAbly:
           return true;
 
@@ -78,5 +77,4 @@ void main() {
     await rest.channels.get('test').publish(name: 'name', data: 'data');
     expect(1, 1);
   });
-
 }

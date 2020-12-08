@@ -32,8 +32,8 @@ class PaginatedResult<T> extends PlatformObject
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
   PaginatedResult(this._items, {bool hasNext})
-    : _hasNext = hasNext,
-      super(fetchHandle: false);
+      : _hasNext = hasNext,
+        super(fetchHandle: false);
 
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
@@ -41,7 +41,7 @@ class PaginatedResult<T> extends PlatformObject
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
   PaginatedResult.fromAblyMessage(AblyMessage message)
-    : super(fetchHandle: false) {
+      : super(fetchHandle: false) {
     final rawResult = message.message as PaginatedResult<Object>;
     _items = rawResult.items.map<T>((e) => e as T).toList();
     _hasNext = rawResult.hasNext();

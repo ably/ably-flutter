@@ -173,13 +173,13 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxClientOptions.authMethod, v.authMethod);
     _writeToJson(jsonMap, TxClientOptions.key, v.key);
     _writeToJson(jsonMap, TxClientOptions.tokenDetails,
-      _encodeTokenDetails(v.tokenDetails));
+        _encodeTokenDetails(v.tokenDetails));
     _writeToJson(jsonMap, TxClientOptions.authHeaders, v.authHeaders);
     _writeToJson(jsonMap, TxClientOptions.authParams, v.authParams);
     _writeToJson(jsonMap, TxClientOptions.queryTime, v.queryTime);
     _writeToJson(jsonMap, TxClientOptions.useTokenAuth, v.useTokenAuth);
     _writeToJson(
-      jsonMap, TxClientOptions.hasAuthCallback, v.authCallback != null);
+        jsonMap, TxClientOptions.hasAuthCallback, v.authCallback != null);
 
     // ClientOptions
     _writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
@@ -192,29 +192,29 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxClientOptions.tlsPort, v.tlsPort);
     _writeToJson(jsonMap, TxClientOptions.autoConnect, v.autoConnect);
     _writeToJson(
-      jsonMap, TxClientOptions.useBinaryProtocol, v.useBinaryProtocol);
+        jsonMap, TxClientOptions.useBinaryProtocol, v.useBinaryProtocol);
     _writeToJson(jsonMap, TxClientOptions.queueMessages, v.queueMessages);
     _writeToJson(jsonMap, TxClientOptions.echoMessages, v.echoMessages);
     _writeToJson(jsonMap, TxClientOptions.recover, v.recover);
     _writeToJson(jsonMap, TxClientOptions.environment, v.environment);
     _writeToJson(jsonMap, TxClientOptions.idempotentRestPublishing,
-      v.idempotentRestPublishing);
+        v.idempotentRestPublishing);
     _writeToJson(jsonMap, TxClientOptions.httpOpenTimeout, v.httpOpenTimeout);
     _writeToJson(
-      jsonMap, TxClientOptions.httpRequestTimeout, v.httpRequestTimeout);
+        jsonMap, TxClientOptions.httpRequestTimeout, v.httpRequestTimeout);
     _writeToJson(
-      jsonMap, TxClientOptions.httpMaxRetryCount, v.httpMaxRetryCount);
+        jsonMap, TxClientOptions.httpMaxRetryCount, v.httpMaxRetryCount);
     _writeToJson(jsonMap, TxClientOptions.realtimeRequestTimeout,
-      v.realtimeRequestTimeout);
+        v.realtimeRequestTimeout);
     _writeToJson(jsonMap, TxClientOptions.fallbackHosts, v.fallbackHosts);
     _writeToJson(jsonMap, TxClientOptions.fallbackHostsUseDefault,
-      v.fallbackHostsUseDefault);
+        v.fallbackHostsUseDefault);
     _writeToJson(
-      jsonMap, TxClientOptions.fallbackRetryTimeout, v.fallbackRetryTimeout);
+        jsonMap, TxClientOptions.fallbackRetryTimeout, v.fallbackRetryTimeout);
     _writeToJson(jsonMap, TxClientOptions.defaultTokenParams,
-      _encodeTokenParams(v.defaultTokenParams));
+        _encodeTokenParams(v.defaultTokenParams));
     _writeToJson(
-      jsonMap, TxClientOptions.channelRetryTimeout, v.channelRetryTimeout);
+        jsonMap, TxClientOptions.channelRetryTimeout, v.channelRetryTimeout);
     _writeToJson(jsonMap, TxClientOptions.transportParams, v.transportParams);
     return jsonMap;
   }
@@ -256,7 +256,7 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxTokenRequest.mac, v.mac);
     _writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
     _writeToJson(
-      jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
+        jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
     _writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
     return jsonMap;
   }
@@ -267,9 +267,9 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     _writeToJson(
-      jsonMap, TxRestHistoryParams.start, v.start?.millisecondsSinceEpoch);
+        jsonMap, TxRestHistoryParams.start, v.start?.millisecondsSinceEpoch);
     _writeToJson(
-      jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
+        jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
     _writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
     _writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
     return jsonMap;
@@ -287,13 +287,13 @@ class Codec extends StandardMessageCodec {
   /// Encodes [RealtimeHistoryParams] to a Map
   /// returns null of passed value [v] is null
   Map<String, dynamic> _encodeRealtimeHistoryParams(
-    final RealtimeHistoryParams v) {
+      final RealtimeHistoryParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxRealtimeHistoryParams.start,
-      v.start?.millisecondsSinceEpoch);
+        v.start?.millisecondsSinceEpoch);
     _writeToJson(
-      jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
+        jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
     _writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
     _writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
     _writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
@@ -306,10 +306,10 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
     final message = (v.message == null)
-      ? null
-      : (codecType == null)
-      ? v.message
-      : codecMap[codecType].encode(v.message);
+        ? null
+        : (codecType == null)
+            ? v.message
+            : codecMap[codecType].encode(v.message);
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxAblyMessage.registrationHandle, v.handle);
     _writeToJson(jsonMap, TxAblyMessage.type, codecType);
@@ -323,10 +323,10 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
     final message = (v.message == null)
-      ? null
-      : (codecType == null)
-      ? v.message
-      : codecMap[codecType].encode(v.message);
+        ? null
+        : (codecType == null)
+            ? v.message
+            : codecMap[codecType].encode(v.message);
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
     _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
@@ -363,7 +363,7 @@ class Codec extends StandardMessageCodec {
     if (jsonMap == null) return null;
 
     return ClientOptions()
-    // AuthOptions (super class of ClientOptions)
+      // AuthOptions (super class of ClientOptions)
       ..authUrl = _readFromJson<String>(
         jsonMap,
         TxClientOptions.authUrl,
@@ -399,7 +399,7 @@ class Codec extends StandardMessageCodec {
         TxClientOptions.useTokenAuth,
       )
 
-    // ClientOptions
+      // ClientOptions
       ..clientId = _readFromJson<String>(
         jsonMap,
         TxClientOptions.clientId,
@@ -408,7 +408,7 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.logLevel,
       )
-    //TODO handle logHandler
+      //TODO handle logHandler
       ..tls = _readFromJson<bool>(
         jsonMap,
         TxClientOptions.tls,
@@ -521,7 +521,7 @@ class Codec extends StandardMessageCodec {
       ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
       ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
       ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-        _readFromJson<int>(jsonMap, TxTokenParams.timestamp))
+          _readFromJson<int>(jsonMap, TxTokenParams.timestamp))
       ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
   }
 
@@ -533,10 +533,10 @@ class Codec extends StandardMessageCodec {
     dynamic message = jsonMap[TxAblyMessage.message];
     if (type != null) {
       message = codecMap[type].decode(
-        toJsonMap(_readFromJson<Map>(jsonMap, TxAblyMessage.message)));
+          toJsonMap(_readFromJson<Map>(jsonMap, TxAblyMessage.message)));
     }
     return AblyMessage(message,
-      handle: jsonMap[TxAblyMessage.registrationHandle] as int, type: type);
+        handle: jsonMap[TxAblyMessage.registrationHandle] as int, type: type);
   }
 
   /// Decodes value [jsonMap] to [ErrorInfo]
@@ -544,12 +544,12 @@ class Codec extends StandardMessageCodec {
   ErrorInfo _decodeErrorInfo(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     return ErrorInfo(
-      code: jsonMap[TxErrorInfo.code] as int,
-      message: jsonMap[TxErrorInfo.message] as String,
-      statusCode: jsonMap[TxErrorInfo.statusCode] as int,
-      href: jsonMap[TxErrorInfo.href] as String,
-      requestId: jsonMap[TxErrorInfo.requestId] as String,
-      cause: jsonMap[TxErrorInfo.cause] as ErrorInfo);
+        code: jsonMap[TxErrorInfo.code] as int,
+        message: jsonMap[TxErrorInfo.message] as String,
+        statusCode: jsonMap[TxErrorInfo.statusCode] as int,
+        href: jsonMap[TxErrorInfo.href] as String,
+        requestId: jsonMap[TxErrorInfo.requestId] as String,
+        cause: jsonMap[TxErrorInfo.cause] as ErrorInfo);
   }
 
   /// Decodes [eventName] to [ConnectionEvent] enum if not null
@@ -652,20 +652,20 @@ class Codec extends StandardMessageCodec {
   /// Decodes value [jsonMap] to [ConnectionStateChange]
   /// returns null if [jsonMap] is null
   ConnectionStateChange _decodeConnectionStateChange(
-    Map<String, dynamic> jsonMap) {
+      Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final current = _decodeConnectionState(
-      _readFromJson<String>(jsonMap, TxConnectionStateChange.current));
+        _readFromJson<String>(jsonMap, TxConnectionStateChange.current));
     final previous = _decodeConnectionState(
-      _readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
+        _readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
     final event = _decodeConnectionEvent(
-      _readFromJson<String>(jsonMap, TxConnectionStateChange.event));
+        _readFromJson<String>(jsonMap, TxConnectionStateChange.event));
     final retryIn =
-    _readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
+        _readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
     final reason = _decodeErrorInfo(
-      toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
+        toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
     return ConnectionStateChange(current, previous, event,
-      retryIn: retryIn, reason: reason);
+        retryIn: retryIn, reason: reason);
   }
 
   /// Decodes value [jsonMap] to [ChannelStateChange]
@@ -673,24 +673,24 @@ class Codec extends StandardMessageCodec {
   ChannelStateChange _decodeChannelStateChange(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final current = _decodeChannelState(
-      _readFromJson<String>(jsonMap, TxChannelStateChange.current));
+        _readFromJson<String>(jsonMap, TxChannelStateChange.current));
     final previous = _decodeChannelState(
-      _readFromJson<String>(jsonMap, TxChannelStateChange.previous));
+        _readFromJson<String>(jsonMap, TxChannelStateChange.previous));
     final event = _decodeChannelEvent(
-      _readFromJson<String>(jsonMap, TxChannelStateChange.event));
+        _readFromJson<String>(jsonMap, TxChannelStateChange.event));
     final resumed = _readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
     final reason = _decodeErrorInfo(
-      toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
+        toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
     return ChannelStateChange(current, previous, event,
-      resumed: resumed, reason: reason);
+        resumed: resumed, reason: reason);
   }
 
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final message = Message(
-      name: _readFromJson<String>(jsonMap, TxMessage.name),
-      clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
-      data: _readFromJson<dynamic>(jsonMap, TxMessage.data))
+        name: _readFromJson<String>(jsonMap, TxMessage.name),
+        clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
+        data: _readFromJson<dynamic>(jsonMap, TxMessage.data))
       ..id = _readFromJson<String>(jsonMap, TxMessage.id)
       ..connectionId = _readFromJson<String>(jsonMap, TxMessage.connectionId)
       ..encoding = _readFromJson<String>(jsonMap, TxMessage.encoding)
@@ -732,12 +732,12 @@ class Codec extends StandardMessageCodec {
       clientId: _readFromJson<String>(jsonMap, TxPresenceMessage.clientId),
       data: _readFromJson<dynamic>(jsonMap, TxPresenceMessage.data),
       connectionId:
-      _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId),
+          _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxPresenceMessage.encoding),
       extras: toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras)),
       timestamp: (timestamp == null)
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(timestamp),
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(timestamp),
     );
   }
 
@@ -745,10 +745,10 @@ class Codec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);
     final items = _readFromJson<List>(jsonMap, TxPaginatedResult.items)
-      ?.map((e) => codecMap[type].decode(toJsonMap(e as Map)))
-      ?.toList() ??
-      [];
+            ?.map((e) => codecMap[type].decode(toJsonMap(e as Map)))
+            ?.toList() ??
+        [];
     return PaginatedResult(items,
-      hasNext: _readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
+        hasNext: _readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
   }
 }

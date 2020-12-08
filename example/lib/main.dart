@@ -486,8 +486,7 @@ class _MyAppState extends State<MyApp> {
                 final next = page?.hasNext() ?? false;
                 print('$name: getting ${next ? 'next' : 'first'} page');
                 try {
-                  if (page == null ||
-                      page.items.isEmpty) {
+                  if (page == null || page.items.isEmpty) {
                     onUpdate(await query());
                   } else if (next) {
                     onUpdate(await page.next());
@@ -508,72 +507,64 @@ class _MyAppState extends State<MyApp> {
       );
 
   Widget getRestChannelHistory() => getPageNavigator<ably.Message>(
-    name: 'Rest history',
-    enabled: _rest != null,
-    page: _restHistory,
-    query: () async => _rest.channels
-          .get(defaultChannel)
-          .history(ably.RestHistoryParams(
-          direction: 'forwards',
-          limit: 10,
-        )),
-    onUpdate: (result) {
-      setState(() {
-        _restHistory = result;
-      });
-    }
-  );
-
-  Widget getRestChannelPresence() => getPageNavigator<ably.PresenceMessage>(
-    name: 'Rest presence members',
-    enabled: _rest != null,
-    page: _restPresenceMembers,
-    query: () async => _rest.channels
-      .get(defaultChannel)
-      .presence
-      .get(ably.RestPresenceParams(limit: 10)),
-    onUpdate: (result) {
-      setState(() {
-        _restPresenceMembers = result;
-      });
-    }
-  );
-
-  Widget getRestChannelPresenceHistory() =>
-    getPageNavigator<ably.PresenceMessage>(
-      name: 'Rest presence history',
+      name: 'Rest history',
       enabled: _rest != null,
-      page: _restPresenceHistory,
+      page: _restHistory,
       query: () async =>
-        _rest.channels
-          .get(defaultChannel)
-          .presence
-          .history(ably.RestHistoryParams(limit: 10)),
+          _rest.channels.get(defaultChannel).history(ably.RestHistoryParams(
+                direction: 'forwards',
+                limit: 10,
+              )),
       onUpdate: (result) {
         setState(() {
-          _restPresenceHistory = result;
+          _restHistory = result;
         });
-      }
-    );
+      });
 
-  Widget getRealtimeChannelHistory() =>
-    getPageNavigator<ably.Message>(
+  Widget getRestChannelPresence() => getPageNavigator<ably.PresenceMessage>(
+      name: 'Rest presence members',
+      enabled: _rest != null,
+      page: _restPresenceMembers,
+      query: () async => _rest.channels
+          .get(defaultChannel)
+          .presence
+          .get(ably.RestPresenceParams(limit: 10)),
+      onUpdate: (result) {
+        setState(() {
+          _restPresenceMembers = result;
+        });
+      });
+
+  Widget getRestChannelPresenceHistory() =>
+      getPageNavigator<ably.PresenceMessage>(
+          name: 'Rest presence history',
+          enabled: _rest != null,
+          page: _restPresenceHistory,
+          query: () async => _rest.channels
+              .get(defaultChannel)
+              .presence
+              .history(ably.RestHistoryParams(limit: 10)),
+          onUpdate: (result) {
+            setState(() {
+              _restPresenceHistory = result;
+            });
+          });
+
+  Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
       name: 'Realtime history',
       enabled: _realtime != null,
       page: _realtimeHistory,
-      query: () async =>
-        _realtime.channels.get(defaultChannel).history(
-          ably.RealtimeHistoryParams(
-            limit: 10,
-            untilAttach: true,
+      query: () async => _realtime.channels.get(defaultChannel).history(
+            ably.RealtimeHistoryParams(
+              limit: 10,
+              untilAttach: true,
+            ),
           ),
-    ),
-    onUpdate: (result) {
-      setState(() {
-        _realtimeHistory = result;
+      onUpdate: (result) {
+        setState(() {
+          _realtimeHistory = result;
+        });
       });
-    }
-  );
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -646,14 +637,14 @@ class _MyAppState extends State<MyApp> {
                       [],
                   getRestChannelPresence(),
                   ..._restPresenceMembers?.items
-                    ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                    ?.toList() ??
-                    [],
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
                   getRestChannelPresenceHistory(),
                   ..._restPresenceHistory?.items
-                    ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                    ?.toList() ??
-                    [],
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
                 ]),
           ),
         ),

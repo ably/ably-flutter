@@ -56,7 +56,6 @@ class RealtimeHistoryTestState extends TestWidgetState<RealtimeHistoryTest> {
     //TODO(tiholic) understand why tests fail without this delay
     await Future.delayed(const Duration(seconds: 2));
 
-
     final time2 = DateTime.now();
     await Future.delayed(const Duration(seconds: 2));
     await channel.publish(name: 'history', data: 'test2');

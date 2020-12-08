@@ -94,11 +94,11 @@ class TestDispatcherState extends State<TestDispatcher> {
   ///     widget.dispatcher.timeout(const Duration(seconds: 3));
   ///
   void timeout(Duration duration) =>
-    unawaited(_responseCompleter.future.timeout(duration, onTimeout: () {
-      reportTestCompletion(
-          {TestControlMessage.errorKey: 'Timed out after $duration'});
-      return null;
-    }));
+      unawaited(_responseCompleter.future.timeout(duration, onTimeout: () {
+        reportTestCompletion(
+            {TestControlMessage.errorKey: 'Timed out after $duration'});
+        return null;
+      }));
 
   @override
   Widget build(BuildContext context) {
