@@ -46,8 +46,8 @@ class Message {
 
   @override
   String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
-    ' connectionId=$connectionId encoding=$encoding name=$name'
-    ' data=$data extras=$extras';
+      ' connectionId=$connectionId encoding=$encoding name=$name'
+      ' data=$data extras=$extras';
 
 // TODO(tiholic) add support for fromEncoded and fromEncodedArray (TM3)
 }
@@ -142,7 +142,7 @@ class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-      ChannelOptions channelOptions,
-    ]) =>
-    jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
+    ChannelOptions channelOptions,
+  ]) =>
+      jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
 }
