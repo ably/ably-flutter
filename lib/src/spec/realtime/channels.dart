@@ -39,7 +39,7 @@ abstract class RealtimeChannelInterface
   ChannelState state;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#RTL9
-  RealtimePresence presence;
+  RealtimePresenceInterface get presence;
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
 

@@ -474,17 +474,17 @@ class RealtimePresenceParams {
   /// before returning a list of members
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c1
-  bool waitForSync;
+  final bool waitForSync;
 
   /// filters members by the provided clientId
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c2
-  String clientId;
+  final String clientId;
 
   /// filters members by the provided connectionId
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c3
-  String connectionId;
+  final String connectionId;
 
   /// initializes with [waitForSync] set to true by default
   RealtimePresenceParams({

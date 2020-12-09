@@ -8,6 +8,7 @@ import '../../../ably_flutter.dart';
 import '../../spec/push/channels.dart';
 import '../message.dart';
 import '../platform_object.dart';
+import 'presence.dart';
 import 'realtime.dart';
 
 /// Plugin based implementation of Realtime channel
@@ -22,14 +23,17 @@ class RealtimeChannel extends PlatformObject
   @override
   ChannelOptions options;
 
+  RealtimePresence _presence;
+
   @override
-  RealtimePresence presence;
+  RealtimePresence get presence => _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
   RealtimeChannel(this.realtime, this.name, this.options) : super() {
+    _presence = RealtimePresence(this);
     state = ChannelState.initialized;
     on().listen((event) => state = event.current);
   }

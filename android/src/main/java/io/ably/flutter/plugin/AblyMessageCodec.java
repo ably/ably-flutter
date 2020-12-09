@@ -93,6 +93,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         new CodecPair<>(null, self::decodeRealtimeHistoryParams));
                 put(PlatformConstants.CodecTypes.restPresenceParams,
                         new CodecPair<>(null, self::decodeRestPresenceParams));
+                put(PlatformConstants.CodecTypes.realtimePresenceParams,
+                        new CodecPair<>(null, self::decodeRealtimePresenceParams));
                 put(PlatformConstants.CodecTypes.errorInfo,
                         new CodecPair<>(self::encodeErrorInfo, null));
                 put(PlatformConstants.CodecTypes.message,
@@ -375,6 +377,25 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
         if (connectionId != null) {
             params[index] = new Param(PlatformConstants.TxRestPresenceParams.connectionId, (String) connectionId);
+        }
+        return params;
+    }
+
+    private Param[] decodeRealtimePresenceParams(Map<String, Object> jsonMap) {
+        if (jsonMap == null) return null;
+        Param[] params = new Param[jsonMap.size()];
+        int index = 0;
+        final Object waitForSync = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.waitForSync);
+        final Object clientId = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.clientId);
+        final Object connectionId = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.connectionId);
+        if (waitForSync != null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimePresenceParams.waitForSync, (Boolean) waitForSync);
+        }
+        if (clientId != null) {
+            params[index++] = new Param(PlatformConstants.TxRealtimePresenceParams.clientId, (String) clientId);
+        }
+        if (connectionId != null) {
+            params[index] = new Param(PlatformConstants.TxRealtimePresenceParams.connectionId, (String) connectionId);
         }
         return params;
     }
