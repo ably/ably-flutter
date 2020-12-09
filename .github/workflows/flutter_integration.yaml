@@ -18,7 +18,10 @@ jobs:
           # flutter-version: '1.12.x' # you can also specify exact version of flutter
 
       - name: 'Install dependencies'
-        run: flutter pub get
+        run: |
+          flutter pub get
+          cd test_integration && flutter pub get && cd ..
+          cd example && flutter pub get && cd ..
 
       - name: 'Check formatting issues in the code'
         run: flutter format --set-exit-if-changed .
