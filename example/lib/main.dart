@@ -40,6 +40,8 @@ class _MyAppState extends State<MyApp> {
   ably.PaginatedResult<ably.Message> _realtimeHistory;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceHistory;
+  List<ably.PresenceMessage> _realtimePresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage> _realtimePresenceHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -566,6 +568,35 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
+  Widget getRealtimeChannelPresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                _realtimePresenceMembers = await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .get(ably.RealtimePresenceParams());
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Get Realtime presence members'),
+      );
+
+  Widget getRealtimeChannelPresenceHistory() =>
+      getPageNavigator<ably.PresenceMessage>(
+          name: 'Realtime presence history',
+          enabled: _realtime != null,
+          page: _realtimePresenceHistory,
+          query: () async => _realtime.channels
+              .get(defaultChannel)
+              .presence
+              .history(ably.RealtimeHistoryParams(limit: 10)),
+          onUpdate: (result) {
+            setState(() {
+              _realtimePresenceHistory = result;
+            });
+          });
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -619,6 +650,16 @@ class _MyAppState extends State<MyApp> {
                   getRealtimeChannelHistory(),
                   ..._realtimeHistory?.items
                           ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
+                          ?.toList() ??
+                      [],
+                  getRealtimeChannelPresence(),
+                  ..._realtimePresenceMembers
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
+                  getRealtimeChannelPresenceHistory(),
+                  ..._realtimePresenceHistory?.items
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
                           ?.toList() ??
                       [],
                   const Divider(),

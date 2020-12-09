@@ -9,7 +9,7 @@ import 'channels.dart';
 /// Presence members and presence history
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTP1
-abstract class RealtimePresence {
+abstract class RealtimePresenceInterface {
   /// Returns true when the initial member SYNC following
   /// channel attach is completed.
   ///
