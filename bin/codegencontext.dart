@@ -28,6 +28,7 @@ const List<Map<String, dynamic>> _types = [
   {'name': 'realtimeHistoryParams', 'value': 137},
   {'name': 'restPresenceParams', 'value': 138},
   {'name': 'presenceMessage', 'value': 139},
+  {'name': 'realtimePresenceParams', 'value': 140},
   {'name': 'errorInfo', 'value': 144},
 
   // Events
@@ -59,6 +60,8 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'attachRealtimeChannel', 'value': 'attachRealtimeChannel'},
   {'name': 'detachRealtimeChannel', 'value': 'detachRealtimeChannel'},
   {'name': 'setRealtimeChannelOptions', 'value': 'setRealtimeChannelOptions'},
+  {'name': 'realtimePresenceGet', 'value': 'realtimePresenceGet'},
+  {'name': 'realtimePresenceHistory', 'value': 'realtimePresenceHistory'},
   {
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
@@ -260,6 +263,14 @@ const List<Map<String, dynamic>> _objects = [
     'name': 'RestPresenceParams',
     'properties': <String>[
       'limit',
+      'clientId',
+      'connectionId',
+    ]
+  },
+  {
+    'name': 'RealtimePresenceParams',
+    'properties': <String>[
+      'waitForSync',
       'clientId',
       'connectionId',
     ]
