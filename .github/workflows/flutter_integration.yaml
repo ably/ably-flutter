@@ -14,7 +14,7 @@ jobs:
 
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable' # 'dev', 'alpha', default to: 'stable'
+          channel: 'beta' # 'dev', 'alpha', default to: 'stable'
           # flutter-version: '1.12.x' # you can also specify exact version of flutter
 
       - name: 'Install dependencies'
@@ -22,7 +22,6 @@ jobs:
 
       - name: 'Check formatting issues in the code'
         run: flutter format --set-exit-if-changed .
-
 
       - name: 'Flutter analyze help'
         run: 'flutter analyze --help'
