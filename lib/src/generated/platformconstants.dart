@@ -18,6 +18,7 @@ class CodecTypes {
   static const int realtimeHistoryParams = 137;
   static const int restPresenceParams = 138;
   static const int presenceMessage = 139;
+  static const int realtimePresenceParams = 140;
   static const int errorInfo = 144;
   static const int connectionStateChange = 201;
   static const int channelStateChange = 202;
@@ -40,6 +41,8 @@ class PlatformMethod {
   static const String attachRealtimeChannel = 'attachRealtimeChannel';
   static const String detachRealtimeChannel = 'detachRealtimeChannel';
   static const String setRealtimeChannelOptions = 'setRealtimeChannelOptions';
+  static const String realtimePresenceGet = 'realtimePresenceGet';
+  static const String realtimePresenceHistory = 'realtimePresenceHistory';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
   static const String realtimeHistory = 'realtimeHistory';
@@ -221,6 +224,12 @@ class TxRealtimeHistoryParams {
 
 class TxRestPresenceParams {
   static const String limit = 'limit';
+  static const String clientId = 'clientId';
+  static const String connectionId = 'connectionId';
+}
+
+class TxRealtimePresenceParams {
+  static const String waitForSync = 'waitForSync';
   static const String clientId = 'clientId';
   static const String connectionId = 'connectionId';
 }

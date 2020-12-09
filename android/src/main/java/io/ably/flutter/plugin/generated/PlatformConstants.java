@@ -21,6 +21,7 @@ final public class PlatformConstants {
         public static final byte realtimeHistoryParams = (byte) 137;
         public static final byte restPresenceParams = (byte) 138;
         public static final byte presenceMessage = (byte) 139;
+        public static final byte realtimePresenceParams = (byte) 140;
         public static final byte errorInfo = (byte) 144;
         public static final byte connectionStateChange = (byte) 201;
         public static final byte channelStateChange = (byte) 202;
@@ -43,6 +44,8 @@ final public class PlatformConstants {
         public static final String attachRealtimeChannel = "attachRealtimeChannel";
         public static final String detachRealtimeChannel = "detachRealtimeChannel";
         public static final String setRealtimeChannelOptions = "setRealtimeChannelOptions";
+        public static final String realtimePresenceGet = "realtimePresenceGet";
+        public static final String realtimePresenceHistory = "realtimePresenceHistory";
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
         public static final String realtimeHistory = "realtimeHistory";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
@@ -221,6 +224,12 @@ final public class PlatformConstants {
 
     static final public class TxRestPresenceParams {
         public static final String limit = "limit";
+        public static final String clientId = "clientId";
+        public static final String connectionId = "connectionId";
+    }
+
+    static final public class TxRealtimePresenceParams {
+        public static final String waitForSync = "waitForSync";
         public static final String clientId = "clientId";
         public static final String connectionId = "connectionId";
     }

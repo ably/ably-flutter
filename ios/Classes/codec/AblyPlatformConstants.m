@@ -23,6 +23,8 @@ NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
 NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChannel";
 NSString *const AblyPlatformMethod_detachRealtimeChannel= @"detachRealtimeChannel";
 NSString *const AblyPlatformMethod_setRealtimeChannelOptions= @"setRealtimeChannelOptions";
+NSString *const AblyPlatformMethod_realtimePresenceGet= @"realtimePresenceGet";
+NSString *const AblyPlatformMethod_realtimePresenceHistory= @"realtimePresenceHistory";
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
@@ -203,4 +205,10 @@ NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
 NSString *const TxRestPresenceParams_limit = @"limit";
 NSString *const TxRestPresenceParams_clientId = @"clientId";
 NSString *const TxRestPresenceParams_connectionId = @"connectionId";
+@end
+
+@implementation TxRealtimePresenceParams
+NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
+NSString *const TxRealtimePresenceParams_clientId = @"clientId";
+NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
 @end

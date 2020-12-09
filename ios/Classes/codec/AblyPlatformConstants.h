@@ -18,6 +18,7 @@ typedef NS_ENUM(UInt8, _Value) {
     realtimeHistoryParamsCodecType = 137,
     restPresenceParamsCodecType = 138,
     presenceMessageCodecType = 139,
+    realtimePresenceParamsCodecType = 140,
     errorInfoCodecType = 144,
     connectionStateChangeCodecType = 201,
     channelStateChangeCodecType = 202,
@@ -41,6 +42,8 @@ extern NSString *const AblyPlatformMethod_closeRealtime;
 extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_detachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_setRealtimeChannelOptions;
+extern NSString *const AblyPlatformMethod_realtimePresenceGet;
+extern NSString *const AblyPlatformMethod_realtimePresenceHistory;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
@@ -221,4 +224,10 @@ extern NSString *const TxRealtimeHistoryParams_untilAttach;
 extern NSString *const TxRestPresenceParams_limit;
 extern NSString *const TxRestPresenceParams_clientId;
 extern NSString *const TxRestPresenceParams_connectionId;
+@end
+
+@interface TxRealtimePresenceParams : NSObject
+extern NSString *const TxRealtimePresenceParams_waitForSync;
+extern NSString *const TxRealtimePresenceParams_clientId;
+extern NSString *const TxRealtimePresenceParams_connectionId;
 @end
