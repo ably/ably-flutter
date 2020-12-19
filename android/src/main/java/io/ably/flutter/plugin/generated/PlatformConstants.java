@@ -12,19 +12,20 @@ final public class PlatformConstants {
         public static final byte ablyMessage = (byte) 128;
         public static final byte ablyEventMessage = (byte) 129;
         public static final byte clientOptions = (byte) 130;
-        public static final byte message = (byte) 131;
-        public static final byte tokenParams = (byte) 132;
-        public static final byte tokenDetails = (byte) 133;
-        public static final byte tokenRequest = (byte) 134;
-        public static final byte paginatedResult = (byte) 135;
-        public static final byte restHistoryParams = (byte) 136;
-        public static final byte realtimeHistoryParams = (byte) 137;
-        public static final byte restPresenceParams = (byte) 138;
-        public static final byte presenceMessage = (byte) 139;
-        public static final byte realtimePresenceParams = (byte) 140;
-        public static final byte errorInfo = (byte) 144;
-        public static final byte connectionStateChange = (byte) 201;
-        public static final byte channelStateChange = (byte) 202;
+        public static final byte messageData = (byte) 131;
+        public static final byte message = (byte) 132;
+        public static final byte tokenParams = (byte) 133;
+        public static final byte tokenDetails = (byte) 134;
+        public static final byte tokenRequest = (byte) 135;
+        public static final byte paginatedResult = (byte) 136;
+        public static final byte restHistoryParams = (byte) 137;
+        public static final byte realtimeHistoryParams = (byte) 138;
+        public static final byte restPresenceParams = (byte) 139;
+        public static final byte presenceMessage = (byte) 140;
+        public static final byte realtimePresenceParams = (byte) 141;
+        public static final byte errorInfo = (byte) 142;
+        public static final byte connectionStateChange = (byte) 143;
+        public static final byte channelStateChange = (byte) 144;
     }
 
     static final public class PlatformMethod {
@@ -46,6 +47,10 @@ final public class PlatformConstants {
         public static final String setRealtimeChannelOptions = "setRealtimeChannelOptions";
         public static final String realtimePresenceGet = "realtimePresenceGet";
         public static final String realtimePresenceHistory = "realtimePresenceHistory";
+        public static final String realtimePresenceEnter = "realtimePresenceEnter";
+        public static final String realtimePresenceUpdate = "realtimePresenceUpdate";
+        public static final String realtimePresenceLeave = "realtimePresenceLeave";
+        public static final String realtimePresenceSubscribe = "realtimePresenceSubscribe";
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
         public static final String realtimeHistory = "realtimeHistory";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
@@ -58,6 +63,8 @@ final public class PlatformConstants {
     static final public class TxTransportKeys {
         public static final String channelName = "channelName";
         public static final String params = "params";
+        public static final String data = "data";
+        public static final String clientId = "clientId";
     }
 
     static final public class TxAblyMessage {
@@ -79,6 +86,11 @@ final public class PlatformConstants {
         public static final String href = "href";
         public static final String requestId = "requestId";
         public static final String cause = "cause";
+    }
+
+    static final public class TxMessageData {
+        public static final String data = "data";
+        public static final String type = "type";
     }
 
     static final public class TxClientOptions {
