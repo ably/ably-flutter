@@ -35,8 +35,7 @@ android {
     }
 
     defaultConfig {
-        // Require Android 7.0 (Nougat) runtime so we can use Lambda expressions
-        minSdkVersion 24
+        minSdkVersion 16
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
