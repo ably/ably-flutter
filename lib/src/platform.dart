@@ -21,7 +21,7 @@ final StreamsChannel streamsChannel = StreamsChannel('io.ably.flutter.stream', c
 
 /// Initializing ably on platform side by invoking `register` platform method.
 /// Register will clear any stale instances on platform.
-const _initializeTimeout = Duration(seconds: 2);
+const _initializeTimeout = Duration(seconds: 5);
 Future _initializer;
 Future _initialize() async {
   if (_initializer==null) {

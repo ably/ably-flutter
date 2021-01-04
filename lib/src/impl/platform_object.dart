@@ -11,7 +11,7 @@ import 'streams_channel.dart';
 /// where that live counterpart is held as a strong reference by the plugin
 /// implementation.
 abstract class PlatformObject {
-  static const _acquireHandleTimeout = Duration(seconds: 2);
+  static const _acquireHandleTimeout = Duration(seconds: 5);
   Future<int> _handle;
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
