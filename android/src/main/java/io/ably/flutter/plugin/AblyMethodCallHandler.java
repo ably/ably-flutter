@@ -9,10 +9,10 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.rest.Auth;
