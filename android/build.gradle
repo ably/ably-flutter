@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.1.1'
     }
 }
 
@@ -23,6 +23,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
     implementation 'io.ably:ably-android:1.1.10'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 }
 
 android {
@@ -30,13 +31,18 @@ android {
 
     // Require Java language level 8 so we can use Method References (used with Lambdas)
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        // Flag to enable Java 8 language APIs while supporting to older SDK Versions
+        coreLibraryDesugaringEnabled true
     }
 
     defaultConfig {
-        minSdkVersion 16
-
+        minSdkVersion 19
+        // Required when setting minSdkVersion to 20 or lower so we can use
+        // the Java 8 language APIs as mentioned here:
+        // https://developer.android.com/studio/write/java8-support#library-desugaring
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
