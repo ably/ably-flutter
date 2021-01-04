@@ -6,8 +6,6 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.JsonElement;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
