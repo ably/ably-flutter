@@ -25,6 +25,22 @@ or visit our
 [Support and Help](https://www.ably.io/support)
 site to discuss privately.
 
+## Supported Platforms
+
+#### iOS
+
+iOS 9 or newer.
+
+#### Android
+
+API Level 19 (Android 4.4, KitKat) or newer.
+
+_This project uses Java 8 language features, utilising [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
+to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
+
+If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
+You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
+
 ## Running the example
 
 - Clone the repo
@@ -213,7 +229,7 @@ Future.delayed(Duration.zero, (){
 
 We have some [Developer Notes](DeveloperNotes.md), but we're still learning too so they'll only help you so far, in fact there's probably a lot you can teach us!
 
-Your pull requests are welcome but please keep them manageable and focussed.
+Your pull requests are welcome but please keep them manageable and focused.
 Equally your input on any pull requests we have in flight at any given time is invaluable to us, so please get involved.
 
 Thanks! :grin:
