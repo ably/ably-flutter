@@ -29,18 +29,17 @@ site to discuss privately.
 
 #### iOS
 
-iOS9 or newer
+iOS 9 or newer.
 
 #### Android
 
-SDKVersion 19 or newer.
+API Level 19 (Android 4.4, KitKat) or newer.
 
-_This project uses Java8 language features and uses [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-to support lower versions of android (< SDKVersion 24)_
+_This project uses Java 8 language features, utilising [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
+to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
 
-If your project needs support for lower SDK Version, Android Gradle Plugin 4.0.0+ must be used.
+If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
 You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
-
 
 ## Running the example
 
