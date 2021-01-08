@@ -39,10 +39,9 @@ abstract class RealtimePresenceInterface {
   /// by calling [StreamSubscription.cancel]
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP6
-  Future<Stream<PresenceMessage>> subscribe({
+  Stream<PresenceMessage> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,
-    EventListener<PresenceMessage> listener,
   });
 
   /// Enters the current client into this channel, optionally with the data

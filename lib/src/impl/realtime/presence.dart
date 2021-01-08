@@ -52,30 +52,50 @@ class RealtimePresence extends PlatformObject
   bool syncComplete;
 
   @override
-  Future<void> enter([Object data]) => throw UnimplementedError();
+  Future<void> enter([Object data]) => enterClient(null, data);
 
   @override
-  Future<void> enterClient(String clientId, [Object data]) =>
-      throw UnimplementedError();
+  Future<void> enterClient(String clientId, [Object data]) async {
+    await invoke(PlatformMethod.realtimePresenceEnter, {
+      TxTransportKeys.channelName: _realtimeChannel.name,
+      if (clientId != null) TxTransportKeys.clientId: clientId,
+      if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
+    });
+  }
 
   @override
-  Future<void> leave([Object data]) => throw UnimplementedError();
+  Future<void> update([Object data]) => updateClient(null, data);
 
   @override
-  Future<void> leaveClient(String clientId, [Object data]) =>
-      throw UnimplementedError();
+  Future<void> updateClient(String clientId, [Object data]) async {
+    await invoke(PlatformMethod.realtimePresenceUpdate, {
+      TxTransportKeys.channelName: _realtimeChannel.name,
+      if (clientId != null) TxTransportKeys.clientId: clientId,
+      if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
+    });
+  }
 
   @override
-  Future<Stream<PresenceMessage>> subscribe(
-          {PresenceAction action,
-          List<PresenceAction> actions,
-          EventListener<PresenceMessage> listener}) =>
-      throw UnimplementedError();
+  Future<void> leave([Object data]) => leaveClient(null, data);
 
   @override
-  Future<void> update([Object data]) => throw UnimplementedError();
+  Future<void> leaveClient(String clientId, [Object data]) async {
+    await invoke(PlatformMethod.realtimePresenceLeave, {
+      TxTransportKeys.channelName: _realtimeChannel.name,
+      if (clientId != null) TxTransportKeys.clientId: clientId,
+      if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
+    });
+  }
 
   @override
-  Future<void> updateClient(String clientId, [Object data]) =>
-      throw UnimplementedError();
+  Stream<PresenceMessage> subscribe({
+    PresenceAction action,
+    List<PresenceAction> actions,
+  }) =>
+      listen(PlatformMethod.realtimePresenceSubscribe)
+          .map((presenceMessage) => presenceMessage as PresenceMessage)
+          .where(
+            (presenceMessage) =>
+                action == null || presenceMessage.action == action,
+          );
 }
