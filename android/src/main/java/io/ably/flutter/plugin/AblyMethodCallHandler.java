@@ -16,6 +16,7 @@ import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
+import io.ably.lib.realtime.Presence;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
@@ -75,6 +76,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.realtimeHistory, this::getRealtimeHistory);
         _map.put(PlatformConstants.PlatformMethod.realtimePresenceGet, this::getRealtimePresence);
         _map.put(PlatformConstants.PlatformMethod.realtimePresenceHistory, this::getRealtimePresenceHistory);
+        _map.put(PlatformConstants.PlatformMethod.realtimePresenceEnter, this::enterRealtimePresence);
+        _map.put(PlatformConstants.PlatformMethod.realtimePresenceUpdate, this::updateRealtimePresence);
+        _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
 
         // paginated results
         _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
@@ -89,8 +93,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     // https://github.com/flutter/flutter/issues/34993#issue-459900986
     // https://github.com/aloisdeniel/flutter_geocoder/commit/bc34cfe473bfd1934fe098bb7053248b75200241
     private static class MethodResultWrapper implements MethodChannel.Result {
-        private MethodChannel.Result methodResult;
-        private Handler handler;
+        private final MethodChannel.Result methodResult;
+        private final Handler handler;
 
         MethodResultWrapper(MethodChannel.Result result) {
             methodResult = result;
@@ -110,7 +114,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
         @Override
         public void notImplemented() {
-            handler.post(() -> methodResult.notImplemented());
+            handler.post(methodResult::notImplemented);
         }
     }
 
@@ -131,6 +135,20 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             handler.accept(call, result);
         }
     }
+    
+    private CompletionListener handleCompletionWithListener(@NonNull MethodChannel.Result result) {
+        return new CompletionListener() {
+            @Override
+            public void onSuccess() {
+                result.success(null);
+            }
+
+            @Override
+            public void onError(ErrorInfo reason) {
+                handleAblyException(result, AblyException.fromErrorInfo(reason));
+            }
+        };
+    }
 
     private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         System.out.println("Registering library instance to clean up any existing instances");
@@ -140,7 +158,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
             try {
                 final long handle = ablyLibrary.getCurrentHandle();
@@ -149,7 +167,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         Object token = ablyLibrary.getRestToken(handle);
                         if (token != null) return token;
                         new Handler(Looper.getMainLooper()).post(() -> {
-                            AblyFlutterMessage channelMessage = new AblyFlutterMessage<>(params, handle);
+                            AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
                             channel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
                                 @Override
                                 public void success(@Nullable Object result) {
@@ -185,18 +203,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             final Map<String, Object> map = messageData.message;
             final String channelName = (String) map.get("channel");
 
-            final CompletionListener listener = new CompletionListener() {
-                @Override
-                public void onSuccess() {
-                    result.success(null);
-                }
-
-                @Override
-                public void onError(ErrorInfo reason) {
-                    handleAblyException(result, AblyException.fromErrorInfo(reason));
-                }
-            };
-
             final ArrayList<Message> channelMessages = (ArrayList<Message>) map.get("messages");
             if (channelMessages == null) {
                 result.error("Messages cannot be null", null, null);
@@ -204,7 +210,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             }
             Message[] messages = new Message[channelMessages.size()];
             messages = channelMessages.toArray(messages);
-            ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(messages, listener);
+            ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(messages, handleCompletionWithListener(result));
         });
     }
 
@@ -311,6 +317,78 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
+    private void enterRealtimePresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
+            final Object data = map.get(PlatformConstants.TxTransportKeys.data);
+            final Presence presence = ablyLibrary
+                    .getRealtime(messageData.handle)
+                    .channels
+                    .get(channelName)
+                    .presence;
+            try {
+                if (clientId != null) {
+                    presence.enterClient(clientId, data, handleCompletionWithListener(result));
+                } else {
+                    presence.enter(data, handleCompletionWithListener(result));
+                }
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
+    private void updateRealtimePresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
+            final Object data = (String) map.get(PlatformConstants.TxTransportKeys.data);
+            final Presence presence = ablyLibrary
+                    .getRealtime(messageData.handle)
+                    .channels
+                    .get(channelName)
+                    .presence;
+            try {
+                if (clientId != null) {
+                    presence.updateClient(clientId, data, handleCompletionWithListener(result));
+                } else {
+                    presence.update(data, handleCompletionWithListener(result));
+                }
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
+    private void leaveRealtimePresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
+            final Object data = (String) map.get(PlatformConstants.TxTransportKeys.data);
+            final Presence presence = ablyLibrary
+                    .getRealtime(messageData.handle)
+                    .channels
+                    .get(channelName)
+                    .presence;
+            try {
+                if (clientId != null) {
+                    presence.leaveClient(clientId, data, handleCompletionWithListener(result));
+                } else {
+                    presence.leave(data, handleCompletionWithListener(result));
+                }
+            } catch (AblyException e) {
+                handleAblyException(result, e);
+            }
+        });
+    }
+
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
@@ -375,19 +453,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         .getRealtime(ablyMessage.handle)
                         .channels
                         .get(channelName, channelOptions)
-                        .attach(
-                                new CompletionListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                        result.success(null);
-                                    }
-
-                                    @Override
-                                    public void onError(ErrorInfo reason) {
-                                        handleAblyException(result, AblyException.fromErrorInfo(reason));
-                                    }
-                                }
-                        );
+                        .attach(handleCompletionWithListener(result));
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }
@@ -406,19 +472,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         .getRealtime(ablyMessage.handle)
                         .channels
                         .get(channelName, channelOptions)
-                        .detach(
-                                new CompletionListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                        result.success(null);
-                                    }
-
-                                    @Override
-                                    public void onError(ErrorInfo reason) {
-                                        handleAblyException(result, AblyException.fromErrorInfo(reason));
-                                    }
-                                }
-                        );
+                        .detach(handleCompletionWithListener(result));
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }
@@ -458,18 +512,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                         .channels
                         .get(channelName, channelOptions);
 
-                final CompletionListener listener = new CompletionListener() {
-                    @Override
-                    public void onSuccess() {
-                        result.success(null);
-                    }
-
-                    @Override
-                    public void onError(ErrorInfo reason) {
-                        handleAblyException(result, AblyException.fromErrorInfo(reason));
-                    }
-                };
-
                 final ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get("messages");
                 if (channelMessages == null) {
                     result.error("Messages cannot be null", null, null);
@@ -477,7 +519,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 }
                 Message[] messages = new Message[channelMessages.size()];
                 messages = channelMessages.toArray(messages);
-                channel.publish(messages, listener);
+                channel.publish(messages, handleCompletionWithListener(result));
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }

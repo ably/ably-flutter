@@ -97,6 +97,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         new CodecPair<>(null, self::decodeRealtimePresenceParams));
                 put(PlatformConstants.CodecTypes.errorInfo,
                         new CodecPair<>(self::encodeErrorInfo, null));
+                put(PlatformConstants.CodecTypes.messageData,
+                        new CodecPair<>(null, self::decodeChannelMessageData));
                 put(PlatformConstants.CodecTypes.message,
                         new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
                 put(PlatformConstants.CodecTypes.presenceMessage,
@@ -400,16 +402,20 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return params;
     }
 
+    private Object decodeChannelMessageData(Map<String, Object> jsonMap) {
+        if (jsonMap == null) return null;
+        final Object value = jsonMap.get(PlatformConstants.TxMessage.data);
+        final JsonElement json = readValueAsJsonElement(value);
+        return (json == null) ? value : json;
+    }
+
     private Message decodeChannelMessage(Map<String, Object> jsonMap) {
         if (jsonMap == null) return null;
         final Message o = new Message();
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.id, v -> o.id = (String) v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.clientId, v -> o.clientId = (String) v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String) v);
-        readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> {
-            final JsonElement json = readValueAsJsonElement(v);
-            o.data = (json == null) ? v : json;
-        });
+        readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> o.data = decodeChannelMessageData((Map<String, Object>) v));
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.encoding, v -> o.encoding = (String) v);
         readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> {
             final Gson gson = new Gson();

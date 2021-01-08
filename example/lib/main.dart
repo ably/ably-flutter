@@ -413,9 +413,7 @@ class _MyAppState extends State<MyApp> {
                 print('Sending rest message...');
                 final data = messagesToPublish[
                     (realtimePubCounter++ % messagesToPublish.length)];
-                final m = ably.Message()
-                  ..data = data
-                  ..name = 'Hello';
+                final m = ably.Message(name: 'Hello', data: data);
                 try {
                   switch (typeCounter % 3) {
                     case 0:
@@ -597,6 +595,73 @@ class _MyAppState extends State<MyApp> {
             });
           });
 
+  final List _presenceData = [
+    null,
+    1,
+    'hello',
+    {'a': 'b'},
+    [
+      1,
+      'ably',
+      null,
+      {'a': 'b'}
+    ],
+    {
+      'c': ['a', 'b']
+    },
+  ];
+
+  int _presenceDataIncrementer = 0;
+
+  Object get _nextPresenceData =>
+      _presenceData[_presenceDataIncrementer++ % _presenceData.length];
+
+  Object get _currentPresenceData => (_presenceDataIncrementer == 0)
+      ? null
+      : _presenceData[_presenceDataIncrementer - 1 % _presenceData.length];
+
+  Widget enterRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .enterClient('33', _nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Enter'),
+      );
+
+  Widget updateRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .updateClient('33', _nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Update'),
+      );
+
+  Widget leaveRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .leaveClient('33', _nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Leave'),
+      );
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -608,6 +673,10 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
+                  const Text(
+                    'System Details',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
                   provisionButton(),
@@ -616,6 +685,10 @@ class _MyAppState extends State<MyApp> {
                     ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
                   ),
                   const Divider(),
+                  const Text(
+                    'Realtime',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRealtimeButton(),
                   Text(
                     'Realtime:'
@@ -645,6 +718,10 @@ class _MyAppState extends State<MyApp> {
                       Expanded(child: createChannelUnSubscribeButton()),
                     ],
                   ),
+                  const Text(
+                    'Channel Messages',
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Text('Message from channel: ${channelMessage?.data ?? '-'}'),
                   createChannelPublishButton(),
                   getRealtimeChannelHistory(),
@@ -652,6 +729,24 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
                           ?.toList() ??
                       [],
+                  const Text(
+                    'Presence',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text('Current Data: $_currentPresenceData'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: enterRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: updateRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: leaveRealtimePresence(),
+                      ),
+                    ],
+                  ),
                   getRealtimeChannelPresence(),
                   ..._realtimePresenceMembers
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
@@ -663,6 +758,10 @@ class _MyAppState extends State<MyApp> {
                           ?.toList() ??
                       [],
                   const Divider(),
+                  const Text(
+                    'Rest',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRestButton(),
                   Text('Rest: '
                       '${_rest?.toString() ?? 'Ably Rest not created yet.'}'),
