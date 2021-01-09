@@ -238,13 +238,13 @@ class TokenRequest {
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE4
   int ttl;
 
-  TokenRequest(
-      {this.keyName,
-      this.nonce,
-      this.clientId,
-      this.mac,
-      this.capability,
-      this.timestamp,
+  TokenRequest({
+    this.keyName,
+    this.nonce,
+    this.clientId,
+    this.mac,
+    this.capability,
+    this.timestamp,
     this.ttl,
   });
 

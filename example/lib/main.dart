@@ -478,8 +478,8 @@ class _MyAppState extends State<MyApp> {
                   if (_restHistory == null || _restHistory.items.isEmpty) {
                     final result = await _rest.channels.get('test').history(
                         ably.RestHistoryParams(
-                            direction: 'forwards', limit: 10),
-                );    _restHistory = result;
+                            direction: 'forwards', limit: 10));
+                    _restHistory = result;
                   } else if (next) {
                     _restHistory = await _restHistory.next();
                   } else {
