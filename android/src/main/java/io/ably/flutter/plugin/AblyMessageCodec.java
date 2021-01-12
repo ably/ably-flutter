@@ -8,11 +8,8 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
@@ -264,7 +261,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[]) v);
 
-        return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback)?((boolean)jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)):false);
+        return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
     }
 
     private TokenDetails decodeTokenDetails(Map<String, Object> jsonMap) {
@@ -312,16 +309,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final Object end = jsonMap.get(PlatformConstants.TxRestHistoryParams.end);
         final Object limit = jsonMap.get(PlatformConstants.TxRestHistoryParams.limit);
         final Object direction = jsonMap.get(PlatformConstants.TxRestHistoryParams.direction);
-        if(start!=null) {
+        if (start != null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.start, readValueAsLong(start));
         }
-        if(end!=null) {
+        if (end != null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.end, readValueAsLong(end));
         }
-        if(limit!=null) {
+        if (limit != null) {
             params[index++] = new Param(PlatformConstants.TxRestHistoryParams.limit, (Integer) limit);
         }
-        if(direction!=null) {
+        if (direction != null) {
             params[index] = new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction);
         }
         return params;
@@ -385,8 +382,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
         // Track @ https://github.com/ably/ably-flutter/issues/14
         return jsonMap;
     }
-    
-    private String encodeConnectionState(ConnectionState state){
+
+    private String encodeConnectionState(ConnectionState state) {
         switch (state) {
             case initialized:
                 return PlatformConstants.TxEnumConstants.initialized;
@@ -408,8 +405,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 return null;
         }
     }
-    
-    private String encodeConnectionEvent(ConnectionEvent event){
+
+    private String encodeConnectionEvent(ConnectionEvent event) {
         switch (event) {
             case initialized:
                 return PlatformConstants.TxEnumConstants.initialized;
@@ -434,7 +431,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
     }
 
-    private String encodeChannelState(ChannelState state){
+    private String encodeChannelState(ChannelState state) {
         switch (state) {
             case initialized:
                 return PlatformConstants.TxEnumConstants.initialized;
@@ -455,7 +452,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         }
     }
 
-    private String encodeChannelEvent(ChannelEvent event){
+    private String encodeChannelEvent(ChannelEvent event) {
         switch (event) {
             case initialized:
                 return PlatformConstants.TxEnumConstants.initialized;
@@ -486,13 +483,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
             Byte type = getType(items[0]);
             CodecPair pair = codecMap.get(type);
             if (type != null && pair != null) {
+                ArrayList<Map<String, Object>> list = new ArrayList<>(items.length);
+                for (Object item : items) {
+                    list.add((Map<String, Object>) pair.encode(item));
+                }
                 writeValueToJson(
                         jsonMap,
                         PlatformConstants.TxPaginatedResult.items,
-                        Arrays
-                                .stream(items)
-                                .map((Function<Object, Map<String, Object>>) pair::encode)
-                                .collect(Collectors.toList())
+                        list
                 );
                 writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.type, type & 0xff);
             }
