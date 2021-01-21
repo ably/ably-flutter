@@ -152,7 +152,6 @@ class _MyAppState extends State<MyApp> {
         ably.ClientOptions.fromKey('dBjBRg.vGOaQw:E7zmEdjv0tAVEgZ6')
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
-            // ignore: avoid_print
             print('Custom logger :: $msg $exception');
           }
         /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
@@ -181,7 +180,6 @@ class _MyAppState extends State<MyApp> {
 
     const name = 'Hello';
     const dynamic data = 'Flutter';
-    // ignore: avoid_print
     print('publishing messages... name "$name", message "$data"');
     try {
       await Future.wait([
@@ -204,14 +202,14 @@ class _MyAppState extends State<MyApp> {
       _realtimeCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
-      ..environment = 'sandbox'
-      ..logLevel = ably.LogLevel.verbose
-      ..autoConnect = false
-      ..logHandler = ({msg, exception}) {
-        // ignore: avoid_print
-        print('Custom logger :: $msg $exception');
-      };
+    final clientOptions =
+        ably.ClientOptions.fromKey(_appKey.toString())
+          ..environment = 'sandbox'
+          ..logLevel = ably.LogLevel.verbose
+          ..autoConnect = false
+          ..logHandler = ({msg, exception}) {
+            print('Custom logger :: $msg $exception');
+          };
 
     try {
       final realtime = ably.Realtime(options: clientOptions);
@@ -614,11 +612,12 @@ class _MyAppState extends State<MyApp> {
   int _presenceDataIncrementer = 0;
 
   Object get _nextPresenceData =>
-      _presenceData[_presenceDataIncrementer++ % _presenceData.length];
+      _presenceData[_presenceDataIncrementer++ % _presenceData.length]
+          .toString();
 
   Object get _currentPresenceData => (_presenceDataIncrementer == 0)
       ? null
-      : _presenceData[_presenceDataIncrementer - 1 % _presenceData.length];
+      : _presenceData[(_presenceDataIncrementer - 1) % _presenceData.length];
 
   Widget enterRealtimePresence() => FlatButton(
         onPressed: (_realtime == null)
