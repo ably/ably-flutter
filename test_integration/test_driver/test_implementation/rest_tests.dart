@@ -84,7 +84,7 @@ Future testRestHistory(FlutterDriver driver) async {
   expect(historyWithStartAndEnd[0]['data'], equals('test'));
 }
 
-Future testRestPresence(FlutterDriver driver) async {
+Future testRestPresenceGet(FlutterDriver driver) async {
   const message = TestControlMessage(TestName.restPresence);
 
   final response = await getTestResponse(driver, message);
@@ -93,9 +93,6 @@ Future testRestPresence(FlutterDriver driver) async {
 
   expect(response.payload['handle'], isA<int>());
   expect(response.payload['handle'], greaterThan(0));
-
-  final paginatedResult =
-      response.payload['membersDefault'] as Map<String, dynamic>;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -114,8 +111,44 @@ Future testRestPresence(FlutterDriver driver) async {
   expect(membersLimitClientId.length, equals(0));
   expect(membersLimitConnectionId.length, equals(0));
 
-  testAllPublishedMessages(membersDefault.toList());
-  testAllPublishedMessages(membersLimit4.toList());
-  testAllPublishedMessages(membersLimit2.toList());
-  testAllPublishedMessages(membersLimitClientId);
+  testAllPresenceMembers(membersDefault.toList());
+  testAllPresenceMembers(membersLimit4.toList());
+  testAllPresenceMembers(membersLimit2.toList());
+  testAllPresenceMembers(membersLimitClientId);
+}
+
+Future testRestPresenceHistory(FlutterDriver driver) async {
+  const message = TestControlMessage(TestName.restPresence);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+
+  List<Map<String, dynamic>> transform(items) =>
+      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+
+  final membersDefault = transform(response.payload['historyDefault']);
+  final membersLimit4 = transform(response.payload['historyLimit4']);
+  final membersLimit2 = transform(response.payload['historyLimit2']);
+  final historyWithStart = transform(response.payload['historyWithStart']);
+  final historyWithStartAndEnd =
+      transform(response.payload['historyWithStartAndEnd']);
+  final historyAll = transform(response.payload['historyAll']);
+
+  expect(membersDefault.length, equals(0));
+  expect(membersLimit4.length, equals(0));
+  expect(membersLimit2.length, equals(0));
+  expect(historyWithStart.length, equals(0));
+  expect(historyWithStartAndEnd.length, equals(0));
+  expect(historyAll.length, equals(0));
+
+  testAllPresenceMembers(membersDefault.toList());
+  testAllPresenceMembers(membersLimit4.toList());
+  testAllPresenceMembers(membersLimit2.toList());
+  testAllPresenceMembers(historyWithStart.toList());
+  testAllPresenceMembers(historyWithStartAndEnd.toList());
+  testAllPresenceMembers(historyAll.toList());
 }
