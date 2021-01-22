@@ -44,7 +44,7 @@ void testAllPublishedMessages(Object messagesObject) {
 
 void testAllPresenceMembers(
   Object membersObject, {
-  Map<String, dynamic> filters
+  Map<String, dynamic> filters,
 }) {
   expect(membersObject, isA<List<Map<String, dynamic>>>());
 
