@@ -83,3 +83,39 @@ Future testRestHistory(FlutterDriver driver) async {
   expect(historyWithStartAndEnd[0]['name'], equals('history'));
   expect(historyWithStartAndEnd[0]['data'], equals('test'));
 }
+
+Future testRestPresence(FlutterDriver driver) async {
+  const message = TestControlMessage(TestName.restPresence);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+
+  final paginatedResult =
+      response.payload['membersDefault'] as Map<String, dynamic>;
+
+  List<Map<String, dynamic>> transform(items) =>
+      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+
+  final membersDefault = transform(response.payload['membersDefault']);
+  final membersLimit4 = transform(response.payload['membersLimit4']);
+  final membersLimit2 = transform(response.payload['membersLimit2']);
+  final membersLimitClientId =
+      transform(response.payload['membersLimitClientId']);
+  final membersLimitConnectionId =
+      transform(response.payload['membersLimitConnectionId']);
+
+  expect(membersDefault.length, equals(0));
+  expect(membersLimit4.length, equals(0));
+  expect(membersLimit2.length, equals(0));
+  expect(membersLimitClientId.length, equals(0));
+  expect(membersLimitConnectionId.length, equals(0));
+
+  testAllPublishedMessages(membersDefault.toList());
+  testAllPublishedMessages(membersLimit4.toList());
+  testAllPublishedMessages(membersLimit2.toList());
+  testAllPublishedMessages(membersLimitClientId);
+}
