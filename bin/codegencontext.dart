@@ -7,7 +7,6 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     //Other ably objects
     'clientOptions',
-    'messageData',
     'message',
     'tokenParams',
     'tokenDetails',

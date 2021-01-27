@@ -12,20 +12,19 @@ final public class PlatformConstants {
         public static final byte ablyMessage = (byte) 128;
         public static final byte ablyEventMessage = (byte) 129;
         public static final byte clientOptions = (byte) 130;
-        public static final byte messageData = (byte) 131;
-        public static final byte message = (byte) 132;
-        public static final byte tokenParams = (byte) 133;
-        public static final byte tokenDetails = (byte) 134;
-        public static final byte tokenRequest = (byte) 135;
-        public static final byte paginatedResult = (byte) 136;
-        public static final byte restHistoryParams = (byte) 137;
-        public static final byte realtimeHistoryParams = (byte) 138;
-        public static final byte restPresenceParams = (byte) 139;
-        public static final byte presenceMessage = (byte) 140;
-        public static final byte realtimePresenceParams = (byte) 141;
-        public static final byte errorInfo = (byte) 142;
-        public static final byte connectionStateChange = (byte) 143;
-        public static final byte channelStateChange = (byte) 144;
+        public static final byte message = (byte) 131;
+        public static final byte tokenParams = (byte) 132;
+        public static final byte tokenDetails = (byte) 133;
+        public static final byte tokenRequest = (byte) 134;
+        public static final byte paginatedResult = (byte) 135;
+        public static final byte restHistoryParams = (byte) 136;
+        public static final byte realtimeHistoryParams = (byte) 137;
+        public static final byte restPresenceParams = (byte) 138;
+        public static final byte presenceMessage = (byte) 139;
+        public static final byte realtimePresenceParams = (byte) 140;
+        public static final byte errorInfo = (byte) 141;
+        public static final byte connectionStateChange = (byte) 142;
+        public static final byte channelStateChange = (byte) 143;
     }
 
     static final public class PlatformMethod {
