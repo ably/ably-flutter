@@ -147,6 +147,10 @@ class RealtimeChannel extends PlatformObject
                     pe.details as ErrorInfo,
                   )));
         }
+      } on Exception {
+        // removing item from queue and rethrowing exception
+        _publishQueue.remove(item);
+        rethrow;
       }
     }
     _publishInternalRunning = false;

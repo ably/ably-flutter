@@ -99,9 +99,12 @@ class Realtime extends PlatformObject
         _connectQueue.remove(item);
         continue;
       }
-      await invoke(PlatformMethod.connectRealtime);
 
-      _connectQueue.remove(item);
+      try {
+        await invoke(PlatformMethod.connectRealtime);
+      } finally {
+        _connectQueue.remove(item);
+      }
 
       // The Completer could have timed out in the meantime and completing a
       // completed Completer would cause an exception, so we check first.
