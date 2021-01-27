@@ -81,7 +81,7 @@ class Message {
   /// Message payload
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TM2d
-  Object get data => _data.data;
+  Object get data => _data?.data;
 
   /// Name of the message
   ///
