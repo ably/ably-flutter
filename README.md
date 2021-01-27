@@ -28,7 +28,7 @@ site to discuss privately.
 - [Quickstart Guide](https://www.ably.io/documentation/quick-start-guide?lang=flutter)
 - [Introducing the Ably Flutter plugin](https://www.ably.io/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
 - [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.io/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
-- [Building realtime apps with Flutter and WebSockets: client-side considerations]()
+- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.io/topic/websockets-flutter)
 
 ## Supported Platforms
 
