@@ -23,13 +23,20 @@ or visit our
 [Support and Help](https://www.ably.io/support)
 site to discuss privately.
 
+## Resources
+
+- [Quickstart Guide](https://www.ably.io/documentation/quick-start-guide?lang=flutter)
+- [Introducing the Ably Flutter plugin](https://www.ably.io/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
+- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.io/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
+- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.io/topic/websockets-flutter)
+
 ## Supported Platforms
 
-#### iOS
+### iOS
 
 iOS 9 or newer.
 
-#### Android
+### Android
 
 API Level 19 (Android 4.4, KitKat) or newer.
 
@@ -46,22 +53,24 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 - run `flutter packages get` to install dependencies
 - `flutter run` will start the application on connected android / iOS device
 
-## Using the Realtime API
+## Usage
 
-##### Import the package
+### Import the package
 
 ```dart
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
 ```
 
-##### create a ClientOptions
+### Configure a Client Options object
 
 ```dart
 final clientOptions = ably.ClientOptions.fromKey("<YOUR APP KEY>");
 clientOptions.logLevel = ably.LogLevel.verbose; // optional
 ```
 
-##### Rest API
+### Using the REST API
+
+Creating the REST client instance:
 
 ```dart
 ably.Rest rest = ably.Rest(options: clientOptions);
@@ -73,61 +82,63 @@ Getting a channel instance
 ably.RestChannel channel = rest.channels.get('test');
 ```
 
-Publish rest messages
+Publishing messages using REST:
 
 ```dart
-void publishMessages() async {
-    // passing both name and data
-    await channel.publish(name: "Hello", data: "Ably");
-    // passing just name
-    await channel.publish(name: "Hello");
-    // passing just data
-    await channel.publish(data: "Ably");
-    // publishing an empty message
-    await channel.publish();
-}
+// both name and data
+await channel.publish(name: "Hello", data: "Ably");
 
-publishMessages();
+// just name
+await channel.publish(name: "Hello");
+
+// just data
+await channel.publish(data: "Ably");
+
+// an empty message
+await channel.publish();
 ```
 
-##### Realtime API
+### Using the Realtime API
+
+Creating the Realtime client instance:
 
 ```dart
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ```
 
-Listen to connection state change event
+Listening for connection state change events:
 
 ```dart
-realtime.connection.on().listen((ably.ConnectionStateChange stateChange) async {
-  print('Realtime connection state changed: ${stateChange.event}');
-  setState(() { _realtimeConnectionState = stateChange.current; });
+realtime.connection
+  .on()
+  .listen((ably.ConnectionStateChange stateChange) async {
+    print('Realtime connection state changed: ${stateChange.event}');
+    setState(() {
+      _realtimeConnectionState = stateChange.current;
+    });
 });
 ```
 
-Listening to a particular event: `connected`
+Listening for a particular connection state change event (e.g. `connected`):
 
 ```dart
-realtime.connection.on(ably.ConnectionEvent.connected).listen((ably.ConnectionStateChange stateChange) async {
-  print('Realtime connection state changed: ${stateChange.event}');
-  setState(() { _realtimeConnectionState = stateChange.current; });
+realtime.connection
+  .on(ably.ConnectionEvent.connected)
+  .listen((ably.ConnectionStateChange stateChange) async {
+    print('Realtime connection state changed: ${stateChange.event}');
+    setState(() {
+      _realtimeConnectionState = stateChange.current;
+    });
 });
 ```
 
-Connect and disconnect to a Realtime instance
-
-```dart
-realtime.connect();     // connect to realtime
-realtime.disconnect();  // disconnect from realtime
-```
-
-Creating a Realtime channel
+Creating a Realtime channel instance:
 
 ```dart
 ably.RealtimeChannel channel = realtime.channels.get('channel-name');
 ```
 
-Listening to channel events
+Listening for channel events:
 
 ```dart
 channel.on().listen((ably.ChannelStateChange stateChange){
@@ -135,19 +146,19 @@ channel.on().listen((ably.ChannelStateChange stateChange){
 });
 ```
 
-Attaching to channel
+Attaching to the channel:
 
 ```dart
 await channel.attach();
 ```
 
-Detaching from channel
+Detaching from the channel:
 
 ```dart
 await channel.detach();
 ```
 
-Subscribing to channel messages
+Subscribing to receive messages received on the channel:
 
 ```dart
 var messageStream = channel.subscribe();
@@ -156,9 +167,9 @@ var channelMessageSubscription = messageStream.listen((ably.Message message){
 });
 ```
 
-_use `channel.subscribe(name: "event1")` or `channel.subscribe(names: ["event1", "event2"])` to listen to specific named messages_
+Use `channel.subscribe(name: "event1")` or `channel.subscribe(names: ["event1", "event2"])` to listen to specific named messages.
 
-UnSubscribing from channel messages
+UnSubscribing from receiving messages on the channel:
 
 ```dart
 await channelMessageSubscription.cancel();
@@ -167,15 +178,15 @@ await channelMessageSubscription.cancel();
 Publishing channel messages
 
 ```dart
-// publish name and data
+// both name and data
 await channel.publish(name: "event1", data: "hello world");
 await channel.publish(name: "event1", data: {"hello": "world", "hey": "ably"});
 await channel.publish(name: "event1", data: [{"hello": {"world": true}, "ably": {"serious": "realtime"}]);
 
-// publish single message
+// single message
 await channel.publish(message: ably.Message()..name = "event1"..data = {"hello": "world"});
 
-// publish multiple messages
+// multiple messages
 await channel.publish(messages: [
   ably.Message()..name="event1"..data = {"hello": "ably"},
   ably.Message()..name="event1"..data = {"hello": "world"}
@@ -184,11 +195,14 @@ await channel.publish(messages: [
 
 ## Caveats
 
-#### RTE6a compliance
+### RTE6a compliance
 
-Using Streams based approach doesn't fully conform with [RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a) from the spec.
+Using the Streams based approach doesn't fully conform with
+[RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a)
+from our
+[client library features specification](https://docs.ably.io/client-lib-development-guide/features/).
 
-##### Problem
+#### The Problem
 
 ```dart
 StreamSubscription subscriptionToBeCancelled;
@@ -206,14 +220,17 @@ subscriptionToBeCancelled = realtime.connection.on().listen((ably.ConnectionStat
 });
 ```
 
-In the example above, 2nd listener is cancelled when 1st listener is notified about the "connected" event.
-As per RTE6a, 2nd listener should also be triggered, but it will not be as 2nd listener is registered after 1st listener and stream subscription is cancelled immediately after first listener is triggered.
+In the example above, the 2nd listener is cancelled when the 1st listener is notified about the "connected" event.
+As per
+[RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a),
+the 2nd listener should also be triggered.
+It will not be as the 2nd listener was registered after the 1st listener and stream subscription is cancelled immediately after 1st listener is triggered.
 
-This wouldn't have happened if 2nd listener was registered before the 1st.
+This wouldn't have happened if the 2nd listener had been registered before the 1st was.
 
-However, using a neat little trick will fix this.
+However, using a neat little workaround will fix this...
 
-##### Suggestion - Cancelling using delay
+#### The Workaround - Cancelling using delay
 
 Instead of `await subscriptionToBeCancelled.cancel();`, use
 
@@ -229,5 +246,3 @@ We have some [Developer Notes](DeveloperNotes.md), but we're still learning too 
 
 Your pull requests are welcome but please keep them manageable and focused.
 Equally your input on any pull requests we have in flight at any given time is invaluable to us, so please get involved.
-
-Thanks! :grin:
