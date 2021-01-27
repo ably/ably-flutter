@@ -11,13 +11,11 @@ client library SDKs for [Ably](https://ably.io/), the realtime data delivery pla
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
 
-## :construction: Experimental! :construction:
+## Development Preview
 
-We're busy working on this repository at the moment and we're doing that work in the public domain so that you can watch or
-[contribute](#contributing).
-
-Get in touch if you are interested in using Ably from your Flutter apps.
-We have our own ideas for how we build out this plugin but we would love to hear from you if there's a feature or capability in particular that you think we should prioritise.
+We are actively working on implementing the full Ably feature set in this plugin,
+so please do not hesitate to get in touch if you are interested in using Ably from your Flutter apps,
+especially if there is a feature or capability in particular that you think we should prioritise.
 
 Create a public
 [Issue](https://github.com/ably/ably-flutter/issues)
