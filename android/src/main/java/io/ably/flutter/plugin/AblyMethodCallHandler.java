@@ -330,11 +330,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                     .get(channelName)
                     .presence;
             try {
-                if (clientId != null) {
-                    presence.enterClient(clientId, data, handleCompletionWithListener(result));
-                } else {
-                    presence.enter(data, handleCompletionWithListener(result));
-                }
+                presence.enterClient(clientId, data, handleCompletionWithListener(result));
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }

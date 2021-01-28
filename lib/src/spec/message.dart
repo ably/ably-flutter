@@ -104,9 +104,15 @@ class Message {
   }) : _data = MessageData.fromValue(data);
 
   @override
-  String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
-      ' connectionId=$connectionId encoding=$encoding name=$name'
-      ' data=$data extras=$extras';
+  String toString() => 'Message'
+      ' id=$id'
+      ' name=$name'
+      ' data=$data'
+      ' extras=$extras'
+      ' encoding=$encoding'
+      ' clientId=$clientId'
+      ' timestamp=$timestamp'
+      ' connectionId=$connectionId';
 
 // TODO(tiholic) add support for fromEncoded and fromEncodedArray (TM3)
 }
@@ -140,7 +146,7 @@ class PresenceMessage {
   /// Message payload
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3e
-  Object get data => _data.data;
+  Object get data => _data?.data;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
   final String encoding;
@@ -208,4 +214,15 @@ class PresenceMessage {
     ChannelOptions channelOptions,
   ]) =>
       jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
+
+  @override
+  String toString() => 'PresenceMessage'
+      ' id=$id'
+      ' data=$data'
+      ' action=$action'
+      ' extras=$extras'
+      ' encoding=$encoding'
+      ' clientId=$clientId'
+      ' timestamp=$timestamp'
+      ' connectionId=$connectionId';
 }
