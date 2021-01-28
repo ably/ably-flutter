@@ -9,14 +9,14 @@ import 'realtime.dart';
 /// Plugin based implementation of [RestPresenceInterface]
 class RealtimePresence extends PlatformObject
     implements RealtimePresenceInterface {
-  final RealtimeChannel _realtimeChannel;
+  final RealtimeChannel _channel;
 
   /// instantiates with a channel
-  RealtimePresence(this._realtimeChannel);
+  RealtimePresence(this._channel);
 
   @override
   Future<int> createPlatformInstance() =>
-      (_realtimeChannel.realtime as Realtime).handle;
+      (_channel.realtime as Realtime).handle;
 
   @override
   Future<List<PresenceMessage>> get([
@@ -25,7 +25,7 @@ class RealtimePresence extends PlatformObject
     final presenceMessages = await invoke<List>(
       PlatformMethod.realtimePresenceGet,
       {
-        TxTransportKeys.channelName: _realtimeChannel.name,
+        TxTransportKeys.channelName: _channel.name,
         if (params != null) TxTransportKeys.params: params
       },
     );
@@ -41,7 +41,7 @@ class RealtimePresence extends PlatformObject
     final message = await invoke<AblyMessage>(
       PlatformMethod.realtimePresenceHistory,
       {
-        TxTransportKeys.channelName: _realtimeChannel.name,
+        TxTransportKeys.channelName: _channel.name,
         if (params != null) TxTransportKeys.params: params
       },
     );
@@ -51,38 +51,52 @@ class RealtimePresence extends PlatformObject
   @override
   bool syncComplete;
 
+  String get _realtimeClientId => _channel.realtime.options.clientId;
+
   @override
-  Future<void> enter([Object data]) => enterClient(null, data);
+  Future<void> enter([Object data]) => enterClient(_realtimeClientId, data);
 
   @override
   Future<void> enterClient(String clientId, [Object data]) async {
+    assert(
+        clientId != null,
+        'Channel ${_channel.name}:'
+        ' unable to enter presence channel (null clientId specified)');
     await invoke(PlatformMethod.realtimePresenceEnter, {
-      TxTransportKeys.channelName: _realtimeChannel.name,
-      if (clientId != null) TxTransportKeys.clientId: clientId,
+      TxTransportKeys.channelName: _channel.name,
+      TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
     });
   }
 
   @override
-  Future<void> update([Object data]) => updateClient(null, data);
+  Future<void> update([Object data]) => updateClient(_realtimeClientId, data);
 
   @override
   Future<void> updateClient(String clientId, [Object data]) async {
+    assert(
+        clientId != null,
+        'Channel ${_channel.name}:'
+        ' unable to update presence channel (null clientId specified)');
     await invoke(PlatformMethod.realtimePresenceUpdate, {
-      TxTransportKeys.channelName: _realtimeChannel.name,
-      if (clientId != null) TxTransportKeys.clientId: clientId,
+      TxTransportKeys.channelName: _channel.name,
+      TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
     });
   }
 
   @override
-  Future<void> leave([Object data]) => leaveClient(null, data);
+  Future<void> leave([Object data]) => leaveClient(_realtimeClientId, data);
 
   @override
   Future<void> leaveClient(String clientId, [Object data]) async {
+    assert(
+        clientId != null,
+        'Channel ${_channel.name}:'
+        ' unable to leave presence channel (null clientId specified)');
     await invoke(PlatformMethod.realtimePresenceLeave, {
-      TxTransportKeys.channelName: _realtimeChannel.name,
-      if (clientId != null) TxTransportKeys.clientId: clientId,
+      TxTransportKeys.channelName: _channel.name,
+      TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
     });
   }
@@ -91,11 +105,11 @@ class RealtimePresence extends PlatformObject
   Stream<PresenceMessage> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,
-  }) =>
-      listen(PlatformMethod.realtimePresenceSubscribe)
-          .map((presenceMessage) => presenceMessage as PresenceMessage)
-          .where(
-            (presenceMessage) =>
-                action == null || presenceMessage.action == action,
-          );
+  }) {
+    if (action != null) actions ??= [action];
+    return listen<PresenceMessage>(PlatformMethod.onRealtimePresenceMessage, {
+      TxTransportKeys.channelName: _channel.name,
+    }).where((presenceMessage) =>
+        actions == null || actions.contains(presenceMessage.action));
+  }
 }
