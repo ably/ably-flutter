@@ -7,6 +7,7 @@ import 'realtime_publish_test.dart';
 import 'realtime_publish_with_auth_callback_test.dart';
 import 'realtime_subscribe.dart';
 import 'rest_history_test.dart';
+import 'rest_presence_history_test.dart';
 import 'rest_presence_test.dart';
 import 'rest_publish_test.dart';
 import 'rest_publish_with_auth_callback_test.dart';
@@ -24,7 +25,8 @@ final testFactory = <String, TestFactory>{
       RealtimePublishWithAuthCallbackTest(d),
   TestName.restPublish: (d) => RestPublishTest(d),
   TestName.restHistory: (d) => RestHistoryTest(d),
-  TestName.restPresence: (d) => RestPresenceTest(d),
+  TestName.restPresenceGet: (d) => RestPresenceTest(d),
+  TestName.restPresenceHistory: (d) => RestPresenceHistoryTest(d),
   TestName.restPublishWithAuthCallback: (d) =>
       RestPublishWithAuthCallbackTest(d),
   TestName.realtimeHistory: (d) => RealtimeHistoryTest(d),

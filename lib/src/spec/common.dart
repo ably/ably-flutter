@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../ably_flutter.dart';
 import '../impl/realtime/connection.dart';
+import '../impl/realtime/presence.dart';
 import 'auth.dart';
 import 'enums.dart';
 import 'spec.dart';
