@@ -40,6 +40,8 @@ class _MyAppState extends State<MyApp> {
   ably.PaginatedResult<ably.Message> _realtimeHistory;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceHistory;
+  StreamSubscription<ably.PresenceMessage> _channelPresenceMessageSubscription;
+  ably.PresenceMessage channelPresenceMessage;
   List<ably.PresenceMessage> _realtimePresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage> _realtimePresenceHistory;
 
@@ -202,14 +204,14 @@ class _MyAppState extends State<MyApp> {
       _realtimeCreationState = OpState.inProgress;
     });
 
-    final clientOptions =
-        ably.ClientOptions.fromKey(_appKey.toString())
-          ..environment = 'sandbox'
-          ..logLevel = ably.LogLevel.verbose
-          ..autoConnect = false
-          ..logHandler = ({msg, exception}) {
-            print('Custom logger :: $msg $exception');
-          };
+    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
+      ..environment = 'sandbox'
+      ..clientId = 'flutter-example-app'
+      ..logLevel = ably.LogLevel.verbose
+      ..autoConnect = false
+      ..logHandler = ({msg, exception}) {
+        print('Custom logger :: $msg $exception');
+      };
 
     try {
       final realtime = ably.Realtime(options: clientOptions);
@@ -564,6 +566,40 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
+  Widget createChannelPresenceSubscribeButton() => FlatButton(
+        onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
+                _channelPresenceMessageSubscription == null)
+            ? () {
+                final channel = _realtime.channels.get(defaultChannel);
+                final presenceMessageStream = channel.presence.subscribe();
+                _channelPresenceMessageSubscription =
+                    presenceMessageStream.listen((presenceMessage) {
+                  print('Channel presence message received: $presenceMessage');
+                  setState(() {
+                    channelPresenceMessage = presenceMessage;
+                  });
+                });
+                setState(() {});
+                print('Channel presence messages subscribed');
+                _subscriptionsToDispose.add(_channelMessageSubscription);
+              }
+            : null,
+        child: const Text('Subscribe'),
+      );
+
+  Widget createChannelPresenceUnSubscribeButton() => FlatButton(
+        onPressed: (_channelPresenceMessageSubscription != null)
+            ? () async {
+                await _channelPresenceMessageSubscription.cancel();
+                print('Channel presence messages unsubscribed');
+                setState(() {
+                  _channelPresenceMessageSubscription = null;
+                });
+              }
+            : null,
+        child: const Text('Unsubscribe'),
+      );
+
   Widget getRealtimeChannelPresence() => FlatButton(
         onPressed: (_realtime == null)
             ? null
@@ -626,7 +662,7 @@ class _MyAppState extends State<MyApp> {
                 await _realtime.channels
                     .get(defaultChannel)
                     .presence
-                    .enterClient('33', _nextPresenceData);
+                    .enter(_nextPresenceData);
                 setState(() {});
               },
         color: Colors.yellow,
@@ -640,7 +676,7 @@ class _MyAppState extends State<MyApp> {
                 await _realtime.channels
                     .get(defaultChannel)
                     .presence
-                    .updateClient('33', _nextPresenceData);
+                    .updateClient('flutter-example-app', _nextPresenceData);
                 setState(() {});
               },
         color: Colors.yellow,
@@ -654,7 +690,7 @@ class _MyAppState extends State<MyApp> {
                 await _realtime.channels
                     .get(defaultChannel)
                     .presence
-                    .leaveClient('33', _nextPresenceData);
+                    .leave(_nextPresenceData);
                 setState(() {});
               },
         color: Colors.yellow,
@@ -733,6 +769,16 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text('Current Data: $_currentPresenceData'),
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: createChannelPresenceSubscribeButton()),
+                      Expanded(child: createChannelPresenceUnSubscribeButton()),
+                    ],
+                  ),
+                  Text(
+                    'Presence Message from channel:'
+                    ' ${channelPresenceMessage?.data ?? '-'}',
+                  ),
                   Row(
                     children: [
                       Expanded(
