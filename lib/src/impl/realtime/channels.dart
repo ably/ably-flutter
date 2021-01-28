@@ -206,18 +206,18 @@ class RealtimeChannel extends PlatformObject
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
-      listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
-          .map((stateChange) => stateChange as ChannelStateChange)
-          .where(
-            (stateChange) =>
-                channelEvent == null || stateChange.event == channelEvent,
-          );
+      listen<ChannelStateChange>(
+        PlatformMethod.onRealtimeChannelStateChanged,
+        _payload,
+      ).where(
+        (stateChange) =>
+            channelEvent == null || stateChange.event == channelEvent,
+      );
 
   @override
   Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
-    return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
-        .map((message) => message as Message)
+    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, _payload)
         .where((message) =>
             subscribedNames.isEmpty ||
             subscribedNames.any((n) => n == message.name));

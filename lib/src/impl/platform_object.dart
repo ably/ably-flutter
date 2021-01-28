@@ -67,18 +67,23 @@ abstract class PlatformObject {
     return invokeRaw<T>(method, message);
   }
 
-  Future<Stream<dynamic>> _listen(final String eventName,
-          [final Object payload]) async =>
-      eventChannel.receiveBroadcastStream(AblyMessage(
+  Future<Stream<T>> _listen<T>(
+    final String eventName, [
+    final Object payload,
+  ]) async =>
+      eventChannel.receiveBroadcastStream<T>(
+        AblyMessage(
           AblyEventMessage(eventName, payload),
-          handle: await handle));
+          handle: await handle,
+        ),
+      );
 
   /// Listen for events
   @protected
-  Stream<dynamic> listen(final String method, [final Object payload]) {
+  Stream<T> listen<T>(final String method, [final Object payload]) {
     // ignore: close_sinks, will be closed by listener
-    final controller = StreamController<dynamic>();
-    _listen(method, payload).then(controller.addStream);
+    final controller = StreamController<T>();
+    _listen<T>(method, payload).then(controller.addStream);
     return controller.stream;
   }
 }
