@@ -9,19 +9,20 @@ class CodecTypes {
   static const int ablyMessage = 128;
   static const int ablyEventMessage = 129;
   static const int clientOptions = 130;
-  static const int message = 131;
-  static const int tokenParams = 132;
-  static const int tokenDetails = 133;
-  static const int tokenRequest = 134;
-  static const int paginatedResult = 135;
-  static const int restHistoryParams = 136;
-  static const int realtimeHistoryParams = 137;
-  static const int restPresenceParams = 138;
-  static const int presenceMessage = 139;
-  static const int realtimePresenceParams = 140;
-  static const int errorInfo = 141;
-  static const int connectionStateChange = 142;
-  static const int channelStateChange = 143;
+  static const int messageData = 131;
+  static const int message = 132;
+  static const int tokenParams = 133;
+  static const int tokenDetails = 134;
+  static const int tokenRequest = 135;
+  static const int paginatedResult = 136;
+  static const int restHistoryParams = 137;
+  static const int realtimeHistoryParams = 138;
+  static const int restPresenceParams = 139;
+  static const int presenceMessage = 140;
+  static const int realtimePresenceParams = 141;
+  static const int errorInfo = 142;
+  static const int connectionStateChange = 143;
+  static const int channelStateChange = 144;
 }
 
 class PlatformMethod {
@@ -46,7 +47,7 @@ class PlatformMethod {
   static const String realtimePresenceEnter = 'realtimePresenceEnter';
   static const String realtimePresenceUpdate = 'realtimePresenceUpdate';
   static const String realtimePresenceLeave = 'realtimePresenceLeave';
-  static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
+  static const String onRealtimePresenceMessage = 'onRealtimePresenceMessage';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
   static const String realtimeHistory = 'realtimeHistory';

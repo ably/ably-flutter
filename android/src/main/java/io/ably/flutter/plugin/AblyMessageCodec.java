@@ -97,6 +97,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
           new CodecPair<>(null, self::decodeRealtimePresenceParams));
         put(PlatformConstants.CodecTypes.errorInfo,
           new CodecPair<>(self::encodeErrorInfo, null));
+        put(PlatformConstants.CodecTypes.messageData,
+          new CodecPair<>(null, self::decodeChannelMessageData));
         put(PlatformConstants.CodecTypes.message,
           new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
         put(PlatformConstants.CodecTypes.presenceMessage,
@@ -403,6 +405,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Object decodeMessageData(Object messageData) {
     final JsonElement json = readValueAsJsonElement(messageData);
     return (json == null) ? messageData : json;
+  }
+
+  private Object decodeChannelMessageData(Map<String, Object> jsonMap) {
+    if (jsonMap == null) return null;
+    return decodeMessageData(jsonMap.get(PlatformConstants.TxMessage.data));
   }
 
   private Message decodeChannelMessage(Map<String, Object> jsonMap) {

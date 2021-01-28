@@ -9,19 +9,20 @@ typedef NS_ENUM(UInt8, _Value) {
     ablyMessageCodecType = 128,
     ablyEventMessageCodecType = 129,
     clientOptionsCodecType = 130,
-    messageCodecType = 131,
-    tokenParamsCodecType = 132,
-    tokenDetailsCodecType = 133,
-    tokenRequestCodecType = 134,
-    paginatedResultCodecType = 135,
-    restHistoryParamsCodecType = 136,
-    realtimeHistoryParamsCodecType = 137,
-    restPresenceParamsCodecType = 138,
-    presenceMessageCodecType = 139,
-    realtimePresenceParamsCodecType = 140,
-    errorInfoCodecType = 141,
-    connectionStateChangeCodecType = 142,
-    channelStateChangeCodecType = 143,
+    messageDataCodecType = 131,
+    messageCodecType = 132,
+    tokenParamsCodecType = 133,
+    tokenDetailsCodecType = 134,
+    tokenRequestCodecType = 135,
+    paginatedResultCodecType = 136,
+    restHistoryParamsCodecType = 137,
+    realtimeHistoryParamsCodecType = 138,
+    restPresenceParamsCodecType = 139,
+    presenceMessageCodecType = 140,
+    realtimePresenceParamsCodecType = 141,
+    errorInfoCodecType = 142,
+    connectionStateChangeCodecType = 143,
+    channelStateChangeCodecType = 144,
 };
 
 
@@ -47,7 +48,7 @@ extern NSString *const AblyPlatformMethod_realtimePresenceHistory;
 extern NSString *const AblyPlatformMethod_realtimePresenceEnter;
 extern NSString *const AblyPlatformMethod_realtimePresenceUpdate;
 extern NSString *const AblyPlatformMethod_realtimePresenceLeave;
-extern NSString *const AblyPlatformMethod_realtimePresenceSubscribe;
+extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;

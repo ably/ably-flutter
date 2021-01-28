@@ -7,6 +7,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     //Other ably objects
     'clientOptions',
+    'messageData',
     'message',
     'tokenParams',
     'tokenDetails',
@@ -70,7 +71,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimePresenceEnter', 'value': 'realtimePresenceEnter'},
   {'name': 'realtimePresenceUpdate', 'value': 'realtimePresenceUpdate'},
   {'name': 'realtimePresenceLeave', 'value': 'realtimePresenceLeave'},
-  {'name': 'realtimePresenceSubscribe', 'value': 'realtimePresenceSubscribe'},
+  {'name': 'onRealtimePresenceMessage', 'value': 'onRealtimePresenceMessage'},
   {
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
