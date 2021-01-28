@@ -85,7 +85,7 @@ Future testRestHistory(FlutterDriver driver) async {
 }
 
 Future testRestPresenceGet(FlutterDriver driver) async {
-  const message = TestControlMessage(TestName.restPresence);
+  const message = TestControlMessage(TestName.restPresenceGet);
 
   final response = await getTestResponse(driver, message);
 
@@ -118,7 +118,7 @@ Future testRestPresenceGet(FlutterDriver driver) async {
 }
 
 Future testRestPresenceHistory(FlutterDriver driver) async {
-  const message = TestControlMessage(TestName.restPresence);
+  const message = TestControlMessage(TestName.restPresenceHistory);
 
   final response = await getTestResponse(driver, message);
 
@@ -133,6 +133,7 @@ Future testRestPresenceHistory(FlutterDriver driver) async {
   final membersDefault = transform(response.payload['historyDefault']);
   final membersLimit4 = transform(response.payload['historyLimit4']);
   final membersLimit2 = transform(response.payload['historyLimit2']);
+  final historyForwards = transform(response.payload['historyForwards']);
   final historyWithStart = transform(response.payload['historyWithStart']);
   final historyWithStartAndEnd =
       transform(response.payload['historyWithStartAndEnd']);
@@ -148,6 +149,7 @@ Future testRestPresenceHistory(FlutterDriver driver) async {
   testAllPresenceMembers(membersDefault.toList());
   testAllPresenceMembers(membersLimit4.toList());
   testAllPresenceMembers(membersLimit2.toList());
+  testAllPresenceMembers(historyForwards.toList());
   testAllPresenceMembers(historyWithStart.toList());
   testAllPresenceMembers(historyWithStartAndEnd.toList());
   testAllPresenceMembers(historyAll.toList());

@@ -5,14 +5,16 @@ import 'app_key_provision_helper.dart';
 import 'encoders.dart';
 import 'test_widget_abstract.dart';
 
-class RestPresenceTest extends TestWidget {
-  const RestPresenceTest(TestDispatcherState dispatcher) : super(dispatcher);
+class RestPresenceHistoryTest extends TestWidget {
+  const RestPresenceHistoryTest(TestDispatcherState dispatcher)
+      : super(dispatcher);
 
   @override
-  TestWidgetState<TestWidget> createState() => RestPresenceTestState();
+  TestWidgetState<TestWidget> createState() => RestPresenceHistoryTestState();
 }
 
-class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
+class RestPresenceHistoryTestState
+    extends TestWidgetState<RestPresenceHistoryTest> {
   @override
   Future<void> test() async {
     widget.dispatcher.reportLog('init start');
@@ -72,6 +74,7 @@ class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
       'historyDefault': historyDefault,
       'historyLimit4': historyLimit4,
       'historyLimit2': historyLimit2,
+      'historyForwards': historyForwards,
       'historyWithStart': historyWithStart,
       'historyWithStartAndEnd': historyWithStartAndEnd,
       'historyAll': historyAll,
