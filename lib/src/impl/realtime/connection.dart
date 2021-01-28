@@ -48,11 +48,11 @@ class Connection extends PlatformObject implements ConnectionInterface {
 
   @override
   Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) =>
-      listen(PlatformMethod.onRealtimeConnectionStateChanged)
-          .map((connectionEvent) => connectionEvent as ConnectionStateChange)
-          .where((connectionStateChange) =>
-              connectionEvent == null ||
-              connectionStateChange.event == connectionEvent);
+      listen<ConnectionStateChange>(
+        PlatformMethod.onRealtimeConnectionStateChanged,
+      ).where((connectionStateChange) =>
+          connectionEvent == null ||
+          connectionStateChange.event == connectionEvent);
 
   @override
   Future<void> close() => realtime.close();
