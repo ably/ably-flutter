@@ -79,6 +79,10 @@ class Codec extends StandardMessageCodec {
       ),
 
       CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
+      CodecTypes.messageData: _CodecPair<MessageData>(
+        _encodeChannelMessageData,
+        _decodeChannelMessageData,
+      ),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
       CodecTypes.presenceMessage:
@@ -112,6 +116,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenParams;
     } else if (value is TokenRequest) {
       return CodecTypes.tokenRequest;
+    } else if (value is MessageData) {
+      return CodecTypes.messageData;
     } else if (value is Message) {
       return CodecTypes.message;
     } else if (value is RealtimeHistoryParams) {
@@ -348,6 +354,13 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
     _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
     _writeToJson(jsonMap, TxAblyEventMessage.message, message);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeChannelMessageData(final MessageData v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxMessageData.data, v.data);
     return jsonMap;
   }
 
@@ -700,6 +713,12 @@ class Codec extends StandardMessageCodec {
         toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
     return ChannelStateChange(current, previous, event,
         resumed: resumed, reason: reason);
+  }
+
+  MessageData _decodeChannelMessageData(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    return MessageData.fromValue(
+        _readFromJson<Object>(jsonMap, TxMessageData.data));
   }
 
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
