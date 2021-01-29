@@ -2,6 +2,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 
 import '../test_dispatcher.dart';
 import 'app_key_provision_helper.dart';
+import 'data.dart';
 import 'encoders.dart';
 import 'test_widget_abstract.dart';
 
@@ -21,15 +22,30 @@ class RestPresenceHistoryTestState
     final appKey = await provision('sandbox-');
     final logMessages = <List<String>>[];
 
-    final rest = Rest(
-      options: ClientOptions.fromKey(appKey.toString())
-        ..environment = 'sandbox'
-        ..clientId = 'someClientId'
-        ..logLevel = LogLevel.verbose
-        ..logHandler =
-            ({msg, exception}) => logMessages.add([msg, exception.toString()]),
-    );
+    final options = ClientOptions.fromKey(appKey.toString())
+      ..environment = 'sandbox'
+      ..clientId = 'someClientId'
+      ..logLevel = LogLevel.verbose
+      ..logHandler =
+          ({msg, exception}) => logMessages.add([msg, exception.toString()]);
+
+    final rest = Rest(options: options);
     final channel = rest.channels.get('test');
+
+    final historyInitial = await _history(channel);
+
+    // creating presence history on channel
+    final realtimePresence =
+        Realtime(options: options).channels.get('test').presence;
+    // single client enters channel
+    await realtimePresence.enter(messagesToPublish[0][1]);
+    // updates, multiple times with different messages
+    for (var i = 1; i < messagesToPublish.length - 1; i++) {
+      await realtimePresence.update(messagesToPublish[i][1]);
+    }
+    // leaves channel
+    await realtimePresence
+        .leave(messagesToPublish[messagesToPublish.length - 1][1]);
 
     final historyDefault = await _history(channel);
     await Future.delayed(const Duration(seconds: 2));
@@ -46,21 +62,18 @@ class RestPresenceHistoryTestState
     );
     await Future.delayed(const Duration(seconds: 2));
 
-    // TODO use realtime to update presence members and verify
-    //  See rest_history_test on how to handle the necessary
-
     final time1 = DateTime.now();
     //TODO(tiholic) iOS fails without this delay
     // - timestamp on message retrieved from history
     // is earlier than expected when ran in CI
     await Future.delayed(const Duration(seconds: 2));
-    // TODO(tiholic) use realtime to enter channel as a new client
+    await realtimePresence.enter('enter-start-time');
     // TODO(tiholic) understand why tests fail without this delay
     await Future.delayed(const Duration(seconds: 2));
 
     final time2 = DateTime.now();
     await Future.delayed(const Duration(seconds: 2));
-    // TODO(tiholic) use realtime to enter channel as a new client
+    await realtimePresence.leave('leave-end-time');
     await Future.delayed(const Duration(seconds: 2));
 
     final historyWithStart =
@@ -71,6 +84,7 @@ class RestPresenceHistoryTestState
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await rest.handle,
+      'historyInitial': historyInitial,
       'historyDefault': historyDefault,
       'historyLimit4': historyLimit4,
       'historyLimit2': historyLimit2,
