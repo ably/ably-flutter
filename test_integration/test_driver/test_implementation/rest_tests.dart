@@ -96,25 +96,41 @@ Future testRestPresenceGet(FlutterDriver driver) async {
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
+  final membersInitial = transform(response.payload['membersInitial']);
   final membersDefault = transform(response.payload['membersDefault']);
   final membersLimit4 = transform(response.payload['membersLimit4']);
   final membersLimit2 = transform(response.payload['membersLimit2']);
-  final membersLimitClientId =
-      transform(response.payload['membersLimitClientId']);
-  final membersLimitConnectionId =
-      transform(response.payload['membersLimitConnectionId']);
+  final membersClientId =
+      transform(response.payload['membersClientId']);
+  final membersConnectionId =
+      transform(response.payload['membersConnectionId']);
 
-  expect(membersDefault.length, equals(0));
-  expect(membersLimit4.length, equals(0));
-  expect(membersLimit2.length, equals(0));
-  expect(membersLimitClientId.length, equals(0));
-  expect(membersLimitConnectionId.length, equals(0));
+  expect(membersInitial.length, equals(0));
+  expect(membersDefault.length, equals(8));
+  expect(membersLimit4.length, equals(8));
+  expect(membersLimit2.length, equals(8));
+  expect(membersClientId.length, equals(1));
+  expect(membersConnectionId.length, equals(0));
 
-  testAllPresenceMembers(membersDefault.toList());
-  testAllPresenceMembers(membersLimit4.toList());
-  testAllPresenceMembers(membersLimit2.toList());
-  testAllPresenceMembers(membersLimitClientId);
+
+  int timestampSorter(Map a, Map b){
+    if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
+        DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+
+  testAllPresenceMembers(membersDefault..sort(timestampSorter));
+  testAllPresenceMembers(membersLimit4..sort(timestampSorter));
+  testAllPresenceMembers(membersLimit2..sort(timestampSorter));
+
+  // there is only 1 client with clientId 'client-1
+  expect(membersClientId[0]['clientId'], equals('client-1'));
+  checkMessageData(1, membersClientId[0]['data']);
+
+  // TODO similarly check for membersConnectionId
 }
 
 Future testRestPresenceHistory(FlutterDriver driver) async {

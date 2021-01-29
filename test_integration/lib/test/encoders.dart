@@ -13,9 +13,9 @@ Map<String, dynamic> encodeMessage(Message message) => {
 
 Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
       'id': message.id,
-      'action': message.action,
+      'action': enumValueToString(message.action),
       'clientId': message.clientId,
-      'connectionId': message.clientId,
+      'connectionId': message.connectionId,
       'data': message.data,
       'encoding': message.encoding,
       'extras': message.extras,
