@@ -96,24 +96,8 @@ Future testRestPresenceGet(FlutterDriver driver) async {
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-  final membersInitial = transform(response.payload['membersInitial']);
-  final membersDefault = transform(response.payload['membersDefault']);
-  final membersLimit4 = transform(response.payload['membersLimit4']);
-  final membersLimit2 = transform(response.payload['membersLimit2']);
-  final membersClientId =
-      transform(response.payload['membersClientId']);
-  final membersConnectionId =
-      transform(response.payload['membersConnectionId']);
 
-  expect(membersInitial.length, equals(0));
-  expect(membersDefault.length, equals(8));
-  expect(membersLimit4.length, equals(8));
-  expect(membersLimit2.length, equals(8));
-  expect(membersClientId.length, equals(1));
-  expect(membersConnectionId.length, equals(0));
-
-
-  int timestampSorter(Map a, Map b){
+  int timestampSorter(Map a, Map b) {
     if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
         DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
       return 1;
@@ -122,15 +106,32 @@ Future testRestPresenceGet(FlutterDriver driver) async {
     }
   }
 
+  final membersInitial = transform(response.payload['membersInitial']);
+  expect(membersInitial.length, equals(0));
+
+  final membersDefault = transform(response.payload['membersDefault']);
+  expect(membersDefault.length, equals(8));
   testAllPresenceMembers(membersDefault..sort(timestampSorter));
+
+  final membersLimit4 = transform(response.payload['membersLimit4']);
+  expect(membersLimit4.length, equals(8));
   testAllPresenceMembers(membersLimit4..sort(timestampSorter));
+
+  final membersLimit2 = transform(response.payload['membersLimit2']);
+  expect(membersLimit2.length, equals(8));
   testAllPresenceMembers(membersLimit2..sort(timestampSorter));
 
   // there is only 1 client with clientId 'client-1
+  final membersClientId = transform(response.payload['membersClientId']);
+  expect(membersClientId.length, equals(1));
   expect(membersClientId[0]['clientId'], equals('client-1'));
   checkMessageData(1, membersClientId[0]['data']);
 
-  // TODO similarly check for membersConnectionId
+  // TODO similarly check for membersConnectionId after implementing
+  //  connection id (sync from platform) on realtime connection
+  final membersConnectionId =
+      transform(response.payload['membersConnectionId']);
+  expect(membersConnectionId.length, equals(0));
 }
 
 Future testRestPresenceHistory(FlutterDriver driver) async {
@@ -146,27 +147,39 @@ Future testRestPresenceHistory(FlutterDriver driver) async {
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final membersDefault = transform(response.payload['historyDefault']);
-  final membersLimit4 = transform(response.payload['historyLimit4']);
-  final membersLimit2 = transform(response.payload['historyLimit2']);
+  final historyInitial = transform(response.payload['historyInitial']);
+  expect(historyInitial.length, equals(0));
+
+  final historyDefault = transform(response.payload['historyDefault']);
+  expect(historyDefault.length, equals(8));
+  testAllPresenceMessagesHistory(historyDefault.reversed.toList());
+
+  final historyLimit4 = transform(response.payload['historyLimit4']);
+  expect(historyLimit4.length, equals(8));
+  testAllPresenceMessagesHistory(historyLimit4.reversed.toList());
+
+  final historyLimit2 = transform(response.payload['historyLimit2']);
+  expect(historyLimit2.length, equals(8));
+  testAllPresenceMessagesHistory(historyLimit2.reversed.toList());
+
   final historyForwards = transform(response.payload['historyForwards']);
-  final historyWithStart = transform(response.payload['historyWithStart']);
+  expect(historyForwards.length, equals(8));
+  testAllPresenceMessagesHistory(historyForwards.toList());
+
+  final historyWithStart =
+      transform(response.payload['historyWithStart']).reversed.toList();
+  expect(historyWithStart.length, equals(2));
+  expect(historyWithStart[0]['clientId'], equals('someClientId'));
+  expect(historyWithStart[0]['data'], equals('enter-start-time'));
+  expect(historyWithStart[1]['clientId'], equals('someClientId'));
+  expect(historyWithStart[1]['data'], equals('leave-end-time'));
+
   final historyWithStartAndEnd =
       transform(response.payload['historyWithStartAndEnd']);
+  expect(historyWithStartAndEnd.length, equals(1));
+  expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
+  expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
+
   final historyAll = transform(response.payload['historyAll']);
-
-  expect(membersDefault.length, equals(0));
-  expect(membersLimit4.length, equals(0));
-  expect(membersLimit2.length, equals(0));
-  expect(historyWithStart.length, equals(0));
-  expect(historyWithStartAndEnd.length, equals(0));
-  expect(historyAll.length, equals(0));
-
-  testAllPresenceMembers(membersDefault.toList());
-  testAllPresenceMembers(membersLimit4.toList());
-  testAllPresenceMembers(membersLimit2.toList());
-  testAllPresenceMembers(historyForwards.toList());
-  testAllPresenceMembers(historyWithStart.toList());
-  testAllPresenceMembers(historyWithStartAndEnd.toList());
-  testAllPresenceMembers(historyAll.toList());
+  expect(historyAll.length, equals(10));
 }

@@ -343,7 +343,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             final Map<String, Object> map = messageData.message;
             final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
             final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
-            final Object data = (String) map.get(PlatformConstants.TxTransportKeys.data);
+            final Object data = map.get(PlatformConstants.TxTransportKeys.data);
             final Presence presence = ablyLibrary
                     .getRealtime(messageData.handle)
                     .channels
@@ -367,7 +367,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             final Map<String, Object> map = messageData.message;
             final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
             final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
-            final Object data = (String) map.get(PlatformConstants.TxTransportKeys.data);
+            final Object data = map.get(PlatformConstants.TxTransportKeys.data);
             final Presence presence = ablyLibrary
                     .getRealtime(messageData.handle)
                     .channels
