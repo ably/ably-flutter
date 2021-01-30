@@ -6,6 +6,7 @@ import 'realtime_history_test.dart';
 import 'realtime_presence_enter_update_leave.dart';
 import 'realtime_presence_get.dart';
 import 'realtime_presence_history_test.dart';
+import 'realtime_presence_subscribe.dart';
 import 'realtime_publish_test.dart';
 import 'realtime_publish_with_auth_callback_test.dart';
 import 'realtime_subscribe.dart';
@@ -40,6 +41,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePresenceHistory: (d) => RealtimePresenceHistoryTest(d),
   TestName.realtimePresenceEnterUpdateLeave: (d) =>
       RealtimePresenceEnterUpdateLeaveTest(d),
+  TestName.realtimePresenceSubscribe: (d) => RealtimePresenceSubscribeTest(d),
   // helper tests
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),
   TestName.testHelperUnhandledExceptionTest: (d) =>

@@ -495,3 +495,47 @@ Future testRealtimeEnterUpdateLeave(FlutterDriver driver) async {
     );
   }
 }
+
+Future testRealtimePresenceSubscription(FlutterDriver driver) async {
+  const message = TestControlMessage(TestName.realtimePresenceSubscribe);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['allMessages'], isA<List>());
+  expect(response.payload['enterMessages'], isA<List>());
+  expect(response.payload['enterUpdateMessages'], isA<List>());
+  expect(response.payload['partialMessages'], isA<List>());
+
+  List<Map<String, dynamic>> transform(items) =>
+      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+
+  final allMessages = transform(response.payload['allMessages']);
+  final enterMessages = transform(response.payload['enterMessages']);
+  final enterUpdateMessages =
+      transform(response.payload['enterUpdateMessages']);
+  final partialMessages = transform(response.payload['partialMessages']);
+
+  expect(allMessages.length, equals(8));
+  expect(enterMessages.length, equals(1));
+  expect(enterUpdateMessages.length, equals(7));
+  expect(partialMessages.length, equals(7));
+
+  void _test(List<Map<String, dynamic>> messages) {
+    for (var i = 0; i < messages.length; i++) {
+      final message = messages[i];
+      expect(message['clientId'], equals('someClientId'));
+      expect(
+        message['action'],
+        (i == 0) ? 'enter' : ((i < 7) ? 'update' : 'leave'),
+      );
+      checkMessageData(i, message['data']);
+    }
+  }
+
+  _test(allMessages);
+  _test(enterMessages);
+  _test(enterUpdateMessages);
+  expect(partialMessages, equals(enterUpdateMessages));
+}

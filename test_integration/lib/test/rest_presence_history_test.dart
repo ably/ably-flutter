@@ -38,14 +38,13 @@ class RestPresenceHistoryTestState
     final realtimePresence =
         Realtime(options: options).channels.get('test').presence;
     // single client enters channel
-    await realtimePresence.enter(messagesToPublish[0][1]);
+    await realtimePresence.enter(messagesToPublish.first[1]);
     // updates, multiple times with different messages
     for (var i = 1; i < messagesToPublish.length - 1; i++) {
       await realtimePresence.update(messagesToPublish[i][1]);
     }
     // leaves channel
-    await realtimePresence
-        .leave(messagesToPublish[messagesToPublish.length - 1][1]);
+    await realtimePresence.leave(messagesToPublish.last[1]);
 
     final historyDefault = await _history(channel);
     await Future.delayed(const Duration(seconds: 2));
