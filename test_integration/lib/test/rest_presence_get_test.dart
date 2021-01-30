@@ -6,14 +6,14 @@ import 'data.dart';
 import 'encoders.dart';
 import 'test_widget_abstract.dart';
 
-class RestPresenceTest extends TestWidget {
-  const RestPresenceTest(TestDispatcherState dispatcher) : super(dispatcher);
+class RestPresenceGetTest extends TestWidget {
+  const RestPresenceGetTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  TestWidgetState<TestWidget> createState() => RestPresenceTestState();
+  TestWidgetState<TestWidget> createState() => RestPresenceGetTestState();
 }
 
-class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
+class RestPresenceGetTestState extends TestWidgetState<RestPresenceGetTest> {
   final logMessages = <List<String>>[];
 
   ClientOptions getClientOptions(
@@ -62,7 +62,7 @@ class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
 
     // TODO(tiholic) extract connection ID from realtime instance
     //  after implementing `id` update on connection object from platform
-    // Until then, `membersLimitConnectionId` will be empty list
+    // Until then, `membersConnectionId` will be empty list
     final membersConnectionId = await _members(
       channel,
       RestPresenceParams(connectionId: 'connection-1'),
