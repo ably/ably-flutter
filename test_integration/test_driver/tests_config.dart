@@ -23,9 +23,9 @@ final _tests = <TestGroup, Map<String, Function>>{
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,
     'should publish with authCallback': testRealtimePublishWithAuthCallback,
-    'should get Presence Members': testRestPresenceGet,
-    'should get Presence History': testRestPresenceHistory,
-
+    'should get Presence Members': testRealtimePresenceGet,
+    'should get Presence History': testRealtimePresenceHistory,
+    'should enter, update and leave Presence': testRealtimeEnterUpdateLeave,
   },
   // FlutterError seems to break the test app and needs to be run last
   TestGroup.helperTests: {
