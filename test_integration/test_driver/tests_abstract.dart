@@ -35,7 +35,7 @@ void runTests({
         test(
           testName,
           () => testFunction(driver),
-          timeout: const Timeout(Duration(seconds: 60)),
+          timeout: const Timeout(Duration(minutes: 2)),
         );
       });
     });
