@@ -82,19 +82,19 @@ void testAllPresenceMembers(
 }) {
   expect(membersObject, isA<List<Map<String, dynamic>>>());
   final members = membersObject as List;
-  for(var i=0; i<members.length; i++){
+  for (var i = 0; i < members.length; i++) {
     expect(members[i]['clientId'], equals('client-$i'));
     checkMessageData(i, members[i]['data']);
   }
 }
 
 void testAllPresenceMessagesHistory(
-    Object messagesHistory, {
-      Map<String, dynamic> filters,
-    }) {
+  Object messagesHistory, {
+  Map<String, dynamic> filters,
+}) {
   expect(messagesHistory, isA<List<Map<String, dynamic>>>());
   final history = messagesHistory as List;
-  for(var i=0; i<history.length; i++){
+  for (var i = 0; i < history.length; i++) {
     expect(history[i]['clientId'], equals('someClientId'));
     checkMessageData(i, history[i]['data']);
   }
