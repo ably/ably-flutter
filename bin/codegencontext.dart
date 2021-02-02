@@ -36,11 +36,10 @@ Iterable<Map<String, dynamic>> get _types sync* {
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
   var index = 128;
-  for(final platformType in platformTypes){
+  for (final platformType in platformTypes) {
     yield {'name': platformType, 'value': index++};
   }
 }
-
 
 ///Platform method names
 const List<Map<String, dynamic>> _platformMethods = [
