@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
         [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
         [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
+        [NSString stringWithFormat:@"%d", realtimePresenceParamsCodecType]: readRealtimePresenceParams,
+        [NSString stringWithFormat:@"%d", messageDataCodecType]: readMessageData,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -266,6 +268,18 @@ static AblyCodecDecoder readRestPresenceParams = ^ARTPresenceQuery*(NSDictionary
     READ_VALUE(o, connectionId, dictionary, TxRestPresenceParams_connectionId);
 
     return o;
+};
+
+static AblyCodecDecoder readRealtimePresenceParams = ^ARTRealtimePresenceQuery*(NSDictionary *const dictionary) {
+    ARTRealtimePresenceQuery *const o = [ARTRealtimePresenceQuery new];
+    READ_VALUE(o, clientId, dictionary, TxRealtimePresenceParams_clientId);
+    READ_VALUE(o, connectionId, dictionary, TxRealtimePresenceParams_connectionId);
+    READ_VALUE(o, waitForSync, dictionary, TxRealtimePresenceParams_waitForSync);
+    return o;
+};
+
+static AblyCodecDecoder readMessageData = ^id (NSDictionary *const dictionary) {
+    return [dictionary objectForKey: TxMessage_data];
 };
 
 @end
