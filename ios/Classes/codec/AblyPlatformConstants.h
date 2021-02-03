@@ -63,6 +63,7 @@ extern NSString *const TxTransportKeys_channelName;
 extern NSString *const TxTransportKeys_params;
 extern NSString *const TxTransportKeys_data;
 extern NSString *const TxTransportKeys_clientId;
+extern NSString *const TxTransportKeys_options;
 @end
 
 @interface TxAblyMessage : NSObject
