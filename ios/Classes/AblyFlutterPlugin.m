@@ -192,14 +192,14 @@ static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *co
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     [channel attach:^(ARTErrorInfo *_Nullable error){
-        if(error){
+        if (error) {
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
                     message:[NSString stringWithFormat:@"Error attaching to realtime channel; err = %@", [error message]]
                     details:error
                     ]);
-        }else{
+        } else {
             result(nil);
         }
     }];
@@ -217,14 +217,14 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *co
     ARTChannelOptions  *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     [channel detach:^(ARTErrorInfo *_Nullable error){
-        if(error){
+        if (error) {
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
                     message:[NSString stringWithFormat:@"Error detaching from realtime channel; err = %@", [error message]]
                     details:error
                     ]);
-        }else{
+        } else {
             result(nil);
         }
     }];
@@ -242,13 +242,13 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
-        if(error){
+        if (error) {
             result(
                    [FlutterError errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
                                        message:[NSString stringWithFormat:@"Error publishing realtime message; err = %@", [error message]]
                                        details:error]
                    );
-        }else{
+        } else {
             result(nil);
         }
     };
@@ -272,14 +272,14 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
     ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
     ARTRealtimeChannel *const channel = [client.channels get:channelName];
     const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
-        if(error){
+        if (error) {
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
                     message:[NSString stringWithFormat:@"Error getting realtime channel history; err = %@", [error message]]
                     details:error
                     ]);
-        }else{
+        } else {
             NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
             result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
         }
@@ -289,6 +289,135 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
     } else {
         [channel history:cbk];
     }
+};
+
+static const FlutterHandler _getRealtimePresence = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    ARTRealtimePresenceQuery *const dataQuery = (ARTRealtimePresenceQuery*)[_dataMap objectForKey: TxTransportKeys_params];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    const id cbk = ^(NSArray<ARTPresenceMessage *> * _Nullable presenceMembers, ARTErrorInfo * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error getting realtime channel presence; err = %@", [error message]]
+                    details:error
+                    ]);
+        } else {
+            result(presenceMembers);
+        }
+    };
+    if (dataQuery) {
+        [[channel presence] get:dataQuery callback:cbk];
+    } else {
+        [[channel presence] get:cbk];
+    }
+};
+
+static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*)[_dataMap objectForKey: TxTransportKeys_params];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error querying realtime channel presence history; err = %@", [error message]]
+                    details:error
+                    ]);
+        } else {
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
+            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+        }
+    };
+    if (dataQuery) {
+        [[channel presence] history:dataQuery callback:cbk error:nil];
+    } else {
+        [[channel presence] history:cbk];
+    }
+};
+
+static const FlutterHandler _enterRealtimePresence = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    NSString *const clientId = (NSString*)[_dataMap objectForKey: TxTransportKeys_clientId];
+    const id data = [_dataMap objectForKey: TxTransportKeys_data];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    [[channel presence] enterClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error entering realtime channel presence for %@; err = %@", channelName, [error message]]
+                    details:error
+                    ]);
+        } else {
+            result(nil);
+        }
+    }];
+};
+
+static const FlutterHandler _updateRealtimePresence = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    NSString *const clientId = (NSString*)[_dataMap objectForKey: TxTransportKeys_clientId];
+    const id data = [_dataMap objectForKey: TxTransportKeys_data];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    [[channel presence] updateClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error updating realtime channel presence for %@; err = %@", channelName, [error message]]
+                    details:error
+                    ]);
+        } else {
+            result(nil);
+        }
+    }];
+};
+
+static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey: TxTransportKeys_channelName];
+    NSString *const clientId = (NSString*)[_dataMap objectForKey: TxTransportKeys_clientId];
+    const id data = [_dataMap objectForKey: TxTransportKeys_data];
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    [[channel presence] leaveClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error leaving realtime channel presence for %@; err = %@", channelName, [error message]]
+                    details:error
+                    ]);
+        } else {
+            result(nil);
+        }
+    }];
 };
 
 static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -330,7 +459,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         }
     }];
 };
-
 
 
 @implementation AblyFlutterPlugin {
@@ -397,6 +525,11 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimeHistory: _getRealtimeHistory,
         AblyPlatformMethod_nextPage: _getNextPage,
         AblyPlatformMethod_firstPage: _getFirstPage,
+        AblyPlatformMethod_realtimePresenceGet: _getRealtimePresence,
+        AblyPlatformMethod_realtimePresenceHistory: _getRealtimePresenceHistory,
+        AblyPlatformMethod_realtimePresenceEnter: _enterRealtimePresence,
+        AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
+        AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
     };
     
     _nextRegistration = 1;

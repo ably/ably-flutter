@@ -244,7 +244,7 @@ static AblyCodecEncoder encodePresenceMessage = ^NSMutableDictionary*(ARTPresenc
     
     WRITE_VALUE(dictionary, TxPresenceMessage_id, [message id]);
     WRITE_VALUE(dictionary,
-                TxConnectionStateChange_current,
+                TxPresenceMessage_action,
                 [AblyFlutterWriter encodePresenceAction: [message action]]);
     WRITE_VALUE(dictionary, TxPresenceMessage_clientId, [message clientId]);
     WRITE_VALUE(dictionary, TxPresenceMessage_data, (NSObject *)[message data]);
