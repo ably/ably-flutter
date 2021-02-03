@@ -65,6 +65,7 @@ final public class PlatformConstants {
         public static final String params = "params";
         public static final String data = "data";
         public static final String clientId = "clientId";
+        public static final String options = "options";
     }
 
     static final public class TxAblyMessage {

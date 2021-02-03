@@ -43,6 +43,7 @@ NSString *const TxTransportKeys_channelName = @"channelName";
 NSString *const TxTransportKeys_params = @"params";
 NSString *const TxTransportKeys_data = @"data";
 NSString *const TxTransportKeys_clientId = @"clientId";
+NSString *const TxTransportKeys_options = @"options";
 @end
 
 @implementation TxAblyMessage

@@ -96,7 +96,13 @@ const List<Map<String, dynamic>> _platformMethods = [
 const List<Map<String, dynamic>> _objects = [
   {
     'name': 'TransportKeys',
-    'properties': <String>['channelName', 'params', 'data', 'clientId']
+    'properties': <String>[
+      'channelName',
+      'params',
+      'data',
+      'clientId',
+      'options',
+    ]
   },
   {
     'name': 'AblyMessage',

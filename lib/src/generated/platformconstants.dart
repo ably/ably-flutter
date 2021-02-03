@@ -65,6 +65,7 @@ class TxTransportKeys {
   static const String params = 'params';
   static const String data = 'data';
   static const String clientId = 'clientId';
+  static const String options = 'options';
 }
 
 class TxAblyMessage {
