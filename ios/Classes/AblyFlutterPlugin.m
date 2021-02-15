@@ -222,7 +222,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     NSDictionary *const realtimePayload = data.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:@"channel"];
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:@"options"];
-ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
         if(error){
             result(
