@@ -64,6 +64,8 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenRequest>(encodeTokenRequest, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, decodePaginatedResult),
+      CodecTypes.realtimeHistoryParams:
+          _CodecPair<RealtimeHistoryParams>(encodeRealtimeHistoryParams, null),
       CodecTypes.restHistoryParams:
           _CodecPair<RestHistoryParams>(encodeRestHistoryParams, null),
 
@@ -101,6 +103,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is Message) {
       return CodecTypes.message;
+    } else if (value is RealtimeHistoryParams) {
+      return CodecTypes.realtimeHistoryParams;
     } else if (value is RestHistoryParams) {
       return CodecTypes.restHistoryParams;
     } else if (value is ErrorInfo) {
@@ -260,6 +264,20 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  Map<String, dynamic> encodeRealtimeHistoryParams(
+      final RealtimeHistoryParams v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    writeToJson(jsonMap, TxRealtimeHistoryParams.start,
+        v.start?.millisecondsSinceEpoch);
+    writeToJson(
+        jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
+    writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
+    return jsonMap;
+  }
+
   /// Encodes [AblyMessage] to a Map
   /// returns null of passed value [v] is null
   Map<String, dynamic> encodeAblyMessage(final AblyMessage v) {
@@ -323,7 +341,7 @@ class Codec extends StandardMessageCodec {
     if (jsonMap == null) return null;
 
     return ClientOptions()
-    // AuthOptions (super class of ClientOptions)
+      // AuthOptions (super class of ClientOptions)
       ..authUrl = readFromJson<String>(jsonMap, TxClientOptions.authUrl)
       ..authMethod =
           readFromJson<HTTPMethods>(jsonMap, TxClientOptions.authMethod)
@@ -337,10 +355,10 @@ class Codec extends StandardMessageCodec {
       ..queryTime = readFromJson<bool>(jsonMap, TxClientOptions.queryTime)
       ..useTokenAuth = readFromJson<bool>(jsonMap, TxClientOptions.useTokenAuth)
 
-    // ClientOptions
+      // ClientOptions
       ..clientId = readFromJson<String>(jsonMap, TxClientOptions.clientId)
       ..logLevel = readFromJson<int>(jsonMap, TxClientOptions.logLevel)
-    //TODO handle logHandler
+      //TODO handle logHandler
       ..tls = readFromJson<bool>(jsonMap, TxClientOptions.tls)
       ..restHost = readFromJson<String>(jsonMap, TxClientOptions.restHost)
       ..realtimeHost =
@@ -561,8 +579,8 @@ class Codec extends StandardMessageCodec {
   Message decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final message = Message(
-      name: readFromJson<String>(jsonMap, TxMessage.name),
-      clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
+        name: readFromJson<String>(jsonMap, TxMessage.name),
+        clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
         data: readFromJson<dynamic>(jsonMap, TxMessage.data))
       ..id = readFromJson<String>(jsonMap, TxMessage.id)
       ..connectionId = readFromJson<String>(jsonMap, TxMessage.connectionId)

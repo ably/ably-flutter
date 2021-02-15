@@ -2,6 +2,7 @@ import '../test_dispatcher.dart';
 import 'app_key_provision_test.dart';
 import 'platform_and_ably_version_test.dart';
 import 'realtime_events_test.dart';
+import 'realtime_history_test.dart';
 import 'realtime_publish_test.dart';
 import 'realtime_publish_with_auth_callback_test.dart';
 import 'realtime_subscribe.dart';
@@ -24,6 +25,7 @@ final testFactory = <String, TestFactory>{
   TestName.restHistory: (d) => RestHistoryTest(d),
   TestName.restPublishWithAuthCallback: (d) =>
       RestPublishWithAuthCallbackTest(d),
+  TestName.realtimeHistory: (d) => RealtimeHistoryTest(d),
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),
   TestName.testHelperUnhandledExceptionTest: (d) =>
       TestHelperUnhandledExceptionTest(d),

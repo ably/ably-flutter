@@ -32,7 +32,7 @@ class Message {
   String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
         ' connectionId=$connectionId encoding=$encoding name=$name'
         ' data=$data extras=$extras';
-  }
+}
 
 abstract class MessageStatic {
   //TODO why is this class required?

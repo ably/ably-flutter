@@ -218,6 +218,30 @@ await channel.publish(messages: [
   ably.Message()..name="event1"..data = {"hello": "world"}
 ]);
 ```
+Get realtime history
+
+```dart
+void getHistory([ably.RealtimeHistoryParams params]) async {
+    var result = await channel.history(params);
+
+    var messages = result.items; //get messages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){    
+      result = await result.next();  //fetches next page results
+      messages = result.items;
+    }
+    if(!hasNextPage){
+      result = await result.first();  //fetches first page results
+      messages = result.items;
+    }
+}
+
+// history with default params
+getHistory();
+
+// sorted and filtered history
+getHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+```
 
 ## Caveats
 

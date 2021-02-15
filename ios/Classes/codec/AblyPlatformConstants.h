@@ -15,6 +15,7 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenRequestCodecType = 134,
     paginatedResultCodecType = 135,
     restHistoryParamsCodecType = 136,
+    realtimeHistoryParamsCodecType = 137,
     errorInfoCodecType = 144,
     connectionStateChangeCodecType = 201,
     channelStateChangeCodecType = 202,
@@ -43,6 +44,11 @@ extern NSString *const AblyPlatformMethod_restHistory;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
+@end
+
+@interface TxTransportKeys : NSObject
+extern NSString *const TxTransportKeys_channelName;
+extern NSString *const TxTransportKeys_params;
 @end
 
 @interface TxAblyMessage : NSObject
@@ -177,14 +183,17 @@ extern NSString *const TxPaginatedResult_type;
 extern NSString *const TxPaginatedResult_hasNext;
 @end
 
-@interface TxRestHistoryArguments : NSObject
-extern NSString *const TxRestHistoryArguments_channelName;
-extern NSString *const TxRestHistoryArguments_params;
-@end
-
 @interface TxRestHistoryParams : NSObject
 extern NSString *const TxRestHistoryParams_start;
 extern NSString *const TxRestHistoryParams_end;
 extern NSString *const TxRestHistoryParams_direction;
 extern NSString *const TxRestHistoryParams_limit;
+@end
+
+@interface TxRealtimeHistoryParams : NSObject
+extern NSString *const TxRealtimeHistoryParams_start;
+extern NSString *const TxRealtimeHistoryParams_end;
+extern NSString *const TxRealtimeHistoryParams_direction;
+extern NSString *const TxRealtimeHistoryParams_limit;
+extern NSString *const TxRealtimeHistoryParams_untilAttach;
 @end

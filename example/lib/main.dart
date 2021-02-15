@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
   StreamSubscription<ably.Message> _channelMessageSubscription;
   ably.Message channelMessage;
   ably.PaginatedResult<ably.Message> _restHistory;
+  ably.PaginatedResult<ably.Message> _realtimeHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -447,44 +448,101 @@ class _MyAppState extends State<MyApp> {
   int msgCounter = 1;
 
   Widget sendRestMessage() => FlatButton(
-        onPressed: () async {
-          print('Sending rest message');
-          try {
-            await _rest.channels
-                .get('test')
-                .publish(name: 'Hello', data: 'Flutter $msgCounter');
-            print('Rest message sent.');
-            setState(() {
-              ++msgCounter;
-            });
-          } on ably.AblyException catch (e) {
-            print('Rest message sending failed:: $e :: ${e.errorInfo}');
-          }
-        },
+        onPressed: (_rest == null)
+            ? null
+            : () async {
+                print('Sending rest message');
+                try {
+                  await _rest.channels
+                      .get('test')
+                      .publish(name: 'Hello', data: 'Flutter $msgCounter');
+                  print('Rest message sent.');
+                  setState(() {
+                    ++msgCounter;
+                  });
+                } on ably.AblyException catch (e) {
+                  print('Rest message sending failed:: $e :: ${e.errorInfo}');
+                }
+              },
         color: Colors.yellow,
         child: const Text('Publish'),
       );
 
   Widget getRestChannelHistory() => FlatButton(
-        onPressed: () async {
-          final next = _restHistory?.hasNext() ?? false;
-      print('Rest history: getting ${next ? 'next' : 'first'} page');
-      try {
-        if (_restHistory == null || _restHistory.items.isEmpty) {
-          final result = await _rest.channels.get('test').history(
-            ably.RestHistoryParams(direction: 'forwards', limit: 10),
-          );
-          _restHistory = result;
-        } else if (next) {
-          _restHistory = await _restHistory.next();
-        } else {
-          _restHistory = await _restHistory.first();
-        }
-        setState(() {});
-      } on ably.AblyException catch (e) {
-            print('failed to get history:: $e :: ${e.errorInfo}');
-          }
-        },
+        onPressed: (_rest == null)
+            ? null
+            : () async {
+                final next = _restHistory?.hasNext() ?? false;
+                print('Rest history: getting ${next ? 'next' : 'first'} page');
+                try {
+                  if (_restHistory == null || _restHistory.items.isEmpty) {
+                    final result = await _rest.channels.get('test').history(
+                        ably.RestHistoryParams(
+                            direction: 'forwards', limit: 10));
+                    _restHistory = result;
+                  } else if (next) {
+                    _restHistory = await _restHistory.next();
+                  } else {
+                    _restHistory = await _restHistory.first();
+                  }
+                  setState(() {});
+                } on ably.AblyException catch (e) {
+                  print('failed to get history:: $e :: ${e.errorInfo}');
+                }
+              },
+        onLongPress: (_rest == null)
+            ? null
+            : () async {
+                final result = await _rest.channels.get('test').history(
+                    ably.RestHistoryParams(direction: 'forwards', limit: 10));
+                setState(() {
+                  _restHistory = result;
+                });
+              },
+        color: Colors.yellow,
+        child: const Text('Get history'),
+      );
+
+  Widget getRealtimeChannelHistory() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                final next = _realtimeHistory?.hasNext() ?? false;
+                print('Rest history: getting ${next ? 'next' : 'first'} page');
+                try {
+                  if (_realtimeHistory == null ||
+                      _realtimeHistory.items.isEmpty) {
+                    final result =
+                        await _realtime.channels.get('test-channel').history(
+                              ably.RealtimeHistoryParams(
+                                direction: 'backwards',
+                                limit: 10,
+                                untilAttach: true,
+                              ),
+                            );
+                    _realtimeHistory = result;
+                  } else if (next) {
+                    _realtimeHistory = await _realtimeHistory.next();
+                  } else {
+                    _realtimeHistory = await _realtimeHistory.first();
+                  }
+                  setState(() {});
+                } on ably.AblyException catch (e) {
+                  print('failed to get history:: $e :: ${e.errorInfo}');
+                }
+              },
+        onLongPress: (_realtime == null)
+            ? null
+            : () async {
+                final result =
+                    await _realtime.channels.get('test-channel').history(
+                          ably.RealtimeHistoryParams(
+                              direction: 'forwards', limit: 10),
+                        );
+                setState(() {
+                  _realtimeHistory = result;
+                });
+              },
         color: Colors.yellow,
         child: const Text('Get history'),
       );
@@ -539,6 +597,12 @@ class _MyAppState extends State<MyApp> {
                   ),
                   Text('Message from channel: ${channelMessage?.data ?? '-'}'),
                   createChannelPublishButton(),
+                  getRealtimeChannelHistory(),
+                  const Text('History'),
+                  ..._realtimeHistory?.items
+                          ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
+                          ?.toList() ??
+                      [],
                   const Divider(),
                   createRestButton(),
                   Text('Rest: '

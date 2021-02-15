@@ -25,6 +25,7 @@ const List<Map<String, dynamic>> _types = [
   {'name': 'tokenRequest', 'value': 134},
   {'name': 'paginatedResult', 'value': 135},
   {'name': 'restHistoryParams', 'value': 136},
+  {'name': 'realtimeHistoryParams', 'value': 137},
   {'name': 'errorInfo', 'value': 144},
 
   // Events
@@ -79,6 +80,10 @@ const List<Map<String, dynamic>> _platformMethods = [
 ];
 
 const List<Map<String, dynamic>> _objects = [
+  {
+    'name': 'TransportKeys',
+    'properties': <String>['channelName', 'params']
+  },
   {
     'name': 'AblyMessage',
     'properties': <String>['registrationHandle', 'type', 'message']
@@ -214,16 +219,22 @@ const List<Map<String, dynamic>> _objects = [
     'properties': <String>['items', 'type', 'hasNext']
   },
   {
-    'name': 'RestHistoryArguments',
-    'properties': <String>['channelName', 'params']
-  },
-  {
     'name': 'RestHistoryParams',
     'properties': <String>[
       'start',
       'end',
       'direction',
       'limit',
+    ]
+  },
+  {
+    'name': 'RealtimeHistoryParams',
+    'properties': <String>[
+      'start',
+      'end',
+      'direction',
+      'limit',
+      'untilAttach',
     ]
   }
 ];

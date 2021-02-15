@@ -1,3 +1,5 @@
+import 'package:ably_flutter_plugin/src/spec/spec.dart';
+
 import 'auth.dart';
 import 'enums.dart';
 import 'rest/ably_base.dart';
@@ -236,13 +238,13 @@ class TokenRequest {
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE4
   int ttl;
 
-  TokenRequest(
-      {this.keyName,
-      this.nonce,
-      this.clientId,
-      this.mac,
-      this.capability,
-      this.timestamp,
+  TokenRequest({
+    this.keyName,
+    this.nonce,
+    this.clientId,
+    this.mac,
+    this.capability,
+    this.timestamp,
     this.ttl,
   });
 
@@ -316,8 +318,8 @@ class RealtimeHistoryParams extends RestHistoryParams {
   RealtimeHistoryParams({
     DateTime start,
     DateTime end,
-    String direction,
-    int limit,
+    String direction = 'backwards',
+    int limit = 100,
     this.untilAttach,
   }) : super(
           start: start,
