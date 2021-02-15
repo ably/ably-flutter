@@ -34,6 +34,7 @@ jobs:
         with:
           channel: "stable"
       - name: "Run Flutter Driver tests"
+        timeout-minutes: 90
         run: |
           flutter pub get
           cd test_integration && ./run_integration_tests.sh
@@ -56,7 +57,7 @@ jobs:
         with:
           channel: "stable"
       - name: "Run Flutter Driver tests"
-        timeout-minutes: 30
+        timeout-minutes: 90
         uses: reactivecircus/android-emulator-runner@v2
         # env:
         #   ANDROID_SIGN_PWD: ${{ secrets.ANDROID_SIGN_PWD }}
