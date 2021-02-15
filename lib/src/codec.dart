@@ -60,6 +60,8 @@ class Codec extends StandardMessageCodec {
             CodecTypes.tokenParams: _CodecPair<TokenParams>(encodeTokenParams, decodeTokenParams),
             CodecTypes.tokenDetails: _CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
             CodecTypes.tokenRequest: _CodecPair<TokenRequest>(encodeTokenRequest, null),
+            CodecTypes.paginatedResult: _CodecPair<PaginatedResult>(null, decodePaginatedResult),
+            CodecTypes.restHistoryParams: _CodecPair<RestHistoryParams>(encodeRestHistoryParams, null),
 
             CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
             CodecTypes.message: _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
@@ -92,6 +94,8 @@ class Codec extends StandardMessageCodec {
           return CodecTypes.tokenRequest;
         } else if (value is Message) {
           return CodecTypes.message;
+        } else if (value is RestHistoryParams) {
+          return CodecTypes.restHistoryParams;
         } else if (value is ErrorInfo) {
             return CodecTypes.errorInfo;
         } else if (value is AblyMessage) {
@@ -221,6 +225,16 @@ class Codec extends StandardMessageCodec {
       writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
       writeToJson(jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
       writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
+      return jsonMap;
+    }
+
+    Map<String, dynamic> encodeRestHistoryParams(final RestHistoryParams v){
+      if(v==null) return null;
+      var jsonMap = <String, dynamic>{};
+      writeToJson(jsonMap, TxRestHistoryParams.start, v.start?.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
+      writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
+      writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
       return jsonMap;
     }
 
@@ -505,4 +519,14 @@ class Codec extends StandardMessageCodec {
       return message;
     }
 
+    PaginatedResult<Object> decodePaginatedResult(Map<String, dynamic> jsonMap) {
+      if (jsonMap == null) return null;
+      var type = readFromJson<int>(jsonMap, TxPaginatedResult.type);
+      var items = readFromJson<List>(jsonMap, TxPaginatedResult.items)
+              ?.map((e) => codecMap[type].decode(toJsonMap(e)))
+              ?.toList() ??
+          [];
+      return PaginatedResult(
+          items, readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
+    }
 }

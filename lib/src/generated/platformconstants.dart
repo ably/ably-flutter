@@ -11,6 +11,8 @@ class CodecTypes {
     static const int tokenParams = 132;
     static const int tokenDetails = 133;
     static const int tokenRequest = 134;
+    static const int paginatedResult = 135;
+    static const int restHistoryParams = 136;
     static const int errorInfo = 144;
     static const int connectionStateChange = 201;
     static const int channelStateChange = 202;
@@ -34,6 +36,10 @@ class PlatformMethod {
     static const String onRealtimeConnectionStateChanged = 'onRealtimeConnectionStateChanged';
     static const String onRealtimeChannelStateChanged = 'onRealtimeChannelStateChanged';
     static const String onRealtimeChannelMessage = 'onRealtimeChannelMessage';
+    static const String restHistory = 'restHistory';
+    static const String realtimeHistory = 'realtimeHistory';
+    static const String nextPage = 'nextPage';
+    static const String firstPage = 'firstPage';
 }
 
 class TxAblyMessage {
@@ -160,4 +166,22 @@ class TxMessage {
     static const String data = "data";
     static const String name = "name";
     static const String extras = "extras";
+}
+
+class TxPaginatedResult {
+    static const String items = "items";
+    static const String type = "type";
+    static const String hasNext = "hasNext";
+}
+
+class TxRestHistoryArguments {
+    static const String channelName = "channelName";
+    static const String params = "params";
+}
+
+class TxRestHistoryParams {
+    static const String start = "start";
+    static const String end = "end";
+    static const String direction = "direction";
+    static const String limit = "limit";
 }

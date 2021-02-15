@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
 import '../platform_object.dart';
+import '../message.dart';
 import 'rest.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
@@ -34,10 +35,14 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   Future<int> createPlatformInstance() async => await restPlatformObject.handle;
 
   @override
-  Future<spec.PaginatedResult<spec.Message>> history(
-      [spec.RestHistoryParams params]) {
-    // TODO: implement history
-    return null;
+  Future<PaginatedResult<spec.Message>> history(
+      [spec.RestHistoryParams params]) async {
+    var message = await invoke<AblyMessage>(
+        PlatformMethod.restHistory, {
+          TxRestHistoryArguments.channelName: name,
+          if (params!=null) TxRestHistoryArguments.params: params
+        });
+    return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();

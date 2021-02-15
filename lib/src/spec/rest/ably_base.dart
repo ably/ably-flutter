@@ -27,7 +27,7 @@ abstract class AblyBase {
   static PresenceMessageStatic presenceMessage;
   Auth auth;
   Push push;
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]);
+  Future<PaginatedResultInterface<Stats>> stats([Map<String, dynamic> params]);
   Future<HttpPaginatedResponse> request({
     @required String method,
     @required String path,

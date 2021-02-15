@@ -18,7 +18,7 @@ abstract class RestChannel {
   String name;
   ChannelOptions options;
   Presence presence;
-  Future<PaginatedResult<Message>> history([RestHistoryParams params]);
+  Future<PaginatedResultInterface<Message>> history([RestHistoryParams params]);
   Future<void> publish({
     Message message,
     List<Message> messages,

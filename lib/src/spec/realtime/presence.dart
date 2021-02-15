@@ -1,12 +1,12 @@
-import '../enums.dart';
 import '../common.dart';
+import '../enums.dart';
 import '../message.dart';
 
 
 abstract class RealtimePresence {
   bool syncComplete;
   Future<List<PresenceMessage>> get([RealtimePresenceParams params]);
-  Future<PaginatedResult<PresenceMessage>> history([RealtimeHistoryParams params]);
+  Future<PaginatedResultInterface<PresenceMessage>> history([RealtimeHistoryParams params]);
   Future<void> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,

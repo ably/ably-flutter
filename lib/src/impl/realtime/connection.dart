@@ -57,7 +57,6 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   @override
   Future<int> ping() {
-    // TODO: implement ping
-    return null;
+    throw UnimplementedError();
   }
 }

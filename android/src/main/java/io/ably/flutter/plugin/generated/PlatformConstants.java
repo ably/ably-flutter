@@ -16,6 +16,8 @@ final public class PlatformConstants {
         public static final byte tokenParams = (byte) 132;
         public static final byte tokenDetails = (byte) 133;
         public static final byte tokenRequest = (byte) 134;
+        public static final byte paginatedResult = (byte) 135;
+        public static final byte restHistoryParams = (byte) 136;
         public static final byte errorInfo = (byte) 144;
         public static final byte connectionStateChange = (byte) 201;
         public static final byte channelStateChange = (byte) 202;
@@ -39,6 +41,10 @@ final public class PlatformConstants {
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
+        public static final String restHistory = "restHistory";
+        public static final String realtimeHistory = "realtimeHistory";
+        public static final String nextPage = "nextPage";
+        public static final String firstPage = "firstPage";
     }
 
     static final public class TxAblyMessage {
@@ -165,6 +171,24 @@ final public class PlatformConstants {
         public static final String data = "data";
         public static final String name = "name";
         public static final String extras = "extras";
+    }
+
+    static final public class TxPaginatedResult {
+        public static final String items = "items";
+        public static final String type = "type";
+        public static final String hasNext = "hasNext";
+    }
+
+    static final public class TxRestHistoryArguments {
+        public static final String channelName = "channelName";
+        public static final String params = "params";
+    }
+
+    static final public class TxRestHistoryParams {
+        public static final String start = "start";
+        public static final String end = "end";
+        public static final String direction = "direction";
+        public static final String limit = "limit";
     }
 
 }

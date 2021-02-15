@@ -21,6 +21,8 @@ List<Map<String, dynamic>> _types = [
   {"name": "tokenParams", "value": 132},
   {"name": "tokenDetails", "value": 133},
   {"name": "tokenRequest", "value": 134},
+  {"name": "paginatedResult", "value": 135},
+  {"name": "restHistoryParams", "value": 136},
   {"name": "errorInfo", "value": 144},
 
   // Events
@@ -55,6 +57,14 @@ List<Map<String, dynamic>> _platformMethods = [
   {"name": "onRealtimeConnectionStateChanged", "value": "onRealtimeConnectionStateChanged"},
   {"name": "onRealtimeChannelStateChanged", "value": "onRealtimeChannelStateChanged"},
   {"name": "onRealtimeChannelMessage", "value": "onRealtimeChannelMessage"},
+
+  // History
+  {"name": "restHistory", "value": "restHistory"},
+  {"name": "realtimeHistory", "value": "realtimeHistory"},
+
+  // Paginated results
+  {"name": "nextPage", "value": "nextPage"},
+  {"name": "firstPage", "value": "firstPage"},
 ];
 
 List<Map<String, dynamic>> objects = [
@@ -206,6 +216,30 @@ List<Map<String, dynamic>> objects = [
       "data",
       "name",
       "extras"
+    ]
+  },
+  {
+    "name": "PaginatedResult",
+    "properties": <String>[
+      "items",
+      "type",
+      "hasNext"
+    ]
+  },
+  {
+    "name": "RestHistoryArguments",
+    "properties": <String>[
+      "channelName",
+      "params"
+    ]
+  },
+  {
+    "name": "RestHistoryParams",
+    "properties": <String>[
+      "start",
+      "end",
+      "direction",
+      "limit",
     ]
   }
 ];

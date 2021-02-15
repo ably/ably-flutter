@@ -98,6 +98,32 @@ await channel.publish(data: "Ably");
 await channel.publish();
 ```
 
+Get REST history:
+
+```dart
+void getHistory([ably.RestHistoryParams params]) async {
+    // getting channel history, by passing or omitting the optional params
+    var result = await channel.history(params);
+
+    var messages = result.items; //get messages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){    
+      result = await result.next();  //fetches next page results
+      messages = result.items;
+    }
+    if(!hasNextPage){
+      result = await result.first();  //fetches first page results
+      messages = result.items;
+    }
+}
+
+// history with default params
+getHistory();
+
+// sorted and filtered history
+getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
+```
+
 ### Using the Realtime API
 
 Creating the Realtime client instance:
