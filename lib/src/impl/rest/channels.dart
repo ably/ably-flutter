@@ -6,8 +6,8 @@ import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/spec.dart' as spec;
-import '../platform_object.dart';
 import '../message.dart';
+import '../platform_object.dart';
 import 'rest.dart';
 
 class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
@@ -32,16 +32,16 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
   @override
-  Future<int> createPlatformInstance() async => await restPlatformObject.handle;
+  Future<int> createPlatformInstance() async => restPlatformObject.handle;
 
   @override
-  Future<PaginatedResult<spec.Message>> history(
-      [spec.RestHistoryParams params]) async {
-    var message = await invoke<AblyMessage>(
-        PlatformMethod.restHistory, {
-          TxRestHistoryArguments.channelName: name,
-          if (params!=null) TxRestHistoryArguments.params: params
-        });
+  Future<PaginatedResult<spec.Message>> history([
+    spec.RestHistoryParams params,
+  ]) async {
+    final message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
+      TxRestHistoryArguments.channelName: name,
+      if (params != null) TxRestHistoryArguments.params: params
+    });
     return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
@@ -53,21 +53,17 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
     Message message,
     List<Message> messages,
     String name,
-    dynamic data,
+    Object data,
   }) async {
-    if(messages == null){
+    var _messages = messages;
+    if (_messages == null) {
       if (message != null) {
-        messages = [message];
+        _messages = [message];
       } else {
-        messages ??= [
-          spec.Message(
-            name: name,
-            data: data
-          )
-        ];
+        _messages = [Message(name: name, data: data)];
       }
     }
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -115,18 +111,27 @@ class RestPlatformChannel extends PlatformObject implements spec.RestChannel {
           _authCallbackCompleter = Completer<void>();
           try {
             await _authCallbackCompleter.future.timeout(
-                Timeouts.retryOperationOnAuthFailure,
-                onTimeout: () => _publishQueue
-                    .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(TimeoutException(
-                        'Timed out', Timeouts.retryOperationOnAuthFailure))));
+              Timeouts.retryOperationOnAuthFailure,
+              onTimeout: () => _publishQueue
+                  .where((e) => !e.completer.isCompleted)
+                  .forEach((e) => e.completer.completeError(
+                        TimeoutException(
+                          'Timed out',
+                          Timeouts.retryOperationOnAuthFailure,
+                        ),
+                      )),
+            );
           } finally {
             _authCallbackCompleter = null;
           }
         } else {
-          _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-            e.completer.completeError(
-              spec.AblyException(pe.code, pe.message, pe.details)));
+          _publishQueue
+              .where((e) => !e.completer.isCompleted)
+              .forEach((e) => e.completer.completeError(spec.AblyException(
+                    pe.code,
+                    pe.message,
+                    pe.details as ErrorInfo,
+                  )));
         }
       }
     }
@@ -142,8 +147,8 @@ class RestPlatformChannels extends spec.RestChannels<RestPlatformChannel> {
   RestPlatformChannels(Rest ably) : super(ably);
 
   @override
-  RestPlatformChannel createChannel(name, options) =>
-    RestPlatformChannel(ably, name, options);
+  RestPlatformChannel createChannel(String name, ChannelOptions options) =>
+      RestPlatformChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

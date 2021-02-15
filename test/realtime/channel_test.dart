@@ -15,12 +15,12 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   // Used to generate unique handle ids
-  var handleCounter;
+  int handleCounter;
 
   // Keep created channel instances associated with its handle.
   final channels = <int, AblyMessage>{};
 
-  var publishedMessages = <AblyMessage>[];
+  final publishedMessages = <AblyMessage>[];
 
   setUp(() {
     channels.clear();
@@ -28,7 +28,7 @@ void main() {
     handleCounter = 0;
     var isAuthenticated = false;
 
-    methodChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+    methodChannel.setMockMethodCallHandler((methodCall) async {
 
       switch (methodCall.method) {
         case PlatformMethod.registerAbly:
@@ -61,8 +61,8 @@ void main() {
           return null;
 
         default:
-          return throw 'Unexpected channel method call: ${methodCall.method}'
-            ' args: ${methodCall.arguments}';
+          return throw Exception('Unexpected method call: ${methodCall.method}'
+            ' args: ${methodCall.arguments}');
       }
     });
   });
@@ -74,7 +74,7 @@ void main() {
   test('publish realtime message without authCallback', () async {
     // setup
     final realtime = Realtime(key: 'TEST-KEY');
-    final channel = await realtime.channels.get('test');
+    final channel = realtime.channels.get('test');
 
     // exercise
     await channel.publish(name: 'name', data: 'data1');
@@ -85,7 +85,6 @@ void main() {
     expect(publishedMessages.length, 3);
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
-    print("messageData $messageData");
     expect(messageData['channel'], 'test');
     expect(messageData['name'], 'name');
     expect(messageData['data'], 'data1');
@@ -118,7 +117,7 @@ void main() {
   test('publish realtime message with authCallback timing out', () async {
     // setup
     final tooMuchDelay =
-      Timeouts.retryOperationOnAuthFailure + Duration(seconds: 2);
+      Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
     var authCallbackCounter = 0;
 
     Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {

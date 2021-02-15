@@ -1,12 +1,12 @@
+//ignore_for_file: avoid_print
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-
 Future testPlatformAndAblyVersion(FlutterDriver driver) async {
   final data = {'message': 'foo'};
   final message =
-  TestControlMessage(TestName.platformAndAblyVersion, payload: data);
+      TestControlMessage(TestName.platformAndAblyVersion, payload: data);
 
   final response = await getTestResponse(driver, message);
 
@@ -21,22 +21,20 @@ Future testPlatformAndAblyVersion(FlutterDriver driver) async {
 Future testDemoDependencies(FlutterDriver driver) async {
   final data = {'message': 'foo'};
   final message =
-  TestControlMessage(TestName.appKeyProvisioning, payload: data);
+      TestControlMessage(TestName.appKeyProvisioning, payload: data);
 
   final response = await getTestResponse(driver, message);
 
-  print("response.payload ${response.payload}");
+  print('response.payload ${response.payload}');
 
   expect(response.testName, message.testName);
 
   expect(response.payload['appKey'], isA<String>());
   expect(response.payload['appKey'], isNotEmpty);
 
-
   print('response.payload:: ${response.payload}');
 
-
-  var tokenRequest = response.payload['tokenRequest'];
+  final tokenRequest = response.payload['tokenRequest'];
 
   expect(tokenRequest['keyName'], isA<String>());
   expect(tokenRequest['keyName'], isNotEmpty);
@@ -47,7 +45,7 @@ Future testDemoDependencies(FlutterDriver driver) async {
   expect(tokenRequest['mac'], isA<String>());
   expect(tokenRequest['mac'], isNotEmpty);
 
-  expect(tokenRequest['timestamp'], isA<int>());;
+  expect(tokenRequest['timestamp'], isA<int>());
 
   expect(tokenRequest['ttl'], isA<int>());
 }

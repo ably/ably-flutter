@@ -1,7 +1,6 @@
 import 'common.dart';
 import 'rest/options.dart';
 
-
 class AuthBase {
   String clientId;
 }
@@ -9,14 +8,16 @@ class AuthBase {
 abstract class Auth extends AuthBase {
   Future<TokenDetails> authorize({
     TokenParams tokenParams,
-    AuthOptions authOptions
+    AuthOptions authOptions,
   });
+
   Future<TokenRequest> createTokenRequest({
     TokenParams tokenParams,
-    AuthOptions authOptions
+    AuthOptions authOptions,
   });
+
   Future<TokenDetails> requestToken({
     TokenParams tokenParams,
-    AuthOptions authOptions
+    AuthOptions authOptions,
   });
 }

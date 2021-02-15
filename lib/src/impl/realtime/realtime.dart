@@ -19,8 +19,10 @@ Map<int, Realtime> get realtimeInstances =>
 
 class Realtime extends PlatformObject
     implements spec.RealtimeInterface<RealtimePlatformChannels> {
-  Realtime({ClientOptions options, final String key})
-      : assert(options != null || key != null),
+  Realtime({
+    ClientOptions options,
+    final String key,
+  })  : assert(options != null || key != null),
         options = options ?? ClientOptions.fromKey(key),
         super() {
     _connection = ConnectionPlatformObject(this);
@@ -29,15 +31,17 @@ class Realtime extends PlatformObject
 
   @override
   Future<int> createPlatformInstance() async {
-    var handle = await invokeRaw<int>(
-        PlatformMethod.createRealtimeWithOptions, AblyMessage(options));
+    final handle = await invokeRaw<int>(
+      PlatformMethod.createRealtimeWithOptions,
+      AblyMessage(options),
+    );
     _realtimeInstances[handle] = this;
     return handle;
   }
 
   // The _connection instance keeps a reference to this platform object.
-  // Ideally connection would be final, but that would need 'late final' which is coming.
-  // https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
+  // Ideally connection would be final, but that would need 'late final'
+  // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
   Connection _connection;
 
   @override
@@ -61,7 +65,7 @@ class Realtime extends PlatformObject
   RealtimePlatformChannels get channels => _channels;
 
   @override
-  Future<void> close() async => await invoke(PlatformMethod.closeRealtime);
+  Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   final _connectQueue = Queue<Completer<void>>();
   Completer<void> _authCallbackCompleter;
@@ -104,7 +108,7 @@ class Realtime extends PlatformObject
     _connecting = false;
   }
 
-  void awaitAuthUpdateAndReconnect() async {
+  Future<void> awaitAuthUpdateAndReconnect() async {
     if (_authCallbackCompleter != null) {
       return;
     }
@@ -112,9 +116,14 @@ class Realtime extends PlatformObject
     try {
       await _authCallbackCompleter.future.timeout(
           Timeouts.retryOperationOnAuthFailure,
-          onTimeout: () => _connectQueue.where((e) => !e.isCompleted).forEach(
-              (e) => e.completeError(TimeoutException(
-                  'Timed out', Timeouts.retryOperationOnAuthFailure))));
+          onTimeout: () => _connectQueue
+              .where((e) => !e.isCompleted)
+              .forEach((e) => e.completeError(
+                    TimeoutException(
+                      'Timed out',
+                      Timeouts.retryOperationOnAuthFailure,
+                    ),
+                  )));
     } finally {
       _authCallbackCompleter = null;
     }
@@ -123,16 +132,19 @@ class Realtime extends PlatformObject
 
   void authUpdateComplete() {
     _authCallbackCompleter?.complete();
-    channels.all.forEach((c) => c.authUpdateComplete());
+    for (final channel in channels.all) {
+      channel.authUpdateComplete();
+    }
   }
 
   @override
-  Future<HttpPaginatedResponse> request(
-      {String method,
-      String path,
-      Map<String, dynamic> params,
-      body,
-      Map<String, String> headers}) {
+  Future<HttpPaginatedResponse> request({
+    String method,
+    String path,
+    Map<String, dynamic> params,
+    Object body,
+    Map<String, String> headers,
+  }) {
     throw UnimplementedError();
   }
 

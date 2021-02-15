@@ -1,6 +1,7 @@
 import 'auth.dart';
 import 'enums.dart';
 import 'rest/ably_base.dart';
+import 'spec.dart';
 
 //==============================================================================
 //==========================    ABSTRACT CLASSES    ============================
@@ -25,16 +26,17 @@ class ErrorInfo {
   final int statusCode;
   final String requestId;
 
-  ErrorInfo({
-    this.code, this.href, this.message,
-    this.cause, this.statusCode, this.requestId
-  });
+  ErrorInfo(
+      {this.code,
+      this.href,
+      this.message,
+      this.cause,
+      this.statusCode,
+      this.requestId});
 
   @override
-  String toString() {
-    return 'ErrorInfo message=$message code=$code statusCode=$statusCode href=$href';
-  }
-
+  String toString() => 'ErrorInfo message=$message code=$code '
+      'statusCode=$statusCode href=$href';
 }
 
 abstract class StatsMessageCount {
@@ -84,7 +86,6 @@ abstract class StatsMessageTraffic {
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK1
 class TokenParams {
-
   /// Capability of the token.
   ///
   /// If the token request is successful, the capability of the
@@ -92,7 +93,7 @@ class TokenParams {
   /// with the capability of the issuing key.
   ///
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TK2b
-  String  capability;
+  String capability;
 
   /// A clientId to associate with this token.
   ///
@@ -133,16 +134,14 @@ class TokenParams {
     this.clientId,
     this.nonce,
     this.timestamp,
-    this.ttl
+    this.ttl,
   });
-
 }
 
 /// Response to a `requestToken` request
 ///
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD1
 class TokenDetails {
-
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD2
   String token;
 
@@ -172,27 +171,26 @@ class TokenDetails {
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TD6
   String clientId;
 
-  TokenDetails(this.token, {
+  TokenDetails(
+    this.token, {
     this.expires,
     this.issued,
     this.capability,
-    this.clientId
+    this.clientId,
   });
 
   /// TD7
-  TokenDetails.fromMap(Map<String, dynamic> map){
+  TokenDetails.fromMap(Map<String, dynamic> map) {
     token = map['token'] as String;
     expires = map['expires'] as int;
     issued = map['issued'] as int;
     capability = map['capability'] as String;
     clientId = map['clientId'] as String;
   }
-
 }
 
 /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE1
 class TokenRequest {
-
   /// [keyName] is the first part of Ably API Key.
   ///
   /// provided keyName will be used to authorize requests made to Ably.
@@ -245,32 +243,33 @@ class TokenRequest {
     this.mac,
     this.capability,
     this.timestamp,
-    this.ttl
+    this.ttl,
   });
 
   /// spec: https://docs.ably.io/client-lib-development-guide/features/#TE7
-  TokenRequest.fromMap(Map<String, dynamic> map){
-    this.keyName = map["keyName"] as String;
-    this.nonce = map["nonce"] as String;
-    this.mac = map["mac"] as String;
-    this.capability = map["capability"] as String;
-    this.clientId = map["clientId"] as String;
-    this.timestamp = DateTime.fromMillisecondsSinceEpoch(map["timestamp"] as int);
-    this.ttl = map["ttl"] as int;
+  TokenRequest.fromMap(Map<String, dynamic> map) {
+    keyName = map['keyName'] as String;
+    nonce = map['nonce'] as String;
+    mac = map['mac'] as String;
+    capability = map['capability'] as String;
+    clientId = map['clientId'] as String;
+    timestamp = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
+    ttl = map['ttl'] as int;
   }
-
 }
 
 /// Params for rest history
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSL2b
 class RestHistoryParams {
-  /// start must be equal to or less than end and is unaffected by the request direction
+  /// [start] must be equal to or less than end and is unaffected
+  /// by the request direction
   ///
   /// RLS2b1
   final DateTime start;
 
-  /// end must be equal to or greater than start and is unaffected by the request direction
+  /// [end] must be equal to or greater than start and is unaffected
+  /// by the request direction
   ///
   /// RLS2b1
   final DateTime end;
@@ -283,18 +282,17 @@ class RestHistoryParams {
 
   /// Number of items returned in one page
   ///
-  /// limit supports up to 1,000 items.
+  /// [limit] supports up to 1,000 items.
   /// if omitted the direction defaults to the REST API default (100)
   /// RLS2b3
   final int limit;
 
-  RestHistoryParams(
-      {DateTime start,
-      DateTime end,
-      String direction = 'backwards',
-      this.limit = 100})
-      : assert(direction == 'backwards' || direction == 'forwards'),
-        direction = direction,
+  RestHistoryParams({
+    DateTime start,
+    DateTime end,
+    this.direction = 'backwards',
+    this.limit = 100,
+  })  : assert(direction == 'backwards' || direction == 'forwards'),
         start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
         end = end ?? DateTime.now();
 }
@@ -307,13 +305,18 @@ class RealtimeHistoryParams extends RestHistoryParams {
   /// was attached or emitted an UPDATE indicating loss of continuity.
   bool untilAttach;
 
-  RealtimeHistoryParams(
-      {DateTime start,
-      DateTime end,
-      String direction,
-      int limit,
-      this.untilAttach})
-      : super(start: start, end: end, direction: direction, limit: limit);
+  RealtimeHistoryParams({
+    DateTime start,
+    DateTime end,
+    String direction,
+    int limit,
+    this.untilAttach,
+  }) : super(
+          start: start,
+          end: end,
+          direction: direction,
+          limit: limit,
+        );
 }
 
 class RestPresenceParams {
@@ -324,7 +327,7 @@ class RestPresenceParams {
   RestPresenceParams({
     this.limit,
     this.clientId,
-    this.connectionId
+    this.connectionId,
   });
 }
 
@@ -333,23 +336,32 @@ class RealtimePresenceParams {
   String clientId;
   String connectionId;
 
-  RealtimePresenceParams({this.waitForSync, this.clientId, this.connectionId});
+  RealtimePresenceParams({
+    this.waitForSync,
+    this.clientId,
+    this.connectionId,
+  });
 }
 
 /// An exception generated by the client library SDK called by this plugin.
 class AblyException implements Exception {
-
   final String code;
   final String message;
   final ErrorInfo errorInfo;
 
-  AblyException([this.code, this.message, this.errorInfo]);
+  AblyException([
+    this.code,
+    this.message,
+    this.errorInfo,
+  ]);
 
+  @override
   String toString() {
-    if (message == null) return "AblyException";
-    return "AblyException: $message (${(code==null)?"":'$code '})";
+    if (message == null) {
+      return 'AblyException (${(code == null) ? "" : '$code '})';
+    }
+    return 'AblyException: $message (${(code == null) ? "" : '$code '})';
   }
-
 }
 
 class ChannelStateChange {
@@ -358,9 +370,13 @@ class ChannelStateChange {
   final ChannelState previous;
   ErrorInfo reason;
   final bool resumed;
-  ChannelStateChange(this.current, this.previous, this.event, {
+
+  ChannelStateChange(
+    this.current,
+    this.previous,
+    this.event, {
     this.reason,
-    this.resumed=false
+    this.resumed = false,
   });
 }
 
@@ -370,52 +386,55 @@ class ConnectionStateChange {
   final ConnectionState previous;
   ErrorInfo reason;
   int retryIn;
-  ConnectionStateChange(this.current, this.previous, this.event, {
+
+  ConnectionStateChange(
+    this.current,
+    this.previous,
+    this.event, {
     this.reason,
-    this.retryIn
+    this.retryIn,
   });
 }
 
 abstract class DevicePushDetails {
   dynamic recipient;
-  DevicePushState state;  //optional
-  ErrorInfo errorReason;  //optional
+  DevicePushState state; //optional
+  ErrorInfo errorReason; //optional
 }
 
 abstract class DeviceDetails {
   String id;
-  String clientId;  //optional
+  String clientId; //optional
   DevicePlatform platform;
   FormFactor formFactor;
   dynamic metadata; //optional
-  String deviceSecret;  //optional
+  String deviceSecret; //optional
   DevicePushDetails push; //optional
 }
 
 abstract class PushChannelSubscription {
   String channel;
-  String deviceId;  //optional
-  String clientId;  //optional
+  String deviceId; //optional
+  String clientId; //optional
 }
 
 abstract class DeviceRegistrationParams {
-  String clientId;  //optional
-  String deviceId;  //optional
-  int limit;  //optional
-  DevicePushState state;  //optional
+  String clientId; //optional
+  String deviceId; //optional
+  int limit; //optional
+  DevicePushState state; //optional
 }
 
 abstract class PushChannelSubscriptionParams {
-  String channel;  //optional
-  String clientId;  //optional
-  String deviceId;  //optional
-  int limit;    //optional
+  String channel; //optional
+  String clientId; //optional
+  String deviceId; //optional
+  int limit; //optional
 }
 
 abstract class PushChannelsParams {
-  int limit;    //optional
+  int limit; //optional
 }
-
 
 // Internal Classes
 /// Interface implemented by event listeners, returned by event emitters.
@@ -423,19 +442,19 @@ abstract class EventListener<E> {
   /// Register for all events (no parameter), or a specific event.
   Stream<E> on([E event]);
 
-  /// Register for a single occurrence of any event (no parameter), or a specific event.
+  /// Register for a single occurrence of any event (no parameter),
+  /// or a specific event.
   Future<E> once([E event]);
 
   /// Remove registrations for this listener, irrespective of type.
   Future<void> off();
 }
 
-/// Interface implemented by Ably classes that can emit events, offering the capability
-/// to create listeners for those events.
+/// Interface implemented by Ably classes that can emit events,
+/// offering the capability to create listeners for those events.
 /// [E] is type of event to listen for
 /// [G] is the instance which will be passed back in streams
 abstract class EventEmitter<E, G> {
-
   // Remove all listener registrations, irrespective of type.
   // Future<void> off();
 
@@ -488,33 +507,29 @@ class Stats {
 }
 
 abstract class Channels<ChannelType> {
-
   Channels(this.ably);
 
   AblyBase ably;
-  Map<String, ChannelType> _channels = {};
+  final _channels = <String, ChannelType>{};
 
-  ChannelType createChannel(name, options);
+  ChannelType createChannel(String name, ChannelOptions options);
 
   Iterable<ChannelType> get all => _channels.values;
 
-  ChannelType get(String name) {  //TODO add ChannelOptions as optional argument here, and pass it on to createChannel
-    if (_channels[name]==null) {
+  ChannelType get(String name) {
+    //TODO add ChannelOptions as optional argument here,
+    // and pass it on to createChannel
+    if (_channels[name] == null) {
       _channels[name] = createChannel(name, null);
     }
     return _channels[name];
   }
 
-  bool exists(String name){
-    return _channels[name] != null;
-  }
+  bool exists(String name) => _channels[name] != null;
 
-  Iterable<ChannelType> iterate(){
-    return _channels.values;
-  }
+  Iterable<ChannelType> iterate() => _channels.values;
 
   void release(String str) {
-    // TODO: implement release
+    throw UnimplementedError();
   }
-
 }

@@ -82,7 +82,7 @@
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
-    
+
     NSNumber *const handle = @(_nextHandle++);
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =

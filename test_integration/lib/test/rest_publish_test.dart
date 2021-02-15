@@ -1,11 +1,11 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'test_widget_abstract.dart';
 
 class RestPublishTest extends TestWidget {
-  RestPublishTest(TestDispatcherState dispatcher) : super(dispatcher);
+  const RestPublishTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
   TestWidgetState<TestWidget> createState() => RestPublishTestState();
@@ -35,7 +35,7 @@ class RestPublishTestState extends TestWidgetState<RestPublishTest> {
 }
 
 Future<void> restMessagesPublishUtil(Rest rest) async {
-  final name = 'Hello';
+  const name = 'Hello';
   final messageData = [
     null,   //null
     'Ably', //string
@@ -48,7 +48,7 @@ Future<void> restMessagesPublishUtil(Rest rest) async {
   final channel = rest.channels.get('test');
   await channel.publish();  //publish without name and data
   await channel.publish(data: messageData[1]);  //publish without name
-  for(var data in messageData){
+  for(final data in messageData){
     await channel.publish(name: name, data: data);
   }
 }

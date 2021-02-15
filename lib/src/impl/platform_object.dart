@@ -15,8 +15,8 @@ abstract class PlatformObject {
   Future<int> _handle;
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
-  PlatformObject([fetchHandle = true]) {
-    if(fetchHandle) {
+  PlatformObject({bool fetchHandle = true}) : assert(fetchHandle != null) {
+    if (fetchHandle) {
       _handle = _acquireHandle();
     }
   }
@@ -32,7 +32,9 @@ abstract class PlatformObject {
       createPlatformInstance().timeout(_acquireHandleTimeout, onTimeout: () {
         _handle = null;
         throw TimeoutException(
-            'Acquiring handle timed out.', _acquireHandleTimeout);
+          'Acquiring handle timed out.',
+          _acquireHandleTimeout,
+        );
       }).then((value) => _handleValue = value);
 
   MethodChannel get methodChannel => platform.methodChannel;
@@ -41,31 +43,30 @@ abstract class PlatformObject {
 
   /// invoke platform method channel without AblyMessage encapsulation
   @protected
-  Future<T> invokeRaw<T>(final String method, [final Object arguments]) async {
-    return await platform.invoke<T>(method, arguments);
-  }
+  Future<T> invokeRaw<T>(final String method, [final Object arguments]) async =>
+      platform.invoke<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
   @protected
   Future<T> invoke<T>(final String method, [final Object argument]) async {
-    var _handle = await handle;
+    final _handle = await handle;
     final message = (null != argument)
         ? AblyMessage(AblyMessage(argument, handle: _handle))
         : AblyMessage(_handle);
-    return await invokeRaw<T>(method, message);
+    return invokeRaw<T>(method, message);
   }
 
   Future<Stream<dynamic>> _listen(final String eventName,
-      [final Object payload]) async {
-    return eventChannel.receiveBroadcastStream(AblyMessage(
-        AblyEventMessage(eventName, payload),
-        handle: await handle));
-  }
+          [final Object payload]) async =>
+      eventChannel.receiveBroadcastStream(AblyMessage(
+          AblyEventMessage(eventName, payload),
+          handle: await handle));
 
   /// Listen for events
   @protected
   Stream<dynamic> listen(final String method, [final Object payload]) {
-    var controller = StreamController<dynamic>();
+    // ignore: close_sinks, will be closed by listener
+    final controller = StreamController<dynamic>();
     _listen(method, payload).then(controller.addStream);
     return controller.stream;
   }

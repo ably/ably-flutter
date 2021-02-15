@@ -15,8 +15,10 @@ Map<int, Rest> get restInstances =>
 
 class Rest extends PlatformObject
     implements spec.RestInterface<RestPlatformChannels> {
-  Rest({ClientOptions options, final String key})
-      : assert(options != null || key != null),
+  Rest({
+    ClientOptions options,
+    final String key,
+  })  : assert(options != null || key != null),
         options = options ?? ClientOptions.fromKey(key),
         super() {
     channels = RestPlatformChannels(this);
@@ -24,14 +26,18 @@ class Rest extends PlatformObject
 
   @override
   Future<int> createPlatformInstance() async {
-    var handle = await invokeRaw<int>(
-        PlatformMethod.createRestWithOptions, AblyMessage(options));
+    final handle = await invokeRaw<int>(
+      PlatformMethod.createRestWithOptions,
+      AblyMessage(options),
+    );
     _restInstances[handle] = this;
     return handle;
   }
 
   void authUpdateComplete() {
-    channels.all.forEach((c) => c.authUpdateComplete());
+    for (final channel in channels.all) {
+      channel.authUpdateComplete();
+    }
   }
 
   @override
@@ -41,12 +47,13 @@ class Rest extends PlatformObject
   ClientOptions options;
 
   @override
-  Future<HttpPaginatedResponse> request(
-      {String method,
-      String path,
-      Map<String, dynamic> params,
-      body,
-      Map<String, String> headers}) {
+  Future<HttpPaginatedResponse> request({
+    String method,
+    String path,
+    Map<String, dynamic> params,
+    Object body,
+    Map<String, String> headers,
+  }) {
     throw UnimplementedError();
   }
 

@@ -1,5 +1,4 @@
-String $(c) {
-  return '''
+String $(Map<String, dynamic> c) => '''
 @import Foundation;
 
 typedef NS_ENUM(UInt8, _Value) {
@@ -11,11 +10,8 @@ typedef NS_ENUM(UInt8, _Value) {
 ${c['methods'].map((_) => 'extern NSString *const AblyPlatformMethod_${_['name']};').join('\n')}
 @end
 
-${c['objects'].map((_) {
-    return '''
+${c['objects'].map((_) => '''
 @interface Tx${_['name']} : NSObject
-${_['properties'].map((name) => 'extern NSString *const Tx${_['name']}_${name};').join('\n')}
+${_['properties'].map((name) => 'extern NSString *const Tx${_['name']}_$name;').join('\n')}
 @end
-''';
-  }).join('\n')}''';
-}
+''').join('\n')}''';

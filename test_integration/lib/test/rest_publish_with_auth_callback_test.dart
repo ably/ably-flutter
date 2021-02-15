@@ -1,9 +1,9 @@
-import 'package:ably_flutter_integration_test/test/rest_publish_test.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'rest_publish_test.dart';
 
 class RestPublishWithAuthCallbackTest extends StatefulWidget {
   final TestDispatcherState dispatcher;
@@ -30,7 +30,7 @@ class RestPublishWithAuthCallbackTestState
         options: ClientOptions()
           ..clientId = 'someClientId'
           ..logLevel = LogLevel.verbose
-          ..authCallback = ((TokenParams params) async {
+          ..authCallback = ((params) async {
             authCallbackInvoked = true;
             return TokenRequest.fromMap(await getTokenRequest());
           }));
