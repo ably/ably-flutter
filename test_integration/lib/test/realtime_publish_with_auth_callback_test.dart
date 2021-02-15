@@ -26,7 +26,7 @@ class RealtimePublishWithAuthCallbackTestState
             authCallbackInvoked = true;
             return TokenRequest.fromMap(await getTokenRequest());
           }));
-    await realtimeMessagesPublishUtil(realtime);
+    await realtimeMessagesPublishUtil(realtime.channels.get('test'));
     await realtime.close();
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{

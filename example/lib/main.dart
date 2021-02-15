@@ -468,19 +468,20 @@ class _MyAppState extends State<MyApp> {
   Widget getRestChannelHistory() => FlatButton(
         onPressed: () async {
           final next = _restHistory?.hasNext() ?? false;
-          print('Rest history: getting ${next ? 'next' : 'first'} page');
-          try {
-            if (_restHistory == null || _restHistory.items.isEmpty) {
-              final result = await _rest.channels.get('test').history(
-                  ably.RestHistoryParams(direction: 'forwards', limit: 10));
-              _restHistory = result;
-            } else if (next) {
-              _restHistory = await _restHistory.next();
-            } else {
-              _restHistory = await _restHistory.first();
-            }
-            setState(() {});
-          } on ably.AblyException catch (e) {
+      print('Rest history: getting ${next ? 'next' : 'first'} page');
+      try {
+        if (_restHistory == null || _restHistory.items.isEmpty) {
+          final result = await _rest.channels.get('test').history(
+            ably.RestHistoryParams(direction: 'forwards', limit: 10),
+          );
+          _restHistory = result;
+        } else if (next) {
+          _restHistory = await _restHistory.next();
+        } else {
+          _restHistory = await _restHistory.first();
+        }
+        setState(() {});
+      } on ably.AblyException catch (e) {
             print('failed to get history:: $e :: ${e.errorInfo}');
           }
         },
