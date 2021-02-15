@@ -57,6 +57,14 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 ## Usage
 
+### Specify Dependency
+
+Package home:
+[pub.dev/packages/ably_flutter_plugin](https://pub.dev/packages/ably_flutter_plugin)
+
+See:
+[Adding a package dependency to an app](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app)
+
 ### Import the package
 
 ```dart
