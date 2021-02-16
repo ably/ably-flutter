@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.2.0-preview.1](https://github.com/ably/ably-flutter/tree/1.2.0-preview.1)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/1.0.0+dev.2...1.2.0-preview.1)
+
+With this release we are conforming our version numbering to match that used in our other client libraries.
+This reflects the fact that this plugin is heading towards compliance with version 1.2 of our
+[Features Specification](https://docs.ably.io/client-lib-development-guide/features/), also aligning with the
+underlying implementations of
+[ably-cocoa](https://github.com/ably/ably-cocoa)
+and
+[ably-java](https://github.com/ably/ably-java).
+
+**Fixed bugs:**
+
+- Unhandled TimeoutException error being thrown occassionally [\#72](https://github.com/ably/ably-flutter/issues/72)
+
+**Closed issues:**
+
+- native dart implementation [\#76](https://github.com/ably/ably-flutter/issues/76)
+- Improve our "pub points" score on pub.dev [\#65](https://github.com/ably/ably-flutter/issues/65)
+- Ably Flutter - Error building for android: target SDK less than 24 [\#25](https://github.com/ably/ably-flutter/issues/25)
+
+**Merged pull requests:**
+
+- Stage 1.1 Integration [\#88](https://github.com/ably/ably-flutter/pull/88) ([QuintinWillison](https://github.com/QuintinWillison))
+- Readme Improvements [\#79](https://github.com/ably/ably-flutter/pull/79) ([QuintinWillison](https://github.com/QuintinWillison))
+- Add maintainers file [\#78](https://github.com/ably/ably-flutter/pull/78) ([niksilver](https://github.com/niksilver))
+- Remove experimental warning [\#77](https://github.com/ably/ably-flutter/pull/77) ([QuintinWillison](https://github.com/QuintinWillison))
+- Android | reduce minSdkVersion to 19 [\#75](https://github.com/ably/ably-flutter/pull/75) ([tiholic](https://github.com/tiholic))
+- Feature/rest history integration tests [\#68](https://github.com/ably/ably-flutter/pull/68) ([tiholic](https://github.com/tiholic))
+- Feature/lint dart [\#67](https://github.com/ably/ably-flutter/pull/67) ([tiholic](https://github.com/tiholic))
+- Realtime Channel history [\#52](https://github.com/ably/ably-flutter/pull/52) ([tiholic](https://github.com/tiholic))
+- Channel history & Paginated Result API for Rest [\#48](https://github.com/ably/ably-flutter/pull/48) ([tiholic](https://github.com/tiholic))
+
 ## [1.0.0+dev.2](https://github.com/ably/ably-flutter/tree/1.0.0-dev.2)
 
 Conforming to pub.dev recommendations, following initial upload to the platform.
