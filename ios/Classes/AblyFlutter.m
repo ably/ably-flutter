@@ -1,8 +1,6 @@
-#import "AblyFlutter.h"
+@import Ably;
 
-// TODO work out why importing Ably as a module does not work like this:
-//   @import Ably;
-#import "Ably.h"
+#import "AblyFlutter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
@@ -12,6 +10,7 @@
     FlutterMethodChannel* _channel;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
+    NSMutableDictionary<NSNumber *, ARTPaginatedResult *>* _paginatedResults;
     long long _nextHandle;
 }
 
@@ -37,6 +36,7 @@
     
     _realtimeInstances = [NSMutableDictionary new];
     _restInstances = [NSMutableDictionary new];
+    _paginatedResults = [NSMutableDictionary new];
     _nextHandle = 1;
     
     return self;
@@ -82,6 +82,7 @@
     if (!options) {
         [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
     }
+
     NSNumber *const handle = @(_nextHandle++);
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =
@@ -112,6 +113,18 @@
 
 -(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
     return [_realtimeInstances objectForKey:handle];
+}
+
+-(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(NSNumber *) handle {
+    if(!handle){
+        handle = @(_nextHandle++);
+    }
+    [_paginatedResults setObject:result forKey:handle];
+    return handle;
+}
+
+-(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle {
+    return [_paginatedResults objectForKey:handle];
 }
 
 -(void)disposeWithCompletionHandler:(const dispatch_block_t)completionHandler {

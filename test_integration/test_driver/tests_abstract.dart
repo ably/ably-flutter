@@ -8,24 +8,26 @@ void runTests({
   TestGroup groupName,
   List<TestGroup> groups,
 }) {
-  Map tests = getTestsFor(
+  final tests = getTestsFor(
     all: all,
     group: groupName,
     groups: groups,
   );
 
   for (groupName in tests.keys) {
-    var name =
+    final name =
         groupName.toString().substring(groupName.toString().indexOf('.') + 1);
-    print("GROUP:: $name");
     group(name, () {
       FlutterDriver driver;
 
       // Connect to the Flutter driver before running any tests.
       setUpAll(() async {
-        driver = await FlutterDriver.connect(printCommunication: true);
+        driver = await FlutterDriver.connect(
+          printCommunication: true,
+          timeout: const Duration(seconds: 60),
+        );
       });
-
+      
       tearDownAll(() async {
         if (driver != null) {
           final _ = driver.close();

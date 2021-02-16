@@ -5,14 +5,15 @@ enum ChannelState {
   detaching,
   detached,
   suspended,
-  failed
+  failed,
 }
 
-enum ChannelMode{   // TB2d
+enum ChannelMode {
+  // TB2d
   presence,
   publish,
   subscribe,
-  presence_subscribe
+  presenceSubscribe,
 }
 
 enum ChannelEvent {
@@ -23,7 +24,7 @@ enum ChannelEvent {
   detached,
   suspended,
   failed,
-  update
+  update,
 }
 
 enum ConnectionState {
@@ -34,7 +35,7 @@ enum ConnectionState {
   suspended,
   closing,
   closed,
-  failed
+  failed,
 }
 
 enum ConnectionEvent {
@@ -46,7 +47,7 @@ enum ConnectionEvent {
   closing,
   closed,
   failed,
-  update
+  update,
 }
 
 enum PresenceAction {
@@ -54,41 +55,41 @@ enum PresenceAction {
   present,
   enter,
   leave,
-  update
+  update,
 }
 
 enum StatsIntervalGranularity {
   minute,
   hour,
   day,
-  month
+  month,
 }
 
 enum HTTPMethods {
-  POST,
-  GET
+  post,
+  get,
 }
 
 /// Java: io.ably.lib.http.HttpAuth.Type
 enum HttpAuthType {
-  BASIC,
-  DIGEST,
-  X_ABLY_TOKEN,
+  basic,
+  digest,
+  xAblyToken,
 }
 
-enum DevicePushState{
+enum DevicePushState {
   active,
   failing,
-  failed
+  failed,
 }
 
-enum DevicePlatform{
+enum DevicePlatform {
   android,
   ios,
-  browser
+  browser,
 }
 
-enum FormFactor{
+enum FormFactor {
   phone,
   tablet,
   desktop,
@@ -96,5 +97,5 @@ enum FormFactor{
   watch,
   car,
   embedded,
-  other
+  other,
 }

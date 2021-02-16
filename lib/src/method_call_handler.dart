@@ -9,19 +9,19 @@ class AblyMethodCallHandler {
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case PlatformMethod.authCallback:
-          return await onAuthCallback(call.arguments);
+          return onAuthCallback(call.arguments as AblyMessage);
         case PlatformMethod.realtimeAuthCallback:
-          return await onRealtimeAuthCallback(call.arguments);
+          return onRealtimeAuthCallback(call.arguments as AblyMessage);
         default:
           throw PlatformException(
-            code: 'invalid_method', message: 'No such method ${call.method}');
+              code: 'invalid_method', message: 'No such method ${call.method}');
       }
     });
   }
 
   Future<Object> onAuthCallback(AblyMessage message) async {
-    var tokenParams = message.message as ably.TokenParams;
-    var rest = ably.restInstances[message.handle];
+    final tokenParams = message.message as ably.TokenParams;
+    final rest = ably.restInstances[message.handle];
     final callbackResponse = await rest.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, rest.authUpdateComplete);
     return callbackResponse;
@@ -34,9 +34,9 @@ class AblyMethodCallHandler {
       return null;
     }
     _realtimeAuthInProgress = true;
-    var tokenParams = message.message as ably.TokenParams;
-    var realtime = ably.realtimeInstances[message.handle];
-    Object callbackResponse = await realtime.options.authCallback(tokenParams);
+    final tokenParams = message.message as ably.TokenParams;
+    final realtime = ably.realtimeInstances[message.handle];
+    final callbackResponse = await realtime.options.authCallback(tokenParams);
     Future.delayed(Duration.zero, realtime.authUpdateComplete);
     _realtimeAuthInProgress = false;
     return callbackResponse;

@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter_plugin.dart';
 import '../../spec/push/channels.dart';
 import '../../spec/spec.dart' as spec;
+import '../message.dart';
 import '../platform_object.dart';
 import 'realtime.dart';
 
@@ -26,58 +27,54 @@ class RealtimePlatformChannel extends PlatformObject
 
   RealtimePlatformChannel(this.ably, this.name, this.options) : super() {
     state = spec.ChannelState.initialized;
-    on().listen((ChannelStateChange event) {
-      state = event.current;
-    });
+    on().listen((event) => state = event.current);
   }
 
   Realtime get realtimePlatformObject => ably as Realtime;
 
   /// createPlatformInstance will return realtimePlatformObject's handle
-  /// as that is what will be required in platforms end to find realtime instance
-  /// and send message to channel
+  /// as that is what will be required in platforms end to find realtime
+  /// instance and send message to channel
   @override
-  Future<int> createPlatformInstance() async =>
-      await realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
 
   @override
-  Future<spec.PaginatedResult<spec.Message>> history(
-      [spec.RealtimeHistoryParams params]) {
-    // TODO: implement history
-    return null;
+  Future<PaginatedResult<spec.Message>> history([
+    spec.RealtimeHistoryParams params,
+  ]) async {
+    final message = await invoke<AblyMessage>(PlatformMethod.realtimeHistory, {
+      TxTransportKeys.channelName: name,
+      if (params != null) TxTransportKeys.params: params
+    });
+    return PaginatedResult<Message>.fromAblyMessage(message);
   }
 
   Map<String, dynamic> __payload;
 
   Map<String, dynamic> get _payload => __payload ??= {
         'channel': name,
-        if (options != null) 'options': options
+        if (options != null) 'options': options,
       };
 
-  final _publishQueue = Queue<_RealtimePublishQueueItem>();
+  final _publishQueue = Queue<_PublishQueueItem>();
   Completer<void> _authCallbackCompleter;
 
   @override
   Future<void> publish({
-    spec.Message message,
-    List<spec.Message> messages,
+    Message message,
+    List<Message> messages,
     String name,
-    dynamic data,
+    Object data,
   }) async {
-    if (messages == null) {
+    var _messages = messages;
+    if (_messages == null) {
       if (message != null) {
-        messages = [message];
+        _messages = [message];
       } else {
-        messages ??= [
-          spec.Message(
-            name: name,
-            data: data
-          )
-        ];
+        _messages = [Message(name: name, data: data)];
       }
     }
-    final queueItem = _RealtimePublishQueueItem(
-        Completer<void>(), message, messages);
+    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -126,15 +123,23 @@ class RealtimePlatformChannel extends PlatformObject
                 Timeouts.retryOperationOnAuthFailure,
                 onTimeout: () => _publishQueue
                     .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(TimeoutException(
-                        'Timed out', Timeouts.retryOperationOnAuthFailure))));
+                    .forEach((e) => e.completer.completeError(
+                          TimeoutException(
+                            'Timed out',
+                            Timeouts.retryOperationOnAuthFailure,
+                          ),
+                        )));
           } finally {
             _authCallbackCompleter = null;
           }
         } else {
-          _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-              e.completer.completeError(
-                  spec.AblyException(pe.code, pe.message, pe.details)));
+          _publishQueue
+              .where((e) => !e.completer.isCompleted)
+              .forEach((e) => e.completer.completeError(spec.AblyException(
+                    pe.code,
+                    pe.message,
+                    pe.details as ErrorInfo,
+                  )));
         }
       }
     }
@@ -165,7 +170,7 @@ class RealtimePlatformChannel extends PlatformObject
     try {
       await invoke(PlatformMethod.attachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
@@ -174,7 +179,7 @@ class RealtimePlatformChannel extends PlatformObject
     try {
       await invoke(PlatformMethod.detachRealtimeChannel, _payload);
     } on PlatformException catch (pe) {
-      throw spec.AblyException(pe.code, pe.message, pe.details);
+      throw spec.AblyException(pe.code, pe.message, pe.details as ErrorInfo);
     }
   }
 
@@ -184,12 +189,13 @@ class RealtimePlatformChannel extends PlatformObject
   }
 
   @override
-  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) {
-    return listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
-        .map((stateChange) => stateChange as ChannelStateChange)
-        .where((stateChange) =>
-            channelEvent == null || stateChange.event == channelEvent);
-  }
+  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
+      listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
+          .map((stateChange) => stateChange as ChannelStateChange)
+          .where(
+            (stateChange) =>
+                channelEvent == null || stateChange.event == channelEvent,
+          );
 
   @override
   Stream<spec.Message> subscribe({String name, List<String> names}) {
@@ -207,18 +213,15 @@ class RealtimePlatformChannels
   RealtimePlatformChannels(Realtime ably) : super(ably);
 
   @override
-  RealtimePlatformChannel createChannel(name, options) {
-    return RealtimePlatformChannel(ably, name, options);
-  }
+  RealtimePlatformChannel createChannel(String name, ChannelOptions options) =>
+      RealtimePlatformChannel(ably, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing
 /// authCallback is completed
-class _RealtimePublishQueueItem {
-  spec.Message message;
+class _PublishQueueItem {
   List<spec.Message> messages;
   final Completer<void> completer;
 
-  _RealtimePublishQueueItem(
-      this.completer, this.message, this.messages);
+  _PublishQueueItem(this.completer, this.messages);
 }

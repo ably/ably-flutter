@@ -10,7 +10,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   ConnectionPlatformObject(this.realtimePlatformObject) : super() {
     state = ConnectionState.initialized;
-    on().listen((ConnectionStateChange event) {
+    on().listen((event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {
         realtimePlatformObject.awaitAuthUpdateAndReconnect();
       }
@@ -19,8 +19,7 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   }
 
   @override
-  Future<int> createPlatformInstance() async =>
-      await realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
 
   @override
   ErrorInfo errorReason;
@@ -41,13 +40,12 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
   ConnectionState state;
 
   @override
-  Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) {
-    return listen(PlatformMethod.onRealtimeConnectionStateChanged)
-        .map((connectionEvent) => connectionEvent as ConnectionStateChange)
-        .where((connectionStateChange) =>
-            connectionEvent == null ||
-            connectionStateChange.event == connectionEvent);
-  }
+  Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) =>
+      listen(PlatformMethod.onRealtimeConnectionStateChanged)
+          .map((connectionEvent) => connectionEvent as ConnectionStateChange)
+          .where((connectionStateChange) =>
+              connectionEvent == null ||
+              connectionStateChange.event == connectionEvent);
 
   @override
   Future<void> close() => realtimePlatformObject.close();
@@ -57,7 +55,6 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
 
   @override
   Future<int> ping() {
-    // TODO: implement ping
-    return null;
+    throw UnimplementedError();
   }
 }

@@ -19,7 +19,8 @@ class DriverDataHandler {
   /// Handler for a message sent from the driver test to the test widget.
   Future<String> call(String encodedMessage) async {
     if (callback != null) {
-      final message = TestControlMessage.fromJson(json.decode(encodedMessage));
+      final message =
+          TestControlMessage.fromJson(json.decode(encodedMessage) as Map);
       final response = await callback(message);
       return json.encode(response);
     }
@@ -48,9 +49,8 @@ class TestControlMessage {
   final Map<String, dynamic> payload;
   final List<dynamic> log;
 
-  factory TestControlMessage.fromJsonEncoded(String encoded) {
-    return TestControlMessage.fromJson(json.decode(encoded));
-  }
+  factory TestControlMessage.fromJsonEncoded(String encoded) =>
+      TestControlMessage.fromJson(json.decode(encoded) as Map);
 
   factory TestControlMessage.fromJson(Map jsonValue) => TestControlMessage(
         jsonValue[testNameKey] as String,

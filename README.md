@@ -1,5 +1,7 @@
 # Ably Flutter Plugin
 
+![flutter_integration](https://github.com/ably/ably-flutter/workflows/flutter_integration/badge.svg)
+
 A
 [Flutter](https://flutter.dev/)
 plugin wrapping the
@@ -55,6 +57,14 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 ## Usage
 
+### Specify Dependency
+
+Package home:
+[pub.dev/packages/ably_flutter_plugin](https://pub.dev/packages/ably_flutter_plugin)
+
+See:
+[Adding a package dependency to an app](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app)
+
 ### Import the package
 
 ```dart
@@ -96,6 +106,32 @@ await channel.publish(data: "Ably");
 
 // an empty message
 await channel.publish();
+```
+
+Get REST history:
+
+```dart
+void getHistory([ably.RestHistoryParams params]) async {
+    // getting channel history, by passing or omitting the optional params
+    var result = await channel.history(params);
+
+    var messages = result.items; //get messages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){    
+      result = await result.next();  //fetches next page results
+      messages = result.items;
+    }
+    if(!hasNextPage){
+      result = await result.first();  //fetches first page results
+      messages = result.items;
+    }
+}
+
+// history with default params
+getHistory();
+
+// sorted and filtered history
+getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
 ```
 
 ### Using the Realtime API
@@ -191,6 +227,30 @@ await channel.publish(messages: [
   ably.Message()..name="event1"..data = {"hello": "ably"},
   ably.Message()..name="event1"..data = {"hello": "world"}
 ]);
+```
+Get realtime history
+
+```dart
+void getHistory([ably.RealtimeHistoryParams params]) async {
+    var result = await channel.history(params);
+
+    var messages = result.items; //get messages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){    
+      result = await result.next();  //fetches next page results
+      messages = result.items;
+    }
+    if(!hasNextPage){
+      result = await result.first();  //fetches first page results
+      messages = result.items;
+    }
+}
+
+// history with default params
+getHistory();
+
+// sorted and filtered history
+getHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
 ```
 
 ## Caveats

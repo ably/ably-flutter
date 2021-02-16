@@ -24,6 +24,15 @@ NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealt
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
+NSString *const AblyPlatformMethod_restHistory= @"restHistory";
+NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
+NSString *const AblyPlatformMethod_nextPage= @"nextPage";
+NSString *const AblyPlatformMethod_firstPage= @"firstPage";
+@end
+
+@implementation TxTransportKeys
+NSString *const TxTransportKeys_channelName = @"channelName";
+NSString *const TxTransportKeys_params = @"params";
 @end
 
 @implementation TxAblyMessage
@@ -150,4 +159,25 @@ NSString *const TxMessage_encoding = @"encoding";
 NSString *const TxMessage_data = @"data";
 NSString *const TxMessage_name = @"name";
 NSString *const TxMessage_extras = @"extras";
+@end
+
+@implementation TxPaginatedResult
+NSString *const TxPaginatedResult_items = @"items";
+NSString *const TxPaginatedResult_type = @"type";
+NSString *const TxPaginatedResult_hasNext = @"hasNext";
+@end
+
+@implementation TxRestHistoryParams
+NSString *const TxRestHistoryParams_start = @"start";
+NSString *const TxRestHistoryParams_end = @"end";
+NSString *const TxRestHistoryParams_direction = @"direction";
+NSString *const TxRestHistoryParams_limit = @"limit";
+@end
+
+@implementation TxRealtimeHistoryParams
+NSString *const TxRealtimeHistoryParams_start = @"start";
+NSString *const TxRealtimeHistoryParams_end = @"end";
+NSString *const TxRealtimeHistoryParams_direction = @"direction";
+NSString *const TxRealtimeHistoryParams_limit = @"limit";
+NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
 @end

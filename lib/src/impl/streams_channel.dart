@@ -34,8 +34,8 @@ class StreamsChannel {
 
   int _lastId = 0;
 
-  Stream<dynamic> receiveBroadcastStream([dynamic arguments]) {
-    final MethodChannel methodChannel = MethodChannel(name, codec);
+  Stream<dynamic> receiveBroadcastStream([Object arguments]) {
+    final methodChannel = MethodChannel(name, codec);
 
     final id = ++_lastId;
     final handlerName = '$name#$id';
@@ -43,7 +43,7 @@ class StreamsChannel {
     StreamController<dynamic> controller;
     controller = StreamController<dynamic>.broadcast(onListen: () async {
       ServicesBinding.instance.defaultBinaryMessenger
-        .setMessageHandler(handlerName, (ByteData reply) async {
+          .setMessageHandler(handlerName, (reply) async {
         if (reply == null) {
           await controller.close();
         } else {
@@ -58,27 +58,27 @@ class StreamsChannel {
       });
       try {
         await methodChannel.invokeMethod('listen#$id', arguments);
-      } catch (exception, stack) {
+      } on Exception catch (exception, stack) {
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
           library: 'streams_channel',
           context: DiagnosticsNode.message(
-            'while activating platform stream on channel $name'),
+              'while activating platform stream on channel $name'),
         ));
       }
     }, onCancel: () async {
       ServicesBinding.instance.defaultBinaryMessenger
-        .setMessageHandler(handlerName, null);
+          .setMessageHandler(handlerName, null);
       try {
         await methodChannel.invokeMethod('cancel#$id', arguments);
-      } catch (exception, stack) {
+      } on Exception catch (exception, stack) {
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
           library: 'streams_channel',
           context: DiagnosticsNode.message(
-            'while de-activating platform stream on channel $name'),
+              'while de-activating platform stream on channel $name'),
         ));
       }
     });

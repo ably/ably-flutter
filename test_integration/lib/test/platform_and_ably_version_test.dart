@@ -1,10 +1,10 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
 
 import '../test_dispatcher.dart';
+import 'test_widget_abstract.dart';
 
 class PlatformAndAblyVersionTest extends TestWidget {
-  PlatformAndAblyVersionTest(TestDispatcherState dispatcher)
+  const PlatformAndAblyVersionTest(TestDispatcherState dispatcher)
       : super(dispatcher);
 
   @override

@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
         [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
+        [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
+        [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -209,6 +211,49 @@ static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const
                                               keyName:keyName
                                                 nonce:nonce
                                                   mac:mac];
+};
+
+static AblyCodecDecoder readRestHistoryParams = ^ARTDataQuery*(NSDictionary *const dictionary) {
+    ARTDataQuery *const o = [ARTDataQuery new];
+    ON_VALUE(^(const id value) {
+        o.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+    }, dictionary, TxRestHistoryParams_start);
+    ON_VALUE(^(const id value) {
+        o.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+    }, dictionary, TxRestHistoryParams_end);
+    ON_VALUE(^(NSString const *value) {
+        o.limit = [value integerValue];
+    }, dictionary, TxRestHistoryParams_limit);
+    ON_VALUE(^(NSString const *value) {
+        if([@"forwards" isEqual: value]){
+            o.direction = ARTQueryDirectionForwards;
+        } else {
+            o.direction = ARTQueryDirectionBackwards;
+        }
+    }, dictionary, TxRestHistoryParams_direction);
+    return o;
+};
+
+static AblyCodecDecoder readRealtimeHistoryParams = ^ARTRealtimeHistoryQuery*(NSDictionary *const dictionary) {
+    ARTRealtimeHistoryQuery *const o = [ARTRealtimeHistoryQuery new];
+    ON_VALUE(^(const id value) {
+        o.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+    }, dictionary, TxRealtimeHistoryParams_start);
+    ON_VALUE(^(const id value) {
+        o.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+    }, dictionary, TxRealtimeHistoryParams_end);
+    ON_VALUE(^(NSString const *value) {
+        o.limit = [value integerValue];
+    }, dictionary, TxRealtimeHistoryParams_limit);
+    ON_VALUE(^(NSString const *value) {
+        if([@"forwards" isEqual: value]){
+            o.direction = ARTQueryDirectionForwards;
+        } else {
+            o.direction = ARTQueryDirectionBackwards;
+        }
+    }, dictionary, TxRealtimeHistoryParams_direction);
+    READ_VALUE(o, untilAttach, dictionary, TxRealtimeHistoryParams_untilAttach);
+    return o;
 };
 
 @end

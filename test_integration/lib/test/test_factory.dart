@@ -1,15 +1,16 @@
-import 'package:ably_flutter_integration_test/test/appkey_provision_test.dart';
-import 'package:ably_flutter_integration_test/test/platform_and_ably_version_test.dart';
-import 'package:ably_flutter_integration_test/test/realtime_events_test.dart';
-import 'package:ably_flutter_integration_test/test/realtime_publish_test.dart';
-import 'package:ably_flutter_integration_test/test/realtime_publish_with_auth_callback_test.dart';
-import 'package:ably_flutter_integration_test/test/realtime_subscribe.dart';
-import 'package:ably_flutter_integration_test/test/rest_publish_test.dart';
-import 'package:ably_flutter_integration_test/test/rest_publish_with_auth_callback_test.dart';
-import 'package:ably_flutter_integration_test/test/test_helper_flutter_error_test.dart';
-import 'package:ably_flutter_integration_test/test/test_helper_unhandled_exception_test.dart';
-import 'package:ably_flutter_integration_test/test_dispatcher.dart';
-
+import '../test_dispatcher.dart';
+import 'app_key_provision_test.dart';
+import 'platform_and_ably_version_test.dart';
+import 'realtime_events_test.dart';
+import 'realtime_history_test.dart';
+import 'realtime_publish_test.dart';
+import 'realtime_publish_with_auth_callback_test.dart';
+import 'realtime_subscribe.dart';
+import 'rest_history_test.dart';
+import 'rest_publish_test.dart';
+import 'rest_publish_with_auth_callback_test.dart';
+import 'test_helper_flutter_error_test.dart';
+import 'test_helper_unhandled_exception_test.dart';
 import 'test_names.dart';
 
 final testFactory = <String, TestFactory>{
@@ -21,8 +22,10 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePublishWithAuthCallback: (d) =>
       RealtimePublishWithAuthCallbackTest(d),
   TestName.restPublish: (d) => RestPublishTest(d),
+  TestName.restHistory: (d) => RestHistoryTest(d),
   TestName.restPublishWithAuthCallback: (d) =>
       RestPublishWithAuthCallbackTest(d),
+  TestName.realtimeHistory: (d) => RealtimeHistoryTest(d),
   TestName.testHelperFlutterErrorTest: (d) => TestHelperFlutterErrorTest(d),
   TestName.testHelperUnhandledExceptionTest: (d) =>
       TestHelperUnhandledExceptionTest(d),

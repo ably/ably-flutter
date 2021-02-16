@@ -18,9 +18,12 @@ import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
 import io.ably.lib.types.AblyException;
+import io.ably.lib.types.AsyncPaginatedResult;
+import io.ably.lib.types.Callback;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
+import io.ably.lib.types.Param;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -65,6 +68,14 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.detachRealtimeChannel, this::detachRealtimeChannel);
         _map.put(PlatformConstants.PlatformMethod.setRealtimeChannelOptions, this::setRealtimeChannelOptions);
         _map.put(PlatformConstants.PlatformMethod.publishRealtimeChannelMessage, this::publishRealtimeChannelMessage);
+
+        // history
+        _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
+        _map.put(PlatformConstants.PlatformMethod.realtimeHistory, this::getRealtimeHistory);
+
+        // paginated results
+        _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
+        _map.put(PlatformConstants.PlatformMethod.firstPage, this::getFirstPage);
     }
 
     // MethodChannel.Result wrapper that responds on the platform thread.
@@ -194,6 +205,55 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
+    private <T> Callback<AsyncPaginatedResult<T>> paginatedResponseHandler(@NonNull MethodChannel.Result result, Integer handle) {
+        return new Callback<AsyncPaginatedResult<T>>() {
+            @Override
+            public void onSuccess(AsyncPaginatedResult<T> paginatedResult) {
+                long paginatedResultHandle = _ably.setPaginatedResult(paginatedResult, handle);
+                result.success(new AblyFlutterMessage<>(paginatedResult, paginatedResultHandle));
+            }
+
+            @Override
+            public void onError(ErrorInfo reason) {
+                handleAblyException(result, AblyException.fromErrorInfo(reason));
+            }
+        };
+    }
+
+    private void getRestHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+            if (params == null) {
+                params = new Param[0];
+            }
+            ablyLibrary
+                    .getRest(messageData.handle)
+                    .channels.get(channelName)
+                    .historyAsync(params, this.paginatedResponseHandler(result, null));
+        });
+    }
+
+    private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<Integer>ablyDo(
+                message,
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .next(this.paginatedResponseHandler(result, pageHandle)));
+    }
+
+    private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<Integer>ablyDo(
+                message,
+                (ablyLibrary, pageHandle) -> ablyLibrary
+                        .getPaginatedResult(pageHandle)
+                        .first(this.paginatedResponseHandler(result, pageHandle)));
+    }
+
     private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
         this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
@@ -208,7 +268,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                             channel.invokeMethod(PlatformConstants.PlatformMethod.realtimeAuthCallback, channelMessage, new MethodChannel.Result() {
                                 @Override
                                 public void success(@Nullable Object result) {
-                                    if(result!=null){
+                                    if (result != null) {
                                         ablyLibrary.setRealtimeToken(handle, result);
                                     }
                                 }
@@ -364,6 +424,22 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }
+        });
+    }
+
+    private void getRealtimeHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+            if (params == null) {
+                params = new Param[0];
+            }
+            ablyLibrary
+                    .getRealtime(messageData.handle)
+                    .channels.get(channelName)
+                    .historyAsync(params, this.paginatedResponseHandler(result, null));
         });
     }
 

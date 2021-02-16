@@ -1,11 +1,12 @@
-import 'package:ably_flutter_integration_test/test/test_widget_abstract.dart';
 import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
 
 import '../test_dispatcher.dart';
-import 'appkey_provision_helper.dart';
+import 'app_key_provision_helper.dart';
+import 'encoders.dart';
+import 'test_widget_abstract.dart';
 
 class RealtimeEventsTest extends TestWidget {
-  RealtimeEventsTest(TestDispatcherState dispatcher) : super(dispatcher);
+  const RealtimeEventsTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
   TestWidgetState<TestWidget> createState() => RealtimeEventsTestState();
@@ -37,24 +38,24 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     recordConnectionState(); //connection: initialized
     realtime.connection
       .on()
-      .listen((e) => connectionStateChanges.add(connectionEventToJson(e)));
+      .listen((e) => connectionStateChanges.add(encodeConnectionEvent(e)));
     realtime.connection.on(ConnectionEvent.connected).listen(
-        (e) => filteredConnectionStateChanges.add(connectionEventToJson(e)));
+        (e) => filteredConnectionStateChanges.add(encodeConnectionEvent(e)));
 
     widget.dispatcher.reportLog({'before realtime.connect': ''});
     recordConnectionState(); //connection: initialized
     await realtime.connect();
     widget.dispatcher.reportLog({'after realtime.connect': ''});
 
-    final channel = await realtime.channels.get('events-test');
+    final channel = realtime.channels.get('events-test');
     void recordChannelState() =>
       channelStates.add(enumValueToString(channel.state));
 
     recordChannelState(); // channel: initialized
-    channel.on().listen((e) => channelStateChanges.add(channelEventToJson(e)));
+    channel.on().listen((e) => channelStateChanges.add(encodeChannelEvent(e)));
     channel
       .on(ChannelEvent.attaching)
-      .listen((e) => filteredChannelStateChanges.add(channelEventToJson(e)));
+      .listen((e) => filteredChannelStateChanges.add(encodeChannelEvent(e)));
     recordChannelState(); // channel: initialized
 
     widget.dispatcher.reportLog({'before channel.attach': ''});
@@ -75,7 +76,7 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     await realtime.close();
     await Future.delayed(Duration.zero);
     while (realtime.connection.state != ConnectionState.closed) {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
     }
     recordChannelState(); // channel: detached
     recordConnectionState(); // connection: closed
@@ -91,26 +92,4 @@ class RealtimeEventsTestState extends TestWidgetState<RealtimeEventsTest> {
     });
   }
 
-  Map<String, dynamic> channelEventToJson(ChannelStateChange e) {
-    return {
-      'event': enumValueToString(e.event),
-      'current': enumValueToString(e.current),
-      'previous': enumValueToString(e.previous),
-      'reason': e.reason.toString(),
-      'resumed': e.resumed,
-    };
-  }
-
-  Map<String, dynamic> connectionEventToJson(ConnectionStateChange e) {
-    return {
-      'event': enumValueToString(e.event),
-      'current': enumValueToString(e.current),
-      'previous': enumValueToString(e.previous),
-      'reason': e.reason.toString(),
-      'retryIn': e.retryIn,
-    };
-  }
 }
-
-String enumValueToString(dynamic value) =>
-  value.toString().substring(value.toString().indexOf('.') + 1);

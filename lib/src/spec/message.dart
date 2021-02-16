@@ -2,7 +2,6 @@ import 'enums.dart';
 import 'rest/channels.dart';
 
 class Message {
-
   /// A unique ID for this message
   String id;
 
@@ -27,25 +26,27 @@ class Message {
   /// Extras, if available
   Map extras;
 
-  Message({this.name, this.data, this.clientId});  // TM2
+  Message({this.name, this.data, this.clientId}); // TM2
 
   @override
-  String toString() {
-    return 'Message id=$id timestamp=$timestamp clientId=$clientId'
-      ' connectionId=$connectionId encoding=$encoding name=$name'
-      ' data=$data extras=$extras';
-  }
-
+  String toString() => 'Message id=$id timestamp=$timestamp clientId=$clientId'
+        ' connectionId=$connectionId encoding=$encoding name=$name'
+        ' data=$data extras=$extras';
 }
 
-abstract class MessageStatic {  //TODO why is this class required?
+abstract class MessageStatic {
+  //TODO why is this class required?
   MessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
+
   MessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
 }
 
 abstract class PresenceMessage {
   PresenceMessage.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
-  PresenceMessage.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
+
+  PresenceMessage.fromEncodedArray(
+      List jsonArray, ChannelOptions channelOptions);
+
   PresenceAction action;
   String clientId;
   String connectionId;
@@ -54,10 +55,15 @@ abstract class PresenceMessage {
   Map<String, dynamic> extras;
   String id;
   DateTime timestamp;
+
   String memberKey();
 }
 
-abstract class PresenceMessageStatic {  //TODO why is this class required?
-  PresenceMessageStatic.fromEncoded(Map jsonObject, ChannelOptions channelOptions);
-  PresenceMessageStatic.fromEncodedArray(List jsonArray, ChannelOptions channelOptions);
+abstract class PresenceMessageStatic {
+  //TODO why is this class required?
+  PresenceMessageStatic.fromEncoded(
+      Map jsonObject, ChannelOptions channelOptions);
+
+  PresenceMessageStatic.fromEncodedArray(
+      List jsonArray, ChannelOptions channelOptions);
 }
