@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
-import '../../../ably_flutter_plugin.dart';
+import '../../../ably_flutter.dart';
 import '../../spec/push/channels.dart';
 import '../../spec/spec.dart' as spec;
 import '../message.dart';

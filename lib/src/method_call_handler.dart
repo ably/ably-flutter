@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import '../ably_flutter_plugin.dart' as ably;
+import '../ably_flutter.dart' as ably;
 import 'generated/platformconstants.dart';
 import 'impl/message.dart';
 

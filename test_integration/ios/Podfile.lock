@@ -4,7 +4,7 @@ PODS:
     - msgpack (= 0.3.1)
     - SocketRocketAblyFork (= 0.5.2-ably-7)
     - ULID (= 1.1.0)
-  - ably_flutter_plugin (0.0.5):
+  - ably_flutter (0.0.5):
     - Ably
     - Flutter
   - AblyDeltaCodec (1.2.0)
@@ -14,7 +14,7 @@ PODS:
   - ULID (1.1.0)
 
 DEPENDENCIES:
-  - ably_flutter_plugin (from `.symlinks/plugins/ably_flutter_plugin/ios`)
+  - ably_flutter (from `.symlinks/plugins/ably_flutter/ios`)
   - Flutter (from `Flutter`)
 
 SPEC REPOS:
@@ -26,14 +26,14 @@ SPEC REPOS:
     - ULID
 
 EXTERNAL SOURCES:
-  ably_flutter_plugin:
-    :path: ".symlinks/plugins/ably_flutter_plugin/ios"
+  ably_flutter:
+    :path: ".symlinks/plugins/ably_flutter/ios"
   Flutter:
     :path: Flutter
 
 SPEC CHECKSUMS:
   Ably: 9f143677993cb6df20fce4551b9b6b2e55ad2f4d
-  ably_flutter_plugin: b68be8fea2c311f64a39132a0b70794c33e2093b
+  ably_flutter: a35c3926509e76b0fc69b9199872b9d428882611
   AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
@@ -42,4 +42,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7d251af3d33bd11d1f2d86f8fb2d423bf85567b7
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
-import 'package:ably_flutter_plugin/src/impl/message.dart';
-import 'package:ably_flutter_plugin/src/method_call_handler.dart';
-import 'package:ably_flutter_plugin/src/platform.dart' as platform;
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/impl/message.dart';
+import 'package:ably_flutter/src/method_call_handler.dart';
+import 'package:ably_flutter/src/platform.dart' as platform;
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

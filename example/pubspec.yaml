@@ -1,4 +1,4 @@
-name: ably_flutter_plugin_example
+name: ably_flutter_example
 description: Demonstrates how to use the Ably Flutter plugin.
 publish_to: 'none'
 
@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  ably_flutter_plugin:
+  ably_flutter:
     path: ../
 
   # Stricter Linting

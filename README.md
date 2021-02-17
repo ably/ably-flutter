@@ -60,7 +60,7 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 ### Specify Dependency
 
 Package home:
-[pub.dev/packages/ably_flutter_plugin](https://pub.dev/packages/ably_flutter_plugin)
+[pub.dev/packages/ably_flutter](https://pub.dev/packages/ably_flutter)
 
 See:
 [Adding a package dependency to an app](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app)
@@ -68,7 +68,7 @@ See:
 ### Import the package
 
 ```dart
-import 'package:ably_flutter_plugin/ably_flutter_plugin.dart' as ably;
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 ```
 
 ### Configure a Client Options object
