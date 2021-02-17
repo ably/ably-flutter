@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../../ably_flutter_plugin.dart';
+import '../../../ably_flutter.dart';
 import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
 import '../platform_object.dart';
 import 'realtime.dart';

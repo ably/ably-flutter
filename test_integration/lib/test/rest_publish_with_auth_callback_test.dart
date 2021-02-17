@@ -1,4 +1,4 @@
-import 'package:ably_flutter_plugin/ably_flutter_plugin.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/widgets.dart';
 
 import '../test_dispatcher.dart';

@@ -1,4 +1,4 @@
-import 'package:ably_flutter_plugin/src/spec/spec.dart';
+import 'package:ably_flutter/src/spec/spec.dart';
 
 import 'auth.dart';
 import 'enums.dart';

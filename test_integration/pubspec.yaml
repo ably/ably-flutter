@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  ably_flutter_plugin:
+  ably_flutter:
     path: ".."
   flutter:
     sdk: flutter

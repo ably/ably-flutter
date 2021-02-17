@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../ably_flutter_plugin.dart';
+import '../ably_flutter.dart';
 import '../src/generated/platformconstants.dart';
 import '../src/impl/message.dart';
 

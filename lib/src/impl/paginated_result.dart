@@ -1,4 +1,4 @@
-import '../../ably_flutter_plugin.dart';
+import '../../ably_flutter.dart';
 import '../spec/spec.dart' as spec;
 import 'message.dart';
 import 'platform_object.dart';
