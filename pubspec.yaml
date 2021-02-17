@@ -1,6 +1,6 @@
 name: ably_flutter_plugin
 description: A wrapper around Ably's Cocoa and Java client library SDKs, providing iOS and Android support.
-version: 1.0.0+dev.2
+version: 1.0.1-discontinued.1
 repository: https://github.com/ably/ably-flutter
 
 environment:
