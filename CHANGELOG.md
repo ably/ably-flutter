@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1-discontinued.1
+
+Created branch `discontinued/1.0.1-discontinued.1` as the codebase snapshot to `flutter pub publish` from in order to
+[mark the package under the old name as discontinued](https://dart.dev/tools/pub/publishing#discontinue).
+
 ## [1.0.0+dev.2](https://github.com/ably/ably-flutter/tree/1.0.0-dev.2)
 
 Conforming to pub.dev recommendations, following initial upload to the platform.
