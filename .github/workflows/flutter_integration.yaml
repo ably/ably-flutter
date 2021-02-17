@@ -1,14 +1,10 @@
-# Reference
-#  https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
-#  https://github.com/marketplace/actions/flutter-action
-
-name: flutter_integration
 on:
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - main
 jobs:
   ios:
-    if: github.event.pull_request.draft == false
     strategy:
       matrix:
         device:
@@ -40,7 +36,6 @@ jobs:
           cd test_integration && ./run_integration_tests.sh
 
   android:
-    if: github.event.pull_request.draft == false
     strategy:
       matrix:
         api-level: [19, 22, 24, 26, 28]
