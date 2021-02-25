@@ -136,13 +136,12 @@ class RealtimeChannel extends PlatformObject
           }
         } else {
           _publishQueue
-            .where((e) => !e.completer.isCompleted)
-            .forEach((e) =>
-            e.completer.completeError(AblyException(
-              pe.code,
-              pe.message,
-              pe.details as ErrorInfo,
-            )));
+              .where((e) => !e.completer.isCompleted)
+              .forEach((e) => e.completer.completeError(AblyException(
+                    pe.code,
+                    pe.message,
+                    pe.details as ErrorInfo,
+                  )));
         }
       }
     }
@@ -210,10 +209,10 @@ class RealtimeChannel extends PlatformObject
   Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
-      .map((message) => message as Message)
-      .where((message) =>
-    subscribedNames.isEmpty ||
-      subscribedNames.any((n) => n == message.name));
+        .map((message) => message as Message)
+        .where((message) =>
+            subscribedNames.isEmpty ||
+            subscribedNames.any((n) => n == message.name));
   }
 }
 
@@ -226,7 +225,7 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
 
   @override
   RealtimeChannel createChannel(String name, ChannelOptions options) =>
-    RealtimeChannel(realtime, name, options);
+      RealtimeChannel(realtime, name, options);
 }
 
 /// An item for used to enqueue a message to be published after an ongoing
