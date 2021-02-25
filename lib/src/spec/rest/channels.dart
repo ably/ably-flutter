@@ -1,4 +1,4 @@
-import '../../../ably_flutter_plugin.dart';
+import '../../../ably_flutter.dart';
 import '../common.dart';
 import '../message.dart';
 import 'presence.dart';

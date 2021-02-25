@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../ably_flutter_plugin.dart';
+import '../../../ably_flutter.dart';
 import '../auth.dart';
 import '../common.dart';
 import '../push/push.dart';

@@ -1,4 +1,4 @@
-import '../../ably_flutter_plugin.dart';
+import '../../ably_flutter.dart';
 
 /// An encapsulating object used to pass data to/from platform for method calls
 class AblyMessage {

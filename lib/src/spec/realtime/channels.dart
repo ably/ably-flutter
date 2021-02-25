@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../../ably_flutter_plugin.dart';
+import '../../../ably_flutter.dart';
 import '../common.dart';
 import '../enums.dart';
 import '../message.dart';

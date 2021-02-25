@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import '../../ably_flutter.dart';
 import '../impl/realtime/connection.dart';
 import 'auth.dart';
 import 'enums.dart';

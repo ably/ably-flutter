@@ -1,4 +1,4 @@
-import '../../ably_flutter_plugin.dart';
+import '../../ably_flutter.dart';
 
 /// Log levels - control verbosity of log messages
 ///

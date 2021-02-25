@@ -1,4 +1,4 @@
-import '../../ably_flutter_plugin.dart';
+import '../../ably_flutter.dart';
 
 /// Set of flags that represent the capabilities of a channel for current client
 ///
