@@ -174,7 +174,7 @@ class PresenceMessage {
 
   @override
   bool operator ==(Object other) =>
-    other is PresenceMessage &&
+      other is PresenceMessage &&
       other.id == id &&
       other.action == action &&
       other.clientId == clientId &&
