@@ -14,10 +14,8 @@ dependencies:
 dev_dependencies:
   ably_flutter:
     path: ../
-
   flutter_test:
     sdk: flutter
-
 
   # Stricter Linting
   pedantic: ^1.0.0
