@@ -953,6 +953,13 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// returns true if a channel exists [name]
   bool exists(String name) => _channels[name] != null;
 
+  /// Same as [get].
+  ChannelType operator [](String name) => get(name);
+
+  @override
+  Iterator<ChannelType> get iterator =>
+      _ChannelIterator<ChannelType>(_channels.values.toList());
+
   /// releases channel with [name]
   void release(String name) {
     throw UnimplementedError();
