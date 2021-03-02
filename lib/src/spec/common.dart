@@ -935,15 +935,13 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// This is a private method to be overridden by implementation classes
   ChannelType createChannel(String name, ChannelOptions options);
 
-  /// returns all channels
-  Iterable<ChannelType> get all => _channels.values;
-
   /// creates a channel with [name].
   ///
   /// Doesn't create a channel instance on platform side yet.
   ChannelType get(String name) {
     //TODO add ChannelOptions as optional argument here,
     // and pass it on to createChannel
+    assert(name!=null, 'Channel name cannot be null');
     if (_channels[name] == null) {
       _channels[name] = createChannel(name, null);
     }
@@ -962,6 +960,6 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
 
   /// releases channel with [name]
   void release(String name) {
-    throw UnimplementedError();
+    _channels.remove(name);
   }
 }

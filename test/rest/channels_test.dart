@@ -82,4 +82,10 @@ void main() {
       expect(channels.length, 4);
     });
   });
+
+  group('rest#channels#channel', () {
+    test('Allows only non-null String input for name', () {
+      expect(() => channels.get(null), throwsA(isA<AssertionError>()));
+    });
+  });
 }
