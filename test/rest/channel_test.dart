@@ -34,7 +34,7 @@ void main() {
       // verification
       expect(manager.publishedMessages.length, 1);
       final firstMessage =
-      manager.publishedMessages.first.message as AblyMessage;
+          manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData['channel'], 'test');
       expect(messageData['messages'], isA<List>());
@@ -60,7 +60,7 @@ void main() {
       // verification
       expect(manager.publishedMessages.length, 1);
       final firstMessage =
-      manager.publishedMessages.first.message as AblyMessage;
+          manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData['channel'], 'test');
       expect(messageData['messages'], isA<List>());
@@ -72,7 +72,7 @@ void main() {
     test('publishes message with authCallback timing out', () async {
       // setup
       final tooMuchDelay =
-        Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
+          Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
       var authCallbackCounter = 0;
 
       Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
@@ -116,7 +116,7 @@ void main() {
           expect(manager.publishedMessages.length, 1);
 
           final firstMessage =
-          manager.publishedMessages.first.message as AblyMessage;
+              manager.publishedMessages.first.message as AblyMessage;
           final messageData = firstMessage.message as Map<dynamic, dynamic>;
           expect(messageData['channel'], 'test');
           expect(messageData['messages'], isA<List>());

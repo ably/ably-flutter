@@ -71,11 +71,11 @@ class MockMethodCallManager {
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
           await AblyMethodCallHandler(methodChannel).onRealtimeAuthCallback(
-            AblyMessage(TokenParams(timestamp: DateTime.now()),
-              handle: handle));
+              AblyMessage(TokenParams(timestamp: DateTime.now()),
+                  handle: handle));
           isAuthenticated = true;
           throw PlatformException(
-            code: ErrorCodes.authCallbackFailure.toString());
+              code: ErrorCodes.authCallbackFailure.toString());
         }
 
         publishedMessages.add(message);
@@ -83,7 +83,7 @@ class MockMethodCallManager {
 
       default:
         return throw Exception('Unexpected method call: ${methodCall.method}'
-          ' args: ${methodCall.arguments}');
+            ' args: ${methodCall.arguments}');
     }
   }
 }

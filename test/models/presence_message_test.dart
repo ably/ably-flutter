@@ -186,25 +186,25 @@ void main() {
       });
       test('a string for extras is not allowed', () {
         expect(
-            () => PresenceMessage(extras: 'extra'),
+          () => PresenceMessage(extras: 'extra'),
           throwsA(isA<AssertionError>()),
         );
       });
       test('an int for extras is not allowed', () {
         expect(
-            () => PresenceMessage(extras: 1),
+          () => PresenceMessage(extras: 1),
           throwsA(isA<AssertionError>()),
         );
       });
       test('a bool for extras is not allowed', () {
         expect(
-            () => PresenceMessage(extras: true),
+          () => PresenceMessage(extras: true),
           throwsA(isA<AssertionError>()),
         );
       });
       test('any other Object for extras is not allowed', () {
         expect(
-            () => PresenceMessage(extras: Object()),
+          () => PresenceMessage(extras: Object()),
           throwsA(isA<AssertionError>()),
         );
       });

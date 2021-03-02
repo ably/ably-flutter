@@ -941,7 +941,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   ChannelType get(String name) {
     //TODO add ChannelOptions as optional argument here,
     // and pass it on to createChannel
-    assert(name!=null, 'Channel name cannot be null');
+    assert(name != null, 'Channel name cannot be null');
     if (_channels[name] == null) {
       _channels[name] = createChannel(name, null);
     }

@@ -194,7 +194,7 @@ void main() {
         });
         test('any other Object for extras is not allowed', () {
           expect(
-              () => Message(extras: Object()),
+            () => Message(extras: Object()),
             throwsA(isA<AssertionError>()),
           );
         });
