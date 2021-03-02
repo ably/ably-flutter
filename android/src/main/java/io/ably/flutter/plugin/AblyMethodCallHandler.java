@@ -64,6 +64,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
         _map.put(PlatformConstants.PlatformMethod.restPresenceGet, this::getRestPresence);
         _map.put(PlatformConstants.PlatformMethod.restPresenceHistory, this::getRestPresenceHistory);
+        _map.put(PlatformConstants.PlatformMethod.releaseRestChannel, this::releaseRestChannel);
 
         //Realtime
         _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
@@ -79,6 +80,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.realtimePresenceEnter, this::enterRealtimePresence);
         _map.put(PlatformConstants.PlatformMethod.realtimePresenceUpdate, this::updateRealtimePresence);
         _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
+        _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
 
         // paginated results
         _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
@@ -135,7 +137,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             handler.accept(call, result);
         }
     }
-    
+
     private CompletionListener handleCompletionWithListener(@NonNull MethodChannel.Result result) {
         return new CompletionListener() {
             @Override
@@ -211,6 +213,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             Message[] messages = new Message[channelMessages.size()];
             messages = channelMessages.toArray(messages);
             ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(messages, handleCompletionWithListener(result));
+        });
+    }
+
+    private void releaseRestChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<String>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final String channelName = messageData.message;
+            ablyLibrary.getRest(messageData.handle).channels.release(channelName);
+            result.success(null);
         });
     }
 
@@ -519,6 +530,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             } catch (AblyException e) {
                 handleAblyException(result, e);
             }
+        });
+    }
+
+    private void releaseRealtimeChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<String>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final String channelName = messageData.message;
+            ablyLibrary.getRealtime(messageData.handle).channels.release(channelName);
+            result.success(null);
         });
     }
 

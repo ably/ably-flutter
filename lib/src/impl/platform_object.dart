@@ -60,7 +60,6 @@ abstract class PlatformObject {
       platform.invokePlatformMethod<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
-  @protected
   Future<T> invoke<T>(final String method, [final Object argument]) async {
     final _handle = await handle;
     final message = (null != argument)

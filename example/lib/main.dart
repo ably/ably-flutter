@@ -550,6 +550,14 @@ class _MyAppState extends State<MyApp> {
             });
           });
 
+  Widget releaseRestChannel() => FlatButton(
+        color: Colors.deepOrangeAccent[100],
+        onPressed: (_rest == null)
+            ? null
+            : () => _rest.channels.release(defaultChannel),
+        child: const Text('Release Rest channel'),
+      );
+
   Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
       name: 'Realtime history',
       enabled: _realtime != null,
@@ -628,6 +636,14 @@ class _MyAppState extends State<MyApp> {
               _realtimePresenceHistory = result;
             });
           });
+
+  Widget releaseRealtimeChannel() => FlatButton(
+        color: Colors.deepOrangeAccent[100],
+        onPressed: (_realtime == null)
+            ? null
+            : () => _realtime.channels.release(defaultChannel),
+        child: const Text('Release Realtime channel'),
+      );
 
   final List _presenceData = [
     null,
@@ -802,6 +818,7 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
                           ?.toList() ??
                       [],
+                  releaseRealtimeChannel(),
                   const Divider(),
                   const Text(
                     'Rest',
@@ -830,6 +847,7 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
                           ?.toList() ??
                       [],
+                  releaseRestChannel(),
                 ]),
           ),
         ),

@@ -166,6 +166,12 @@ class RestPlatformChannels extends RestChannels<RestChannel> {
   @override
   RestChannel createChannel(String name, ChannelOptions options) =>
       RestChannel(rest, name, options);
+
+  @override
+  void release(String name) {
+    super.release(name);
+    (rest as Rest).invoke(PlatformMethod.releaseRestChannel, name);
+  }
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

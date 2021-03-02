@@ -39,6 +39,7 @@ final public class PlatformConstants {
         public static final String restHistory = "restHistory";
         public static final String restPresenceGet = "restPresenceGet";
         public static final String restPresenceHistory = "restPresenceHistory";
+        public static final String releaseRestChannel = "releaseRestChannel";
         public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
@@ -52,6 +53,7 @@ final public class PlatformConstants {
         public static final String realtimePresenceLeave = "realtimePresenceLeave";
         public static final String onRealtimePresenceMessage = "onRealtimePresenceMessage";
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
+        public static final String releaseRealtimeChannel = "releaseRealtimeChannel";
         public static final String realtimeHistory = "realtimeHistory";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
