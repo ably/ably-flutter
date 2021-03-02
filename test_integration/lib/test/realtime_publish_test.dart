@@ -1,38 +1,29 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_example/provisioning.dart';
 
+import '../config/data.dart';
 import '../test_dispatcher.dart';
-import 'app_key_provision_helper.dart';
-import 'data.dart';
-import 'test_widget_abstract.dart';
 
-class RealtimePublishTest extends TestWidget {
-  const RealtimePublishTest(TestDispatcherState dispatcher) : super(dispatcher);
+Future<Map<String, dynamic>> testRealtimePublish({
+  TestDispatcherState dispatcher,
+  Map<String, dynamic> payload,
+}) async {
+  final appKey = await provision('sandbox-');
+  final logMessages = <List<String>>[];
 
-  @override
-  TestWidgetState<TestWidget> createState() => RealtimePublishTestState();
-}
-
-class RealtimePublishTestState extends TestWidgetState<RealtimePublishTest> {
-  @override
-  Future<void> test() async {
-    final appKey = await provision('sandbox-');
-    final logMessages = <List<String>>[];
-
-    final realtime = Realtime(
-      options: ClientOptions.fromKey(appKey.toString())
-        ..environment = 'sandbox'
-        ..clientId = 'someClientId'
-        ..logLevel = LogLevel.verbose
-        ..logHandler =
-            ({msg, exception}) => logMessages.add([msg, '$exception']),
-    );
-    await realtimeMessagesPublishUtil(realtime.channels.get('test'));
-    await realtime.close();
-    widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'handle': await realtime.handle,
-      'log': logMessages,
-    });
-  }
+  final realtime = Realtime(
+    options: ClientOptions.fromKey(appKey.toString())
+      ..environment = 'sandbox'
+      ..clientId = 'someClientId'
+      ..logLevel = LogLevel.verbose
+      ..logHandler = ({msg, exception}) => logMessages.add([msg, '$exception']),
+  );
+  await realtimeMessagesPublishUtil(realtime.channels.get('test'));
+  await realtime.close();
+  return {
+    'handle': await realtime.handle,
+    'log': logMessages,
+  };
 }
 
 Future<void> realtimeMessagesPublishUtil(RealtimeChannel channel) async {

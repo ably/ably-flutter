@@ -1,12 +1,10 @@
-//ignore_for_file: avoid_print
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pedantic/pedantic.dart';
 
+import 'config/test_factory.dart';
 import 'driver_data_handler.dart';
-import 'test/test_factory.dart';
 
 /// Decodes messages from the driver, invokes the test and returns the result.
 class TestDispatcher extends StatefulWidget {
@@ -31,6 +29,12 @@ class TestDispatcherState extends State<TestDispatcher> {
 
   Map<String, String> _testResults;
 
+  /// stores whether a test is success/failed/pending
+  /// {'restPublish': true} => basic test passed,
+  /// {'restPublish': false} => failed
+  /// {} i.e., missing 'restPublish' key => test is still pending
+  final _testStatuses = <String, bool>{};
+
   /// To wait for the response of the test after a received message.
   Completer<TestControlMessage> _responseCompleter;
 
@@ -47,10 +51,12 @@ class TestDispatcherState extends State<TestDispatcher> {
   }
 
   Future<TestControlMessage> _incomingDriverMessageHandler(
-      TestControlMessage m) async {
+    TestControlMessage m,
+  ) async {
     if (_responseCompleter != null) {
       _responseCompleter.completeError(
-          'New test started while the previous one is still running.');
+        'New test started while the previous one is still running.',
+      );
       _responseCompleter = null;
       _log.clear();
     }
@@ -62,7 +68,8 @@ class TestDispatcherState extends State<TestDispatcher> {
   }
 
   void _unhandledTestExceptionAndFlutterErrorHandler(
-          Map<String, String> errorMessage) =>
+    Map<String, String> errorMessage,
+  ) =>
       reportTestCompletion({TestControlMessage.errorKey: errorMessage});
 
   final _log = <dynamic>[];
@@ -72,91 +79,86 @@ class TestDispatcherState extends State<TestDispatcher> {
 
   /// Create a response to a message from the driver reporting the test result.
   void reportTestCompletion(Map<String, dynamic> data) {
+    final testName = _message?.testName ?? 'N/A';
     final msg = TestControlMessage(
-      _message?.testName ?? 'N/A',
+      testName,
       payload: data,
       log: _log.toList(),
     );
-
     _responseCompleter?.complete(msg);
     _log.clear();
     _responseCompleter = null;
 
-    _testResults[msg.testName] = msg.toJsonEncoded();
-    setState(() => _message = null);
+    _testResults[msg.testName] = msg.toPrettyJson();
+    setState(() {
+      _message = null;
+      _testStatuses[testName] = !data.containsKey(TestControlMessage.errorKey);
+    });
   }
 
-  /// Configure a timeout in case the test does not complete.
-  ///
-  /// [duration] is the time to wait before an error is reported.
-  /// This method is supposed to be called from test widgets in `initState`
-  ///
-  ///     widget.dispatcher.timeout(const Duration(seconds: 3));
-  ///
-  void timeout(Duration duration) =>
-      unawaited(_responseCompleter.future.timeout(duration, onTimeout: () {
-        reportTestCompletion(
-            {TestControlMessage.errorKey: 'Timed out after $duration'});
-        return null;
-      }));
+  Widget getTestButton(String testName) => FlatButton(
+        color: _testStatuses.containsKey(testName)
+            ? _testStatuses[testName]
+                ? Colors.green
+                : Colors.red
+            : Colors.blue,
+        onPressed: _responseCompleter != null
+            ? null
+            : () {
+                widget.driverDataHandler.call(
+                  TestControlMessage(testName).toJsonEncoded(),
+                );
+              },
+        child: Text(testName),
+      );
 
   @override
   Widget build(BuildContext context) {
     Widget testWidget;
-    if (_noMessageReceivedYet) {
-      testWidget = Container();
-    } else {
+    testWidget = Container();
+    if (!_noMessageReceivedYet) {
       if (widget.testFactory.containsKey(_message.testName)) {
-        testWidget = widget.testFactory[_message.testName](this);
+        widget.testFactory[_message.testName](
+          dispatcher: this,
+          payload: _message.payload,
+        )
+            .then(reportTestCompletion);
       } else {
         reportTestCompletion({
           TestControlMessage.errorKey:
               'Test ${_message?.testName ?? 'N/A'} is not implemented'
         });
-        testWidget = Container();
       }
     }
 
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Test dispatcher'),
+      appBar: AppBar(
+        title: const Text('Test dispatcher'),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Text(_message?.testName ?? 'N/A'),
+          ),
+          testWidget,
+          Expanded(
+            child: ListView.builder(
+              itemCount: _testResults.keys.length,
+              itemBuilder: (context, idx) {
+                final testName = _testResults.keys.toList()[idx];
+                return ListTile(
+                  title: getTestButton(testName),
+                  subtitle: Text(_testResults[testName] ?? 'No result yet'),
+                );
+              },
             ),
-            body: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Text(_message?.testName ?? 'N/A'),
-                  ),
-                  testWidget,
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _testResults.keys.length,
-                      itemBuilder: (context, idx) {
-                        final testName = _testResults.keys.toList()[idx];
-                        return ListTile(
-                          leading: FlatButton(
-                            color: Colors.blue,
-                            onPressed: _responseCompleter != null
-                                ? null
-                                : () {
-                                    widget.driverDataHandler.call(
-                                        TestControlMessage(testName)
-                                            .toJsonEncoded());
-                                  },
-                            child: Text(testName),
-                          ),
-                          subtitle:
-                              Text(_testResults[testName] ?? 'No result yet'),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )));
+          ),
+        ],
+      ),
+    ));
   }
 
   bool get _noMessageReceivedYet => _message == null;
@@ -168,10 +170,8 @@ class ErrorHandler {
   void Function(Map<String, String> message) callback;
 
   void onFlutterError(FlutterErrorDetails details) {
-    if (callback == null) {
-      print(details.exception);
-      print(details.stack);
-    }
+    print(details.exception);
+    print(details.stack);
 
     callback({
       'exceptionType': '${details.exception.runtimeType}',
@@ -183,10 +183,8 @@ class ErrorHandler {
   }
 
   void onException(Object error, StackTrace stack) {
-    if (callback == null) {
-      print(error);
-      print(stack);
-    }
+    print(error);
+    print(stack);
 
     callback({
       'exceptionType': '${error.runtimeType}',
@@ -196,4 +194,7 @@ class ErrorHandler {
   }
 }
 
-typedef TestFactory = Widget Function(TestDispatcherState testDispatcher);
+typedef TestFactory = Future<Map<String, dynamic>> Function({
+  TestDispatcherState dispatcher,
+  Map<String, dynamic> payload,
+});
