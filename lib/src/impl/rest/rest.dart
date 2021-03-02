@@ -48,7 +48,7 @@ class Rest extends PlatformObject
   ///
   /// discussion: https://github.com/ably/ably-flutter/issues/31
   void authUpdateComplete() {
-    for (final channel in channels.all) {
+    for (final channel in channels) {
       channel.authUpdateComplete();
     }
   }
