@@ -158,12 +158,45 @@ void main() {
         });
       });
 
-      group('Can be initialized with ', () {
-        test('null name, client_id and encoding', () {
+      group('arguments with ', () {
+        test('null name, extras, client_id and encoding are allowed', () {
           final message = Message();
           expect(message.name, null);
           expect(message.encoding, null);
           expect(message.clientId, null);
+          expect(message.extras, null);
+        });
+        test('a map of extras is allowed', () {
+          final message = Message(extras: const {'key': 'value'});
+          expect(message.extras, const {'key': 'value'});
+        });
+        test('a list of extras is allowed', () {
+          final message = Message(extras: const ['item1', 'item2']);
+          expect(message.extras, orderedEquals(const ['item1', 'item2']));
+        });
+        test('a string for extras is not allowed', () {
+          expect(
+            () => Message(extras: 'extra'),
+            throwsA(isA<AssertionError>()),
+          );
+        });
+        test('an int for extras is not allowed', () {
+          expect(
+            () => Message(extras: 1),
+            throwsA(isA<AssertionError>()),
+          );
+        });
+        test('a bool for extras is not allowed', () {
+          expect(
+            () => Message(extras: true),
+            throwsA(isA<AssertionError>()),
+          );
+        });
+        test('any other Object for extras is not allowed', () {
+          expect(
+              () => Message(extras: Object()),
+            throwsA(isA<AssertionError>()),
+          );
         });
       });
     });
