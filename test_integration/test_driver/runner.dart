@@ -21,7 +21,7 @@ void main(List<String> args) {
 
   var argv = parser.parse(args);
 
-  if (argv['help']) {
+  if (argv['help'] as bool) {
     print(parser.usage);
     return;
   }
@@ -31,10 +31,10 @@ void main(List<String> args) {
     if (modules is List) {
       runTests(
           groups: modules
-              .map((module) => TestGroup.values[allowedModules.indexOf(module)])
+              .map((module) => TestGroup.values[allowedModules.indexOf(module as String)])
               .toList());
     } else {
-      runTests(groupName: TestGroup.values[allowedModules.indexOf(modules)]);
+      runTests(groupName: TestGroup.values[allowedModules.indexOf(modules as String)]);
     }
   } else {
     runTests(all: true);

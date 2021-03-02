@@ -50,7 +50,10 @@ Future<Map> _provisionApp(final String environmentPrefix) async {
 }
 
 Future<AppKey> provision(String environmentPrefix) async {
-  final result = await _provisionApp(environmentPrefix);
+  final r = RetryOptions(maxAttempts: 5, delayFactor: const Duration(seconds: 2));
+  final result = await r.retry(() async {
+    await _provisionApp(environmentPrefix);
+  });
   final key = result['keys'][0];
   return AppKey(
     key['keyName'] as String,
