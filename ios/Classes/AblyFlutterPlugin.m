@@ -158,6 +158,16 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutterPlugin *c
     }
 };
 
+static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    ARTRest *const client = [ably getRest:messageData.handle];
+    NSString *const channelName = (NSString*)messageData.message;
+    [client.channels release:channelName];
+    result(nil);
+};
+
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
@@ -420,6 +430,16 @@ static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutterPlugin *co
     }];
 };
 
+static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    AblyFlutterMessage *const messageData = message.message;
+    ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
+    NSString *const channelName = (NSString*)messageData.message;
+    [client.channels release:channelName];
+    result(nil);
+};
+
 static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
@@ -515,6 +535,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_restHistory: _getRestHistory,
         AblyPlatformMethod_restPresenceGet: _getRestPresence,
         AblyPlatformMethod_restPresenceHistory: _getRestPresenceHistory,
+        AblyPlatformMethod_releaseRestChannel: _releaseRestChannel,
         AblyPlatformMethod_createRealtimeWithOptions: _createRealtimeWithOptions,
         AblyPlatformMethod_connectRealtime: _connectRealtime,
         AblyPlatformMethod_closeRealtime: _closeRealtime,
@@ -530,6 +551,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimePresenceEnter: _enterRealtimePresence,
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
+        AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
     };
     
     _nextRegistration = 1;
