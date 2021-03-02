@@ -10,6 +10,7 @@ dependencies:
     sdk: flutter
 
   http: ^0.12.0+4
+  retry: ^3.0.1
 
 dev_dependencies:
   ably_flutter:
