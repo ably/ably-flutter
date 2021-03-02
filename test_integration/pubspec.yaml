@@ -4,13 +4,16 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   ably_flutter:
-    path: ".."
+    path: '..'
   flutter:
     sdk: flutter
+  ably_flutter_example:
+    path: '../example'
+  args: ^1.6.0
 
 dev_dependencies:
   flutter_driver:

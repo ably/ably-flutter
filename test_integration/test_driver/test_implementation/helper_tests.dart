@@ -13,8 +13,6 @@ Future testShouldReportUnhandledException(FlutterDriver driver) async {
   expect(response.payload['error']['exception'], contains('Unhandled'));
 }
 
-// FlutterError seems to break the test app
-// and needs to be run last
 Future testShouldReportFlutterError(FlutterDriver driver) async {
   const message = TestControlMessage(TestName.testHelperFlutterErrorTest);
 
