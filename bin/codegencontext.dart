@@ -57,6 +57,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'restHistory', 'value': 'restHistory'},
   {'name': 'restPresenceGet', 'value': 'restPresenceGet'},
   {'name': 'restPresenceHistory', 'value': 'restPresenceHistory'},
+  {'name': 'releaseRestChannel', 'value': 'releaseRestChannel'},
 
   // Realtime
   {'name': 'createRealtimeWithOptions', 'value': 'createRealtimeWithOptions'},
@@ -75,6 +76,7 @@ const List<Map<String, dynamic>> _platformMethods = [
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
   },
+  {'name': 'releaseRealtimeChannel', 'value': 'releaseRealtimeChannel'},
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
   // Realtime events

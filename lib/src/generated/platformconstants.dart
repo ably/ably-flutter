@@ -36,6 +36,7 @@ class PlatformMethod {
   static const String restHistory = 'restHistory';
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
+  static const String releaseRestChannel = 'releaseRestChannel';
   static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -50,6 +51,7 @@ class PlatformMethod {
   static const String onRealtimePresenceMessage = 'onRealtimePresenceMessage';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
+  static const String releaseRealtimeChannel = 'releaseRealtimeChannel';
   static const String realtimeHistory = 'realtimeHistory';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';

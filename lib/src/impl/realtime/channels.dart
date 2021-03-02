@@ -229,6 +229,12 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   @override
   RealtimeChannel createChannel(String name, ChannelOptions options) =>
       RealtimeChannel(realtime, name, options);
+
+  @override
+  void release(String name) {
+    super.release(name);
+    (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
+  }
 }
 
 /// An item for used to enqueue a message to be published after an ongoing
