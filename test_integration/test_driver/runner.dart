@@ -1,9 +1,10 @@
 import 'package:args/args.dart';
-import 'tests_config.dart';
+
 import 'tests_abstract.dart';
+import 'tests_config.dart';
 
 void main(List<String> args) {
-  var parser = ArgParser();
+  final parser = ArgParser();
   final allowedModules =
       TestGroup.values.map((group) => group.toString().split('.')[1]).toList();
   parser.addOption(
@@ -19,7 +20,7 @@ void main(List<String> args) {
     help: 'Show this help content',
   );
 
-  var argv = parser.parse(args);
+  final argv = parser.parse(args);
 
   if (argv['help'] as bool) {
     print(parser.usage);

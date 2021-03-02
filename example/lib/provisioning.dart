@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
+import 'package:retry/retry.dart';
 
 const _capabilitySpec = {
   '*': ['publish', 'subscribe', 'history', 'presence'],
