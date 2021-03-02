@@ -1,8 +1,8 @@
-import 'dart:convert' show json;
+import 'dart:convert';
 
 import 'package:flutter_driver/flutter_driver.dart';
 
-export 'package:ably_flutter_integration_test/test/test_names.dart';
+export 'config/test_names.dart';
 
 /// Send a message to run a widget test and receive a response.
 ///
@@ -67,4 +67,6 @@ class TestControlMessage {
       };
 
   String toJsonEncoded() => json.encode(toJson());
+
+  String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 }

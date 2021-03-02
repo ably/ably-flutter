@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 
+import 'config/test_factory.dart';
 import 'driver_data_handler.dart';
-import 'test/test_factory.dart';
 import 'test_dispatcher.dart';
 
 void main() {
   final dataHandler = DriverDataHandler();
-  // This line enables the extension.
+
+  // enable driver extension
   enableFlutterDriverExtension(handler: dataHandler);
 
   final flutterErrorHandler = ErrorHandler();
