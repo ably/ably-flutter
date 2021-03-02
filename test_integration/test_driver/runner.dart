@@ -31,10 +31,13 @@ void main(List<String> args) {
     if (modules is List) {
       runTests(
           groups: modules
-              .map((module) => TestGroup.values[allowedModules.indexOf(module as String)])
+              .map((module) =>
+                  TestGroup.values[allowedModules.indexOf(module as String)])
               .toList());
     } else {
-      runTests(groupName: TestGroup.values[allowedModules.indexOf(modules as String)]);
+      runTests(
+          groupName:
+              TestGroup.values[allowedModules.indexOf(modules as String)]);
     }
   } else {
     runTests(all: true);

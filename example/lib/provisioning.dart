@@ -50,7 +50,10 @@ Future<Map> _provisionApp(final String environmentPrefix) async {
 }
 
 Future<AppKey> provision(String environmentPrefix) async {
-  final r = RetryOptions(maxAttempts: 5, delayFactor: const Duration(seconds: 2));
+  final r = RetryOptions(
+    maxAttempts: 5,
+    delayFactor: const Duration(seconds: 2),
+  );
   final result = await r.retry(() async {
     await _provisionApp(environmentPrefix);
   });
