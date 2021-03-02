@@ -49,6 +49,42 @@ class MessageData<T> {
   }
 }
 
+/// Handles supported message extras types, their encoding and decoding
+class MessageExtras<T> {
+  final T _extras;
+
+  /// Only Map and List types are supported
+  MessageExtras(this._extras) : assert(T == Map || T == List);
+
+  /// retrieve extras
+  T get extras => _extras;
+
+  /// initializes [MessageExtras] with given value and validates
+  /// the data type, runtime
+  static MessageExtras fromValue(Object value) {
+    if (value == null) {
+      return null;
+    }
+    assert(
+      value is MessageExtras || value is Map || value is List,
+      'Message extras must be either `Map`, `List`, or `null`.'
+      ' Does not support $value ("${value.runtimeType}")',
+    );
+    if (value is MessageExtras) {
+      return value;
+    } else if (value is Map) {
+      return MessageExtras<Map>(value);
+    } else if (value is List) {
+      return MessageExtras<List>(value);
+    } else {
+      throw AssertionError(
+        'Message extras must be either `Map`, `List` or `null`.'
+        ' Does not support $value ("${value.runtimeType}")',
+      );
+    }
+  }
+}
+
 /// An individual message to be sent/received by Ably
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TM1
@@ -89,8 +125,13 @@ class Message {
   /// https://docs.ably.io/client-lib-development-guide/features/#TM2g
   final String name;
 
-  /// Extras, if available
-  final Map extras;
+  final MessageExtras _extras;
+
+  /// Message extras that may contain message metadata
+  /// and/or ancillary payloads
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#TM2i
+  Object get extras => _extras?.extras;
 
   /// Creates a message instance with [name], [data] and [clientId]
   Message({
@@ -101,8 +142,9 @@ class Message {
     this.connectionId,
     this.timestamp,
     this.encoding,
-    this.extras,
-  }) : _data = MessageData.fromValue(data);
+    Object extras,
+  })  : _data = MessageData.fromValue(data),
+        _extras = MessageExtras.fromValue(extras);
 
   @override
   bool operator ==(Object other) =>
@@ -140,11 +182,11 @@ class Message {
         connectionId = jsonObject['connectionId'] as String,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String,
-        extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
-            jsonObject['extras'] as Map),
+        _extras = MessageExtras.fromValue(jsonObject['extras']),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
-                jsonObject['timestamp'] as int)
+                jsonObject['timestamp'] as int,
+              )
             : null;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TM3
@@ -202,8 +244,13 @@ class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
   final String encoding;
 
+  final MessageExtras _extras;
+
+  /// Message extras that may contain message metadata
+  /// and/or ancillary payloads
+  ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3i
-  final Map<String, dynamic> extras;
+  Object get extras => _extras?.extras;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3g
   final DateTime timestamp;
@@ -219,9 +266,10 @@ class PresenceMessage {
     this.connectionId,
     Object data,
     this.encoding,
-    this.extras,
+    Object extras,
     this.timestamp,
-  }) : _data = MessageData.fromValue(data);
+  })  : _data = MessageData.fromValue(data),
+        _extras = MessageExtras.fromValue(extras);
 
   @override
   bool operator ==(Object other) =>
@@ -260,11 +308,11 @@ class PresenceMessage {
         connectionId = jsonObject['connectionId'] as String,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String,
-        extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
-            jsonObject['extras'] as Map),
+        _extras = MessageExtras.fromValue(jsonObject['extras']),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
-                jsonObject['timestamp'] as int)
+                jsonObject['timestamp'] as int,
+              )
             : null;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
