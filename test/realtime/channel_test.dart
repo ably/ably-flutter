@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/impl/message.dart';
-import 'package:ably_flutter/src/method_call_handler.dart';
-import 'package:ably_flutter/src/platform.dart' as platform;
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -38,7 +35,8 @@ void main() {
 
       // verification
       expect(manager.publishedMessages.length, 3);
-      final firstMessage = manager.publishedMessages.first.message as AblyMessage;
+      final firstMessage =
+          manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData['channel'], 'test');
       expect(messageData['messages'], isA<List>());
@@ -64,7 +62,8 @@ void main() {
       // verification
 
       expect(manager.publishedMessages.length, 1);
-      final firstMessage = manager.publishedMessages.first.message as AblyMessage;
+      final firstMessage =
+          manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData['channel'], 'test');
       expect(messageData['messages'], isA<List>());
@@ -119,7 +118,8 @@ void main() {
 
           expect(manager.publishedMessages.length, 1);
 
-          final firstMessage = manager.publishedMessages.first.message as AblyMessage;
+          final firstMessage =
+              manager.publishedMessages.first.message as AblyMessage;
           final messageData = firstMessage.message as Map<dynamic, dynamic>;
           expect(messageData['channel'], 'test');
           expect(messageData['messages'], isA<List>());
