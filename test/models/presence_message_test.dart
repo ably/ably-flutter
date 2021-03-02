@@ -28,28 +28,28 @@ void main() {
         extras: extras,
         timestamp: timestamp,
       );
-      test('Retrieves id', () {
+      test('#id retrieves id', () {
         expect(presenceMessage.id, messageId);
       });
-      test('Retrieves action', () {
+      test('#action retrieves action', () {
         expect(presenceMessage.action, action);
       });
-      test('Retrieves clientId', () {
+      test('#clientId retrieves clientId', () {
         expect(presenceMessage.clientId, clientId);
       });
-      test('Retrieves connectionId', () {
+      test('#connectionId retrieves connectionId', () {
         expect(presenceMessage.connectionId, connectionId);
       });
-      test('Retrieves data', () {
+      test('#data retrieves data', () {
         expect(presenceMessage.data, data);
       });
-      test('Retrieves encoding', () {
+      test('#encoding retrieves encoding', () {
         expect(presenceMessage.encoding, encoding);
       });
-      test('Retrieves extras', () {
+      test('#extras retrieves extras', () {
         expect(presenceMessage.extras, extras);
       });
-      test('Retrieves timestamp', () {
+      test('#timestamp retrieves timestamp', () {
         expect(presenceMessage.timestamp, timestamp);
       });
 
