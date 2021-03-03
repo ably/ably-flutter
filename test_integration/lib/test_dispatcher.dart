@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'config/test_factory.dart';
 import 'driver_data_handler.dart';
 
+enum _TestStatus { success, error, progress }
+
 /// Decodes messages from the driver, invokes the test and returns the result.
 class TestDispatcher extends StatefulWidget {
   final DriverDataHandler driverDataHandler;
@@ -33,7 +35,7 @@ class TestDispatcherState extends State<TestDispatcher> {
   /// {'restPublish': true} => basic test passed,
   /// {'restPublish': false} => failed
   /// {} i.e., missing 'restPublish' key => test is still pending
-  final _testStatuses = <String, bool>{};
+  final _testStatuses = <String, _TestStatus>{};
 
   /// To wait for the response of the test after a received message.
   Completer<TestControlMessage> _responseCompleter;
@@ -92,32 +94,101 @@ class TestDispatcherState extends State<TestDispatcher> {
     _testResults[msg.testName] = msg.toPrettyJson();
     setState(() {
       _message = null;
-      _testStatuses[testName] = !data.containsKey(TestControlMessage.errorKey);
+      _testStatuses[testName] = data.containsKey(TestControlMessage.errorKey)
+          ? _TestStatus.error
+          : _TestStatus.success;
     });
   }
 
-  Widget getTestButton(String testName) => FlatButton(
-        color: _testStatuses.containsKey(testName)
-            ? _testStatuses[testName]
-                ? Colors.green
-                : Colors.red
-            : Colors.blue,
-        onPressed: _responseCompleter != null
-            ? null
-            : () {
-                widget.driverDataHandler.call(
-                  TestControlMessage(testName).toJsonEncoded(),
-                );
-              },
-        child: Text(testName),
+  Color _getColor(String testName) {
+    switch (_testStatuses[testName]) {
+      case _TestStatus.success:
+        return Colors.green;
+      case _TestStatus.error:
+        return Colors.red;
+      case _TestStatus.progress:
+        return Colors.blue;
+    }
+    return Colors.grey;
+  }
+
+  Widget _getAction(String testName) {
+    final playIcon = IconButton(
+      icon: const Icon(Icons.play_arrow),
+      onPressed: _responseCompleter != null
+          ? null
+          : () {
+              widget.driverDataHandler.call(
+                TestControlMessage(testName).toJsonEncoded(),
+              );
+            },
+    );
+    switch (_testStatuses[testName]) {
+      case _TestStatus.success:
+        return playIcon;
+      case _TestStatus.error:
+        return playIcon;
+      case _TestStatus.progress:
+        return const SizedBox(
+          width: 18,
+          height: 18,
+          child: CircularProgressIndicator(),
+        );
+    }
+    return playIcon;
+  }
+
+  Widget _getStatus(String testName) {
+    switch (_testStatuses[testName]) {
+      case _TestStatus.success:
+        return const Icon(Icons.check);
+      case _TestStatus.error:
+        return const Icon(Icons.close);
+      case _TestStatus.progress:
+        return Container();
+    }
+    return Container();
+  }
+
+  Widget getTestRow(BuildContext context, String testName) => Row(
+        children: [
+          Expanded(
+            child: Text(
+              testName,
+              style: TextStyle(color: _getColor(testName)),
+            ),
+          ),
+          _getAction(testName),
+          _getStatus(testName),
+          IconButton(
+            icon: const Icon(Icons.remove_red_eye),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  contentPadding: const EdgeInsets.all(4),
+                  insetPadding: const EdgeInsets.symmetric(vertical: 24),
+                  content: SingleChildScrollView(
+                    child: Text(
+                      _testResults[testName] ?? 'No result yet',
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       );
 
   @override
   Widget build(BuildContext context) {
     Widget testWidget;
     testWidget = Container();
+    final testName = _message?.testName ?? 'N/A';
     if (!_noMessageReceivedYet) {
-      if (widget.testFactory.containsKey(_message.testName)) {
+      if (widget.testFactory.containsKey(testName)) {
+        _testStatuses[testName] = _TestStatus.progress;
+        setState(() {});
         widget.testFactory[_message.testName](
           dispatcher: this,
           payload: _message.payload,
@@ -149,10 +220,7 @@ class TestDispatcherState extends State<TestDispatcher> {
               itemCount: _testResults.keys.length,
               itemBuilder: (context, idx) {
                 final testName = _testResults.keys.toList()[idx];
-                return ListTile(
-                  title: getTestButton(testName),
-                  subtitle: Text(_testResults[testName] ?? 'No result yet'),
-                );
+                return ListTile(subtitle: getTestRow(context, testName));
               },
             ),
           ),

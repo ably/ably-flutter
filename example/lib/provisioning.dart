@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 
@@ -50,13 +51,11 @@ Future<Map> _provisionApp(final String environmentPrefix) async {
 }
 
 Future<AppKey> provision(String environmentPrefix) async {
-  final r = RetryOptions(
+  const r = RetryOptions(
     maxAttempts: 5,
-    delayFactor: const Duration(seconds: 2),
+    delayFactor: Duration(seconds: 2),
   );
-  final result = await r.retry(() async {
-    await _provisionApp(environmentPrefix);
-  });
+  final result = await r.retry(() => _provisionApp(environmentPrefix));
   final key = result['keys'][0];
   return AppKey(
     key['keyName'] as String,

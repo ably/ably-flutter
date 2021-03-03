@@ -53,7 +53,7 @@ class StreamsChannel {
           await controller.close();
         } else {
           try {
-            controller.add(codec.decodeEnvelope(reply) as T);
+            controller.add(codec.decodeEnvelope(reply as ByteData) as T);
           } on PlatformException catch (e) {
             controller.addError(e);
           }

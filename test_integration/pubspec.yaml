@@ -1,5 +1,5 @@
 name: ably_flutter_integration_test
-description: A new Flutter project.
+description: Integration tests for Ably Flutter plugin.
 publish_to: 'none'
 version: 1.0.0+1
 
