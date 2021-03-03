@@ -2,10 +2,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
 import '../config/encoders.dart';
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testRealtimeEvents({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   final appKey = await provision('sandbox-');
@@ -35,10 +35,10 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   realtime.connection.on(ConnectionEvent.connected).listen(
       (e) => filteredConnectionStateChanges.add(encodeConnectionEvent(e)));
 
-  dispatcher.reportLog({'before realtime.connect': ''});
+  reporter.reportLog({'before realtime.connect': ''});
   recordConnectionState(); //connection: initialized
   await realtime.connect();
-  dispatcher.reportLog({'after realtime.connect': ''});
+  reporter.reportLog({'after realtime.connect': ''});
 
   final channel = realtime.channels.get('events-test');
   void recordChannelState() =>
@@ -51,23 +51,23 @@ Future<Map<String, dynamic>> testRealtimeEvents({
       .listen((e) => filteredChannelStateChanges.add(encodeChannelEvent(e)));
   recordChannelState(); // channel: initialized
 
-  dispatcher.reportLog({'before channel.attach': ''});
+  reporter.reportLog({'before channel.attach': ''});
   await channel.attach();
   recordChannelState(); // channel: attached
-  dispatcher
+  reporter
     ..reportLog({'after channel.attach': ''})
     ..reportLog({'before channel.publish': ''});
   await channel.publish(name: 'hello', data: 'ably');
   recordChannelState(); // channel: attached
   recordConnectionState(); // connection: connected
-  dispatcher
+  reporter
     ..reportLog({'after channel.publish': ''})
     ..reportLog({'before channel.detach': ''});
   await channel.detach();
-  dispatcher.reportLog({'after channel.detach': ''});
+  reporter.reportLog({'after channel.detach': ''});
   recordChannelState(); // channel: detached
   recordConnectionState(); // connection: connected
-  dispatcher.reportLog({'before connection.close': ''});
+  reporter.reportLog({'before connection.close': ''});
   await realtime.close();
   await Future.delayed(Duration.zero);
   while (realtime.connection.state != ConnectionState.closed) {
@@ -75,7 +75,7 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   }
   recordChannelState(); // channel: detached
   recordConnectionState(); // connection: closed
-  dispatcher.reportLog({'after connection.close': ''});
+  reporter.reportLog({'after connection.close': ''});
 
   return {
     'connectionStates': connectionStates,

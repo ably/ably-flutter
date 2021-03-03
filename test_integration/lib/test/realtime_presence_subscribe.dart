@@ -5,15 +5,15 @@ import 'package:ably_flutter_example/provisioning.dart';
 
 import '../config/data.dart';
 import '../config/encoders.dart';
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 final logMessages = <List<String>>[];
 
 Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
-  dispatcher.reportLog('init start');
+  reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();
   final presence = Realtime(
     options: ClientOptions.fromKey(appKey)

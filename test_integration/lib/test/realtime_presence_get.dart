@@ -3,7 +3,7 @@ import 'package:ably_flutter_example/provisioning.dart';
 
 import '../config/data.dart';
 import '../config/encoders.dart';
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 final logMessages = <List<String>>[];
 
@@ -19,10 +19,10 @@ ClientOptions getClientOptions(
           ({msg, exception}) => logMessages.add([msg, exception.toString()]);
 
 Future<Map<String, dynamic>> testRealtimePresenceGet({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
-  dispatcher.reportLog('init start');
+  reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();
 
   final realtime = Realtime(options: getClientOptions(appKey));

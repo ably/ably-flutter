@@ -1,33 +1,36 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'config/test_factory.dart';
 import 'driver_data_handler.dart';
+import 'factory/error_handler.dart';
+import 'factory/reporter.dart';
 
 enum _TestStatus { success, error, progress }
 
 /// Decodes messages from the driver, invokes the test and returns the result.
 class TestDispatcher extends StatefulWidget {
-  final DriverDataHandler driverDataHandler;
   final ErrorHandler errorHandler;
   final Map<String, TestFactory> testFactory;
+  final DispatcherController controller;
 
   const TestDispatcher({
     Key key,
     this.testFactory,
-    this.driverDataHandler,
     this.errorHandler,
+    this.controller,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => TestDispatcherState();
+  State<StatefulWidget> createState() => _TestDispatcherState();
 }
 
-class TestDispatcherState extends State<TestDispatcher> {
+class _TestDispatcherState extends State<TestDispatcher> {
   /// The last message received from the driver.
-  TestControlMessage _message;
+  Reporter _reporter;
 
   Map<String, String> _testResults;
 
@@ -37,68 +40,63 @@ class TestDispatcherState extends State<TestDispatcher> {
   /// {} i.e., missing 'restPublish' key => test is still pending
   final _testStatuses = <String, _TestStatus>{};
 
-  /// To wait for the response of the test after a received message.
-  Completer<TestControlMessage> _responseCompleter;
-
   @override
   void initState() {
     super.initState();
+    widget.controller.setDispatcher(this);
     _testResults = <String, String>{
       for (final key in testFactory.keys) key: '',
     };
-
-    widget.driverDataHandler.callback = _incomingDriverMessageHandler;
-    widget.errorHandler.callback =
-        _unhandledTestExceptionAndFlutterErrorHandler;
   }
 
-  Future<TestControlMessage> _incomingDriverMessageHandler(
-    TestControlMessage m,
-  ) async {
-    if (_responseCompleter != null) {
-      _responseCompleter.completeError(
-        'New test started while the previous one is still running.',
-      );
-      _responseCompleter = null;
-      _log.clear();
-    }
-    _responseCompleter = Completer<TestControlMessage>();
+  Future<TestControlMessage> handleDriverMessage(
+    TestControlMessage message,
+  ) {
+    final reporter = Reporter(message, widget.controller);
 
-    setState(() => _message = m);
+    Future.delayed(Duration.zero, () async {
+      // check if a test is running and throw error
+      if (_reporter != null) {
+        reporter.reportTestError(
+          'New test started while the previous one is still running.',
+        );
+      }
 
-    return _responseCompleter.future;
+      if (widget.testFactory.containsKey(reporter.testName)) {
+        // check if a test exists with that name
+        _reporter = reporter;
+        if (widget.testFactory.containsKey(_reporter.testName)) {
+          setState(() {
+            _testStatuses[_reporter.testName] = _TestStatus.progress;
+          });
+          final testFunction = widget.testFactory[_reporter.testName];
+          await testFunction(
+            reporter: _reporter,
+            payload: _reporter.message.payload,
+          ).then(
+            (response) {
+              _reporter?.reportTestCompletion(response);
+            },
+          ).catchError(widget.errorHandler.onException);
+        }
+      } else {
+        // report error otherwise
+        reporter.reportTestCompletion({
+          TestControlMessage.errorKey:
+              'Test ${reporter.testName} is not implemented'
+        });
+      }
+      setState(() {});
+    });
+
+    return reporter.response.future;
   }
 
-  void _unhandledTestExceptionAndFlutterErrorHandler(
+  void unhandledTestExceptionAndFlutterErrorHandler(
     Map<String, String> errorMessage,
   ) =>
-      reportTestCompletion({TestControlMessage.errorKey: errorMessage});
-
-  final _log = <dynamic>[];
-
-  /// Collect log messages.to be sent with the response at the end of the test.
-  void reportLog(Object log) => _log.add(log);
-
-  /// Create a response to a message from the driver reporting the test result.
-  void reportTestCompletion(Map<String, dynamic> data) {
-    final testName = _message?.testName ?? 'N/A';
-    final msg = TestControlMessage(
-      testName,
-      payload: data,
-      log: _log.toList(),
-    );
-    _responseCompleter?.complete(msg);
-    _log.clear();
-    _responseCompleter = null;
-
-    _testResults[msg.testName] = msg.toPrettyJson();
-    setState(() {
-      _message = null;
-      _testStatuses[testName] = data.containsKey(TestControlMessage.errorKey)
-          ? _TestStatus.error
-          : _TestStatus.success;
-    });
-  }
+      _reporter
+          .reportTestCompletion({TestControlMessage.errorKey: errorMessage});
 
   Color _getColor(String testName) {
     switch (_testStatuses[testName]) {
@@ -115,13 +113,14 @@ class TestDispatcherState extends State<TestDispatcher> {
   Widget _getAction(String testName) {
     final playIcon = IconButton(
       icon: const Icon(Icons.play_arrow),
-      onPressed: _responseCompleter != null
-          ? null
-          : () {
-              widget.driverDataHandler.call(
-                TestControlMessage(testName).toJsonEncoded(),
-              );
-            },
+      onPressed: _reporter == null
+          ? () {
+              handleDriverMessage(TestControlMessage(testName)).then((_) {
+                setState(() {});
+              });
+              setState(() {});
+            }
+          : null,
     );
     switch (_testStatuses[testName]) {
       case _TestStatus.success:
@@ -143,7 +142,7 @@ class TestDispatcherState extends State<TestDispatcher> {
       case _TestStatus.success:
         return const Icon(Icons.check);
       case _TestStatus.error:
-        return const Icon(Icons.close);
+        return const Icon(Icons.warning_amber_rounded);
       case _TestStatus.progress:
         return Container();
     }
@@ -181,88 +180,63 @@ class TestDispatcherState extends State<TestDispatcher> {
       );
 
   @override
-  Widget build(BuildContext context) {
-    Widget testWidget;
-    testWidget = Container();
-    final testName = _message?.testName ?? 'N/A';
-    if (!_noMessageReceivedYet) {
-      if (widget.testFactory.containsKey(testName)) {
-        _testStatuses[testName] = _TestStatus.progress;
-        setState(() {});
-        widget.testFactory[_message.testName](
-          dispatcher: this,
-          payload: _message.payload,
-        )
-            .then(reportTestCompletion);
-      } else {
-        reportTestCompletion({
-          TestControlMessage.errorKey:
-              'Test ${_message?.testName ?? 'N/A'} is not implemented'
-        });
-      }
-    }
-
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        title: const Text('Test dispatcher'),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-            child: Text(_message?.testName ?? 'N/A'),
-          ),
-          testWidget,
-          Expanded(
-            child: ListView.builder(
-              itemCount: _testResults.keys.length,
-              itemBuilder: (context, idx) {
-                final testName = _testResults.keys.toList()[idx];
-                return ListTile(subtitle: getTestRow(context, testName));
-              },
+  Widget build(BuildContext context) => MaterialApp(
+          home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Test dispatcher'),
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(child: Text(_reporter?.testName ?? '-')),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _testResults.keys.length,
+                itemBuilder: (context, idx) {
+                  final testName = _testResults.keys.toList()[idx];
+                  return ListTile(subtitle: getTestRow(context, testName));
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    ));
-  }
+          ],
+        ),
+      ));
 
-  bool get _noMessageReceivedYet => _message == null;
-}
-
-/// Used to wire app unhandled exceptions and Flutter errors to be reported back
-/// to the test driver.
-class ErrorHandler {
-  void Function(Map<String, String> message) callback;
-
-  void onFlutterError(FlutterErrorDetails details) {
-    print(details.exception);
-    print(details.stack);
-
-    callback({
-      'exceptionType': '${details.exception.runtimeType}',
-      'exception': details.exceptionAsString(),
-      'context': details.context?.toDescription(),
-      'library': details.library,
-      'stackTrace': '${details.stack}',
-    });
-  }
-
-  void onException(Object error, StackTrace stack) {
-    print(error);
-    print(stack);
-
-    callback({
-      'exceptionType': '${error.runtimeType}',
-      'exception': '$error',
-      'stackTrace': '$stack',
+  void renderResponse(TestControlMessage message) {
+    final testName = message.testName;
+    _testResults[testName] = message.toPrettyJson();
+    setState(() {
+      _reporter = null;
+      _testStatuses[testName] =
+          message.payload.containsKey(TestControlMessage.errorKey)
+              ? _TestStatus.error
+              : _TestStatus.success;
     });
   }
 }
 
-typedef TestFactory = Future<Map<String, dynamic>> Function({
-  TestDispatcherState dispatcher,
-  Map<String, dynamic> payload,
-});
+class DispatcherController {
+  _TestDispatcherState _dispatcher;
+
+  // ignore: use_setters_to_change_properties
+  void setDispatcher(_TestDispatcherState dispatcher) {
+    _dispatcher = dispatcher;
+    // more stuff
+  }
+
+  Future<String> driveHandler(String encodedMessage) async {
+    final response = await _dispatcher.handleDriverMessage(
+      TestControlMessage.fromJson(json.decode(encodedMessage) as Map),
+    );
+    return json.encode(response);
+  }
+
+  void errorHandler(Map<String, String> errorMessage) {
+    _dispatcher.unhandledTestExceptionAndFlutterErrorHandler(errorMessage);
+  }
+
+  void setResponse(TestControlMessage message) {
+    _dispatcher.renderResponse(message);
+  }
+}

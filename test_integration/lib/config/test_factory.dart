@@ -1,3 +1,4 @@
+import '../factory/reporter.dart';
 import '../test/app_key_provision_test.dart';
 import '../test/platform_and_ably_version_test.dart';
 import '../test/realtime_events_test.dart';
@@ -16,8 +17,12 @@ import '../test/rest_publish_test.dart';
 import '../test/rest_publish_with_auth_callback_test.dart';
 import '../test/test_helper_flutter_error_test.dart';
 import '../test/test_helper_unhandled_exception_test.dart';
-import '../test_dispatcher.dart';
 import 'test_names.dart';
+
+typedef TestFactory = Future<Map<String, dynamic>> Function({
+  Reporter reporter,
+  Map<String, dynamic> payload,
+});
 
 final testFactory = <String, TestFactory>{
   // platform and app key tests
@@ -26,9 +31,9 @@ final testFactory = <String, TestFactory>{
   // rest tests
   TestName.restPublish: testRestPublish,
   TestName.restHistory: testRestHistory,
+  TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
   TestName.restPresenceGet: testRestPresenceGet,
   TestName.restPresenceHistory: testRestPresenceHistory,
-  TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
   // realtime tests
   TestName.realtimePublish: testRealtimePublish,
   TestName.realtimeEvents: testRealtimeEvents,

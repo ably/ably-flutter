@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testTestHelperFlutterError({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   FlutterError.reportError(const FlutterErrorDetails(

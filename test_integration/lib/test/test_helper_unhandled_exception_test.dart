@@ -1,7 +1,7 @@
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testTestHelperUnhandledException({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   // ignore: only_throw_errors

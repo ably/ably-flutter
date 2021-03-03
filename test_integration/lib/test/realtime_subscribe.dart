@@ -2,11 +2,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
 import '../config/encoders.dart';
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 import 'realtime_publish_test.dart';
 
 Future<Map<String, dynamic>> testRealtimeSubscribe({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   final appKey = await provision('sandbox-');

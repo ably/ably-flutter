@@ -1,9 +1,9 @@
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testAppKeyProvision({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async =>
     {

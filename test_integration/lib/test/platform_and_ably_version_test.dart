@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testPlatformAndAblyVersion({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   final platformVersion = await ably.platformVersion();

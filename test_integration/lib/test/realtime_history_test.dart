@@ -2,14 +2,14 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
 import '../config/encoders.dart';
-import '../test_dispatcher.dart';
+import '../factory/reporter.dart';
 import 'realtime_publish_test.dart';
 
 Future<Map<String, dynamic>> testRealtimeHistory({
-  TestDispatcherState dispatcher,
+  Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
-  dispatcher.reportLog('init start');
+  reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
   final logMessages = <List<String>>[];
 
