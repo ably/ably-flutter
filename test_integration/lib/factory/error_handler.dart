@@ -1,25 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
 /// Used to wire app unhandled exceptions and Flutter errors to be reported back
 /// to the test driver.
 class ErrorHandler {
-  void Function(Map<String, String> message) callback;
-
-  ErrorHandler(this.callback);
-
-  void onFlutterError(FlutterErrorDetails details) {
+  static Map<String, String> encodeFlutterError(FlutterErrorDetails details) {
     print('Caught FlutterError::\n'
         'exception: ${details.exception}\n'
         'stack: ${details.stack}');
 
-    callback({
+    return {
       'exceptionType': '${details.exception.runtimeType}',
       'exception': details.exceptionAsString(),
       'context': details.context?.toDescription(),
       'library': details.library,
       'stackTrace': '${details.stack}',
-    });
+    };
   }
 
   static Map<String, String> encodeException(Object error, StackTrace stack) {

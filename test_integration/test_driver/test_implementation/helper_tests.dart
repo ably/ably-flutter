@@ -12,14 +12,3 @@ Future testShouldReportUnhandledException(FlutterDriver driver) async {
   expect(response.payload['error']['exceptionType'], 'String');
   expect(response.payload['error']['exception'], contains('Unhandled'));
 }
-
-Future testShouldReportFlutterError(FlutterDriver driver) async {
-  const message = TestControlMessage(TestName.testHelperFlutterErrorTest);
-
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['error']['exceptionType'], 'String');
-  expect(response.payload['error']['exception'], contains('FlutterError'));
-}

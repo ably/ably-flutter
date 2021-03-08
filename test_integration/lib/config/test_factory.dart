@@ -15,7 +15,6 @@ import '../test/rest_presence_get_test.dart';
 import '../test/rest_presence_history_test.dart';
 import '../test/rest_publish_test.dart';
 import '../test/rest_publish_with_auth_callback_test.dart';
-import '../test/test_helper_flutter_error_test.dart';
 import '../test/test_helper_unhandled_exception_test.dart';
 import 'test_names.dart';
 
@@ -46,6 +45,5 @@ final testFactory = <String, TestFactory>{
       testRealtimePresenceEnterUpdateLeave,
   TestName.realtimePresenceSubscribe: testRealtimePresenceSubscribe,
   // helper tests
-  TestName.testHelperFlutterErrorTest: testTestHelperFlutterError,
   TestName.testHelperUnhandledExceptionTest: testTestHelperUnhandledException,
 };

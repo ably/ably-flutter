@@ -13,14 +13,12 @@ enum _TestStatus { success, error, progress }
 
 /// Decodes messages from the driver, invokes the test and returns the result.
 class TestDispatcher extends StatefulWidget {
-  final ErrorHandler errorHandler;
   final Map<String, TestFactory> testFactory;
   final DispatcherController controller;
 
   const TestDispatcher({
     Key key,
     this.testFactory,
-    this.errorHandler,
     this.controller,
   }) : super(key: key);
 
@@ -83,6 +81,9 @@ class _TestDispatcherState extends State<TestDispatcher> {
                 }),
               );
         }
+      } else if (reporter.testName == TestName.getFlutterErrors) {
+        reporter.reportTestCompletion({'logs': _flutterErrorLogs});
+        _flutterErrorLogs.clear();
       } else {
         // report error otherwise
         reporter.reportTestCompletion({
@@ -96,11 +97,10 @@ class _TestDispatcherState extends State<TestDispatcher> {
     return reporter.response.future;
   }
 
-  void unhandledTestExceptionAndFlutterErrorHandler(
-    Map<String, String> errorMessage,
-  ) =>
-      _reporter
-          .reportTestCompletion({TestControlMessage.errorKey: errorMessage});
+  final _flutterErrorLogs = <Map<String, String>>[];
+
+  void logFlutterErrors(FlutterErrorDetails details) =>
+      _flutterErrorLogs.add(ErrorHandler.encodeFlutterError(details));
 
   Color _getColor(String testName) {
     switch (_testStatuses[testName]) {
@@ -241,8 +241,8 @@ class DispatcherController {
     return json.encode(response);
   }
 
-  void errorHandler(Map<String, String> errorMessage) {
-    _dispatcher.unhandledTestExceptionAndFlutterErrorHandler(errorMessage);
+  void logFlutterErrors(FlutterErrorDetails details) {
+    _dispatcher.logFlutterErrors(details);
   }
 
   void setResponse(TestControlMessage message) {

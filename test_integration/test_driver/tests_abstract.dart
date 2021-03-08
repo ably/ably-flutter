@@ -1,3 +1,4 @@
+import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -27,6 +28,9 @@ void runTests({
 
       tearDownAll(() async {
         if (driver != null) {
+          const message = TestControlMessage(TestName.getFlutterErrors);
+          final flutterErrors = await getTestResponse(driver, message);
+          print('Flutter errors: ${flutterErrors.payload}');
           final _ = driver.close();
         }
       });

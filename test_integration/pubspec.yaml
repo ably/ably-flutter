@@ -7,11 +7,11 @@ environment:
   sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
-  args: ^1.6.0
   ably_flutter:
     path: '..'
   ably_flutter_example:
     path: '../example'
+  args: ^1.6.0
   flutter:
     sdk: flutter
 
