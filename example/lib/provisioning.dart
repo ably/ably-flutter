@@ -51,11 +51,10 @@ Future<Map> _provisionApp(final String environmentPrefix) async {
 }
 
 Future<AppKey> provision(String environmentPrefix) async {
-  const r = RetryOptions(
+  final result = await const RetryOptions(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
-  );
-  final result = await r.retry(() => _provisionApp(environmentPrefix));
+  ).retry(() => _provisionApp(environmentPrefix));
   final key = result['keys'][0];
   return AppKey(
     key['keyName'] as String,
@@ -67,9 +66,12 @@ Future<AppKey> provision(String environmentPrefix) async {
 Future<Map<String, dynamic>> getTokenRequest() async {
   // NOTE: This doesn't work with sandbox. The URL can point to test-harness's
   // tokenRequest express server's `/auth` endpoint
-  final r = await http.get(authURL);
-  //ignore: avoid_print
+  final r = await const RetryOptions(
+    maxAttempts: 5,
+    delayFactor: Duration(seconds: 2),
+  ).retry(() => http.get(authURL));
   print('tokenRequest from tokenRequest server: ${r.body}');
   return Map.castFrom<dynamic, dynamic, String, dynamic>(
-      jsonDecode(r.body) as Map);
+    jsonDecode(r.body) as Map,
+  );
 }
