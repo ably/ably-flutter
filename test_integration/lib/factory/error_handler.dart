@@ -22,17 +22,17 @@ class ErrorHandler {
     });
   }
 
-  void onException(Object error, StackTrace stack) {
+  static Map<String, String> encodeException(Object error, StackTrace stack) {
     print(error);
     print(stack);
     print('Caught Exception::\n'
         'error: $error\n'
         'stack: $stack');
 
-    callback({
+    return {
       'exceptionType': '${error.runtimeType}',
       'exception': '$error',
       'stackTrace': '$stack',
-    });
+    };
   }
 }

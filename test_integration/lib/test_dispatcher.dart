@@ -29,8 +29,8 @@ class TestDispatcher extends StatefulWidget {
 }
 
 class _TestDispatcherState extends State<TestDispatcher> {
-  /// The last message received from the driver.
-  Reporter _reporter;
+  /// A map of active test names vs reporters
+  final _reporters = <String, Reporter>{};
 
   Map<String, String> _testResults;
 
@@ -56,28 +56,32 @@ class _TestDispatcherState extends State<TestDispatcher> {
 
     Future.delayed(Duration.zero, () async {
       // check if a test is running and throw error
-      if (_reporter != null) {
+      if (_reporters.containsKey(reporter.testName)) {
         reporter.reportTestError(
-          'New test started while the previous one is still running.',
+          'Test started while the previous one is still running.',
         );
       }
 
       if (widget.testFactory.containsKey(reporter.testName)) {
         // check if a test exists with that name
-        _reporter = reporter;
-        if (widget.testFactory.containsKey(_reporter.testName)) {
+        if (widget.testFactory.containsKey(reporter.testName)) {
           setState(() {
-            _testStatuses[_reporter.testName] = _TestStatus.progress;
+            _testStatuses[reporter.testName] = _TestStatus.progress;
           });
-          final testFunction = widget.testFactory[_reporter.testName];
+          final testFunction = widget.testFactory[reporter.testName];
           await testFunction(
-            reporter: _reporter,
-            payload: _reporter.message.payload,
-          ).then(
-            (response) {
-              _reporter?.reportTestCompletion(response);
-            },
-          ).catchError(widget.errorHandler.onException);
+            reporter: reporter,
+            payload: reporter.message.payload,
+          )
+              .then((response) => reporter?.reportTestCompletion(response))
+              .catchError(
+                (error, stack) => reporter.reportTestCompletion({
+                  TestControlMessage.errorKey: ErrorHandler.encodeException(
+                    error,
+                    stack as StackTrace,
+                  ),
+                }),
+              );
         }
       } else {
         // report error otherwise
@@ -113,14 +117,12 @@ class _TestDispatcherState extends State<TestDispatcher> {
   Widget _getAction(String testName) {
     final playIcon = IconButton(
       icon: const Icon(Icons.play_arrow),
-      onPressed: _reporter == null
-          ? () {
-              handleDriverMessage(TestControlMessage(testName)).then((_) {
-                setState(() {});
-              });
-              setState(() {});
-            }
-          : null,
+      onPressed: () {
+        handleDriverMessage(TestControlMessage(testName)).then((_) {
+          setState(() {});
+        });
+        setState(() {});
+      },
     );
     switch (_testStatuses[testName]) {
       case _TestStatus.success:
@@ -189,7 +191,14 @@ class _TestDispatcherState extends State<TestDispatcher> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Center(child: Text(_reporter?.testName ?? '-')),
+            Center(
+              child: Text(
+                _reporters.isEmpty
+                    ? '-'
+                    : 'running ${_reporters.length}'
+                        ' (${_reporters.keys.toList().toString()}) tests',
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: _testResults.keys.length,
@@ -207,7 +216,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
     final testName = message.testName;
     _testResults[testName] = message.toPrettyJson();
     setState(() {
-      _reporter = null;
+      _reporters.remove(testName);
       _testStatuses[testName] =
           message.payload.containsKey(TestControlMessage.errorKey)
               ? _TestStatus.error
