@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../ably_flutter.dart';
 import '../src/generated/platformconstants.dart';
 import '../src/impl/message.dart';
+import '../src/spec/realtime/channels.dart';
+import '../src/spec/rest/channels.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
@@ -65,6 +67,13 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
+      CodecTypes.restChannelOptions:
+          _CodecPair<ChannelOptions>(_encodeRestChannelOptions, null),
+      CodecTypes.realtimeChannelOptions:
+          _CodecPair<RealtimeChannelOptions>(
+            _encodeRealtimeChannelOptions,
+            null,
+          ),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -270,6 +279,46 @@ class Codec extends StandardMessageCodec {
     _writeToJson(
         jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
     _writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
+    return jsonMap;
+  }
+
+  /// Encodes [TokenRequest] to a Map
+  /// returns null of passed value [v] is null
+  Map<String, dynamic> _encodeRestChannelOptions(final ChannelOptions v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
+    return jsonMap;
+  }
+
+  /// Encodes [ChannelMode] to a string constant
+  String _encodeChannelMode(ChannelMode mode) {
+    switch (mode) {
+      case ChannelMode.presence:
+        return TxEnumConstants.presence;
+      case ChannelMode.publish:
+        return TxEnumConstants.publish;
+      case ChannelMode.subscribe:
+        return TxEnumConstants.subscribe;
+      case ChannelMode.presenceSubscribe:
+        return TxEnumConstants.presenceSubscribe;
+    }
+    return null;
+  }
+
+  /// Encodes [TokenRequest] to a Map
+  /// returns null of passed value [v] is null
+  Map<String, dynamic> _encodeRealtimeChannelOptions(
+    final RealtimeChannelOptions v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRealtimeChannelOptions.cipher, v.cipher);
+    _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
+    _writeToJson(
+      jsonMap,
+      TxRealtimeChannelOptions.modes,
+      v.modes?.map(_encodeChannelMode)?.toList(),
+    );
     return jsonMap;
   }
 

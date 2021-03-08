@@ -12,6 +12,8 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'tokenParams',
     'tokenDetails',
     'tokenRequest',
+    'restChannelOptions',
+    'realtimeChannelOptions',
     'paginatedResult',
     'restHistoryParams',
     'realtimeHistoryParams',
@@ -53,6 +55,7 @@ const List<Map<String, dynamic>> _platformMethods = [
 
   // Rest
   {'name': 'createRestWithOptions', 'value': 'createRestWithOptions'},
+  {'name': 'setRestChannelOptions', 'value': 'setRestChannelOptions'},
   {'name': 'publish', 'value': 'publish'},
   {'name': 'restHistory', 'value': 'restHistory'},
   {'name': 'restPresenceGet', 'value': 'restPresenceGet'},
@@ -104,6 +107,7 @@ const List<Map<String, dynamic>> _objects = [
       'data',
       'clientId',
       'options',
+      'messages',
     ]
   },
   {
@@ -170,6 +174,20 @@ const List<Map<String, dynamic>> _objects = [
     ]
   },
   {
+    'name': 'RestChannelOptions',
+    'properties': <String>[
+      'cipher'
+    ]
+  },
+  {
+    'name': 'RealtimeChannelOptions',
+    'properties': <String>[
+      'cipher',
+      'params',
+      'modes',
+    ]
+  },
+  {
     'name': 'TokenDetails',
     'properties': <String>[
       'token',
@@ -204,6 +222,7 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'EnumConstants',
     'properties': <String>[
+      // connection & channel - states & events
       'initialized',
       'connecting',
       'connected',
@@ -216,11 +235,17 @@ const List<Map<String, dynamic>> _objects = [
       'closing',
       'closed',
       'failed',
+      // Presence actions
       'absent',
       'leave',
       'enter',
       'present',
       'update',
+      // channel modes
+      'presence',
+      'publish',
+      'subscribe',
+      'presenceSubscribe',
     ]
   },
   {

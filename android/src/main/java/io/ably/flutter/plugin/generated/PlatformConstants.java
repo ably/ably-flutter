@@ -17,15 +17,17 @@ final public class PlatformConstants {
         public static final byte tokenParams = (byte) 133;
         public static final byte tokenDetails = (byte) 134;
         public static final byte tokenRequest = (byte) 135;
-        public static final byte paginatedResult = (byte) 136;
-        public static final byte restHistoryParams = (byte) 137;
-        public static final byte realtimeHistoryParams = (byte) 138;
-        public static final byte restPresenceParams = (byte) 139;
-        public static final byte presenceMessage = (byte) 140;
-        public static final byte realtimePresenceParams = (byte) 141;
-        public static final byte errorInfo = (byte) 142;
-        public static final byte connectionStateChange = (byte) 143;
-        public static final byte channelStateChange = (byte) 144;
+        public static final byte restChannelOptions = (byte) 136;
+        public static final byte realtimeChannelOptions = (byte) 137;
+        public static final byte paginatedResult = (byte) 138;
+        public static final byte restHistoryParams = (byte) 139;
+        public static final byte realtimeHistoryParams = (byte) 140;
+        public static final byte restPresenceParams = (byte) 141;
+        public static final byte presenceMessage = (byte) 142;
+        public static final byte realtimePresenceParams = (byte) 143;
+        public static final byte errorInfo = (byte) 144;
+        public static final byte connectionStateChange = (byte) 145;
+        public static final byte channelStateChange = (byte) 146;
     }
 
     static final public class PlatformMethod {
@@ -35,6 +37,7 @@ final public class PlatformConstants {
         public static final String authCallback = "authCallback";
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
         public static final String createRestWithOptions = "createRestWithOptions";
+        public static final String setRestChannelOptions = "setRestChannelOptions";
         public static final String publish = "publish";
         public static final String restHistory = "restHistory";
         public static final String restPresenceGet = "restPresenceGet";
@@ -68,6 +71,7 @@ final public class PlatformConstants {
         public static final String data = "data";
         public static final String clientId = "clientId";
         public static final String options = "options";
+        public static final String messages = "messages";
     }
 
     static final public class TxAblyMessage {
@@ -132,6 +136,16 @@ final public class PlatformConstants {
         public static final String transportParams = "transportParams";
     }
 
+    static final public class TxRestChannelOptions {
+        public static final String cipher = "cipher";
+    }
+
+    static final public class TxRealtimeChannelOptions {
+        public static final String cipher = "cipher";
+        public static final String params = "params";
+        public static final String modes = "modes";
+    }
+
     static final public class TxTokenDetails {
         public static final String token = "token";
         public static final String expires = "expires";
@@ -176,6 +190,10 @@ final public class PlatformConstants {
         public static final String enter = "enter";
         public static final String present = "present";
         public static final String update = "update";
+        public static final String presence = "presence";
+        public static final String publish = "publish";
+        public static final String subscribe = "subscribe";
+        public static final String presenceSubscribe = "presenceSubscribe";
     }
 
     static final public class TxConnectionStateChange {

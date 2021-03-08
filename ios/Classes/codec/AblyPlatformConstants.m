@@ -13,6 +13,7 @@ NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
 NSString *const AblyPlatformMethod_authCallback= @"authCallback";
 NSString *const AblyPlatformMethod_realtimeAuthCallback= @"realtimeAuthCallback";
 NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
+NSString *const AblyPlatformMethod_setRestChannelOptions= @"setRestChannelOptions";
 NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_restHistory= @"restHistory";
 NSString *const AblyPlatformMethod_restPresenceGet= @"restPresenceGet";
@@ -46,6 +47,7 @@ NSString *const TxTransportKeys_params = @"params";
 NSString *const TxTransportKeys_data = @"data";
 NSString *const TxTransportKeys_clientId = @"clientId";
 NSString *const TxTransportKeys_options = @"options";
+NSString *const TxTransportKeys_messages = @"messages";
 @end
 
 @implementation TxAblyMessage
@@ -110,6 +112,16 @@ NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
 @end
 
+@implementation TxRestChannelOptions
+NSString *const TxRestChannelOptions_cipher = @"cipher";
+@end
+
+@implementation TxRealtimeChannelOptions
+NSString *const TxRealtimeChannelOptions_cipher = @"cipher";
+NSString *const TxRealtimeChannelOptions_params = @"params";
+NSString *const TxRealtimeChannelOptions_modes = @"modes";
+@end
+
 @implementation TxTokenDetails
 NSString *const TxTokenDetails_token = @"token";
 NSString *const TxTokenDetails_expires = @"expires";
@@ -154,6 +166,10 @@ NSString *const TxEnumConstants_leave = @"leave";
 NSString *const TxEnumConstants_enter = @"enter";
 NSString *const TxEnumConstants_present = @"present";
 NSString *const TxEnumConstants_update = @"update";
+NSString *const TxEnumConstants_presence = @"presence";
+NSString *const TxEnumConstants_publish = @"publish";
+NSString *const TxEnumConstants_subscribe = @"subscribe";
+NSString *const TxEnumConstants_presenceSubscribe = @"presenceSubscribe";
 @end
 
 @implementation TxConnectionStateChange

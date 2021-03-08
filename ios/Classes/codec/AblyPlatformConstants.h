@@ -14,15 +14,17 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenParamsCodecType = 133,
     tokenDetailsCodecType = 134,
     tokenRequestCodecType = 135,
-    paginatedResultCodecType = 136,
-    restHistoryParamsCodecType = 137,
-    realtimeHistoryParamsCodecType = 138,
-    restPresenceParamsCodecType = 139,
-    presenceMessageCodecType = 140,
-    realtimePresenceParamsCodecType = 141,
-    errorInfoCodecType = 142,
-    connectionStateChangeCodecType = 143,
-    channelStateChangeCodecType = 144,
+    restChannelOptionsCodecType = 136,
+    realtimeChannelOptionsCodecType = 137,
+    paginatedResultCodecType = 138,
+    restHistoryParamsCodecType = 139,
+    realtimeHistoryParamsCodecType = 140,
+    restPresenceParamsCodecType = 141,
+    presenceMessageCodecType = 142,
+    realtimePresenceParamsCodecType = 143,
+    errorInfoCodecType = 144,
+    connectionStateChangeCodecType = 145,
+    channelStateChangeCodecType = 146,
 };
 
 
@@ -33,6 +35,7 @@ extern NSString *const AblyPlatformMethod_registerAbly;
 extern NSString *const AblyPlatformMethod_authCallback;
 extern NSString *const AblyPlatformMethod_realtimeAuthCallback;
 extern NSString *const AblyPlatformMethod_createRestWithOptions;
+extern NSString *const AblyPlatformMethod_setRestChannelOptions;
 extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_restHistory;
 extern NSString *const AblyPlatformMethod_restPresenceGet;
@@ -66,6 +69,7 @@ extern NSString *const TxTransportKeys_params;
 extern NSString *const TxTransportKeys_data;
 extern NSString *const TxTransportKeys_clientId;
 extern NSString *const TxTransportKeys_options;
+extern NSString *const TxTransportKeys_messages;
 @end
 
 @interface TxAblyMessage : NSObject
@@ -130,6 +134,16 @@ extern NSString *const TxClientOptions_channelRetryTimeout;
 extern NSString *const TxClientOptions_transportParams;
 @end
 
+@interface TxRestChannelOptions : NSObject
+extern NSString *const TxRestChannelOptions_cipher;
+@end
+
+@interface TxRealtimeChannelOptions : NSObject
+extern NSString *const TxRealtimeChannelOptions_cipher;
+extern NSString *const TxRealtimeChannelOptions_params;
+extern NSString *const TxRealtimeChannelOptions_modes;
+@end
+
 @interface TxTokenDetails : NSObject
 extern NSString *const TxTokenDetails_token;
 extern NSString *const TxTokenDetails_expires;
@@ -174,6 +188,10 @@ extern NSString *const TxEnumConstants_leave;
 extern NSString *const TxEnumConstants_enter;
 extern NSString *const TxEnumConstants_present;
 extern NSString *const TxEnumConstants_update;
+extern NSString *const TxEnumConstants_presence;
+extern NSString *const TxEnumConstants_publish;
+extern NSString *const TxEnumConstants_subscribe;
+extern NSString *const TxEnumConstants_presenceSubscribe;
 @end
 
 @interface TxConnectionStateChange : NSObject

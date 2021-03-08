@@ -88,8 +88,8 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
       try {
         final _map = <String, Object>{
-          'channel': name,
-          'messages': item.messages
+          TxTransportKeys.channelName: name,
+          TxTransportKeys.messages: item.messages,
         };
 
         await invoke(PlatformMethod.publish, _map);
@@ -152,7 +152,14 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
   @override
   Future<void> setOptions(ChannelOptions options) async {
-    throw UnimplementedError();
+    try {
+      await invoke(PlatformMethod.setRealtimeChannelOptions, {
+        TxTransportKeys.channelName: name,
+        TxTransportKeys.options: options
+      });
+    } on PlatformException catch (pe) {
+      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+    }
   }
 }
 

@@ -22,7 +22,9 @@ import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
+import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
+import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
@@ -74,39 +76,43 @@ public class AblyMessageCodec extends StandardMessageCodec {
     codecMap = new HashMap<Byte, CodecPair>() {
       {
         put(PlatformConstants.CodecTypes.ablyMessage,
-          new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
+            new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
         put(PlatformConstants.CodecTypes.ablyEventMessage,
-          new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
+            new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
         put(PlatformConstants.CodecTypes.clientOptions,
-          new CodecPair<>(null, self::decodeClientOptions));
+            new CodecPair<>(null, self::decodeClientOptions));
         put(PlatformConstants.CodecTypes.tokenParams,
-          new CodecPair<>(self::encodeTokenParams, null));
+            new CodecPair<>(self::encodeTokenParams, null));
         put(PlatformConstants.CodecTypes.tokenDetails,
-          new CodecPair<>(null, self::decodeTokenDetails));
+            new CodecPair<>(null, self::decodeTokenDetails));
         put(PlatformConstants.CodecTypes.tokenRequest,
-          new CodecPair<>(null, self::decodeTokenRequest));
+            new CodecPair<>(null, self::decodeTokenRequest));
+        put(PlatformConstants.CodecTypes.restChannelOptions,
+            new CodecPair<>(null, self::decodeRestChannelOptions));
+        put(PlatformConstants.CodecTypes.realtimeChannelOptions,
+            new CodecPair<>(null, self::decodeRealtimeChannelOptions));
         put(PlatformConstants.CodecTypes.paginatedResult,
-          new CodecPair<>(self::encodePaginatedResult, null));
+            new CodecPair<>(self::encodePaginatedResult, null));
         put(PlatformConstants.CodecTypes.restHistoryParams,
-          new CodecPair<>(null, self::decodeRestHistoryParams));
+            new CodecPair<>(null, self::decodeRestHistoryParams));
         put(PlatformConstants.CodecTypes.realtimeHistoryParams,
-          new CodecPair<>(null, self::decodeRealtimeHistoryParams));
+            new CodecPair<>(null, self::decodeRealtimeHistoryParams));
         put(PlatformConstants.CodecTypes.restPresenceParams,
-          new CodecPair<>(null, self::decodeRestPresenceParams));
+            new CodecPair<>(null, self::decodeRestPresenceParams));
         put(PlatformConstants.CodecTypes.realtimePresenceParams,
-          new CodecPair<>(null, self::decodeRealtimePresenceParams));
+            new CodecPair<>(null, self::decodeRealtimePresenceParams));
         put(PlatformConstants.CodecTypes.errorInfo,
-          new CodecPair<>(self::encodeErrorInfo, null));
+            new CodecPair<>(self::encodeErrorInfo, null));
         put(PlatformConstants.CodecTypes.messageData,
-          new CodecPair<>(null, self::decodeChannelMessageData));
+            new CodecPair<>(null, self::decodeChannelMessageData));
         put(PlatformConstants.CodecTypes.message,
-          new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
+            new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
         put(PlatformConstants.CodecTypes.presenceMessage,
-          new CodecPair<>(self::encodePresenceMessage, null));
+            new CodecPair<>(self::encodePresenceMessage, null));
         put(PlatformConstants.CodecTypes.connectionStateChange,
-          new CodecPair<>(self::encodeConnectionStateChange, null));
+            new CodecPair<>(self::encodeConnectionStateChange, null));
         put(PlatformConstants.CodecTypes.channelStateChange,
-          new CodecPair<>(self::encodeChannelStateChange, null));
+            new CodecPair<>(self::encodeChannelStateChange, null));
       }
     };
   }
@@ -312,6 +318,32 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.timestamp, v -> o.timestamp = readValueAsLong(v));
     readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.ttl, v -> o.ttl = readValueAsLong(v));
     return o;
+  }
+
+  private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
+    if (jsonMap == null) return null;
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+    try {
+      return ChannelOptions.withCipherKey((String) cipher);
+    } catch (AblyException ae) {
+      System.out.println("Exception while decoding RestChannelOptions : " + ae);
+      return null;
+    }
+  }
+
+  private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
+    if (jsonMap == null) return null;
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+    try {
+      final ChannelOptions o = ChannelOptions.withCipherKey((String) cipher);
+      readValueFromJson(jsonMap, PlatformConstants.TxRealtimeChannelOptions.params, v -> o.cipherParams = (Map<String, String>) v);
+      // modes is not supported in ably-java
+      // Track @ https://github.com/ably/ably-flutter/issues/14
+      return o;
+    } catch (AblyException ae) {
+      System.out.println("Exception while decoding RealtimeChannelOptions: " + ae);
+      return null;
+    }
   }
 
   private Param[] decodeRestHistoryParams(Map<String, Object> jsonMap) {
@@ -573,9 +605,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
           list.add((Map<String, Object>) pair.encode(item));
         }
         writeValueToJson(
-          jsonMap,
-          PlatformConstants.TxPaginatedResult.items,
-          list
+            jsonMap,
+            PlatformConstants.TxPaginatedResult.items,
+            list
         );
         writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.type, type & 0xff);
       }

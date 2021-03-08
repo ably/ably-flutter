@@ -141,7 +141,6 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     final String eventName = eventMessage.eventName;
     final Map<String, Object> eventPayload = (eventMessage.message == null) ? null : (Map<String, Object>) eventMessage.message;
     try {
-      ChannelOptions channelOptions;
       switch (eventName) {
         case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
           connectionStateListener = new PluginConnectionStateListener(eventSink);
@@ -154,8 +153,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
               .getRealtime(ablyMessage.handle)
               .channels
               .get(
-                (String) eventPayload.get("channel"),
-                (ChannelOptions) eventPayload.get("options")
+                (String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName),
+                (ChannelOptions) eventPayload.get(PlatformConstants.TxTransportKeys.options)
               );
             channelStateListener = new PluginChannelStateListener(eventSink);
             channel.on(channelStateListener);
@@ -170,8 +169,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
               .getRealtime(ablyMessage.handle)
               .channels
               .get(
-                (String) eventPayload.get("channel"),
-                (ChannelOptions) eventPayload.get("options")
+                (String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName),
+                (ChannelOptions) eventPayload.get(PlatformConstants.TxTransportKeys.options)
               );
             channelMessageListener = new PluginChannelMessageListener(eventSink);
             channel.subscribe(channelMessageListener);
@@ -221,7 +220,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         ablyLibrary
           .getRealtime(ablyMessage.handle)
           .channels
-          .get((String) eventPayload.get("channel"))
+          .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
           .off(channelStateListener);
         break;
       case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
@@ -229,7 +228,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         ablyLibrary
           .getRealtime(ablyMessage.handle)
           .channels
-          .get((String) eventPayload.get("channel"))
+          .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
           .unsubscribe(channelMessageListener);
         break;
       case PlatformConstants.PlatformMethod.onRealtimePresenceMessage:

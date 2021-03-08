@@ -15,20 +15,20 @@ import 'realtime.dart';
 class RealtimeChannel extends PlatformObject
     implements RealtimeChannelInterface {
   @override
-  RealtimeInterface realtime;
+  final RealtimeInterface realtime;
 
   @override
-  String name;
+  final String name;
 
   @override
-  ChannelOptions options;
+  final RealtimeChannelOptions options;
 
   RealtimePresence _presence;
 
   @override
   RealtimePresence get presence => _presence;
 
-  /// instantiates with [Rest], [name] and [ChannelOptions]
+  /// instantiates with [Rest], [name] and [RealtimeChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
@@ -58,8 +58,8 @@ class RealtimeChannel extends PlatformObject
   Map<String, dynamic> __payload;
 
   Map<String, dynamic> get _payload => __payload ??= {
-        'channel': name,
-        if (options != null) 'options': options,
+        TxTransportKeys.channelName: name,
+        if (options != null) TxTransportKeys.options: options,
       };
 
   final _publishQueue = Queue<_PublishQueueItem>();
@@ -195,8 +195,12 @@ class RealtimeChannel extends PlatformObject
   }
 
   @override
-  Future<void> setOptions(ChannelOptions options) async {
-    throw UnimplementedError();
+  Future<void> setOptions(RealtimeChannelOptions options) async {
+    try {
+      await invoke(PlatformMethod.setRealtimeChannelOptions, _payload);
+    } on PlatformException catch (pe) {
+      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+    }
   }
 
   @override
@@ -227,7 +231,7 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   RealtimePlatformChannels(Realtime realtime) : super(realtime);
 
   @override
-  RealtimeChannel createChannel(String name, ChannelOptions options) =>
+  RealtimeChannel createChannel(String name, RealtimeChannelOptions options) =>
       RealtimeChannel(realtime, name, options);
 
   @override
