@@ -81,6 +81,30 @@ void main() {
 
       expect(channels.length, 4);
     });
+
+    group('#release', () {
+      test(
+          '(RSN4a) Takes one argument, the channel name,'
+          ' and releases the corresponding channel entity', () {
+        channels..get('channel-1')..get('channel-2');
+        expect(channels.length, 2);
+        channels.release('channel-1');
+        expect(channels.length, 1);
+        expect(channels.exists('channel-1'), false);
+      });
+
+      test(
+          '(RSN4b) Calling release() with a channel name'
+          ' that does not correspond to an extant channel'
+          ' entity must return without error', () {
+        channels..get('channel-1')..get('channel-2');
+        expect(channels.length, 2);
+        channels.release('channel-3');
+        expect(channels.length, 2);
+        expect(channels.exists('channel-1'), true);
+        expect(channels.exists('channel-2'), true);
+      });
+    });
   });
 
   group('rest#channels#channel', () {

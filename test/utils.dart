@@ -81,6 +81,10 @@ class MockMethodCallManager {
         publishedMessages.add(message);
         return null;
 
+      case PlatformMethod.releaseRestChannel:
+      case PlatformMethod.releaseRealtimeChannel:
+        return null;
+
       default:
         return throw Exception('Unexpected method call: ${methodCall.method}'
             ' args: ${methodCall.arguments}');
