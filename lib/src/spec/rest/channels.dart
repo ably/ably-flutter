@@ -11,7 +11,7 @@ class ChannelOptions {
   final Object cipher;
 
   /// create channel options with a cipher
-  ChannelOptions(this.cipher): assert(cipher!=null, 'cipher cannot be null');
+  ChannelOptions(this.cipher) : assert(cipher != null, 'cipher cannot be null');
 }
 
 /// A named channel through with rest client can interact with ably service.
@@ -21,9 +21,11 @@ class ChannelOptions {
 /// https://docs.ably.io/client-lib-development-guide/features/#RSL1
 abstract class RestChannelInterface {
   /// creates a Rest channel instance
-  RestChannelInterface(this.rest,
+  RestChannelInterface(
+    this.rest,
     this.name,
-    this.options,);
+    this.options,
+  );
 
   /// reference to Rest client
   RestInterface rest;
@@ -66,7 +68,7 @@ abstract class RestChannelInterface {
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSN1
 abstract class RestChannels<T extends RestChannelInterface>
-  extends Channels<T, ChannelOptions> {
+    extends Channels<T, ChannelOptions> {
   /// instance of a rest client
   RestInterface rest;
 

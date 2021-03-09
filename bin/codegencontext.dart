@@ -175,9 +175,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>[
-      'cipher'
-    ]
+    'properties': <String>['cipher']
   },
   {
     'name': 'RealtimeChannelOptions',

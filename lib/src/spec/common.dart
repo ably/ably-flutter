@@ -927,7 +927,7 @@ class _ChannelIterator<T> implements Iterator<T> {
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
 abstract class Channels<ChannelType, OptionsType>
-  extends Iterable<ChannelType> {
+    extends Iterable<ChannelType> {
   /// stores channel name vs instance of [ChannelType]
   final _channels = <String, ChannelType>{};
 

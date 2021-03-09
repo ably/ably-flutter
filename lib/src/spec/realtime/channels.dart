@@ -13,7 +13,6 @@ import 'realtime.dart';
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TB1
 class RealtimeChannelOptions extends ChannelOptions {
-
   /// https://docs.ably.io/client-lib-development-guide/features/#TB2c
   final Map<String, String> params;
 
@@ -21,8 +20,8 @@ class RealtimeChannelOptions extends ChannelOptions {
   final List<ChannelMode> modes;
 
   /// create channel options with a cipher, params and modes
-  RealtimeChannelOptions(Object cipher, {this.params, this.modes}) :
-      super(cipher);
+  RealtimeChannelOptions(Object cipher, {this.params, this.modes})
+      : super(cipher);
 }
 
 /// A named channel through with realtime client can interact with ably service.
@@ -31,11 +30,13 @@ class RealtimeChannelOptions extends ChannelOptions {
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTL1
 abstract class RealtimeChannelInterface
-  extends EventEmitter<ChannelEvent, ChannelStateChange> {
+    extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
-  RealtimeChannelInterface(this.realtime,
+  RealtimeChannelInterface(
+    this.realtime,
     this.name,
-    this.options,);
+    this.options,
+  );
 
   /// realtime client instance
   final RealtimeInterface realtime;
@@ -122,7 +123,7 @@ abstract class RealtimeChannelInterface
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTS1
 abstract class RealtimeChannels<T extends RealtimeChannelInterface>
-  extends Channels<T, RealtimeChannelOptions> {
+    extends Channels<T, RealtimeChannelOptions> {
   /// instance of ably realtime client
   RealtimeInterface realtime;
 
