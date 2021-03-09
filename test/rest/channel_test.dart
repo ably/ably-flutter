@@ -36,9 +36,10 @@ void main() {
       final firstMessage =
           manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
-      expect(messageData['channel'], 'test');
-      expect(messageData['messages'], isA<List>());
-      final messages = List<Message>.from(messageData['messages'] as List);
+      expect(messageData[TxTransportKeys.channelName], 'test');
+      expect(messageData[TxTransportKeys.messages], isA<List>());
+      final messages =
+          List<Message>.from(messageData[TxTransportKeys.messages] as List);
       expect(messages[0].name, 'name');
       expect(messages[0].data, 'data1');
     });
@@ -62,9 +63,10 @@ void main() {
       final firstMessage =
           manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
-      expect(messageData['channel'], 'test');
-      expect(messageData['messages'], isA<List>());
-      final messages = List<Message>.from(messageData['messages'] as List);
+      expect(messageData[TxTransportKeys.channelName], 'test');
+      expect(messageData[TxTransportKeys.messages], isA<List>());
+      final messages =
+          List<Message>.from(messageData[TxTransportKeys.messages] as List);
       expect(messages[0].name, 'name');
       expect(messages[0].data, 'data2');
     });
@@ -118,9 +120,10 @@ void main() {
           final firstMessage =
               manager.publishedMessages.first.message as AblyMessage;
           final messageData = firstMessage.message as Map<dynamic, dynamic>;
-          expect(messageData['channel'], 'test');
-          expect(messageData['messages'], isA<List>());
-          final messages = List<Message>.from(messageData['messages'] as List);
+          expect(messageData[TxTransportKeys.channelName], 'test');
+          expect(messageData[TxTransportKeys.messages], isA<List>());
+          final messages =
+              List<Message>.from(messageData[TxTransportKeys.messages] as List);
           expect(messages[0].name, 'name');
           expect(messages[0].data, 'data3-2');
         }),
@@ -145,17 +148,19 @@ void main() {
       expect(manager.publishedMessages.length, 2);
       final message0 = manager.publishedMessages[0].message as AblyMessage;
       final messageData0 = message0.message as Map<dynamic, dynamic>;
-      expect(messageData0['channel'], 'test');
-      expect(messageData0['messages'], isA<List>());
-      final messages = List<Message>.from(messageData0['messages'] as List);
+      expect(messageData0[TxTransportKeys.channelName], 'test');
+      expect(messageData0[TxTransportKeys.messages], isA<List>());
+      final messages =
+          List<Message>.from(messageData0[TxTransportKeys.messages] as List);
       expect(messages[0].name, 'name');
       expect(messages[0].data, 'data4');
 
       final message1 = manager.publishedMessages[1].message as AblyMessage;
       final messageData1 = message1.message as Map<dynamic, dynamic>;
-      expect(messageData1['channel'], 'test');
-      expect(messageData1['messages'], isA<List>());
-      final messages2 = List<Message>.from(messageData1['messages'] as List);
+      expect(messageData1[TxTransportKeys.channelName], 'test');
+      expect(messageData1[TxTransportKeys.messages], isA<List>());
+      final messages2 =
+          List<Message>.from(messageData1[TxTransportKeys.messages] as List);
       expect(messages2[0].name, 'name');
       expect(messages2[0].data, 'data5');
     }, timeout: Timeout.none);
