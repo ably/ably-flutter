@@ -1,21 +1,20 @@
 import '../factory/reporter.dart';
-import '../test/app_key_provision_test.dart';
-import '../test/platform_and_ably_version_test.dart';
-import '../test/realtime_events_test.dart';
-import '../test/realtime_history_test.dart';
-import '../test/realtime_presence_enter_update_leave.dart';
-import '../test/realtime_presence_get.dart';
-import '../test/realtime_presence_history_test.dart';
-import '../test/realtime_presence_subscribe.dart';
-import '../test/realtime_publish_test.dart';
-import '../test/realtime_publish_with_auth_callback_test.dart';
-import '../test/realtime_subscribe.dart';
-import '../test/rest_history_test.dart';
-import '../test/rest_presence_get_test.dart';
-import '../test/rest_presence_history_test.dart';
-import '../test/rest_publish_test.dart';
-import '../test/rest_publish_with_auth_callback_test.dart';
-import '../test/test_helper_unhandled_exception_test.dart';
+import '../test/basic_test.dart';
+import '../test/helpers_test.dart';
+import '../test/realtime/realtime_events_test.dart';
+import '../test/realtime/realtime_history_test.dart';
+import '../test/realtime/realtime_presence_enter_update_leave.dart';
+import '../test/realtime/realtime_presence_get.dart';
+import '../test/realtime/realtime_presence_history_test.dart';
+import '../test/realtime/realtime_presence_subscribe.dart';
+import '../test/realtime/realtime_publish_test.dart';
+import '../test/realtime/realtime_publish_with_auth_callback_test.dart';
+import '../test/realtime/realtime_subscribe.dart';
+import '../test/rest/rest_history_test.dart';
+import '../test/rest/rest_presence_get_test.dart';
+import '../test/rest/rest_presence_history_test.dart';
+import '../test/rest/rest_publish_test.dart';
+import '../test/rest/rest_publish_with_auth_callback_test.dart';
 import 'test_names.dart';
 
 typedef TestFactory = Future<Map<String, dynamic>> Function({
@@ -45,5 +44,5 @@ final testFactory = <String, TestFactory>{
       testRealtimePresenceEnterUpdateLeave,
   TestName.realtimePresenceSubscribe: testRealtimePresenceSubscribe,
   // helper tests
-  TestName.testHelperUnhandledExceptionTest: testTestHelperUnhandledException,
+  TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
 };

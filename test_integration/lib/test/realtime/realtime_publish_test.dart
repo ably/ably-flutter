@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../factory/reporter.dart';
+import '../../factory/reporter.dart';
+import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePublish({
   Reporter reporter,
@@ -18,16 +18,10 @@ Future<Map<String, dynamic>> testRealtimePublish({
       ..logLevel = LogLevel.verbose
       ..logHandler = ({msg, exception}) => logMessages.add([msg, '$exception']),
   );
-  await realtimeMessagesPublishUtil(realtime.channels.get('test'));
+  await publishMessages(realtime.channels.get('test'));
   await realtime.close();
   return {
     'handle': await realtime.handle,
     'log': logMessages,
   };
-}
-
-Future<void> realtimeMessagesPublishUtil(RealtimeChannel channel) async {
-  for (final data in messagesToPublish) {
-    await channel.publish(name: data[0] as String, data: data[1]);
-  }
 }

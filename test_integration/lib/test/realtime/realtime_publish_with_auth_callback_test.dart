@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../factory/reporter.dart';
-import 'realtime_publish_test.dart';
+import '../../factory/reporter.dart';
+import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePublishWithAuthCallback({
   Reporter reporter,
@@ -16,7 +16,7 @@ Future<Map<String, dynamic>> testRealtimePublishWithAuthCallback({
           authCallbackInvoked = true;
           return TokenRequest.fromMap(await getTokenRequest());
         }));
-  await realtimeMessagesPublishUtil(realtime.channels.get('test'));
+  await publishMessages(realtime.channels.get('test'));
   await realtime.close();
 
   return {

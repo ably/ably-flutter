@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../config/data.dart';
+import '../../factory/reporter.dart';
+import '../../utils/encoders.dart';
 
 final logMessages = <List<String>>[];
+
+List<Map<String, dynamic>> _encode(List<PresenceMessage> messages) =>
+    encodeList<PresenceMessage>(messages, encodePresenceMessage);
 
 Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   Reporter reporter,
@@ -65,13 +68,10 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   await enterUpdateMessagesSubscription.cancel();
 
   return {
-    'allMessages': encode(allMessages),
-    'enterMessages': encode(enterMessages),
-    'enterUpdateMessages': encode(enterUpdateMessages),
-    'partialMessages': encode(partialMessages),
+    'allMessages': _encode(allMessages),
+    'enterMessages': _encode(enterMessages),
+    'enterUpdateMessages': _encode(enterUpdateMessages),
+    'partialMessages': _encode(partialMessages),
     'log': logMessages,
   };
 }
-
-List<Map<String, dynamic>> encode(List<PresenceMessage> messages) =>
-    encodeList<PresenceMessage>(messages, encodePresenceMessage);

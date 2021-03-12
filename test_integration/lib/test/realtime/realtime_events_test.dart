@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../factory/reporter.dart';
+import '../../utils/encoders.dart';
 
 Future<Map<String, dynamic>> testRealtimeEvents({
   Reporter reporter,

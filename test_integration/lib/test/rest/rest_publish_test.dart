@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../factory/reporter.dart';
+import '../../factory/reporter.dart';
+import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPublish({
   Reporter reporter,
@@ -20,15 +20,9 @@ Future<Map<String, dynamic>> testRestPublish({
       ..logHandler =
           ({msg, exception}) => logMessages.add([msg, exception.toString()]),
   );
-  await restMessagesPublishUtil(rest.channels.get('test'));
+  await publishMessages(rest.channels.get('test'));
   return {
     'handle': await rest.handle,
     'log': logMessages,
   };
-}
-
-Future<void> restMessagesPublishUtil(RestChannel channel) async {
-  for (final data in messagesToPublish) {
-    await channel.publish(name: data[0] as String, data: data[1]);
-  }
 }

@@ -1,9 +1,9 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../config/data.dart';
+import '../../factory/reporter.dart';
+import '../../utils/rest.dart';
 
 final logMessages = <List<String>>[];
 
@@ -18,16 +18,16 @@ ClientOptions getClientOptions(
       ..logHandler =
           ({msg, exception}) => logMessages.add([msg, exception.toString()]);
 
-Future<Map<String, dynamic>> testRealtimePresenceGet({
+Future<Map<String, dynamic>> testRestPresenceGet({
   Reporter reporter,
   Map<String, dynamic> payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();
 
-  final realtime = Realtime(options: getClientOptions(appKey));
-  final channel = realtime.channels.get('test');
-  final membersInitial = await _members(channel);
+  final rest = Rest(options: getClientOptions(appKey));
+  final channel = rest.channels.get('test');
+  final membersInitial = await getPresenceMembers(channel);
 
   // enter multiple clients
   for (var i = 0; i < messagesToPublish.length; i++) {
@@ -38,39 +38,44 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
 
   await Future.delayed(const Duration(seconds: 2));
 
-  final membersDefault = await _members(channel);
+  final membersDefault = await getPresenceMembers(channel);
   await Future.delayed(const Duration(seconds: 2));
 
-  final membersClientId = await _members(
+  final membersLimit4 = await getPresenceMembers(
     channel,
-    RealtimePresenceParams(clientId: 'client-1'),
+    RestPresenceParams(limit: 4),
+  );
+  await Future.delayed(const Duration(seconds: 2));
+
+  final membersLimit2 = await getPresenceMembers(
+    channel,
+    RestPresenceParams(limit: 2),
+  );
+  await Future.delayed(const Duration(seconds: 2));
+
+  final membersClientId = await getPresenceMembers(
+    channel,
+    RestPresenceParams(clientId: 'client-1'),
   );
   await Future.delayed(const Duration(seconds: 2));
 
   // TODO(tiholic) extract connection ID from realtime instance
   //  after implementing `id` update on connection object from platform
   // Until then, `membersConnectionId` will be empty list
-  final membersConnectionId = await _members(
+  final membersConnectionId = await getPresenceMembers(
     channel,
-    RealtimePresenceParams(connectionId: 'connection-1'),
+    RestPresenceParams(connectionId: 'connection-1'),
   );
   await Future.delayed(const Duration(seconds: 2));
 
   return {
-    'handle': await realtime.handle,
+    'handle': await rest.handle,
     'membersInitial': membersInitial,
     'membersDefault': membersDefault,
+    'membersLimit4': membersLimit4,
+    'membersLimit2': membersLimit2,
     'membersClientId': membersClientId,
     'membersConnectionId': membersConnectionId,
     'log': logMessages,
   };
 }
-
-Future<List<Map<String, dynamic>>> _members(
-  RealtimeChannel channel, [
-  RealtimePresenceParams params,
-]) async =>
-    encodeList<PresenceMessage>(
-      await channel.presence.get(params),
-      encodePresenceMessage,
-    );

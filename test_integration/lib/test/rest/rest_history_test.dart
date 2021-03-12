@@ -1,9 +1,9 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
-import 'rest_publish_test.dart';
+import '../../factory/reporter.dart';
+import '../../utils/encoders.dart';
+import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestHistory({
   Reporter reporter,
@@ -22,19 +22,19 @@ Future<Map<String, dynamic>> testRestHistory({
           ({msg, exception}) => logMessages.add([msg, exception.toString()]),
   );
   final channel = rest.channels.get('test');
-  await restMessagesPublishUtil(channel);
+  await publishMessages(channel);
 
   final paginatedResult = await channel.history();
-  final historyDefault = await _history(channel);
+  final historyDefault = await getHistory(channel);
   await Future.delayed(const Duration(seconds: 2));
 
-  final historyLimit4 = await _history(channel, RestHistoryParams(limit: 4));
+  final historyLimit4 = await getHistory(channel, RestHistoryParams(limit: 4));
   await Future.delayed(const Duration(seconds: 2));
 
-  final historyLimit2 = await _history(channel, RestHistoryParams(limit: 2));
+  final historyLimit2 = await getHistory(channel, RestHistoryParams(limit: 2));
   await Future.delayed(const Duration(seconds: 2));
 
-  final historyForwardLimit4 = await _history(
+  final historyForwardLimit4 = await getHistory(
       channel, RestHistoryParams(direction: 'forwards', limit: 4));
   await Future.delayed(const Duration(seconds: 2));
 
@@ -53,10 +53,10 @@ Future<Map<String, dynamic>> testRestHistory({
   await Future.delayed(const Duration(seconds: 2));
 
   final historyWithStart =
-      await _history(channel, RestHistoryParams(start: time1));
+      await getHistory(channel, RestHistoryParams(start: time1));
   final historyWithStartAndEnd =
-      await _history(channel, RestHistoryParams(start: time1, end: time2));
-  final historyAll = await _history(channel);
+      await getHistory(channel, RestHistoryParams(start: time1, end: time2));
+  final historyAll = await getHistory(channel);
   return {
     'handle': await rest.handle,
     'paginatedResult': encodePaginatedResult(paginatedResult, encodeMessage),
@@ -71,17 +71,4 @@ Future<Map<String, dynamic>> testRestHistory({
     't2': time2.toIso8601String(),
     'log': logMessages,
   };
-}
-
-Future<List<Map<String, dynamic>>> _history(
-  RestChannel channel, [
-  RestHistoryParams params,
-]) async {
-  var results = await channel.history(params);
-  final messages = encodeList<Message>(results.items, encodeMessage);
-  while (results.hasNext()) {
-    results = await results.next();
-    messages.addAll(encodeList<Message>(results.items, encodeMessage));
-  }
-  return messages;
 }
