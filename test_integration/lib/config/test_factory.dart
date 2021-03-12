@@ -28,6 +28,7 @@ final testFactory = <String, TestFactory>{
   TestName.appKeyProvisioning: testAppKeyProvision,
   // rest tests
   TestName.restPublish: testRestPublish,
+  TestName.restPublishSpec: testRestPublishSpec,
   TestName.restHistory: testRestHistory,
   TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
   TestName.restPresenceGet: testRestPresenceGet,

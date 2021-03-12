@@ -13,9 +13,84 @@ Future testRestPublish(FlutterDriver driver) async {
 
   expect(response.payload['handle'], isA<int>());
   expect(response.payload['handle'], greaterThan(0));
+}
 
-  // TODO(tiholic) enable this after implementing logger
-  // expect(response.payload['log'], isNotEmpty);
+Future testRestPublishSpec(FlutterDriver driver) async {
+  const message = TestControlMessage(TestName.restPublishSpec);
+
+  final response = await getTestResponse(driver, message);
+
+  expect(response.testName, message.testName);
+
+  expect(response.payload['handle'], isA<int>());
+  expect(response.payload['handle'], greaterThan(0));
+
+  expect(response.payload['exception'], isA<Map>());
+  expect(response.payload['publishedMessages'], isA<List>());
+  expect(response.payload['publishedMessages2'], isA<List>());
+
+  final messages = response.payload['publishedMessages'] as List;
+  final messages2 = response.payload['publishedMessages2'] as List;
+  final exception = Map.castFrom<dynamic, dynamic, String, dynamic>(
+      response.payload['exception'] as Map);
+
+  // publish without name and data
+  expect(messages[0]['name'], null);
+  expect(messages[0]['data'], null);
+
+  // publish without data
+  expect(messages[1]['name'], 'name1');
+  expect(messages[1]['data'], null);
+
+  // publish without name
+  expect(messages[2]['name'], null);
+  expect(messages[2]['data'], 'data1');
+
+  // publish with name and data
+  expect(messages[3]['name'], 'name1');
+  expect(messages[3]['data'], 'data1');
+
+  // publish as one Message object
+  expect(messages[4]['name'], 'message-name1');
+  expect(messages[4]['data'], 'message-data1');
+
+  // publish multiple Messages at once
+  expect(messages[5]['name'], 'messages-name1');
+  expect(messages[5]['data'], 'messages-data1');
+  expect(messages[6]['name'], 'messages-name2');
+  expect(messages[6]['data'], 'messages-data2');
+  expect(messages[5]['timestamp'] == messages[6]['timestamp'], true);
+  expect(messages[5]['timestamp'] != messages[4]['timestamp'], true);
+
+  // (RSL1d) Raises an error if the message was not successfully published
+  //  -- and --
+  // (RSL1m4) Publishing a Message with a clientId set to a different value
+  //  from the clientId in the client options should result in a message
+  //  being rejected by the server.
+  expect(exception['code'], '14');
+  expect(
+    exception['message'],
+    'Error publishing rest message;'
+    ' err = attempted to publish message with an invalid clientId',
+  );
+  expect(exception['errorInfo']['message'],
+      'attempted to publish message with an invalid clientId');
+
+  // (RSL1m1) Publishing a Message with no clientId when the clientId
+  //  is set to some value in the client options should result in a message
+  //  received with the clientId property set to that value
+  // expect(messages[0]['clientId'], 'someClientId');
+
+  // (RSL1m2) Publishing a Message with a clientId set to the same
+  //  value as the clientId in the client options should result in
+  //  a message received with the clientId property set to that value
+  expect(messages[7]['clientId'], 'someClientId');
+
+  // (RSL1m3) Publishing a Message with a clientId set to a value
+  //  from an unidentified client (no clientId in the client options
+  //  and credentials that can assume any clientId) should result in
+  //  a message received with the clientId property set to that value
+  expect(messages2[0]['clientId'], 'client-id');
 }
 
 Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
