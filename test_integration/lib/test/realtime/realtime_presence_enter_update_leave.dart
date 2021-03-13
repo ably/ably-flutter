@@ -95,6 +95,7 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
     }
   }
 
+  // Interact with different types of data.
   final actionMatrix = <Map<String, dynamic>>[];
   final realtimePresence =
       Realtime(options: getClientOptions(appKey, 'test-client'))

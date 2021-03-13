@@ -15,33 +15,36 @@ void runTests({
     groups: groups,
   );
 
+  FlutterDriver driver;
+
+  // Connect to the Flutter driver before running any tests.
+  setUpAll(() async {
+    driver = await FlutterDriver.connect(printCommunication: true);
+  });
+
+  tearDownAll(() async {
+    if (driver != null) {
+      const message = TestControlMessage(TestName.getFlutterErrors);
+      final flutterErrors = await getTestResponse(driver, message);
+      print('Flutter errors: ${flutterErrors.payload}');
+      final _ = driver.close();
+    }
+  });
+
+  FlutterDriver getDriver() => driver;
+
   for (groupName in tests.keys) {
     final name =
         groupName.toString().substring(groupName.toString().indexOf('.') + 1);
-    group(name, () {
-      FlutterDriver driver;
-
-      // Connect to the Flutter driver before running any tests.
-      setUpAll(() async {
-        driver = await FlutterDriver.connect(printCommunication: true);
-      });
-
-      tearDownAll(() async {
-        if (driver != null) {
-          const message = TestControlMessage(TestName.getFlutterErrors);
-          final flutterErrors = await getTestResponse(driver, message);
-          print('Flutter errors: ${flutterErrors.payload}');
-          final _ = driver.close();
-        }
-      });
-
-      tests[groupName].forEach((testName, testFunction) {
-        test(
-          testName,
-          () => testFunction(driver),
-          timeout: const Timeout(Duration(minutes: 2)),
-        );
-      });
+    tests[groupName].forEach((
+      testName,
+      void Function(FlutterDriver Function()) testFunction,
+    ) {
+      group(
+        '$name $testName',
+        () => testFunction(getDriver),
+        timeout: const Timeout(Duration(minutes: 2)),
+      );
     });
   }
 }

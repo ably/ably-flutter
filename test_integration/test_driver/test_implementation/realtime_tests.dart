@@ -4,393 +4,456 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
-Future testRealtimePublish(FlutterDriver driver) async {
+void testRealtimePublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePublish);
+  const message2 = TestControlMessage(TestName.realtimePublishWithAuthCallback);
+  TestControlMessage response;
+  TestControlMessage response2;
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    response2 = await getTestResponse(getDriver(), message2);
+  });
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  test('publishes message without any response', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+  test('invokes authCallback if available in clientOptions', () {
+    expect(response2.payload['authCallbackInvoked'], isTrue);
+  });
 }
 
-Future testRealtimeEvents(FlutterDriver driver) async {
+void testRealtimeEvents(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEvents);
+  TestControlMessage response;
+  List<String> connectionStates;
+  List<Map<String, dynamic>> connectionStateChanges;
+  List<Map<String, dynamic>> filteredConnectionStateChanges;
+  List<String> channelStates;
+  List<Map<String, dynamic>> channelStateChanges;
+  List<Map<String, dynamic>> filteredChannelStateChanges;
 
-  final response = await getTestResponse(driver, message);
+  List<String> transformState(items) =>
+      List.from(items as List).map((t) => t as String).toList();
 
-  expect(response.testName, message.testName);
+  List<Map<String, dynamic>> transformStateChange(items) =>
+      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final connectionStates = (response.payload['connectionStates'] as List)
-      .map((e) => e as String)
-      .toList();
-  final connectionStateChanges =
-      (response.payload['connectionStateChanges'] as List)
-          .map((e) => e as Map<String, dynamic>)
-          .toList();
-  final filteredConnectionStateChanges =
-      (response.payload['filteredConnectionStateChanges'] as List)
-          .map((e) => e as Map<String, dynamic>)
-          .toList();
-  final channelStates = (response.payload['channelStates'] as List)
-      .map((e) => e as String)
-      .toList();
-  final channelStateChanges = (response.payload['channelStateChanges'] as List)
-      .map((e) => e as Map<String, dynamic>)
-      .toList();
-  final filteredChannelStateChanges =
-      (response.payload['filteredChannelStateChanges'] as List)
-          .map((e) => e as Map<String, dynamic>)
-          .toList();
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    connectionStates = transformState(response.payload['connectionStates']);
+    connectionStateChanges = transformStateChange(
+      response.payload['connectionStateChanges'],
+    );
+    filteredConnectionStateChanges = transformStateChange(
+      response.payload['filteredConnectionStateChanges'],
+    );
+    channelStates = transformState(response.payload['channelStates']);
+    channelStateChanges = transformStateChange(
+      response.payload['channelStateChanges'],
+    );
+    filteredChannelStateChanges = transformStateChange(
+      response.payload['filteredChannelStateChanges'],
+    );
+  });
 
-  // connectionStates
-  expect(
-      connectionStates,
-      orderedEquals(const [
-        'initialized',
-        'initialized',
-        'connected',
-        'connected',
-        'closed',
-      ]));
+  group('realtime#channel#connection', () {
+    test('#state', () {
+      expect(
+          connectionStates,
+          orderedEquals(const [
+            'initialized',
+            'initialized',
+            'connected',
+            'connected',
+            'closed',
+          ]));
+    });
+    test(
+      '#on returns a stream which can be subscribed for connectionStateChanges',
+      () {
+        expect(
+            connectionStateChanges.map((e) => e['event']),
+            orderedEquals(const [
+              'connecting',
+              'connected',
+              'closing',
+              'closed',
+            ]));
+        expect(
+            connectionStateChanges.map((e) => e['previous']),
+            orderedEquals(const [
+              'initialized',
+              'connecting',
+              'connected',
+              'closing',
+            ]));
+      },
+    );
 
-  // connectionStateChanges
-  expect(
-      connectionStateChanges.map((e) => e['event']),
-      orderedEquals(const [
-        'connecting',
-        'connected',
-        'closing',
-        'closed',
-      ]));
+    test(
+      '#on returns a stream which can be subscribed'
+      ' for connection state changes with filter',
+      () {
+        expect(filteredConnectionStateChanges.map((e) => e['event']), const [
+          'connected',
+        ]);
+        expect(filteredConnectionStateChanges.map((e) => e['current']), const [
+          'connected',
+        ]);
+        expect(filteredConnectionStateChanges.map((e) => e['previous']), const [
+          'connecting',
+        ]);
+      },
+    );
+  });
 
-  expect(
-      connectionStateChanges.map((e) => e['current']),
-      orderedEquals(const [
-        'connecting',
-        'connected',
-        'closing',
-        'closed',
-      ]));
+  group('realtime#channel#chanenls#channel', () {
+    test(
+      '#state',
+      () {
+        expect(
+            channelStates,
+            orderedEquals(const [
+              'initialized',
+              'initialized',
+              'attached',
+              'attached',
+              'detached',
+              'detached',
+            ]));
+      },
+    );
+    test(
+      '#on returns a stream which can be subscribed for channel state changes',
+      () {
+        // TODO(tiholic): get rid of _stateChangeEvents and _stateChangePrevious
+        //  variables as they are a way to make tests pass due to
+        //  https://github.com/ably/ably-flutter/issues/63
+        List<String> _stateChangeEvents;
+        List<String> _stateChangePrevious;
+        if (channelStateChanges.length == 5) {
+          // ios
+          _stateChangeEvents = const [
+            'attaching',
+            'attached',
+            'detaching',
+            'detached',
+            'detached',
+          ];
+          _stateChangePrevious = const [
+            'initialized',
+            'attaching',
+            'attached',
+            'detaching',
+            'detached',
+          ];
+        } else {
+          _stateChangeEvents = const [
+            'attaching',
+            'attached',
+            'detaching',
+            'detached',
+          ];
+          _stateChangePrevious = const [
+            'initialized',
+            'attaching',
+            'attached',
+            'detaching',
+          ];
+        }
 
-  expect(
-      connectionStateChanges.map((e) => e['previous']),
-      orderedEquals(const [
-        'initialized',
-        'connecting',
-        'connected',
-        'closing',
-      ]));
+        expect(channelStateChanges.map((e) => e['event']),
+            orderedEquals(_stateChangeEvents));
 
-  // filteredConnectionStateChanges
-  expect(filteredConnectionStateChanges.map((e) => e['event']), const [
-    'connected',
-  ]);
+        expect(channelStateChanges.map((e) => e['current']),
+            orderedEquals(_stateChangeEvents));
 
-  expect(filteredConnectionStateChanges.map((e) => e['current']), const [
-    'connected',
-  ]);
+        expect(channelStateChanges.map((e) => e['previous']),
+            orderedEquals(_stateChangePrevious));
+      },
+    );
 
-  expect(filteredConnectionStateChanges.map((e) => e['previous']), const [
-    'connecting',
-  ]);
+    test(
+      '#on returns a stream which can be subscribed'
+      ' for channel state changes with filter',
+      () {
+        // filteredChannelStateChanges
+        expect(filteredChannelStateChanges.map((e) => e['event']),
+            orderedEquals(const ['attaching']));
 
-  // channelStates
-  expect(
-      channelStates,
-      orderedEquals(const [
-        'initialized',
-        'initialized',
-        'attached',
-        'attached',
-        'detached',
-        'detached',
-      ]));
+        expect(filteredChannelStateChanges.map((e) => e['current']),
+            orderedEquals(const ['attaching']));
 
-  // channelStateChanges
-
-  // TODO(tiholic): get rid of _stateChangeEvents and _stateChangePrevious
-  //  variables as they are a way to make tests pass due to
-  //  https://github.com/ably/ably-flutter/issues/63
-  List<String> _stateChangeEvents;
-  List<String> _stateChangePrevious;
-  if (channelStateChanges.length == 5) {
-    // ios
-    _stateChangeEvents = const [
-      'attaching',
-      'attached',
-      'detaching',
-      'detached',
-      'detached',
-    ];
-    _stateChangePrevious = const [
-      'initialized',
-      'attaching',
-      'attached',
-      'detaching',
-      'detached',
-    ];
-  } else {
-    _stateChangeEvents = const [
-      'attaching',
-      'attached',
-      'detaching',
-      'detached',
-    ];
-    _stateChangePrevious = const [
-      'initialized',
-      'attaching',
-      'attached',
-      'detaching',
-    ];
-  }
-
-  expect(channelStateChanges.map((e) => e['event']),
-      orderedEquals(_stateChangeEvents));
-
-  expect(channelStateChanges.map((e) => e['current']),
-      orderedEquals(_stateChangeEvents));
-
-  expect(channelStateChanges.map((e) => e['previous']),
-      orderedEquals(_stateChangePrevious));
-
-  // filteredChannelStateChanges
-  expect(filteredChannelStateChanges.map((e) => e['event']),
-      orderedEquals(const ['attaching']));
-
-  expect(filteredChannelStateChanges.map((e) => e['current']),
-      orderedEquals(const ['attaching']));
-
-  expect(filteredChannelStateChanges.map((e) => e['previous']),
-      orderedEquals(const ['initialized']));
+        expect(filteredChannelStateChanges.map((e) => e['previous']),
+            orderedEquals(const ['initialized']));
+      },
+    );
+  });
 }
 
-Future testRealtimeSubscribe(FlutterDriver driver) async {
+void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeSubscribe);
+  TestControlMessage response;
+  List<Map<String, dynamic>> all;
+  List<Map<String, dynamic>> filteredWithName;
+  List<Map<String, dynamic>> filteredWithNames;
 
-  final response = await getTestResponse(driver, message);
+  List<Map<String, dynamic>> transformMessages(messages) =>
+      List.from(messages as List)
+          .map((t) => t as Map<String, dynamic>)
+          .toList();
 
-  expect(response.testName, message.testName);
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    all = transformMessages(response.payload['all']);
+    filteredWithName = transformMessages(response.payload['filteredWithName']);
+    filteredWithNames = transformMessages(
+      response.payload['filteredWithNames'],
+    );
+  });
 
-  // Testing realtime subscribe to all messages
-  final all = response.payload['all']
-      .map<Map<String, dynamic>>(
-          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
-      .toList();
+  test(
+    'realtime#channels#channel#subscribe should subscribe to'
+    ' all message on channel',
+    () {
+      testAllPublishedMessages(all);
+    },
+  );
 
-  testAllPublishedMessages(all);
+  test(
+    'realtime#channels#channel#subscribe(name: string)'
+    ' should subscribe to messages with specified name',
+    () {
+      expect(filteredWithName.length, equals(2));
 
-  // Testing realtime subscribe to messages filtered with name
-  final filteredWithName = response.payload['filteredWithName']
-      .map<Map<String, dynamic>>(
-          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
-      .toList();
+      expect(filteredWithName[0]['name'], 'name1');
+      expect(filteredWithName[0]['data'], isNull);
 
-  expect(filteredWithName, isA<List<Map<String, dynamic>>>());
-  expect(filteredWithName.length, equals(2));
+      expect(filteredWithName[1]['name'], 'name1');
+      expect(filteredWithName[1]['data'], equals('Ably'));
+    },
+  );
 
-  expect(filteredWithName[0]['name'], 'name1');
-  expect(filteredWithName[0]['data'], isNull);
+  test(
+    'realtime#channels#channel#subscribe(names: List<string>)'
+    ' should subscribe to messages with specified names',
+    () {
+      expect(filteredWithNames.length, equals(4));
 
-  expect(filteredWithName[1]['name'], 'name1');
-  expect(filteredWithName[1]['data'], equals('Ably'));
+      expect(filteredWithNames[0]['name'], 'name1');
+      expect(filteredWithNames[0]['data'], isNull);
 
-  // Testing realtime subscribe to messages filtered with multiple names
-  final filteredWithNames = response.payload['filteredWithNames']
-      .map<Map<String, dynamic>>(
-          (m) => Map.castFrom<dynamic, dynamic, String, dynamic>(m as Map))
-      .toList();
+      expect(filteredWithNames[1]['name'], 'name1');
+      expect(filteredWithNames[1]['data'], equals('Ably'));
 
-  expect(filteredWithNames, isA<List<Map<String, dynamic>>>());
-  expect(filteredWithNames.length, equals(4));
+      expect(filteredWithNames[2]['name'], 'name2');
+      expect(filteredWithNames[2]['data'], equals([1, 2, 3]));
 
-  expect(filteredWithNames[0]['name'], 'name1');
-  expect(filteredWithNames[0]['data'], isNull);
-
-  expect(filteredWithNames[1]['name'], 'name1');
-  expect(filteredWithNames[1]['data'], equals('Ably'));
-
-  expect(filteredWithNames[2]['name'], 'name2');
-  expect(filteredWithNames[2]['data'], equals([1, 2, 3]));
-
-  expect(filteredWithNames[3]['name'], 'name2');
-  expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
+      expect(filteredWithNames[3]['name'], 'name2');
+      expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
+    },
+  );
 }
 
-Future testRealtimePublishWithAuthCallback(FlutterDriver driver) async {
-  const message = TestControlMessage(TestName.realtimePublishWithAuthCallback);
-
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
-
-  expect(response.payload['authCallbackInvoked'], isTrue);
-}
-
-Future testRealtimeHistory(FlutterDriver driver) async {
+void testRealtimeHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeHistory);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
-
-  final paginatedResult =
-      response.payload['paginatedResult'] as Map<String, dynamic>;
+  Map<String, dynamic> paginatedResult;
+  List<Map<String, dynamic>> historyDefault;
+  List<Map<String, dynamic>> historyLimit4;
+  List<Map<String, dynamic>> historyLimit2;
+  List<Map<String, dynamic>> historyForwardLimit4;
+  List<Map<String, dynamic>> historyWithStart;
+  List<Map<String, dynamic>> historyWithStartAndEnd;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final historyDefault = transform(response.payload['historyDefault']);
-  final historyLimit4 = transform(response.payload['historyLimit4']);
-  final historyLimit2 = transform(response.payload['historyLimit2']);
-  final historyForwardLimit4 =
-      transform(response.payload['historyForwardLimit4']);
-  final historyWithStart = transform(response.payload['historyWithStart']);
-  final historyWithStartAndEnd =
-      transform(response.payload['historyWithStartAndEnd']);
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    paginatedResult =
+        response.payload['paginatedResult'] as Map<String, dynamic>;
+    historyDefault = transform(response.payload['historyDefault']);
+    historyLimit4 = transform(response.payload['historyLimit4']);
+    historyLimit2 = transform(response.payload['historyLimit2']);
+    historyForwardLimit4 = transform(response.payload['historyForwardLimit4']);
+    historyWithStart = transform(response.payload['historyWithStart']);
+    historyWithStartAndEnd = transform(
+      response.payload['historyWithStartAndEnd'],
+    );
+  });
 
-  expect(paginatedResult['hasNext'], false);
-  expect(paginatedResult['isLast'], true);
-  expect(paginatedResult['items'], isA<List>());
+  group('paginated result', () {
+    test('#items is a list', () {
+      expect(paginatedResult['items'], isA<List>());
+    });
+    test('#hasNext indicates whether there are more entries', () {
+      expect(paginatedResult['hasNext'], false);
+    });
+    test('#isLast indicates if current page is last page', () {
+      expect(paginatedResult['isLast'], true);
+    });
+  });
 
-  expect(historyDefault.length, equals(8));
-  expect(historyLimit4.length, equals(8));
-  expect(historyLimit2.length, equals(8));
-  expect(historyForwardLimit4.length, equals(8));
-  expect(historyWithStart.length, equals(2));
-  expect(historyWithStartAndEnd.length, equals(1));
-
-  testAllPublishedMessages(historyDefault.reversed.toList());
-  testAllPublishedMessages(historyLimit4.reversed.toList());
-  testAllPublishedMessages(historyLimit2.reversed.toList());
-  testAllPublishedMessages(historyForwardLimit4);
-
-  // start and no-end test (backward)
-  expect(historyWithStart[0]['name'], equals('history'));
-  expect(historyWithStart[0]['data'], equals('test2'));
-
-  expect(historyWithStart[1]['name'], equals('history'));
-  expect(historyWithStart[1]['data'], equals('test'));
-
-  // start and end test
-  expect(historyWithStartAndEnd[0]['name'], equals('history'));
-  expect(historyWithStartAndEnd[0]['data'], equals('test'));
+  group('realtime#channels#channel#history', () {
+    test('queries all entries by default', () {
+      expect(historyDefault.length, equals(8));
+      testAllPublishedMessages(historyDefault.reversed.toList());
+    });
+    test('queries all entries by paginating with limit', () {
+      expect(historyLimit4.length, equals(8));
+      expect(historyLimit2.length, equals(8));
+      testAllPublishedMessages(historyLimit4.reversed.toList());
+      testAllPublishedMessages(historyLimit2.reversed.toList());
+    });
+    test('queries entries in reverse order with direction set to "forward"',
+        () {
+      expect(historyForwardLimit4.length, equals(8));
+      testAllPublishedMessages(historyForwardLimit4);
+    });
+    test('returns entries created after specified time', () {
+      expect(historyWithStart.length, equals(2));
+      expect(historyWithStart[0]['name'], equals('history'));
+      expect(historyWithStart[0]['data'], equals('test2'));
+      expect(historyWithStart[1]['name'], equals('history'));
+      expect(historyWithStart[1]['data'], equals('test'));
+    });
+    test('returns entries created between specified start and end', () {
+      expect(historyWithStartAndEnd.length, equals(1));
+      expect(historyWithStartAndEnd[0]['name'], equals('history'));
+      expect(historyWithStartAndEnd[0]['data'], equals('test'));
+    });
+  });
 }
 
-Future testRealtimePresenceGet(FlutterDriver driver) async {
+void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceGet);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  List<Map<String, dynamic>> membersInitial;
+  List<Map<String, dynamic>> membersDefault;
+  List<Map<String, dynamic>> membersClientId;
+  List<Map<String, dynamic>> membersConnectionId;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  int timestampSorter(Map a, Map b) {
-    if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
-        DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    membersInitial = transform(response.payload['membersInitial']);
+    membersDefault = transform(response.payload['membersDefault']);
+    membersClientId = transform(response.payload['membersClientId']);
+    membersConnectionId = transform(response.payload['membersConnectionId']);
+  });
 
-  final membersInitial = transform(response.payload['membersInitial']);
-  expect(membersInitial.length, equals(0));
-
-  final membersDefault = transform(response.payload['membersDefault']);
-  expect(membersDefault.length, equals(8));
-  testAllPresenceMembers(membersDefault..sort(timestampSorter));
-
-  // there is only 1 client with clientId 'client-1
-  final membersClientId = transform(response.payload['membersClientId']);
-  expect(membersClientId.length, equals(1));
-  expect(membersClientId[0]['clientId'], equals('client-1'));
-  checkMessageData(1, membersClientId[0]['data']);
-
-  // TODO similarly check for membersConnectionId after implementing
-  //  connection id (sync from platform) on realtime connection
-  final membersConnectionId =
-      transform(response.payload['membersConnectionId']);
-  expect(membersConnectionId.length, equals(0));
+  group('realtime#channels#channel#presence#get', () {
+    test('has 0 members without any clients joined', () {
+      expect(membersInitial.length, equals(0));
+    });
+    test('queries all entries by default', () {
+      expect(membersDefault.length, equals(8));
+      testAllPresenceMembers(membersDefault..sort(timestampSorter));
+    });
+    test('filters entries with clientId when specified', () {
+      // there is only 1 client with clientId 'client-1
+      expect(membersClientId.length, equals(1));
+      expect(membersClientId[0]['clientId'], equals('client-1'));
+      checkMessageData(1, membersClientId[0]['data']);
+    });
+    test('filters entries with clientId when specified', () {
+      // TODO similarly check for membersConnectionId after implementing
+      //  connection id (sync from platform) on realtime connection
+      expect(membersConnectionId.length, equals(0));
+    });
+  });
 }
 
-Future testRealtimePresenceHistory(FlutterDriver driver) async {
+void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceHistory);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  List<Map<String, dynamic>> historyInitial;
+  List<Map<String, dynamic>> historyDefault;
+  List<Map<String, dynamic>> historyLimit4;
+  List<Map<String, dynamic>> historyLimit2;
+  List<Map<String, dynamic>> historyForwards;
+  List<Map<String, dynamic>> historyWithStart;
+  List<Map<String, dynamic>> historyWithStartAndEnd;
+  List<Map<String, dynamic>> historyAll;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final historyInitial = transform(response.payload['historyInitial']);
-  expect(historyInitial.length, equals(0));
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    historyInitial = transform(response.payload['historyInitial']);
+    historyDefault = transform(response.payload['historyDefault']);
+    historyLimit4 = transform(response.payload['historyLimit4']);
+    historyLimit2 = transform(response.payload['historyLimit2']);
+    historyForwards = transform(response.payload['historyForwards']);
+    historyWithStart = transform(
+      response.payload['historyWithStart'],
+    ).reversed.toList();
+    historyWithStartAndEnd = transform(
+      response.payload['historyWithStartAndEnd'],
+    );
+    historyAll = transform(response.payload['historyAll']);
+  });
 
-  final historyDefault = transform(response.payload['historyDefault']);
-  expect(historyDefault.length, equals(8));
-  testAllPresenceMessagesHistory(historyDefault.reversed.toList());
+  test('queries all entries by default', () {
+    expect(historyInitial.length, equals(0));
+    expect(historyAll.length, equals(10));
 
-  final historyLimit4 = transform(response.payload['historyLimit4']);
-  expect(historyLimit4.length, equals(8));
-  testAllPresenceMessagesHistory(historyLimit4.reversed.toList());
-
-  final historyLimit2 = transform(response.payload['historyLimit2']);
-  expect(historyLimit2.length, equals(8));
-  testAllPresenceMessagesHistory(historyLimit2.reversed.toList());
-
-  final historyForwards = transform(response.payload['historyForwards']);
-  expect(historyForwards.length, equals(8));
-  testAllPresenceMessagesHistory(historyForwards.toList());
-
-  final historyWithStart =
-      transform(response.payload['historyWithStart']).reversed.toList();
-  expect(historyWithStart.length, equals(2));
-  expect(historyWithStart[0]['clientId'], equals('someClientId'));
-  expect(historyWithStart[0]['data'], equals('enter-start-time'));
-  expect(historyWithStart[1]['clientId'], equals('someClientId'));
-  expect(historyWithStart[1]['data'], equals('leave-end-time'));
-
-  final historyWithStartAndEnd =
-      transform(response.payload['historyWithStartAndEnd']);
-  expect(historyWithStartAndEnd.length, equals(1));
-  expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
-  expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
-
-  final historyAll = transform(response.payload['historyAll']);
-  expect(historyAll.length, equals(10));
+    expect(historyDefault.length, equals(8));
+    testAllPresenceMessagesHistory(historyDefault.reversed.toList());
+  });
+  test('queries all entries by paginating with limit', () {
+    expect(historyLimit4.length, equals(8));
+    expect(historyLimit2.length, equals(8));
+    testAllPresenceMessagesHistory(historyLimit4.reversed.toList());
+    testAllPresenceMessagesHistory(historyLimit2.reversed.toList());
+  });
+  test(
+    'queries entries in reverse order with direction set to "forward"',
+    () {
+      expect(historyForwards.length, equals(8));
+      testAllPresenceMessagesHistory(historyForwards.toList());
+    },
+  );
+  test('returns entries created after specified time', () {
+    expect(historyWithStart.length, equals(2));
+    expect(historyWithStart[0]['clientId'], equals('someClientId'));
+    expect(historyWithStart[0]['data'], equals('enter-start-time'));
+    expect(historyWithStart[1]['clientId'], equals('someClientId'));
+    expect(historyWithStart[1]['data'], equals('leave-end-time'));
+  });
+  test('returns entries created between specified start and end', () {
+    expect(historyWithStartAndEnd.length, equals(1));
+    expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
+    expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
+  });
 }
 
-Future testRealtimeEnterUpdateLeave(FlutterDriver driver) async {
+void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceEnterUpdateLeave);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['clientIDClashMatrix'], isA<List>());
-  expect(response.payload['actionMatrix'], isA<List>());
+  List<Map<String, dynamic>> clientIDClashMatrix;
+  List<Map<String, dynamic>> actionMatrix;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    clientIDClashMatrix = transform(response.payload['clientIDClashMatrix']);
+    actionMatrix = transform(response.payload['actionMatrix']);
+  });
 
   void testMatrixEntry(
-    entry, {
+    Map entry, {
     bool enter = false,
     bool update = false,
     bool leave = false,
@@ -430,97 +493,93 @@ Future testRealtimeEnterUpdateLeave(FlutterDriver driver) async {
     );
   }
 
-  final clientIDClashMatrix =
-      transform(response.payload['clientIDClashMatrix']);
-  for (final clashEntry in clientIDClashMatrix) {
-    final realtimeClientID = clashEntry['realtimeClientId'];
-    final presenceClientID = clashEntry['presenceClientId'];
+  test(
+      'clientID should be same in both realtime ClientOptions as well as'
+      ' the one passed to presence enter/update/leave APIs.'
+      ' If unequal, throw error.', () {
+    for (final clashEntry in clientIDClashMatrix) {
+      final realtimeClientID = clashEntry['realtimeClientId'] as String;
+      final presenceClientID = clashEntry['presenceClientId'] as String;
 
-    if (realtimeClientID != presenceClientID) {
-      if (realtimeClientID == null) {
-        // only presenceClientID is present
-        testMatrixEntry(
-          clashEntry,
-          enterClient: true,
-          updateClient: true,
-          leaveClient: true,
-        );
-      } else if (presenceClientID == null) {
-        // only realtimeClientID is present
-        testMatrixEntry(
-          clashEntry,
-          enter: true,
-          update: true,
-          leave: true,
-        );
+      if (realtimeClientID != presenceClientID) {
+        if (realtimeClientID == null) {
+          // only presenceClientID is present
+          testMatrixEntry(
+            clashEntry,
+            enterClient: true,
+            updateClient: true,
+            leaveClient: true,
+          );
+        } else if (presenceClientID == null) {
+          // only realtimeClientID is present
+          testMatrixEntry(
+            clashEntry,
+            enter: true,
+            update: true,
+            leave: true,
+          );
+        } else {
+          // both clientIDs are present and are unequal
+          testMatrixEntry(
+            clashEntry,
+            enter: true,
+            update: true,
+            leave: true,
+          );
+        }
       } else {
-        // both clientIDs are present and are unequal
-        testMatrixEntry(
-          clashEntry,
-          enter: true,
-          update: true,
-          leave: true,
-        );
-      }
-    } else {
-      if (presenceClientID == null) {
-        // both clientIDs are equal and null
-        testMatrixEntry(clashEntry);
-      } else {
-        // both clientIDs are equal and not null
-        testMatrixEntry(
-          clashEntry,
-          enter: true,
-          update: true,
-          leave: true,
-          enterClient: true,
-          updateClient: true,
-          leaveClient: true,
-        );
+        if (presenceClientID == null) {
+          // both clientIDs are equal and null
+          testMatrixEntry(clashEntry);
+        } else {
+          // both clientIDs are equal and not null
+          testMatrixEntry(
+            clashEntry,
+            enter: true,
+            update: true,
+            leave: true,
+            enterClient: true,
+            updateClient: true,
+            leaveClient: true,
+          );
+        }
       }
     }
-  }
+  });
 
-  final actionMatrix = transform(response.payload['actionMatrix']);
-  for (final actionEntry in actionMatrix) {
-    // all cases should succeed
-    testMatrixEntry(
-      actionEntry,
-      enter: true,
-      update: true,
-      leave: true,
-      enterClient: true,
-      updateClient: true,
-      leaveClient: true,
-    );
-  }
+  test('supports all data types as payload for presence actions', () {
+    for (final actionEntry in actionMatrix) {
+      testMatrixEntry(
+        actionEntry,
+        enter: true,
+        update: true,
+        leave: true,
+        enterClient: true,
+        updateClient: true,
+        leaveClient: true,
+      );
+    }
+  });
 }
 
-Future testRealtimePresenceSubscription(FlutterDriver driver) async {
+void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceSubscribe);
-
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['allMessages'], isA<List>());
-  expect(response.payload['enterMessages'], isA<List>());
-  expect(response.payload['enterUpdateMessages'], isA<List>());
-  expect(response.payload['partialMessages'], isA<List>());
+  TestControlMessage response;
+  List<Map<String, dynamic>> allMessages;
+  List<Map<String, dynamic>> enterMessages;
+  List<Map<String, dynamic>> enterUpdateMessages;
+  List<Map<String, dynamic>> partialMessages;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final allMessages = transform(response.payload['allMessages']);
-  final enterMessages = transform(response.payload['enterMessages']);
-  final enterUpdateMessages =
-      transform(response.payload['enterUpdateMessages']);
-  final partialMessages = transform(response.payload['partialMessages']);
-
-  expect(allMessages.length, equals(8));
-  expect(enterMessages.length, equals(1));
-  expect(enterUpdateMessages.length, equals(7));
-  expect(partialMessages.length, equals(7));
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    allMessages = transform(response.payload['allMessages']);
+    enterMessages = transform(response.payload['enterMessages']);
+    enterUpdateMessages = transform(response.payload['enterUpdateMessages']);
+    partialMessages = transform(response.payload['partialMessages']);
+  });
 
   void _test(List<Map<String, dynamic>> messages) {
     for (var i = 0; i < messages.length; i++) {
@@ -534,8 +593,23 @@ Future testRealtimePresenceSubscription(FlutterDriver driver) async {
     }
   }
 
-  _test(allMessages);
-  _test(enterMessages);
-  _test(enterUpdateMessages);
-  expect(partialMessages, equals(enterUpdateMessages));
+  test('listens to messages', () {
+    expect(allMessages.length, equals(8));
+    _test(allMessages);
+  });
+
+  test('filters messages with single action', () {
+    expect(enterMessages.length, equals(1));
+    _test(enterMessages);
+  });
+
+  test('filters messages with multiple actions', () {
+    expect(enterUpdateMessages.length, equals(7));
+    _test(enterUpdateMessages);
+  });
+
+  test('listens to messages only until subscription is active', () {
+    expect(partialMessages.length, equals(7));
+    expect(partialMessages, equals(enterUpdateMessages));
+  });
 }

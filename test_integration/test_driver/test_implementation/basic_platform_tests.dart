@@ -2,49 +2,66 @@ import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-Future testPlatformAndAblyVersion(FlutterDriver driver) async {
-  final data = {'message': 'foo'};
-  final message =
-      TestControlMessage(TestName.platformAndAblyVersion, payload: data);
+void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.platformAndAblyVersion);
+  TestControlMessage response;
+  setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
-  final response = await getTestResponse(driver, message);
+  test('platformVersion is a string', () {
+    expect(response.payload['platformVersion'], isA<String>());
+  });
 
-  expect(response.testName, message.testName);
+  test('platformVersion is not empty', () {
+    expect(response.payload['platformVersion'], isNot(isEmpty));
+  });
 
-  expect(response.payload['platformVersion'], isA<String>());
-  expect(response.payload['platformVersion'], isNot(isEmpty));
-  expect(response.payload['ablyVersion'], isA<String>());
-  expect(response.payload['ablyVersion'], isNot(isEmpty));
+  test('ablyVersion is a string', () {
+    expect(response.payload['ablyVersion'], isA<String>());
+  });
+
+  test('ablyVersion is not empty', () {
+    expect(response.payload['ablyVersion'], isNot(isEmpty));
+  });
 }
 
-Future testDemoDependencies(FlutterDriver driver) async {
-  final data = {'message': 'foo'};
-  final message =
-      TestControlMessage(TestName.appKeyProvisioning, payload: data);
+void testDemoDependencies(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.appKeyProvisioning);
+  TestControlMessage response;
+  setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
-  final response = await getTestResponse(driver, message);
+  test('appKey is a string', () {
+    expect(response.payload['appKey'], isA<String>());
+    expect(response.payload['appKey'], isNotEmpty);
+  });
 
-  print('response.payload ${response.payload}');
+  group('token request has', () {
+    Map tokenRequest;
 
-  expect(response.testName, message.testName);
+    setUp(() {
+      tokenRequest = response.payload['tokenRequest'] as Map;
+    });
 
-  expect(response.payload['appKey'], isA<String>());
-  expect(response.payload['appKey'], isNotEmpty);
+    test('non-empty keyName', () {
+      expect(tokenRequest['keyName'], isA<String>());
+      expect(tokenRequest['keyName'], isNotEmpty);
+    });
 
-  print('response.payload:: ${response.payload}');
+    test('non-empty nonce', () {
+      expect(tokenRequest['nonce'], isA<String>());
+      expect(tokenRequest['nonce'], isNotEmpty);
+    });
 
-  final tokenRequest = response.payload['tokenRequest'];
+    test('non-empty mac', () {
+      expect(tokenRequest['mac'], isA<String>());
+      expect(tokenRequest['mac'], isNotEmpty);
+    });
 
-  expect(tokenRequest['keyName'], isA<String>());
-  expect(tokenRequest['keyName'], isNotEmpty);
+    test('non-empty timestamp', () {
+      expect(tokenRequest['timestamp'], isA<int>());
+    });
 
-  expect(tokenRequest['nonce'], isA<String>());
-  expect(tokenRequest['nonce'], isNotEmpty);
-
-  expect(tokenRequest['mac'], isA<String>());
-  expect(tokenRequest['mac'], isNotEmpty);
-
-  expect(tokenRequest['timestamp'], isA<int>());
-
-  expect(tokenRequest['ttl'], isA<int>());
+    test('non-empty ttl', () {
+      expect(tokenRequest['ttl'], isA<int>());
+    });
+  });
 }

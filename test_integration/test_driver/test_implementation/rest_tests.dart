@@ -4,258 +4,306 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
-Future testRestPublish(FlutterDriver driver) async {
+void testRestPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublish);
+  TestControlMessage response;
+  setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  test('rest instance has a valid handle on publish', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
 }
 
-Future testRestPublishSpec(FlutterDriver driver) async {
+void testRestPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishSpec);
+  TestControlMessage response;
+  List messages;
+  List messages2;
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    messages = response.payload['publishedMessages'] as List;
+    messages2 = response.payload['publishedMessages2'] as List;
+  });
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
-
-  expect(response.payload['publishedMessages'], isA<List>());
-  expect(response.payload['publishedMessages2'], isA<List>());
-
-  final messages = response.payload['publishedMessages'] as List;
-  final messages2 = response.payload['publishedMessages2'] as List;
-  final exception = Map.castFrom<dynamic, dynamic, String, dynamic>(
-      response.payload['exception'] as Map);
-
-  // publish without name and data
-  expect(messages[0]['name'], null);
-  expect(messages[0]['data'], null);
-
-  // publish without data
-  expect(messages[1]['name'], 'name1');
-  expect(messages[1]['data'], null);
-
-  // publish without name
-  expect(messages[2]['name'], null);
-  expect(messages[2]['data'], 'data1');
-
-  // publish with name and data
-  expect(messages[3]['name'], 'name1');
-  expect(messages[3]['data'], 'data1');
-
-  // publish as one Message object
-  expect(messages[4]['name'], 'message-name1');
-  expect(messages[4]['data'], 'message-data1');
-
-  // publish multiple Messages at once
-  expect(messages[5]['name'], 'messages-name1');
-  expect(messages[5]['data'], 'messages-data1');
-  expect(messages[6]['name'], 'messages-name2');
-  expect(messages[6]['data'], 'messages-data2');
-  expect(messages[5]['timestamp'] == messages[6]['timestamp'], true);
-  expect(messages[5]['timestamp'] != messages[4]['timestamp'], true);
-
-  // (RSL1d) Raises an error if the message was not successfully published
-  //  -- and --
-  // (RSL1m4) Publishing a Message with a clientId set to a different value
-  //  from the clientId in the client options should result in a message
-  //  being rejected by the server.
-  expect(response.payload['exception'], isA<Map>());
-  // TODO as error details are incompatible from both libraries, it makes no sense to enable below expect's
-  // expect(exception['code'], '14'); //40012 from android and 14 from iOS
-  // expect(
-  //   exception['message'],
-  //   'Error publishing rest message;'
-  //   ' err = attempted to publish message with an invalid clientId',
-  // );
-  // expect(exception['errorInfo']['message'],
-  //     'attempted to publish message with an invalid clientId');
+  test('publishes without a name and data', () {
+    expect(messages[0]['name'], null);
+    expect(messages[0]['data'], null);
+  });
+  test('publishes without data', () {
+    expect(messages[1]['name'], 'name1');
+    expect(messages[1]['data'], null);
+  });
+  test('publishes without a name', () {
+    expect(messages[2]['name'], null);
+    expect(messages[2]['data'], 'data1');
+  });
+  test('publishes with name and data', () {
+    expect(messages[3]['name'], 'name1');
+    expect(messages[3]['data'], 'data1');
+  });
+  test('publishes single message object', () {
+    expect(messages[4]['name'], 'message-name1');
+    expect(messages[4]['data'], 'message-data1');
+  });
+  test('publishes multiple message objects', () {
+    expect(messages[5]['name'], 'messages-name1');
+    expect(messages[5]['data'], 'messages-data1');
+    expect(messages[6]['name'], 'messages-name2');
+    expect(messages[6]['data'], 'messages-data2');
+  });
+  test('publishes multiple messages at once', () {
+    expect(messages[5]['timestamp'] == messages[6]['timestamp'], true);
+    expect(messages[5]['timestamp'] != messages[4]['timestamp'], true);
+  });
 
   // (RSL1m1) Publishing a Message with no clientId when the clientId
   //  is set to some value in the client options should result in a message
   //  received with the clientId property set to that value
   // expect(messages[0]['clientId'], 'someClientId');
 
-  // (RSL1m2) Publishing a Message with a clientId set to the same
-  //  value as the clientId in the client options should result in
-  //  a message received with the clientId property set to that value
-  expect(messages[7]['clientId'], 'someClientId');
+  test(
+      '(RSL1m2) Publishing a Message with a clientId set to the same'
+      ' value as the clientId in the client options should result in'
+      ' a message received with the clientId property set to that value', () {
+    expect(messages[7]['clientId'], 'someClientId');
+  });
 
-  // (RSL1m3) Publishing a Message with a clientId set to a value
-  //  from an unidentified client (no clientId in the client options
-  //  and credentials that can assume any clientId) should result in
-  //  a message received with the clientId property set to that value
-  expect(messages2[0]['clientId'], 'client-id');
+  test(
+    '(RSL1d) Raises an error if the message was not successfully published',
+    () => expect(response.payload['exception'], isA<Map>()),
+  );
+
+  test(
+    '(RSL1m4) Publishing a Message with a clientId set to a different value'
+    ' from the clientId in the client options should result in a message'
+    ' being rejected by the server.',
+    () {
+      expect(response.payload['exception'], isA<Map>());
+      // TODO as error details are incompatible from both libraries,
+      //  it makes no sense to include below expect's
+      //
+      // final exception = Map.castFrom<dynamic, dynamic, String, dynamic>(
+      //   response.payload['exception'] as Map);
+      // expect(exception['code'], '14'); //40012 from android and 14 from iOS
+      // expect(
+      //   exception['message'],
+      //   'Error publishing rest message;'
+      //   ' err = attempted to publish message with an invalid clientId',
+      // );
+      // expect(exception['errorInfo']['message'],
+      //     'attempted to publish message with an invalid clientId');
+    },
+  );
+
+  test(
+    '(RSL1m3) Publishing a Message with a clientId set to a value'
+    ' from an unidentified client (no clientId in the client options'
+    ' and credentials that can assume any clientId) should result in'
+    ' a message received with the clientId property set to that value',
+    () => expect(messages2[0]['clientId'], 'client-id'),
+  );
 }
 
-Future testRestPublishWithAuthCallback(FlutterDriver driver) async {
+void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishWithAuthCallback);
+  TestControlMessage response;
+  setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
-
-  expect(response.payload['authCallbackInvoked'], isTrue);
+  test('auth callback is invoked', () {
+    expect(response.payload['authCallbackInvoked'], isTrue);
+  });
 }
 
-Future testRestHistory(FlutterDriver driver) async {
+void testRestHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restHistory);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
-
-  final paginatedResult =
-      response.payload['paginatedResult'] as Map<String, dynamic>;
+  Map<String, dynamic> paginatedResult;
+  List<Map<String, dynamic>> historyDefault;
+  List<Map<String, dynamic>> historyLimit4;
+  List<Map<String, dynamic>> historyLimit2;
+  List<Map<String, dynamic>> historyForwardLimit4;
+  List<Map<String, dynamic>> historyWithStart;
+  List<Map<String, dynamic>> historyWithStartAndEnd;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final historyDefault = transform(response.payload['historyDefault']);
-  final historyLimit4 = transform(response.payload['historyLimit4']);
-  final historyLimit2 = transform(response.payload['historyLimit2']);
-  final historyForwardLimit4 =
-      transform(response.payload['historyForwardLimit4']);
-  final historyWithStart = transform(response.payload['historyWithStart']);
-  final historyWithStartAndEnd =
-      transform(response.payload['historyWithStartAndEnd']);
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    paginatedResult =
+        response.payload['paginatedResult'] as Map<String, dynamic>;
+    historyDefault = transform(response.payload['historyDefault']);
+    historyLimit4 = transform(response.payload['historyLimit4']);
+    historyLimit2 = transform(response.payload['historyLimit2']);
+    historyForwardLimit4 = transform(response.payload['historyForwardLimit4']);
+    historyWithStart = transform(response.payload['historyWithStart']);
+    historyWithStartAndEnd = transform(
+      response.payload['historyWithStartAndEnd'],
+    );
+  });
 
-  expect(paginatedResult['hasNext'], false);
-  expect(paginatedResult['isLast'], true);
-  expect(paginatedResult['items'], isA<List>());
+  group('paginated result', () {
+    test('#items is a list', () {
+      expect(paginatedResult['items'], isA<List>());
+    });
+    test('#hasNext indicates whether there are more entries', () {
+      expect(paginatedResult['hasNext'], false);
+    });
+    test('#isLast indicates if current page is last page', () {
+      expect(paginatedResult['isLast'], true);
+    });
+  });
 
-  expect(historyDefault.length, equals(8));
-  expect(historyLimit4.length, equals(8));
-  expect(historyLimit2.length, equals(8));
-  expect(historyForwardLimit4.length, equals(8));
-  expect(historyWithStart.length, equals(2));
-  expect(historyWithStartAndEnd.length, equals(1));
-
-  testAllPublishedMessages(historyDefault.reversed.toList());
-  testAllPublishedMessages(historyLimit4.reversed.toList());
-  testAllPublishedMessages(historyLimit2.reversed.toList());
-  testAllPublishedMessages(historyForwardLimit4);
-
-  // start and no-end test (backward)
-  expect(historyWithStart[0]['name'], equals('history'));
-  expect(historyWithStart[0]['data'], equals('test2'));
-
-  expect(historyWithStart[1]['name'], equals('history'));
-  expect(historyWithStart[1]['data'], equals('test'));
-
-  // start and end test
-  expect(historyWithStartAndEnd[0]['name'], equals('history'));
-  expect(historyWithStartAndEnd[0]['data'], equals('test'));
+  group('rest#channels#channel#history', () {
+    test('queries all entries by default', () {
+      expect(historyDefault.length, equals(8));
+      testAllPublishedMessages(historyDefault.reversed.toList());
+    });
+    test('queries all entries by paginating with limit', () {
+      expect(historyLimit4.length, equals(8));
+      expect(historyLimit2.length, equals(8));
+      testAllPublishedMessages(historyLimit4.reversed.toList());
+      testAllPublishedMessages(historyLimit2.reversed.toList());
+    });
+    test('queries entries in reverse order with direction set to "forward"',
+        () {
+      expect(historyForwardLimit4.length, equals(8));
+      testAllPublishedMessages(historyForwardLimit4);
+    });
+    test('returns entries created after specified time', () {
+      expect(historyWithStart.length, equals(2));
+      expect(historyWithStart[0]['name'], equals('history'));
+      expect(historyWithStart[0]['data'], equals('test2'));
+      expect(historyWithStart[1]['name'], equals('history'));
+      expect(historyWithStart[1]['data'], equals('test'));
+    });
+    test('returns entries created between specified start and end', () {
+      expect(historyWithStartAndEnd.length, equals(1));
+      expect(historyWithStartAndEnd[0]['name'], equals('history'));
+      expect(historyWithStartAndEnd[0]['data'], equals('test'));
+    });
+  });
 }
 
-Future testRestPresenceGet(FlutterDriver driver) async {
+void testRestPresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceGet);
+  TestControlMessage response;
 
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  List<Map<String, dynamic>> membersInitial;
+  List<Map<String, dynamic>> membersDefault;
+  List<Map<String, dynamic>> membersLimit4;
+  List<Map<String, dynamic>> membersLimit2;
+  List<Map<String, dynamic>> membersClientId;
+  List<Map<String, dynamic>> membersConnectionId;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  int timestampSorter(Map a, Map b) {
-    if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
-        DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    membersInitial = transform(response.payload['membersInitial']);
+    membersDefault = transform(response.payload['membersDefault']);
+    membersLimit4 = transform(response.payload['membersLimit4']);
+    membersLimit2 = transform(response.payload['membersLimit2']);
+    membersClientId = transform(response.payload['membersClientId']);
+    membersConnectionId = transform(response.payload['membersConnectionId']);
+  });
 
-  final membersInitial = transform(response.payload['membersInitial']);
-  expect(membersInitial.length, equals(0));
-
-  final membersDefault = transform(response.payload['membersDefault']);
-  expect(membersDefault.length, equals(8));
-  testAllPresenceMembers(membersDefault..sort(timestampSorter));
-
-  final membersLimit4 = transform(response.payload['membersLimit4']);
-  expect(membersLimit4.length, equals(8));
-  testAllPresenceMembers(membersLimit4..sort(timestampSorter));
-
-  final membersLimit2 = transform(response.payload['membersLimit2']);
-  expect(membersLimit2.length, equals(8));
-  testAllPresenceMembers(membersLimit2..sort(timestampSorter));
-
-  // there is only 1 client with clientId 'client-1
-  final membersClientId = transform(response.payload['membersClientId']);
-  expect(membersClientId.length, equals(1));
-  expect(membersClientId[0]['clientId'], equals('client-1'));
-  checkMessageData(1, membersClientId[0]['data']);
-
-  // TODO similarly check for membersConnectionId after implementing
-  //  connection id (sync from platform) on realtime connection
-  final membersConnectionId =
-      transform(response.payload['membersConnectionId']);
-  expect(membersConnectionId.length, equals(0));
+  group('rest#channels#channel#presence#get', () {
+    test('has 0 members without any clients joined', () {
+      expect(membersInitial.length, equals(0));
+    });
+    test('queries all entries by default', () {
+      expect(membersDefault.length, equals(8));
+      testAllPresenceMembers(membersDefault..sort(timestampSorter));
+    });
+    test('queries all entries by paginating with limit', () {
+      expect(membersLimit4.length, equals(8));
+      expect(membersLimit2.length, equals(8));
+      testAllPresenceMembers(membersLimit4..sort(timestampSorter));
+      testAllPresenceMembers(membersLimit2..sort(timestampSorter));
+    });
+    test('filters entries with clientId when specified', () {
+      // there is only 1 client with clientId 'client-1
+      expect(membersClientId.length, equals(1));
+      expect(membersClientId[0]['clientId'], equals('client-1'));
+      checkMessageData(1, membersClientId[0]['data']);
+    });
+    test('filters entries with clientId when specified', () {
+      // TODO similarly (like clientId) check for membersConnectionId
+      //  after implementing connection id (sync from platform)
+      //  on realtime connection
+      expect(membersConnectionId.length, equals(0));
+    });
+  });
 }
 
-Future testRestPresenceHistory(FlutterDriver driver) async {
+void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceHistory);
-
-  final response = await getTestResponse(driver, message);
-
-  expect(response.testName, message.testName);
-
-  expect(response.payload['handle'], isA<int>());
-  expect(response.payload['handle'], greaterThan(0));
+  TestControlMessage response;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  final historyInitial = transform(response.payload['historyInitial']);
-  expect(historyInitial.length, equals(0));
+  List<Map<String, dynamic>> historyInitial;
+  List<Map<String, dynamic>> historyDefault;
+  List<Map<String, dynamic>> historyLimit4;
+  List<Map<String, dynamic>> historyLimit2;
+  List<Map<String, dynamic>> historyForwards;
+  List<Map<String, dynamic>> historyWithStart;
+  List<Map<String, dynamic>> historyWithStartAndEnd;
+  List<Map<String, dynamic>> historyAll;
 
-  final historyDefault = transform(response.payload['historyDefault']);
-  expect(historyDefault.length, equals(8));
-  testAllPresenceMessagesHistory(historyDefault.reversed.toList());
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    historyInitial = transform(response.payload['historyInitial']);
+    historyDefault = transform(response.payload['historyDefault']);
+    historyLimit4 = transform(response.payload['historyLimit4']);
+    historyLimit2 = transform(response.payload['historyLimit2']);
+    historyForwards = transform(response.payload['historyForwards']);
+    historyWithStart = transform(
+      response.payload['historyWithStart'],
+    ).reversed.toList();
+    historyWithStartAndEnd = transform(
+      response.payload['historyWithStartAndEnd'],
+    );
+    historyAll = transform(response.payload['historyAll']);
+  });
 
-  final historyLimit4 = transform(response.payload['historyLimit4']);
-  expect(historyLimit4.length, equals(8));
-  testAllPresenceMessagesHistory(historyLimit4.reversed.toList());
+  group('rest#channels#channel#presence#history', () {
+    test('queries all entries by default', () {
+      expect(historyInitial.length, equals(0));
+      expect(historyAll.length, equals(10));
 
-  final historyLimit2 = transform(response.payload['historyLimit2']);
-  expect(historyLimit2.length, equals(8));
-  testAllPresenceMessagesHistory(historyLimit2.reversed.toList());
-
-  final historyForwards = transform(response.payload['historyForwards']);
-  expect(historyForwards.length, equals(8));
-  testAllPresenceMessagesHistory(historyForwards.toList());
-
-  final historyWithStart =
-      transform(response.payload['historyWithStart']).reversed.toList();
-  expect(historyWithStart.length, equals(2));
-  expect(historyWithStart[0]['clientId'], equals('someClientId'));
-  expect(historyWithStart[0]['data'], equals('enter-start-time'));
-  expect(historyWithStart[1]['clientId'], equals('someClientId'));
-  expect(historyWithStart[1]['data'], equals('leave-end-time'));
-
-  final historyWithStartAndEnd =
-      transform(response.payload['historyWithStartAndEnd']);
-  expect(historyWithStartAndEnd.length, equals(1));
-  expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
-  expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
-
-  final historyAll = transform(response.payload['historyAll']);
-  expect(historyAll.length, equals(10));
+      expect(historyDefault.length, equals(8));
+      testAllPresenceMessagesHistory(historyDefault.reversed.toList());
+    });
+    test('queries all entries by paginating with limit', () {
+      expect(historyLimit4.length, equals(8));
+      expect(historyLimit2.length, equals(8));
+      testAllPresenceMessagesHistory(historyLimit4.reversed.toList());
+      testAllPresenceMessagesHistory(historyLimit2.reversed.toList());
+    });
+    test(
+      'queries entries in reverse order with direction set to "forward"',
+      () {
+        expect(historyForwards.length, equals(8));
+        testAllPresenceMessagesHistory(historyForwards.toList());
+      },
+    );
+    test('returns entries created after specified time', () {
+      expect(historyWithStart.length, equals(2));
+      expect(historyWithStart[0]['clientId'], equals('someClientId'));
+      expect(historyWithStart[0]['data'], equals('enter-start-time'));
+      expect(historyWithStart[1]['clientId'], equals('someClientId'));
+      expect(historyWithStart[1]['data'], equals('leave-end-time'));
+    });
+    test('returns entries created between specified start and end', () {
+      expect(historyWithStartAndEnd.length, equals(1));
+      expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
+      expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
+    });
+  });
 }
