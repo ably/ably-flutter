@@ -20,10 +20,20 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   TestControlMessage response;
   List messages;
   List messages2;
+  List messages3;
+  Map<String, dynamic> exception;
+  Map<String, dynamic> exception2;
+  Map<String, dynamic> exception3;
+
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
+
     messages = response.payload['publishedMessages'] as List;
     messages2 = response.payload['publishedMessages2'] as List;
+    messages3 = response.payload['publishedMessages3'] as List;
+    exception = response.payload['exception'] as Map<String, dynamic>;
+    exception2 = response.payload['exception2'] as Map<String, dynamic>;
+    exception3 = response.payload['exception3'] as Map<String, dynamic>;
   });
 
   test('publishes without a name and data', () {
@@ -71,7 +81,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 
   test(
     '(RSL1d) Raises an error if the message was not successfully published',
-    () => expect(response.payload['exception'], isA<Map>()),
+    () => expect(exception == null, false),
   );
 
   test(
@@ -102,6 +112,27 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
     ' and credentials that can assume any clientId) should result in'
     ' a message received with the clientId property set to that value',
     () => expect(messages2[0]['clientId'], 'client-id'),
+  );
+
+  test(
+    '(RSL1i) If the total size of the message or (if publishing an array)'
+    ' messages, calculated per TO3l8, exceeds the maxMessageSize, then the'
+    ' client library should reject the publish and indicate an error'
+    ' with code 40009',
+    () {
+      // allows publishing messages length <= max allowed limit
+      expect(exception2 == null, true);
+      // errors out publishing messages length > max allowed limit
+      expect(exception3 == null, false);
+    },
+  );
+
+  test(
+    'publishes non-ascii characters',
+    () {
+      expect(messages3[0]['name'], 'Ωπ');
+      expect(messages3[0]['data'], 'ΨΔ');
+    },
   );
 }
 
@@ -305,5 +336,51 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
       expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
       expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
     });
+  });
+}
+
+void testCapabilityMatrix(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restCapabilities);
+  TestControlMessage response;
+  List<Map<String, dynamic>> capabilityMatrix;
+
+  List<Map<String, dynamic>> transform(items) =>
+      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+
+  setUpAll(() async {
+    response = await getTestResponse(getDriver(), message);
+    capabilityMatrix = transform(response.payload['matrix']);
+  });
+
+  test('capabilitySpec', () {
+    for (final entry in capabilityMatrix) {
+      final capabilities = entry['channelCapabilities'] as List;
+      final publishEnabled = capabilities.contains('publish');
+      final historyEnabled = capabilities.contains('history');
+      final subscribeEnabled = capabilities.contains('subscribe');
+
+      final publishException = entry['publishException'];
+      final historyException = entry['historyException'];
+      final presenceException = entry['presenceException'];
+      final presenceHistoryException = entry['presenceHistoryException'];
+
+      if (publishEnabled) {
+        expect(publishException == null, true);
+      } else {
+        expect(publishException['code'], '40160');
+      }
+      if (historyEnabled) {
+        expect(historyException == null, true);
+        expect(presenceHistoryException == null, true);
+      } else {
+        expect(historyException['code'], '40160');
+        expect(presenceHistoryException['code'], '40160');
+      }
+      if (subscribeEnabled) {
+        expect(presenceException == null, subscribeEnabled);
+      } else {
+        expect(presenceException['code'], '40160');
+      }
+    }
   });
 }

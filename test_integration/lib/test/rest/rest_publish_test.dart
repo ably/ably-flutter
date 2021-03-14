@@ -1,5 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
+import '../../config/data.dart';
 
 import '../../factory/reporter.dart';
 import '../../utils/encoders.dart';
@@ -88,10 +89,35 @@ Future<Map<String, dynamic>> testRestPublishSpec({
     RestHistoryParams(direction: 'forwards'),
   );
 
+  // publish max allowed length - sandbox apps message limit is 16384
+  Map<String, dynamic> exception2;
+  try {
+    await channel2.publish(data: getRandomString(16384));
+  } on AblyException catch (e) {
+    exception2 = encodeAblyException(e);
+  }
+
+  // publish more than max allowed length
+  Map<String, dynamic> exception3;
+  try {
+    await channel2.publish(data: getRandomString(16384 + 1));
+  } on AblyException catch (e) {
+    exception3 = encodeAblyException(e);
+  }
+
+  final channel3 = rest2.channels.get('©Äblý');
+  await channel3.publish(name: 'Ωπ', data: 'ΨΔ');
+
+  await Future.delayed(const Duration(seconds: 2));
+  final history3 = await getHistory(channel3);
+
   return {
     'handle': await rest.handle,
     'publishedMessages': history,
-    'exception': exception,
     'publishedMessages2': history2,
+    'publishedMessages3': history3,
+    'exception': exception,
+    'exception2': exception2,
+    'exception3': exception3,
   };
 }

@@ -12,6 +12,7 @@ class TestName {
 
   static const String restPublish = 'restPublish';
   static const String restPublishSpec = 'restPublishSpec';
+  static const String restCapabilities = 'restCapabilities';
   static const String restHistory = 'restHistory';
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';

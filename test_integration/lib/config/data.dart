@@ -1,3 +1,5 @@
+import 'dart:math';
+
 final messagesToPublish = [
   [null, null], //name and message are both null
   [null, 'Ably'], //name is null
@@ -27,3 +29,26 @@ final messagesToPublish = [
     ]
   ] //message is a complex list
 ];
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+Random _rnd = Random();
+
+/// get random alpha numeric string of given length
+String getRandomString(int length) => String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)),
+      ),
+    );
+
+/// returns subsets of all entries in a list
+List<List> getAllSubsets(List l) => l.fold<List<List>>(
+      [[]],
+      (subLists, element) => subLists
+          .map((subList) => [
+                subList,
+                subList + [element]
+              ])
+          .expand((element) => element)
+          .toList(),
+    );

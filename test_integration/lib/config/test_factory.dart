@@ -10,6 +10,7 @@ import '../test/realtime/realtime_presence_subscribe.dart';
 import '../test/realtime/realtime_publish_test.dart';
 import '../test/realtime/realtime_publish_with_auth_callback_test.dart';
 import '../test/realtime/realtime_subscribe.dart';
+import '../test/rest/rest_capability_test.dart';
 import '../test/rest/rest_history_test.dart';
 import '../test/rest/rest_presence_get_test.dart';
 import '../test/rest/rest_presence_history_test.dart';
@@ -29,6 +30,7 @@ final testFactory = <String, TestFactory>{
   // rest tests
   TestName.restPublish: testRestPublish,
   TestName.restPublishSpec: testRestPublishSpec,
+  TestName.restCapabilities: testRestCapabilities,
   TestName.restHistory: testRestHistory,
   TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
   TestName.restPresenceGet: testRestPresenceGet,
