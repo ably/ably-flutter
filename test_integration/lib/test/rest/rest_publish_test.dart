@@ -38,7 +38,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())
-      //..environment = 'sandbox'
+      ..environment = 'sandbox'
       ..clientId = 'someClientId'
       ..logLevel = LogLevel.verbose,
   );
@@ -79,17 +79,14 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   // client options - no client id, message has client id
   final rest2 = Rest(
     options:
-        ClientOptions.fromKey(appKey.toString()), //..environment = 'sandbox',
+        ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
   );
 
-  print('NOW IS::: ${DateTime.now()}');
   final channel2 = rest2.channels.get('test2');
   await channel2.publish(
     message: Message(name: 'name-client-id', clientId: 'client-id'),
   );
-  print('NOW IS 2::: ${DateTime.now()}');
   await Future.delayed(TestConstants.publishToHistoryDelay);
-  print('NOW IS 3::: ${DateTime.now()}');
   final history2 = await getHistory(
     channel2,
     RestHistoryParams(direction: 'forwards'),
