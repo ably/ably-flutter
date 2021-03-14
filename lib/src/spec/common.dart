@@ -517,6 +517,12 @@ class AblyException implements Exception {
     this.errorInfo,
   ]);
 
+  /// create AblyException from [PlatformException]
+  AblyException.fromPlatformException(PlatformException pe)
+      : code = pe.code,
+        message = pe.message,
+        errorInfo = pe.details as ErrorInfo;
+
   @override
   String toString() {
     if (message == null) {

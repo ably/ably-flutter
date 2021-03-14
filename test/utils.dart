@@ -54,6 +54,7 @@ class MockMethodCallManager {
           isAuthenticated = true;
           throw PlatformException(
             code: ErrorCodes.authCallbackFailure.toString(),
+            details: ErrorInfo(),
           );
         }
 
@@ -75,7 +76,9 @@ class MockMethodCallManager {
                   handle: handle));
           isAuthenticated = true;
           throw PlatformException(
-              code: ErrorCodes.authCallbackFailure.toString());
+            code: ErrorCodes.authCallbackFailure.toString(),
+            details: ErrorInfo(),
+          );
         }
 
         publishedMessages.add(message);

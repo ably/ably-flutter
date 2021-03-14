@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -137,6 +138,9 @@ class RealtimeChannel extends PlatformObject
               .where((e) => !e.completer.isCompleted)
               .forEach((e) => e.completer.completeError(ae));
         }
+      } on PlatformException catch (pe) {
+        _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
+            e.completer.completeError(AblyException.fromPlatformException(pe)));
       } on Exception {
         // removing item from queue and rethrowing exception
         _publishQueue.remove(item);

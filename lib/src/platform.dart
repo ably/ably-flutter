@@ -53,7 +53,7 @@ Future<T> invokePlatformMethod<T>(String method, [Object arguments]) async {
     return await methodChannel.invokeMethod<T>(method, arguments);
   } on PlatformException catch (pe) {
     if (pe.details is ErrorInfo) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+      throw AblyException.fromPlatformException(pe);
     } else {
       rethrow;
     }

@@ -23,6 +23,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../spec/common.dart';
+
 /// Manages multiple event listeners which would otherwise require verbose code
 /// on platform side
 class StreamsChannel {
@@ -54,8 +56,12 @@ class StreamsChannel {
         } else {
           try {
             controller.add(codec.decodeEnvelope(reply) as T);
-          } on PlatformException catch (e) {
-            controller.addError(e);
+          } on PlatformException catch (pe) {
+            if (pe.details is ErrorInfo) {
+              throw AblyException.fromPlatformException(pe);
+            } else {
+              controller.addError(pe);
+            }
           }
         }
 

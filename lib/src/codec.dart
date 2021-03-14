@@ -86,7 +86,8 @@ class Codec extends StandardMessageCodec {
         null,
       ),
 
-      CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
+      CodecTypes.errorInfo:
+          _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
       CodecTypes.messageData: _CodecPair<MessageData>(
         _encodeChannelMessageData,
         _decodeChannelMessageData,
@@ -402,6 +403,18 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
     _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
     _writeToJson(jsonMap, TxAblyEventMessage.message, message);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeErrorInfo(final ErrorInfo v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxErrorInfo.code, v.code);
+    _writeToJson(jsonMap, TxErrorInfo.message, v.message);
+    _writeToJson(jsonMap, TxErrorInfo.statusCode, v.statusCode);
+    _writeToJson(jsonMap, TxErrorInfo.href, v.href);
+    _writeToJson(jsonMap, TxErrorInfo.requestId, v.requestId);
+    _writeToJson(jsonMap, TxErrorInfo.cause, v.cause);
     return jsonMap;
   }
 
