@@ -1,6 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-import '../config/data.dart';
+import 'data.dart';
 import 'encoders.dart';
 
 Future<void> publishMessages(RealtimeChannel channel) async {

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../../config/data.dart';
 import '../../factory/reporter.dart';
+import '../../utils/data.dart';
 import '../../utils/encoders.dart';
 
 final logMessages = <List<String>>[];
