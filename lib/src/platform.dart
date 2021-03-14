@@ -6,6 +6,7 @@ import 'codec.dart';
 import 'generated/platformconstants.dart' show PlatformMethod;
 import 'impl/streams_channel.dart';
 import 'method_call_handler.dart';
+import 'spec/common.dart' show ErrorInfo, AblyException;
 import 'spec/constants.dart';
 
 /// instance of [StandardMethodCodec] with custom [MessageCodec] for
@@ -48,5 +49,13 @@ Future _initialize() async {
 /// (as hot-restart is known to not clear any objects on platform side)
 Future<T> invokePlatformMethod<T>(String method, [Object arguments]) async {
   await _initialize();
-  return methodChannel.invokeMethod<T>(method, arguments);
+  try {
+    return await methodChannel.invokeMethod<T>(method, arguments);
+  } on PlatformException catch (pe) {
+    if (pe.details is ErrorInfo) {
+      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
+    } else {
+      rethrow;
+    }
+  }
 }

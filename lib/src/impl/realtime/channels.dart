@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -113,8 +112,8 @@ class RealtimeChannel extends PlatformObject
         if (!item.completer.isCompleted) {
           item.completer.complete();
         }
-      } on PlatformException catch (pe) {
-        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
+      } on AblyException catch (ae) {
+        if (ae.code == ErrorCodes.authCallbackFailure.toString()) {
           if (_authCallbackCompleter != null) {
             return;
           }
@@ -136,11 +135,7 @@ class RealtimeChannel extends PlatformObject
         } else {
           _publishQueue
               .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(AblyException(
-                    pe.code,
-                    pe.message,
-                    pe.details as ErrorInfo,
-                  )));
+              .forEach((e) => e.completer.completeError(ae));
         }
       } on Exception {
         // removing item from queue and rethrowing exception
@@ -177,31 +172,16 @@ class RealtimeChannel extends PlatformObject
   ChannelState state;
 
   @override
-  Future<void> attach() async {
-    try {
-      await invoke(PlatformMethod.attachRealtimeChannel, _payload);
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
+  Future<void> attach() =>
+      invoke(PlatformMethod.attachRealtimeChannel, _payload);
 
   @override
-  Future<void> detach() async {
-    try {
-      await invoke(PlatformMethod.detachRealtimeChannel, _payload);
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
+  Future<void> detach() =>
+      invoke(PlatformMethod.detachRealtimeChannel, _payload);
 
   @override
-  Future<void> setOptions(RealtimeChannelOptions options) async {
-    try {
-      await invoke(PlatformMethod.setRealtimeChannelOptions, _payload);
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
+  Future<void> setOptions(RealtimeChannelOptions options) =>
+      invoke(PlatformMethod.setRealtimeChannelOptions, _payload);
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>

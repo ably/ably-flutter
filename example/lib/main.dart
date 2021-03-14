@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'provisioning.dart' as provisioning;
 
@@ -100,12 +99,12 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await ably.platformVersion();
-    } on PlatformException {
+    } on ably.AblyException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
       ablyVersion = await ably.version();
-    } on PlatformException {
+    } on ably.AblyException {
       ablyVersion = 'Failed to get Ably version.';
     }
 

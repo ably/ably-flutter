@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -101,8 +100,8 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         if (!item.completer.isCompleted) {
           item.completer.complete();
         }
-      } on PlatformException catch (pe) {
-        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
+      } on AblyException catch (ae) {
+        if (ae.code == ErrorCodes.authCallbackFailure.toString()) {
           if (_authCallbackCompleter != null) {
             return;
           }
@@ -125,11 +124,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         } else {
           _publishQueue
               .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(AblyException(
-                    pe.code,
-                    pe.message,
-                    pe.details as ErrorInfo,
-                  )));
+              .forEach((e) => e.completer.completeError(ae));
         }
       } on Exception {
         // removing item from queue and rethrowing exception
@@ -151,16 +146,11 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   }
 
   @override
-  Future<void> setOptions(ChannelOptions options) async {
-    try {
-      await invoke(PlatformMethod.setRealtimeChannelOptions, {
+  Future<void> setOptions(ChannelOptions options) =>
+      invoke(PlatformMethod.setRealtimeChannelOptions, {
         TxTransportKeys.channelName: name,
-        TxTransportKeys.options: options
+        TxTransportKeys.options: options,
       });
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
 }
 
 /// A collection of rest channel objects
