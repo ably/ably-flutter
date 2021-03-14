@@ -10,7 +10,7 @@ const _capabilitySpec = {
 const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
 // per: https://docs.ably.io/client-lib-development-guide/test-api/
-final _appSpec = Map.unmodifiable({
+final _appSpec = Map<String, List>.unmodifiable({
   // API Keys & Capabilities.
   'keys': [
     {
@@ -39,22 +39,30 @@ class AppKey {
   String toString() => _keyStr;
 }
 
-Future<Map> _provisionApp(final String environmentPrefix) async {
+Future<Map> _provisionApp(
+  final String environmentPrefix, [
+  Map<String, List> appSpec,
+]) async {
+  appSpec ??= _appSpec;
   final url = 'https://${environmentPrefix}rest.ably.io/apps';
-  final body = jsonEncode(_appSpec);
+  final body = jsonEncode(appSpec);
   final response = await http.post(url, body: body, headers: _requestHeaders);
   if (response.statusCode != HttpStatus.created) {
+    print("Server didn't return success. ${response.body}");
     throw HttpException("Server didn't return success."
-        ' Status: ${response.statusCode}');
+        ' Status: ${response.statusCode} : ${response.body}');
   }
   return jsonDecode(response.body) as Map;
 }
 
-Future<AppKey> provision(String environmentPrefix) async {
+Future<AppKey> provision(
+  String environmentPrefix, [
+  Map<String, List> appSpec,
+]) async {
   final result = await const RetryOptions(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
-  ).retry(() => _provisionApp(environmentPrefix));
+  ).retry(() => _provisionApp(environmentPrefix, appSpec));
   final key = result['keys'][0];
   return AppKey(
     key['keyName'] as String,
