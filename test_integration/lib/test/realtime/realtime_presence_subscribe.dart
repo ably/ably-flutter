@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
+import '../../config/test_config.dart';
 import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 import '../../utils/encoders.dart';
@@ -55,14 +56,14 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   // Wait for the update event as it is asynchronously triggered.
   // Then cancelling partial subscription expecting it to not receive
   // further presence events.
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await partialMessagesSubscription.cancel();
 
   await presence.leave(messagesToPublish.last[1]);
 
   // Wait for the leave event to be received by listeners.
   // Assuming, they'd turn out in 2 seconds.
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await allMessagesSubscription.cancel();
   await enterMessagesSubscription.cancel();
   await enterUpdateMessagesSubscription.cancel();

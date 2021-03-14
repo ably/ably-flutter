@@ -1,6 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
+import '../../config/test_config.dart';
 import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 import '../../utils/rest.dart';
@@ -36,28 +37,28 @@ Future<Map<String, dynamic>> testRestPresenceGet({
     ).channels.get('test').presence.enter(messagesToPublish[i][1]);
   }
 
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final membersDefault = await getPresenceMembers(channel);
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final membersLimit4 = await getPresenceMembers(
     channel,
     RestPresenceParams(limit: 4),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final membersLimit2 = await getPresenceMembers(
     channel,
     RestPresenceParams(limit: 2),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final membersClientId = await getPresenceMembers(
     channel,
     RestPresenceParams(clientId: 'client-1'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // TODO(tiholic) extract connection ID from realtime instance
   //  after implementing `id` update on connection object from platform
@@ -66,7 +67,7 @@ Future<Map<String, dynamic>> testRestPresenceGet({
     channel,
     RestPresenceParams(connectionId: 'connection-1'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   return {
     'handle': await rest.handle,

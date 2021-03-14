@@ -1,6 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
+import '../../config/test_config.dart';
 import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 import '../../utils/encoders.dart';
@@ -37,7 +38,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
+      //..environment = 'sandbox'
       ..clientId = 'someClientId'
       ..logLevel = LogLevel.verbose,
   );
@@ -46,21 +47,21 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await channel.publish(name: 'name1');
   await channel.publish(data: 'data1');
   await channel.publish(name: 'name1', data: 'data1');
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(
     message: Message(name: 'message-name1', data: 'message-data1'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(messages: [
     Message(name: 'messages-name1', data: 'messages-data1'),
     Message(name: 'messages-name2', data: 'messages-data2'),
   ]);
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(
     message: Message(
         name: 'message-name1', data: 'message-data1', clientId: 'someClientId'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // publishing message with a different client id
   Map<String, dynamic> exception;
@@ -77,13 +78,18 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   // client options - no client id, message has client id
   final rest2 = Rest(
-    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
+    options:
+        ClientOptions.fromKey(appKey.toString()), //..environment = 'sandbox',
   );
+
+  print('NOW IS::: ${DateTime.now()}');
   final channel2 = rest2.channels.get('test2');
   await channel2.publish(
     message: Message(name: 'name-client-id', clientId: 'client-id'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  print('NOW IS 2::: ${DateTime.now()}');
+  await Future.delayed(TestConstants.publishToHistoryDelay);
+  print('NOW IS 3::: ${DateTime.now()}');
   final history2 = await getHistory(
     channel2,
     RestHistoryParams(direction: 'forwards'),
@@ -108,7 +114,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   final channel3 = rest2.channels.get('©Äblý');
   await channel3.publish(name: 'Ωπ', data: 'ΨΔ');
 
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   final history3 = await getHistory(channel3);
 
   return {

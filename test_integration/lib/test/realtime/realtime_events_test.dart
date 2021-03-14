@@ -1,6 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
+import '../../config/test_config.dart';
 import '../../factory/reporter.dart';
 import '../../utils/encoders.dart';
 
@@ -71,7 +72,7 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   await realtime.close();
   await Future.delayed(Duration.zero);
   while (realtime.connection.state != ConnectionState.closed) {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(TestConstants.publishToHistoryDelay);
   }
   recordChannelState(); // channel: detached
   recordConnectionState(); // connection: closed
