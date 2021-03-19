@@ -22,5 +22,6 @@ jobs:
 
       - name: Build Documentation
         run: |
+          env | grep FLUTTER_
           dartdoc
           ls -al doc/api
