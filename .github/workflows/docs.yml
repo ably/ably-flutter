@@ -22,6 +22,5 @@ jobs:
 
       - name: Build Documentation
         run: |
-          env | grep FLUTTER_
-          dartdoc
+          flutter pub global run dartdoc
           ls -al doc/api
