@@ -98,3 +98,128 @@ dartanalyzer --fatal-warnings lib/**/*.dart
 
 dartanalyzer --fatal-warnings example/lib/**/*.dart
 ```
+
+## dartdoc
+
+### Tool Installation
+
+With just the Flutter tools installed, the following is observed:
+
+```
+ably-flutter % which dartdoc
+dartdoc not found
+
+?1 ably-flutter % which flutter
+/Users/quintinwillison/flutter/bin/flutter
+```
+
+The `dartdoc` tool can be activated via the `flutter` command like this:
+
+```
+ably-flutter % flutter pub global activate dartdoc
+Resolving dependencies...
++ _fe_analyzer_shared 14.0.0 (18.0.0 available)
++ analyzer 0.41.2 (1.2.0 available)
++ args 1.6.0 (2.0.0 available)
++ async 2.4.2 (2.5.0 available)
++ charcode 1.1.3 (1.2.0 available)
++ cli_util 0.2.0 (0.3.0 available)
++ collection 1.14.13 (1.15.0 available)
++ convert 2.1.1 (3.0.0 available)
++ crypto 2.1.5 (3.0.0 available)
++ csslib 0.16.2 (0.17.0 available)
++ dartdoc 0.39.0 (0.40.0 available)
++ file 5.2.1 (6.1.0 available)
++ glob 1.2.0 (2.0.0 available)
++ html 0.14.0+4 (0.15.0 available)
++ intl 0.16.1 (0.17.0 available)
++ js 0.6.2 (0.6.3 available)
++ logging 0.11.4 (1.0.0 available)
++ markdown 3.0.0 (4.0.0 available)
++ meta 1.2.4 (1.3.0 available)
++ mustache 1.1.1
++ node_interop 1.2.1
++ node_io 1.2.0
++ package_config 1.9.3 (2.0.0 available)
++ path 1.7.0 (1.8.0 available)
++ pedantic 1.9.2 (1.11.0 available)
++ pub_semver 1.4.4 (2.0.0 available)
++ source_span 1.7.0 (1.8.1 available)
++ string_scanner 1.0.5 (1.1.0 available)
++ term_glyph 1.1.0 (1.2.0 available)
++ typed_data 1.2.0 (1.3.0 available)
++ watcher 0.9.7+15 (1.0.0 available)
++ yaml 2.2.1 (3.1.0 available)
+Downloading dartdoc 0.39.0...
+Downloading mustache 1.1.1...
+Downloading analyzer 0.41.2...
+Downloading _fe_analyzer_shared 14.0.0...
+Downloading markdown 3.0.0...
+Downloading charcode 1.1.3...
+Downloading node_io 1.2.0...
+Downloading node_interop 1.2.1...
+Downloading js 0.6.2...
+Downloading path 1.7.0...
+Downloading meta 1.2.4...
+Downloading file 5.2.1...
+Downloading typed_data 1.2.0...
+Downloading string_scanner 1.0.5...
+Downloading source_span 1.7.0...
+Downloading term_glyph 1.1.0...
+Downloading async 2.4.2...
+Downloading html 0.14.0+4...
+Downloading collection 1.14.13...
+Precompiling executables...
+Precompiled dartdoc:dartdoc.
+Installed executable dartdoc.
+Warning: Pub installs executables into $HOME/flutter/.pub-cache/bin, which is not on your path.
+You can fix that by adding this to your shell's config file (.bashrc, .bash_profile, etc.):
+
+  export PATH="$PATH":"$HOME/flutter/.pub-cache/bin"
+
+Activated dartdoc 0.39.0.
+```
+
+And, indeed, on inspecting my path I could confirm that it wasn't present:
+
+```
+ably-flutter % echo $PATH
+/Users/quintinwillison/.asdf/shims:/Users/quintinwillison/.asdf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin
+```
+
+So I edited my configuration to add the `PATH` export suggested:
+
+```
+ably-flutter % vi ~/.zshrc
+ably-flutter % source ~/.zshrc
+ably-flutter % echo $PATH
+/Users/quintinwillison/.asdf/shims:/Users/quintinwillison/.asdf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin:/Users/quintinwillison/flutter/.pub-cache/bin
+```
+
+And I was then able to find the `dartdoc` tool:
+
+```
+ably-flutter % which dartdoc
+/Users/quintinwillison/flutter/.pub-cache/bin/dartdoc
+```
+
+And see that it had been installed globally in the Flutter context:
+
+```
+ably-flutter % flutter pub global list
+dartdoc 0.39.0
+```
+
+### Generating Documentation
+
+```
+ably-flutter % dartdoc
+Documenting ably_flutter...
+Initialized dartdoc with 195 libraries in 180.4 seconds
+Generating docs for library ably_flutter from package:ably_flutter/ably_flutter.dart...
+Validating docs...
+  warning: dartdoc generated a broken link to: DeveloperNotes.md, linked to from package-ably_flutter: file:///Users/quintinwillison/code/ably/ably-flutter
+found 1 warning and 0 errors
+Documented 1 public library in 5.6 seconds
+Success! Docs generated into /Users/quintinwillison/code/ably/ably-flutter/doc/api
+```
