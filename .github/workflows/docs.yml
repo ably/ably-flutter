@@ -1,0 +1,19 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  ios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      
+      - name: Exploratory
+        run: |
+          flutter --version
+          dartdoc --version
