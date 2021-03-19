@@ -13,7 +13,7 @@ jobs:
         with:
           channel: stable
       
-      - name: Exploratory
+      - name: Build Documentation
         run: |
-          flutter --version
-          dartdoc --version
+          dartdoc
+          ls -al doc/api
