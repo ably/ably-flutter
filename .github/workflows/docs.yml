@@ -25,8 +25,13 @@ jobs:
           flutter pub global run dartdoc
           ls -al doc/api
 
+      # Default shell is bash: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
+      # jq emits `null` if the `pull_request` key is not found.
       - name: Experiment
         run: |
-          echo $GITHUB_EVENT_PATH
-          cat $GITHUB_EVENT_PATH
-          cat $GITHUB_EVENT_PATH | jq .pull_request.number
+          PULL_REQUEST_NUMBER=`cat pull-request-event.json | jq .pull_request.number`
+          if [ $PULL_REQUEST_NUMBER == "null" ]; then
+            echo "Running for a branch, assumed to be main given the triggers configured for this workflow"
+          else
+            echo "Running for Pull Request Number: $PULL_REQUEST_NUMBER"
+          fi
