@@ -50,4 +50,4 @@ jobs:
             echo "Running sync for main branch (assumed given the triggers configured for this workflow) ..."
             REMOTE_PATH="main/$REMOTE_PATH_SUFFIX"
           fi
-          aws --debug s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
+          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
