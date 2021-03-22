@@ -46,4 +46,4 @@ jobs:
             echo "Running sync for Pull Request Number: $PULL_REQUEST_NUMBER ..."
             REMOTE_PATH="pull/$PULL_REQUEST_NUMBER/$REMOTE_PATH_SUFFIX"
           fi
-          aws --debug s3 sync doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
+          aws --debug s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
