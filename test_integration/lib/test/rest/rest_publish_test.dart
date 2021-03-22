@@ -78,8 +78,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   // client options - no client id, message has client id
   final rest2 = Rest(
-    options:
-        ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
+    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
   );
 
   final channel2 = rest2.channels.get('test2');
