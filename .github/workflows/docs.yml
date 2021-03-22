@@ -25,6 +25,45 @@ jobs:
           flutter pub global run dartdoc
           ls -al doc/api
 
+      - name: Get Pull Request Information
+        id: get_pull_request_information
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/:repository/pulls/:issue_id
+          repository: ${{ github.repository }}
+          issue_id: ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      # Based on the approach modelled here: https://github.com/SanderKnape/pr-deployments
+      - name: Create Deployment
+        id: create_deployment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments
+          repository: ${{ github.repository }}
+          ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.ref }}
+          environment: sdk-staging
+          auto_merge: false
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Set Deployment Status to In Progress
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: sdk-staging
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          state: in_progress
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
       # Default shell is bash: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
       # jq emits `null` if the `pull_request` key is not found.
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#cli-tools
@@ -51,3 +90,31 @@ jobs:
             REMOTE_PATH="main/$REMOTE_PATH_SUFFIX"
           fi
           aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
+
+      - name: Set Deployment Status to Success
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: sdk-staging
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          state: success
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Set Deployment Status to Failure
+        uses: octokit/request-action@v2.x
+        if: ${{ failure() && github.event_name == 'pull_request' }}
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: sdk-staging
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          state: failure
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
