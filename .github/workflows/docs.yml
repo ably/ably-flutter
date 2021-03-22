@@ -29,7 +29,7 @@ jobs:
       # jq emits `null` if the `pull_request` key is not found.
       - name: Experiment
         run: |
-          PULL_REQUEST_NUMBER=`cat pull-request-event.json | jq .pull_request.number`
+          PULL_REQUEST_NUMBER=`cat $GITHUB_EVENT_PATH | jq .pull_request.number`
           if [ $PULL_REQUEST_NUMBER == "null" ]; then
             echo "Running for a branch, assumed to be main given the triggers configured for this workflow"
           else
