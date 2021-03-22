@@ -67,13 +67,18 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
     expect(messages[5]['timestamp'] != messages[4]['timestamp'], true);
   });
 
-  // (RSL1m1) Publishing a Message with no clientId when the clientId
-  //  is set to some value in the client options should result in a message
-  //  received with the clientId property set to that value
-  // expect(messages[0]['clientId'], 'someClientId');
+  // TODO(tiholic) Fails on iOS, track at https://github.com/ably/ably-cocoa/issues/1108
+  // test(
+  //   '(RSL1m1) Publishing a Message with no clientId when the clientId'
+  //   ' is set to some value in the client options should result in a message'
+  //   ' received with the clientId property set to that value',
+  //   () {
+  //     expect(messages[0]['clientId'], 'someClientId');
+  //   },
+  // );
 
   test(
-      '(RSL1m2) Publishing a Message with a clientId set to the same'
+    '(RSL1m2) Publishing a Message with a clientId set to the same'
       ' value as the clientId in the client options should result in'
       ' a message received with the clientId property set to that value', () {
     expect(messages[7]['clientId'], 'someClientId');
@@ -81,14 +86,14 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 
   test(
     '(RSL1d) Raises an error if the message was not successfully published',
-    () => expect(exception == null, false),
+      () => expect(exception == null, false),
   );
 
   test(
     '(RSL1m4) Publishing a Message with a clientId set to a different value'
-    ' from the clientId in the client options should result in a message'
-    ' being rejected by the server.',
-    () {
+      ' from the clientId in the client options should result in a message'
+      ' being rejected by the server.',
+      () {
       expect(response.payload['exception'], isA<Map>());
       // TODO as error details are incompatible from both libraries,
       //  it makes no sense to include below expect's
@@ -108,18 +113,18 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 
   test(
     '(RSL1m3) Publishing a Message with a clientId set to a value'
-    ' from an unidentified client (no clientId in the client options'
-    ' and credentials that can assume any clientId) should result in'
-    ' a message received with the clientId property set to that value',
-    () => expect(messages2[0]['clientId'], 'client-id'),
+      ' from an unidentified client (no clientId in the client options'
+      ' and credentials that can assume any clientId) should result in'
+      ' a message received with the clientId property set to that value',
+      () => expect(messages2[0]['clientId'], 'client-id'),
   );
 
   test(
     '(RSL1i) If the total size of the message or (if publishing an array)'
-    ' messages, calculated per TO3l8, exceeds the maxMessageSize, then the'
-    ' client library should reject the publish and indicate an error'
-    ' with code 40009',
-    () {
+      ' messages, calculated per TO3l8, exceeds the maxMessageSize, then the'
+      ' client library should reject the publish and indicate an error'
+      ' with code 40009',
+      () {
       // allows publishing messages length <= max allowed limit
       expect(exception2 == null, true);
       // errors out publishing messages length > max allowed limit
@@ -129,7 +134,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 
   test(
     'publishes non-ascii characters',
-    () {
+      () {
       expect(messages3[0]['name'], 'Ωπ');
       expect(messages3[0]['data'], 'ΨΔ');
     },
@@ -159,12 +164,12 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> historyWithStartAndEnd;
 
   List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+    List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
     paginatedResult =
-        response.payload['paginatedResult'] as Map<String, dynamic>;
+    response.payload['paginatedResult'] as Map<String, dynamic>;
     historyDefault = transform(response.payload['historyDefault']);
     historyLimit4 = transform(response.payload['historyLimit4']);
     historyLimit2 = transform(response.payload['historyLimit2']);
@@ -200,9 +205,9 @@ void testRestHistory(FlutterDriver Function() getDriver) {
     });
     test('queries entries in reverse order with direction set to "forward"',
         () {
-      expect(historyForwardLimit4.length, equals(8));
-      testAllPublishedMessages(historyForwardLimit4);
-    });
+        expect(historyForwardLimit4.length, equals(8));
+        testAllPublishedMessages(historyForwardLimit4);
+      });
     test('returns entries created after specified time', () {
       expect(historyWithStart.length, equals(2));
       expect(historyWithStart[0]['name'], equals('history'));
@@ -230,7 +235,7 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> membersConnectionId;
 
   List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+    List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
@@ -276,7 +281,7 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   TestControlMessage response;
 
   List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+    List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   List<Map<String, dynamic>> historyInitial;
   List<Map<String, dynamic>> historyDefault;
@@ -319,7 +324,7 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
     });
     test(
       'queries entries in reverse order with direction set to "forward"',
-      () {
+        () {
         expect(historyForwards.length, equals(8));
         testAllPresenceMessagesHistory(historyForwards.toList());
       },
@@ -345,7 +350,7 @@ void testCapabilityMatrix(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> capabilityMatrix;
 
   List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
+    List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
