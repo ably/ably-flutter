@@ -37,13 +37,17 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
         run: |
-          PULL_REQUEST_NUMBER=`cat $GITHUB_EVENT_PATH | jq .pull_request.number`
           REMOTE_PATH_SUFFIX="docs/api-reference"
-          if [ $PULL_REQUEST_NUMBER == "null" ]; then
-            echo "Running sync for main branch (assumed given the triggers configured for this workflow) ..."
-            REMOTE_PATH="main/$REMOTE_PATH_SUFFIX"
-          else
+          if [ $GITHUB_EVENT_PATH == "pull_request" ]; then
+            PULL_REQUEST_NUMBER=`cat $GITHUB_EVENT_PATH | jq .pull_request.number`
+            if [ $PULL_REQUEST_NUMBER == "null" ]; then
+              echo 'Failed to find pull request number in event data.' >/dev/stderr
+              exit 1
+            fi
             echo "Running sync for Pull Request Number: $PULL_REQUEST_NUMBER ..."
             REMOTE_PATH="pull/$PULL_REQUEST_NUMBER/$REMOTE_PATH_SUFFIX"
+          else
+            echo "Running sync for main branch (assumed given the triggers configured for this workflow) ..."
+            REMOTE_PATH="main/$REMOTE_PATH_SUFFIX"
           fi
           aws --debug s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
