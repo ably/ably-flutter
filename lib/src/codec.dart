@@ -39,47 +39,50 @@ class _CodecPair<T> {
   }
 }
 
+/// Custom message codec for encoding objects to send to platform
+/// or decoding objects received from platform.
 class Codec extends StandardMessageCodec {
   /// Map of codec type (a value from [CodecTypes]) vs encoder/decoder pair.
   /// Encoder/decoder can be null.
   /// For example, [ErrorInfo] only needs a decoder but not an encoder.
   Map<int, _CodecPair> codecMap;
 
+  /// initializes codec with codec map linking codec type to codec pair
   Codec() : super() {
     codecMap = {
       // Ably flutter plugin protocol message
       CodecTypes.ablyMessage:
-          _CodecPair<AblyMessage>(encodeAblyMessage, decodeAblyMessage),
+          _CodecPair<AblyMessage>(_encodeAblyMessage, _decodeAblyMessage),
       CodecTypes.ablyEventMessage:
-          _CodecPair<AblyEventMessage>(encodeAblyEventMessage, null),
+          _CodecPair<AblyEventMessage>(_encodeAblyEventMessage, null),
 
       // Other ably objects
       CodecTypes.clientOptions:
-          _CodecPair<ClientOptions>(encodeClientOptions, decodeClientOptions),
+          _CodecPair<ClientOptions>(_encodeClientOptions, _decodeClientOptions),
       CodecTypes.tokenParams:
-          _CodecPair<TokenParams>(encodeTokenParams, decodeTokenParams),
+          _CodecPair<TokenParams>(_encodeTokenParams, _decodeTokenParams),
       CodecTypes.tokenDetails:
-          _CodecPair<TokenDetails>(encodeTokenDetails, decodeTokenDetails),
+          _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
-          _CodecPair<TokenRequest>(encodeTokenRequest, null),
+          _CodecPair<TokenRequest>(_encodeTokenRequest, null),
       CodecTypes.paginatedResult:
-          _CodecPair<PaginatedResult>(null, decodePaginatedResult),
+          _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
-          _CodecPair<RealtimeHistoryParams>(encodeRealtimeHistoryParams, null),
+          _CodecPair<RealtimeHistoryParams>(_encodeRealtimeHistoryParams, null),
       CodecTypes.restHistoryParams:
-          _CodecPair<RestHistoryParams>(encodeRestHistoryParams, null),
+          _CodecPair<RestHistoryParams>(_encodeRestHistoryParams, null),
 
-      CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, decodeErrorInfo),
+      CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
       CodecTypes.message:
-          _CodecPair<Message>(encodeChannelMessage, decodeChannelMessage),
+          _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
 
       // Events - Connection
       CodecTypes.connectionStateChange:
-          _CodecPair<ConnectionStateChange>(null, decodeConnectionStateChange),
+          _CodecPair<ConnectionStateChange>(null, _decodeConnectionStateChange),
 
       // Events - Channel
       CodecTypes.channelStateChange:
-          _CodecPair<ChannelStateChange>(null, decodeChannelStateChange),
+          _CodecPair<ChannelStateChange>(null, _decodeChannelStateChange),
     };
   }
 
@@ -148,7 +151,7 @@ class Codec extends StandardMessageCodec {
 
   // =========== ENCODERS ===========
   /// Writes [value] for [key] in [map] if [value] is not null
-  void writeToJson(Map<String, dynamic> map, String key, Object value) {
+  void _writeToJson(Map<String, dynamic> map, String key, Object value) {
     assert(value is! DateTime, '`DateTime` objects cannot be encoded');
     if (value == null) return;
     map[key] = value;
@@ -156,63 +159,63 @@ class Codec extends StandardMessageCodec {
 
   /// Encodes [ClientOptions] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeClientOptions(final ClientOptions v) {
+  Map<String, dynamic> _encodeClientOptions(final ClientOptions v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     // AuthOptions (super class of ClientOptions)
-    writeToJson(jsonMap, TxClientOptions.authUrl, v.authUrl);
-    writeToJson(jsonMap, TxClientOptions.authMethod, v.authMethod);
-    writeToJson(jsonMap, TxClientOptions.key, v.key);
-    writeToJson(jsonMap, TxClientOptions.tokenDetails,
-        encodeTokenDetails(v.tokenDetails));
-    writeToJson(jsonMap, TxClientOptions.authHeaders, v.authHeaders);
-    writeToJson(jsonMap, TxClientOptions.authParams, v.authParams);
-    writeToJson(jsonMap, TxClientOptions.queryTime, v.queryTime);
-    writeToJson(jsonMap, TxClientOptions.useTokenAuth, v.useTokenAuth);
-    writeToJson(
-        jsonMap, TxClientOptions.hasAuthCallback, v.authCallback != null);
+    _writeToJson(jsonMap, TxClientOptions.authUrl, v.authUrl);
+    _writeToJson(jsonMap, TxClientOptions.authMethod, v.authMethod);
+    _writeToJson(jsonMap, TxClientOptions.key, v.key);
+    _writeToJson(jsonMap, TxClientOptions.tokenDetails,
+      _encodeTokenDetails(v.tokenDetails));
+    _writeToJson(jsonMap, TxClientOptions.authHeaders, v.authHeaders);
+    _writeToJson(jsonMap, TxClientOptions.authParams, v.authParams);
+    _writeToJson(jsonMap, TxClientOptions.queryTime, v.queryTime);
+    _writeToJson(jsonMap, TxClientOptions.useTokenAuth, v.useTokenAuth);
+    _writeToJson(
+      jsonMap, TxClientOptions.hasAuthCallback, v.authCallback != null);
 
     // ClientOptions
-    writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
-    writeToJson(jsonMap, TxClientOptions.logLevel, v.logLevel);
+    _writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
+    _writeToJson(jsonMap, TxClientOptions.logLevel, v.logLevel);
     //TODO handle logHandler
-    writeToJson(jsonMap, TxClientOptions.tls, v.tls);
-    writeToJson(jsonMap, TxClientOptions.restHost, v.restHost);
-    writeToJson(jsonMap, TxClientOptions.realtimeHost, v.realtimeHost);
-    writeToJson(jsonMap, TxClientOptions.port, v.port);
-    writeToJson(jsonMap, TxClientOptions.tlsPort, v.tlsPort);
-    writeToJson(jsonMap, TxClientOptions.autoConnect, v.autoConnect);
-    writeToJson(
-        jsonMap, TxClientOptions.useBinaryProtocol, v.useBinaryProtocol);
-    writeToJson(jsonMap, TxClientOptions.queueMessages, v.queueMessages);
-    writeToJson(jsonMap, TxClientOptions.echoMessages, v.echoMessages);
-    writeToJson(jsonMap, TxClientOptions.recover, v.recover);
-    writeToJson(jsonMap, TxClientOptions.environment, v.environment);
-    writeToJson(jsonMap, TxClientOptions.idempotentRestPublishing,
-        v.idempotentRestPublishing);
-    writeToJson(jsonMap, TxClientOptions.httpOpenTimeout, v.httpOpenTimeout);
-    writeToJson(
-        jsonMap, TxClientOptions.httpRequestTimeout, v.httpRequestTimeout);
-    writeToJson(
-        jsonMap, TxClientOptions.httpMaxRetryCount, v.httpMaxRetryCount);
-    writeToJson(jsonMap, TxClientOptions.realtimeRequestTimeout,
-        v.realtimeRequestTimeout);
-    writeToJson(jsonMap, TxClientOptions.fallbackHosts, v.fallbackHosts);
-    writeToJson(jsonMap, TxClientOptions.fallbackHostsUseDefault,
-        v.fallbackHostsUseDefault);
-    writeToJson(
-        jsonMap, TxClientOptions.fallbackRetryTimeout, v.fallbackRetryTimeout);
-    writeToJson(jsonMap, TxClientOptions.defaultTokenParams,
-        encodeTokenParams(v.defaultTokenParams));
-    writeToJson(
-        jsonMap, TxClientOptions.channelRetryTimeout, v.channelRetryTimeout);
-    writeToJson(jsonMap, TxClientOptions.transportParams, v.transportParams);
+    _writeToJson(jsonMap, TxClientOptions.tls, v.tls);
+    _writeToJson(jsonMap, TxClientOptions.restHost, v.restHost);
+    _writeToJson(jsonMap, TxClientOptions.realtimeHost, v.realtimeHost);
+    _writeToJson(jsonMap, TxClientOptions.port, v.port);
+    _writeToJson(jsonMap, TxClientOptions.tlsPort, v.tlsPort);
+    _writeToJson(jsonMap, TxClientOptions.autoConnect, v.autoConnect);
+    _writeToJson(
+      jsonMap, TxClientOptions.useBinaryProtocol, v.useBinaryProtocol);
+    _writeToJson(jsonMap, TxClientOptions.queueMessages, v.queueMessages);
+    _writeToJson(jsonMap, TxClientOptions.echoMessages, v.echoMessages);
+    _writeToJson(jsonMap, TxClientOptions.recover, v.recover);
+    _writeToJson(jsonMap, TxClientOptions.environment, v.environment);
+    _writeToJson(jsonMap, TxClientOptions.idempotentRestPublishing,
+      v.idempotentRestPublishing);
+    _writeToJson(jsonMap, TxClientOptions.httpOpenTimeout, v.httpOpenTimeout);
+    _writeToJson(
+      jsonMap, TxClientOptions.httpRequestTimeout, v.httpRequestTimeout);
+    _writeToJson(
+      jsonMap, TxClientOptions.httpMaxRetryCount, v.httpMaxRetryCount);
+    _writeToJson(jsonMap, TxClientOptions.realtimeRequestTimeout,
+      v.realtimeRequestTimeout);
+    _writeToJson(jsonMap, TxClientOptions.fallbackHosts, v.fallbackHosts);
+    _writeToJson(jsonMap, TxClientOptions.fallbackHostsUseDefault,
+      v.fallbackHostsUseDefault);
+    _writeToJson(
+      jsonMap, TxClientOptions.fallbackRetryTimeout, v.fallbackRetryTimeout);
+    _writeToJson(jsonMap, TxClientOptions.defaultTokenParams,
+      _encodeTokenParams(v.defaultTokenParams));
+    _writeToJson(
+      jsonMap, TxClientOptions.channelRetryTimeout, v.channelRetryTimeout);
+    _writeToJson(jsonMap, TxClientOptions.transportParams, v.transportParams);
     return jsonMap;
   }
 
   /// Encodes [TokenDetails] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeTokenDetails(final TokenDetails v) {
+  Map<String, dynamic> _encodeTokenDetails(final TokenDetails v) {
     if (v == null) return null;
     return {
       TxTokenDetails.token: v.token,
@@ -225,111 +228,115 @@ class Codec extends StandardMessageCodec {
 
   /// Encodes [TokenParams] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeTokenParams(final TokenParams v) {
+  Map<String, dynamic> _encodeTokenParams(final TokenParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
-    writeToJson(jsonMap, TxTokenParams.capability, v.capability);
-    writeToJson(jsonMap, TxTokenParams.clientId, v.clientId);
-    writeToJson(jsonMap, TxTokenParams.nonce, v.nonce);
-    writeToJson(jsonMap, TxTokenParams.timestamp, v.timestamp);
-    writeToJson(jsonMap, TxTokenParams.ttl, v.ttl);
+    _writeToJson(jsonMap, TxTokenParams.capability, v.capability);
+    _writeToJson(jsonMap, TxTokenParams.clientId, v.clientId);
+    _writeToJson(jsonMap, TxTokenParams.nonce, v.nonce);
+    _writeToJson(jsonMap, TxTokenParams.timestamp, v.timestamp);
+    _writeToJson(jsonMap, TxTokenParams.ttl, v.ttl);
     return jsonMap;
   }
 
   /// Encodes [TokenRequest] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeTokenRequest(final TokenRequest v) {
+  Map<String, dynamic> _encodeTokenRequest(final TokenRequest v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
-    writeToJson(jsonMap, TxTokenRequest.capability, v.capability);
-    writeToJson(jsonMap, TxTokenRequest.clientId, v.clientId);
-    writeToJson(jsonMap, TxTokenRequest.keyName, v.keyName);
-    writeToJson(jsonMap, TxTokenRequest.mac, v.mac);
-    writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
-    writeToJson(
-        jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
-    writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
+    _writeToJson(jsonMap, TxTokenRequest.capability, v.capability);
+    _writeToJson(jsonMap, TxTokenRequest.clientId, v.clientId);
+    _writeToJson(jsonMap, TxTokenRequest.keyName, v.keyName);
+    _writeToJson(jsonMap, TxTokenRequest.mac, v.mac);
+    _writeToJson(jsonMap, TxTokenRequest.nonce, v.nonce);
+    _writeToJson(
+      jsonMap, TxTokenRequest.timestamp, v.timestamp?.millisecondsSinceEpoch);
+    _writeToJson(jsonMap, TxTokenRequest.ttl, v.ttl);
     return jsonMap;
   }
 
-  Map<String, dynamic> encodeRestHistoryParams(final RestHistoryParams v) {
+  /// Encodes [RestHistoryParams] to a Map
+  /// returns null of passed value [v] is null
+  Map<String, dynamic> _encodeRestHistoryParams(final RestHistoryParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
-    writeToJson(
-        jsonMap, TxRestHistoryParams.start, v.start?.millisecondsSinceEpoch);
-    writeToJson(
-        jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
-    writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
-    writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
+    _writeToJson(
+      jsonMap, TxRestHistoryParams.start, v.start?.millisecondsSinceEpoch);
+    _writeToJson(
+      jsonMap, TxRestHistoryParams.end, v.end?.millisecondsSinceEpoch);
+    _writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
+    _writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
     return jsonMap;
   }
 
-  Map<String, dynamic> encodeRealtimeHistoryParams(
-      final RealtimeHistoryParams v) {
+  /// Encodes [RealtimeHistoryParams] to a Map
+  /// returns null of passed value [v] is null
+  Map<String, dynamic> _encodeRealtimeHistoryParams(
+    final RealtimeHistoryParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
-    writeToJson(jsonMap, TxRealtimeHistoryParams.start,
-        v.start?.millisecondsSinceEpoch);
-    writeToJson(
-        jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
-    writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
-    writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
-    writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
+    _writeToJson(jsonMap, TxRealtimeHistoryParams.start,
+      v.start?.millisecondsSinceEpoch);
+    _writeToJson(
+      jsonMap, TxRealtimeHistoryParams.end, v.end?.millisecondsSinceEpoch);
+    _writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
+    _writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
+    _writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
     return jsonMap;
   }
 
   /// Encodes [AblyMessage] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeAblyMessage(final AblyMessage v) {
+  Map<String, dynamic> _encodeAblyMessage(final AblyMessage v) {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
     final message = (v.message == null)
-        ? null
-        : (codecType == null)
-            ? v.message
-            : codecMap[codecType].encode(v.message);
+      ? null
+      : (codecType == null)
+      ? v.message
+      : codecMap[codecType].encode(v.message);
     final jsonMap = <String, dynamic>{};
-    writeToJson(jsonMap, TxAblyMessage.registrationHandle, v.handle);
-    writeToJson(jsonMap, TxAblyMessage.type, codecType);
-    writeToJson(jsonMap, TxAblyMessage.message, message);
+    _writeToJson(jsonMap, TxAblyMessage.registrationHandle, v.handle);
+    _writeToJson(jsonMap, TxAblyMessage.type, codecType);
+    _writeToJson(jsonMap, TxAblyMessage.message, message);
     return jsonMap;
   }
 
   /// Encodes [AblyEventMessage] to a Map
   /// returns null of passed value [v] is null
-  Map<String, dynamic> encodeAblyEventMessage(final AblyEventMessage v) {
+  Map<String, dynamic> _encodeAblyEventMessage(final AblyEventMessage v) {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
     final message = (v.message == null)
-        ? null
-        : (codecType == null)
-            ? v.message
-            : codecMap[codecType].encode(v.message);
+      ? null
+      : (codecType == null)
+      ? v.message
+      : codecMap[codecType].encode(v.message);
     final jsonMap = <String, dynamic>{};
-    writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
-    writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
-    writeToJson(jsonMap, TxAblyEventMessage.message, message);
+    _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
+    _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
+    _writeToJson(jsonMap, TxAblyEventMessage.message, message);
     return jsonMap;
   }
 
-  Map<String, dynamic> encodeChannelMessage(final Message v) {
+  Map<String, dynamic> _encodeChannelMessage(final Message v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     // Note: connectionId and timestamp are automatically set by platform
     // So they are suppressed on dart side
-    writeToJson(jsonMap, TxMessage.name, v.name);
-    writeToJson(jsonMap, TxMessage.clientId, v.clientId);
-    writeToJson(jsonMap, TxMessage.data, v.data);
-    writeToJson(jsonMap, TxMessage.id, v.id);
-    writeToJson(jsonMap, TxMessage.encoding, v.encoding);
-    writeToJson(jsonMap, TxMessage.extras, v.extras);
+    _writeToJson(jsonMap, TxMessage.name, v.name);
+    _writeToJson(jsonMap, TxMessage.clientId, v.clientId);
+    _writeToJson(jsonMap, TxMessage.data, v.data);
+    _writeToJson(jsonMap, TxMessage.id, v.id);
+    _writeToJson(jsonMap, TxMessage.encoding, v.encoding);
+    _writeToJson(jsonMap, TxMessage.extras, v.extras);
     return jsonMap;
   }
 
   // =========== DECODERS ===========
   /// Reads [key] value from [jsonMap]
   /// Casts it to [T] if the value is not null
-  T readFromJson<T>(Map<String, dynamic> jsonMap, String key) {
+  T _readFromJson<T>(Map<String, dynamic> jsonMap, String key) {
     final value = jsonMap[key];
     if (value == null) return null;
     return value as T;
@@ -337,120 +344,202 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [ClientOptions]
   /// returns null if [jsonMap] is null
-  ClientOptions decodeClientOptions(Map<String, dynamic> jsonMap) {
+  ClientOptions _decodeClientOptions(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
 
     return ClientOptions()
-      // AuthOptions (super class of ClientOptions)
-      ..authUrl = readFromJson<String>(jsonMap, TxClientOptions.authUrl)
-      ..authMethod =
-          readFromJson<HTTPMethods>(jsonMap, TxClientOptions.authMethod)
-      ..key = readFromJson<String>(jsonMap, TxClientOptions.key)
-      ..tokenDetails = decodeTokenDetails(
-          toJsonMap(readFromJson<Map>(jsonMap, TxClientOptions.tokenDetails)))
-      ..authHeaders = readFromJson<Map<String, String>>(
-          jsonMap, TxClientOptions.authHeaders)
-      ..authParams =
-          readFromJson<Map<String, String>>(jsonMap, TxClientOptions.authParams)
-      ..queryTime = readFromJson<bool>(jsonMap, TxClientOptions.queryTime)
-      ..useTokenAuth = readFromJson<bool>(jsonMap, TxClientOptions.useTokenAuth)
+    // AuthOptions (super class of ClientOptions)
+      ..authUrl = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.authUrl,
+      )
+      ..authMethod = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.authMethod,
+      )
+      ..key = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.key,
+      )
+      ..tokenDetails = _decodeTokenDetails(
+        toJsonMap(_readFromJson<Map>(
+          jsonMap,
+          TxClientOptions.tokenDetails,
+        )),
+      )
+      ..authHeaders = _readFromJson<Map<String, String>>(
+        jsonMap,
+        TxClientOptions.authHeaders,
+      )
+      ..authParams = _readFromJson<Map<String, String>>(
+        jsonMap,
+        TxClientOptions.authParams,
+      )
+      ..queryTime = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.queryTime,
+      )
+      ..useTokenAuth = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.useTokenAuth,
+      )
 
-      // ClientOptions
-      ..clientId = readFromJson<String>(jsonMap, TxClientOptions.clientId)
-      ..logLevel = readFromJson<int>(jsonMap, TxClientOptions.logLevel)
-      //TODO handle logHandler
-      ..tls = readFromJson<bool>(jsonMap, TxClientOptions.tls)
-      ..restHost = readFromJson<String>(jsonMap, TxClientOptions.restHost)
-      ..realtimeHost =
-          readFromJson<String>(jsonMap, TxClientOptions.realtimeHost)
-      ..port = readFromJson<int>(jsonMap, TxClientOptions.port)
-      ..tlsPort = readFromJson<int>(jsonMap, TxClientOptions.tlsPort)
-      ..autoConnect = readFromJson<bool>(jsonMap, TxClientOptions.autoConnect)
-      ..useBinaryProtocol =
-          readFromJson<bool>(jsonMap, TxClientOptions.useBinaryProtocol)
-      ..queueMessages =
-          readFromJson<bool>(jsonMap, TxClientOptions.queueMessages)
-      ..echoMessages = readFromJson<bool>(jsonMap, TxClientOptions.echoMessages)
-      ..recover = readFromJson<String>(jsonMap, TxClientOptions.recover)
-      ..environment = readFromJson<String>(jsonMap, TxClientOptions.environment)
-      ..idempotentRestPublishing =
-          readFromJson<bool>(jsonMap, TxClientOptions.idempotentRestPublishing)
-      ..httpOpenTimeout =
-          readFromJson<int>(jsonMap, TxClientOptions.httpOpenTimeout)
-      ..httpRequestTimeout =
-          readFromJson<int>(jsonMap, TxClientOptions.httpRequestTimeout)
-      ..httpMaxRetryCount =
-          readFromJson<int>(jsonMap, TxClientOptions.httpMaxRetryCount)
-      ..realtimeRequestTimeout =
-          readFromJson<int>(jsonMap, TxClientOptions.realtimeRequestTimeout)
-      ..fallbackHosts =
-          readFromJson<List<String>>(jsonMap, TxClientOptions.fallbackHosts)
-      ..fallbackHostsUseDefault =
-          readFromJson<bool>(jsonMap, TxClientOptions.fallbackHostsUseDefault)
-      ..fallbackRetryTimeout =
-          readFromJson<int>(jsonMap, TxClientOptions.fallbackRetryTimeout)
-      ..defaultTokenParams = decodeTokenParams(toJsonMap(
-          readFromJson<Map>(jsonMap, TxClientOptions.defaultTokenParams)))
-      ..channelRetryTimeout =
-          readFromJson<int>(jsonMap, TxClientOptions.channelRetryTimeout)
-      ..transportParams = readFromJson<Map<String, String>>(
-          jsonMap, TxClientOptions.transportParams);
+    // ClientOptions
+      ..clientId = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.clientId,
+      )
+      ..logLevel = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.logLevel,
+      )
+    //TODO handle logHandler
+      ..tls = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.tls,
+      )
+      ..restHost = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.restHost,
+      )
+      ..realtimeHost = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.realtimeHost,
+      )
+      ..port = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.port,
+      )
+      ..tlsPort = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.tlsPort,
+      )
+      ..autoConnect = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.autoConnect,
+      )
+      ..useBinaryProtocol = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.useBinaryProtocol,
+      )
+      ..queueMessages = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.queueMessages,
+      )
+      ..echoMessages = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.echoMessages,
+      )
+      ..recover = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.recover,
+      )
+      ..environment = _readFromJson<String>(
+        jsonMap,
+        TxClientOptions.environment,
+      )
+      ..idempotentRestPublishing = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.idempotentRestPublishing,
+      )
+      ..httpOpenTimeout = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.httpOpenTimeout,
+      )
+      ..httpRequestTimeout = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.httpRequestTimeout,
+      )
+      ..httpMaxRetryCount = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.httpMaxRetryCount,
+      )
+      ..realtimeRequestTimeout = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.realtimeRequestTimeout,
+      )
+      ..fallbackHosts = _readFromJson<List<String>>(
+        jsonMap,
+        TxClientOptions.fallbackHosts,
+      )
+      ..fallbackHostsUseDefault = _readFromJson<bool>(
+        jsonMap,
+        TxClientOptions.fallbackHostsUseDefault,
+      )
+      ..fallbackRetryTimeout = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.fallbackRetryTimeout,
+      )
+      ..defaultTokenParams = _decodeTokenParams(
+        toJsonMap(_readFromJson<Map>(
+          jsonMap,
+          TxClientOptions.defaultTokenParams,
+        )),
+      )
+      ..channelRetryTimeout = _readFromJson<int>(
+        jsonMap,
+        TxClientOptions.channelRetryTimeout,
+      )
+      ..transportParams = _readFromJson<Map<String, String>>(
+        jsonMap,
+        TxClientOptions.transportParams,
+      );
   }
 
   /// Decodes value [jsonMap] to [TokenDetails]
   /// returns null if [jsonMap] is null
-  TokenDetails decodeTokenDetails(Map<String, dynamic> jsonMap) {
+  TokenDetails _decodeTokenDetails(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    return TokenDetails(readFromJson<String>(jsonMap, TxTokenDetails.token))
-      ..expires = readFromJson<int>(jsonMap, TxTokenDetails.expires)
-      ..issued = readFromJson<int>(jsonMap, TxTokenDetails.issued)
-      ..capability = readFromJson<String>(jsonMap, TxTokenDetails.capability)
-      ..clientId = readFromJson<String>(jsonMap, TxTokenDetails.clientId);
+    return TokenDetails(_readFromJson<String>(jsonMap, TxTokenDetails.token))
+      ..expires = _readFromJson<int>(jsonMap, TxTokenDetails.expires)
+      ..issued = _readFromJson<int>(jsonMap, TxTokenDetails.issued)
+      ..capability = _readFromJson<String>(jsonMap, TxTokenDetails.capability)
+      ..clientId = _readFromJson<String>(jsonMap, TxTokenDetails.clientId);
   }
 
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
-  TokenParams decodeTokenParams(Map<String, dynamic> jsonMap) {
+  TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     return TokenParams()
-      ..capability = readFromJson<String>(jsonMap, TxTokenParams.capability)
-      ..clientId = readFromJson<String>(jsonMap, TxTokenParams.clientId)
-      ..nonce = readFromJson<String>(jsonMap, TxTokenParams.nonce)
+      ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
+      ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
+      ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
       ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-          readFromJson<int>(jsonMap, TxTokenParams.timestamp))
-      ..ttl = readFromJson<int>(jsonMap, TxTokenParams.ttl);
+        _readFromJson<int>(jsonMap, TxTokenParams.timestamp))
+      ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
   }
 
   /// Decodes value [jsonMap] to [AblyMessage]
   /// returns null if [jsonMap] is null
-  AblyMessage decodeAblyMessage(Map<String, dynamic> jsonMap) {
+  AblyMessage _decodeAblyMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final type = readFromJson<int>(jsonMap, TxAblyMessage.type);
+    final type = _readFromJson<int>(jsonMap, TxAblyMessage.type);
     dynamic message = jsonMap[TxAblyMessage.message];
     if (type != null) {
-      message = codecMap[type]
-          .decode(toJsonMap(readFromJson<Map>(jsonMap, TxAblyMessage.message)));
+      message = codecMap[type].decode(
+        toJsonMap(_readFromJson<Map>(jsonMap, TxAblyMessage.message)));
     }
     return AblyMessage(message,
-        handle: jsonMap[TxAblyMessage.registrationHandle] as int, type: type);
+      handle: jsonMap[TxAblyMessage.registrationHandle] as int, type: type);
   }
 
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null
-  ErrorInfo decodeErrorInfo(Map<String, dynamic> jsonMap) {
+  ErrorInfo _decodeErrorInfo(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     return ErrorInfo(
-        code: jsonMap[TxErrorInfo.code] as int,
-        message: jsonMap[TxErrorInfo.message] as String,
-        statusCode: jsonMap[TxErrorInfo.statusCode] as int,
-        href: jsonMap[TxErrorInfo.href] as String,
-        requestId: jsonMap[TxErrorInfo.requestId] as String,
-        cause: jsonMap[TxErrorInfo.cause] as ErrorInfo);
+      code: jsonMap[TxErrorInfo.code] as int,
+      message: jsonMap[TxErrorInfo.message] as String,
+      statusCode: jsonMap[TxErrorInfo.statusCode] as int,
+      href: jsonMap[TxErrorInfo.href] as String,
+      requestId: jsonMap[TxErrorInfo.requestId] as String,
+      cause: jsonMap[TxErrorInfo.cause] as ErrorInfo);
   }
 
   /// Decodes [eventName] to [ConnectionEvent] enum if not null
   // ignore: missing_return
-  ConnectionEvent decodeConnectionEvent(String eventName) {
+  ConnectionEvent _decodeConnectionEvent(String eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
         return ConnectionEvent.initialized;
@@ -475,7 +564,7 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes [state] to [ConnectionState] enum if not null
   // ignore: missing_return
-  ConnectionState decodeConnectionState(String state) {
+  ConnectionState _decodeConnectionState(String state) {
     if (state == null) return null;
     switch (state) {
       case TxEnumConstants.initialized:
@@ -499,7 +588,7 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes [eventName] to [ChannelEvent] enum if not null
   // ignore: missing_return
-  ChannelEvent decodeChannelEvent(String eventName) {
+  ChannelEvent _decodeChannelEvent(String eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
         return ChannelEvent.initialized;
@@ -522,7 +611,7 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes [state] to [ChannelState] enum if not null
   // ignore: missing_return
-  ChannelState decodeChannelState(String state) {
+  ChannelState _decodeChannelState(String state) {
     switch (state) {
       case TxEnumConstants.initialized:
         return ChannelState.initialized;
@@ -543,64 +632,65 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [ConnectionStateChange]
   /// returns null if [jsonMap] is null
-  ConnectionStateChange decodeConnectionStateChange(
-      Map<String, dynamic> jsonMap) {
+  ConnectionStateChange _decodeConnectionStateChange(
+    Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final current = decodeConnectionState(
-        readFromJson<String>(jsonMap, TxConnectionStateChange.current));
-    final previous = decodeConnectionState(
-        readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
-    final event = decodeConnectionEvent(
-        readFromJson<String>(jsonMap, TxConnectionStateChange.event));
-    final retryIn = readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
-    final reason = decodeErrorInfo(
-        toJsonMap(readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
+    final current = _decodeConnectionState(
+      _readFromJson<String>(jsonMap, TxConnectionStateChange.current));
+    final previous = _decodeConnectionState(
+      _readFromJson<String>(jsonMap, TxConnectionStateChange.previous));
+    final event = _decodeConnectionEvent(
+      _readFromJson<String>(jsonMap, TxConnectionStateChange.event));
+    final retryIn =
+    _readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
+    final reason = _decodeErrorInfo(
+      toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason)));
     return ConnectionStateChange(current, previous, event,
-        retryIn: retryIn, reason: reason);
+      retryIn: retryIn, reason: reason);
   }
 
   /// Decodes value [jsonMap] to [ChannelStateChange]
   /// returns null if [jsonMap] is null
-  ChannelStateChange decodeChannelStateChange(Map<String, dynamic> jsonMap) {
+  ChannelStateChange _decodeChannelStateChange(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final current = decodeChannelState(
-        readFromJson<String>(jsonMap, TxChannelStateChange.current));
-    final previous = decodeChannelState(
-        readFromJson<String>(jsonMap, TxChannelStateChange.previous));
-    final event = decodeChannelEvent(
-        readFromJson<String>(jsonMap, TxChannelStateChange.event));
-    final resumed = readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
-    final reason = decodeErrorInfo(
-        toJsonMap(readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
+    final current = _decodeChannelState(
+      _readFromJson<String>(jsonMap, TxChannelStateChange.current));
+    final previous = _decodeChannelState(
+      _readFromJson<String>(jsonMap, TxChannelStateChange.previous));
+    final event = _decodeChannelEvent(
+      _readFromJson<String>(jsonMap, TxChannelStateChange.event));
+    final resumed = _readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
+    final reason = _decodeErrorInfo(
+      toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason)));
     return ChannelStateChange(current, previous, event,
-        resumed: resumed, reason: reason);
+      resumed: resumed, reason: reason);
   }
 
-  Message decodeChannelMessage(Map<String, dynamic> jsonMap) {
+  Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final message = Message(
-        name: readFromJson<String>(jsonMap, TxMessage.name),
-        clientId: readFromJson<String>(jsonMap, TxMessage.clientId),
-        data: readFromJson<dynamic>(jsonMap, TxMessage.data))
-      ..id = readFromJson<String>(jsonMap, TxMessage.id)
-      ..connectionId = readFromJson<String>(jsonMap, TxMessage.connectionId)
-      ..encoding = readFromJson<String>(jsonMap, TxMessage.encoding)
-      ..extras = readFromJson<Map>(jsonMap, TxMessage.extras);
-    final timestamp = readFromJson<int>(jsonMap, TxMessage.timestamp);
+      name: _readFromJson<String>(jsonMap, TxMessage.name),
+      clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
+      data: _readFromJson<dynamic>(jsonMap, TxMessage.data))
+      ..id = _readFromJson<String>(jsonMap, TxMessage.id)
+      ..connectionId = _readFromJson<String>(jsonMap, TxMessage.connectionId)
+      ..encoding = _readFromJson<String>(jsonMap, TxMessage.encoding)
+      ..extras = _readFromJson<Map>(jsonMap, TxMessage.extras);
+    final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
     if (timestamp != null) {
       message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     }
     return message;
   }
 
-  PaginatedResult<Object> decodePaginatedResult(Map<String, dynamic> jsonMap) {
+  PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final type = readFromJson<int>(jsonMap, TxPaginatedResult.type);
-    final items = readFromJson<List>(jsonMap, TxPaginatedResult.items)
-            ?.map((e) => codecMap[type].decode(toJsonMap(e as Map)))
-            ?.toList() ??
-        [];
+    final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);
+    final items = _readFromJson<List>(jsonMap, TxPaginatedResult.items)
+      ?.map((e) => codecMap[type].decode(toJsonMap(e as Map)))
+      ?.toList() ??
+      [];
     return PaginatedResult(items,
-        hasNext: readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
+      hasNext: _readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool);
   }
 }

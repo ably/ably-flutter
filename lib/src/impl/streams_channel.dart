@@ -23,8 +23,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+/// Manages multiple event listeners which would otherwise require verbose code
+/// on platform side
 class StreamsChannel {
-  StreamsChannel(this.name, [this.codec = const StandardMethodCodec()]);
+  /// initializes with event channel [name] and method [codec]
+  StreamsChannel(this.name, this.codec);
 
   /// The logical channel on which communication happens, not null.
   final String name;
@@ -34,6 +37,8 @@ class StreamsChannel {
 
   int _lastId = 0;
 
+  /// registers a listener on platform side and manages the listener
+  /// with incremental identifiers
   Stream<dynamic> receiveBroadcastStream([Object arguments]) {
     final methodChannel = MethodChannel(name, codec);
 

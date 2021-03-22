@@ -1,25 +1,32 @@
 import 'dart:async';
 
 import '../../../ably_flutter.dart';
-import '../../spec/spec.dart' show Connection, ConnectionState, ErrorInfo;
+import '../../spec/spec.dart'
+    show ConnectionInterface, ConnectionState, ErrorInfo;
 import '../platform_object.dart';
 import 'realtime.dart';
 
-class ConnectionPlatformObject extends PlatformObject implements Connection {
-  Realtime realtimePlatformObject;
+/// connects to Ably service
+class Connection extends PlatformObject implements ConnectionInterface {
+  /// Realtime client instance
+  Realtime realtime;
 
-  ConnectionPlatformObject(this.realtimePlatformObject) : super() {
+  /// instantiates a connection with [realtime] client instance
+  ///
+  /// sets default [state] to [ConnectionState.initialized] and starts listening
+  /// for updates to the connection [state].
+  Connection(this.realtime) : super() {
     state = ConnectionState.initialized;
     on().listen((event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {
-        realtimePlatformObject.awaitAuthUpdateAndReconnect();
+        realtime.awaitAuthUpdateAndReconnect();
       }
       state = event.current;
     });
   }
 
   @override
-  Future<int> createPlatformInstance() async => realtimePlatformObject.handle;
+  Future<int> createPlatformInstance() async => realtime.handle;
 
   @override
   ErrorInfo errorReason;
@@ -48,10 +55,10 @@ class ConnectionPlatformObject extends PlatformObject implements Connection {
               connectionStateChange.event == connectionEvent);
 
   @override
-  Future<void> close() => realtimePlatformObject.close();
+  Future<void> close() => realtime.close();
 
   @override
-  Future<void> connect() => realtimePlatformObject.connect();
+  Future<void> connect() => realtime.connect();
 
   @override
   Future<int> ping() {

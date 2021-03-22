@@ -2,6 +2,8 @@ String getPrefix(Object str) =>
     ((str as String).length > 26) ? '\n      ' : ' ';
 
 String $(Map<String, dynamic> c) => '''
+// ignore_for_file: public_member_api_docs
+
 class CodecTypes {
 ${c['types'].map((_) => "  static const int ${_['name']} ="
         " ${_['value']};").join('\n')}

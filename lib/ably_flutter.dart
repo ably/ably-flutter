@@ -1,7 +1,9 @@
-export 'src/defaults.dart';
 export 'src/generated/platformconstants.dart';
 export 'src/impl/paginated_result.dart';
+export 'src/impl/realtime/channels.dart';
+export 'src/impl/realtime/connection.dart';
 export 'src/impl/realtime/realtime.dart';
+export 'src/impl/rest/channels.dart';
 export 'src/impl/rest/rest.dart';
 export 'src/info.dart';
 export 'src/spec/spec.dart';

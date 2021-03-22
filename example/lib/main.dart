@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
@@ -238,7 +236,7 @@ class _MyAppState extends State<MyApp> {
     _subscriptionsToDispose.add(alphaSubscription);
   }
 
-  void listenRealtimeChannel(ably.RealtimeChannel channel) {
+  void listenRealtimeChannel(ably.RealtimeChannelInterface channel) {
     final _channelStateChangeSubscription = channel.on().listen((stateChange) {
       print('ChannelStateChange: ${stateChange.current}'
           '\nReason: ${stateChange.reason}');
@@ -515,7 +513,6 @@ class _MyAppState extends State<MyApp> {
                     final result =
                         await _realtime.channels.get('test-channel').history(
                               ably.RealtimeHistoryParams(
-                                direction: 'backwards',
                                 limit: 10,
                                 untilAttach: true,
                               ),

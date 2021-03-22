@@ -38,6 +38,11 @@ Future _initialize() async {
   return _initializer;
 }
 
+/// invokes a platform [method] with [arguments]
+///
+/// calls an [_initialize] method before invoking any method so as to handle
+/// any cleanup tasks that are especially required while performing hot-restart
+/// (as hot-restart is known to not clear any objects on platform side)
 Future<T> invoke<T>(String method, [Object arguments]) async {
   await _initialize();
   return methodChannel.invokeMethod<T>(method, arguments);
