@@ -24,3 +24,9 @@ jobs:
         run: |
           flutter pub global run dartdoc
           ls -al doc/api
+
+      - name: Experiment
+        run: |
+          echo $GITHUB_EVENT_PATH
+          cat $GITHUB_EVENT_PATH
+          cat $GITHUB_EVENT_PATH | jq .pull_request.number
