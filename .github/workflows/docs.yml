@@ -30,9 +30,9 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{repository}/pulls/{issue_id}
+          route: GET /repos/{repository}/pulls/{pull_request_number}
           repository: ${{ github.repository }}
-          issue_id: ${{ github.event.issue.number }}
+          pull_request_number: ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -58,7 +58,7 @@ jobs:
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
           environment: sdk-staging
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: in_progress
         env:
@@ -99,7 +99,7 @@ jobs:
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
           environment: sdk-staging
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: success
         env:
@@ -113,7 +113,7 @@ jobs:
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
           environment: sdk-staging
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.issue.number }}/docs/api-reference/
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: failure
         env:
