@@ -34,7 +34,7 @@ jobs:
           repository: ${{ github.repository }}
           issue_id: ${{ github.event.issue.number }}
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Based on the approach modelled here: https://github.com/SanderKnape/pr-deployments
       - name: Create Deployment
@@ -48,7 +48,7 @@ jobs:
           environment: sdk-staging
           auto_merge: false
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Deployment Status to In Progress
         if: ${{ github.event_name == 'pull_request' }}
@@ -62,7 +62,7 @@ jobs:
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: in_progress
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Default shell is bash: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
       # jq emits `null` if the `pull_request` key is not found.
@@ -103,7 +103,7 @@ jobs:
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: success
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Deployment Status to Failure
         uses: octokit/request-action@v2.x
@@ -117,4 +117,4 @@ jobs:
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: failure
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
