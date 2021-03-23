@@ -46,7 +46,7 @@ jobs:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
           ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.ref }}
-          environment: staging/pull/${{ github.event.pull_request.number }}/docs/api-reference
+          environment: staging/pull/${{ github.event.pull_request.number }}/dartdoc
           auto_merge: false
           required_contexts: '[]'
         env:
@@ -61,8 +61,8 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: staging/pull/${{ github.event.pull_request.number }}/docs/api-reference
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
+          environment: staging/pull/${{ github.event.pull_request.number }}/dartdoc
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/dartdoc/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: in_progress
           mediaType: '{"previews": ["flash", "ant-man"]}'
@@ -81,7 +81,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
         run: |
-          REMOTE_PATH_SUFFIX="docs/api-reference"
+          REMOTE_PATH_SUFFIX="dartdoc"
           if [ $GITHUB_EVENT_PATH == "pull_request" ]; then
             PULL_REQUEST_NUMBER=`cat $GITHUB_EVENT_PATH | jq .pull_request.number`
             if [ $PULL_REQUEST_NUMBER == "null" ]; then
@@ -103,8 +103,8 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: staging/pull/${{ github.event.pull_request.number }}/docs/api-reference
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
+          environment: staging/pull/${{ github.event.pull_request.number }}/dartdoc
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/dartdoc/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: success
           mediaType: '{"previews": ["ant-man"]}'
@@ -119,8 +119,8 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: staging/pull/${{ github.event.pull_request.number }}/docs/api-reference
-          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
+          environment: staging/pull/${{ github.event.pull_request.number }}/dartdoc
+          environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/dartdoc/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: failure
           mediaType: '{"previews": ["ant-man"]}'
