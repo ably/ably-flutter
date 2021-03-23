@@ -25,6 +25,17 @@ jobs:
           flutter pub global run dartdoc
           ls -al doc/api
 
+      - name: Get Pull Request Information
+        id: get_pull_request_information
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/pulls/{pull_request_number}
+          repository: ${{ github.repository }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # Based on the approach modelled here: https://github.com/SanderKnape/pr-deployments
       # https://docs.github.com/en/rest/reference/repos#create-a-deployment
       - name: Create Deployment
@@ -34,7 +45,7 @@ jobs:
         with:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
-          ref: ${{ github.sha }}
+          ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.sha }}
           environment: staging/pull/${{ github.event.pull_request.number }}/dartdoc
           auto_merge: false
           required_contexts: '[]'
