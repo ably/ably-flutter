@@ -46,7 +46,7 @@ jobs:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
           ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.ref }}
-          environment: sdk-staging
+          environment: sdk-static
           auto_merge: false
           required_contexts: []
         env:
@@ -59,7 +59,7 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: sdk-staging
+          environment: sdk-static
           environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: in_progress
@@ -100,7 +100,7 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: sdk-staging
+          environment: sdk-static
           environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: success
@@ -114,7 +114,7 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: sdk-staging
+          environment: sdk-static
           environment_url: https://sdk.ably.com/builds/ably/ably-flutter/pull/${{ github.event.pull_request.number }}/docs/api-reference/
           log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           state: failure
