@@ -80,14 +80,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.SDK_S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           REMOTE_PATH_SUFFIX="dartdoc"
-          if [ $GITHUB_EVENT_PATH == "pull_request" ]; then
-            PULL_REQUEST_NUMBER=`cat $GITHUB_EVENT_PATH | jq .pull_request.number`
-            if [ $PULL_REQUEST_NUMBER == "null" ]; then
-              echo 'Failed to find pull request number in event data.' >/dev/stderr
-              exit 1
-            fi
+          if [ $GITHUB_EVENT_NAME == "pull_request" ]; then
             echo "Running sync for Pull Request Number: $PULL_REQUEST_NUMBER ..."
             REMOTE_PATH="pull/$PULL_REQUEST_NUMBER/$REMOTE_PATH_SUFFIX"
           else
