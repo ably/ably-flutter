@@ -37,6 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Based on the approach modelled here: https://github.com/SanderKnape/pr-deployments
+      # https://docs.github.com/en/rest/reference/repos#create-a-deployment
       - name: Create Deployment
         id: create_deployment
         if: ${{ github.event_name == 'pull_request' }}
@@ -47,6 +48,7 @@ jobs:
           ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.ref }}
           environment: sdk-staging
           auto_merge: false
+          required_contexts: []
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
