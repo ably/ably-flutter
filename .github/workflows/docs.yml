@@ -48,7 +48,7 @@ jobs:
           ref: ${{ fromJson(steps.get_pull_request_information.outputs.data).head.ref }}
           environment: sdk-static
           auto_merge: false
-          required_contexts: []
+          required_contexts: '[]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
