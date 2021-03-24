@@ -53,7 +53,7 @@ jobs:
         env:
           LOCAL_DEPLOYMENT_ENVIRONMENT: ${{ format('staging/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
           LOCAL_DEPLOYMENT_ENVIRONMENT_URL: ${{ format('https://sdk.ably.com/builds/ably/ably-flutter/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
-          LOCAL_DEPLOYMENT_LOG_URL: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id }}
+          LOCAL_DEPLOYMENT_LOG_URL: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id) }}
         run: |
           echo "DEPLOYMENT_ENVIRONMENT=$LOCAL_DEPLOYMENT_ENVIRONMENT" >> $GITHUB_ENV
           echo "DEPLOYMENT_ENVIRONMENT_URL=$LOCAL_DEPLOYMENT_ENVIRONMENT_URL" >> $GITHUB_ENV
