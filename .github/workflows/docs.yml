@@ -29,8 +29,8 @@ jobs:
       - name: Define Deployment Constants
         id: define_deployment_constants
         run: |
-          echo "::set-output name=environment::${{ github.event_name == 'pull_request' ? `staging/pull/${github.event.pull_request.number}/dartdoc` : 'main/dartdoc' }}"
-          echo "::set-output name=environment_url::${{ github.event_name == 'pull_request' ? `https://sdk.ably.com/builds/ably/ably-flutter/pull/${github.event.pull_request.number}/dartdoc/` : 'https://sdk.ably.com/builds/ably/ably-flutter/main/dartdoc/' }}"
+          echo "::set-output name=environment::${{ github.event_name === 'pull_request' ? `staging/pull/${github.event.pull_request.number}/dartdoc` : 'main/dartdoc' }}"
+          echo "::set-output name=environment_url::${{ github.event_name === 'pull_request' ? `https://sdk.ably.com/builds/ably/ably-flutter/pull/${github.event.pull_request.number}/dartdoc/` : 'https://sdk.ably.com/builds/ably/ably-flutter/main/dartdoc/' }}"
 
       # https://docs.github.com/en/rest/reference/repos#create-a-deployment
       # Based (very loosely) on the approach found here: https://github.com/SanderKnape/pr-deployments
@@ -47,7 +47,7 @@ jobs:
         with:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
-          ref: ${{ github.event_name == 'pull_request' ? github.event.pull_request.head.sha : github.sha }}
+          ref: ${{ github.event_name === 'pull_request' ? github.event.pull_request.head.sha : github.sha }}
           environment: ${{ steps.define_deployment_constants.outputs.environment }}
           auto_merge: false
           required_contexts: '[]'
