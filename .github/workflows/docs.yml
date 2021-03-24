@@ -26,11 +26,38 @@ jobs:
           ls -al doc/api
       
       # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#using-workflow-commands-to-access-toolkit-functions
-      - name: Define Deployment Constants
-        id: define_deployment_constants
+      # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+      # Using LOCAL_ prefix to name an environment variable coming IN to these environment definition steps, only available to that step.
+      # Conforming to define all dynamic 'constants' as environment variables accessible to all steps, rather than
+      # the alternative which was possible in some cases being that a step emits outputs (being why we have an id defined
+      # for `create_deployment`, for example).
+
+      - name: Define Globally Accessible Deployment Environment Variables for Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          LOCAL_DEPLOYMENT_REMOTE_PATH: ${{ format('pull/{0}/dartdoc', github.event.pull_request.number) }}
+          LOCAL_DEPLOYMENT_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          echo "::set-output name=environment::${{ github.event_name === 'pull_request' ? `staging/pull/${github.event.pull_request.number}/dartdoc` : 'main/dartdoc' }}"
-          echo "::set-output name=environment_url::${{ github.event_name === 'pull_request' ? `https://sdk.ably.com/builds/ably/ably-flutter/pull/${github.event.pull_request.number}/dartdoc/` : 'https://sdk.ably.com/builds/ably/ably-flutter/main/dartdoc/' }}"
+          echo "DEPLOYMENT_REMOTE_PATH=$LOCAL_DEPLOYMENT_REMOTE_PATH" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SHA=$LOCAL_DEPLOYMENT_SHA" >> $GITHUB_ENV
+
+      - name: Define Globally Accessible Deployment Environment Variables for main branch
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          LOCAL_DEPLOYMENT_SHA: ${{ github.sha }}
+        run: |
+          echo "DEPLOYMENT_REMOTE_PATH=main/dartdoc" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SHA=$LOCAL_DEPLOYMENT_SHA" >> $GITHUB_ENV
+
+      - name: Define Globally Accessible Deployment Environment Variables
+        env:
+          LOCAL_DEPLOYMENT_ENVIRONMENT: ${{ format('staging/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
+          LOCAL_DEPLOYMENT_ENVIRONMENT_URL: ${{ format('https://sdk.ably.com/builds/ably/ably-flutter/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
+          LOCAL_DEPLOYMENT_LOG_URL: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id }}
+        run: |
+          echo "DEPLOYMENT_ENVIRONMENT=$LOCAL_DEPLOYMENT_ENVIRONMENT" >> $GITHUB_ENV
+          echo "DEPLOYMENT_ENVIRONMENT_URL=$LOCAL_DEPLOYMENT_ENVIRONMENT_URL" >> $GITHUB_ENV
+          echo "DEPLOYMENT_LOG_URL=$LOCAL_DEPLOYMENT_LOG_URL" >> $GITHUB_ENV
 
       # https://docs.github.com/en/rest/reference/repos#create-a-deployment
       # Based (very loosely) on the approach found here: https://github.com/SanderKnape/pr-deployments
@@ -47,8 +74,8 @@ jobs:
         with:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
-          ref: ${{ github.event_name === 'pull_request' ? github.event.pull_request.head.sha : github.sha }}
-          environment: ${{ steps.define_deployment_constants.outputs.environment }}
+          ref: ${{ env.DEPLOYMENT_SHA }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
           auto_merge: false
           required_contexts: '[]'
         env:
@@ -63,9 +90,9 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: ${{ steps.define_deployment_constants.outputs.environment }}
-          environment_url: ${{ steps.define_deployment_constants.outputs.environment_url }}
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
           state: in_progress
           mediaType: '{"previews": ["flash", "ant-man"]}'
         env:
@@ -82,17 +109,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.SDK_S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
-          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          REMOTE_PATH_SUFFIX="dartdoc"
-          if [ $GITHUB_EVENT_NAME == "pull_request" ]; then
-            echo "Running sync for Pull Request Number: $PULL_REQUEST_NUMBER ..."
-            REMOTE_PATH="pull/$PULL_REQUEST_NUMBER/$REMOTE_PATH_SUFFIX"
-          else
-            echo "Running sync for main branch (assumed given the triggers configured for this workflow) ..."
-            REMOTE_PATH="main/$REMOTE_PATH_SUFFIX"
-          fi
-          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$REMOTE_PATH"
+          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$DEPLOYMENT_REMOTE_PATH"
 
       - name: Set Deployment Status to Success
         uses: octokit/request-action@v2.x
@@ -100,9 +118,9 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: ${{ steps.define_deployment_constants.outputs.environment }}
-          environment_url: ${{ steps.define_deployment_constants.outputs.environment_url }}
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
           state: success
           mediaType: '{"previews": ["ant-man"]}'
         env:
@@ -116,9 +134,9 @@ jobs:
           route: POST /repos/:repository/deployments/:deployment/statuses
           repository: ${{ github.repository }}
           deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: ${{ steps.define_deployment_constants.outputs.environment }}
-          environment_url: ${{ steps.define_deployment_constants.outputs.environment_url }}
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
           state: failure
           mediaType: '{"previews": ["ant-man"]}'
         env:
