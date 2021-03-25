@@ -197,7 +197,23 @@ static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*
     ARTRealtimeChannelOptions *const o = [ARTRealtimeChannelOptions new];
     READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipher);
     READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
-    // TODO work on decoding modes. Currently stalled by incompatibility with Tb2d
+    ON_VALUE(^(const id value) {
+        NSArray* modes = (NSArray *)value;
+        ARTChannelMode options = 0;
+        if ([modes containsObject:TxEnumConstants_presence]) {
+            options = options | ARTChannelModePresence;
+        }
+        if ([modes containsObject:TxEnumConstants_subscribe]) {
+            options = options | ARTChannelModeSubscribe;
+        }
+        if ([modes containsObject:TxEnumConstants_publish]) {
+            options = options | ARTChannelModePublish;
+        }
+        if ([modes containsObject:TxEnumConstants_presenceSubscribe]) {
+            options = options | ARTChannelModePresenceSubscribe;
+        }
+        o.modes = options;
+    }, dictionary, TxRealtimeChannelOptions_modes);
     return o;
 };
 
