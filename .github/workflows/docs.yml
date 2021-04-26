@@ -1,0 +1,142 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      
+      - name: Get Flutter Packages
+        run: flutter pub get
+
+      - name: Install dartdoc global package via pub tool in the Flutter context
+        run: |
+          flutter pub global activate dartdoc
+
+      - name: Build Documentation
+        run: |
+          flutter pub global run dartdoc
+          ls -al doc/api
+      
+      # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#using-workflow-commands-to-access-toolkit-functions
+      # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+      # Using LOCAL_ prefix to name an environment variable coming IN to these environment definition steps, only available to that step.
+      # Conforming to define all dynamic 'constants' as environment variables accessible to all steps, rather than
+      # the alternative which was possible in some cases being that a step emits outputs (being why we have an id defined
+      # for `create_deployment`, for example).
+
+      - name: Define Globally Accessible Deployment Environment Variables for Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          LOCAL_DEPLOYMENT_REMOTE_PATH: ${{ format('pull/{0}/dartdoc', github.event.pull_request.number) }}
+          LOCAL_DEPLOYMENT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          echo "DEPLOYMENT_REMOTE_PATH=$LOCAL_DEPLOYMENT_REMOTE_PATH" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SHA=$LOCAL_DEPLOYMENT_SHA" >> $GITHUB_ENV
+
+      - name: Define Globally Accessible Deployment Environment Variables for main branch
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          LOCAL_DEPLOYMENT_SHA: ${{ github.sha }}
+        run: |
+          echo "DEPLOYMENT_REMOTE_PATH=main/dartdoc" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SHA=$LOCAL_DEPLOYMENT_SHA" >> $GITHUB_ENV
+
+      - name: Define Globally Accessible Deployment Environment Variables
+        env:
+          LOCAL_DEPLOYMENT_ENVIRONMENT: ${{ format('staging/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
+          LOCAL_DEPLOYMENT_ENVIRONMENT_URL: ${{ format('https://sdk.ably.com/builds/{0}/{1}', github.repository, env.DEPLOYMENT_REMOTE_PATH) }}
+          LOCAL_DEPLOYMENT_LOG_URL: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id) }}
+        run: |
+          echo "DEPLOYMENT_ENVIRONMENT=$LOCAL_DEPLOYMENT_ENVIRONMENT" >> $GITHUB_ENV
+          echo "DEPLOYMENT_ENVIRONMENT_URL=$LOCAL_DEPLOYMENT_ENVIRONMENT_URL" >> $GITHUB_ENV
+          echo "DEPLOYMENT_LOG_URL=$LOCAL_DEPLOYMENT_LOG_URL" >> $GITHUB_ENV
+
+      # https://docs.github.com/en/rest/reference/repos#create-a-deployment
+      # Based (very loosely) on the approach found here: https://github.com/SanderKnape/pr-deployments
+      # Regarding getting the SHA for the HEAD of the branch underlying when triggered by a PR:
+      # - github.sha is not helpful as it just gives us the SHA for the temporary merge commit created temporarily
+      #   for this workflow run (the deployment then gets explicitly marked as "temporarily" deployed)
+      # - https://stackoverflow.com/questions/59810838/how-to-get-the-short-sha-for-the-github-workflow#comment107561661_59819441
+      # - https://stackoverflow.com/a/61035010
+      # When triggered by a push to the main branch the the SHA represents the triggering commit:
+      # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context
+      - name: Create Deployment
+        id: create_deployment
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments
+          repository: ${{ github.repository }}
+          ref: ${{ env.DEPLOYMENT_SHA }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          auto_merge: false
+          required_contexts: '[]'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # https://docs.github.com/en/rest/reference/repos#create-a-deployment-status
+      # re mediaType values: https://docs.github.com/en/rest/overview/api-previews
+      # because, ultimatey via: https://github.com/octokit/request.js/#request
+      - name: Set Deployment Status to In Progress
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
+          state: in_progress
+          mediaType: '{"previews": ["flash", "ant-man"]}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Default shell is bash: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
+      # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#cli-tools
+      # https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+      # https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-sync
+      # https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html
+      - name: Upload to Amazon S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SDK_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-west-2
+        run: |
+          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/$GITHUB_REPOSITORY/$DEPLOYMENT_REMOTE_PATH"
+
+      - name: Set Deployment Status to Success
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
+          state: success
+          mediaType: '{"previews": ["ant-man"]}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # If the previous step (set deployment status to success) FAILS then this step will ALSO get run.
+      - name: Set Deployment Status to Failure
+        if: ${{ failure() }}
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments/:deployment/statuses
+          repository: ${{ github.repository }}
+          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
+          environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+          environment_url: ${{ env.DEPLOYMENT_ENVIRONMENT_URL }}
+          log_url: ${{ env.DEPLOYMENT_LOG_URL }}
+          state: failure
+          mediaType: '{"previews": ["ant-man"]}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
