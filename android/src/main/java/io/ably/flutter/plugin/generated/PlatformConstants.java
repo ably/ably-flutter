@@ -19,6 +19,8 @@ final public class PlatformConstants {
         public static final byte paginatedResult = (byte) 135;
         public static final byte restHistoryParams = (byte) 136;
         public static final byte realtimeHistoryParams = (byte) 137;
+        public static final byte restPresenceParams = (byte) 138;
+        public static final byte presenceMessage = (byte) 139;
         public static final byte errorInfo = (byte) 144;
         public static final byte connectionStateChange = (byte) 201;
         public static final byte channelStateChange = (byte) 202;
@@ -32,6 +34,8 @@ final public class PlatformConstants {
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
         public static final String createRestWithOptions = "createRestWithOptions";
         public static final String publish = "publish";
+        public static final String restHistory = "restHistory";
+        public static final String restPresenceGet = "restPresenceGet";
         public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
@@ -39,11 +43,10 @@ final public class PlatformConstants {
         public static final String detachRealtimeChannel = "detachRealtimeChannel";
         public static final String setRealtimeChannelOptions = "setRealtimeChannelOptions";
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
+        public static final String realtimeHistory = "realtimeHistory";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
-        public static final String restHistory = "restHistory";
-        public static final String realtimeHistory = "realtimeHistory";
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
     }
@@ -149,6 +152,10 @@ final public class PlatformConstants {
         public static final String closing = "closing";
         public static final String closed = "closed";
         public static final String failed = "failed";
+        public static final String absent = "absent";
+        public static final String leave = "leave";
+        public static final String enter = "enter";
+        public static final String present = "present";
         public static final String update = "update";
     }
 
@@ -179,6 +186,17 @@ final public class PlatformConstants {
         public static final String extras = "extras";
     }
 
+    static final public class TxPresenceMessage {
+        public static final String id = "id";
+        public static final String action = "action";
+        public static final String clientId = "clientId";
+        public static final String connectionId = "connectionId";
+        public static final String data = "data";
+        public static final String encoding = "encoding";
+        public static final String extras = "extras";
+        public static final String timestamp = "timestamp";
+    }
+
     static final public class TxPaginatedResult {
         public static final String items = "items";
         public static final String type = "type";
@@ -198,6 +216,12 @@ final public class PlatformConstants {
         public static final String direction = "direction";
         public static final String limit = "limit";
         public static final String untilAttach = "untilAttach";
+    }
+
+    static final public class TxRestPresenceParams {
+        public static final String limit = "limit";
+        public static final String clientId = "clientId";
+        public static final String connectionId = "connectionId";
     }
 
 }

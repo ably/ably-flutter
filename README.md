@@ -134,6 +134,36 @@ getHistory();
 getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
 ```
 
+Get REST Channel Presence:
+
+```dart
+void getPresence([ably.RestPresenceParams params]) async {
+    // getting channel history, by passing or omitting the optional params
+    var result = await channel.presence.get(params);
+
+    var presenceMembers = result.items; //returns PresenceMessages
+    var hasNextPage = result.hasNext(); //tells whether there are more results
+    if(hasNextPage){
+      result = await result.next();  //fetches next page results
+      presenceMembers = result.items;
+    }
+    if(!hasNextPage){
+      result = await result.first();  //fetches first page results
+      presenceMembers = result.items;
+    }
+}
+
+// getting presence members with default params
+getPresence();
+
+// filtered presence members
+getPresence(ably.RestPresenceParams(
+  limit: 10,
+  clientId: '<clientId>',
+  connectionId: '<connectionID>',
+));
+```
+
 ### Using the Realtime API
 
 Creating the Realtime client instance:

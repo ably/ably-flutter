@@ -26,6 +26,8 @@ const List<Map<String, dynamic>> _types = [
   {'name': 'paginatedResult', 'value': 135},
   {'name': 'restHistoryParams', 'value': 136},
   {'name': 'realtimeHistoryParams', 'value': 137},
+  {'name': 'restPresenceParams', 'value': 138},
+  {'name': 'presenceMessage', 'value': 139},
   {'name': 'errorInfo', 'value': 144},
 
   // Events
@@ -46,6 +48,8 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Rest
   {'name': 'createRestWithOptions', 'value': 'createRestWithOptions'},
   {'name': 'publish', 'value': 'publish'},
+  {'name': 'restHistory', 'value': 'restHistory'},
+  {'name': 'restPresenceGet', 'value': 'restPresenceGet'},
 
   // Realtime
   {'name': 'createRealtimeWithOptions', 'value': 'createRealtimeWithOptions'},
@@ -58,6 +62,7 @@ const List<Map<String, dynamic>> _platformMethods = [
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
   },
+  {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
   // Realtime events
   {
@@ -69,10 +74,6 @@ const List<Map<String, dynamic>> _platformMethods = [
     'value': 'onRealtimeChannelStateChanged'
   },
   {'name': 'onRealtimeChannelMessage', 'value': 'onRealtimeChannelMessage'},
-
-  // History
-  {'name': 'restHistory', 'value': 'restHistory'},
-  {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
   // Paginated results
   {'name': 'nextPage', 'value': 'nextPage'},
@@ -190,6 +191,10 @@ const List<Map<String, dynamic>> _objects = [
       'closing',
       'closed',
       'failed',
+      'absent',
+      'leave',
+      'enter',
+      'present',
       'update',
     ]
   },
@@ -215,6 +220,19 @@ const List<Map<String, dynamic>> _objects = [
     ]
   },
   {
+    'name': 'PresenceMessage',
+    'properties': <String>[
+      'id',
+      'action',
+      'clientId',
+      'connectionId',
+      'data',
+      'encoding',
+      'extras',
+      'timestamp',
+    ]
+  },
+  {
     'name': 'PaginatedResult',
     'properties': <String>['items', 'type', 'hasNext']
   },
@@ -236,7 +254,15 @@ const List<Map<String, dynamic>> _objects = [
       'limit',
       'untilAttach',
     ]
-  }
+  },
+  {
+    'name': 'RestPresenceParams',
+    'properties': <String>[
+      'limit',
+      'clientId',
+      'connectionId',
+    ]
+  },
 ];
 
 // exporting all the constants as a single map

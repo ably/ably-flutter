@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_END
         return channelStateChangeCodecType;
     }else if([value isKindOfClass:[ARTMessage class]]){
         return messageCodecType;
+    }else if([value isKindOfClass:[ARTPresenceMessage class]]){
+        return presenceMessageCodecType;
     }else if([value isKindOfClass:[ARTTokenParams class]]){
         return tokenParamsCodecType;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
@@ -40,6 +42,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", connectionStateChangeCodecType]: encodeConnectionStateChange,
         [NSString stringWithFormat:@"%d", channelStateChangeCodecType]: encodeChannelStateChange,
         [NSString stringWithFormat:@"%d", messageCodecType]: encodeChannelMessage,
+        [NSString stringWithFormat:@"%d", presenceMessageCodecType]: encodePresenceMessage,
         [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
         [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
     };
@@ -221,6 +224,40 @@ static AblyCodecEncoder encodeChannelMessage = ^NSMutableDictionary*(ARTMessage 
     return dictionary;
 };
 
++(NSString *) encodePresenceAction: (ARTPresenceAction) action {
+    switch(action) {
+        case ARTPresenceAbsent:
+            return TxEnumConstants_absent;
+        case ARTPresencePresent:
+            return TxEnumConstants_present;
+        case ARTPresenceEnter:
+            return TxEnumConstants_enter;
+        case ARTPresenceLeave:
+            return TxEnumConstants_leave;
+        case ARTPresenceUpdate:
+            return TxEnumConstants_update;
+    }
+}
+
+static AblyCodecEncoder encodePresenceMessage = ^NSMutableDictionary*(ARTPresenceMessage *const message) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    
+    WRITE_VALUE(dictionary, TxPresenceMessage_id, [message id]);
+    WRITE_VALUE(dictionary,
+                TxConnectionStateChange_current,
+                [AblyFlutterWriter encodePresenceAction: [message action]]);
+    WRITE_VALUE(dictionary, TxPresenceMessage_clientId, [message clientId]);
+    WRITE_VALUE(dictionary, TxPresenceMessage_data, (NSObject *)[message data]);
+    WRITE_VALUE(dictionary, TxPresenceMessage_connectionId, [message connectionId]);
+    WRITE_VALUE(dictionary, TxPresenceMessage_encoding, [message encoding]);
+    WRITE_VALUE(dictionary, TxPresenceMessage_extras, [message extras]);
+    
+    WRITE_VALUE(dictionary, TxPresenceMessage_timestamp,
+                [message timestamp]?@((long)([[message timestamp] timeIntervalSince1970]*1000)):nil);
+    
+    return dictionary;
+};
+
 static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams *const params) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     
@@ -237,15 +274,17 @@ static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams
 static AblyCodecEncoder encodePaginatedResult = ^NSMutableDictionary*(ARTPaginatedResult *const result) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     NSArray* items = [result items];
-    UInt8 type = [AblyFlutterWriter getType:items[0]];
-    if(type != 0){
-        AblyCodecEncoder encoder = [AblyFlutterWriter getEncoder: [NSString stringWithFormat:@"%d", type]];
-        NSMutableArray *result = [NSMutableArray arrayWithCapacity:[items count]];
-        [items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [result addObject: encoder(obj)];
-        }];
-        WRITE_VALUE(dictionary, TxPaginatedResult_type, [NSNumber numberWithInt:type]);
-        WRITE_VALUE(dictionary, TxPaginatedResult_items, result);
+    if([items count] > 0){
+        UInt8 type = [AblyFlutterWriter getType:items[0]];
+        if(type != 0){
+            AblyCodecEncoder encoder = [AblyFlutterWriter getEncoder: [NSString stringWithFormat:@"%d", type]];
+            NSMutableArray *result = [NSMutableArray arrayWithCapacity:[items count]];
+            [items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [result addObject: encoder(obj)];
+            }];
+            WRITE_VALUE(dictionary, TxPaginatedResult_type, [NSNumber numberWithInt:type]);
+            WRITE_VALUE(dictionary, TxPaginatedResult_items, result);
+        }
     }
     WRITE_VALUE(dictionary, TxPaginatedResult_hasNext, @([result hasNext]));
     

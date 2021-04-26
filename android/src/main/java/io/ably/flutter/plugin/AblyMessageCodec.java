@@ -27,6 +27,7 @@ import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
+import io.ably.lib.types.PresenceMessage;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
@@ -90,10 +91,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
                         new CodecPair<>(null, self::decodeRestHistoryParams));
                 put(PlatformConstants.CodecTypes.realtimeHistoryParams,
                         new CodecPair<>(null, self::decodeRealtimeHistoryParams));
+                put(PlatformConstants.CodecTypes.restPresenceParams,
+                        new CodecPair<>(null, self::decodeRestPresenceParams));
                 put(PlatformConstants.CodecTypes.errorInfo,
                         new CodecPair<>(self::encodeErrorInfo, null));
                 put(PlatformConstants.CodecTypes.message,
                         new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
+                put(PlatformConstants.CodecTypes.presenceMessage,
+                        new CodecPair<>(self::encodePresenceMessage, null));
                 put(PlatformConstants.CodecTypes.connectionStateChange,
                         new CodecPair<>(self::encodeConnectionStateChange, null));
                 put(PlatformConstants.CodecTypes.channelStateChange,
@@ -138,6 +143,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             return PlatformConstants.CodecTypes.connectionStateChange;
         } else if (value instanceof ChannelStateListener.ChannelStateChange) {
             return PlatformConstants.CodecTypes.channelStateChange;
+        } else if (value instanceof PresenceMessage) {
+            return PlatformConstants.CodecTypes.presenceMessage;
         } else if (value instanceof Message) {
             return PlatformConstants.CodecTypes.message;
         }
@@ -335,20 +342,39 @@ public class AblyMessageCodec extends StandardMessageCodec {
         final Object limit = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.limit);
         final Object direction = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.direction);
         final Object untilAttach = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.untilAttach);
-        if(start!=null) {
+        if (start != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.start, readValueAsLong(start));
         }
-        if(end!=null) {
+        if (end != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.end, readValueAsLong(end));
         }
-        if(limit!=null) {
+        if (limit != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.limit, (Integer) limit);
         }
-        if(direction!=null) {
+        if (direction != null) {
             params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
         }
-        if(untilAttach!=null) {
+        if (untilAttach != null) {
             params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) untilAttach);
+        }
+        return params;
+    }
+
+    private Param[] decodeRestPresenceParams(Map<String, Object> jsonMap) {
+        if (jsonMap == null) return null;
+        Param[] params = new Param[jsonMap.size()];
+        int index = 0;
+        final Object limit = jsonMap.get(PlatformConstants.TxRestPresenceParams.limit);
+        final Object clientId = jsonMap.get(PlatformConstants.TxRestPresenceParams.clientId);
+        final Object connectionId = jsonMap.get(PlatformConstants.TxRestPresenceParams.connectionId);
+        if (limit != null) {
+            params[index++] = new Param(PlatformConstants.TxRestPresenceParams.limit, (Integer) limit);
+        }
+        if (clientId != null) {
+            params[index++] = new Param(PlatformConstants.TxRestPresenceParams.clientId, (String) clientId);
+        }
+        if (connectionId != null) {
+            params[index] = new Param(PlatformConstants.TxRestPresenceParams.connectionId, (String) connectionId);
         }
         return params;
     }
@@ -563,6 +589,38 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.data, c.data);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.encoding, c.encoding);
         writeValueToJson(jsonMap, PlatformConstants.TxMessage.extras, c.extras);
+        return jsonMap;
+    }
+
+    private String encodePresenceAction(PresenceMessage.Action action) {
+        switch (action) {
+            case absent:
+                return PlatformConstants.TxEnumConstants.absent;
+            case leave:
+                return PlatformConstants.TxEnumConstants.leave;
+            case enter:
+                return PlatformConstants.TxEnumConstants.enter;
+            case present:
+                return PlatformConstants.TxEnumConstants.present;
+            case update:
+                return PlatformConstants.TxEnumConstants.update;
+            default:
+                return null;
+        }
+    }
+
+    private Map<String, Object> encodePresenceMessage(PresenceMessage c) {
+        if (c == null) return null;
+        final HashMap<String, Object> jsonMap = new HashMap<>();
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.id, c.id);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.action, encodePresenceAction(c.action));
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.clientId, c.clientId);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.connectionId, c.connectionId);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.timestamp, c.timestamp);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.data, c.data);
+        writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.encoding, c.encoding);
+        // PresenceMessage#extras is not supported in ably-java
+        // Track @ https://github.com/ably/ably-flutter/issues/14
         return jsonMap;
     }
 

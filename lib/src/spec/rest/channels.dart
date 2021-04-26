@@ -38,7 +38,7 @@ abstract class RestChannelInterface {
   ///
   /// can only query presence on the channel and presence history
   /// https://docs.ably.io/client-lib-development-guide/features/#RSL3
-  RestPresenceInterface presence;
+  RestPresenceInterface get presence;
 
   /// fetch message history on this channel
   ///
