@@ -1,5 +1,30 @@
 ///Transmission protocol custom types. Will be used by codecs
-const List<Map<String, dynamic>> _types = [
+Iterable<Map<String, dynamic>> get _types sync* {
+  const platformTypes = <String>[
+    // Ably flutter plugin protocol message
+    'ablyMessage',
+    'ablyEventMessage',
+
+    //Other ably objects
+    'clientOptions',
+    'messageData',
+    'message',
+    'tokenParams',
+    'tokenDetails',
+    'tokenRequest',
+    'paginatedResult',
+    'restHistoryParams',
+    'realtimeHistoryParams',
+    'restPresenceParams',
+    'presenceMessage',
+    'realtimePresenceParams',
+    'errorInfo',
+
+    // Events
+    'connectionStateChange',
+    'channelStateChange',
+  ];
+
   // Custom type values must be over 127. At the time of writing
   // the standard message codec encodes them as an unsigned byte
   // which means the maximum type value is 255. If we get to the
@@ -10,30 +35,11 @@ const List<Map<String, dynamic>> _types = [
   // value - perhaps of a wider type.
   //
   // https://api.flutter.dev/flutter/services/StandardMessageCodec/writeValue.html
-  //
-  // NOTE: 'value' must be unique across types
-
-  // Ably flutter plugin protocol message
-  {'name': 'ablyMessage', 'value': 128},
-  {'name': 'ablyEventMessage', 'value': 129},
-
-  //Other ably objects
-  {'name': 'clientOptions', 'value': 130},
-  {'name': 'message', 'value': 131},
-  {'name': 'tokenParams', 'value': 132},
-  {'name': 'tokenDetails', 'value': 133},
-  {'name': 'tokenRequest', 'value': 134},
-  {'name': 'paginatedResult', 'value': 135},
-  {'name': 'restHistoryParams', 'value': 136},
-  {'name': 'realtimeHistoryParams', 'value': 137},
-  {'name': 'restPresenceParams', 'value': 138},
-  {'name': 'presenceMessage', 'value': 139},
-  {'name': 'errorInfo', 'value': 144},
-
-  // Events
-  {'name': 'connectionStateChange', 'value': 201},
-  {'name': 'channelStateChange', 'value': 202}
-];
+  var index = 128;
+  for (final platformType in platformTypes) {
+    yield {'name': platformType, 'value': index++};
+  }
+}
 
 ///Platform method names
 const List<Map<String, dynamic>> _platformMethods = [
@@ -59,6 +65,12 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'attachRealtimeChannel', 'value': 'attachRealtimeChannel'},
   {'name': 'detachRealtimeChannel', 'value': 'detachRealtimeChannel'},
   {'name': 'setRealtimeChannelOptions', 'value': 'setRealtimeChannelOptions'},
+  {'name': 'realtimePresenceGet', 'value': 'realtimePresenceGet'},
+  {'name': 'realtimePresenceHistory', 'value': 'realtimePresenceHistory'},
+  {'name': 'realtimePresenceEnter', 'value': 'realtimePresenceEnter'},
+  {'name': 'realtimePresenceUpdate', 'value': 'realtimePresenceUpdate'},
+  {'name': 'realtimePresenceLeave', 'value': 'realtimePresenceLeave'},
+  {'name': 'onRealtimePresenceMessage', 'value': 'onRealtimePresenceMessage'},
   {
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
@@ -84,7 +96,13 @@ const List<Map<String, dynamic>> _platformMethods = [
 const List<Map<String, dynamic>> _objects = [
   {
     'name': 'TransportKeys',
-    'properties': <String>['channelName', 'params']
+    'properties': <String>[
+      'channelName',
+      'params',
+      'data',
+      'clientId',
+      'options',
+    ]
   },
   {
     'name': 'AblyMessage',
@@ -104,6 +122,10 @@ const List<Map<String, dynamic>> _objects = [
       'requestId',
       'cause'
     ]
+  },
+  {
+    'name': 'MessageData',
+    'properties': <String>['data', 'type']
   },
   {
     'name': 'ClientOptions',
@@ -260,6 +282,14 @@ const List<Map<String, dynamic>> _objects = [
     'name': 'RestPresenceParams',
     'properties': <String>[
       'limit',
+      'clientId',
+      'connectionId',
+    ]
+  },
+  {
+    'name': 'RealtimePresenceParams',
+    'properties': <String>[
+      'waitForSync',
       'clientId',
       'connectionId',
     ]

@@ -14,8 +14,10 @@ class TestName {
   static const String restHistory = 'restHistory';
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
+
   // TODO(tiholic) handle restHistoryWithAuthCallback
-  static const String restPresence = 'restPresence';
+  static const String restPresenceGet = 'restPresenceGet';
+  static const String restPresenceHistory = 'restPresenceHistory';
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';
@@ -23,5 +25,10 @@ class TestName {
   static const String realtimeHistory = 'realtimeHistory';
   static const String realtimePublishWithAuthCallback =
       'realtimePublishWithAuthCallback';
-  // TODO(tiholic) handle realtimeHistoryWithAuthCallback
+  static const String realtimePresenceGet = 'realtimePresenceGet';
+  static const String realtimePresenceHistory = 'realtimePresenceHistory';
+  static const String realtimePresenceEnterUpdateLeave =
+      'realtimePresenceEnterUpdateLeave';
+  static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
+// TODO(tiholic) handle realtimeHistoryWithAuthCallback
 }

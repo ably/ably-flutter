@@ -2,32 +2,48 @@ import 'package:ably_flutter/ably_flutter.dart';
 
 import '../test_dispatcher.dart';
 import 'app_key_provision_helper.dart';
+import 'data.dart';
 import 'encoders.dart';
 import 'test_widget_abstract.dart';
 
-class RestPresenceTest extends TestWidget {
-  const RestPresenceTest(TestDispatcherState dispatcher) : super(dispatcher);
+class RestPresenceGetTest extends TestWidget {
+  const RestPresenceGetTest(TestDispatcherState dispatcher) : super(dispatcher);
 
   @override
-  TestWidgetState<TestWidget> createState() => RestPresenceTestState();
+  TestWidgetState<TestWidget> createState() => RestPresenceGetTestState();
 }
 
-class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
+class RestPresenceGetTestState extends TestWidgetState<RestPresenceGetTest> {
+  final logMessages = <List<String>>[];
+
+  ClientOptions getClientOptions(
+    String appKey, [
+    String clientId = 'someClientId',
+  ]) =>
+      ClientOptions.fromKey(appKey)
+        ..environment = 'sandbox'
+        ..clientId = clientId
+        ..logLevel = LogLevel.verbose
+        ..logHandler =
+            ({msg, exception}) => logMessages.add([msg, exception.toString()]);
+
   @override
   Future<void> test() async {
     widget.dispatcher.reportLog('init start');
-    final appKey = await provision('sandbox-');
-    final logMessages = <List<String>>[];
+    final appKey = (await provision('sandbox-')).toString();
 
-    final rest = Rest(
-      options: ClientOptions.fromKey(appKey.toString())
-        ..environment = 'sandbox'
-        ..clientId = 'someClientId'
-        ..logLevel = LogLevel.verbose
-        ..logHandler =
-            ({msg, exception}) => logMessages.add([msg, exception.toString()]),
-    );
+    final rest = Rest(options: getClientOptions(appKey));
     final channel = rest.channels.get('test');
+    final membersInitial = await _members(channel);
+
+    // enter multiple clients
+    for (var i = 0; i < messagesToPublish.length; i++) {
+      await Realtime(
+        options: getClientOptions(appKey, 'client-$i'),
+      ).channels.get('test').presence.enter(messagesToPublish[i][1]);
+    }
+
+    await Future.delayed(const Duration(seconds: 2));
 
     final membersDefault = await _members(channel);
     await Future.delayed(const Duration(seconds: 2));
@@ -38,28 +54,29 @@ class RestPresenceTestState extends TestWidgetState<RestPresenceTest> {
     final membersLimit2 = await _members(channel, RestPresenceParams(limit: 2));
     await Future.delayed(const Duration(seconds: 2));
 
-    final membersLimitClientId = await _members(
+    final membersClientId = await _members(
       channel,
       RestPresenceParams(clientId: 'client-1'),
     );
     await Future.delayed(const Duration(seconds: 2));
 
-    final membersLimitConnectionId = await _members(
+    // TODO(tiholic) extract connection ID from realtime instance
+    //  after implementing `id` update on connection object from platform
+    // Until then, `membersConnectionId` will be empty list
+    final membersConnectionId = await _members(
       channel,
       RestPresenceParams(connectionId: 'connection-1'),
     );
     await Future.delayed(const Duration(seconds: 2));
 
-    // TODO use realtime to update presence members and verify
-    //  See rest_history_test on how to handle the necessary
-
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
       'handle': await rest.handle,
+      'membersInitial': membersInitial,
       'membersDefault': membersDefault,
       'membersLimit4': membersLimit4,
       'membersLimit2': membersLimit2,
-      'membersLimitClientId': membersLimitClientId,
-      'membersLimitConnectionId': membersLimitConnectionId,
+      'membersClientId': membersClientId,
+      'membersConnectionId': membersConnectionId,
       'log': logMessages,
     });
   }

@@ -58,15 +58,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     String name,
     Object data,
   }) async {
-    var _messages = messages;
-    if (_messages == null) {
-      if (message != null) {
-        _messages = [message];
-      } else {
-        _messages = [Message(name: name, data: data)];
-      }
-    }
-    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
+    messages ??= [
+      if (message == null) Message(name: name, data: data) else message
+    ];
+    final queueItem = _PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -136,6 +131,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
                     pe.details as ErrorInfo,
                   )));
         }
+      } on Exception {
+        // removing item from queue and rethrowing exception
+        _publishQueue.remove(item);
+        rethrow;
       }
     }
     _publishInternalRunning = false;

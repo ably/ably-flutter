@@ -40,6 +40,10 @@ class _MyAppState extends State<MyApp> {
   ably.PaginatedResult<ably.Message> _realtimeHistory;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage> _restPresenceHistory;
+  StreamSubscription<ably.PresenceMessage> _channelPresenceMessageSubscription;
+  ably.PresenceMessage channelPresenceMessage;
+  List<ably.PresenceMessage> _realtimePresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage> _realtimePresenceHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -150,7 +154,6 @@ class _MyAppState extends State<MyApp> {
         ably.ClientOptions.fromKey('dBjBRg.vGOaQw:E7zmEdjv0tAVEgZ6')
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
-            // ignore: avoid_print
             print('Custom logger :: $msg $exception');
           }
         /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
@@ -179,7 +182,6 @@ class _MyAppState extends State<MyApp> {
 
     const name = 'Hello';
     const dynamic data = 'Flutter';
-    // ignore: avoid_print
     print('publishing messages... name "$name", message "$data"');
     try {
       await Future.wait([
@@ -204,10 +206,10 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
       ..environment = 'sandbox'
+      ..clientId = 'flutter-example-app'
       ..logLevel = ably.LogLevel.verbose
       ..autoConnect = false
       ..logHandler = ({msg, exception}) {
-        // ignore: avoid_print
         print('Custom logger :: $msg $exception');
       };
 
@@ -411,9 +413,7 @@ class _MyAppState extends State<MyApp> {
                 print('Sending rest message...');
                 final data = messagesToPublish[
                     (realtimePubCounter++ % messagesToPublish.length)];
-                final m = ably.Message()
-                  ..data = data
-                  ..name = 'Hello';
+                final m = ably.Message(name: 'Hello', data: data);
                 try {
                   switch (typeCounter % 3) {
                     case 0:
@@ -566,6 +566,137 @@ class _MyAppState extends State<MyApp> {
         });
       });
 
+  Widget createChannelPresenceSubscribeButton() => FlatButton(
+        onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
+                _channelPresenceMessageSubscription == null)
+            ? () {
+                final channel = _realtime.channels.get(defaultChannel);
+                final presenceMessageStream = channel.presence.subscribe();
+                _channelPresenceMessageSubscription =
+                    presenceMessageStream.listen((presenceMessage) {
+                  print('Channel presence message received: $presenceMessage');
+                  setState(() {
+                    channelPresenceMessage = presenceMessage;
+                  });
+                });
+                setState(() {});
+                print('Channel presence messages subscribed');
+                _subscriptionsToDispose.add(_channelMessageSubscription);
+              }
+            : null,
+        child: const Text('Subscribe'),
+      );
+
+  Widget createChannelPresenceUnSubscribeButton() => FlatButton(
+        onPressed: (_channelPresenceMessageSubscription != null)
+            ? () async {
+                await _channelPresenceMessageSubscription.cancel();
+                print('Channel presence messages unsubscribed');
+                setState(() {
+                  _channelPresenceMessageSubscription = null;
+                });
+              }
+            : null,
+        child: const Text('Unsubscribe'),
+      );
+
+  Widget getRealtimeChannelPresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                _realtimePresenceMembers = await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .get(ably.RealtimePresenceParams());
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Get Realtime presence members'),
+      );
+
+  Widget getRealtimeChannelPresenceHistory() =>
+      getPageNavigator<ably.PresenceMessage>(
+          name: 'Realtime presence history',
+          enabled: _realtime != null,
+          page: _realtimePresenceHistory,
+          query: () async => _realtime.channels
+              .get(defaultChannel)
+              .presence
+              .history(ably.RealtimeHistoryParams(limit: 10)),
+          onUpdate: (result) {
+            setState(() {
+              _realtimePresenceHistory = result;
+            });
+          });
+
+  final List _presenceData = [
+    null,
+    1,
+    'hello',
+    {'a': 'b'},
+    [
+      1,
+      'ably',
+      null,
+      {'a': 'b'}
+    ],
+    {
+      'c': ['a', 'b']
+    },
+  ];
+
+  int _presenceDataIncrementer = 0;
+
+  Object get _nextPresenceData =>
+      _presenceData[_presenceDataIncrementer++ % _presenceData.length]
+          .toString();
+
+  Object get _currentPresenceData => (_presenceDataIncrementer == 0)
+      ? null
+      : _presenceData[(_presenceDataIncrementer - 1) % _presenceData.length];
+
+  Widget enterRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .enter(_nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Enter'),
+      );
+
+  Widget updateRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .updateClient('flutter-example-app', _nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Update'),
+      );
+
+  Widget leaveRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .leave(_nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Leave'),
+      );
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -577,6 +708,10 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
+                  const Text(
+                    'System Details',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
                   provisionButton(),
@@ -585,6 +720,10 @@ class _MyAppState extends State<MyApp> {
                     ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
                   ),
                   const Divider(),
+                  const Text(
+                    'Realtime',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRealtimeButton(),
                   Text(
                     'Realtime:'
@@ -614,6 +753,10 @@ class _MyAppState extends State<MyApp> {
                       Expanded(child: createChannelUnSubscribeButton()),
                     ],
                   ),
+                  const Text(
+                    'Channel Messages',
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Text('Message from channel: ${channelMessage?.data ?? '-'}'),
                   createChannelPublishButton(),
                   getRealtimeChannelHistory(),
@@ -621,7 +764,49 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
                           ?.toList() ??
                       [],
+                  const Text(
+                    'Presence',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text('Current Data: $_currentPresenceData'),
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: createChannelPresenceSubscribeButton()),
+                      Expanded(child: createChannelPresenceUnSubscribeButton()),
+                    ],
+                  ),
+                  Text(
+                    'Presence Message from channel:'
+                    ' ${channelPresenceMessage?.data ?? '-'}',
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: enterRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: updateRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: leaveRealtimePresence(),
+                      ),
+                    ],
+                  ),
+                  getRealtimeChannelPresence(),
+                  ..._realtimePresenceMembers
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
+                  getRealtimeChannelPresenceHistory(),
+                  ..._realtimePresenceHistory?.items
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
                   const Divider(),
+                  const Text(
+                    'Rest',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRestButton(),
                   Text('Rest: '
                       '${_rest?.toString() ?? 'Ably Rest not created yet.'}'),

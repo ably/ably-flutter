@@ -73,8 +73,16 @@ class Codec extends StandardMessageCodec {
           _CodecPair<RestHistoryParams>(_encodeRestHistoryParams, null),
       CodecTypes.restPresenceParams:
           _CodecPair<RestPresenceParams>(_encodeRestPresenceParams, null),
+      CodecTypes.realtimePresenceParams: _CodecPair<RealtimePresenceParams>(
+        _encodeRealtimePresenceParams,
+        null,
+      ),
 
       CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
+      CodecTypes.messageData: _CodecPair<MessageData>(
+        _encodeChannelMessageData,
+        _decodeChannelMessageData,
+      ),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
       CodecTypes.presenceMessage:
@@ -108,6 +116,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenParams;
     } else if (value is TokenRequest) {
       return CodecTypes.tokenRequest;
+    } else if (value is MessageData) {
+      return CodecTypes.messageData;
     } else if (value is Message) {
       return CodecTypes.message;
     } else if (value is RealtimeHistoryParams) {
@@ -116,6 +126,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.restHistoryParams;
     } else if (value is RestPresenceParams) {
       return CodecTypes.restPresenceParams;
+    } else if (value is RealtimePresenceParams) {
+      return CodecTypes.realtimePresenceParams;
     } else if (value is ErrorInfo) {
       return CodecTypes.errorInfo;
     } else if (value is AblyMessage) {
@@ -284,6 +296,17 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  Map<String, dynamic> _encodeRealtimePresenceParams(
+      final RealtimePresenceParams v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRealtimePresenceParams.waitForSync, v.waitForSync);
+    _writeToJson(jsonMap, TxRealtimePresenceParams.clientId, v.clientId);
+    _writeToJson(
+        jsonMap, TxRealtimePresenceParams.connectionId, v.connectionId);
+    return jsonMap;
+  }
+
   /// Encodes [RealtimeHistoryParams] to a Map
   /// returns null of passed value [v] is null
   Map<String, dynamic> _encodeRealtimeHistoryParams(
@@ -331,6 +354,13 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
     _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
     _writeToJson(jsonMap, TxAblyEventMessage.message, message);
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeChannelMessageData(final MessageData v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxMessageData.data, v.data);
     return jsonMap;
   }
 
@@ -685,21 +715,27 @@ class Codec extends StandardMessageCodec {
         resumed: resumed, reason: reason);
   }
 
+  MessageData _decodeChannelMessageData(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    return MessageData.fromValue(
+        _readFromJson<Object>(jsonMap, TxMessageData.data));
+  }
+
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
-    final message = Message(
-        name: _readFromJson<String>(jsonMap, TxMessage.name),
-        clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
-        data: _readFromJson<dynamic>(jsonMap, TxMessage.data))
-      ..id = _readFromJson<String>(jsonMap, TxMessage.id)
-      ..connectionId = _readFromJson<String>(jsonMap, TxMessage.connectionId)
-      ..encoding = _readFromJson<String>(jsonMap, TxMessage.encoding)
-      ..extras = _readFromJson<Map>(jsonMap, TxMessage.extras);
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
-    if (timestamp != null) {
-      message.timestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    }
-    return message;
+    return Message(
+      name: _readFromJson<String>(jsonMap, TxMessage.name),
+      clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
+      data: _readFromJson<dynamic>(jsonMap, TxMessage.data),
+      id: _readFromJson<String>(jsonMap, TxMessage.id),
+      connectionId: _readFromJson<String>(jsonMap, TxMessage.connectionId),
+      encoding: _readFromJson<String>(jsonMap, TxMessage.encoding),
+      extras: _readFromJson<Map>(jsonMap, TxMessage.extras),
+      timestamp: (timestamp == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(timestamp),
+    );
   }
 
   /// Decodes [action] to [PresenceAction] enum if not null

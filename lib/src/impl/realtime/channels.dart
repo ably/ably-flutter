@@ -8,6 +8,7 @@ import '../../../ably_flutter.dart';
 import '../../spec/push/channels.dart';
 import '../message.dart';
 import '../platform_object.dart';
+import 'presence.dart';
 import 'realtime.dart';
 
 /// Plugin based implementation of Realtime channel
@@ -22,14 +23,17 @@ class RealtimeChannel extends PlatformObject
   @override
   ChannelOptions options;
 
+  RealtimePresence _presence;
+
   @override
-  RealtimePresence presence;
+  RealtimePresence get presence => _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
   RealtimeChannel(this.realtime, this.name, this.options) : super() {
+    _presence = RealtimePresence(this);
     state = ChannelState.initialized;
     on().listen((event) => state = event.current);
   }
@@ -68,15 +72,10 @@ class RealtimeChannel extends PlatformObject
     String name,
     Object data,
   }) async {
-    var _messages = messages;
-    if (_messages == null) {
-      if (message != null) {
-        _messages = [message];
-      } else {
-        _messages = [Message(name: name, data: data)];
-      }
-    }
-    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
+    messages ??= [
+      if (message == null) Message(name: name, data: data) else message
+    ];
+    final queueItem = _PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -143,6 +142,10 @@ class RealtimeChannel extends PlatformObject
                     pe.details as ErrorInfo,
                   )));
         }
+      } on Exception {
+        // removing item from queue and rethrowing exception
+        _publishQueue.remove(item);
+        rethrow;
       }
     }
     _publishInternalRunning = false;
@@ -198,18 +201,18 @@ class RealtimeChannel extends PlatformObject
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
-      listen(PlatformMethod.onRealtimeChannelStateChanged, _payload)
-          .map((stateChange) => stateChange as ChannelStateChange)
-          .where(
-            (stateChange) =>
-                channelEvent == null || stateChange.event == channelEvent,
-          );
+      listen<ChannelStateChange>(
+        PlatformMethod.onRealtimeChannelStateChanged,
+        _payload,
+      ).where(
+        (stateChange) =>
+            channelEvent == null || stateChange.event == channelEvent,
+      );
 
   @override
   Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
-    return listen(PlatformMethod.onRealtimeChannelMessage, _payload)
-        .map((message) => message as Message)
+    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, _payload)
         .where((message) =>
             subscribedNames.isEmpty ||
             subscribedNames.any((n) => n == message.name));

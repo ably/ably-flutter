@@ -9,18 +9,20 @@ typedef NS_ENUM(UInt8, _Value) {
     ablyMessageCodecType = 128,
     ablyEventMessageCodecType = 129,
     clientOptionsCodecType = 130,
-    messageCodecType = 131,
-    tokenParamsCodecType = 132,
-    tokenDetailsCodecType = 133,
-    tokenRequestCodecType = 134,
-    paginatedResultCodecType = 135,
-    restHistoryParamsCodecType = 136,
-    realtimeHistoryParamsCodecType = 137,
-    restPresenceParamsCodecType = 138,
-    presenceMessageCodecType = 139,
-    errorInfoCodecType = 144,
-    connectionStateChangeCodecType = 201,
-    channelStateChangeCodecType = 202,
+    messageDataCodecType = 131,
+    messageCodecType = 132,
+    tokenParamsCodecType = 133,
+    tokenDetailsCodecType = 134,
+    tokenRequestCodecType = 135,
+    paginatedResultCodecType = 136,
+    restHistoryParamsCodecType = 137,
+    realtimeHistoryParamsCodecType = 138,
+    restPresenceParamsCodecType = 139,
+    presenceMessageCodecType = 140,
+    realtimePresenceParamsCodecType = 141,
+    errorInfoCodecType = 142,
+    connectionStateChangeCodecType = 143,
+    channelStateChangeCodecType = 144,
 };
 
 
@@ -41,6 +43,12 @@ extern NSString *const AblyPlatformMethod_closeRealtime;
 extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_detachRealtimeChannel;
 extern NSString *const AblyPlatformMethod_setRealtimeChannelOptions;
+extern NSString *const AblyPlatformMethod_realtimePresenceGet;
+extern NSString *const AblyPlatformMethod_realtimePresenceHistory;
+extern NSString *const AblyPlatformMethod_realtimePresenceEnter;
+extern NSString *const AblyPlatformMethod_realtimePresenceUpdate;
+extern NSString *const AblyPlatformMethod_realtimePresenceLeave;
+extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
@@ -53,6 +61,9 @@ extern NSString *const AblyPlatformMethod_firstPage;
 @interface TxTransportKeys : NSObject
 extern NSString *const TxTransportKeys_channelName;
 extern NSString *const TxTransportKeys_params;
+extern NSString *const TxTransportKeys_data;
+extern NSString *const TxTransportKeys_clientId;
+extern NSString *const TxTransportKeys_options;
 @end
 
 @interface TxAblyMessage : NSObject
@@ -74,6 +85,11 @@ extern NSString *const TxErrorInfo_statusCode;
 extern NSString *const TxErrorInfo_href;
 extern NSString *const TxErrorInfo_requestId;
 extern NSString *const TxErrorInfo_cause;
+@end
+
+@interface TxMessageData : NSObject
+extern NSString *const TxMessageData_data;
+extern NSString *const TxMessageData_type;
 @end
 
 @interface TxClientOptions : NSObject
@@ -221,4 +237,10 @@ extern NSString *const TxRealtimeHistoryParams_untilAttach;
 extern NSString *const TxRestPresenceParams_limit;
 extern NSString *const TxRestPresenceParams_clientId;
 extern NSString *const TxRestPresenceParams_connectionId;
+@end
+
+@interface TxRealtimePresenceParams : NSObject
+extern NSString *const TxRealtimePresenceParams_waitForSync;
+extern NSString *const TxRealtimePresenceParams_clientId;
+extern NSString *const TxRealtimePresenceParams_connectionId;
 @end

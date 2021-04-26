@@ -23,6 +23,12 @@ NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
 NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChannel";
 NSString *const AblyPlatformMethod_detachRealtimeChannel= @"detachRealtimeChannel";
 NSString *const AblyPlatformMethod_setRealtimeChannelOptions= @"setRealtimeChannelOptions";
+NSString *const AblyPlatformMethod_realtimePresenceGet= @"realtimePresenceGet";
+NSString *const AblyPlatformMethod_realtimePresenceHistory= @"realtimePresenceHistory";
+NSString *const AblyPlatformMethod_realtimePresenceEnter= @"realtimePresenceEnter";
+NSString *const AblyPlatformMethod_realtimePresenceUpdate= @"realtimePresenceUpdate";
+NSString *const AblyPlatformMethod_realtimePresenceLeave= @"realtimePresenceLeave";
+NSString *const AblyPlatformMethod_onRealtimePresenceMessage= @"onRealtimePresenceMessage";
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
@@ -35,6 +41,9 @@ NSString *const AblyPlatformMethod_firstPage= @"firstPage";
 @implementation TxTransportKeys
 NSString *const TxTransportKeys_channelName = @"channelName";
 NSString *const TxTransportKeys_params = @"params";
+NSString *const TxTransportKeys_data = @"data";
+NSString *const TxTransportKeys_clientId = @"clientId";
+NSString *const TxTransportKeys_options = @"options";
 @end
 
 @implementation TxAblyMessage
@@ -56,6 +65,11 @@ NSString *const TxErrorInfo_statusCode = @"statusCode";
 NSString *const TxErrorInfo_href = @"href";
 NSString *const TxErrorInfo_requestId = @"requestId";
 NSString *const TxErrorInfo_cause = @"cause";
+@end
+
+@implementation TxMessageData
+NSString *const TxMessageData_data = @"data";
+NSString *const TxMessageData_type = @"type";
 @end
 
 @implementation TxClientOptions
@@ -203,4 +217,10 @@ NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
 NSString *const TxRestPresenceParams_limit = @"limit";
 NSString *const TxRestPresenceParams_clientId = @"clientId";
 NSString *const TxRestPresenceParams_connectionId = @"connectionId";
+@end
+
+@implementation TxRealtimePresenceParams
+NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
+NSString *const TxRealtimePresenceParams_clientId = @"clientId";
+NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
 @end

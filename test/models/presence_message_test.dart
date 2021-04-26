@@ -93,21 +93,21 @@ void main() {
 
     group('memberKey attribute', () {
       test('is connectionId:clientId', () {
-        const presenceMessage =
+        final presenceMessage =
             PresenceMessage(clientId: clientId, connectionId: connectionId);
         expect(presenceMessage.memberKey, '$connectionId:$clientId');
       });
       test('is unique with the same client id across multiple connections', () {
-        const presenceMessage =
+        final presenceMessage =
             PresenceMessage(clientId: clientId, connectionId: connectionId);
-        const presenceMessage2 =
+        final presenceMessage2 =
             PresenceMessage(clientId: clientId, connectionId: 'different');
         expect(presenceMessage.memberKey == presenceMessage2.memberKey, false);
       });
       test('is unique with a single connection and different client_ids', () {
-        const presenceMessage =
+        final presenceMessage =
             PresenceMessage(clientId: clientId, connectionId: connectionId);
-        const presenceMessage2 =
+        final presenceMessage2 =
             PresenceMessage(clientId: 'different', connectionId: connectionId);
         expect(presenceMessage.memberKey == presenceMessage2.memberKey, false);
       });

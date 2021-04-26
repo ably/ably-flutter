@@ -22,10 +22,7 @@ void runTests({
 
       // Connect to the Flutter driver before running any tests.
       setUpAll(() async {
-        driver = await FlutterDriver.connect(
-          printCommunication: true,
-          timeout: const Duration(seconds: 60),
-        );
+        driver = await FlutterDriver.connect(printCommunication: true);
       });
 
       tearDownAll(() async {
@@ -35,7 +32,11 @@ void runTests({
       });
 
       tests[groupName].forEach((testName, testFunction) {
-        test(testName, () => testFunction(driver));
+        test(
+          testName,
+          () => testFunction(driver),
+          timeout: const Timeout(Duration(minutes: 2)),
+        );
       });
     });
   }

@@ -8,7 +8,9 @@ export 'package:ably_flutter_integration_test/test/test_names.dart';
 ///
 /// Helper to minimize repeatedly used code in driver tests.
 Future<TestControlMessage> getTestResponse(
-    FlutterDriver driver, TestControlMessage message) async {
+  FlutterDriver driver,
+  TestControlMessage message,
+) async {
   final result = await driver.requestData(message.toJsonEncoded());
   return TestControlMessage.fromJsonEncoded(result);
 }

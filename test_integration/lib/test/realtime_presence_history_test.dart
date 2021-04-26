@@ -6,16 +6,17 @@ import 'data.dart';
 import 'encoders.dart';
 import 'test_widget_abstract.dart';
 
-class RestPresenceHistoryTest extends TestWidget {
-  const RestPresenceHistoryTest(TestDispatcherState dispatcher)
+class RealtimePresenceHistoryTest extends TestWidget {
+  const RealtimePresenceHistoryTest(TestDispatcherState dispatcher)
       : super(dispatcher);
 
   @override
-  TestWidgetState<TestWidget> createState() => RestPresenceHistoryTestState();
+  TestWidgetState<TestWidget> createState() =>
+      RealtimePresenceHistoryTestState();
 }
 
-class RestPresenceHistoryTestState
-    extends TestWidgetState<RestPresenceHistoryTest> {
+class RealtimePresenceHistoryTestState
+    extends TestWidgetState<RealtimePresenceHistoryTest> {
   @override
   Future<void> test() async {
     widget.dispatcher.reportLog('init start');
@@ -29,14 +30,13 @@ class RestPresenceHistoryTestState
       ..logHandler =
           ({msg, exception}) => logMessages.add([msg, exception.toString()]);
 
-    final rest = Rest(options: options);
-    final channel = rest.channels.get('test');
+    final realtime = Realtime(options: options);
+    final channel = realtime.channels.get('test');
 
     final historyInitial = await _history(channel);
 
     // creating presence history on channel
-    final realtimePresence =
-        Realtime(options: options).channels.get('test').presence;
+    final realtimePresence = channel.presence;
     // single client enters channel
     await realtimePresence.enter(messagesToPublish.first[1]);
     // updates, multiple times with different messages
@@ -49,15 +49,17 @@ class RestPresenceHistoryTestState
     final historyDefault = await _history(channel);
     await Future.delayed(const Duration(seconds: 2));
 
-    final historyLimit4 = await _history(channel, RestHistoryParams(limit: 4));
+    final historyLimit4 =
+        await _history(channel, RealtimeHistoryParams(limit: 4));
     await Future.delayed(const Duration(seconds: 2));
 
-    final historyLimit2 = await _history(channel, RestHistoryParams(limit: 2));
+    final historyLimit2 =
+        await _history(channel, RealtimeHistoryParams(limit: 2));
     await Future.delayed(const Duration(seconds: 2));
 
     final historyForwards = await _history(
       channel,
-      RestHistoryParams(direction: 'forwards'),
+      RealtimeHistoryParams(direction: 'forwards'),
     );
     await Future.delayed(const Duration(seconds: 2));
 
@@ -76,13 +78,15 @@ class RestPresenceHistoryTestState
     await Future.delayed(const Duration(seconds: 2));
 
     final historyWithStart =
-        await _history(channel, RestHistoryParams(start: time1));
-    final historyWithStartAndEnd =
-        await _history(channel, RestHistoryParams(start: time1, end: time2));
+        await _history(channel, RealtimeHistoryParams(start: time1));
+    final historyWithStartAndEnd = await _history(
+      channel,
+      RealtimeHistoryParams(start: time1, end: time2),
+    );
     final historyAll = await _history(channel);
 
     widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'handle': await rest.handle,
+      'handle': await realtime.handle,
       'historyInitial': historyInitial,
       'historyDefault': historyDefault,
       'historyLimit4': historyLimit4,
@@ -96,8 +100,8 @@ class RestPresenceHistoryTestState
   }
 
   Future<List<Map<String, dynamic>>> _history(
-    RestChannel channel, [
-    RestHistoryParams params,
+    RealtimeChannel channel, [
+    RealtimeHistoryParams params,
   ]) async {
     var results = await channel.presence.history(params);
     final messages =
@@ -105,7 +109,8 @@ class RestPresenceHistoryTestState
     while (results.hasNext()) {
       results = await results.next();
       messages.addAll(
-          encodeList<PresenceMessage>(results.items, encodePresenceMessage));
+        encodeList<PresenceMessage>(results.items, encodePresenceMessage),
+      );
     }
     return messages;
   }
