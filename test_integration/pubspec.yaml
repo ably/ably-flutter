@@ -1,14 +1,17 @@
 name: ably_flutter_integration_test
-description: A new Flutter project.
+description: Integration tests for Ably Flutter plugin.
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   ably_flutter:
-    path: ".."
+    path: '..'
+  ably_flutter_example:
+    path: '../example'
+  args: ^1.6.0
   flutter:
     sdk: flutter
 

@@ -1,9 +1,10 @@
 import 'generated/platformconstants.dart' show PlatformMethod;
-import 'platform.dart' show invoke;
+import 'platform.dart' show invokePlatformMethod;
 
 /// Get android/iOS platform version
 Future<String> platformVersion() async =>
-    invoke(PlatformMethod.getPlatformVersion);
+    invokePlatformMethod(PlatformMethod.getPlatformVersion);
 
 /// Get ably library version
-Future<String> version() async => invoke(PlatformMethod.getVersion);
+Future<String> version() async =>
+    invokePlatformMethod(PlatformMethod.getVersion);

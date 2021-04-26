@@ -1,27 +1,15 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import '../factory/reporter.dart';
 
-import '../test_dispatcher.dart';
-import 'test_widget_abstract.dart';
+Future<Map<String, dynamic>> testPlatformAndAblyVersion({
+  Reporter reporter,
+  Map<String, dynamic> payload,
+}) async {
+  final platformVersion = await ably.platformVersion();
+  final ablyVersion = await ably.version();
 
-class PlatformAndAblyVersionTest extends TestWidget {
-  const PlatformAndAblyVersionTest(TestDispatcherState dispatcher)
-      : super(dispatcher);
-
-  @override
-  TestWidgetState<TestWidget> createState() =>
-      PlatformAndAblyVersionTestState();
-}
-
-class PlatformAndAblyVersionTestState
-    extends TestWidgetState<PlatformAndAblyVersionTest> {
-  @override
-  Future<void> test() async {
-    final platformVersion = await ably.platformVersion();
-    final ablyVersion = await ably.version();
-
-    widget.dispatcher.reportTestCompletion({
-      'platformVersion': platformVersion,
-      'ablyVersion': ablyVersion,
-    });
-  }
+  return {
+    'platformVersion': platformVersion,
+    'ablyVersion': ablyVersion,
+  };
 }

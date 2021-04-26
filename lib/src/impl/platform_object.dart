@@ -55,7 +55,7 @@ abstract class PlatformObject {
   /// invoke platform method channel without AblyMessage encapsulation
   @protected
   Future<T> invokeRaw<T>(final String method, [final Object arguments]) async =>
-      platform.invoke<T>(method, arguments);
+      platform.invokePlatformMethod<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
   @protected

@@ -1,8 +1,8 @@
-import 'dart:convert' show json;
+import 'dart:convert';
 
 import 'package:flutter_driver/flutter_driver.dart';
 
-export 'package:ably_flutter_integration_test/test/test_names.dart';
+export 'config/test_names.dart';
 
 /// Send a message to run a widget test and receive a response.
 ///
@@ -13,25 +13,6 @@ Future<TestControlMessage> getTestResponse(
 ) async {
   final result = await driver.requestData(message.toJsonEncoded());
   return TestControlMessage.fromJsonEncoded(result);
-}
-
-/// Passed to `enableFlutterDriverExtension` to receive messages sent by the
-/// driver tests.
-class DriverDataHandler {
-  /// Handler for a message sent from the driver test to the test widget.
-  Future<String> call(String encodedMessage) async {
-    if (callback != null) {
-      final message =
-          TestControlMessage.fromJson(json.decode(encodedMessage) as Map);
-      final response = await callback(message);
-      return json.encode(response);
-    }
-
-    return Future.error('No callback registered.');
-  }
-
-  /// The test dispacher can register a callback to get notified about messages.
-  Future<TestControlMessage> Function(TestControlMessage message) callback;
 }
 
 /// Used to encode and decode messages between driver test and test widget.
@@ -67,4 +48,6 @@ class TestControlMessage {
       };
 
   String toJsonEncoded() => json.encode(toJson());
+
+  String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 }

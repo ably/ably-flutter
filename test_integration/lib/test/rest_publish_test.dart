@@ -1,38 +1,30 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_example/provisioning.dart';
 
-import '../test_dispatcher.dart';
-import 'app_key_provision_helper.dart';
-import 'data.dart';
-import 'test_widget_abstract.dart';
+import '../config/data.dart';
+import '../factory/reporter.dart';
 
-class RestPublishTest extends TestWidget {
-  const RestPublishTest(TestDispatcherState dispatcher) : super(dispatcher);
+Future<Map<String, dynamic>> testRestPublish({
+  Reporter reporter,
+  Map<String, dynamic> payload,
+}) async {
+  reporter.reportLog('init start');
+  final appKey = await provision('sandbox-');
+  final logMessages = <List<String>>[];
 
-  @override
-  TestWidgetState<TestWidget> createState() => RestPublishTestState();
-}
-
-class RestPublishTestState extends TestWidgetState<RestPublishTest> {
-  @override
-  Future<void> test() async {
-    widget.dispatcher.reportLog('init start');
-    final appKey = await provision('sandbox-');
-    final logMessages = <List<String>>[];
-
-    final rest = Rest(
-      options: ClientOptions.fromKey(appKey.toString())
-        ..environment = 'sandbox'
-        ..clientId = 'someClientId'
-        ..logLevel = LogLevel.verbose
-        ..logHandler =
-            ({msg, exception}) => logMessages.add([msg, exception.toString()]),
-    );
-    await restMessagesPublishUtil(rest.channels.get('test'));
-    widget.dispatcher.reportTestCompletion(<String, dynamic>{
-      'handle': await rest.handle,
-      'log': logMessages,
-    });
-  }
+  final rest = Rest(
+    options: ClientOptions.fromKey(appKey.toString())
+      ..environment = 'sandbox'
+      ..clientId = 'someClientId'
+      ..logLevel = LogLevel.verbose
+      ..logHandler =
+          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+  );
+  await restMessagesPublishUtil(rest.channels.get('test'));
+  return {
+    'handle': await rest.handle,
+    'log': logMessages,
+  };
 }
 
 Future<void> restMessagesPublishUtil(RestChannel channel) async {
