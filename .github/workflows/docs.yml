@@ -52,7 +52,7 @@ jobs:
       - name: Define Globally Accessible Deployment Environment Variables
         env:
           LOCAL_DEPLOYMENT_ENVIRONMENT: ${{ format('staging/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
-          LOCAL_DEPLOYMENT_ENVIRONMENT_URL: ${{ format('https://sdk.ably.com/builds/ably/ably-flutter/{0}', env.DEPLOYMENT_REMOTE_PATH) }}
+          LOCAL_DEPLOYMENT_ENVIRONMENT_URL: ${{ format('https://sdk.ably.com/builds/{0}/{1}', github.repository, env.DEPLOYMENT_REMOTE_PATH) }}
           LOCAL_DEPLOYMENT_LOG_URL: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id) }}
         run: |
           echo "DEPLOYMENT_ENVIRONMENT=$LOCAL_DEPLOYMENT_ENVIRONMENT" >> $GITHUB_ENV
@@ -109,7 +109,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SDK_S3_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
         run: |
-          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/ably/ably-flutter/$DEPLOYMENT_REMOTE_PATH"
+          aws s3 sync --acl public-read doc/api "s3://sdk.ably.com/builds/$GITHUB_REPOSITORY/$DEPLOYMENT_REMOTE_PATH"
 
       - name: Set Deployment Status to Success
         uses: octokit/request-action@v2.x
