@@ -1,6 +1,6 @@
 # Ably Flutter Plugin
 
-![flutter_integration](https://github.com/ably/ably-flutter/workflows/flutter_integration/badge.svg)
+![flutter_integration](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)
 
 A
 [Flutter](https://flutter.dev/)
