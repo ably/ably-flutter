@@ -61,6 +61,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         _map.put(PlatformConstants.PlatformMethod.publish, this::publishRestMessage);
         _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
         _map.put(PlatformConstants.PlatformMethod.restPresenceGet, this::getRestPresence);
+        _map.put(PlatformConstants.PlatformMethod.restPresenceHistory, this::getRestPresenceHistory);
 
         //Realtime
         _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
@@ -248,6 +249,22 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                     .getRest(messageData.handle)
                     .channels.get(channelName)
                     .presence.getAsync(params, this.paginatedResponseHandler(result, null));
+        });
+    }
+
+    private void getRestPresenceHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+            final Map<String, Object> map = messageData.message;
+            final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+            Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+            if (params == null) {
+                params = new Param[0];
+            }
+            ablyLibrary
+                    .getRest(messageData.handle)
+                    .channels.get(channelName)
+                    .presence.historyAsync(params, this.paginatedResponseHandler(result, null));
         });
     }
 

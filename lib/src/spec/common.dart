@@ -73,10 +73,10 @@ class ErrorInfo {
 
   @override
   String toString() => 'ErrorInfo'
-    ' message=$message'
-    ' code=$code'
-    ' statusCode=$statusCode'
-    ' href=$href';
+      ' message=$message'
+      ' code=$code'
+      ' statusCode=$statusCode'
+      ' href=$href';
 }
 
 /// MessageCount contains aggregate counts for messages and data transferred
@@ -407,10 +407,10 @@ class RestHistoryParams {
 
   @override
   String toString() => 'RestHistoryParams:'
-    ' start=$start'
-    ' end=$end'
-    ' direction=$direction'
-    ' limit=$limit';
+      ' start=$start'
+      ' end=$end'
+      ' direction=$direction'
+      ' limit=$limit';
 }
 
 /// https://docs.ably.io/client-lib-development-guide/features/#RTL10
@@ -902,6 +902,8 @@ class Stats {
 
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
+///
+/// https://docs.ably.io/client-lib-development-guide/features/#RSN1
 abstract class Channels<ChannelType> {
   /// stores channel name vs instance of [ChannelType]
   final _channels = <String, ChannelType>{};

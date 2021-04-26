@@ -44,7 +44,7 @@ Future<Map> _provisionApp(final String environmentPrefix) async {
   final response = await http.post(url, body: body, headers: _requestHeaders);
   if (response.statusCode != HttpStatus.created) {
     throw HttpException("Server didn't return success."
-      ' Status: ${response.statusCode}');
+        ' Status: ${response.statusCode}');
   }
   return jsonDecode(response.body) as Map;
 }
@@ -66,5 +66,5 @@ Future<Map<String, dynamic>> getTokenRequest() async {
   //ignore: avoid_print
   print('tokenRequest from tokenRequest server: ${r.body}');
   return Map.castFrom<dynamic, dynamic, String, dynamic>(
-    jsonDecode(r.body) as Map);
+      jsonDecode(r.body) as Map);
 }

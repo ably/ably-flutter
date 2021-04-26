@@ -50,6 +50,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'publish', 'value': 'publish'},
   {'name': 'restHistory', 'value': 'restHistory'},
   {'name': 'restPresenceGet', 'value': 'restPresenceGet'},
+  {'name': 'restPresenceHistory', 'value': 'restPresenceHistory'},
 
   // Realtime
   {'name': 'createRealtimeWithOptions', 'value': 'createRealtimeWithOptions'},

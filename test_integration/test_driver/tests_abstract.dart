@@ -27,7 +27,7 @@ void runTests({
           timeout: const Duration(seconds: 60),
         );
       });
-      
+
       tearDownAll(() async {
         if (driver != null) {
           final _ = driver.close();

@@ -6,7 +6,7 @@ void main() {
   ///
   /// This test ensures that the default ClientOptions created on Dart side has
   /// null for all properties so that this works.
-  test('Default ClientOptions', () { 
+  test('Default ClientOptions', () {
     final clientOptions = ClientOptions();
     expect(clientOptions.clientId, isNull);
     expect(clientOptions.logLevel, LogLevel.info);

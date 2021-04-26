@@ -36,6 +36,7 @@ final public class PlatformConstants {
         public static final String publish = "publish";
         public static final String restHistory = "restHistory";
         public static final String restPresenceGet = "restPresenceGet";
+        public static final String restPresenceHistory = "restPresenceHistory";
         public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";

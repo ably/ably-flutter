@@ -3,12 +3,7 @@ import 'test_implementation/helper_tests.dart';
 import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
-enum TestGroup{
-  basicTests,
-  helperTests,
-  rest,
-  realtime
-}
+enum TestGroup { basicTests, helperTests, rest, realtime }
 
 final _tests = <TestGroup, Map<String, Function>>{
   TestGroup.basicTests: {

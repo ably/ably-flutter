@@ -1,0 +1,33 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+
+      - name: 'Install dependencies'
+        run: |
+          flutter pub get
+          cd test_integration && flutter pub get && cd ..
+          cd example && flutter pub get && cd ..
+
+      - name: 'Check formatting issues in the code'
+        run: flutter format --set-exit-if-changed .
+
+      - name: 'Flutter analyze help'
+        run: 'flutter analyze --help'
+        
+      - name: 'Statically analyze the Dart code for any errors'
+        run: 'flutter analyze --no-pub --no-fatal-infos .'  # suppressing info - deprecated entries fall under info, and CI shouldn't fail if there are any Deprecated APIs
+
+      - name: 'Run unit tests'
+        run: flutter test --no-pub

@@ -11,6 +11,17 @@ Map<String, dynamic> encodeMessage(Message message) => {
       'extras': message.extras,
     };
 
+Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
+      'id': message.id,
+      'action': message.action,
+      'clientId': message.clientId,
+      'connectionId': message.clientId,
+      'data': message.data,
+      'encoding': message.encoding,
+      'extras': message.extras,
+      'timestamp': message.timestamp.toIso8601String(),
+    };
+
 String enumValueToString(Object value) =>
     value.toString().substring(value.toString().indexOf('.') + 1);
 

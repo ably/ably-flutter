@@ -29,7 +29,6 @@ void main() {
     var isAuthenticated = false;
 
     methodChannel.setMockMethodCallHandler((methodCall) async {
-
       switch (methodCall.method) {
         case PlatformMethod.registerAbly:
           return true;
@@ -50,11 +49,11 @@ void main() {
           // PlatformChannel.
           if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
             await AblyMethodCallHandler(methodChannel).onRealtimeAuthCallback(
-              AblyMessage(TokenParams(timestamp: DateTime.now()),
-                handle: handle));
+                AblyMessage(TokenParams(timestamp: DateTime.now()),
+                    handle: handle));
             isAuthenticated = true;
             throw PlatformException(
-              code: ErrorCodes.authCallbackFailure.toString());
+                code: ErrorCodes.authCallbackFailure.toString());
           }
 
           publishedMessages.add(message);
@@ -62,7 +61,7 @@ void main() {
 
         default:
           return throw Exception('Unexpected method call: ${methodCall.method}'
-            ' args: ${methodCall.arguments}');
+              ' args: ${methodCall.arguments}');
       }
     });
   });
@@ -86,8 +85,10 @@ void main() {
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
     expect(messageData['channel'], 'test');
-    expect(messageData['name'], 'name');
-    expect(messageData['data'], 'data1');
+    expect(messageData['messages'], isA<List>());
+    final messages = List<Message>.from(messageData['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data1');
   });
 
   test('publish message with authCallback', () async {
@@ -110,14 +111,16 @@ void main() {
     final firstMessage = publishedMessages.first.message as AblyMessage;
     final messageData = firstMessage.message as Map<dynamic, dynamic>;
     expect(messageData['channel'], 'test');
-    expect(messageData['name'], 'name');
-    expect(messageData['data'], 'data2');
+    expect(messageData['messages'], isA<List>());
+    final messages = List<Message>.from(messageData['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data2');
   });
 
   test('publish realtime message with authCallback timing out', () async {
     // setup
     final tooMuchDelay =
-      Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
+        Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
     var authCallbackCounter = 0;
 
     Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
@@ -163,8 +166,10 @@ void main() {
         final firstMessage = publishedMessages.first.message as AblyMessage;
         final messageData = firstMessage.message as Map<dynamic, dynamic>;
         expect(messageData['channel'], 'test');
-        expect(messageData['name'], 'name');
-        expect(messageData['data'], 'data3-2');
+        expect(messageData['messages'], isA<List>());
+        final messages = List<Message>.from(messageData['messages'] as List);
+        expect(messages[0].name, 'name');
+        expect(messages[0].data, 'data3-2');
       }),
     );
   });
@@ -188,15 +193,17 @@ void main() {
     final message0 = publishedMessages[0].message as AblyMessage;
     final messageData0 = message0.message as Map<dynamic, dynamic>;
     expect(messageData0['channel'], 'test');
-    expect(messageData0['name'], 'name');
-    expect(messageData0['data'], 'data4');
+    expect(messageData0['messages'], isA<List>());
+    final messages = List<Message>.from(messageData0['messages'] as List);
+    expect(messages[0].name, 'name');
+    expect(messages[0].data, 'data4');
 
     final message1 = publishedMessages[1].message as AblyMessage;
     final messageData1 = message1.message as Map<dynamic, dynamic>;
     expect(messageData1['channel'], 'test');
-    expect(messageData1['name'], 'name');
-    expect(messageData1['data'], 'data5');
-
-    // });
+    expect(messageData1['messages'], isA<List>());
+    final messages1 = List<Message>.from(messageData1['messages'] as List);
+    expect(messages1[0].name, 'name');
+    expect(messages1[0].data, 'data5');
   }, timeout: Timeout.none);
 }

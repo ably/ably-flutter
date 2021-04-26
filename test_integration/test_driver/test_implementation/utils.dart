@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 
-void testAllPublishedMessages(Object messagesObject){
-
+void testAllPublishedMessages(Object messagesObject) {
   expect(messagesObject, isA<List<Map<String, dynamic>>>());
 
   final messages = messagesObject as List;
@@ -27,18 +26,30 @@ void testAllPublishedMessages(Object messagesObject){
 
   expect(messages[6]['name'], 'name3');
   expect(
-    messages[6]['data'],
-    equals({
-      'hello': 'ably',
-      'items': ['1', 2.2, true]
-    }));
+      messages[6]['data'],
+      equals({
+        'hello': 'ably',
+        'items': ['1', 2.2, true]
+      }));
 
   expect(messages[7]['name'], 'name3');
   expect(
-    messages[7]['data'],
-    equals([
-      {'hello': 'ably'},
-      'ably',
-      'realtime'
-    ]));
+      messages[7]['data'],
+      equals([
+        {'hello': 'ably'},
+        'ably',
+        'realtime'
+      ]));
+}
+
+void testAllPresenceMembers(
+  Object membersObject, {
+  Map<String, dynamic> filters,
+}) {
+  expect(membersObject, isA<List<Map<String, dynamic>>>());
+
+  final members = membersObject as List;
+
+  // TODO(tiholic) calculate length dynamically based on the filters
+  expect(members.length, equals(0));
 }

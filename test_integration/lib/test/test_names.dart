@@ -15,6 +15,7 @@ class TestName {
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
   // TODO(tiholic) handle restHistoryWithAuthCallback
+  static const String restPresence = 'restPresence';
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEvents = 'realtimeEvents';

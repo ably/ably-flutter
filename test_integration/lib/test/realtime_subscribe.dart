@@ -16,7 +16,6 @@ class RealtimeSubscribeTest extends TestWidget {
 
 class RealtimeSubscribeTestState
     extends TestWidgetState<RealtimeSubscribeTest> {
-
   @override
   Future<void> test() async {
     final appKey = await provision('sandbox-');
@@ -56,5 +55,4 @@ class RealtimeSubscribeTestState
     await subscription.cancel();
     return messages;
   }
-
 }

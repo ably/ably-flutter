@@ -133,7 +133,7 @@ class Realtime extends PlatformObject
                       'Timed out',
                       Timeouts.retryOperationOnAuthFailure,
                     ),
-          )));
+                  )));
     } finally {
       _authCallbackCompleter = null;
     }
