@@ -330,6 +330,18 @@ Future.delayed(Duration.zero, (){
 });
 ```
 
+## Known Limitations
+
+Features that we do not currently support, but we do plan to add in the future:
+
+- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
+- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
+- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
+- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
+- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
+- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
+- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
+
 ## Contributing
 
 For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
