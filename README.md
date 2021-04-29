@@ -332,7 +332,4 @@ Future.delayed(Duration.zero, (){
 
 ## Contributing
 
-We have some [Developer Notes](DeveloperNotes.md), but we're still learning too so they'll only help you so far, in fact there's probably a lot you can teach us!
-
-Your pull requests are welcome but please keep them manageable and focused.
-Equally your input on any pull requests we have in flight at any given time is invaluable to us, so please get involved.
+For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
