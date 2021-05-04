@@ -43,8 +43,7 @@
             ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
             
             NSString *channelName = (NSString*)[eventPayload objectForKey:TxTransportKeys_channelName];
-            ARTRealtimeChannelOptions *channelOptions = (ARTRealtimeChannelOptions*)[eventPayload objectForKey:TxTransportKeys_options];
-            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
             
             listener = [channel on: ^(ARTChannelStateChange * const stateChange) {
                 emitter(stateChange);
@@ -55,8 +54,7 @@
             ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
             
             NSString *channelName = (NSString*)[eventPayload objectForKey:TxTransportKeys_channelName];
-            ARTRealtimeChannelOptions *channelOptions = (ARTRealtimeChannelOptions*)[eventPayload objectForKey:TxTransportKeys_options];
-            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
             
             listener = [channel subscribe: ^(ARTMessage * const message) {
                 emitter(message);
@@ -67,8 +65,7 @@
             ARTRealtime* realtimeWithHandle = [_ably realtimeWithHandle: handle];
             
             NSString *channelName = (NSString*)[eventPayload objectForKey:TxTransportKeys_channelName];
-            ARTRealtimeChannelOptions *channelOptions = (ARTRealtimeChannelOptions*)[eventPayload objectForKey:TxTransportKeys_options];
-            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+            ARTRealtimeChannel *channel = [realtimeWithHandle.channels get:channelName];
             listener = [[channel presence] subscribe: ^(ARTPresenceMessage * const message) {
                 emitter(message);
             }];

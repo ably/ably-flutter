@@ -214,8 +214,7 @@ static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *co
     
     NSDictionary *const realtimePayload = data.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:TxTransportKeys_channelName];
-    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
-    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
     [channel attach:^(ARTErrorInfo *_Nullable error){
         if (error) {
             result([
@@ -239,8 +238,7 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *co
     
     NSDictionary *const realtimePayload = data.message;
     NSString  *const channelName = (NSString*)[realtimePayload objectForKey:TxTransportKeys_channelName];
-    ARTChannelOptions  *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
-    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
     [channel detach:^(ARTErrorInfo *_Nullable error){
         if (error) {
             result([
@@ -264,8 +262,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
     
     NSDictionary *const realtimePayload = data.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:TxTransportKeys_channelName];
-    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
-    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName options:channelOptions];
+    ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
         if (error) {
             result(
