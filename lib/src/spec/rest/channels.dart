@@ -21,20 +21,13 @@ class ChannelOptions {
 /// https://docs.ably.io/client-lib-development-guide/features/#RSL1
 abstract class RestChannelInterface {
   /// creates a Rest channel instance
-  RestChannelInterface(
-    this.rest,
-    this.name,
-    this.options,
-  );
+  RestChannelInterface(this.rest, this.name);
 
   /// reference to Rest client
   RestInterface rest;
 
   /// name of the channel
   String name;
-
-  /// options of the channel
-  ChannelOptions options;
 
   /// presence interface for this channel
   ///
@@ -68,7 +61,7 @@ abstract class RestChannelInterface {
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSN1
 abstract class RestChannels<T extends RestChannelInterface>
-    extends Channels<T, ChannelOptions> {
+    extends Channels<T> {
   /// instance of a rest client
   RestInterface rest;
 

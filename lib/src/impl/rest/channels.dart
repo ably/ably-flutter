@@ -18,13 +18,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   String name;
 
-  @override
-  ChannelOptions options;
-
   RestPresence _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
-  RestChannel(this.rest, this.name, this.options) {
+  RestChannel(this.rest, this.name) {
     _presence = RestPresence(this);
   }
 
@@ -165,8 +162,7 @@ class RestPlatformChannels extends RestChannels<RestChannel> {
   RestPlatformChannels(Rest rest) : super(rest);
 
   @override
-  RestChannel createChannel(String name, ChannelOptions options) =>
-      RestChannel(rest, name, options);
+  RestChannel createChannel(String name) => RestChannel(rest, name);
 
   @override
   void release(String name) {

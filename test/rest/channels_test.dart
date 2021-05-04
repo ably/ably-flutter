@@ -23,7 +23,6 @@ void main() {
     test('creates channel with #get', () {
       final channel = channels.get('channel-1');
       expect(channel.name, 'channel-1');
-      expect(channel.options, isNull);
     });
 
     test('checks if channel exist with #exists', () {

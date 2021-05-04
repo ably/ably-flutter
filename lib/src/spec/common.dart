@@ -932,15 +932,14 @@ class _ChannelIterator<T> implements Iterator<T> {
 
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
-abstract class Channels<ChannelType, OptionsType>
-    extends Iterable<ChannelType> {
+abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// stores channel name vs instance of [ChannelType]
   final _channels = <String, ChannelType>{};
 
   /// creates a channel with provided name and options
   ///
   /// This is a private method to be overridden by implementation classes
-  ChannelType createChannel(String name, OptionsType options);
+  ChannelType createChannel(String name);
 
   /// creates a channel with [name].
   ///
@@ -950,7 +949,7 @@ abstract class Channels<ChannelType, OptionsType>
     // and pass it on to createChannel
     assert(name != null, 'Channel name cannot be null');
     if (_channels[name] == null) {
-      _channels[name] = createChannel(name, null);
+      _channels[name] = createChannel(name);
     }
     return _channels[name];
   }

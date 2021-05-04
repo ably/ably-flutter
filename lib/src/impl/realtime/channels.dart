@@ -20,9 +20,6 @@ class RealtimeChannel extends PlatformObject
   @override
   final String name;
 
-  @override
-  final RealtimeChannelOptions options;
-
   RealtimePresence _presence;
 
   @override
@@ -32,7 +29,7 @@ class RealtimeChannel extends PlatformObject
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
-  RealtimeChannel(this.realtime, this.name, this.options) : super() {
+  RealtimeChannel(this.realtime, this.name) : super() {
     _presence = RealtimePresence(this);
     state = ChannelState.initialized;
     on().listen((event) => state = event.current);
@@ -54,13 +51,6 @@ class RealtimeChannel extends PlatformObject
     });
     return PaginatedResult<Message>.fromAblyMessage(message);
   }
-
-  Map<String, dynamic> __payload;
-
-  Map<String, dynamic> get _payload => __payload ??= {
-        TxTransportKeys.channelName: name,
-        if (options != null) TxTransportKeys.options: options,
-      };
 
   final _publishQueue = Queue<_PublishQueueItem>();
   Completer<void> _authCallbackCompleter;
@@ -102,8 +92,8 @@ class RealtimeChannel extends PlatformObject
 
       try {
         await invoke(PlatformMethod.publishRealtimeChannelMessage, {
-          ..._payload,
-          'messages': item.messages,
+          TxTransportKeys.channelName: name,
+          TxTransportKeys.messages: item.messages,
         });
 
         _publishQueue.remove(item);
@@ -176,22 +166,29 @@ class RealtimeChannel extends PlatformObject
   ChannelState state;
 
   @override
-  Future<void> attach() =>
-      invoke(PlatformMethod.attachRealtimeChannel, _payload);
+  Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
+        TxTransportKeys.channelName: name,
+      });
 
   @override
-  Future<void> detach() =>
-      invoke(PlatformMethod.detachRealtimeChannel, _payload);
+  Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
+        TxTransportKeys.channelName: name,
+      });
 
   @override
   Future<void> setOptions(RealtimeChannelOptions options) =>
-      invoke(PlatformMethod.setRealtimeChannelOptions, _payload);
+      invoke(PlatformMethod.setRealtimeChannelOptions, {
+        TxTransportKeys.channelName: name,
+        TxTransportKeys.options: options,
+      });
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
-        _payload,
+        {
+          TxTransportKeys.channelName: name,
+        },
       ).where(
         (stateChange) =>
             channelEvent == null || stateChange.event == channelEvent,
@@ -200,10 +197,11 @@ class RealtimeChannel extends PlatformObject
   @override
   Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
-    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, _payload)
-        .where((message) =>
-            subscribedNames.isEmpty ||
-            subscribedNames.any((n) => n == message.name));
+    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
+      TxTransportKeys.channelName: this.name,
+    }).where((message) =>
+        subscribedNames.isEmpty ||
+        subscribedNames.any((n) => n == message.name));
   }
 }
 
@@ -215,8 +213,7 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   RealtimePlatformChannels(Realtime realtime) : super(realtime);
 
   @override
-  RealtimeChannel createChannel(String name, RealtimeChannelOptions options) =>
-      RealtimeChannel(realtime, name, options);
+  RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
   @override
   void release(String name) {

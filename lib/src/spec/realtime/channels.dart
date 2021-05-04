@@ -32,20 +32,13 @@ class RealtimeChannelOptions extends ChannelOptions {
 abstract class RealtimeChannelInterface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
-  RealtimeChannelInterface(
-    this.realtime,
-    this.name,
-    this.options,
-  );
+  RealtimeChannelInterface(this.realtime, this.name);
 
   /// realtime client instance
   final RealtimeInterface realtime;
 
   /// name of the channel
   final String name;
-
-  /// channel options
-  final RealtimeChannelOptions options;
 
   /// will hold reason for failure of attaching to channel in such cases
   ErrorInfo errorReason;
@@ -123,7 +116,7 @@ abstract class RealtimeChannelInterface
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTS1
 abstract class RealtimeChannels<T extends RealtimeChannelInterface>
-    extends Channels<T, RealtimeChannelOptions> {
+    extends Channels<T> {
   /// instance of ably realtime client
   RealtimeInterface realtime;
 
