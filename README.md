@@ -36,6 +36,18 @@ to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
 If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
 You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
 
+## Known Limitations
+
+Features that we do not currently support, but we do plan to add in the future:
+
+- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
+- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
+- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
+- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
+- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
+- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
+- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
+
 ## Running the example
 
 - Clone the repo
@@ -317,18 +329,6 @@ Future.delayed(Duration.zero, (){
     subscriptionToBeCancelled.cancel();
 });
 ```
-
-## Known Limitations
-
-Features that we do not currently support, but we do plan to add in the future:
-
-- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
-- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
-- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
-- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
-- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
-- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
-- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
 
 ## Contributing
 
