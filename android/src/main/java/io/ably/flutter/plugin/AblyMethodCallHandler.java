@@ -203,9 +203,21 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void setRestChannelOptions(
       @NonNull MethodCall call, @NonNull MethodChannel.Result result
   ) {
-    // setOptions is not supported on a rest instance
+    // setOptions is not supported on a rest instance directly
     // Track @ https://github.com/ably/ably-flutter/issues/14
-    result.notImplemented();
+    // An alternative is to use the side effect of get channel
+    // with options which updates passed channel options.
+    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+    this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
+      final Map<String, Object> map = messageData.message;
+      final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+      final ChannelOptions options = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
+      try {
+        ablyLibrary.getRest(messageData.handle).channels.get(channelName, options);
+      } catch (AblyException ae) {
+        handleAblyException(result, ae);
+      }
+    });
   }
 
   private void publishRestMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
@@ -213,8 +225,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
       final Map<String, Object> map = messageData.message;
       final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
-      final ChannelOptions options = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
-
       final ArrayList<Message> channelMessages = (ArrayList<Message>) map.get(PlatformConstants.TxTransportKeys.messages);
       if (channelMessages == null) {
         result.error("Messages cannot be null", null, null);
@@ -222,11 +232,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       }
       Message[] messages = new Message[channelMessages.size()];
       messages = channelMessages.toArray(messages);
-      try {
-        ablyLibrary.getRest(messageData.handle).channels.get(channelName, options).publishAsync(messages, handleCompletionWithListener(result));
-      } catch (AblyException ae) {
-        handleAblyException(result, ae);
-      }
+      ablyLibrary.getRest(messageData.handle).channels.get(channelName).publishAsync(messages, handleCompletionWithListener(result));
     });
   }
 
@@ -469,11 +475,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
       try {
         final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-        final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
         ablyLibrary
             .getRealtime(ablyMessage.handle)
             .channels
-            .get(channelName, channelOptions)
+            .get(channelName)
             .attach(handleCompletionWithListener(result));
       } catch (AblyException e) {
         handleAblyException(result, e);
@@ -488,11 +493,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
       try {
         final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-        final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
         ablyLibrary
             .getRealtime(ablyMessage.handle)
             .channels
-            .get(channelName, channelOptions)
+            .get(channelName)
             .detach(handleCompletionWithListener(result));
       } catch (AblyException e) {
         handleAblyException(result, e);
@@ -527,11 +531,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
       try {
         final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-        final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
         final Channel channel = ablyLibrary
             .getRealtime(ablyMessage.handle)
             .channels
-            .get(channelName, channelOptions);
+            .get(channelName);
 
         final ArrayList<Message> channelMessages = (ArrayList<Message>) ablyMessage.message.get(PlatformConstants.TxTransportKeys.messages);
         if (channelMessages == null) {

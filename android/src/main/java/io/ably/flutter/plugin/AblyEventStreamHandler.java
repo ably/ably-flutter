@@ -148,32 +148,22 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
           break;
         case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
           assert eventPayload != null : "event message is missing";
-          try {
-            final Channel channel = ablyLibrary
+          channelStateListener = new PluginChannelStateListener(eventSink);
+          ablyLibrary
               .getRealtime(ablyMessage.handle)
               .channels
-              .get(
-                (String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName),
-                (ChannelOptions) eventPayload.get(PlatformConstants.TxTransportKeys.options)
-              );
-            channelStateListener = new PluginChannelStateListener(eventSink);
-            channel.on(channelStateListener);
-          } catch (AblyException ablyException) {
-            handleAblyException(eventSink, ablyException);
-          }
+              .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+              .on(channelStateListener);
           break;
         case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
           assert eventPayload != null : "event message is missing";
           try {
-            final Channel channel = ablyLibrary
-              .getRealtime(ablyMessage.handle)
-              .channels
-              .get(
-                (String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName),
-                (ChannelOptions) eventPayload.get(PlatformConstants.TxTransportKeys.options)
-              );
             channelMessageListener = new PluginChannelMessageListener(eventSink);
-            channel.subscribe(channelMessageListener);
+            ablyLibrary
+                .getRealtime(ablyMessage.handle)
+                .channels
+                .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+                .subscribe(channelMessageListener);
           } catch (AblyException ablyException) {
             handleAblyException(eventSink, ablyException);
           }
@@ -181,12 +171,12 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         case PlatformConstants.PlatformMethod.onRealtimePresenceMessage:
           assert eventPayload != null : "event message is missing";
           try {
-            final Channel channel = ablyLibrary
-              .getRealtime(ablyMessage.handle)
-              .channels
-              .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName));
             channelPresenceMessageListener = new PluginChannelPresenceMessageListener(eventSink);
-            channel.presence.subscribe(channelPresenceMessageListener);
+            ablyLibrary
+                .getRealtime(ablyMessage.handle)
+                .channels
+                .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+                .presence.subscribe(channelPresenceMessageListener);
           } catch (AblyException ablyException) {
             handleAblyException(eventSink, ablyException);
           }
@@ -218,27 +208,27 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         // left as is as there is no way of propagating this error to flutter side
         assert eventPayload != null : "event message is missing";
         ablyLibrary
-          .getRealtime(ablyMessage.handle)
-          .channels
-          .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
-          .off(channelStateListener);
+            .getRealtime(ablyMessage.handle)
+            .channels
+            .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+            .off(channelStateListener);
         break;
       case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
         assert eventPayload != null : "event message is missing";
         ablyLibrary
-          .getRealtime(ablyMessage.handle)
-          .channels
-          .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
-          .unsubscribe(channelMessageListener);
+            .getRealtime(ablyMessage.handle)
+            .channels
+            .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+            .unsubscribe(channelMessageListener);
         break;
       case PlatformConstants.PlatformMethod.onRealtimePresenceMessage:
         assert eventPayload != null : "event message is missing";
         ablyLibrary
-          .getRealtime(ablyMessage.handle)
-          .channels
-          .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
-          .presence
-          .unsubscribe(channelPresenceMessageListener);
+            .getRealtime(ablyMessage.handle)
+            .channels
+            .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
+            .presence
+            .unsubscribe(channelPresenceMessageListener);
         break;
     }
   }
