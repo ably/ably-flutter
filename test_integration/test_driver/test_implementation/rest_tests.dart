@@ -68,14 +68,14 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   });
 
   // TODO(tiholic) Fails on iOS, track at https://github.com/ably/ably-cocoa/issues/1108
-  // test(
-  //   '(RSL1m1) Publishing a Message with no clientId when the clientId'
-  //   ' is set to some value in the client options should result in a message'
-  //   ' received with the clientId property set to that value',
-  //   () {
-  //     expect(messages[0]['clientId'], 'someClientId');
-  //   },
-  // );
+  test(
+    '(RSL1m1) Publishing a Message with no clientId when the clientId'
+    ' is set to some value in the client options should result in a message'
+    ' received with the clientId property set to that value',
+    () {
+      expect(messages[0]['clientId'], 'someClientId');
+    },
+  );
 
   test(
       '(RSL1m2) Publishing a Message with a clientId set to the same'

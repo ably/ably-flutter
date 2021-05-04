@@ -1,16 +1,16 @@
 PODS:
-  - Ably (1.2.3):
+  - Ably (1.2.4):
     - AblyDeltaCodec (= 1.2.0)
     - msgpack (= 0.3.1)
-    - SocketRocketAblyFork (= 0.5.2-ably-7)
+    - SocketRocketAblyFork (= 0.5.2-ably-8)
     - ULID (= 1.1.0)
   - ably_flutter (0.0.5):
-    - Ably
+    - Ably (= 1.2.4)
     - Flutter
   - AblyDeltaCodec (1.2.0)
   - Flutter (1.0.0)
   - msgpack (0.3.1)
-  - SocketRocketAblyFork (0.5.2-ably-7)
+  - SocketRocketAblyFork (0.5.2-ably-8)
   - ULID (1.1.0)
 
 DEPENDENCIES:
@@ -32,12 +32,12 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  Ably: 9f143677993cb6df20fce4551b9b6b2e55ad2f4d
-  ably_flutter: a35c3926509e76b0fc69b9199872b9d428882611
+  Ably: 863d35bb6a6aa5fc537304ef19f85cfa51d1bbde
+  ably_flutter: b37439c7b63f4b3e44f4674c5bfb56452d193ad0
   AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
-  SocketRocketAblyFork: 33ff506ecb565498051b8f358d60ae44274c3981
+  SocketRocketAblyFork: e6e3d820bf8ff9e6265d2af81b9f11f270351ea6
   ULID: b4714891a02819364faecd574a53e391c4c6de9d
 
 PODFILE CHECKSUM: 7d251af3d33bd11d1f2d86f8fb2d423bf85567b7
