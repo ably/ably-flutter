@@ -13,18 +13,6 @@ client library SDKs for [Ably](https://ably.io/), the realtime data delivery pla
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
 
-## Development Preview
-
-We are actively working on implementing the full Ably feature set in this plugin,
-so please do not hesitate to get in touch if you are interested in using Ably from your Flutter apps,
-especially if there is a feature or capability in particular that you think we should prioritise.
-
-Create a public
-[Issue](https://github.com/ably/ably-flutter/issues)
-or visit our
-[Support and Help](https://www.ably.io/support)
-site to discuss privately.
-
 ## Resources
 
 - [Quickstart Guide](https://www.ably.io/documentation/quick-start-guide?lang=flutter)
@@ -47,6 +35,18 @@ to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
 
 If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
 You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
+
+## Known Limitations
+
+Features that we do not currently support, but we do plan to add in the future:
+
+- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
+- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
+- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
+- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
+- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
+- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
+- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
 
 ## Running the example
 
@@ -332,7 +332,4 @@ Future.delayed(Duration.zero, (){
 
 ## Contributing
 
-We have some [Developer Notes](DeveloperNotes.md), but we're still learning too so they'll only help you so far, in fact there's probably a lot you can teach us!
-
-Your pull requests are welcome but please keep them manageable and focused.
-Equally your input on any pull requests we have in flight at any given time is invaluable to us, so please get involved.
+For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
