@@ -150,12 +150,20 @@ class _MyAppState extends State<MyApp> {
       _restCreationState = OpState.inProgress;
     });
 
-    final clientOptions =
-        ably.ClientOptions.fromKey('dBjBRg.vGOaQw:E7zmEdjv0tAVEgZ6')
+    final clientOptions = ably.ClientOptions()
+          // .fromKey(_appKey.toString())
+          ..environment = 'sandbox'
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
             print('Custom logger :: $msg $exception');
           }
+          ..tokenDetails = ably.TokenDetails.fromMap(
+            await provisioning.getTokenDetails(
+              _appKey.name,
+              _appKey.secret,
+              'sandbox-',
+            ),
+          )
         /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
         /*..authCallback = (params) async => ably.TokenRequest.fromMap(
             Map.castFrom<dynamic, dynamic, String, dynamic>(
