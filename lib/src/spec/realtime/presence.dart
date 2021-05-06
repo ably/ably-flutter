@@ -9,7 +9,7 @@ import 'channels.dart';
 /// Presence members and presence history
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RTP1
-abstract class RealtimePresence {
+abstract class RealtimePresenceInterface {
   /// Returns true when the initial member SYNC following
   /// channel attach is completed.
   ///
@@ -39,10 +39,9 @@ abstract class RealtimePresence {
   /// by calling [StreamSubscription.cancel]
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP6
-  Future<Stream<PresenceMessage>> subscribe({
+  Stream<PresenceMessage> subscribe({
     PresenceAction action,
     List<PresenceAction> actions,
-    EventListener<PresenceMessage> listener,
   });
 
   /// Enters the current client into this channel, optionally with the data

@@ -1,4 +1,4 @@
-# Developer Notes
+# Contributing to the Ably Flutter Plugin
 
 ## Implementation Notes
 
@@ -118,57 +118,7 @@ The `dartdoc` tool can be activated via the `flutter` command like this:
 ```
 ably-flutter % flutter pub global activate dartdoc
 Resolving dependencies...
-+ _fe_analyzer_shared 14.0.0 (18.0.0 available)
-+ analyzer 0.41.2 (1.2.0 available)
-+ args 1.6.0 (2.0.0 available)
-+ async 2.4.2 (2.5.0 available)
-+ charcode 1.1.3 (1.2.0 available)
-+ cli_util 0.2.0 (0.3.0 available)
-+ collection 1.14.13 (1.15.0 available)
-+ convert 2.1.1 (3.0.0 available)
-+ crypto 2.1.5 (3.0.0 available)
-+ csslib 0.16.2 (0.17.0 available)
-+ dartdoc 0.39.0 (0.40.0 available)
-+ file 5.2.1 (6.1.0 available)
-+ glob 1.2.0 (2.0.0 available)
-+ html 0.14.0+4 (0.15.0 available)
-+ intl 0.16.1 (0.17.0 available)
-+ js 0.6.2 (0.6.3 available)
-+ logging 0.11.4 (1.0.0 available)
-+ markdown 3.0.0 (4.0.0 available)
-+ meta 1.2.4 (1.3.0 available)
-+ mustache 1.1.1
-+ node_interop 1.2.1
-+ node_io 1.2.0
-+ package_config 1.9.3 (2.0.0 available)
-+ path 1.7.0 (1.8.0 available)
-+ pedantic 1.9.2 (1.11.0 available)
-+ pub_semver 1.4.4 (2.0.0 available)
-+ source_span 1.7.0 (1.8.1 available)
-+ string_scanner 1.0.5 (1.1.0 available)
-+ term_glyph 1.1.0 (1.2.0 available)
-+ typed_data 1.2.0 (1.3.0 available)
-+ watcher 0.9.7+15 (1.0.0 available)
-+ yaml 2.2.1 (3.1.0 available)
-Downloading dartdoc 0.39.0...
-Downloading mustache 1.1.1...
-Downloading analyzer 0.41.2...
-Downloading _fe_analyzer_shared 14.0.0...
-Downloading markdown 3.0.0...
-Downloading charcode 1.1.3...
-Downloading node_io 1.2.0...
-Downloading node_interop 1.2.1...
-Downloading js 0.6.2...
-Downloading path 1.7.0...
-Downloading meta 1.2.4...
-Downloading file 5.2.1...
-Downloading typed_data 1.2.0...
-Downloading string_scanner 1.0.5...
-Downloading source_span 1.7.0...
-Downloading term_glyph 1.1.0...
-Downloading async 2.4.2...
-Downloading html 0.14.0+4...
-Downloading collection 1.14.13...
+Downloading...
 Precompiling executables...
 Precompiled dartdoc:dartdoc.
 Installed executable dartdoc.
@@ -223,3 +173,30 @@ found 1 warning and 0 errors
 Documented 1 public library in 5.6 seconds
 Success! Docs generated into /Users/quintinwillison/code/ably/ably-flutter/doc/api
 ```
+
+## Release Process
+
+Releases should always be made through a release pull request (PR), which needs to bump the version number and add to the [change log](CHANGELOG.md).
+For an example of a previous release PR, see [#89](https://github.com/ably/ably-flutter/pull/89).
+
+The release process must include the following steps:
+
+1. Ensure that all work intended for this release has landed to `main`
+2. Create a release branch named like `release/1.2.3`
+3. Add a commit to bump the version number
+4. Add a commit to update the change log
+5. Push the release branch to GitHub
+6. Open a PR for the release against the release branch you just pushed
+7. Gain approval(s) for the release PR from maintainer(s)
+8. Land the release PR to `main`
+9. Execute `flutter pub publish` from the root of this repository
+10. Create a tag named like `1.2.3` and push it to GitHub
+
+To check that everything is looking sensible to the Flutter tools, without publishing, you can use:
+
+    flutter pub publish --dry-run
+
+We tend to use [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator) to collate the information required for a change log update.
+Your mileage may vary, but it seems the most reliable method to invoke the generator is something like:
+`github_changelog_generator -u ably -p ably-flutter --since-tag v1.0.0 --output delta.md`
+and then manually merge the delta contents in to the main change log (where `v1.0.0` in this case is the tag for the previous release).

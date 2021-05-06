@@ -1,3 +1,4 @@
+import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -22,20 +23,24 @@ void runTests({
 
       // Connect to the Flutter driver before running any tests.
       setUpAll(() async {
-        driver = await FlutterDriver.connect(
-          printCommunication: true,
-          timeout: const Duration(seconds: 60),
-        );
+        driver = await FlutterDriver.connect(printCommunication: true);
       });
-      
+
       tearDownAll(() async {
         if (driver != null) {
+          const message = TestControlMessage(TestName.getFlutterErrors);
+          final flutterErrors = await getTestResponse(driver, message);
+          print('Flutter errors: ${flutterErrors.payload}');
           final _ = driver.close();
         }
       });
 
       tests[groupName].forEach((testName, testFunction) {
-        test(testName, () => testFunction(driver));
+        test(
+          testName,
+          () => testFunction(driver),
+          timeout: const Timeout(Duration(minutes: 2)),
+        );
       });
     });
   }

@@ -20,6 +20,8 @@ enum OpState {
   failed,
 }
 
+const defaultChannel = 'test-channel';
+
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
@@ -36,6 +38,12 @@ class _MyAppState extends State<MyApp> {
   ably.Message channelMessage;
   ably.PaginatedResult<ably.Message> _restHistory;
   ably.PaginatedResult<ably.Message> _realtimeHistory;
+  ably.PaginatedResult<ably.PresenceMessage> _restPresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage> _restPresenceHistory;
+  StreamSubscription<ably.PresenceMessage> _channelPresenceMessageSubscription;
+  ably.PresenceMessage channelPresenceMessage;
+  List<ably.PresenceMessage> _realtimePresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage> _realtimePresenceHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -143,17 +151,26 @@ class _MyAppState extends State<MyApp> {
     });
 
     final clientOptions = ably.ClientOptions()
-      ..logLevel = ably.LogLevel.verbose
-      ..logHandler = ({msg, exception}) {
-        // ignore: avoid_print
-        print('Custom logger :: $msg $exception');
-      }
-      ..defaultTokenParams = ably.TokenParams(ttl: 20000)
-      ..authCallback = (params) async => ably.TokenRequest.fromMap(
+          // .fromKey(_appKey.toString())
+          ..environment = 'sandbox'
+          ..logLevel = ably.LogLevel.verbose
+          ..logHandler = ({msg, exception}) {
+            print('Custom logger :: $msg $exception');
+          }
+          ..tokenDetails = ably.TokenDetails.fromMap(
+            await provisioning.getTokenDetails(
+              _appKey.name,
+              _appKey.secret,
+              'sandbox-',
+            ),
+          )
+        /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
+        /*..authCallback = (params) async => ably.TokenRequest.fromMap(
             Map.castFrom<dynamic, dynamic, String, dynamic>(
               await provisioning.getTokenRequest(),
             ),
-          );
+          )*/
+        ;
 
     ably.Rest rest;
     try {
@@ -173,15 +190,14 @@ class _MyAppState extends State<MyApp> {
 
     const name = 'Hello';
     const dynamic data = 'Flutter';
-    // ignore: avoid_print
     print('publishing messages... name "$name", message "$data"');
     try {
       await Future.wait([
-        rest.channels.get('test').publish(name: name, data: data),
-        rest.channels.get('test').publish(name: name)
+        rest.channels.get(defaultChannel).publish(name: name, data: data),
+        rest.channels.get(defaultChannel).publish(name: name)
       ]);
-      await rest.channels.get('test').publish(data: data);
-      await rest.channels.get('test').publish();
+      await rest.channels.get(defaultChannel).publish(data: data);
+      await rest.channels.get(defaultChannel).publish();
       print('Messages published');
     } on ably.AblyException catch (e) {
       print(e.errorInfo);
@@ -198,17 +214,17 @@ class _MyAppState extends State<MyApp> {
 
     final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
       ..environment = 'sandbox'
+      ..clientId = 'flutter-example-app'
       ..logLevel = ably.LogLevel.verbose
       ..autoConnect = false
       ..logHandler = ({msg, exception}) {
-        // ignore: avoid_print
         print('Custom logger :: $msg $exception');
       };
 
     try {
       final realtime = ably.Realtime(options: clientOptions);
       listenRealtimeConnection(realtime);
-      final channel = realtime.channels.get('test-channel');
+      final channel = realtime.channels.get(defaultChannel);
       listenRealtimeChannel(channel);
       setState(() {
         _realtime = realtime;
@@ -332,7 +348,7 @@ class _MyAppState extends State<MyApp> {
         padding: EdgeInsets.zero,
         onPressed: (_realtimeConnectionState == ably.ConnectionState.connected)
             ? () async {
-                final channel = _realtime.channels.get('test-channel');
+                final channel = _realtime.channels.get(defaultChannel);
                 print('Attaching to channel ${channel.name}.'
                     ' Current state ${channel.state}.');
                 try {
@@ -349,7 +365,7 @@ class _MyAppState extends State<MyApp> {
         padding: EdgeInsets.zero,
         onPressed: (_realtimeChannelState == ably.ChannelState.attached)
             ? () {
-                final channel = _realtime.channels.get('test-channel');
+                final channel = _realtime.channels.get(defaultChannel);
                 print('Detaching from channel ${channel.name}.'
                     ' Current state ${channel.state}.');
                 channel.detach();
@@ -363,7 +379,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
                 _channelMessageSubscription == null)
             ? () {
-                final channel = _realtime.channels.get('test-channel');
+                final channel = _realtime.channels.get(defaultChannel);
                 final messageStream =
                     channel.subscribe(names: ['message-data', 'Hello']);
                 _channelMessageSubscription = messageStream.listen((message) {
@@ -405,24 +421,22 @@ class _MyAppState extends State<MyApp> {
                 print('Sending rest message...');
                 final data = messagesToPublish[
                     (realtimePubCounter++ % messagesToPublish.length)];
-                final m = ably.Message()
-                  ..data = data
-                  ..name = 'Hello';
+                final m = ably.Message(name: 'Hello', data: data);
                 try {
                   switch (typeCounter % 3) {
                     case 0:
                       await _realtime.channels
-                          .get('test-channel')
+                          .get(defaultChannel)
                           .publish(name: 'Hello', data: data);
                       break;
                     case 1:
                       await _realtime.channels
-                          .get('test-channel')
+                          .get(defaultChannel)
                           .publish(message: m);
                       break;
                     case 2:
                       await _realtime.channels
-                          .get('test-channel')
+                          .get(defaultChannel)
                           .publish(messages: [m, m]);
                   }
                   if (realtimePubCounter != 0 &&
@@ -452,7 +466,7 @@ class _MyAppState extends State<MyApp> {
                 print('Sending rest message');
                 try {
                   await _rest.channels
-                      .get('test')
+                      .get(defaultChannel)
                       .publish(name: 'Hello', data: 'Flutter $msgCounter');
                   print('Rest message sent.');
                   setState(() {
@@ -466,82 +480,229 @@ class _MyAppState extends State<MyApp> {
         child: const Text('Publish'),
       );
 
-  Widget getRestChannelHistory() => FlatButton(
-        onPressed: (_rest == null)
+  Widget getPageNavigator<T>({
+    String name,
+    bool enabled,
+    ably.PaginatedResult<T> page,
+    Future<ably.PaginatedResult<T>> Function() query,
+    Function(ably.PaginatedResult<T> result) onUpdate,
+  }) =>
+      FlatButton(
+        onPressed: !enabled
             ? null
             : () async {
-                final next = _restHistory?.hasNext() ?? false;
-                print('Rest history: getting ${next ? 'next' : 'first'} page');
+                final next = page?.hasNext() ?? false;
+                print('$name: getting ${next ? 'next' : 'first'} page');
                 try {
-                  if (_restHistory == null || _restHistory.items.isEmpty) {
-                    final result = await _rest.channels.get('test').history(
-                        ably.RestHistoryParams(
-                            direction: 'forwards', limit: 10));
-                    _restHistory = result;
+                  if (page == null || page.items.isEmpty) {
+                    onUpdate(await query());
                   } else if (next) {
-                    _restHistory = await _restHistory.next();
+                    onUpdate(await page.next());
                   } else {
-                    _restHistory = await _restHistory.first();
+                    onUpdate(await page.first());
                   }
-                  setState(() {});
                 } on ably.AblyException catch (e) {
-                  print('failed to get history:: $e :: ${e.errorInfo}');
+                  print('failed to get $name:: $e :: ${e.errorInfo}');
                 }
               },
-        onLongPress: (_rest == null)
+        onLongPress: !enabled
             ? null
             : () async {
-                final result = await _rest.channels.get('test').history(
-                    ably.RestHistoryParams(direction: 'forwards', limit: 10));
-                setState(() {
-                  _restHistory = result;
-                });
+                onUpdate(await query());
               },
         color: Colors.yellow,
-        child: const Text('Get history'),
+        child: Text('Get $name'),
       );
 
-  Widget getRealtimeChannelHistory() => FlatButton(
+  Widget getRestChannelHistory() => getPageNavigator<ably.Message>(
+      name: 'Rest history',
+      enabled: _rest != null,
+      page: _restHistory,
+      query: () async =>
+          _rest.channels.get(defaultChannel).history(ably.RestHistoryParams(
+                direction: 'forwards',
+                limit: 10,
+              )),
+      onUpdate: (result) {
+        setState(() {
+          _restHistory = result;
+        });
+      });
+
+  Widget getRestChannelPresence() => getPageNavigator<ably.PresenceMessage>(
+      name: 'Rest presence members',
+      enabled: _rest != null,
+      page: _restPresenceMembers,
+      query: () async => _rest.channels
+          .get(defaultChannel)
+          .presence
+          .get(ably.RestPresenceParams(limit: 10)),
+      onUpdate: (result) {
+        setState(() {
+          _restPresenceMembers = result;
+        });
+      });
+
+  Widget getRestChannelPresenceHistory() =>
+      getPageNavigator<ably.PresenceMessage>(
+          name: 'Rest presence history',
+          enabled: _rest != null,
+          page: _restPresenceHistory,
+          query: () async => _rest.channels
+              .get(defaultChannel)
+              .presence
+              .history(ably.RestHistoryParams(limit: 10)),
+          onUpdate: (result) {
+            setState(() {
+              _restPresenceHistory = result;
+            });
+          });
+
+  Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
+      name: 'Realtime history',
+      enabled: _realtime != null,
+      page: _realtimeHistory,
+      query: () async => _realtime.channels.get(defaultChannel).history(
+            ably.RealtimeHistoryParams(
+              limit: 10,
+              untilAttach: true,
+            ),
+          ),
+      onUpdate: (result) {
+        setState(() {
+          _realtimeHistory = result;
+        });
+      });
+
+  Widget createChannelPresenceSubscribeButton() => FlatButton(
+        onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
+                _channelPresenceMessageSubscription == null)
+            ? () {
+                final channel = _realtime.channels.get(defaultChannel);
+                final presenceMessageStream = channel.presence.subscribe();
+                _channelPresenceMessageSubscription =
+                    presenceMessageStream.listen((presenceMessage) {
+                  print('Channel presence message received: $presenceMessage');
+                  setState(() {
+                    channelPresenceMessage = presenceMessage;
+                  });
+                });
+                setState(() {});
+                print('Channel presence messages subscribed');
+                _subscriptionsToDispose.add(_channelMessageSubscription);
+              }
+            : null,
+        child: const Text('Subscribe'),
+      );
+
+  Widget createChannelPresenceUnSubscribeButton() => FlatButton(
+        onPressed: (_channelPresenceMessageSubscription != null)
+            ? () async {
+                await _channelPresenceMessageSubscription.cancel();
+                print('Channel presence messages unsubscribed');
+                setState(() {
+                  _channelPresenceMessageSubscription = null;
+                });
+              }
+            : null,
+        child: const Text('Unsubscribe'),
+      );
+
+  Widget getRealtimeChannelPresence() => FlatButton(
         onPressed: (_realtime == null)
             ? null
             : () async {
-                final next = _realtimeHistory?.hasNext() ?? false;
-                print('Rest history: getting ${next ? 'next' : 'first'} page');
-                try {
-                  if (_realtimeHistory == null ||
-                      _realtimeHistory.items.isEmpty) {
-                    final result =
-                        await _realtime.channels.get('test-channel').history(
-                              ably.RealtimeHistoryParams(
-                                limit: 10,
-                                untilAttach: true,
-                              ),
-                            );
-                    _realtimeHistory = result;
-                  } else if (next) {
-                    _realtimeHistory = await _realtimeHistory.next();
-                  } else {
-                    _realtimeHistory = await _realtimeHistory.first();
-                  }
-                  setState(() {});
-                } on ably.AblyException catch (e) {
-                  print('failed to get history:: $e :: ${e.errorInfo}');
-                }
-              },
-        onLongPress: (_realtime == null)
-            ? null
-            : () async {
-                final result =
-                    await _realtime.channels.get('test-channel').history(
-                          ably.RealtimeHistoryParams(
-                              direction: 'forwards', limit: 10),
-                        );
-                setState(() {
-                  _realtimeHistory = result;
-                });
+                _realtimePresenceMembers = await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .get(ably.RealtimePresenceParams());
+                setState(() {});
               },
         color: Colors.yellow,
-        child: const Text('Get history'),
+        child: const Text('Get Realtime presence members'),
+      );
+
+  Widget getRealtimeChannelPresenceHistory() =>
+      getPageNavigator<ably.PresenceMessage>(
+          name: 'Realtime presence history',
+          enabled: _realtime != null,
+          page: _realtimePresenceHistory,
+          query: () async => _realtime.channels
+              .get(defaultChannel)
+              .presence
+              .history(ably.RealtimeHistoryParams(limit: 10)),
+          onUpdate: (result) {
+            setState(() {
+              _realtimePresenceHistory = result;
+            });
+          });
+
+  final List _presenceData = [
+    null,
+    1,
+    'hello',
+    {'a': 'b'},
+    [
+      1,
+      'ably',
+      null,
+      {'a': 'b'}
+    ],
+    {
+      'c': ['a', 'b']
+    },
+  ];
+
+  int _presenceDataIncrementer = 0;
+
+  Object get _nextPresenceData =>
+      _presenceData[_presenceDataIncrementer++ % _presenceData.length]
+          .toString();
+
+  Object get _currentPresenceData => (_presenceDataIncrementer == 0)
+      ? null
+      : _presenceData[(_presenceDataIncrementer - 1) % _presenceData.length];
+
+  Widget enterRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .enter(_nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Enter'),
+      );
+
+  Widget updateRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .updateClient('flutter-example-app', _nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Update'),
+      );
+
+  Widget leaveRealtimePresence() => FlatButton(
+        onPressed: (_realtime == null)
+            ? null
+            : () async {
+                await _realtime.channels
+                    .get(defaultChannel)
+                    .presence
+                    .leave(_nextPresenceData);
+                setState(() {});
+              },
+        color: Colors.yellow,
+        child: const Text('Leave'),
       );
 
   @override
@@ -555,6 +716,10 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
+                  const Text(
+                    'System Details',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
                   provisionButton(),
@@ -563,6 +728,10 @@ class _MyAppState extends State<MyApp> {
                     ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
                   ),
                   const Divider(),
+                  const Text(
+                    'Realtime',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRealtimeButton(),
                   Text(
                     'Realtime:'
@@ -592,15 +761,60 @@ class _MyAppState extends State<MyApp> {
                       Expanded(child: createChannelUnSubscribeButton()),
                     ],
                   ),
+                  const Text(
+                    'Channel Messages',
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Text('Message from channel: ${channelMessage?.data ?? '-'}'),
                   createChannelPublishButton(),
                   getRealtimeChannelHistory(),
-                  const Text('History'),
                   ..._realtimeHistory?.items
                           ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
                           ?.toList() ??
                       [],
+                  const Text(
+                    'Presence',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text('Current Data: $_currentPresenceData'),
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: createChannelPresenceSubscribeButton()),
+                      Expanded(child: createChannelPresenceUnSubscribeButton()),
+                    ],
+                  ),
+                  Text(
+                    'Presence Message from channel:'
+                    ' ${channelPresenceMessage?.data ?? '-'}',
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: enterRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: updateRealtimePresence(),
+                      ),
+                      Expanded(
+                        child: leaveRealtimePresence(),
+                      ),
+                    ],
+                  ),
+                  getRealtimeChannelPresence(),
+                  ..._realtimePresenceMembers
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
+                  getRealtimeChannelPresenceHistory(),
+                  ..._realtimePresenceHistory?.items
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
                   const Divider(),
+                  const Text(
+                    'Rest',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   createRestButton(),
                   Text('Rest: '
                       '${_rest?.toString() ?? 'Ably Rest not created yet.'}'),
@@ -610,11 +824,20 @@ class _MyAppState extends State<MyApp> {
                     ' data "Flutter $msgCounter"',
                   ),
                   getRestChannelHistory(),
-                  const Text('History'),
                   ..._restHistory?.items
                           ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
                           ?.toList() ??
-                      []
+                      [],
+                  getRestChannelPresence(),
+                  ..._restPresenceMembers?.items
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
+                  getRestChannelPresenceHistory(),
+                  ..._restPresenceHistory?.items
+                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          ?.toList() ??
+                      [],
                 ]),
           ),
         ),

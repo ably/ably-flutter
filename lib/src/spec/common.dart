@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../ably_flutter.dart';
 import '../impl/realtime/connection.dart';
+import '../impl/realtime/presence.dart';
 import 'auth.dart';
 import 'enums.dart';
 import 'spec.dart';
@@ -474,17 +475,17 @@ class RealtimePresenceParams {
   /// before returning a list of members
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c1
-  bool waitForSync;
+  final bool waitForSync;
 
   /// filters members by the provided clientId
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c2
-  String clientId;
+  final String clientId;
 
   /// filters members by the provided connectionId
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RTP11c3
-  String connectionId;
+  final String connectionId;
 
   /// initializes with [waitForSync] set to true by default
   RealtimePresenceParams({

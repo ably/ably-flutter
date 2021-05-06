@@ -46,7 +46,8 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#RSH1b2
   Future<PaginatedResultInterface<DeviceDetails>> list(
-    DeviceRegistrationParams params,);
+    DeviceRegistrationParams params,
+  );
 
   /// Save and register device.
   ///

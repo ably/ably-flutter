@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.0-preview.2](https://github.com/ably/ably-flutter/tree/1.2.0-preview.2)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.1...1.2.0-preview.2)
+
+**Implemented enhancements:**
+
+- Presence subscription example [\#53](https://github.com/ably/ably-flutter/issues/53)
+- typed Message\#data [\#35](https://github.com/ably/ably-flutter/issues/35)
+
+**Fixed bugs:**
+
+- compilation error on iOS [\#112](https://github.com/ably/ably-flutter/issues/112)
+
+**Merged pull requests:**
+
+- Fix iOS issue with token details auth [\#115](https://github.com/ably/ably-flutter/pull/115) ([tiholic](https://github.com/tiholic))
+- Add docs workflow [\#97](https://github.com/ably/ably-flutter/pull/97) ([QuintinWillison](https://github.com/QuintinWillison))
+- Realtime Presence [\#81](https://github.com/ably/ably-flutter/pull/81) ([tiholic](https://github.com/tiholic))
+- Feature/rest presence history [\#70](https://github.com/ably/ably-flutter/pull/70) ([tiholic](https://github.com/tiholic))
+- Feature/docstrings [\#69](https://github.com/ably/ably-flutter/pull/69) ([tiholic](https://github.com/tiholic))
+- Rest Channel Presence\#get [\#55](https://github.com/ably/ably-flutter/pull/55) ([tiholic](https://github.com/tiholic))
+
 ## [1.2.0-preview.1](https://github.com/ably/ably-flutter/tree/1.2.0-preview.1)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/1.0.0+dev.2...1.2.0-preview.1)

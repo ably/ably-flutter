@@ -3,12 +3,7 @@ import 'test_implementation/helper_tests.dart';
 import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
-enum TestGroup{
-  basicTests,
-  helperTests,
-  rest,
-  realtime
-}
+enum TestGroup { basicTests, helperTests, rest, realtime }
 
 final _tests = <TestGroup, Map<String, Function>>{
   TestGroup.basicTests: {
@@ -19,6 +14,8 @@ final _tests = <TestGroup, Map<String, Function>>{
     'should publish': testRestPublish,
     'should retrieve history': testRestHistory,
     'should publish with AuthCallback': testRestPublishWithAuthCallback,
+    'should get Presence Members': testRestPresenceGet,
+    'should get Presence History': testRestPresenceHistory,
   },
   TestGroup.realtime: {
     'should publish': testRealtimePublish,
@@ -26,11 +23,13 @@ final _tests = <TestGroup, Map<String, Function>>{
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,
     'should publish with authCallback': testRealtimePublishWithAuthCallback,
+    'should get Presence Members': testRealtimePresenceGet,
+    'should get Presence History': testRealtimePresenceHistory,
+    'should enter, update and leave Presence': testRealtimeEnterUpdateLeave,
+    'should subscribe to channel presence': testRealtimePresenceSubscription,
   },
-  // FlutterError seems to break the test app and needs to be run last
   TestGroup.helperTests: {
     'should report unhandled exception': testShouldReportUnhandledException,
-    'should report FlutterError': testShouldReportFlutterError,
   }
 };
 
@@ -45,6 +44,8 @@ Map<TestGroup, Map<String, Function>> getTestsFor({
     _groups = _tests.keys.toList();
   } else if (group != null) {
     _groups = [group];
+  } else {
+    _groups = groups;
   }
   return Map.from(_tests)..removeWhere((key, value) => !_groups.contains(key));
 }

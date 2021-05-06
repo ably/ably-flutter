@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
         [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
         [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
+        [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
+        [NSString stringWithFormat:@"%d", realtimePresenceParamsCodecType]: readRealtimePresenceParams,
+        [NSString stringWithFormat:@"%d", messageDataCodecType]: readMessageData,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -160,7 +163,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenDetails_capability);
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenDetails_clientId);
     
-    return [[ARTTokenDetails new] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
+    return [[ARTTokenDetails alloc] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
 }
 
 +(ARTTokenParams *)tokenParamsFromDictionary: (NSDictionary *) dictionary {
@@ -170,7 +173,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenParams_clientId);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenParams_nonce);
     
-    ARTTokenParams *const o = [[ARTTokenParams new] initWithClientId: clientId nonce: nonce];
+    ARTTokenParams *const o = [[ARTTokenParams alloc] initWithClientId: clientId nonce: nonce];
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
     ON_VALUE(^(const id value) {
@@ -207,7 +210,7 @@ static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const
     ON_VALUE(^(const id value) { keyName = value; }, dictionary, TxTokenRequest_keyName);
 
     ARTTokenParams *const params = [AblyFlutterReader tokenParamsFromDictionary: dictionary];
-    return [[ARTTokenRequest new] initWithTokenParams:params
+    return [[ARTTokenRequest alloc] initWithTokenParams:params
                                               keyName:keyName
                                                 nonce:nonce
                                                   mac:mac];
@@ -254,6 +257,29 @@ static AblyCodecDecoder readRealtimeHistoryParams = ^ARTRealtimeHistoryQuery*(NS
     }, dictionary, TxRealtimeHistoryParams_direction);
     READ_VALUE(o, untilAttach, dictionary, TxRealtimeHistoryParams_untilAttach);
     return o;
+};
+
+static AblyCodecDecoder readRestPresenceParams = ^ARTPresenceQuery*(NSDictionary *const dictionary) {
+    ARTPresenceQuery *const o = [ARTPresenceQuery new];
+    ON_VALUE(^(NSString const *value) {
+        o.limit = [value integerValue];
+    }, dictionary, TxRestPresenceParams_limit);
+    READ_VALUE(o, clientId, dictionary, TxRestPresenceParams_clientId);
+    READ_VALUE(o, connectionId, dictionary, TxRestPresenceParams_connectionId);
+
+    return o;
+};
+
+static AblyCodecDecoder readRealtimePresenceParams = ^ARTRealtimePresenceQuery*(NSDictionary *const dictionary) {
+    ARTRealtimePresenceQuery *const o = [ARTRealtimePresenceQuery new];
+    READ_VALUE(o, clientId, dictionary, TxRealtimePresenceParams_clientId);
+    READ_VALUE(o, connectionId, dictionary, TxRealtimePresenceParams_connectionId);
+    READ_VALUE(o, waitForSync, dictionary, TxRealtimePresenceParams_waitForSync);
+    return o;
+};
+
+static AblyCodecDecoder readMessageData = ^id (NSDictionary *const dictionary) {
+    return [dictionary objectForKey: TxMessage_data];
 };
 
 @end

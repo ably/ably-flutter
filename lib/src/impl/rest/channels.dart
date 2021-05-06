@@ -7,6 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import '../../../ably_flutter.dart';
 import '../message.dart';
 import '../platform_object.dart';
+import 'presence.dart';
 import 'rest.dart';
 
 /// Plugin based implementation of Rest channel
@@ -20,11 +21,15 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   ChannelOptions options;
 
-  @override
-  RestPresenceInterface presence;
+  RestPresence _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
-  RestChannel(this.rest, this.name, this.options);
+  RestChannel(this.rest, this.name, this.options) {
+    _presence = RestPresence(this);
+  }
+
+  @override
+  RestPresence get presence => _presence;
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
@@ -53,15 +58,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     String name,
     Object data,
   }) async {
-    var _messages = messages;
-    if (_messages == null) {
-      if (message != null) {
-        _messages = [message];
-      } else {
-        _messages = [Message(name: name, data: data)];
-      }
-    }
-    final queueItem = _PublishQueueItem(Completer<void>(), _messages);
+    messages ??= [
+      if (message == null) Message(name: name, data: data) else message
+    ];
+    final queueItem = _PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -131,6 +131,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
                     pe.details as ErrorInfo,
                   )));
         }
+      } on Exception {
+        // removing item from queue and rethrowing exception
+        _publishQueue.remove(item);
+        rethrow;
       }
     }
     _publishInternalRunning = false;
