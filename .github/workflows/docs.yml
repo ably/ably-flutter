@@ -12,7 +12,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-      
+
       - name: Get Flutter Packages
         run: flutter pub get
 
@@ -27,8 +27,8 @@ jobs:
 
       - uses: ably/sdk-upload-action@v1
         with:
-            s3AccessKeyId: ${{ secrets.SDK_S3_ACCESS_KEY_ID }}
-            s3AccessKey: ${{ secrets.SDK_S3_ACCESS_KEY }}
-            sourcePath: doc/api
-            githubToken: ${{ secrets.GITHUB_TOKEN }}
-            artifactName: dartdoc
+          s3AccessKeyId: ${{ secrets.SDK_S3_ACCESS_KEY_ID }}
+          s3AccessKey: ${{ secrets.SDK_S3_ACCESS_KEY }}
+          sourcePath: doc/api
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          artifactName: dartdoc
