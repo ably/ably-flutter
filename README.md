@@ -1,6 +1,8 @@
 # Ably Flutter Plugin
 
-![flutter_integration](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)
+[![.github/workflows/check.yaml](https://github.com/ably/ably-flutter/actions/workflows/check.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/check.yaml)
+[![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
+[![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
 
 A
 [Flutter](https://flutter.dev/)
@@ -52,7 +54,7 @@ Features that we do not currently support, but we do plan to add in the future:
 
 - Clone the repo
 - cd to `example` folder
-- run `flutter packages get` to install dependencies
+- run `flutter pub get` to install dependencies
 - `flutter run` will start the application on connected android / iOS device
 
 ## Usage
