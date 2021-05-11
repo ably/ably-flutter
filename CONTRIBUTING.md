@@ -2,6 +2,11 @@
 
 ## Getting Started
 
+The code in this repository has been constructed to be
+[built as a Flutter Plugin](https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin).
+It is not yet constructed as a federated plugin but this is in our backlog as
+[issue 118](https://github.com/ably/ably-flutter/issues/118).
+
 After checking out this repository, run the following command:
 
     flutter pub get
