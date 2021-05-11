@@ -52,7 +52,7 @@ Features that we do not currently support, but we do plan to add in the future:
 
 - Clone the repo
 - cd to `example` folder
-- run `flutter packages get` to install dependencies
+- run `flutter pub get` to install dependencies
 - `flutter run` will start the application on connected android / iOS device
 
 ## Usage
