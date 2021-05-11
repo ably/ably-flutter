@@ -1,5 +1,15 @@
 # Contributing to the Ably Flutter Plugin
 
+## Getting Started
+
+After checking out this repository, run the following command:
+
+    flutter pub get
+
+You may also find it insightful to run the following command, as it can reveal issues with your development environment:
+
+    flutter doctor
+
 ## Implementation Notes
 
 ### Interfaces
