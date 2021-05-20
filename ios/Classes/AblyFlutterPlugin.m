@@ -95,7 +95,7 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const plu
     ARTDataQuery *const dataQuery = (ARTDataQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
                     FlutterError
@@ -109,9 +109,9 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const plu
         }
     };
     if (dataQuery) {
-        [channel history:dataQuery callback:cbk error: nil];
+        [channel history:dataQuery callback:callback error: nil];
     } else {
-        [channel history:cbk];
+        [channel history:callback];
     }
 };
 
@@ -124,7 +124,7 @@ static const FlutterHandler _getRestPresence = ^void(AblyFlutterPlugin *const pl
     ARTPresenceQuery *const dataQuery = (ARTPresenceQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
                     FlutterError
@@ -138,9 +138,9 @@ static const FlutterHandler _getRestPresence = ^void(AblyFlutterPlugin *const pl
         }
     };
     if (dataQuery) {
-        [[channel presence] get:dataQuery callback:cbk error:nil];
+        [[channel presence] get:dataQuery callback:callback error:nil];
     } else {
-        [[channel presence] get:cbk];
+        [[channel presence] get:callback];
     }
 };
 
@@ -153,7 +153,7 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutterPlugin *c
     ARTPresenceQuery *const dataQuery = (ARTPresenceQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRest *const client = [ably getRest:messageData.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
                     FlutterError
@@ -167,9 +167,9 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutterPlugin *c
         }
     };
     if (dataQuery) {
-        [[channel presence] history:dataQuery callback:cbk error:nil];
+        [[channel presence] history:dataQuery callback:callback error:nil];
     } else {
-        [[channel presence] history:cbk];
+        [[channel presence] history:callback];
     }
 };
 
@@ -291,7 +291,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
     ARTRealtimeChannelOptions *const channelOptions = (ARTRealtimeChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
 
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
@@ -304,7 +304,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
             result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
         }
     };
-    [channel setOptions:channelOptions callback:cbk];
+    [channel setOptions:channelOptions callback:callback];
     result(nil);
 };
 
@@ -317,7 +317,7 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
     ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
     ARTRealtimeChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
@@ -331,9 +331,9 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const
         }
     };
     if (dataQuery) {
-        [channel history:dataQuery callback:cbk error: nil];
+        [channel history:dataQuery callback:callback error: nil];
     } else {
-        [channel history:cbk];
+        [channel history:callback];
     }
 };
 
@@ -346,7 +346,7 @@ static const FlutterHandler _getRealtimePresence = ^void(AblyFlutterPlugin *cons
     ARTRealtimePresenceQuery *const dataQuery = (ARTRealtimePresenceQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
     ARTRealtimeChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(NSArray<ARTPresenceMessage *> * _Nullable presenceMembers, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(NSArray<ARTPresenceMessage *> * _Nullable presenceMembers, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
@@ -359,9 +359,9 @@ static const FlutterHandler _getRealtimePresence = ^void(AblyFlutterPlugin *cons
         }
     };
     if (dataQuery) {
-        [[channel presence] get:dataQuery callback:cbk];
+        [[channel presence] get:dataQuery callback:callback];
     } else {
-        [[channel presence] get:cbk];
+        [[channel presence] get:callback];
     }
 };
 
@@ -374,7 +374,7 @@ static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutterPlugi
     ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*)[_dataMap objectForKey: TxTransportKeys_params];
     ARTRealtime *const client = [ably realtimeWithHandle:messageData.handle];
     ARTRealtimeChannel *const channel = [client.channels get:channelName];
-    const id cbk = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
@@ -388,9 +388,9 @@ static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutterPlugi
         }
     };
     if (dataQuery) {
-        [[channel presence] history:dataQuery callback:cbk error:nil];
+        [[channel presence] history:dataQuery callback:callback error:nil];
     } else {
-        [[channel presence] history:cbk];
+        [[channel presence] history:callback];
     }
 };
 
