@@ -282,7 +282,7 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// Encodes [TokenRequest] to a Map
+  /// Encodes [ChannelOptions] to a Map
   /// returns null of passed value [v] is null
   Map<String, dynamic> _encodeRestChannelOptions(final ChannelOptions v) {
     if (v == null) return null;
