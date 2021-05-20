@@ -49,6 +49,6 @@ class Timeouts {
   static const acquireHandleTimeout = Duration(seconds: 5);
 
   /// max time dart side will wait for platform side to respond after
-  ///  initializing an able instance on platform side
+  ///  initializing an Ably instance on platform side
   static const initializeTimeout = Duration(seconds: 5);
 }
