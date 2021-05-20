@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -213,6 +214,7 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   RealtimePlatformChannels(Realtime realtime) : super(realtime);
 
   @override
+  @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 
 import '../../ably_flutter.dart';
 import '../impl/realtime/connection.dart';
@@ -939,6 +940,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// creates a channel with provided name and options
   ///
   /// This is a private method to be overridden by implementation classes
+  @protected
   ChannelType createChannel(String name);
 
   /// creates a channel with [name].

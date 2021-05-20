@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -162,6 +163,7 @@ class RestPlatformChannels extends RestChannels<RestChannel> {
   RestPlatformChannels(Rest rest) : super(rest);
 
   @override
+  @protected
   RestChannel createChannel(String name) => RestChannel(rest, name);
 
   @override
