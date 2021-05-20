@@ -49,7 +49,11 @@ Future<Map> _provisionApp(
   appSpec ??= _appSpec;
   final url = 'https://${environmentPrefix}rest.ably.io/apps';
   final body = jsonEncode(appSpec);
-  final response = await http.post(url, body: body, headers: _requestHeaders);
+  final response = await http.post(
+    Uri.parse(url),
+    body: body,
+    headers: _requestHeaders,
+  );
   if (response.statusCode != HttpStatus.created) {
     print("Server didn't return success. ${response.body}");
     throw HttpException("Server didn't return success."
@@ -80,7 +84,7 @@ Future<Map<String, dynamic>> getTokenRequest() async {
   final r = await const RetryOptions(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
-  ).retry(() => http.get(authURL));
+  ).retry(() => http.get(Uri.parse(authURL)));
   print('tokenRequest from tokenRequest server: ${r.body}');
   return Map.castFrom<dynamic, dynamic, String, dynamic>(
     jsonDecode(r.body) as Map,
@@ -98,7 +102,7 @@ Future<Map<String, dynamic>> getTokenDetails(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
   ).retry(() => http.post(
-        tokenDetailsURL(keyName, prefix),
+        Uri.parse(tokenDetailsURL(keyName, prefix)),
         headers: {
           'Authorization': 'Basic $encoded',
           'Content-Type': 'application/json',

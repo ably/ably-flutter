@@ -11,7 +11,7 @@ dependencies:
     path: '..'
   ably_flutter_example:
     path: '../example'
-  args: ^1.6.0
+  args: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -20,8 +20,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  http: ^0.12.2
-  test: ^1.9.4
+  test: 1.16.7
 
 flutter:
   uses-material-design: true
