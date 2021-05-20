@@ -28,7 +28,7 @@ typedef NS_ENUM(UInt8, _Value) {
 };
 
 
-@interface AblyPlatformMethod : NSObject
+// flutter platform channel method names
 extern NSString *const AblyPlatformMethod_getPlatformVersion;
 extern NSString *const AblyPlatformMethod_getVersion;
 extern NSString *const AblyPlatformMethod_registerAbly;
@@ -61,44 +61,38 @@ extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
-@end
 
-@interface TxTransportKeys : NSObject
+// key constants for TransportKeys
 extern NSString *const TxTransportKeys_channelName;
 extern NSString *const TxTransportKeys_params;
 extern NSString *const TxTransportKeys_data;
 extern NSString *const TxTransportKeys_clientId;
 extern NSString *const TxTransportKeys_options;
 extern NSString *const TxTransportKeys_messages;
-@end
 
-@interface TxAblyMessage : NSObject
+// key constants for AblyMessage
 extern NSString *const TxAblyMessage_registrationHandle;
 extern NSString *const TxAblyMessage_type;
 extern NSString *const TxAblyMessage_message;
-@end
 
-@interface TxAblyEventMessage : NSObject
+// key constants for AblyEventMessage
 extern NSString *const TxAblyEventMessage_eventName;
 extern NSString *const TxAblyEventMessage_type;
 extern NSString *const TxAblyEventMessage_message;
-@end
 
-@interface TxErrorInfo : NSObject
+// key constants for ErrorInfo
 extern NSString *const TxErrorInfo_code;
 extern NSString *const TxErrorInfo_message;
 extern NSString *const TxErrorInfo_statusCode;
 extern NSString *const TxErrorInfo_href;
 extern NSString *const TxErrorInfo_requestId;
 extern NSString *const TxErrorInfo_cause;
-@end
 
-@interface TxMessageData : NSObject
+// key constants for MessageData
 extern NSString *const TxMessageData_data;
 extern NSString *const TxMessageData_type;
-@end
 
-@interface TxClientOptions : NSObject
+// key constants for ClientOptions
 extern NSString *const TxClientOptions_authUrl;
 extern NSString *const TxClientOptions_authMethod;
 extern NSString *const TxClientOptions_key;
@@ -132,35 +126,30 @@ extern NSString *const TxClientOptions_fallbackRetryTimeout;
 extern NSString *const TxClientOptions_defaultTokenParams;
 extern NSString *const TxClientOptions_channelRetryTimeout;
 extern NSString *const TxClientOptions_transportParams;
-@end
 
-@interface TxRestChannelOptions : NSObject
+// key constants for RestChannelOptions
 extern NSString *const TxRestChannelOptions_cipher;
-@end
 
-@interface TxRealtimeChannelOptions : NSObject
+// key constants for RealtimeChannelOptions
 extern NSString *const TxRealtimeChannelOptions_cipher;
 extern NSString *const TxRealtimeChannelOptions_params;
 extern NSString *const TxRealtimeChannelOptions_modes;
-@end
 
-@interface TxTokenDetails : NSObject
+// key constants for TokenDetails
 extern NSString *const TxTokenDetails_token;
 extern NSString *const TxTokenDetails_expires;
 extern NSString *const TxTokenDetails_issued;
 extern NSString *const TxTokenDetails_capability;
 extern NSString *const TxTokenDetails_clientId;
-@end
 
-@interface TxTokenParams : NSObject
+// key constants for TokenParams
 extern NSString *const TxTokenParams_capability;
 extern NSString *const TxTokenParams_clientId;
 extern NSString *const TxTokenParams_nonce;
 extern NSString *const TxTokenParams_timestamp;
 extern NSString *const TxTokenParams_ttl;
-@end
 
-@interface TxTokenRequest : NSObject
+// key constants for TokenRequest
 extern NSString *const TxTokenRequest_capability;
 extern NSString *const TxTokenRequest_clientId;
 extern NSString *const TxTokenRequest_keyName;
@@ -168,9 +157,8 @@ extern NSString *const TxTokenRequest_mac;
 extern NSString *const TxTokenRequest_nonce;
 extern NSString *const TxTokenRequest_timestamp;
 extern NSString *const TxTokenRequest_ttl;
-@end
 
-@interface TxEnumConstants : NSObject
+// key constants for EnumConstants
 extern NSString *const TxEnumConstants_initialized;
 extern NSString *const TxEnumConstants_connecting;
 extern NSString *const TxEnumConstants_connected;
@@ -192,25 +180,22 @@ extern NSString *const TxEnumConstants_presence;
 extern NSString *const TxEnumConstants_publish;
 extern NSString *const TxEnumConstants_subscribe;
 extern NSString *const TxEnumConstants_presenceSubscribe;
-@end
 
-@interface TxConnectionStateChange : NSObject
+// key constants for ConnectionStateChange
 extern NSString *const TxConnectionStateChange_current;
 extern NSString *const TxConnectionStateChange_previous;
 extern NSString *const TxConnectionStateChange_event;
 extern NSString *const TxConnectionStateChange_retryIn;
 extern NSString *const TxConnectionStateChange_reason;
-@end
 
-@interface TxChannelStateChange : NSObject
+// key constants for ChannelStateChange
 extern NSString *const TxChannelStateChange_current;
 extern NSString *const TxChannelStateChange_previous;
 extern NSString *const TxChannelStateChange_event;
 extern NSString *const TxChannelStateChange_resumed;
 extern NSString *const TxChannelStateChange_reason;
-@end
 
-@interface TxMessage : NSObject
+// key constants for Message
 extern NSString *const TxMessage_id;
 extern NSString *const TxMessage_timestamp;
 extern NSString *const TxMessage_clientId;
@@ -219,9 +204,8 @@ extern NSString *const TxMessage_encoding;
 extern NSString *const TxMessage_data;
 extern NSString *const TxMessage_name;
 extern NSString *const TxMessage_extras;
-@end
 
-@interface TxPresenceMessage : NSObject
+// key constants for PresenceMessage
 extern NSString *const TxPresenceMessage_id;
 extern NSString *const TxPresenceMessage_action;
 extern NSString *const TxPresenceMessage_clientId;
@@ -230,37 +214,31 @@ extern NSString *const TxPresenceMessage_data;
 extern NSString *const TxPresenceMessage_encoding;
 extern NSString *const TxPresenceMessage_extras;
 extern NSString *const TxPresenceMessage_timestamp;
-@end
 
-@interface TxPaginatedResult : NSObject
+// key constants for PaginatedResult
 extern NSString *const TxPaginatedResult_items;
 extern NSString *const TxPaginatedResult_type;
 extern NSString *const TxPaginatedResult_hasNext;
-@end
 
-@interface TxRestHistoryParams : NSObject
+// key constants for RestHistoryParams
 extern NSString *const TxRestHistoryParams_start;
 extern NSString *const TxRestHistoryParams_end;
 extern NSString *const TxRestHistoryParams_direction;
 extern NSString *const TxRestHistoryParams_limit;
-@end
 
-@interface TxRealtimeHistoryParams : NSObject
+// key constants for RealtimeHistoryParams
 extern NSString *const TxRealtimeHistoryParams_start;
 extern NSString *const TxRealtimeHistoryParams_end;
 extern NSString *const TxRealtimeHistoryParams_direction;
 extern NSString *const TxRealtimeHistoryParams_limit;
 extern NSString *const TxRealtimeHistoryParams_untilAttach;
-@end
 
-@interface TxRestPresenceParams : NSObject
+// key constants for RestPresenceParams
 extern NSString *const TxRestPresenceParams_limit;
 extern NSString *const TxRestPresenceParams_clientId;
 extern NSString *const TxRestPresenceParams_connectionId;
-@end
 
-@interface TxRealtimePresenceParams : NSObject
+// key constants for RealtimePresenceParams
 extern NSString *const TxRealtimePresenceParams_waitForSync;
 extern NSString *const TxRealtimePresenceParams_clientId;
 extern NSString *const TxRealtimePresenceParams_connectionId;
-@end

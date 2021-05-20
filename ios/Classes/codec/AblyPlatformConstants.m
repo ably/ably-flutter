@@ -6,7 +6,7 @@
 #import "AblyPlatformConstants.h"
 
 
-@implementation AblyPlatformMethod
+// flutter platform channel method names
 NSString *const AblyPlatformMethod_getPlatformVersion= @"getPlatformVersion";
 NSString *const AblyPlatformMethod_getVersion= @"getVersion";
 NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
@@ -39,44 +39,38 @@ NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeCh
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
-@end
 
-@implementation TxTransportKeys
+// key constants for TransportKeys
 NSString *const TxTransportKeys_channelName = @"channelName";
 NSString *const TxTransportKeys_params = @"params";
 NSString *const TxTransportKeys_data = @"data";
 NSString *const TxTransportKeys_clientId = @"clientId";
 NSString *const TxTransportKeys_options = @"options";
 NSString *const TxTransportKeys_messages = @"messages";
-@end
 
-@implementation TxAblyMessage
+// key constants for AblyMessage
 NSString *const TxAblyMessage_registrationHandle = @"registrationHandle";
 NSString *const TxAblyMessage_type = @"type";
 NSString *const TxAblyMessage_message = @"message";
-@end
 
-@implementation TxAblyEventMessage
+// key constants for AblyEventMessage
 NSString *const TxAblyEventMessage_eventName = @"eventName";
 NSString *const TxAblyEventMessage_type = @"type";
 NSString *const TxAblyEventMessage_message = @"message";
-@end
 
-@implementation TxErrorInfo
+// key constants for ErrorInfo
 NSString *const TxErrorInfo_code = @"code";
 NSString *const TxErrorInfo_message = @"message";
 NSString *const TxErrorInfo_statusCode = @"statusCode";
 NSString *const TxErrorInfo_href = @"href";
 NSString *const TxErrorInfo_requestId = @"requestId";
 NSString *const TxErrorInfo_cause = @"cause";
-@end
 
-@implementation TxMessageData
+// key constants for MessageData
 NSString *const TxMessageData_data = @"data";
 NSString *const TxMessageData_type = @"type";
-@end
 
-@implementation TxClientOptions
+// key constants for ClientOptions
 NSString *const TxClientOptions_authUrl = @"authUrl";
 NSString *const TxClientOptions_authMethod = @"authMethod";
 NSString *const TxClientOptions_key = @"key";
@@ -110,35 +104,30 @@ NSString *const TxClientOptions_fallbackRetryTimeout = @"fallbackRetryTimeout";
 NSString *const TxClientOptions_defaultTokenParams = @"defaultTokenParams";
 NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
-@end
 
-@implementation TxRestChannelOptions
+// key constants for RestChannelOptions
 NSString *const TxRestChannelOptions_cipher = @"cipher";
-@end
 
-@implementation TxRealtimeChannelOptions
+// key constants for RealtimeChannelOptions
 NSString *const TxRealtimeChannelOptions_cipher = @"cipher";
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
-@end
 
-@implementation TxTokenDetails
+// key constants for TokenDetails
 NSString *const TxTokenDetails_token = @"token";
 NSString *const TxTokenDetails_expires = @"expires";
 NSString *const TxTokenDetails_issued = @"issued";
 NSString *const TxTokenDetails_capability = @"capability";
 NSString *const TxTokenDetails_clientId = @"clientId";
-@end
 
-@implementation TxTokenParams
+// key constants for TokenParams
 NSString *const TxTokenParams_capability = @"capability";
 NSString *const TxTokenParams_clientId = @"clientId";
 NSString *const TxTokenParams_nonce = @"nonce";
 NSString *const TxTokenParams_timestamp = @"timestamp";
 NSString *const TxTokenParams_ttl = @"ttl";
-@end
 
-@implementation TxTokenRequest
+// key constants for TokenRequest
 NSString *const TxTokenRequest_capability = @"capability";
 NSString *const TxTokenRequest_clientId = @"clientId";
 NSString *const TxTokenRequest_keyName = @"keyName";
@@ -146,9 +135,8 @@ NSString *const TxTokenRequest_mac = @"mac";
 NSString *const TxTokenRequest_nonce = @"nonce";
 NSString *const TxTokenRequest_timestamp = @"timestamp";
 NSString *const TxTokenRequest_ttl = @"ttl";
-@end
 
-@implementation TxEnumConstants
+// key constants for EnumConstants
 NSString *const TxEnumConstants_initialized = @"initialized";
 NSString *const TxEnumConstants_connecting = @"connecting";
 NSString *const TxEnumConstants_connected = @"connected";
@@ -170,25 +158,22 @@ NSString *const TxEnumConstants_presence = @"presence";
 NSString *const TxEnumConstants_publish = @"publish";
 NSString *const TxEnumConstants_subscribe = @"subscribe";
 NSString *const TxEnumConstants_presenceSubscribe = @"presenceSubscribe";
-@end
 
-@implementation TxConnectionStateChange
+// key constants for ConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";
 NSString *const TxConnectionStateChange_previous = @"previous";
 NSString *const TxConnectionStateChange_event = @"event";
 NSString *const TxConnectionStateChange_retryIn = @"retryIn";
 NSString *const TxConnectionStateChange_reason = @"reason";
-@end
 
-@implementation TxChannelStateChange
+// key constants for ChannelStateChange
 NSString *const TxChannelStateChange_current = @"current";
 NSString *const TxChannelStateChange_previous = @"previous";
 NSString *const TxChannelStateChange_event = @"event";
 NSString *const TxChannelStateChange_resumed = @"resumed";
 NSString *const TxChannelStateChange_reason = @"reason";
-@end
 
-@implementation TxMessage
+// key constants for Message
 NSString *const TxMessage_id = @"id";
 NSString *const TxMessage_timestamp = @"timestamp";
 NSString *const TxMessage_clientId = @"clientId";
@@ -197,9 +182,8 @@ NSString *const TxMessage_encoding = @"encoding";
 NSString *const TxMessage_data = @"data";
 NSString *const TxMessage_name = @"name";
 NSString *const TxMessage_extras = @"extras";
-@end
 
-@implementation TxPresenceMessage
+// key constants for PresenceMessage
 NSString *const TxPresenceMessage_id = @"id";
 NSString *const TxPresenceMessage_action = @"action";
 NSString *const TxPresenceMessage_clientId = @"clientId";
@@ -208,37 +192,31 @@ NSString *const TxPresenceMessage_data = @"data";
 NSString *const TxPresenceMessage_encoding = @"encoding";
 NSString *const TxPresenceMessage_extras = @"extras";
 NSString *const TxPresenceMessage_timestamp = @"timestamp";
-@end
 
-@implementation TxPaginatedResult
+// key constants for PaginatedResult
 NSString *const TxPaginatedResult_items = @"items";
 NSString *const TxPaginatedResult_type = @"type";
 NSString *const TxPaginatedResult_hasNext = @"hasNext";
-@end
 
-@implementation TxRestHistoryParams
+// key constants for RestHistoryParams
 NSString *const TxRestHistoryParams_start = @"start";
 NSString *const TxRestHistoryParams_end = @"end";
 NSString *const TxRestHistoryParams_direction = @"direction";
 NSString *const TxRestHistoryParams_limit = @"limit";
-@end
 
-@implementation TxRealtimeHistoryParams
+// key constants for RealtimeHistoryParams
 NSString *const TxRealtimeHistoryParams_start = @"start";
 NSString *const TxRealtimeHistoryParams_end = @"end";
 NSString *const TxRealtimeHistoryParams_direction = @"direction";
 NSString *const TxRealtimeHistoryParams_limit = @"limit";
 NSString *const TxRealtimeHistoryParams_untilAttach = @"untilAttach";
-@end
 
-@implementation TxRestPresenceParams
+// key constants for RestPresenceParams
 NSString *const TxRestPresenceParams_limit = @"limit";
 NSString *const TxRestPresenceParams_clientId = @"clientId";
 NSString *const TxRestPresenceParams_connectionId = @"connectionId";
-@end
 
-@implementation TxRealtimePresenceParams
+// key constants for RealtimePresenceParams
 NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
 NSString *const TxRealtimePresenceParams_clientId = @"clientId";
 NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
-@end

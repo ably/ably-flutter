@@ -6,12 +6,10 @@ typedef NS_ENUM(UInt8, _Value) {
 };
 
 
-@interface AblyPlatformMethod : NSObject
+// flutter platform channel method names
 ${c['methods'].map((_) => 'extern NSString *const AblyPlatformMethod_${_['name']};').join('\n')}
-@end
 
 ${c['objects'].map((_) => '''
-@interface Tx${_['name']} : NSObject
+// key constants for ${_['name']}
 ${_['properties'].map((name) => 'extern NSString *const Tx${_['name']}_$name;').join('\n')}
-@end
 ''').join('\n')}''';
