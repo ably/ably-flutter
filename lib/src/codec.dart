@@ -306,7 +306,7 @@ class Codec extends StandardMessageCodec {
     return null;
   }
 
-  /// Encodes [TokenRequest] to a Map
+  /// Encodes [RealtimeChannelOptions] to a Map
   /// returns null of passed value [v] is null
   Map<String, dynamic> _encodeRealtimeChannelOptions(
       final RealtimeChannelOptions v) {
