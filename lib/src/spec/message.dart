@@ -54,7 +54,7 @@ class MessageExtras<T> {
   final T _extras;
 
   /// Only Map and List types are supported
-  MessageExtras(this._extras) : assert(T == Map || T == List);
+  MessageExtras(this._extras) : assert(T == Map);
 
   /// retrieve extras
   T get extras => _extras;
@@ -66,19 +66,17 @@ class MessageExtras<T> {
       return null;
     }
     assert(
-      value is MessageExtras || value is Map || value is List,
-      'Message extras must be either `Map`, `List`, or `null`.'
+      value is MessageExtras || value is Map,
+      'Message extras must be either `Map`, or `null`.'
       ' Does not support $value ("${value.runtimeType}")',
     );
     if (value is MessageExtras) {
       return value;
     } else if (value is Map) {
       return MessageExtras<Map>(value);
-    } else if (value is List) {
-      return MessageExtras<List>(value);
     } else {
       throw AssertionError(
-        'Message extras must be either `Map`, `List` or `null`.'
+        'Message extras must be either `Map`, or `null`.'
         ' Does not support $value ("${value.runtimeType}")',
       );
     }
