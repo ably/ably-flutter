@@ -49,37 +49,48 @@ class MessageData<T> {
   }
 }
 
+/// Delta extension configuration for [MessageExtras]
+class DeltaExtras {
+  /// the id of the message the delta was generated from
+  final String from;
+
+  /// the delta format. Only "vcdiff" is supported currently
+  final String format;
+
+  /// initializes with from and format
+  const DeltaExtras({this.from, this.format});
+
+  /// create instance from a map
+  static DeltaExtras fromMap(Map value) {
+    if (value == null) return null;
+    return DeltaExtras(
+      from: value['from'] as String,
+      format: value['format'] as String,
+    );
+  }
+}
+
 /// Handles supported message extras types, their encoding and decoding
-class MessageExtras<T> {
-  final T _extras;
+class MessageExtras {
+  /// json-encodable map of extras
+  final Map<String, dynamic> extras;
 
-  /// Only Map and List types are supported
-  MessageExtras(this._extras) : assert(T == Map);
+  /// configuration for delta compression extension
+  final DeltaExtras delta;
 
-  /// retrieve extras
-  T get extras => _extras;
+  /// extras is a mandatory json-encodable argument while delta is an extension
+  ///  which defines configuration for delta compression extension
+  const MessageExtras(this.extras, {this.delta});
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
-  static MessageExtras fromValue(Object value) {
-    if (value == null) {
-      return null;
-    }
-    assert(
-      value is MessageExtras || value is Map,
-      'Message extras must be either `Map`, or `null`.'
-      ' Does not support $value ("${value.runtimeType}")',
+  static MessageExtras fromMap(Map<String, dynamic> value) {
+    if (value == null) return null;
+    final deltaMap = value.remove('delta') as Map;
+    return MessageExtras(
+      value,
+      delta: DeltaExtras.fromMap(deltaMap),
     );
-    if (value is MessageExtras) {
-      return value;
-    } else if (value is Map) {
-      return MessageExtras<Map>(value);
-    } else {
-      throw AssertionError(
-        'Message extras must be either `Map`, or `null`.'
-        ' Does not support $value ("${value.runtimeType}")',
-      );
-    }
   }
 }
 
@@ -123,13 +134,11 @@ class Message {
   /// https://docs.ably.io/client-lib-development-guide/features/#TM2g
   final String name;
 
-  final MessageExtras _extras;
-
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TM2i
-  Object get extras => _extras?.extras;
+  final MessageExtras extras;
 
   /// Creates a message instance with [name], [data] and [clientId]
   Message({
@@ -140,9 +149,8 @@ class Message {
     this.connectionId,
     this.timestamp,
     this.encoding,
-    Object extras,
-  })  : _data = MessageData.fromValue(data),
-        _extras = MessageExtras.fromValue(extras);
+    this.extras,
+  }) : _data = MessageData.fromValue(data);
 
   @override
   bool operator ==(Object other) =>
@@ -180,7 +188,11 @@ class Message {
         connectionId = jsonObject['connectionId'] as String,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String,
-        _extras = MessageExtras.fromValue(jsonObject['extras']),
+        extras = MessageExtras.fromMap(
+          Map.castFrom<dynamic, dynamic, String, dynamic>(
+            jsonObject['extras'] as Map,
+          ),
+        ),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
                 jsonObject['timestamp'] as int,
@@ -242,13 +254,11 @@ class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
   final String encoding;
 
-  final MessageExtras _extras;
-
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3i
-  Object get extras => _extras?.extras;
+  final MessageExtras extras;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3g
   final DateTime timestamp;
@@ -264,10 +274,9 @@ class PresenceMessage {
     this.connectionId,
     Object data,
     this.encoding,
-    Object extras,
+    this.extras,
     this.timestamp,
-  })  : _data = MessageData.fromValue(data),
-        _extras = MessageExtras.fromValue(extras);
+  }) : _data = MessageData.fromValue(data);
 
   @override
   bool operator ==(Object other) =>
@@ -306,7 +315,11 @@ class PresenceMessage {
         connectionId = jsonObject['connectionId'] as String,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String,
-        _extras = MessageExtras.fromValue(jsonObject['extras']),
+        extras = MessageExtras.fromMap(
+          Map.castFrom<dynamic, dynamic, String, dynamic>(
+            jsonObject['extras'] as Map,
+          ),
+        ),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
                 jsonObject['timestamp'] as int,

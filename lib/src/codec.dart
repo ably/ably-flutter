@@ -92,6 +92,14 @@ class Codec extends StandardMessageCodec {
         _encodeChannelMessageData,
         _decodeChannelMessageData,
       ),
+      CodecTypes.deltaExtras: _CodecPair<DeltaExtras>(
+        _encodeChannelDeltaExtras,
+        _decodeChannelDeltaExtras,
+      ),
+      CodecTypes.messageExtras: _CodecPair<MessageExtras>(
+        _encodeChannelMessageExtras,
+        _decodeChannelMessageExtras,
+      ),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
       CodecTypes.presenceMessage:
@@ -127,6 +135,10 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
+    } else if (value is DeltaExtras) {
+      return CodecTypes.messageExtras;
+    } else if (value is MessageExtras) {
+      return CodecTypes.deltaExtras;
     } else if (value is Message) {
       return CodecTypes.message;
     } else if (value is RealtimeHistoryParams) {
@@ -428,6 +440,26 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxMessageData.data, v.data);
+    return jsonMap;
+  }
+
+  /// Encodes [DeltaExtras] to a Map
+  /// returns null of [v] is null
+  Map<String, dynamic> _encodeChannelDeltaExtras(final DeltaExtras v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxDeltaExtras.from, v.from);
+    _writeToJson(jsonMap, TxDeltaExtras.format, v.format);
+    return jsonMap;
+  }
+
+  /// Encodes [MessageExtras] to a Map
+  /// returns null of [v] is null
+  Map<String, dynamic> _encodeChannelMessageExtras(final MessageExtras v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxMessageExtras.extras, v.extras);
+    _writeToJson(jsonMap, TxMessageExtras.delta, v.delta);
     return jsonMap;
   }
 
@@ -792,6 +824,20 @@ class Codec extends StandardMessageCodec {
         _readFromJson<Object>(jsonMap, TxMessageData.data));
   }
 
+  /// Decodes value [jsonMap] to [DeltaExtras]
+  /// returns null if [jsonMap] is null
+  DeltaExtras _decodeChannelDeltaExtras(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    return DeltaExtras.fromMap(jsonMap);
+  }
+
+  /// Decodes value [jsonMap] to [MessageExtras]
+  /// returns null if [jsonMap] is null
+  MessageExtras _decodeChannelMessageExtras(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    return MessageExtras.fromMap(jsonMap);
+  }
+
   /// Decodes value [jsonMap] to [Message]
   /// returns null if [jsonMap] is null
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
@@ -804,7 +850,7 @@ class Codec extends StandardMessageCodec {
       id: _readFromJson<String>(jsonMap, TxMessage.id),
       connectionId: _readFromJson<String>(jsonMap, TxMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxMessage.encoding),
-      extras: _readFromJson<Map>(jsonMap, TxMessage.extras),
+      extras: _readFromJson<MessageExtras>(jsonMap, TxMessage.extras),
       timestamp: (timestamp == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
@@ -845,7 +891,7 @@ class Codec extends StandardMessageCodec {
       connectionId:
           _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxPresenceMessage.encoding),
-      extras: toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras)),
+      extras: _readFromJson<MessageExtras>(jsonMap, TxPresenceMessage.extras),
       timestamp: (timestamp == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
