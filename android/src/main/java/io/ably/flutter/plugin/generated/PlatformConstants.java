@@ -13,21 +13,23 @@ final public class PlatformConstants {
         public static final byte ablyEventMessage = (byte) 129;
         public static final byte clientOptions = (byte) 130;
         public static final byte messageData = (byte) 131;
-        public static final byte message = (byte) 132;
-        public static final byte tokenParams = (byte) 133;
-        public static final byte tokenDetails = (byte) 134;
-        public static final byte tokenRequest = (byte) 135;
-        public static final byte restChannelOptions = (byte) 136;
-        public static final byte realtimeChannelOptions = (byte) 137;
-        public static final byte paginatedResult = (byte) 138;
-        public static final byte restHistoryParams = (byte) 139;
-        public static final byte realtimeHistoryParams = (byte) 140;
-        public static final byte restPresenceParams = (byte) 141;
-        public static final byte presenceMessage = (byte) 142;
-        public static final byte realtimePresenceParams = (byte) 143;
-        public static final byte errorInfo = (byte) 144;
-        public static final byte connectionStateChange = (byte) 145;
-        public static final byte channelStateChange = (byte) 146;
+        public static final byte deltaExtras = (byte) 132;
+        public static final byte messageExtras = (byte) 133;
+        public static final byte message = (byte) 134;
+        public static final byte tokenParams = (byte) 135;
+        public static final byte tokenDetails = (byte) 136;
+        public static final byte tokenRequest = (byte) 137;
+        public static final byte restChannelOptions = (byte) 138;
+        public static final byte realtimeChannelOptions = (byte) 139;
+        public static final byte paginatedResult = (byte) 140;
+        public static final byte restHistoryParams = (byte) 141;
+        public static final byte realtimeHistoryParams = (byte) 142;
+        public static final byte restPresenceParams = (byte) 143;
+        public static final byte presenceMessage = (byte) 144;
+        public static final byte realtimePresenceParams = (byte) 145;
+        public static final byte errorInfo = (byte) 146;
+        public static final byte connectionStateChange = (byte) 147;
+        public static final byte channelStateChange = (byte) 148;
     }
 
     static final public class PlatformMethod {
@@ -98,6 +100,16 @@ final public class PlatformConstants {
     static final public class TxMessageData {
         public static final String data = "data";
         public static final String type = "type";
+    }
+
+    static final public class TxDeltaExtras {
+        public static final String from = "from";
+        public static final String format = "format";
+    }
+
+    static final public class TxMessageExtras {
+        public static final String extras = "extras";
+        public static final String delta = "delta";
     }
 
     static final public class TxClientOptions {

@@ -10,21 +10,23 @@ typedef NS_ENUM(UInt8, _Value) {
     ablyEventMessageCodecType = 129,
     clientOptionsCodecType = 130,
     messageDataCodecType = 131,
-    messageCodecType = 132,
-    tokenParamsCodecType = 133,
-    tokenDetailsCodecType = 134,
-    tokenRequestCodecType = 135,
-    restChannelOptionsCodecType = 136,
-    realtimeChannelOptionsCodecType = 137,
-    paginatedResultCodecType = 138,
-    restHistoryParamsCodecType = 139,
-    realtimeHistoryParamsCodecType = 140,
-    restPresenceParamsCodecType = 141,
-    presenceMessageCodecType = 142,
-    realtimePresenceParamsCodecType = 143,
-    errorInfoCodecType = 144,
-    connectionStateChangeCodecType = 145,
-    channelStateChangeCodecType = 146,
+    deltaExtrasCodecType = 132,
+    messageExtrasCodecType = 133,
+    messageCodecType = 134,
+    tokenParamsCodecType = 135,
+    tokenDetailsCodecType = 136,
+    tokenRequestCodecType = 137,
+    restChannelOptionsCodecType = 138,
+    realtimeChannelOptionsCodecType = 139,
+    paginatedResultCodecType = 140,
+    restHistoryParamsCodecType = 141,
+    realtimeHistoryParamsCodecType = 142,
+    restPresenceParamsCodecType = 143,
+    presenceMessageCodecType = 144,
+    realtimePresenceParamsCodecType = 145,
+    errorInfoCodecType = 146,
+    connectionStateChangeCodecType = 147,
+    channelStateChangeCodecType = 148,
 };
 
 
@@ -91,6 +93,14 @@ extern NSString *const TxErrorInfo_cause;
 // key constants for MessageData
 extern NSString *const TxMessageData_data;
 extern NSString *const TxMessageData_type;
+
+// key constants for DeltaExtras
+extern NSString *const TxDeltaExtras_from;
+extern NSString *const TxDeltaExtras_format;
+
+// key constants for MessageExtras
+extern NSString *const TxMessageExtras_extras;
+extern NSString *const TxMessageExtras_delta;
 
 // key constants for ClientOptions
 extern NSString *const TxClientOptions_authUrl;
