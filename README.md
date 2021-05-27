@@ -49,6 +49,7 @@ Features that we do not currently support, but we do plan to add in the future:
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
 - Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 - Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
+- Message Delta Compression ([#11](https://github.com/ably/ably-flutter/issues/11))
 
 ## Running the example
 
