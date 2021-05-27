@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -18,13 +19,10 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   String name;
 
-  @override
-  ChannelOptions options;
-
   RestPresence _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
-  RestChannel(this.rest, this.name, this.options) {
+  RestChannel(this.rest, this.name) {
     _presence = RestPresence(this);
   }
 
@@ -88,8 +86,8 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
       try {
         final _map = <String, Object>{
-          'channel': name,
-          'messages': item.messages
+          TxTransportKeys.channelName: name,
+          TxTransportKeys.messages: item.messages,
         };
 
         await invoke(PlatformMethod.publish, _map);
@@ -101,8 +99,8 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         if (!item.completer.isCompleted) {
           item.completer.complete();
         }
-      } on PlatformException catch (pe) {
-        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
+      } on AblyException catch (ae) {
+        if (ae.code == ErrorCodes.authCallbackFailure.toString()) {
           if (_authCallbackCompleter != null) {
             return;
           }
@@ -125,12 +123,11 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         } else {
           _publishQueue
               .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(AblyException(
-                    pe.code,
-                    pe.message,
-                    pe.details as ErrorInfo,
-                  )));
+              .forEach((e) => e.completer.completeError(ae));
         }
+      } on PlatformException catch (pe) {
+        _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
+            e.completer.completeError(AblyException.fromPlatformException(pe)));
       } on Exception {
         // removing item from queue and rethrowing exception
         _publishQueue.remove(item);
@@ -151,9 +148,11 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   }
 
   @override
-  Future<void> setOptions(ChannelOptions options) async {
-    throw UnimplementedError();
-  }
+  Future<void> setOptions(ChannelOptions options) =>
+      invoke(PlatformMethod.setRealtimeChannelOptions, {
+        TxTransportKeys.channelName: name,
+        TxTransportKeys.options: options,
+      });
 }
 
 /// A collection of rest channel objects
@@ -164,8 +163,14 @@ class RestPlatformChannels extends RestChannels<RestChannel> {
   RestPlatformChannels(Rest rest) : super(rest);
 
   @override
-  RestChannel createChannel(String name, ChannelOptions options) =>
-      RestChannel(rest, name, options);
+  @protected
+  RestChannel createChannel(String name) => RestChannel(rest, name);
+
+  @override
+  void release(String name) {
+    super.release(name);
+    (rest as Rest).invoke(PlatformMethod.releaseRestChannel, name);
+  }
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

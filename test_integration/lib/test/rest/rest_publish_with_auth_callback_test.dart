@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../factory/reporter.dart';
-import 'rest_publish_test.dart';
+import '../../factory/reporter.dart';
+import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPublishWithAuthCallback({
   Reporter reporter,
@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> testRestPublishWithAuthCallback({
           authCallbackInvoked = true;
           return TokenRequest.fromMap(await getTokenRequest());
         }));
-  await restMessagesPublishUtil(rest.channels.get('test'));
+  await publishMessages(rest.channels.get('test'));
   return {
     'handle': await rest.handle,
     'authCallbackInvoked': authCallbackInvoked

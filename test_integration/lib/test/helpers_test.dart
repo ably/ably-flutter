@@ -1,6 +1,6 @@
 import '../factory/reporter.dart';
 
-Future<Map<String, dynamic>> testTestHelperUnhandledException({
+Future<Map<String, dynamic>> testHelperUnhandledException({
   Reporter reporter,
   Map<String, dynamic> payload,
 }) async {

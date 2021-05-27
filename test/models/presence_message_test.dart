@@ -28,28 +28,28 @@ void main() {
         extras: extras,
         timestamp: timestamp,
       );
-      test('Retrieves id', () {
+      test('#id retrieves id', () {
         expect(presenceMessage.id, messageId);
       });
-      test('Retrieves action', () {
+      test('#action retrieves action', () {
         expect(presenceMessage.action, action);
       });
-      test('Retrieves clientId', () {
+      test('#clientId retrieves clientId', () {
         expect(presenceMessage.clientId, clientId);
       });
-      test('Retrieves connectionId', () {
+      test('#connectionId retrieves connectionId', () {
         expect(presenceMessage.connectionId, connectionId);
       });
-      test('Retrieves data', () {
+      test('#data retrieves data', () {
         expect(presenceMessage.data, data);
       });
-      test('Retrieves encoding', () {
+      test('#encoding retrieves encoding', () {
         expect(presenceMessage.encoding, encoding);
       });
-      test('Retrieves extras', () {
+      test('#extras retrieves extras', () {
         expect(presenceMessage.extras, extras);
       });
-      test('Retrieves timestamp', () {
+      test('#timestamp retrieves timestamp', () {
         expect(presenceMessage.timestamp, timestamp);
       });
 
@@ -164,6 +164,50 @@ void main() {
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
+        );
+      });
+    });
+
+    group('arguments with ', () {
+      test('null id, extras, client_id and encoding are allowed', () {
+        final message = PresenceMessage();
+        expect(message.id, null);
+        expect(message.encoding, null);
+        expect(message.clientId, null);
+        expect(message.extras, null);
+      });
+      test('a map of extras is allowed', () {
+        final message = PresenceMessage(extras: const {'key': 'value'});
+        expect(message.extras, const {'key': 'value'});
+      });
+      test('a list of extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: const ['item1', 'item2']),
+          throwsA(isA<AssertionError>()),
+        );
+      });
+      test('a string for extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: 'extra'),
+          throwsA(isA<AssertionError>()),
+        );
+      });
+      test('an int for extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: 1),
+          throwsA(isA<AssertionError>()),
+        );
+      });
+      test('a bool for extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: true),
+          throwsA(isA<AssertionError>()),
+        );
+      });
+      test('any other Object for extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: Object()),
+          throwsA(isA<AssertionError>()),
         );
       });
     });

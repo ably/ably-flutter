@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 import '../platform.dart' as platform;
+import '../spec/constants.dart';
 import 'message.dart';
 import 'streams_channel.dart';
 
@@ -11,7 +12,6 @@ import 'streams_channel.dart';
 /// where that live counterpart is held as a strong reference by the plugin
 /// implementation.
 abstract class PlatformObject {
-  static const _acquireHandleTimeout = Duration(seconds: 5);
   Future<int> _handle;
   int _handleValue; // Only for logging. Otherwise use _handle instead.
 
@@ -37,14 +37,16 @@ abstract class PlatformObject {
   /// updates [_handle] and returns it.
   Future<int> get handle async => _handle ??= _acquireHandle();
 
-  Future<int> _acquireHandle() =>
-      createPlatformInstance().timeout(_acquireHandleTimeout, onTimeout: () {
-        _handle = null;
-        throw TimeoutException(
-          'Acquiring handle timed out.',
-          _acquireHandleTimeout,
-        );
-      }).then((value) => _handleValue = value);
+  Future<int> _acquireHandle() => createPlatformInstance().timeout(
+        Timeouts.acquireHandleTimeout,
+        onTimeout: () {
+          _handle = null;
+          throw TimeoutException(
+            'Acquiring handle timed out.',
+            Timeouts.acquireHandleTimeout,
+          );
+        },
+      ).then((value) => _handleValue = value);
 
   /// [MethodChannel] to make method calls to platform side
   MethodChannel get methodChannel => platform.methodChannel;
@@ -58,7 +60,6 @@ abstract class PlatformObject {
       platform.invokePlatformMethod<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
-  @protected
   Future<T> invoke<T>(final String method, [final Object argument]) async {
     final _handle = await handle;
     final message = (null != argument)

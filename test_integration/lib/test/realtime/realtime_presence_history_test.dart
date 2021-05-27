@@ -1,9 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../config/test_config.dart';
+import '../../factory/reporter.dart';
+import '../../utils/data.dart';
+import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePresenceHistory({
   Reporter reporter,
@@ -23,7 +24,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   final realtime = Realtime(options: options);
   final channel = realtime.channels.get('test');
 
-  final historyInitial = await _history(channel);
+  final historyInitial = await getPresenceHistory(channel);
 
   // creating presence history on channel
   final realtimePresence = channel.presence;
@@ -36,44 +37,50 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   // leaves channel
   await realtimePresence.leave(messagesToPublish.last[1]);
 
-  final historyDefault = await _history(channel);
-  await Future.delayed(const Duration(seconds: 2));
+  final historyDefault = await getPresenceHistory(channel);
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit4 =
-      await _history(channel, RealtimeHistoryParams(limit: 4));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit4 = await getPresenceHistory(
+    channel,
+    RealtimeHistoryParams(limit: 4),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit2 =
-      await _history(channel, RealtimeHistoryParams(limit: 2));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit2 = await getPresenceHistory(
+    channel,
+    RealtimeHistoryParams(limit: 2),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyForwards = await _history(
+  final historyForwards = await getPresenceHistory(
     channel,
     RealtimeHistoryParams(direction: 'forwards'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time1 = DateTime.now();
   //TODO(tiholic) iOS fails without this delay
   // - timestamp on message retrieved from history
   // is earlier than expected when ran in CI
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.enter('enter-start-time');
   // TODO(tiholic) understand why tests fail without this delay
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time2 = DateTime.now();
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.leave('leave-end-time');
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyWithStart =
-      await _history(channel, RealtimeHistoryParams(start: time1));
-  final historyWithStartAndEnd = await _history(
+  final historyWithStart = await getPresenceHistory(
+    channel,
+    RealtimeHistoryParams(start: time1),
+  );
+  final historyWithStartAndEnd = await getPresenceHistory(
     channel,
     RealtimeHistoryParams(start: time1, end: time2),
   );
-  final historyAll = await _history(channel);
+  final historyAll = await getPresenceHistory(channel);
 
   return {
     'handle': await realtime.handle,
@@ -87,20 +94,4 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
     'historyAll': historyAll,
     'log': logMessages,
   };
-}
-
-Future<List<Map<String, dynamic>>> _history(
-  RealtimeChannel channel, [
-  RealtimeHistoryParams params,
-]) async {
-  var results = await channel.presence.history(params);
-  final messages =
-      encodeList<PresenceMessage>(results.items, encodePresenceMessage);
-  while (results.hasNext()) {
-    results = await results.next();
-    messages.addAll(
-      encodeList<PresenceMessage>(results.items, encodePresenceMessage),
-    );
-  }
-  return messages;
 }

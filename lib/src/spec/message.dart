@@ -49,9 +49,44 @@ class MessageData<T> {
   }
 }
 
+/// Handles supported message extras types, their encoding and decoding
+class MessageExtras<T> {
+  final T _extras;
+
+  /// Only Map and List types are supported
+  MessageExtras(this._extras) : assert(T == Map);
+
+  /// retrieve extras
+  T get extras => _extras;
+
+  /// initializes [MessageExtras] with given value and validates
+  /// the data type, runtime
+  static MessageExtras fromValue(Object value) {
+    if (value == null) {
+      return null;
+    }
+    assert(
+      value is MessageExtras || value is Map,
+      'Message extras must be either `Map`, or `null`.'
+      ' Does not support $value ("${value.runtimeType}")',
+    );
+    if (value is MessageExtras) {
+      return value;
+    } else if (value is Map) {
+      return MessageExtras<Map>(value);
+    } else {
+      throw AssertionError(
+        'Message extras must be either `Map`, or `null`.'
+        ' Does not support $value ("${value.runtimeType}")',
+      );
+    }
+  }
+}
+
 /// An individual message to be sent/received by Ably
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TM1
+@immutable
 class Message {
   /// A unique ID for this message
   ///
@@ -88,8 +123,13 @@ class Message {
   /// https://docs.ably.io/client-lib-development-guide/features/#TM2g
   final String name;
 
-  /// Extras, if available
-  final Map extras;
+  final MessageExtras _extras;
+
+  /// Message extras that may contain message metadata
+  /// and/or ancillary payloads
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#TM2i
+  Object get extras => _extras?.extras;
 
   /// Creates a message instance with [name], [data] and [clientId]
   Message({
@@ -100,8 +140,59 @@ class Message {
     this.connectionId,
     this.timestamp,
     this.encoding,
-    this.extras,
-  }) : _data = MessageData.fromValue(data);
+    Object extras,
+  })  : _data = MessageData.fromValue(data),
+        _extras = MessageExtras.fromValue(extras);
+
+  @override
+  bool operator ==(Object other) =>
+      other is Message &&
+      other.id == id &&
+      other.name == name &&
+      other.data == data &&
+      other.extras == extras &&
+      other.encoding == encoding &&
+      other.clientId == clientId &&
+      other.timestamp == timestamp &&
+      other.connectionId == connectionId;
+
+  @override
+  int get hashCode => '$id:'
+          '$name:'
+          '$encoding:'
+          '$clientId:'
+          '$timestamp:'
+          '$connectionId:'
+          '${data?.toString()}:'
+          '${extras?.toString()}:'
+      .hashCode;
+
+  /// https://docs.ably.io/client-lib-development-guide/features/#TM3
+  ///
+  /// TODO(tiholic): decoding and decryption is not implemented as per
+  ///  RSL6 and RLS6b as mentioned in TM3
+  Message.fromEncoded(
+    Map<String, dynamic> jsonObject, [
+    ChannelOptions channelOptions,
+  ])  : id = jsonObject['id'] as String,
+        name = jsonObject['name'] as String,
+        clientId = jsonObject['clientId'] as String,
+        connectionId = jsonObject['connectionId'] as String,
+        _data = MessageData.fromValue(jsonObject['data']),
+        encoding = jsonObject['encoding'] as String,
+        _extras = MessageExtras.fromValue(jsonObject['extras']),
+        timestamp = jsonObject['timestamp'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                jsonObject['timestamp'] as int,
+              )
+            : null;
+
+  /// https://docs.ably.io/client-lib-development-guide/features/#TM3
+  static List<Message> fromEncodedArray(
+    List<Map<String, dynamic>> jsonArray, [
+    ChannelOptions channelOptions,
+  ]) =>
+      jsonArray.map((e) => Message.fromEncoded(e, channelOptions)).toList();
 
   @override
   String toString() => 'Message'
@@ -151,8 +242,13 @@ class PresenceMessage {
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
   final String encoding;
 
+  final MessageExtras _extras;
+
+  /// Message extras that may contain message metadata
+  /// and/or ancillary payloads
+  ///
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3i
-  final Map<String, dynamic> extras;
+  Object get extras => _extras?.extras;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP3g
   final DateTime timestamp;
@@ -168,9 +264,10 @@ class PresenceMessage {
     this.connectionId,
     Object data,
     this.encoding,
-    this.extras,
+    Object extras,
     this.timestamp,
-  }) : _data = MessageData.fromValue(data);
+  })  : _data = MessageData.fromValue(data),
+        _extras = MessageExtras.fromValue(extras);
 
   @override
   bool operator ==(Object other) =>
@@ -185,7 +282,15 @@ class PresenceMessage {
       other.timestamp == timestamp;
 
   @override
-  int get hashCode => '$id:$clientId:$connectionId:$timestamp'.hashCode;
+  int get hashCode => '$id:'
+          '$encoding:'
+          '$clientId:'
+          '$timestamp:'
+          '$connectionId:'
+          '${data?.toString()}:'
+          '${action.toString()}:'
+          '${extras?.toString()}:'
+      .hashCode;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
   ///
@@ -201,11 +306,11 @@ class PresenceMessage {
         connectionId = jsonObject['connectionId'] as String,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String,
-        extras = Map.castFrom<dynamic, dynamic, String, dynamic>(
-            jsonObject['extras'] as Map),
+        _extras = MessageExtras.fromValue(jsonObject['extras']),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
-                jsonObject['timestamp'] as int)
+                jsonObject['timestamp'] as int,
+              )
             : null;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TP4
@@ -213,7 +318,12 @@ class PresenceMessage {
     List<Map<String, dynamic>> jsonArray, [
     ChannelOptions channelOptions,
   ]) =>
-      jsonArray.map((e) => PresenceMessage.fromEncoded(e)).toList();
+      jsonArray
+          .map((jsonObject) => PresenceMessage.fromEncoded(
+                jsonObject,
+                channelOptions,
+              ))
+          .toList();
 
   @override
   String toString() => 'PresenceMessage'

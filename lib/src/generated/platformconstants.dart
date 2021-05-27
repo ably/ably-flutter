@@ -14,15 +14,17 @@ class CodecTypes {
   static const int tokenParams = 133;
   static const int tokenDetails = 134;
   static const int tokenRequest = 135;
-  static const int paginatedResult = 136;
-  static const int restHistoryParams = 137;
-  static const int realtimeHistoryParams = 138;
-  static const int restPresenceParams = 139;
-  static const int presenceMessage = 140;
-  static const int realtimePresenceParams = 141;
-  static const int errorInfo = 142;
-  static const int connectionStateChange = 143;
-  static const int channelStateChange = 144;
+  static const int restChannelOptions = 136;
+  static const int realtimeChannelOptions = 137;
+  static const int paginatedResult = 138;
+  static const int restHistoryParams = 139;
+  static const int realtimeHistoryParams = 140;
+  static const int restPresenceParams = 141;
+  static const int presenceMessage = 142;
+  static const int realtimePresenceParams = 143;
+  static const int errorInfo = 144;
+  static const int connectionStateChange = 145;
+  static const int channelStateChange = 146;
 }
 
 class PlatformMethod {
@@ -32,10 +34,12 @@ class PlatformMethod {
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
   static const String createRestWithOptions = 'createRestWithOptions';
+  static const String setRestChannelOptions = 'setRestChannelOptions';
   static const String publish = 'publish';
   static const String restHistory = 'restHistory';
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
+  static const String releaseRestChannel = 'releaseRestChannel';
   static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -50,6 +54,7 @@ class PlatformMethod {
   static const String onRealtimePresenceMessage = 'onRealtimePresenceMessage';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
+  static const String releaseRealtimeChannel = 'releaseRealtimeChannel';
   static const String realtimeHistory = 'realtimeHistory';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
@@ -66,6 +71,7 @@ class TxTransportKeys {
   static const String data = 'data';
   static const String clientId = 'clientId';
   static const String options = 'options';
+  static const String messages = 'messages';
 }
 
 class TxAblyMessage {
@@ -130,6 +136,16 @@ class TxClientOptions {
   static const String transportParams = 'transportParams';
 }
 
+class TxRestChannelOptions {
+  static const String cipher = 'cipher';
+}
+
+class TxRealtimeChannelOptions {
+  static const String cipher = 'cipher';
+  static const String params = 'params';
+  static const String modes = 'modes';
+}
+
 class TxTokenDetails {
   static const String token = 'token';
   static const String expires = 'expires';
@@ -174,6 +190,10 @@ class TxEnumConstants {
   static const String enter = 'enter';
   static const String present = 'present';
   static const String update = 'update';
+  static const String presence = 'presence';
+  static const String publish = 'publish';
+  static const String subscribe = 'subscribe';
+  static const String presenceSubscribe = 'presenceSubscribe';
 }
 
 class TxConnectionStateChange {

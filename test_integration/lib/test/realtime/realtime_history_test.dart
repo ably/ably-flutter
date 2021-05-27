@@ -1,9 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
-import 'realtime_publish_test.dart';
+import '../../config/test_config.dart';
+import '../../factory/reporter.dart';
+import '../../utils/encoders.dart';
+import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimeHistory({
   Reporter reporter,
@@ -22,43 +23,53 @@ Future<Map<String, dynamic>> testRealtimeHistory({
           ({msg, exception}) => logMessages.add([msg, exception.toString()]),
   );
   final channel = realtime.channels.get('test');
-  await realtimeMessagesPublishUtil(channel);
+  await publishMessages(channel);
 
   final paginatedResult = await channel.history();
-  final historyDefault = await _history(channel);
-  await Future.delayed(const Duration(seconds: 2));
+  final historyDefault = await getHistory(channel);
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit4 =
-      await _history(channel, RealtimeHistoryParams(limit: 4));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit4 = await getHistory(
+    channel,
+    RealtimeHistoryParams(limit: 4),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit2 =
-      await _history(channel, RealtimeHistoryParams(limit: 2));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit2 = await getHistory(
+    channel,
+    RealtimeHistoryParams(limit: 2),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyForwardLimit4 = await _history(
-      channel, RealtimeHistoryParams(direction: 'forwards', limit: 4));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyForwardLimit4 = await getHistory(
+    channel,
+    RealtimeHistoryParams(direction: 'forwards', limit: 4),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time1 = DateTime.now();
   //TODO(tiholic) iOS fails without this delay
   // - timestamp on message retrieved from history
   // is earlier than expected when ran in CI
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(name: 'history', data: 'test');
   //TODO(tiholic) understand why tests fail without this delay
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time2 = DateTime.now();
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(name: 'history', data: 'test2');
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyWithStart =
-      await _history(channel, RealtimeHistoryParams(start: time1));
-  final historyWithStartAndEnd =
-      await _history(channel, RealtimeHistoryParams(start: time1, end: time2));
-  final historyAll = await _history(channel);
+  final historyWithStart = await getHistory(
+    channel,
+    RealtimeHistoryParams(start: time1),
+  );
+  final historyWithStartAndEnd = await getHistory(
+    channel,
+    RealtimeHistoryParams(start: time1, end: time2),
+  );
+  final historyAll = await getHistory(channel);
   return {
     'handle': await realtime.handle,
     'paginatedResult': encodePaginatedResult(paginatedResult, encodeMessage),
@@ -73,17 +84,4 @@ Future<Map<String, dynamic>> testRealtimeHistory({
     't2': time2.toIso8601String(),
     'log': logMessages,
   };
-}
-
-Future<List<Map<String, dynamic>>> _history(
-  RealtimeChannel channel, [
-  RealtimeHistoryParams params,
-]) async {
-  var results = await channel.history(params);
-  final messages = encodeList<Message>(results.items, encodeMessage);
-  while (results.hasNext()) {
-    results = await results.next();
-    messages.addAll(encodeList<Message>(results.items, encodeMessage));
-  }
-  return messages;
 }

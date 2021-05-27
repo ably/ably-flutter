@@ -1,9 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../config/test_config.dart';
+import '../../factory/reporter.dart';
+import '../../utils/data.dart';
+import '../../utils/realtime.dart';
 
 final logMessages = <List<String>>[];
 
@@ -27,7 +28,7 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
 
   final realtime = Realtime(options: getClientOptions(appKey));
   final channel = realtime.channels.get('test');
-  final membersInitial = await _members(channel);
+  final membersInitial = await getPresenceMembers(channel);
 
   // enter multiple clients
   for (var i = 0; i < messagesToPublish.length; i++) {
@@ -36,25 +37,25 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
     ).channels.get('test').presence.enter(messagesToPublish[i][1]);
   }
 
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final membersDefault = await _members(channel);
-  await Future.delayed(const Duration(seconds: 2));
+  final membersDefault = await getPresenceMembers(channel);
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final membersClientId = await _members(
+  final membersClientId = await getPresenceMembers(
     channel,
     RealtimePresenceParams(clientId: 'client-1'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // TODO(tiholic) extract connection ID from realtime instance
   //  after implementing `id` update on connection object from platform
   // Until then, `membersConnectionId` will be empty list
-  final membersConnectionId = await _members(
+  final membersConnectionId = await getPresenceMembers(
     channel,
     RealtimePresenceParams(connectionId: 'connection-1'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   return {
     'handle': await realtime.handle,
@@ -65,12 +66,3 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
     'log': logMessages,
   };
 }
-
-Future<List<Map<String, dynamic>>> _members(
-  RealtimeChannel channel, [
-  RealtimePresenceParams params,
-]) async =>
-    encodeList<PresenceMessage>(
-      await channel.presence.get(params),
-      encodePresenceMessage,
-    );

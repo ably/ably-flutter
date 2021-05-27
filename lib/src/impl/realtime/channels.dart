@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
@@ -15,24 +16,21 @@ import 'realtime.dart';
 class RealtimeChannel extends PlatformObject
     implements RealtimeChannelInterface {
   @override
-  RealtimeInterface realtime;
+  final RealtimeInterface realtime;
 
   @override
-  String name;
-
-  @override
-  ChannelOptions options;
+  final String name;
 
   RealtimePresence _presence;
 
   @override
   RealtimePresence get presence => _presence;
 
-  /// instantiates with [Rest], [name] and [ChannelOptions]
+  /// instantiates with [Rest], [name] and [RealtimeChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
-  RealtimeChannel(this.realtime, this.name, this.options) : super() {
+  RealtimeChannel(this.realtime, this.name) : super() {
     _presence = RealtimePresence(this);
     state = ChannelState.initialized;
     on().listen((event) => state = event.current);
@@ -54,13 +52,6 @@ class RealtimeChannel extends PlatformObject
     });
     return PaginatedResult<Message>.fromAblyMessage(message);
   }
-
-  Map<String, dynamic> __payload;
-
-  Map<String, dynamic> get _payload => __payload ??= {
-        'channel': name,
-        if (options != null) 'options': options,
-      };
 
   final _publishQueue = Queue<_PublishQueueItem>();
   Completer<void> _authCallbackCompleter;
@@ -102,8 +93,8 @@ class RealtimeChannel extends PlatformObject
 
       try {
         await invoke(PlatformMethod.publishRealtimeChannelMessage, {
-          ..._payload,
-          'messages': item.messages,
+          TxTransportKeys.channelName: name,
+          TxTransportKeys.messages: item.messages,
         });
 
         _publishQueue.remove(item);
@@ -113,8 +104,8 @@ class RealtimeChannel extends PlatformObject
         if (!item.completer.isCompleted) {
           item.completer.complete();
         }
-      } on PlatformException catch (pe) {
-        if (pe.code == ErrorCodes.authCallbackFailure.toString()) {
+      } on AblyException catch (ae) {
+        if (ae.code == ErrorCodes.authCallbackFailure.toString()) {
           if (_authCallbackCompleter != null) {
             return;
           }
@@ -136,12 +127,11 @@ class RealtimeChannel extends PlatformObject
         } else {
           _publishQueue
               .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(AblyException(
-                    pe.code,
-                    pe.message,
-                    pe.details as ErrorInfo,
-                  )));
+              .forEach((e) => e.completer.completeError(ae));
         }
+      } on PlatformException catch (pe) {
+        _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
+            e.completer.completeError(AblyException.fromPlatformException(pe)));
       } on Exception {
         // removing item from queue and rethrowing exception
         _publishQueue.remove(item);
@@ -177,33 +167,29 @@ class RealtimeChannel extends PlatformObject
   ChannelState state;
 
   @override
-  Future<void> attach() async {
-    try {
-      await invoke(PlatformMethod.attachRealtimeChannel, _payload);
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
+  Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
+        TxTransportKeys.channelName: name,
+      });
 
   @override
-  Future<void> detach() async {
-    try {
-      await invoke(PlatformMethod.detachRealtimeChannel, _payload);
-    } on PlatformException catch (pe) {
-      throw AblyException(pe.code, pe.message, pe.details as ErrorInfo);
-    }
-  }
+  Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
+        TxTransportKeys.channelName: name,
+      });
 
   @override
-  Future<void> setOptions(ChannelOptions options) async {
-    throw UnimplementedError();
-  }
+  Future<void> setOptions(RealtimeChannelOptions options) =>
+      invoke(PlatformMethod.setRealtimeChannelOptions, {
+        TxTransportKeys.channelName: name,
+        TxTransportKeys.options: options,
+      });
 
   @override
   Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
-        _payload,
+        {
+          TxTransportKeys.channelName: name,
+        },
       ).where(
         (stateChange) =>
             channelEvent == null || stateChange.event == channelEvent,
@@ -212,10 +198,11 @@ class RealtimeChannel extends PlatformObject
   @override
   Stream<Message> subscribe({String name, List<String> names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
-    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, _payload)
-        .where((message) =>
-            subscribedNames.isEmpty ||
-            subscribedNames.any((n) => n == message.name));
+    return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
+      TxTransportKeys.channelName: this.name,
+    }).where((message) =>
+        subscribedNames.isEmpty ||
+        subscribedNames.any((n) => n == message.name));
   }
 }
 
@@ -227,8 +214,14 @@ class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   RealtimePlatformChannels(Realtime realtime) : super(realtime);
 
   @override
-  RealtimeChannel createChannel(String name, ChannelOptions options) =>
-      RealtimeChannel(realtime, name, options);
+  @protected
+  RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
+
+  @override
+  void release(String name) {
+    super.release(name);
+    (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
+  }
 }
 
 /// An item for used to enqueue a message to be published after an ongoing

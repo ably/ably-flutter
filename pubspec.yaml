@@ -21,7 +21,7 @@ dev_dependencies:
 
   # Specifying a slightly older version minimum for the 'pure' Dart test package
   # because the flutter_test package needs an older version of test_api.
-  test: ^1.9.4
+  test: ^1.16.7
 
 
 flutter:

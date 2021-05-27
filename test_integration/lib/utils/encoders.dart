@@ -56,3 +56,16 @@ Map<String, dynamic> encodePaginatedResult<T>(
       'hasNext': paginatedResult.hasNext(),
       'isLast': paginatedResult.isLast(),
     };
+
+Map<String, dynamic> encodeAblyException<T>(AblyException exception) => {
+      'code': exception.code,
+      'message': exception.message,
+      'errorInfo': {
+        'code': exception.errorInfo.code,
+        'href': exception.errorInfo.href,
+        'message': exception.errorInfo.message,
+        'cause': exception.errorInfo.cause,
+        'statusCode': exception.errorInfo.statusCode,
+        'requestId': exception.errorInfo.requestId,
+      }
+    };

@@ -9,7 +9,7 @@ abstract class ConnectionInterface
   /// current state of this connection
   ///
   /// https://docs.ably.io/client-lib-development-guide/features/#connection-states-operations
-  ConnectionState state;
+  ConnectionState get state;
 
   /// Error information associated with connection failure
   ///

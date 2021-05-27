@@ -6,6 +6,8 @@ import 'codec.dart';
 import 'generated/platformconstants.dart' show PlatformMethod;
 import 'impl/streams_channel.dart';
 import 'method_call_handler.dart';
+import 'spec/common.dart' show ErrorInfo, AblyException;
+import 'spec/constants.dart';
 
 /// instance of [StandardMethodCodec] with custom [MessageCodec] for
 /// exchanging Ably types with platform via platform channels
@@ -22,7 +24,6 @@ final StreamsChannel streamsChannel =
 
 /// Initializing ably on platform side by invoking `register` platform method.
 /// Register will clear any stale instances on platform.
-const _initializeTimeout = Duration(seconds: 5);
 Future _initializer;
 
 Future _initialize() async {
@@ -30,9 +31,12 @@ Future _initialize() async {
     AblyMethodCallHandler(methodChannel);
     _initializer = methodChannel
         .invokeMethod(PlatformMethod.registerAbly)
-        .timeout(_initializeTimeout, onTimeout: () {
+        .timeout(Timeouts.initializeTimeout, onTimeout: () {
       _initializer = null;
-      throw TimeoutException('Initialization timed out.', _initializeTimeout);
+      throw TimeoutException(
+        'Initialization timed out.',
+        Timeouts.initializeTimeout,
+      );
     });
   }
   return _initializer;
@@ -45,5 +49,13 @@ Future _initialize() async {
 /// (as hot-restart is known to not clear any objects on platform side)
 Future<T> invokePlatformMethod<T>(String method, [Object arguments]) async {
   await _initialize();
-  return methodChannel.invokeMethod<T>(method, arguments);
+  try {
+    return await methodChannel.invokeMethod<T>(method, arguments);
+  } on PlatformException catch (pe) {
+    if (pe.details is ErrorInfo) {
+      throw AblyException.fromPlatformException(pe);
+    } else {
+      rethrow;
+    }
+  }
 }

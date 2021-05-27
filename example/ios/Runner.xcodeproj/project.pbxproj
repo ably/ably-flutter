@@ -231,7 +231,6 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Ably/Ably.framework",
 				"${BUILT_PRODUCTS_DIR}/AblyDeltaCodec/AblyDeltaCodec.framework",
-				"${PODS_ROOT}/../Flutter/Flutter.framework",
 				"${BUILT_PRODUCTS_DIR}/SocketRocketAblyFork/SocketRocketAblyFork.framework",
 				"${BUILT_PRODUCTS_DIR}/ULID/ULID.framework",
 				"${BUILT_PRODUCTS_DIR}/ably_flutter/ably_flutter.framework",
@@ -241,7 +240,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ably.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AblyDeltaCodec.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flutter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocketAblyFork.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ULID.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ably_flutter.framework",

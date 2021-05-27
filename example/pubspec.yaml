@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  http: ^0.12.0+4
+  http: ^0.13.3
   retry: ^3.0.1
 
 dev_dependencies:

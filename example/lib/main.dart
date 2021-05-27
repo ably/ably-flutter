@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'provisioning.dart' as provisioning;
 
@@ -100,12 +99,12 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await ably.platformVersion();
-    } on PlatformException {
+    } on ably.AblyException {
       platformVersion = 'Failed to get platform version.';
     }
     try {
       ablyVersion = await ably.version();
-    } on PlatformException {
+    } on ably.AblyException {
       ablyVersion = 'Failed to get Ably version.';
     }
 
@@ -558,6 +557,14 @@ class _MyAppState extends State<MyApp> {
             });
           });
 
+  Widget releaseRestChannel() => FlatButton(
+        color: Colors.deepOrangeAccent[100],
+        onPressed: (_rest == null)
+            ? null
+            : () => _rest.channels.release(defaultChannel),
+        child: const Text('Release Rest channel'),
+      );
+
   Widget getRealtimeChannelHistory() => getPageNavigator<ably.Message>(
       name: 'Realtime history',
       enabled: _realtime != null,
@@ -636,6 +643,14 @@ class _MyAppState extends State<MyApp> {
               _realtimePresenceHistory = result;
             });
           });
+
+  Widget releaseRealtimeChannel() => FlatButton(
+        color: Colors.deepOrangeAccent[100],
+        onPressed: (_realtime == null)
+            ? null
+            : () => _realtime.channels.release(defaultChannel),
+        child: const Text('Release Realtime channel'),
+      );
 
   final List _presenceData = [
     null,
@@ -810,6 +825,7 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
                           ?.toList() ??
                       [],
+                  releaseRealtimeChannel(),
                   const Divider(),
                   const Text(
                     'Rest',
@@ -838,6 +854,7 @@ class _MyAppState extends State<MyApp> {
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
                           ?.toList() ??
                       [],
+                  releaseRestChannel(),
                 ]),
           ),
         ),

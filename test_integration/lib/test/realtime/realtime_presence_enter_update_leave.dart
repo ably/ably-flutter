@@ -2,8 +2,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../factory/reporter.dart';
+import '../../factory/reporter.dart';
+import '../../utils/data.dart';
 
 final logMessages = <List<String>>[];
 
@@ -95,6 +95,7 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
     }
   }
 
+  // Interact with different types of data.
   final actionMatrix = <Map<String, dynamic>>[];
   final realtimePresence =
       Realtime(options: getClientOptions(appKey, 'test-client'))

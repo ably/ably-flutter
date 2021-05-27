@@ -1,9 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
 
-import '../config/data.dart';
-import '../config/encoders.dart';
-import '../factory/reporter.dart';
+import '../../config/test_config.dart';
+import '../../factory/reporter.dart';
+import '../../utils/data.dart';
+import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPresenceHistory({
   Reporter reporter,
@@ -23,7 +24,7 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
   final rest = Rest(options: options);
   final channel = rest.channels.get('test');
 
-  final historyInitial = await _history(channel);
+  final historyInitial = await getPresenceHistory(channel);
 
   // creating presence history on channel
   final realtimePresence =
@@ -37,40 +38,50 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
   // leaves channel
   await realtimePresence.leave(messagesToPublish.last[1]);
 
-  final historyDefault = await _history(channel);
-  await Future.delayed(const Duration(seconds: 2));
+  final historyDefault = await getPresenceHistory(channel);
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit4 = await _history(channel, RestHistoryParams(limit: 4));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit4 = await getPresenceHistory(
+    channel,
+    RestHistoryParams(limit: 4),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyLimit2 = await _history(channel, RestHistoryParams(limit: 2));
-  await Future.delayed(const Duration(seconds: 2));
+  final historyLimit2 = await getPresenceHistory(
+    channel,
+    RestHistoryParams(limit: 2),
+  );
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyForwards = await _history(
+  final historyForwards = await getPresenceHistory(
     channel,
     RestHistoryParams(direction: 'forwards'),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time1 = DateTime.now();
   //TODO(tiholic) iOS fails without this delay
   // - timestamp on message retrieved from history
   // is earlier than expected when ran in CI
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.enter('enter-start-time');
   // TODO(tiholic) understand why tests fail without this delay
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time2 = DateTime.now();
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.leave('leave-end-time');
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  final historyWithStart =
-      await _history(channel, RestHistoryParams(start: time1));
-  final historyWithStartAndEnd =
-      await _history(channel, RestHistoryParams(start: time1, end: time2));
-  final historyAll = await _history(channel);
+  final historyWithStart = await getPresenceHistory(
+    channel,
+    RestHistoryParams(start: time1),
+  );
+  final historyWithStartAndEnd = await getPresenceHistory(
+    channel,
+    RestHistoryParams(start: time1, end: time2),
+  );
+  final historyAll = await getPresenceHistory(channel);
 
   return {
     'handle': await rest.handle,
@@ -84,19 +95,4 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
     'historyAll': historyAll,
     'log': logMessages,
   };
-}
-
-Future<List<Map<String, dynamic>>> _history(
-  RestChannel channel, [
-  RestHistoryParams params,
-]) async {
-  var results = await channel.presence.history(params);
-  final messages =
-      encodeList<PresenceMessage>(results.items, encodePresenceMessage);
-  while (results.hasNext()) {
-    results = await results.next();
-    messages.addAll(
-        encodeList<PresenceMessage>(results.items, encodePresenceMessage));
-  }
-  return messages;
 }

@@ -99,3 +99,12 @@ void testAllPresenceMessagesHistory(
     checkMessageData(i, history[i]['data']);
   }
 }
+
+int timestampSorter(Map a, Map b) {
+  if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
+      DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
+    return 1;
+  } else {
+    return -1;
+  }
+}

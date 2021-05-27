@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../ably_flutter.dart';
 import '../src/generated/platformconstants.dart';
 import '../src/impl/message.dart';
+import '../src/spec/realtime/channels.dart';
+import '../src/spec/rest/channels.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
@@ -65,6 +67,12 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
+      CodecTypes.restChannelOptions:
+          _CodecPair<ChannelOptions>(_encodeRestChannelOptions, null),
+      CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
+        _encodeRealtimeChannelOptions,
+        null,
+      ),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -78,7 +86,8 @@ class Codec extends StandardMessageCodec {
         null,
       ),
 
-      CodecTypes.errorInfo: _CodecPair<ErrorInfo>(null, _decodeErrorInfo),
+      CodecTypes.errorInfo:
+          _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
       CodecTypes.messageData: _CodecPair<MessageData>(
         _encodeChannelMessageData,
         _decodeChannelMessageData,
@@ -176,7 +185,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [ClientOptions] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeClientOptions(final ClientOptions v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -232,7 +241,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [TokenDetails] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null if [v] is null
   Map<String, dynamic> _encodeTokenDetails(final TokenDetails v) {
     if (v == null) return null;
     return {
@@ -245,7 +254,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [TokenParams] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null if [v] is null
   Map<String, dynamic> _encodeTokenParams(final TokenParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -258,7 +267,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [TokenRequest] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null if [v] is null
   Map<String, dynamic> _encodeTokenRequest(final TokenRequest v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -273,8 +282,48 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  /// Encodes [ChannelOptions] to a Map
+  /// returns null if [v] is null
+  Map<String, dynamic> _encodeRestChannelOptions(final ChannelOptions v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
+    return jsonMap;
+  }
+
+  /// Encodes [ChannelMode] to a string constant
+  String _encodeChannelMode(ChannelMode mode) {
+    switch (mode) {
+      case ChannelMode.presence:
+        return TxEnumConstants.presence;
+      case ChannelMode.publish:
+        return TxEnumConstants.publish;
+      case ChannelMode.subscribe:
+        return TxEnumConstants.subscribe;
+      case ChannelMode.presenceSubscribe:
+        return TxEnumConstants.presenceSubscribe;
+    }
+    return null;
+  }
+
+  /// Encodes [RealtimeChannelOptions] to a Map
+  /// returns null if [v] is null
+  Map<String, dynamic> _encodeRealtimeChannelOptions(
+      final RealtimeChannelOptions v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxRealtimeChannelOptions.cipher, v.cipher);
+    _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
+    _writeToJson(
+      jsonMap,
+      TxRealtimeChannelOptions.modes,
+      v.modes?.map(_encodeChannelMode)?.toList(),
+    );
+    return jsonMap;
+  }
+
   /// Encodes [RestHistoryParams] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null if [v] is null
   Map<String, dynamic> _encodeRestHistoryParams(final RestHistoryParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -287,6 +336,8 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  /// Encodes [RestPresenceParams] to a Map
+  /// returns null if [v] is null
   Map<String, dynamic> _encodeRestPresenceParams(final RestPresenceParams v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -308,7 +359,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [RealtimeHistoryParams] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeRealtimeHistoryParams(
       final RealtimeHistoryParams v) {
     if (v == null) return null;
@@ -324,7 +375,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [AblyMessage] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeAblyMessage(final AblyMessage v) {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
@@ -341,7 +392,7 @@ class Codec extends StandardMessageCodec {
   }
 
   /// Encodes [AblyEventMessage] to a Map
-  /// returns null of passed value [v] is null
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeAblyEventMessage(final AblyEventMessage v) {
     if (v == null) return null;
     final codecType = getCodecType(v.message);
@@ -357,6 +408,22 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  /// Encodes [ErrorInfo] to a Map
+  /// returns null of [v] is null
+  Map<String, dynamic> _encodeErrorInfo(final ErrorInfo v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxErrorInfo.code, v.code);
+    _writeToJson(jsonMap, TxErrorInfo.message, v.message);
+    _writeToJson(jsonMap, TxErrorInfo.statusCode, v.statusCode);
+    _writeToJson(jsonMap, TxErrorInfo.href, v.href);
+    _writeToJson(jsonMap, TxErrorInfo.requestId, v.requestId);
+    _writeToJson(jsonMap, TxErrorInfo.cause, v.cause);
+    return jsonMap;
+  }
+
+  /// Encodes [MessageData] to a Map
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeChannelMessageData(final MessageData v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -364,6 +431,8 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  /// Encodes [Message] to a Map
+  /// returns null of [v] is null
   Map<String, dynamic> _encodeChannelMessage(final Message v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -715,12 +784,16 @@ class Codec extends StandardMessageCodec {
         resumed: resumed, reason: reason);
   }
 
+  /// Decodes value [jsonMap] to [MessageData]
+  /// returns null if [jsonMap] is null
   MessageData _decodeChannelMessageData(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     return MessageData.fromValue(
         _readFromJson<Object>(jsonMap, TxMessageData.data));
   }
 
+  /// Decodes value [jsonMap] to [Message]
+  /// returns null if [jsonMap] is null
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
@@ -756,6 +829,8 @@ class Codec extends StandardMessageCodec {
     }
   }
 
+  /// Decodes value [jsonMap] to [PresenceMessage]
+  /// returns null if [jsonMap] is null
   PresenceMessage _decodePresenceMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final timestamp = _readFromJson<int>(jsonMap, TxPresenceMessage.timestamp);
@@ -777,6 +852,8 @@ class Codec extends StandardMessageCodec {
     );
   }
 
+  /// Decodes value [jsonMap] to [PaginatedResult]
+  /// returns null if [jsonMap] is null
   PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);

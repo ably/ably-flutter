@@ -6,10 +6,12 @@ import 'presence.dart';
 /// options provided when instantiating a channel
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#TB1
-abstract class ChannelOptions {
+class ChannelOptions {
   /// https://docs.ably.io/client-lib-development-guide/features/#TB2b
-  dynamic cipher;
-// TODO add params and modes for realtime channel options
+  final Object cipher;
+
+  /// create channel options with a cipher
+  ChannelOptions(this.cipher) : assert(cipher != null, 'cipher cannot be null');
 }
 
 /// A named channel through with rest client can interact with ably service.
@@ -19,20 +21,13 @@ abstract class ChannelOptions {
 /// https://docs.ably.io/client-lib-development-guide/features/#RSL1
 abstract class RestChannelInterface {
   /// creates a Rest channel instance
-  RestChannelInterface(
-    this.rest,
-    this.name,
-    this.options,
-  );
+  RestChannelInterface(this.rest, this.name);
 
   /// reference to Rest client
   RestInterface rest;
 
   /// name of the channel
   String name;
-
-  /// options of the channel
-  ChannelOptions options;
 
   /// presence interface for this channel
   ///

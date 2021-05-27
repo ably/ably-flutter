@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 
 import '../../ably_flutter.dart';
 import '../impl/realtime/connection.dart';
@@ -517,6 +518,12 @@ class AblyException implements Exception {
     this.errorInfo,
   ]);
 
+  /// create AblyException from [PlatformException]
+  AblyException.fromPlatformException(PlatformException pe)
+      : code = pe.code,
+        message = pe.message,
+        errorInfo = pe.details as ErrorInfo;
+
   @override
   String toString() {
     if (message == null) {
@@ -901,17 +908,40 @@ class Stats {
   StatsRequestCount tokenRequests;
 }
 
+/// Iterator class for [Channels.iterator]
+class _ChannelIterator<T> implements Iterator<T> {
+  _ChannelIterator(this._channels);
+
+  final List<T> _channels;
+
+  int _currentIndex = 0;
+
+  T _currentChannel;
+
+  @override
+  T get current => _currentChannel;
+
+  @override
+  bool moveNext() {
+    if (_currentIndex == _channels.length) {
+      return false;
+    }
+    _currentChannel = _channels[_currentIndex++];
+    return true;
+  }
+}
+
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
-abstract class Channels<ChannelType> {
+abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// stores channel name vs instance of [ChannelType]
   final _channels = <String, ChannelType>{};
 
   /// creates a channel with provided name and options
-  ChannelType createChannel(String name, ChannelOptions options);
-
-  /// returns all channels
-  Iterable<ChannelType> get all => _channels.values;
+  ///
+  /// This is a private method to be overridden by implementation classes
+  @protected
+  ChannelType createChannel(String name);
 
   /// creates a channel with [name].
   ///
@@ -919,8 +949,9 @@ abstract class Channels<ChannelType> {
   ChannelType get(String name) {
     //TODO add ChannelOptions as optional argument here,
     // and pass it on to createChannel
+    assert(name != null, 'Channel name cannot be null');
     if (_channels[name] == null) {
-      _channels[name] = createChannel(name, null);
+      _channels[name] = createChannel(name);
     }
     return _channels[name];
   }
@@ -928,8 +959,15 @@ abstract class Channels<ChannelType> {
   /// returns true if a channel exists [name]
   bool exists(String name) => _channels[name] != null;
 
+  /// Same as [get].
+  ChannelType operator [](String name) => get(name);
+
+  @override
+  Iterator<ChannelType> get iterator =>
+      _ChannelIterator<ChannelType>(_channels.values.toList());
+
   /// releases channel with [name]
   void release(String name) {
-    throw UnimplementedError();
+    _channels.remove(name);
   }
 }
