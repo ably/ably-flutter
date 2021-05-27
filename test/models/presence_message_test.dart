@@ -180,9 +180,11 @@ void main() {
         final message = PresenceMessage(extras: const {'key': 'value'});
         expect(message.extras, const {'key': 'value'});
       });
-      test('a list of extras is allowed', () {
-        final message = PresenceMessage(extras: const ['item1', 'item2']);
-        expect(message.extras, orderedEquals(const ['item1', 'item2']));
+      test('a list of extras is not allowed', () {
+        expect(
+          () => PresenceMessage(extras: const ['item1', 'item2']),
+          throwsA(isA<AssertionError>()),
+        );
       });
       test('a string for extras is not allowed', () {
         expect(
