@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 import 'enums.dart';
@@ -68,6 +69,13 @@ class DeltaExtras {
       format: value['format'] as String,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is DeltaExtras && other.from == from && other.format == format;
+
+  @override
+  int get hashCode => '$from:$format'.hashCode;
 }
 
 /// Handles supported message extras types, their encoding and decoding
@@ -76,22 +84,37 @@ class MessageExtras {
   final Map<String, dynamic> extras;
 
   /// configuration for delta compression extension
-  final DeltaExtras delta;
+  DeltaExtras _delta;
+
+  /// delta configuration received from channel message
+  DeltaExtras get delta => _delta;
 
   /// extras is a mandatory json-encodable argument while delta is an extension
   ///  which defines configuration for delta compression extension
-  const MessageExtras(this.extras, {this.delta});
+  MessageExtras(this.extras);
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
   static MessageExtras fromMap(Map<String, dynamic> value) {
     if (value == null) return null;
+    value = Map<String, dynamic>.from(value);
     final deltaMap = value.remove('delta') as Map;
-    return MessageExtras(
-      value,
-      delta: DeltaExtras._fromMap(deltaMap),
-    );
+    final extras = MessageExtras(value)
+      .._delta = DeltaExtras._fromMap(deltaMap);
+    return extras;
   }
+
+  @override
+  String toString() => {'extras': extras, 'delta': delta}.toString();
+
+  @override
+  bool operator ==(Object other) =>
+      other is MessageExtras &&
+      const MapEquality().equals(other.extras, extras) &&
+      other.delta == delta;
+
+  @override
+  int get hashCode => '$extras:${delta.hashCode}'.hashCode;
 }
 
 /// An individual message to be sent/received by Ably
@@ -171,8 +194,8 @@ class Message {
           '$clientId:'
           '$timestamp:'
           '$connectionId:'
-          '${data?.toString()}:'
-          '${extras?.toString()}:'
+          '${data?.hashCode}:'
+          '${extras?.hashCode}:'
       .hashCode;
 
   /// https://docs.ably.io/client-lib-development-guide/features/#TM3
