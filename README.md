@@ -120,11 +120,11 @@ void getHistory([ably.RestHistoryParams params]) async {
 
   var messages = result.items;        // get messages
   var hasNextPage = result.hasNext(); // tells whether there are more results
-  if(hasNextPage){    
+  if (hasNextPage) {    
     result = await result.next();     // will fetch next page results
     messages = result.items;
   }
-  if(!hasNextPage){
+  if (!hasNextPage) {
     result = await result.first();    // will fetch first page results
     messages = result.items;
   }
@@ -144,14 +144,14 @@ void getPresence([ably.RestPresenceParams params]) async {
   // getting channel presence members, by passing or omitting the optional params
   var result = await channel.presence.get(params);
 
-  var presenceMembers = result.items; //returns PresenceMessages
-  var hasNextPage = result.hasNext(); //tells whether there are more results
-  if(hasNextPage){
-    result = await result.next();     //will fetch next page results
+  var presenceMembers = result.items; // returns PresenceMessages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {
+    result = await result.next();     // will fetch next page results
     presenceMembers = result.items;
   }
-  if(!hasNextPage){
-    result = await result.first();    //will fetch first page results
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
     presenceMembers = result.items;
   }
 }
@@ -177,11 +177,11 @@ void getPresenceHistory([ably.RestHistoryParams params]) async {
 
   var presenceHistory = result.items; // returns PresenceMessages
   var hasNextPage = result.hasNext(); // tells whether there are more results
-  if(hasNextPage){
+  if (hasNextPage) {
     result = await result.next();     // will fetch next page results
     presenceHistory = result.items;
   }
-  if(!hasNextPage){
+  if (!hasNextPage) {
     result = await result.first();    // will fetch first page results
     presenceHistory = result.items;
   }
@@ -237,7 +237,7 @@ ably.RealtimeChannel channel = realtime.channels.get('channel-name');
 Listening for channel events:
 
 ```dart
-channel.on().listen((ably.ChannelStateChange stateChange){
+channel.on().listen((ably.ChannelStateChange stateChange) {
   print("Channel state changed: ${stateChange.current}");
 });
 ```
@@ -258,7 +258,7 @@ Subscribing to messages on the channel:
 
 ```dart
 var messageStream = channel.subscribe();
-var channelMessageSubscription = messageStream.listen((ably.Message message){
+var channelMessageSubscription = messageStream.listen((ably.Message message) {
   print("New message arrived ${message.data}");
 });
 ```
@@ -297,11 +297,11 @@ void getHistory([ably.RealtimeHistoryParams params]) async {
 
   var messages = result.items;        // get messages
   var hasNextPage = result.hasNext(); // tells whether there are more results
-  if(hasNextPage){    
+  if (hasNextPage) {    
     result = await result.next();     // will fetch next page results
     messages = result.items;
   }
-  if(!hasNextPage){
+  if (!hasNextPage) {
     result = await result.first();    // will fetch first page results
     messages = result.items;
   }
@@ -399,11 +399,11 @@ void getPresenceHistory([ably.RealtimeHistoryParams params]) async {
 
   var messages = result.items;        // get messages
   var hasNextPage = result.hasNext(); // tells whether there are more results
-  if(hasNextPage){    
+  if (hasNextPage) {    
     result = await result.next();     // will fetch next page results
     messages = result.items;
   }
-  if(!hasNextPage){
+  if (!hasNextPage) {
     result = await result.first();    // will fetch first page results
     messages = result.items;
   }
@@ -492,7 +492,7 @@ However, using a neat little workaround will fix this...
 Instead of `await subscriptionToBeCancelled.cancel();`, use
 
 ```dart
-Future.delayed(Duration.zero, (){
+Future.delayed(Duration.zero, () {
     subscriptionToBeCancelled.cancel();
 });
 ```
