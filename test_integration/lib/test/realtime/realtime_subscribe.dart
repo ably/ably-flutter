@@ -5,14 +5,7 @@ import '../../factory/reporter.dart';
 import '../../utils/encoders.dart';
 import '../../utils/realtime.dart';
 
-Future<List<Map<String, dynamic>>> _getAllMessages(
-  String apiKey,
-  String channelName, {
-  String name,
-  List<String> names,
-}) async {
-  final messages = <Map<String, dynamic>>[];
-
+Future<Realtime> _createRealtime(String apiKey) async {
   final realtime = Realtime(
     options: ClientOptions.fromKey(apiKey)
       ..environment = 'sandbox'
@@ -20,7 +13,17 @@ Future<List<Map<String, dynamic>>> _getAllMessages(
       ..autoConnect = false,
   );
   await realtime.connect();
+  return realtime;
+}
 
+Future<List<Map<String, dynamic>>> _getAllMessages(
+  String apiKey,
+  String channelName, {
+  String name,
+  List<String> names,
+}) async {
+  final messages = <Map<String, dynamic>>[];
+  final realtime = await _createRealtime(apiKey);
   final channel = realtime.channels.get(channelName);
   await channel.attach();
   final subscription =
@@ -38,11 +41,41 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
 }) async {
   final appKey = await provision('sandbox-');
 
+  final allMessages = await _getAllMessages(appKey.toString(), 'test-all');
+  final nameFiltered = await _getAllMessages(
+    appKey.toString(),
+    'test-name',
+    name: 'name1',
+  );
+  final namesFiltered = await _getAllMessages(
+    appKey.toString(),
+    'test-name',
+    names: ['name1', 'name2'],
+  );
+
+  final realtime = await _createRealtime(appKey.toString());
+  final extrasChannel = realtime.channels.get('test-extras');
+  await extrasChannel.attach();
+  final extrasMessages = <Map<String, dynamic>>[];
+  final extrasSubscription = extrasChannel.subscribe().listen((message) {
+    extrasMessages.add(encodeMessage(message));
+  });
+  await extrasChannel.publish(
+      message: Message(
+    name: 'name',
+    data: 'data',
+    extras: MessageExtras({
+      'push': [
+        {'title': 'Testing'}
+      ]
+    }),
+  ));
+  await extrasSubscription.cancel();
+
   return {
-    'all': await _getAllMessages(appKey.toString(), 'test-all'),
-    'filteredWithName':
-        await _getAllMessages(appKey.toString(), 'test-name', name: 'name1'),
-    'filteredWithNames': await _getAllMessages(appKey.toString(), 'test-name',
-        names: ['name1', 'name2']),
+    'all': allMessages,
+    'filteredWithName': nameFiltered,
+    'filteredWithNames': namesFiltered,
+    'extrasMessages': extrasMessages,
   };
 }

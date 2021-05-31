@@ -1,4 +1,5 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -21,6 +22,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   List messages;
   List messages2;
   List messages3;
+  List messagesWithExtras;
   Map<String, dynamic> exception;
   Map<String, dynamic> exception2;
   Map<String, dynamic> exception3;
@@ -31,6 +33,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
     messages = response.payload['publishedMessages'] as List;
     messages2 = response.payload['publishedMessages2'] as List;
     messages3 = response.payload['publishedMessages3'] as List;
+    messagesWithExtras = response.payload['publishedExtras'] as List;
     exception = response.payload['exception'] as Map<String, dynamic>;
     exception2 = response.payload['exception2'] as Map<String, dynamic>;
     exception3 = response.payload['exception3'] as Map<String, dynamic>;
@@ -139,6 +142,23 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
       expect(messages3[0]['data'], 'ΨΔ');
     },
   );
+
+  test('publishes message extras', () {
+    expect(messagesWithExtras[0]['name'], 'name');
+    expect(messagesWithExtras[0]['data'], 'data');
+    expect(
+      const MapEquality().equals(
+        messagesWithExtras[0]['extras']['extras'] as Map,
+        {
+          'push': [
+            {'title': 'Testing'}
+          ]
+        },
+      ),
+      true,
+    );
+    expect(messagesWithExtras[0]['extras']['delta'], null);
+  });
 }
 
 void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {

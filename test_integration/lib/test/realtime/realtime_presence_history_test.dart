@@ -82,6 +82,20 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   );
   final historyAll = await getPresenceHistory(channel);
 
+  final extrasChannel = realtime.channels.get('test-extras');
+  await extrasChannel.attach();
+  await extrasChannel.publish(
+      message: Message(
+    name: 'name',
+    data: 'data',
+    extras: MessageExtras({
+      'push': [
+        {'title': 'Testing'}
+      ]
+    }),
+  ));
+  final historyExtras = await getPresenceHistory(extrasChannel);
+
   return {
     'handle': await realtime.handle,
     'historyInitial': historyInitial,
@@ -92,6 +106,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
     'historyWithStart': historyWithStart,
     'historyWithStartAndEnd': historyWithStartAndEnd,
     'historyAll': historyAll,
+    'historyExtras': historyExtras,
     'log': logMessages,
   };
 }

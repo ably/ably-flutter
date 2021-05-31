@@ -1,5 +1,15 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
+Map<String, dynamic> encodeMessageExtras(MessageExtras extras) => {
+      'extras': extras.extras,
+      'delta': (extras.delta == null)
+          ? null
+          : {
+              'from': extras.delta.from,
+              'format': extras.delta.format,
+            },
+    };
+
 Map<String, dynamic> encodeMessage(Message message) => {
       'id': message.id,
       'timestamp': message.timestamp.toIso8601String(),
@@ -8,7 +18,7 @@ Map<String, dynamic> encodeMessage(Message message) => {
       'encoding': message.encoding,
       'data': message.data,
       'name': message.name,
-      'extras': message.extras,
+      'extras': encodeMessageExtras(message.extras),
     };
 
 Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
@@ -18,7 +28,7 @@ Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
       'connectionId': message.connectionId,
       'data': message.data,
       'encoding': message.encoding,
-      'extras': message.extras,
+      'extras': encodeMessageExtras(message.extras),
       'timestamp': message.timestamp.toIso8601String(),
     };
 

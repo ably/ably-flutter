@@ -1,4 +1,5 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -198,6 +199,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> all;
   List<Map<String, dynamic>> filteredWithName;
   List<Map<String, dynamic>> filteredWithNames;
+  List<Map<String, dynamic>> extrasMessages;
 
   List<Map<String, dynamic>> transformMessages(messages) =>
       List.from(messages as List)
@@ -211,6 +213,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
     filteredWithNames = transformMessages(
       response.payload['filteredWithNames'],
     );
+    extrasMessages = transformMessages(response.payload['extrasMessages']);
   });
 
   test(
@@ -254,6 +257,20 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
       expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
     },
   );
+
+  test('retrieves extras posted in message', () {
+    expect(extrasMessages[0]['name'], 'name');
+    expect(extrasMessages[0]['data'], 'data');
+    expect(
+      const MapEquality().equals(extrasMessages[0]['extras']['extras'] as Map, {
+        'push': [
+          {'title': 'Testing'}
+        ]
+      }),
+      true,
+    );
+    expect(extrasMessages[0]['extras']['delta'], null);
+  });
 }
 
 void testRealtimeHistory(FlutterDriver Function() getDriver) {
@@ -381,6 +398,7 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> historyForwards;
   List<Map<String, dynamic>> historyWithStart;
   List<Map<String, dynamic>> historyWithStartAndEnd;
+  List<Map<String, dynamic>> historyExtras;
   List<Map<String, dynamic>> historyAll;
 
   List<Map<String, dynamic>> transform(items) =>
@@ -400,6 +418,7 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
       response.payload['historyWithStartAndEnd'],
     );
     historyAll = transform(response.payload['historyAll']);
+    historyExtras = transform(response.payload['historyExtras']);
   });
 
   test('queries all entries by default', () {
@@ -433,6 +452,19 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
     expect(historyWithStartAndEnd.length, equals(1));
     expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
     expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
+  });
+  test('receives messages extras in PresenceMessage', () {
+    expect(historyExtras[0]['name'], 'name');
+    expect(historyExtras[0]['data'], 'data');
+    expect(
+      const MapEquality().equals(historyExtras[0]['extras']['extras'] as Map, {
+        'push': [
+          {'title': 'Testing'}
+        ]
+      }),
+      true,
+    );
+    expect(historyExtras[0]['extras']['delta'], null);
   });
 }
 
