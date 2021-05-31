@@ -10,23 +10,22 @@ class CodecTypes {
   static const int ablyEventMessage = 129;
   static const int clientOptions = 130;
   static const int messageData = 131;
-  static const int deltaExtras = 132;
-  static const int messageExtras = 133;
-  static const int message = 134;
-  static const int tokenParams = 135;
-  static const int tokenDetails = 136;
-  static const int tokenRequest = 137;
-  static const int restChannelOptions = 138;
-  static const int realtimeChannelOptions = 139;
-  static const int paginatedResult = 140;
-  static const int restHistoryParams = 141;
-  static const int realtimeHistoryParams = 142;
-  static const int restPresenceParams = 143;
-  static const int presenceMessage = 144;
-  static const int realtimePresenceParams = 145;
-  static const int errorInfo = 146;
-  static const int connectionStateChange = 147;
-  static const int channelStateChange = 148;
+  static const int messageExtras = 132;
+  static const int message = 133;
+  static const int tokenParams = 134;
+  static const int tokenDetails = 135;
+  static const int tokenRequest = 136;
+  static const int restChannelOptions = 137;
+  static const int realtimeChannelOptions = 138;
+  static const int paginatedResult = 139;
+  static const int restHistoryParams = 140;
+  static const int realtimeHistoryParams = 141;
+  static const int restPresenceParams = 142;
+  static const int presenceMessage = 143;
+  static const int realtimePresenceParams = 144;
+  static const int errorInfo = 145;
+  static const int connectionStateChange = 146;
+  static const int channelStateChange = 147;
 }
 
 class PlatformMethod {
@@ -100,11 +99,6 @@ class TxErrorInfo {
 class TxMessageData {
   static const String data = 'data';
   static const String type = 'type';
-}
-
-class TxDeltaExtras {
-  static const String from = 'from';
-  static const String format = 'format';
 }
 
 class TxMessageExtras {
