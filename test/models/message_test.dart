@@ -26,7 +26,7 @@ void main() {
         connectionId: connectionId,
         data: data,
         encoding: encoding,
-        extras: extras,
+        extras: MessageExtras(extras),
         timestamp: timestamp,
       );
 
@@ -55,7 +55,7 @@ void main() {
       });
 
       test('#extras retrieves extras', () {
-        expect(message.extras, extras);
+        expect(message.extras.extras, extras);
       });
 
       test('#timestamp retrieves timestamp', () {
@@ -70,7 +70,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: extras,
+          extras: MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(message == message2, true);
@@ -86,7 +86,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: extras,
+          extras: MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(message == message2, false);
@@ -100,7 +100,7 @@ void main() {
       });
 
       group('fromEncoded', () {
-        test('returns a presence message object', () {
+        test('returns a message object', () {
           final message = Message.fromEncoded({
             'id': messageId,
             'name': name,
@@ -117,7 +117,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras, extras);
+          expect(message.extras.extras, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -128,7 +128,7 @@ void main() {
       });
 
       group('fromEncodedArray', () {
-        test('returns a list of presence message objects', () {
+        test('returns a list of message objects', () {
           final messages = Message.fromEncodedArray([
             {
               'id': messageId,
@@ -148,7 +148,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras, extras);
+          expect(message.extras.extras, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -167,38 +167,8 @@ void main() {
           expect(message.extras, null);
         });
         test('a map of extras is allowed', () {
-          final message = Message(extras: const {'key': 'value'});
-          expect(message.extras, const {'key': 'value'});
-        });
-        test('a list of extras is not allowed', () {
-          expect(
-            () => Message(extras: const ['item1', 'item2']),
-            throwsA(isA<AssertionError>()),
-          );
-        });
-        test('a string for extras is not allowed', () {
-          expect(
-            () => Message(extras: 'extra'),
-            throwsA(isA<AssertionError>()),
-          );
-        });
-        test('an int for extras is not allowed', () {
-          expect(
-            () => Message(extras: 1),
-            throwsA(isA<AssertionError>()),
-          );
-        });
-        test('a bool for extras is not allowed', () {
-          expect(
-            () => Message(extras: true),
-            throwsA(isA<AssertionError>()),
-          );
-        });
-        test('any other Object for extras is not allowed', () {
-          expect(
-            () => Message(extras: Object()),
-            throwsA(isA<AssertionError>()),
-          );
+          final message = Message(extras: MessageExtras({'key': 'value'}));
+          expect(message.extras.extras, const {'key': 'value'});
         });
       });
     });

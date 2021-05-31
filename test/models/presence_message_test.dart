@@ -25,7 +25,7 @@ void main() {
         connectionId: connectionId,
         data: data,
         encoding: encoding,
-        extras: extras,
+        extras: MessageExtras(extras),
         timestamp: timestamp,
       );
       test('#id retrieves id', () {
@@ -47,7 +47,7 @@ void main() {
         expect(presenceMessage.encoding, encoding);
       });
       test('#extras retrieves extras', () {
-        expect(presenceMessage.extras, extras);
+        expect(presenceMessage.extras.extras, extras);
       });
       test('#timestamp retrieves timestamp', () {
         expect(presenceMessage.timestamp, timestamp);
@@ -61,7 +61,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: extras,
+          extras: MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(presenceMessage == presenceMessage2, true);
@@ -77,7 +77,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: extras,
+          extras: MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(presenceMessage == presenceMessage2, false);
@@ -131,7 +131,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras, extras);
+        expect(presenceMessage.extras.extras, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -160,7 +160,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras, extras);
+        expect(presenceMessage.extras.extras, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -177,38 +177,10 @@ void main() {
         expect(message.extras, null);
       });
       test('a map of extras is allowed', () {
-        final message = PresenceMessage(extras: const {'key': 'value'});
-        expect(message.extras, const {'key': 'value'});
-      });
-      test('a list of extras is not allowed', () {
-        expect(
-          () => PresenceMessage(extras: const ['item1', 'item2']),
-          throwsA(isA<AssertionError>()),
+        final message = PresenceMessage(
+          extras: MessageExtras({'key': 'value'}),
         );
-      });
-      test('a string for extras is not allowed', () {
-        expect(
-          () => PresenceMessage(extras: 'extra'),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-      test('an int for extras is not allowed', () {
-        expect(
-          () => PresenceMessage(extras: 1),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-      test('a bool for extras is not allowed', () {
-        expect(
-          () => PresenceMessage(extras: true),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-      test('any other Object for extras is not allowed', () {
-        expect(
-          () => PresenceMessage(extras: Object()),
-          throwsA(isA<AssertionError>()),
-        );
+        expect(message.extras.extras, const {'key': 'value'});
       });
     });
   });
