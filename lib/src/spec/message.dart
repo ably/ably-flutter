@@ -61,7 +61,7 @@ class DeltaExtras {
   const DeltaExtras({this.from, this.format});
 
   /// create instance from a map
-  static DeltaExtras fromMap(Map value) {
+  static DeltaExtras _fromMap(Map value) {
     if (value == null) return null;
     return DeltaExtras(
       from: value['from'] as String,
@@ -89,7 +89,7 @@ class MessageExtras {
     final deltaMap = value.remove('delta') as Map;
     return MessageExtras(
       value,
-      delta: DeltaExtras.fromMap(deltaMap),
+      delta: DeltaExtras._fromMap(deltaMap),
     );
   }
 }

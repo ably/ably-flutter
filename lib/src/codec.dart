@@ -92,10 +92,6 @@ class Codec extends StandardMessageCodec {
         _encodeChannelMessageData,
         _decodeChannelMessageData,
       ),
-      CodecTypes.deltaExtras: _CodecPair<DeltaExtras>(
-        _encodeChannelDeltaExtras,
-        _decodeChannelDeltaExtras,
-      ),
       CodecTypes.messageExtras: _CodecPair<MessageExtras>(
         _encodeChannelMessageExtras,
         _decodeChannelMessageExtras,
@@ -135,10 +131,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
-    } else if (value is DeltaExtras) {
-      return CodecTypes.messageExtras;
     } else if (value is MessageExtras) {
-      return CodecTypes.deltaExtras;
+      return CodecTypes.messageExtras;
     } else if (value is Message) {
       return CodecTypes.message;
     } else if (value is RealtimeHistoryParams) {
@@ -443,23 +437,13 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// Encodes [DeltaExtras] to a Map
-  /// returns null of [v] is null
-  Map<String, dynamic> _encodeChannelDeltaExtras(final DeltaExtras v) {
-    if (v == null) return null;
-    final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxDeltaExtras.from, v.from);
-    _writeToJson(jsonMap, TxDeltaExtras.format, v.format);
-    return jsonMap;
-  }
-
   /// Encodes [MessageExtras] to a Map
   /// returns null of [v] is null
   Map<String, dynamic> _encodeChannelMessageExtras(final MessageExtras v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
+    // Not encoding `delta`, as it is a readonly extension
     _writeToJson(jsonMap, TxMessageExtras.extras, v.extras);
-    _writeToJson(jsonMap, TxMessageExtras.delta, v.delta);
     return jsonMap;
   }
 
@@ -824,13 +808,6 @@ class Codec extends StandardMessageCodec {
         _readFromJson<Object>(jsonMap, TxMessageData.data));
   }
 
-  /// Decodes value [jsonMap] to [DeltaExtras]
-  /// returns null if [jsonMap] is null
-  DeltaExtras _decodeChannelDeltaExtras(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
-    return DeltaExtras.fromMap(jsonMap);
-  }
-
   /// Decodes value [jsonMap] to [MessageExtras]
   /// returns null if [jsonMap] is null
   MessageExtras _decodeChannelMessageExtras(Map<String, dynamic> jsonMap) {
@@ -843,6 +820,10 @@ class Codec extends StandardMessageCodec {
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
+    var extras = _readFromJson<Object>(jsonMap, TxMessage.extras);
+    if (extras is! MessageExtras) {
+      extras = MessageExtras.fromMap(toJsonMap(extras as Map));
+    }
     return Message(
       name: _readFromJson<String>(jsonMap, TxMessage.name),
       clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
@@ -850,7 +831,7 @@ class Codec extends StandardMessageCodec {
       id: _readFromJson<String>(jsonMap, TxMessage.id),
       connectionId: _readFromJson<String>(jsonMap, TxMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxMessage.encoding),
-      extras: _readFromJson<MessageExtras>(jsonMap, TxMessage.extras),
+      extras: extras as MessageExtras,
       timestamp: (timestamp == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
