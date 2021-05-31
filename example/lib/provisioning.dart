@@ -5,7 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 
 const _capabilitySpec = {
-  '*': ['publish', 'subscribe', 'history', 'presence'],
+  '*': [
+    'publish',
+    'subscribe',
+    'history',
+    'presence',
+    'push-subscribe',
+    'push-admin',
+  ],
 };
 const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
