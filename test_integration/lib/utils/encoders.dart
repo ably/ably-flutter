@@ -1,14 +1,16 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-Map<String, dynamic> encodeMessageExtras(MessageExtras extras) => {
-      'extras': extras.extras,
-      'delta': (extras.delta == null)
-          ? null
-          : {
-              'from': extras.delta.from,
-              'format': extras.delta.format,
-            },
-    };
+Map<String, dynamic> encodeMessageExtras(MessageExtras extras) => extras == null
+    ? null
+    : {
+        'extras': extras.extras,
+        'delta': (extras.delta == null)
+            ? null
+            : {
+                'from': extras.delta.from,
+                'format': extras.delta.format,
+              },
+      };
 
 Map<String, dynamic> encodeMessage(Message message) => {
       'id': message.id,
