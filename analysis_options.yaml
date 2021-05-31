@@ -133,7 +133,7 @@ linter:
     - overridden_fields
     - package_api_docs
     - package_prefixed_library_names
-    - parameter_assignments        # personal preference
+    # - parameter_assignments        # personal preference
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
     # - prefer_asserts_with_message # personal preference
