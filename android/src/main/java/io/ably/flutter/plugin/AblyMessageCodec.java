@@ -655,10 +655,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final HashMap<String, Object> jsonMap = new HashMap<>();
     writeValueToJson(jsonMap, PlatformConstants.TxMessageExtras.extras, c.asJsonObject());
     DeltaExtras deltaExtras = c.getDelta();
-    final HashMap<String, Object> deltaJson = new HashMap<>();
-    writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.format, deltaExtras.getFormat());
-    writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.from, deltaExtras.getFrom());
-    writeValueToJson(jsonMap, PlatformConstants.TxMessageExtras.delta, deltaJson);
+    if (deltaExtras != null) {
+      final HashMap<String, Object> deltaJson = new HashMap<>();
+      writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.format, deltaExtras.getFormat());
+      writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.from, deltaExtras.getFrom());
+      writeValueToJson(jsonMap, PlatformConstants.TxMessageExtras.delta, deltaJson);
+    }
     return jsonMap;
   }
 
