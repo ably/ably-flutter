@@ -135,6 +135,10 @@ const List<Map<String, dynamic>> _objects = [
     'properties': <String>['data', 'type']
   },
   {
+    'name': 'DeltaExtras',
+    'properties': <String>['format', 'from']
+  },
+  {
     'name': 'MessageExtras',
     'properties': <String>['extras', 'delta']
   },

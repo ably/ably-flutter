@@ -101,6 +101,11 @@ final public class PlatformConstants {
         public static final String type = "type";
     }
 
+    static final public class TxDeltaExtras {
+        public static final String format = "format";
+        public static final String from = "from";
+    }
+
     static final public class TxMessageExtras {
         public static final String extras = "extras";
         public static final String delta = "delta";

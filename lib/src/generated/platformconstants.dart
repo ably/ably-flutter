@@ -101,6 +101,11 @@ class TxMessageData {
   static const String type = 'type';
 }
 
+class TxDeltaExtras {
+  static const String format = 'format';
+  static const String from = 'from';
+}
+
 class TxMessageExtras {
   static const String extras = 'extras';
   static const String delta = 'delta';

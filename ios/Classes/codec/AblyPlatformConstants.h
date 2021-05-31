@@ -93,6 +93,10 @@ extern NSString *const TxErrorInfo_cause;
 extern NSString *const TxMessageData_data;
 extern NSString *const TxMessageData_type;
 
+// key constants for DeltaExtras
+extern NSString *const TxDeltaExtras_format;
+extern NSString *const TxDeltaExtras_from;
+
 // key constants for MessageExtras
 extern NSString *const TxMessageExtras_extras;
 extern NSString *const TxMessageExtras_delta;

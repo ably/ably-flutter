@@ -70,6 +70,10 @@ NSString *const TxErrorInfo_cause = @"cause";
 NSString *const TxMessageData_data = @"data";
 NSString *const TxMessageData_type = @"type";
 
+// key constants for DeltaExtras
+NSString *const TxDeltaExtras_format = @"format";
+NSString *const TxDeltaExtras_from = @"from";
+
 // key constants for MessageExtras
 NSString *const TxMessageExtras_extras = @"extras";
 NSString *const TxMessageExtras_delta = @"delta";
