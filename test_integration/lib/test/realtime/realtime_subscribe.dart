@@ -54,7 +54,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
   );
 
   final realtime = await _createRealtime(appKey.toString());
-  final extrasChannel = realtime.channels.get('test-extras');
+  final extrasChannel = realtime.channels.get('pushenabled:test:extras');
   await extrasChannel.attach();
   final extrasMessages = <Map<String, dynamic>>[];
   final extrasSubscription = extrasChannel.subscribe().listen((message) {
