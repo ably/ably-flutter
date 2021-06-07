@@ -22,6 +22,9 @@ String tokenDetailsURL(String keyName, [String prefix = '']) =>
 // per: https://docs.ably.io/client-lib-development-guide/test-api/
 final _appSpec = Map<String, List>.unmodifiable({
   // API Keys & Capabilities.
+  'namespaces': [
+    {'id': 'pushenabled', 'pushEnabled': true}
+  ],
   'keys': [
     {
       // The need to use jsonEncode here is a requirement of the
