@@ -652,8 +652,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private Map<String, Object> encodeChannelMessageExtras(MessageExtras c) {
     if (c == null) return null;
-    final HashMap<String, Object> jsonMap = new HashMap<>();
-    writeValueToJson(jsonMap, PlatformConstants.TxMessageExtras.extras, c.asJsonObject());
+    final HashMap<String, Object> jsonMap =
+        new Gson().<HashMap<String, Object>>fromJson(c.asJsonObject().toString(), HashMap.class);
     DeltaExtras deltaExtras = c.getDelta();
     if (deltaExtras != null) {
       final HashMap<String, Object> deltaJson = new HashMap<>();
