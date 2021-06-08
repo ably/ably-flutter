@@ -88,11 +88,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
       message: Message(
     name: 'name',
     data: 'data',
-    extras: MessageExtras({
-      'push': [
-        {'title': 'Testing'}
-      ]
-    }),
+    extras: MessageExtras({...pushPayload}),
   ));
   final historyExtras = await getPresenceHistory(extrasChannel);
 
