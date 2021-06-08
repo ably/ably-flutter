@@ -78,7 +78,7 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 ```dart
 final clientOptions = ably.ClientOptions.fromKey("<YOUR APP KEY>");
-clientOptions.logLevel = ably.LogLevel.verbose; // optional
+clientOptions.logLevel = ably.LogLevel.verbose;  // optional
 ```
 
 ### Using the REST API
@@ -115,19 +115,19 @@ Get REST history:
 
 ```dart
 void getHistory([ably.RestHistoryParams params]) async {
-    // getting channel history, by passing or omitting the optional params
-    var result = await channel.history(params);
+  // getting channel history, by passing or omitting the optional params
+  var result = await channel.history(params);
 
-    var messages = result.items; //get messages
-    var hasNextPage = result.hasNext(); //tells whether there are more results
-    if(hasNextPage){    
-      result = await result.next();  //fetches next page results
-      messages = result.items;
-    }
-    if(!hasNextPage){
-      result = await result.first();  //fetches first page results
-      messages = result.items;
-    }
+  var messages = result.items;        // get messages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {    
+    result = await result.next();     // will fetch next page results
+    messages = result.items;
+  }
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
+    messages = result.items;
+  }
 }
 
 // history with default params
@@ -141,19 +141,19 @@ Get REST Channel Presence:
 
 ```dart
 void getPresence([ably.RestPresenceParams params]) async {
-    // getting channel history, by passing or omitting the optional params
-    var result = await channel.presence.get(params);
+  // getting channel presence members, by passing or omitting the optional params
+  var result = await channel.presence.get(params);
 
-    var presenceMembers = result.items; //returns PresenceMessages
-    var hasNextPage = result.hasNext(); //tells whether there are more results
-    if(hasNextPage){
-      result = await result.next();  //fetches next page results
-      presenceMembers = result.items;
-    }
-    if(!hasNextPage){
-      result = await result.first();  //fetches first page results
-      presenceMembers = result.items;
-    }
+  var presenceMembers = result.items; // returns PresenceMessages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {
+    result = await result.next();     // will fetch next page results
+    presenceMembers = result.items;
+  }
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
+    presenceMembers = result.items;
+  }
 }
 
 // getting presence members with default params
@@ -165,6 +165,33 @@ getPresence(ably.RestPresenceParams(
   clientId: '<clientId>',
   connectionId: '<connectionID>',
 ));
+```
+
+Get REST Presence History:
+
+```dart
+void getPresenceHistory([ably.RestHistoryParams params]) async {
+
+  // getting channel presence history, by passing or omitting the optional params
+  var result = await channel.presence.history(params);
+
+  var presenceHistory = result.items; // returns PresenceMessages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {
+    result = await result.next();     // will fetch next page results
+    presenceHistory = result.items;
+  }
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
+    presenceHistory = result.items;
+  }
+}
+
+// getting presence members with default params
+getPresenceHistory();
+
+// filtered presence members
+getPresenceHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
 ```
 
 ### Using the Realtime API
@@ -210,7 +237,7 @@ ably.RealtimeChannel channel = realtime.channels.get('channel-name');
 Listening for channel events:
 
 ```dart
-channel.on().listen((ably.ChannelStateChange stateChange){
+channel.on().listen((ably.ChannelStateChange stateChange) {
   print("Channel state changed: ${stateChange.current}");
 });
 ```
@@ -227,11 +254,11 @@ Detaching from the channel:
 await channel.detach();
 ```
 
-Subscribing to receive messages received on the channel:
+Subscribing to messages on the channel:
 
 ```dart
 var messageStream = channel.subscribe();
-var channelMessageSubscription = messageStream.listen((ably.Message message){
+var channelMessageSubscription = messageStream.listen((ably.Message message) {
   print("New message arrived ${message.data}");
 });
 ```
@@ -261,22 +288,23 @@ await channel.publish(messages: [
   ably.Message()..name="event1"..data = {"hello": "world"}
 ]);
 ```
-Get realtime history
+
+Get Realtime history
 
 ```dart
 void getHistory([ably.RealtimeHistoryParams params]) async {
-    var result = await channel.history(params);
+  var result = await channel.history(params);
 
-    var messages = result.items; //get messages
-    var hasNextPage = result.hasNext(); //tells whether there are more results
-    if(hasNextPage){    
-      result = await result.next();  //fetches next page results
-      messages = result.items;
-    }
-    if(!hasNextPage){
-      result = await result.first();  //fetches first page results
-      messages = result.items;
-    }
+  var messages = result.items;        // get messages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {    
+    result = await result.next();     // will fetch next page results
+    messages = result.items;
+  }
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
+    messages = result.items;
+  }
 }
 
 // history with default params
@@ -284,6 +312,142 @@ getHistory();
 
 // sorted and filtered history
 getHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+```
+
+Enter Realtime Presence:
+
+```dart
+await channel.presence.enter();
+
+// with data
+await channel.presence.enter("hello");
+await channel.presence.enter([1, 2, 3]);
+await channel.presence.enter({"key": "value"});
+
+// with Client ID
+await channel.presence.enterClient("user1");
+
+// with Client ID and data
+await channel.presence.enterClient("user1", "hello");
+await channel.presence.enterClient("user1", [1, 2, 3]);
+await channel.presence.enterClient("user1", {"key": "value"});
+```
+
+Update Realtime Presence:
+
+```dart
+await channel.presence.update();
+
+// with data
+await channel.presence.update("hello");
+await channel.presence.update([1, 2, 3]);
+await channel.presence.update({"key": "value"});
+
+// with Client ID
+await channel.presence.updateClient("user1");
+
+// with Client ID and data
+await channel.presence.updateClient("user1", "hello");
+await channel.presence.updateClient("user1", [1, 2, 3]);
+await channel.presence.updateClient("user1", {"key": "value"});
+```
+
+Leave Realtime Presence:
+
+```dart
+await channel.presence.leave();
+
+// with data
+await channel.presence.leave("hello");
+await channel.presence.leave([1, 2, 3]);
+await channel.presence.leave({"key": "value"});
+
+// with Client ID
+await channel.presence.leaveClient("user1");
+
+// with Client ID and data
+await channel.presence.leaveClient("user1", "hello");
+await channel.presence.leaveClient("user1", [1, 2, 3]);
+await channel.presence.leaveClient("user1", {"key": "value"});
+```
+
+Get Realtime Presence members:
+
+```dart
+var presenceMessages = await channel.presence.get();
+
+// filter by Client Id
+var presenceMessages = await channel.presence.get(
+  ably.RealtimePresenceParams(
+    clientId: 'clientId',
+  ),
+);
+
+// filter by Connection Id
+var presenceMessages = await channel.presence.get(
+  ably.RealtimePresenceParams(
+    connectionId: 'connectionId',
+  ),
+);
+```
+
+Get Realtime Presence history
+
+```dart
+void getPresenceHistory([ably.RealtimeHistoryParams params]) async {
+  var result = await channel.presence.history(params);
+
+  var messages = result.items;        // get messages
+  var hasNextPage = result.hasNext(); // tells whether there are more results
+  if (hasNextPage) {    
+    result = await result.next();     // will fetch next page results
+    messages = result.items;
+  }
+  if (!hasNextPage) {
+    result = await result.first();    // will fetch first page results
+    messages = result.items;
+  }
+}
+
+// presence history with default params
+getPresenceHistory();
+
+// sorted and filtered history
+getPresenceHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+```
+
+Subscribe to Realtime Presence messages
+
+```dart
+// subscribe for all presence actions
+channel
+  .presence
+  .subscribe()
+  .listen((presenceMessage) {
+    print(presenceMessage);
+  },
+);
+
+// subscribe for specific action
+channel
+  .presence
+  .subscribe(action: PresenceAction.enter)
+  .listen((presenceMessage) {
+    print(presenceMessage);
+  },
+);
+
+// subscribe for multiple actions
+channel
+  .presence
+  .subscribe(actions: [
+    PresenceAction.enter,
+    PresenceAction.update,
+  ])
+  .listen((presenceMessage) {
+    print(presenceMessage);
+  },
+);
 ```
 
 ## Caveats
@@ -328,7 +492,7 @@ However, using a neat little workaround will fix this...
 Instead of `await subscriptionToBeCancelled.cancel();`, use
 
 ```dart
-Future.delayed(Duration.zero, (){
+Future.delayed(Duration.zero, () {
     subscriptionToBeCancelled.cancel();
 });
 ```
