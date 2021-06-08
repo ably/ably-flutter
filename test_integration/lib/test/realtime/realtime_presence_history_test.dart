@@ -85,11 +85,12 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   final extrasChannel = realtime.channels.get('pushenabled:test:extras');
   await extrasChannel.attach();
   await extrasChannel.publish(
-      message: Message(
-    name: 'name',
-    data: 'data',
-    extras: MessageExtras({...pushPayload}),
-  ));
+    message: Message(
+      name: 'name',
+      data: 'data',
+      extras: MessageExtras({...pushPayload}),
+    ),
+  );
   final historyExtras = await getPresenceHistory(extrasChannel);
 
   return {

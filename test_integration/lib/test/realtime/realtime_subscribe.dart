@@ -62,11 +62,12 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
     extrasMessages.add(encodeMessage(message));
   });
   await extrasChannel.publish(
-      message: Message(
-    name: 'name',
-    data: 'data',
-    extras: MessageExtras({...pushPayload}),
-  ));
+    message: Message(
+      name: 'name',
+      data: 'data',
+      extras: MessageExtras({...pushPayload}),
+    ),
+  );
   await extrasSubscription.cancel();
 
   return {

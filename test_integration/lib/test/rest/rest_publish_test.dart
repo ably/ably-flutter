@@ -118,11 +118,12 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   final channelExtras = rest.channels.get('pushenabled:test:extras');
   await channelExtras.publish(
-      message: Message(
-    name: 'name',
-    data: 'data',
-    extras: MessageExtras({...pushPayload}),
-  ));
+    message: Message(
+      name: 'name',
+      data: 'data',
+      extras: MessageExtras({...pushPayload}),
+    ),
+  );
   final historyExtras = await getHistory(channelExtras);
 
   return {
