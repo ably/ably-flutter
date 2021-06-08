@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
-import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -150,10 +147,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   test('RSL6a2 publishes message extras', () {
     expect(messagesWithExtras[0]['name'], 'name');
     expect(messagesWithExtras[0]['data'], 'data');
-    expect(
-      json.encode(messagesWithExtras[0]['extras']['extras'] as Map),
-      json.encode({...pushPayload}),
-    );
+    checkMessageExtras(messagesWithExtras[0]['extras']['extras'] as Map);
     expect(messagesWithExtras[0]['extras']['delta'], null);
   });
 }

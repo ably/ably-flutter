@@ -108,3 +108,12 @@ int timestampSorter(Map a, Map b) {
     return -1;
   }
 }
+
+void checkMessageExtras(Map messageExtras) {
+  expect(messageExtras['push']['notification']['title'], 'Hello from Ably!');
+  expect(
+    messageExtras['push']['notification']['body'],
+    'Test push notification from Ably',
+  );
+  expect(messageExtras['push']['data']['foo'], 'bar');
+}

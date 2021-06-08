@@ -68,6 +68,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
       extras: MessageExtras({...pushPayload}),
     ),
   );
+  await Future.delayed(const Duration(seconds: 2));
   await extrasSubscription.cancel();
 
   return {

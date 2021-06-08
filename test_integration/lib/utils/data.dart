@@ -57,7 +57,7 @@ const pushPayload = <String, dynamic>{
   'push': {
     'notification': {
       'title': 'Hello from Ably!',
-      'body': 'Example push notification from Ably'
+      'body': 'Test push notification from Ably'
     },
     'data': {'foo': 'bar'}
   }
