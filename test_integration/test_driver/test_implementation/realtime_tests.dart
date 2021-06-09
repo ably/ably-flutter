@@ -390,7 +390,6 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> historyForwards;
   List<Map<String, dynamic>> historyWithStart;
   List<Map<String, dynamic>> historyWithStartAndEnd;
-  List<Map<String, dynamic>> historyExtras;
   List<Map<String, dynamic>> historyAll;
 
   List<Map<String, dynamic>> transform(items) =>
@@ -410,7 +409,6 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
       response.payload['historyWithStartAndEnd'],
     );
     historyAll = transform(response.payload['historyAll']);
-    historyExtras = transform(response.payload['historyExtras']);
   });
 
   test('queries all entries by default', () {
@@ -444,12 +442,6 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
     expect(historyWithStartAndEnd.length, equals(1));
     expect(historyWithStartAndEnd[0]['clientId'], equals('someClientId'));
     expect(historyWithStartAndEnd[0]['data'], equals('enter-start-time'));
-  });
-  test('receives messages extras in PresenceMessage', () {
-    expect(historyExtras[0]['name'], 'name');
-    expect(historyExtras[0]['data'], 'data');
-    checkMessageExtras(historyExtras[0]['extras']['extras'] as Map);
-    expect(historyExtras[0]['extras']['delta'], null);
   });
 }
 
