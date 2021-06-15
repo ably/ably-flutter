@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
@@ -94,11 +95,11 @@ class MessageExtras {
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
-  static MessageExtras fromMap(Map<String, dynamic> value) {
-    if (value == null) return null;
-    value = Map<String, dynamic>.from(value);
-    final deltaMap = value.remove('delta') as Map;
-    final extras = MessageExtras(value)
+  static MessageExtras fromMap(Map<String, dynamic> extrasMap) {
+    if (extrasMap == null) return null;
+    extrasMap = Map<String, dynamic>.from(extrasMap);
+    final deltaMap = extrasMap.remove('delta') as Map;
+    final extras = MessageExtras(extrasMap)
       .._delta = DeltaExtras._fromMap(deltaMap);
     return extras;
   }
