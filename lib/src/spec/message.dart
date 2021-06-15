@@ -89,8 +89,7 @@ class MessageExtras {
   /// delta configuration received from channel message
   DeltaExtras get delta => _delta;
 
-  /// extras is a mandatory json-encodable argument while delta is an extension
-  ///  which defines configuration for delta compression extension
+  /// Creates a message extras instance from given extras
   MessageExtras(this.extras);
 
   /// initializes [MessageExtras] with given value and validates
