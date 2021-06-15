@@ -20,15 +20,16 @@ Future<Realtime> _createRealtime(String apiKey) async {
 Future<List<Map<String, dynamic>>> _getAllMessages(
   String apiKey,
   String channelName, {
-  String name,
-  List<String> names,
+  String messageName,
+  List<String> messageNames,
 }) async {
   final messages = <Map<String, dynamic>>[];
   final realtime = await _createRealtime(apiKey);
   final channel = realtime.channels.get(channelName);
   await channel.attach();
-  final subscription =
-      channel.subscribe(name: name, names: names).listen((message) {
+  final subscription = channel
+      .subscribe(name: messageName, names: messageNames)
+      .listen((message) {
     messages.add(encodeMessage(message));
   });
   await publishMessages(channel);
@@ -46,12 +47,12 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
   final nameFiltered = await _getAllMessages(
     appKey.toString(),
     'test-name',
-    name: 'name1',
+    messageName: 'name1',
   );
   final namesFiltered = await _getAllMessages(
     appKey.toString(),
     'test-name',
-    names: ['name1', 'name2'],
+    messageNames: ['name1', 'name2'],
   );
 
   final realtime = await _createRealtime(appKey.toString());
