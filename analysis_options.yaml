@@ -143,7 +143,8 @@ linter:
     - prefer_const_constructors_in_immutables
     - prefer_const_declarations
     - prefer_const_literals_to_create_immutables
-    - prefer_constructors_over_static_methods
+    # - prefer_constructors_over_static_methods   # not too evolved to read through the logic inside static method.
+                                                  # Constructors cannot always bear enough logic especially when they contain final fields
     - prefer_contains
     # - prefer_double_quotes # We prefer single quotes
     - prefer_equal_for_default_values
