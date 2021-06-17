@@ -97,7 +97,9 @@ class MessageExtras {
   /// the data type, runtime
   static MessageExtras fromMap(Map<String, dynamic> extrasMap) {
     if (extrasMap == null) return null;
-    extrasMap = Map<String, dynamic>.from(extrasMap);
+    extrasMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
+      json.decode(json.encode(extrasMap)) as Map,
+    );
     final deltaMap = extrasMap.remove('delta') as Map;
     final extras = MessageExtras(extrasMap)
       .._delta = DeltaExtras._fromMap(deltaMap);
