@@ -72,6 +72,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private Map<Byte, CodecPair> codecMap;
+  private static final Gson gson = new Gson();
 
   AblyMessageCodec() {
     final AblyMessageCodec self = this;
@@ -187,9 +188,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private void WriteJsonElement(ByteArrayOutputStream stream, JsonElement value) {
     if (value instanceof JsonObject) {
-      super.writeValue(stream, (new Gson()).fromJson(value, Map.class));
+      super.writeValue(stream, (gson).fromJson(value, Map.class));
     } else if (value instanceof JsonArray) {
-      super.writeValue(stream, (new Gson()).fromJson(value, ArrayList.class));
+      super.writeValue(stream, (gson).fromJson(value, ArrayList.class));
     }
   }
 
@@ -198,7 +199,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
    * returns null if these 2 types are a no-match
    */
   static JsonElement readValueAsJsonElement(final Object object) {
-    final Gson gson = new Gson();
     if (object instanceof Map) {
       return gson.fromJson(gson.toJson(object, Map.class), JsonObject.class);
     } else if (object instanceof ArrayList) {
@@ -453,8 +453,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private MessageExtras decodeChannelMessageExtras(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     Object extras = jsonMap.get(PlatformConstants.TxMessageExtras.extras);
-    final Gson gson = new Gson();
-    return new MessageExtras(gson.fromJson(gson.toJson(extras, Map.class), JsonObject.class));
+    // extras received from dart side could be a nested map with dynamic value types
+    // So, converting to a json string and then using that to create a JSONObject
+    String extrasJson = gson.toJson(extras, Map.class);
+    return new MessageExtras(gson.fromJson(extrasJson, JsonObject.class));
   }
 
   private Message decodeChannelMessage(Map<String, Object> jsonMap) {
@@ -653,7 +655,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Map<String, Object> encodeChannelMessageExtras(MessageExtras c) {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap =
-        new Gson().<HashMap<String, Object>>fromJson(c.asJsonObject().toString(), HashMap.class);
+        gson.<HashMap<String, Object>>fromJson(c.asJsonObject().toString(), HashMap.class);
     DeltaExtras deltaExtras = c.getDelta();
     if (deltaExtras != null) {
       final HashMap<String, Object> deltaJson = new HashMap<>();
