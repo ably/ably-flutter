@@ -3,7 +3,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 Map<String, dynamic> encodeMessageExtras(MessageExtras extras) => extras == null
     ? null
     : {
-        'extras': extras.extras,
+        'extras': extras.map,
         'delta': (extras.delta == null)
             ? null
             : {

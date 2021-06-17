@@ -443,7 +443,7 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     // Not encoding `delta`, as it is a readonly extension
-    _writeToJson(jsonMap, TxMessageExtras.extras, v.extras);
+    _writeToJson(jsonMap, TxMessageExtras.extras, v.map);
     return jsonMap;
   }
 

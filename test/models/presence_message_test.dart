@@ -47,7 +47,7 @@ void main() {
         expect(presenceMessage.encoding, encoding);
       });
       test('#extras retrieves extras', () {
-        expect(presenceMessage.extras.extras, extras);
+        expect(presenceMessage.extras.map, extras);
       });
       test('#timestamp retrieves timestamp', () {
         expect(presenceMessage.timestamp, timestamp);
@@ -131,7 +131,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras.extras, extras);
+        expect(presenceMessage.extras.map, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -160,7 +160,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras.extras, extras);
+        expect(presenceMessage.extras.map, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -180,7 +180,7 @@ void main() {
         final message = PresenceMessage(
           extras: MessageExtras({'key': 'value'}),
         );
-        expect(message.extras.extras, const {'key': 'value'});
+        expect(message.extras.map, const {'key': 'value'});
       });
     });
   });

@@ -55,7 +55,7 @@ void main() {
       });
 
       test('#extras retrieves extras', () {
-        expect(message.extras.extras, extras);
+        expect(message.extras.map, extras);
       });
 
       test('#timestamp retrieves timestamp', () {
@@ -117,7 +117,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras.extras, extras);
+          expect(message.extras.map, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -148,7 +148,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras.extras, extras);
+          expect(message.extras.map, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -168,7 +168,7 @@ void main() {
         });
         test('a map of extras is allowed', () {
           final message = Message(extras: MessageExtras({'key': 'value'}));
-          expect(message.extras.extras, const {'key': 'value'});
+          expect(message.extras.map, const {'key': 'value'});
         });
       });
     });

@@ -82,7 +82,7 @@ class DeltaExtras {
 /// Handles supported message extras types, their encoding and decoding
 class MessageExtras {
   /// json-encodable map of extras
-  final Map<String, dynamic> extras;
+  final Map<String, dynamic> map;
 
   /// configuration for delta compression extension
   DeltaExtras _delta;
@@ -91,7 +91,7 @@ class MessageExtras {
   DeltaExtras get delta => _delta;
 
   /// Creates a message extras instance from given extras
-  MessageExtras(this.extras);
+  MessageExtras(this.map);
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
@@ -107,16 +107,16 @@ class MessageExtras {
   }
 
   @override
-  String toString() => {'extras': extras, 'delta': delta}.toString();
+  String toString() => {'extras': map, 'delta': delta}.toString();
 
   @override
   bool operator ==(Object other) =>
       other is MessageExtras &&
-      const MapEquality().equals(other.extras, extras) &&
+      const MapEquality().equals(other.map, map) &&
       other.delta == delta;
 
   @override
-  int get hashCode => '$extras:${delta.hashCode}'.hashCode;
+  int get hashCode => '$map:${delta.hashCode}'.hashCode;
 }
 
 /// An individual message to be sent/received by Ably
