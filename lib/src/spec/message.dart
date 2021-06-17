@@ -85,13 +85,16 @@ class MessageExtras {
   final Map<String, dynamic> map;
 
   /// configuration for delta compression extension
-  DeltaExtras _delta;
+  final DeltaExtras _delta;
 
   /// delta configuration received from channel message
   DeltaExtras get delta => _delta;
 
-  /// Creates a message extras instance from given extras
-  MessageExtras(this.map);
+  /// Creates an instance from given extras map
+  MessageExtras(this.map) : _delta = null;
+
+  /// Creates an instance from given extras map and an instance of DeltaExtras
+  MessageExtras._withDelta(this.map, this._delta);
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
@@ -101,9 +104,7 @@ class MessageExtras {
       json.decode(json.encode(extrasMap)) as Map,
     );
     final deltaMap = extrasMap.remove('delta') as Map;
-    final extras = MessageExtras(extrasMap)
-      .._delta = DeltaExtras._fromMap(deltaMap);
-    return extras;
+    return MessageExtras._withDelta(extrasMap, DeltaExtras._fromMap(deltaMap));
   }
 
   @override
