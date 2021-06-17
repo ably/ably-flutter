@@ -117,7 +117,7 @@ class MessageExtras {
       other.delta == delta;
 
   @override
-  int get hashCode => '$map:${delta.hashCode}'.hashCode;
+  int get hashCode => '${map.hashCode}:${delta.hashCode}'.hashCode;
 }
 
 /// An individual message to be sent/received by Ably
