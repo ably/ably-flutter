@@ -820,6 +820,8 @@ class Codec extends StandardMessageCodec {
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
+    // here extras may be a Map or a MessageExtras instance as
+    //  cocoa side doesn't have dedicated models to handle MessageExtras
     var extras = _readFromJson<Object>(jsonMap, TxMessage.extras);
     if (extras is! MessageExtras) {
       extras = MessageExtras.fromMap(toJsonMap(extras as Map));
