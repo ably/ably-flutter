@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
+import '../generated/platformconstants.dart';
 import 'enums.dart';
 import 'rest/channels.dart';
 
@@ -59,17 +60,10 @@ class DeltaExtras {
   /// the delta format. Only "vcdiff" is supported currently
   final String format;
 
-  /// initializes with from and format
-  const DeltaExtras({this.from, this.format});
-
   /// create instance from a map
-  static DeltaExtras _fromMap(Map value) {
-    if (value == null) return null;
-    return DeltaExtras(
-      from: value['from'] as String,
-      format: value['format'] as String,
-    );
-  }
+  DeltaExtras._fromMap(Map value)
+      : from = value[TxDeltaExtras.from] as String,
+        format = value[TxDeltaExtras.format] as String;
 
   @override
   bool operator ==(Object other) =>
@@ -103,8 +97,11 @@ class MessageExtras {
     extrasMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
       json.decode(json.encode(extrasMap)) as Map,
     );
-    final deltaMap = extrasMap.remove('delta') as Map;
-    return MessageExtras._withDelta(extrasMap, DeltaExtras._fromMap(deltaMap));
+    final deltaMap = extrasMap.remove(TxMessageExtras.delta) as Map;
+    return MessageExtras._withDelta(
+      extrasMap,
+      (deltaMap == null) ? null : DeltaExtras._fromMap(deltaMap),
+    );
   }
 
   @override
