@@ -10,7 +10,8 @@ plugin wrapping the
 [ably-cocoa](https://github.com/ably/ably-cocoa) (iOS)
 and
 [ably-java](https://github.com/ably/ably-java) (Android)
-client library SDKs for [Ably](https://www.ably.com), the realtime data delivery platform.
+client library SDKs for [Ably](https://www.ably.com),
+the platform that powers synchronized digital experiences in realtime.
 
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
