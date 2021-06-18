@@ -10,7 +10,8 @@ plugin wrapping the
 [ably-cocoa](https://github.com/ably/ably-cocoa) (iOS)
 and
 [ably-java](https://github.com/ably/ably-java) (Android)
-client library SDKs for [Ably](https://www.ably.com), the realtime data delivery platform.
+client library SDKs for [Ably](https://www.ably.com),
+the platform that powers synchronized digital experiences in realtime.
 
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
@@ -49,7 +50,6 @@ Features that we do not currently support, but we do plan to add in the future:
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
 - Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 - Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
-- Message Delta Compression ([#11](https://github.com/ably/ably-flutter/issues/11))
 
 ## Running the example
 

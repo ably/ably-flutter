@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.2.0](https://github.com/ably/ably-flutter/tree/v1.2.0)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.2...v1.2.0)
+
+**Merged pull requests:**
+
+- Add support message extras and its extensions \[TM2i\] [\#123](https://github.com/ably/ably-flutter/pull/123) ([tiholic](https://github.com/tiholic)), fixing [\#11](https://github.com/ably/ably-flutter/issues/11)
+- add docs for rest and realtime presence [\#114](https://github.com/ably/ably-flutter/pull/114) ([tiholic](https://github.com/tiholic))
+- REST - Channels & publishing messages [\#45](https://github.com/ably/ably-flutter/pull/45) ([tiholic](https://github.com/tiholic))
+
 ## [1.2.0-preview.2](https://github.com/ably/ably-flutter/tree/1.2.0-preview.2)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.1...1.2.0-preview.2)
