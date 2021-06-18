@@ -208,7 +208,7 @@ class RealtimeChannel extends PlatformObject
 
 /// A collection of realtime channel objects
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#RTS1
+/// https://docs.ably.com/client-lib-development-guide/features/#RTS1
 class RealtimePlatformChannels extends RealtimeChannels<RealtimeChannel> {
   /// instantiates with the ably [Realtime] instance
   RealtimePlatformChannels(Realtime realtime) : super(realtime);

@@ -6,14 +6,14 @@ import 'options.dart';
 
 /// an abstract class for Ably's Rest client
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#RSC1
+/// https://docs.ably.com/client-lib-development-guide/features/#RSC1
 abstract class RestInterface<C extends RestChannels> extends AblyBase {
   /// collection of [RestChannelInterface] objects
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSN1
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
   C channels;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSC1
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC1
   RestInterface({
     ClientOptions options,
     final String key,

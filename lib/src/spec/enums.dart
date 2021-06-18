@@ -3,8 +3,8 @@ import '../../ably_flutter.dart';
 /// Set of flags that represent the capabilities of a channel for current client
 ///
 /// See:
-/// https://docs.ably.io/client-lib-development-guide/features/#TB2d
-/// https://docs.ably.io/client-lib-development-guide/features/#RTL4m
+/// https://docs.ably.com/client-lib-development-guide/features/#TB2d
+/// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
 enum ChannelMode {
   /// specifies that channel can check for presence
   presence,
@@ -22,7 +22,7 @@ enum ChannelMode {
 /// Connection state
 ///
 /// See Ably Realtime API documentation for more details.
-/// https://docs.ably.io/client-lib-development-guide/features/#connection-states-operations
+/// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
 enum ConnectionState {
   /// specifies that a connection is initialized
   initialized,
@@ -85,7 +85,7 @@ enum ConnectionEvent {
 /// Channel states
 ///
 /// See Ably Realtime API documentation for more details.
-/// https://docs.ably.io/client-lib-development-guide/features/#channel-states-operations
+/// https://docs.ably.com/client-lib-development-guide/features/#channel-states-operations
 enum ChannelState {
   /// represents that a channel is initialized and no action was taken
   /// i.e., even auto connect was not triggered - if enabled
@@ -142,7 +142,7 @@ enum ChannelEvent {
 
 /// Status on a presence message
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#TP2
+/// https://docs.ably.com/client-lib-development-guide/features/#TP2
 enum PresenceAction {
   /// indicates that a client is absent for incoming [PresenceMessage]
   absent,
@@ -163,7 +163,7 @@ enum PresenceAction {
   update,
 }
 
-/// https://docs.ably.io/client-lib-development-guide/features/#TS12c
+/// https://docs.ably.com/client-lib-development-guide/features/#TS12c
 enum StatsIntervalGranularity {
   /// indicates units in minutes
   minute,
@@ -218,7 +218,7 @@ enum DevicePlatform {
 
 /// To indicate the type of device in [DeviceDetails] while registering
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#PCD4
+/// https://docs.ably.com/client-lib-development-guide/features/#PCD4
 enum FormFactor {
   /// indicates the device is a mobile phone
   phone,

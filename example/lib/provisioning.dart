@@ -19,7 +19,7 @@ const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 String tokenDetailsURL(String keyName, [String prefix = '']) =>
     'https://${prefix}rest.ably.io/keys/$keyName/requestToken';
 
-// per: https://docs.ably.io/client-lib-development-guide/test-api/
+// per: https://docs.ably.com/client-lib-development-guide/test-api/
 final _appSpec = Map<String, List>.unmodifiable({
   // API Keys & Capabilities.
   'namespaces': [

@@ -5,9 +5,9 @@ import 'presence.dart';
 
 /// options provided when instantiating a channel
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#TB1
+/// https://docs.ably.com/client-lib-development-guide/features/#TB1
 class ChannelOptions {
-  /// https://docs.ably.io/client-lib-development-guide/features/#TB2b
+  /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
   final Object cipher;
 
   /// create channel options with a cipher
@@ -18,7 +18,7 @@ class ChannelOptions {
 ///
 /// The same channel can be interacted with relevant APIs via realtime channel.
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#RSL1
+/// https://docs.ably.com/client-lib-development-guide/features/#RSL1
 abstract class RestChannelInterface {
   /// creates a Rest channel instance
   RestChannelInterface(this.rest, this.name);
@@ -32,17 +32,17 @@ abstract class RestChannelInterface {
   /// presence interface for this channel
   ///
   /// can only query presence on the channel and presence history
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSL3
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
   RestPresenceInterface get presence;
 
   /// fetch message history on this channel
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSL2
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2
   Future<PaginatedResultInterface<Message>> history([RestHistoryParams params]);
 
   /// publish messages on this channel
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSL1
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
   Future<void> publish({
     Message message,
     List<Message> messages,
@@ -53,13 +53,13 @@ abstract class RestChannelInterface {
   /// takes a ChannelOptions object and sets or updates the
   /// stored channel options, then indicates success
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSL7
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
   Future<void> setOptions(ChannelOptions options);
 }
 
 /// A collection of rest channel objects
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#RSN1
+/// https://docs.ably.com/client-lib-development-guide/features/#RSN1
 abstract class RestChannels<T extends RestChannelInterface>
     extends Channels<T> {
   /// instance of a rest client

@@ -3,7 +3,7 @@ import '../spec/spec.dart' as spec;
 import 'message.dart';
 import 'platform_object.dart';
 
-/// PaginatedResult [TG1](https://docs.ably.io/client-lib-development-guide/features/#TG1)
+/// PaginatedResult [TG1](https://docs.ably.com/client-lib-development-guide/features/#TG1)
 ///
 /// A type that represents page results from a paginated query.
 /// The response is accompanied by metadata that indicates the

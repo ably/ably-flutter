@@ -119,27 +119,27 @@ class MessageExtras {
 
 /// An individual message to be sent/received by Ably
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#TM1
+/// https://docs.ably.com/client-lib-development-guide/features/#TM1
 @immutable
 class Message {
   /// A unique ID for this message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2a
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
   final String id;
 
   /// The timestamp for this message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2f
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2f
   final DateTime timestamp;
 
   /// The id of the publisher of this message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2b
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2b
   final String clientId;
 
   /// The connection id of the publisher of this message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2c
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2c
   final String connectionId;
 
   /// Any transformation applied to the data for this message
@@ -149,18 +149,18 @@ class Message {
 
   /// Message payload
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2d
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2d
   Object get data => _data?.data;
 
   /// Name of the message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2g
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2g
   final String name;
 
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM2i
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM2i
   final MessageExtras extras;
 
   /// Creates a message instance with [name], [data] and [clientId]
@@ -198,7 +198,7 @@ class Message {
           '${extras?.hashCode}:'
       .hashCode;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM3
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   ///
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TM3
@@ -222,7 +222,7 @@ class Message {
               )
             : null;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TM3
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     ChannelOptions channelOptions,
@@ -245,48 +245,48 @@ class Message {
 
 /// An individual presence message sent or received via realtime
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#TP1
+/// https://docs.ably.com/client-lib-development-guide/features/#TP1
 @immutable
 class PresenceMessage {
   /// unique ID for this presence message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3a
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3a
   final String id;
 
   /// presence action - to update presence status of current client,
   /// or to understand presence state of another client
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3b
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3b
   final PresenceAction action;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3c
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3c
   final String clientId;
 
   /// connection id of the source of this message
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3d
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3d
   final String connectionId;
 
   final MessageData _data;
 
   /// Message payload
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3e
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3e
   Object get data => _data?.data;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3f
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3f
   final String encoding;
 
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3i
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3i
   final MessageExtras extras;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3g
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3g
   final DateTime timestamp;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP3h
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP3h
   String get memberKey => '$connectionId:$clientId';
 
   /// instantiates presence message with
@@ -324,7 +324,7 @@ class PresenceMessage {
           '${extras?.toString()}:'
       .hashCode;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP4
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   ///
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TP4
@@ -349,7 +349,7 @@ class PresenceMessage {
               )
             : null;
 
-  /// https://docs.ably.io/client-lib-development-guide/features/#TP4
+  /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     ChannelOptions channelOptions,

@@ -1,11 +1,11 @@
 This document aims to list our all the inputs from how some features are tested manually
 and feasible tests can be converted to automated tests. 
 
-This document currently targets **[RTN14](https://docs.ably.io/client-lib-development-guide/features/#RTN14)**
- and **[RTN15](https://docs.ably.io/client-lib-development-guide/features/#RTN15)**
+This document currently targets **[RTN14](https://docs.ably.com/client-lib-development-guide/features/#RTN14)**
+ and **[RTN15](https://docs.ably.com/client-lib-development-guide/features/#RTN15)**
  sections of the spec, partially
 
-## [RTN14](https://docs.ably.io/client-lib-development-guide/features/#RTN14)
+## [RTN14](https://docs.ably.com/client-lib-development-guide/features/#RTN14)
 
 ### RTN14a ✅
 
@@ -67,7 +67,7 @@ logs
 ```
 result: As expected
 
-## [RTN15](https://docs.ably.io/client-lib-development-guide/features/#RTN15)
+## [RTN15](https://docs.ably.com/client-lib-development-guide/features/#RTN15)
 
 ### RTN15h, RTN15h1, RTN15h2  ✅ 
 
