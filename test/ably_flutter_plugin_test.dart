@@ -62,7 +62,7 @@ void main() {
     const key = 'TEST-KEY';
     final rest = Rest(key: key);
     expect(await rest.handle, counter);
-    expect(rest.options.tokenDetails.token, key);
+    expect(rest.options.tokenDetails!.token, key);
   });
 
   test('createRestWithKey', () async {

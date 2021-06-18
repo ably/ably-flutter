@@ -9,8 +9,8 @@ import 'channels.dart';
 abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1
   RealtimeInterface({
-    ClientOptions options,
-    final String key,
+    ClientOptions? options,
+    final String? key,
   }) : super(
           options: options,
           key: key,
@@ -25,7 +25,7 @@ abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
   /// Provides access to the underlying Connection object
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
-  ConnectionInterface get connection;
+  ConnectionInterface? get connection;
 
   /// collection of [RealtimeChannelInterface] objects
   ///

@@ -11,7 +11,7 @@ import '../utils.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MockMethodCallManager manager;
+  late MockMethodCallManager manager;
 
   setUp(() {
     manager = MockMethodCallManager();
@@ -48,7 +48,7 @@ void main() {
 
     test('publish message with authCallback', () async {
       // setup
-      final authCallback = expectAsync1((token) async {}, max: 2);
+      final authCallback = expectAsync1((token) async => 'token', max: 2);
 
       final options = ClientOptions()
         ..authCallback = authCallback
@@ -80,12 +80,12 @@ void main() {
           Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
       var authCallbackCounter = 0;
 
-      Future timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
+      Future<Object> timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
         if (authCallbackCounter == 0) {
           authCallbackCounter++;
           throw TimeoutException('Timed out');
         }
-        return Future.value();
+        return Future.value('token');
       }
 
       unawaited(
@@ -135,7 +135,7 @@ void main() {
 
     test('publish 2 realtime messages with authCallback', () async {
       // setup
-      final authCallback = expectAsync1((token) async {});
+      final authCallback = expectAsync1((token) async => 'token');
 
       final options = ClientOptions()
         ..authCallback = authCallback

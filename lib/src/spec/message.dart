@@ -20,7 +20,7 @@ class MessageData<T> {
   T get data => _data;
 
   /// initializes [MessageData] with given value and asserts from input type
-  static MessageData fromValue(Object value) {
+  static MessageData? fromValue(Object? value) {
     if (value == null) {
       return null;
     }
@@ -53,17 +53,18 @@ class MessageData<T> {
 }
 
 /// Delta extension configuration for [MessageExtras]
+@immutable
 class DeltaExtras {
   /// the id of the message the delta was generated from
-  final String from;
+  final String? from;
 
   /// the delta format. Only "vcdiff" is supported currently
-  final String format;
+  final String? format;
 
   /// create instance from a map
   DeltaExtras._fromMap(Map value)
-      : from = value[TxDeltaExtras.from] as String,
-        format = value[TxDeltaExtras.format] as String;
+      : from = value[TxDeltaExtras.from] as String?,
+        format = value[TxDeltaExtras.format] as String?;
 
   @override
   bool operator ==(Object other) =>
@@ -74,30 +75,31 @@ class DeltaExtras {
 }
 
 /// Handles supported message extras types, their encoding and decoding
+@immutable
 class MessageExtras {
   /// json-encodable map of extras
-  final Map<String, dynamic> map;
+  final Map<String, dynamic>? map;
 
   /// configuration for delta compression extension
-  final DeltaExtras _delta;
+  final DeltaExtras? _delta;
 
   /// delta configuration received from channel message
-  DeltaExtras get delta => _delta;
+  DeltaExtras? get delta => _delta;
 
   /// Creates an instance from given extras map
-  MessageExtras(this.map) : _delta = null;
+  const MessageExtras(this.map) : _delta = null;
 
   /// Creates an instance from given extras map and an instance of DeltaExtras
-  MessageExtras._withDelta(this.map, this._delta);
+  const MessageExtras._withDelta(this.map, this._delta);
 
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
-  static MessageExtras fromMap(Map<String, dynamic> extrasMap) {
+  static MessageExtras? fromMap(Map<String, dynamic>? extrasMap) {
     if (extrasMap == null) return null;
     extrasMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
       json.decode(json.encode(extrasMap)) as Map,
     );
-    final deltaMap = extrasMap.remove(TxMessageExtras.delta) as Map;
+    final deltaMap = extrasMap.remove(TxMessageExtras.delta) as Map?;
     return MessageExtras._withDelta(
       extrasMap,
       (deltaMap == null) ? null : DeltaExtras._fromMap(deltaMap),
@@ -125,49 +127,49 @@ class Message {
   /// A unique ID for this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
-  final String id;
+  final String? id;
 
   /// The timestamp for this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2f
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   /// The id of the publisher of this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2b
-  final String clientId;
+  final String? clientId;
 
   /// The connection id of the publisher of this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2c
-  final String connectionId;
+  final String? connectionId;
 
   /// Any transformation applied to the data for this message
-  final String encoding;
+  final String? encoding;
 
-  final MessageData _data;
+  final MessageData? _data;
 
   /// Message payload
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2d
-  Object get data => _data?.data;
+  Object? get data => _data?.data;
 
   /// Name of the message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2g
-  final String name;
+  final String? name;
 
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2i
-  final MessageExtras extras;
+  final MessageExtras? extras;
 
   /// Creates a message instance with [name], [data] and [clientId]
   Message({
     this.id,
     this.name,
-    Object data,
+    Object? data,
     this.clientId,
     this.connectionId,
     this.timestamp,
@@ -204,13 +206,13 @@ class Message {
   ///  RSL6 and RLS6b as mentioned in TM3
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
-    ChannelOptions channelOptions,
-  ])  : id = jsonObject['id'] as String,
-        name = jsonObject['name'] as String,
-        clientId = jsonObject['clientId'] as String,
-        connectionId = jsonObject['connectionId'] as String,
+    ChannelOptions? channelOptions,
+  ])  : id = jsonObject['id'] as String?,
+        name = jsonObject['name'] as String?,
+        clientId = jsonObject['clientId'] as String?,
+        connectionId = jsonObject['connectionId'] as String?,
         _data = MessageData.fromValue(jsonObject['data']),
-        encoding = jsonObject['encoding'] as String,
+        encoding = jsonObject['encoding'] as String?,
         extras = MessageExtras.fromMap(
           Map.castFrom<dynamic, dynamic, String, dynamic>(
             jsonObject['extras'] as Map,
@@ -225,7 +227,7 @@ class Message {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-    ChannelOptions channelOptions,
+    ChannelOptions? channelOptions,
   ]) =>
       jsonArray.map((e) => Message.fromEncoded(e, channelOptions)).toList();
 
@@ -251,40 +253,40 @@ class PresenceMessage {
   /// unique ID for this presence message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3a
-  final String id;
+  final String? id;
 
   /// presence action - to update presence status of current client,
   /// or to understand presence state of another client
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3b
-  final PresenceAction action;
+  final PresenceAction? action;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3c
-  final String clientId;
+  final String? clientId;
 
   /// connection id of the source of this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3d
-  final String connectionId;
+  final String? connectionId;
 
-  final MessageData _data;
+  final MessageData? _data;
 
   /// Message payload
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3e
-  Object get data => _data?.data;
+  Object? get data => _data?.data;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3f
-  final String encoding;
+  final String? encoding;
 
   /// Message extras that may contain message metadata
   /// and/or ancillary payloads
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3i
-  final MessageExtras extras;
+  final MessageExtras? extras;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3g
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3h
   String get memberKey => '$connectionId:$clientId';
@@ -295,7 +297,7 @@ class PresenceMessage {
     this.action,
     this.clientId,
     this.connectionId,
-    Object data,
+    Object? data,
     this.encoding,
     this.extras,
     this.timestamp,
@@ -330,14 +332,14 @@ class PresenceMessage {
   ///  RSL6 and RLS6b as mentioned in TP4
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
-    ChannelOptions channelOptions,
-  ])  : id = jsonObject['id'] as String,
+    ChannelOptions? channelOptions,
+  ])  : id = jsonObject['id'] as String?,
         action = PresenceAction.values.firstWhere((e) =>
-            e.toString().split('.')[1] == jsonObject['action'] as String),
-        clientId = jsonObject['clientId'] as String,
-        connectionId = jsonObject['connectionId'] as String,
+            e.toString().split('.')[1] == jsonObject['action'] as String?),
+        clientId = jsonObject['clientId'] as String?,
+        connectionId = jsonObject['connectionId'] as String?,
         _data = MessageData.fromValue(jsonObject['data']),
-        encoding = jsonObject['encoding'] as String,
+        encoding = jsonObject['encoding'] as String?,
         extras = MessageExtras.fromMap(
           Map.castFrom<dynamic, dynamic, String, dynamic>(
             jsonObject['extras'] as Map,
@@ -352,7 +354,7 @@ class PresenceMessage {
   /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-    ChannelOptions channelOptions,
+    ChannelOptions? channelOptions,
   ]) =>
       jsonArray
           .map((jsonObject) => PresenceMessage.fromEncoded(

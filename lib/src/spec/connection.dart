@@ -5,39 +5,39 @@ import 'enums.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTN1
 abstract class ConnectionInterface
-    implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
+    implements EventEmitter<ConnectionEvent, ConnectionStateChange?> {
   /// current state of this connection
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
-  ConnectionState get state;
+  ConnectionState? get state;
 
   /// Error information associated with connection failure
   ///
   /// See:
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN14
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN15
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 
   /// A public identifier for this connection, used to identify
   /// this member in presence events and message ids.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN8
-  String id;
+  String? id;
 
   /// A unique private connection key provided by Ably that is used to reconnect
   /// and retain connection state following an unexpected disconnection
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN9
-  String key;
+  String? key;
 
   /// RTN16b) Connection#recoveryKey is an attribute composed of the
   /// connection key and latest serial received on the connection
-  String recoveryKey;
+  String? recoveryKey;
 
   /// The serial number of the last message to be received on this connection.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN10
-  int serial;
+  int? serial;
 
   /// Explicitly connects to Ably service if not already connected
   ///

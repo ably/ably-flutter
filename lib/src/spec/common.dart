@@ -18,7 +18,7 @@ abstract class CipherParams {
   ///
   /// Default is AES. Currently only AES is supported.
   /// https://docs.ably.com/client-lib-development-guide/features/#TZ2a
-  String algorithm;
+  String? algorithm;
 
   /// private key used to encrypt and decrypt payloads
   ///
@@ -28,13 +28,13 @@ abstract class CipherParams {
   /// the length in bits of the key
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TZ2b
-  int keyLength;
+  int? keyLength;
 
   /// Specify cipher mode
   ///
   /// Default is CBC. Currently only CBC is supported
   /// https://docs.ably.com/client-lib-development-guide/features/#TZ2c
-  String mode;
+  String? mode;
 }
 
 /// An [AblyException] encapsulates [ErrorInfo] which carries details
@@ -46,22 +46,22 @@ abstract class CipherParams {
 /// https://docs.ably.com/client-lib-development-guide/features/#TI1
 class ErrorInfo {
   /// ably specific error code
-  final int code;
+  final int? code;
 
   /// link to error related documentation as
-  final String href;
+  final String? href;
 
   /// error message
-  final String message;
+  final String? message;
 
   /// cause for the error
-  final ErrorInfo cause;
+  final ErrorInfo? cause;
 
   /// generic status code
-  final int statusCode;
+  final int? statusCode;
 
   /// request id which triggered this exception
-  final String requestId;
+  final String? requestId;
 
   /// instantiates a [ErrorInfo] with provided values
   ErrorInfo({
@@ -86,10 +86,10 @@ class ErrorInfo {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS5
 abstract class StatsMessageCount {
   /// Count of all messages.
-  int count;
+  int? count;
 
   /// Total data transferred for all messages in bytes.
-  int data;
+  int? data;
 }
 
 /// MessageTypes contains a breakdown of summary stats data
@@ -98,13 +98,13 @@ abstract class StatsMessageCount {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS6
 abstract class StatsMessageTypes {
   /// All messages count (includes both presence & messages).
-  StatsMessageCount all;
+  StatsMessageCount? all;
 
   /// Count of channel messages.
-  StatsMessageCount messages;
+  StatsMessageCount? messages;
 
   /// Count of presence messages.
-  StatsMessageCount presence;
+  StatsMessageCount? presence;
 }
 
 /// RequestCount contains aggregate counts for requests made
@@ -112,14 +112,14 @@ abstract class StatsMessageTypes {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS8
 abstract class StatsRequestCount {
   /// Requests failed.
-  int failed;
+  int? failed;
 
   /// Requests refused typically as a result of permissions
   /// or a limit being exceeded.
-  int refused;
+  int? refused;
 
   /// Requests succeeded.
-  int succeeded;
+  int? succeeded;
 }
 
 /// ResourceCount contains aggregate data for usage of a resource
@@ -128,19 +128,19 @@ abstract class StatsRequestCount {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS9
 abstract class StatsResourceCount {
   /// Average resources of this type used for this period.
-  int mean;
+  int? mean;
 
   /// Minimum total resources of this type used for this period.
-  int min;
+  int? min;
 
   /// Total resources of this type opened.
-  int opened;
+  int? opened;
 
   /// Peak resources of this type used for this period.
-  int peak;
+  int? peak;
 
   /// Resource requests refused within this period.
-  int refused;
+  int? refused;
 }
 
 /// ConnectionTypes contains a breakdown of summary stats data
@@ -149,13 +149,13 @@ abstract class StatsResourceCount {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS4
 abstract class StatsConnectionTypes {
   /// All connection count (includes both TLS & non-TLS connections).
-  StatsResourceCount all;
+  StatsResourceCount? all;
 
   /// Non-TLS connection count (unencrypted).
-  StatsResourceCount plain;
+  StatsResourceCount? plain;
 
   /// TLS connection count.
-  StatsResourceCount tls;
+  StatsResourceCount? tls;
 }
 
 /// MessageTraffic contains a breakdown of summary stats data
@@ -164,17 +164,17 @@ abstract class StatsConnectionTypes {
 /// https://docs.ably.com/client-lib-development-guide/features/#TS7
 abstract class StatsMessageTraffic {
   /// All messages count (includes realtime, rest and webhook messages).
-  StatsMessageTypes all;
+  StatsMessageTypes? all;
 
   /// Count of messages transferred over a realtime transport
   /// such as WebSockets.
-  StatsMessageTypes realtime;
+  StatsMessageTypes? realtime;
 
   /// Count of messages transferred using REST.
-  StatsMessageTypes rest;
+  StatsMessageTypes? rest;
 
   /// Count of messages delivered using WebHooks.
-  StatsMessageTypes webhook;
+  StatsMessageTypes? webhook;
 }
 
 /// A class providing parameters of a token request.
@@ -193,14 +193,14 @@ class TokenParams {
   /// with the capability of the issuing key.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2b
-  String capability;
+  String? capability;
 
   /// A clientId to associate with this token.
   ///
   /// The generated token may be used to authenticate as this clientId.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2c
-  String clientId;
+  String? clientId;
 
   /// An opaque nonce string of at least 16 characters to ensure uniqueness.
   ///
@@ -208,7 +208,7 @@ class TokenParams {
   /// are used to prevent requests from being replayed
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  String nonce;
+  String? nonce;
 
   /// The timestamp (in millis since the epoch) of this request.
   ///
@@ -216,7 +216,7 @@ class TokenParams {
   ///	token requests from being replayed.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  DateTime timestamp;
+  DateTime? timestamp;
 
   /// Requested time to live for the token.
   ///
@@ -227,7 +227,7 @@ class TokenParams {
   /// 0 means Ably will set it to the default value
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
-  int ttl;
+  int? ttl;
 
   /// instantiates a [TokenParams] with provided values
   TokenParams({
@@ -244,22 +244,22 @@ class TokenParams {
 /// https://docs.ably.com/client-lib-development-guide/features/#TD1
 class TokenDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#TD2
-  String token;
+  String? token;
 
   /// Token expiry time in milliseconds
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD3
-  int expires;
+  int? expires;
 
   /// the time the token was issued in milliseconds
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD4
-  int issued;
+  int? issued;
 
   /// stringified capabilities JSON
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD5
-  String capability;
+  String? capability;
 
   /// Client ID assigned to the token.
   ///
@@ -270,7 +270,7 @@ class TokenDetails {
   /// clientId is both enforced and assumed for all operations for this token
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD6
-  String clientId;
+  String? clientId;
 
   /// instantiates a [TokenDetails] with provided values
   TokenDetails(
@@ -285,11 +285,11 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD7
   TokenDetails.fromMap(Map<String, dynamic> map) {
-    token = map['token'] as String;
-    expires = map['expires'] as int;
-    issued = map['issued'] as int;
-    capability = map['capability'] as String;
-    clientId = map['clientId'] as String;
+    token = map['token'] as String?;
+    expires = map['expires'] as int?;
+    issued = map['issued'] as int?;
+    capability = map['capability'] as String?;
+    clientId = map['clientId'] as String?;
   }
 }
 
@@ -302,7 +302,7 @@ class TokenRequest {
   ///
   /// More details about Ably API Key:
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA11
-  String keyName;
+  String? keyName;
 
   /// An opaque nonce string of at least 16 characters to ensure
   ///	uniqueness of this request. Any subsequent request using the
@@ -311,36 +311,36 @@ class TokenRequest {
   /// spec:
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
   /// https://docs.ably.com/client-lib-development-guide/features/#TE5
-  String nonce;
+  String? nonce;
 
   /// The "Message Authentication Code" for this request.
   ///
   /// See the Ably Authentication documentation for more details.
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE2
-  String mac;
+  String? mac;
 
   /// stringified capabilities JSON
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE3
-  String capability;
+  String? capability;
 
   ///  Client ID assigned to the tokenRequest.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
-  String clientId;
+  String? clientId;
 
   /// timestamp long – The timestamp (in milliseconds since the epoch)
   /// of this request. Timestamps, in conjunction with the nonce,
   /// are used to prevent requests from being replayed
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE5
-  DateTime timestamp;
+  DateTime? timestamp;
 
   /// ttl attribute represents time to live (expiry)
   /// of this token in milliseconds
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE4
-  int ttl;
+  int? ttl;
 
   /// instantiates a [TokenRequest] with provided values
   TokenRequest({
@@ -355,13 +355,13 @@ class TokenRequest {
 
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
   TokenRequest.fromMap(Map<String, dynamic> map) {
-    keyName = map['keyName'] as String;
-    nonce = map['nonce'] as String;
-    mac = map['mac'] as String;
-    capability = map['capability'] as String;
-    clientId = map['clientId'] as String;
+    keyName = map['keyName'] as String?;
+    nonce = map['nonce'] as String?;
+    mac = map['mac'] as String?;
+    capability = map['capability'] as String?;
+    clientId = map['clientId'] as String?;
     timestamp = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
-    ttl = map['ttl'] as int;
+    ttl = map['ttl'] as int?;
   }
 }
 
@@ -399,8 +399,8 @@ class RestHistoryParams {
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
   RestHistoryParams({
-    DateTime start,
-    DateTime end,
+    DateTime? start,
+    DateTime? end,
     this.direction = 'backwards',
     this.limit = 100,
   })  : assert(direction == 'backwards' || direction == 'forwards'),
@@ -421,15 +421,15 @@ class RealtimeHistoryParams extends RestHistoryParams {
   ///
   /// if true, will only retrieve messages prior to the moment that the channel
   /// was attached or emitted an UPDATE indicating loss of continuity.
-  bool untilAttach;
+  bool? untilAttach;
 
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
   RealtimeHistoryParams({
-    DateTime start,
-    DateTime end,
+    DateTime? start,
+    DateTime? end,
     String direction = 'backwards',
     int limit = 100,
     this.untilAttach,
@@ -453,12 +453,12 @@ class RestPresenceParams {
   /// filters members by the provided clientId
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a2
-  String clientId;
+  String? clientId;
 
   /// filters members by the provided connectionId
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a3
-  String connectionId;
+  String? connectionId;
 
   /// initializes with default [limit] set to 100
   RestPresenceParams({
@@ -481,12 +481,12 @@ class RealtimePresenceParams {
   /// filters members by the provided clientId
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP11c2
-  final String clientId;
+  final String? clientId;
 
   /// filters members by the provided connectionId
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP11c3
-  final String connectionId;
+  final String? connectionId;
 
   /// initializes with [waitForSync] set to true by default
   RealtimePresenceParams({
@@ -501,15 +501,15 @@ class AblyException implements Exception {
   /// platform error code
   ///
   /// Mostly used for storing [PlatformException.code]
-  final String code;
+  final String? code;
 
   /// platform error message
   ///
   /// Mostly used for storing [PlatformException.message]
-  final String message;
+  final String? message;
 
   /// error message from ably native sdk
-  final ErrorInfo errorInfo;
+  final ErrorInfo? errorInfo;
 
   /// initializes with no defaults
   AblyException([
@@ -522,7 +522,7 @@ class AblyException implements Exception {
   AblyException.fromPlatformException(PlatformException pe)
       : code = pe.code,
         message = pe.message,
-        errorInfo = pe.details as ErrorInfo;
+        errorInfo = pe.details as ErrorInfo?;
 
   @override
   String toString() {
@@ -541,17 +541,17 @@ class ChannelStateChange {
   /// the event that generated the channel state change
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH5
-  final ChannelEvent event;
+  final ChannelEvent? event;
 
   /// current state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
-  final ChannelState current;
+  final ChannelState? current;
 
   /// previous state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
-  final ChannelState previous;
+  final ChannelState? previous;
 
   /// reason for failure, in case of a failed state
   ///
@@ -560,10 +560,10 @@ class ChannelStateChange {
   /// object describing the reason for the error
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH3
-  ErrorInfo reason;
+  ErrorInfo? reason;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TH4
-  final bool resumed;
+  final bool? resumed;
 
   /// initializes with [resumed] set to false
   ChannelStateChange(
@@ -581,17 +581,17 @@ class ChannelStateChange {
 /// https://docs.ably.com/client-lib-development-guide/features/#TA1
 class ConnectionStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionEvent event;
+  final ConnectionEvent? event;
 
   /// current state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionState current;
+  final ConnectionState? current;
 
   /// previous state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionState previous;
+  final ConnectionState? previous;
 
   /// reason for failure, in case of a failed state
   ///
@@ -600,14 +600,14 @@ class ConnectionStateChange {
   /// object describing the reason for the error
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA3
-  ErrorInfo reason;
+  ErrorInfo? reason;
 
   /// when the client is not connected, a connection attempt will be made
   /// automatically by the library after the number of milliseconds
   /// specified by [retryIn]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  int retryIn;
+  int? retryIn;
 
   /// initializes without any defaults
   ConnectionStateChange(
@@ -627,17 +627,17 @@ abstract class DevicePushDetails {
   /// and address.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP3
-  Map<String, String> recipient;
+  Map<String, String>? recipient;
 
   /// The state of the push registration.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP4
-  DevicePushState state;
+  DevicePushState? state;
 
   /// Any error information associated with the registration.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP2
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 }
 
 /// Details of a registered device.
@@ -649,36 +649,36 @@ abstract class DeviceDetails {
   /// Generated locally if not available
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD2
-  String id;
+  String? id;
 
   /// populated for device registrations associated with a clientId (optional)
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD3
-  String clientId;
+  String? clientId;
 
   /// The device platform.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD6
-  DevicePlatform platform;
+  DevicePlatform? platform;
 
   /// the device form factor.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD4
-  FormFactor formFactor;
+  FormFactor? formFactor;
 
   /// a map of string key/value pairs containing any other registered
   /// metadata associated with the device registration
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD5
-  Map<String, String> metadata;
+  Map<String, String>? metadata;
 
   /// Device token. Generated locally, if not available.
-  String deviceSecret;
+  String? deviceSecret;
 
   /// Details of the push registration for this device.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD7
-  DevicePushDetails push;
+  DevicePushDetails? push;
 }
 
 /// Details of a push subscription to a channel.
@@ -688,18 +688,18 @@ abstract class PushChannelSubscription {
   /// the channel name associated with this subscription
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS4
-  String channel;
+  String? channel;
 
   /// populated for subscriptions made for a specific device registration
   /// (optional)
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS2
-  String deviceId;
+  String? deviceId;
 
   /// populated for subscriptions made for a specific clientId (optional)
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS3
-  String clientId;
+  String? clientId;
 }
 
 /// Params to filter push device registrations.
@@ -708,16 +708,16 @@ abstract class PushChannelSubscription {
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
 abstract class DeviceRegistrationParams {
   /// filter by client id
-  String clientId;
+  String? clientId;
 
   /// filter by device id
-  String deviceId;
+  String? deviceId;
 
   /// limit results for each page
-  int limit;
+  int? limit;
 
   /// filter by device state
-  DevicePushState state;
+  DevicePushState? state;
 }
 
 /// Params to filter push channel subscriptions.
@@ -726,16 +726,16 @@ abstract class DeviceRegistrationParams {
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
 abstract class PushChannelSubscriptionParams {
   /// filter by channel
-  String channel;
+  String? channel;
 
   /// filter by clientId
-  String clientId;
+  String? clientId;
 
   /// filter by deviceId
-  String deviceId;
+  String? deviceId;
 
   /// limit results for each page
-  int limit;
+  int? limit;
 }
 
 /// params to filter channels on a [PushChannelSubscriptions]
@@ -743,17 +743,17 @@ abstract class PushChannelSubscriptionParams {
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
 abstract class PushChannelsParams {
   /// limit results for each page
-  int limit;
+  int? limit;
 }
 
 /// Interface implemented by event listeners, returned by event emitters.
 abstract class EventListener<E> {
   /// Register for all events (no parameter), or a specific event.
-  Stream<E> on([E event]);
+  Stream<E> on([E? event]);
 
   /// Register for a single occurrence of any event (no parameter),
   /// or a specific event.
-  Future<E> once([E event]);
+  Future<E> once([E? event]);
 
   /// Remove registrations for this listener, irrespective of type.
   Future<void> off();
@@ -770,7 +770,7 @@ abstract class EventListener<E> {
 /// using [StreamSubscription.cancel] API
 abstract class EventEmitter<E, G> {
   /// Create a listener, with which registrations may be made.
-  Stream<G> on([E event]);
+  Stream<G> on([E? event]);
 }
 
 /// PaginatedResult [TG1](https://docs.ably.com/client-lib-development-guide/features/#TG1)
@@ -782,7 +782,7 @@ abstract class PaginatedResultInterface<T> {
   /// items contain page of results
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TG3
-  List<T> get items;
+  List<T>? get items;
 
   /// returns a new PaginatedResult loaded with the next page of results.
   ///
@@ -799,7 +799,7 @@ abstract class PaginatedResultInterface<T> {
   /// returns true if there are further pages
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TG6
-  bool hasNext();
+  bool? hasNext();
 
   /// returns true if this page is the last page
   ///
@@ -817,29 +817,29 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResultInterface<T> {
   /// HTTP status code for the response
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP4
-  int statusCode;
+  int? statusCode;
 
   /// indicates whether the request is successful
   ///
   /// true when 200 <= [statusCode] < 300
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP5
-  bool success;
+  bool? success;
 
   /// Value from X-Ably-Errorcode HTTP header, if available in response
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP6
-  int errorCode;
+  int? errorCode;
 
   /// Value from X-Ably-Errormessage HTTP header, if available in response
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP7
-  String errorMessage;
+  String? errorMessage;
 
   /// Array of key value pairs of each response header
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP8
-  List<Map<String, String>> headers;
+  List<Map<String, String>>? headers;
 
   /// returns a new HttpPaginatedResponse loaded with the next page of results.
   ///
@@ -863,49 +863,49 @@ class Stats {
   /// Aggregates inbound and outbound messages.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
-  StatsMessageTypes all;
+  StatsMessageTypes? all;
 
   /// Breakdown of API requests received via the REST API.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
-  StatsRequestCount apiRequests;
+  StatsRequestCount? apiRequests;
 
   /// Breakdown of channels stats.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
-  StatsResourceCount channels;
+  StatsResourceCount? channels;
 
   /// Breakdown of connection stats data for different (TLS vs non-TLS)
   /// connection types.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12i
-  StatsConnectionTypes connections;
+  StatsConnectionTypes? connections;
 
   /// All inbound messages i.e.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12f
-  StatsMessageTraffic inbound;
+  StatsMessageTraffic? inbound;
 
   /// The interval that this statistic applies to,
   /// see GRANULARITY and INTERVAL_FORMAT_STRING.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12a
-  String intervalId;
+  String? intervalId;
 
   /// All outbound messages i.e.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12g
-  StatsMessageTraffic outbound;
+  StatsMessageTraffic? outbound;
 
   /// Messages persisted for later retrieval via the history API.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12h
-  StatsMessageTypes persisted;
+  StatsMessageTypes? persisted;
 
   /// Breakdown of Token requests received via the REST API.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12l
-  StatsRequestCount tokenRequests;
+  StatsRequestCount? tokenRequests;
 }
 
 /// Iterator class for [Channels.iterator]
@@ -916,10 +916,15 @@ class _ChannelIterator<T> implements Iterator<T> {
 
   int _currentIndex = 0;
 
-  T _currentChannel;
+  T? _currentChannel;
 
   @override
-  T get current => _currentChannel;
+  T get current {
+    if (_currentChannel == null) {
+      throw StateError('Not iterating');
+    }
+    return _currentChannel!;
+  }
 
   @override
   bool moveNext() {
@@ -947,13 +952,10 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   ///
   /// Doesn't create a channel instance on platform side yet.
   ChannelType get(String name) {
-    //TODO add ChannelOptions as optional argument here,
-    // and pass it on to createChannel
-    assert(name != null, 'Channel name cannot be null');
     if (_channels[name] == null) {
       _channels[name] = createChannel(name);
     }
-    return _channels[name];
+    return _channels[name]!;
   }
 
   /// returns true if a channel exists [name]

@@ -14,10 +14,10 @@ import 'realtime.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
 class RealtimeChannelOptions extends ChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
-  final Map<String, String> params;
+  final Map<String, String>? params;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
-  final List<ChannelMode> modes;
+  final List<ChannelMode>? modes;
 
   /// create channel options with a cipher, params and modes
   RealtimeChannelOptions(Object cipher, {this.params, this.modes})
@@ -30,7 +30,7 @@ class RealtimeChannelOptions extends ChannelOptions {
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 abstract class RealtimeChannelInterface
-    extends EventEmitter<ChannelEvent, ChannelStateChange> {
+    extends EventEmitter<ChannelEvent, ChannelStateChange?> {
   /// creates a Realtime channel instance
   RealtimeChannelInterface(this.realtime, this.name);
 
@@ -41,30 +41,30 @@ abstract class RealtimeChannelInterface
   final String name;
 
   /// will hold reason for failure of attaching to channel in such cases
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 
   /// current state of channel
-  ChannelState state;
+  ChannelState? state;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
-  RealtimePresenceInterface get presence;
+  RealtimePresenceInterface? get presence;
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
   /// (see IDL for more details)
-  PushChannel push;
+  PushChannel? push;
 
   /// modes of this channel as returned by Ably server
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
-  List<ChannelMode> modes;
+  List<ChannelMode>? modes;
 
   /// Subset of the params passed via [ClientOptions]
   /// that the server has recognised and validated
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
-  Map<String, String> params;
+  Map<String, String>? params;
 
   /// Attaches the realtime client to this channel.
   ///
@@ -80,17 +80,17 @@ abstract class RealtimeChannelInterface
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
   Future<PaginatedResultInterface<Message>> history([
-    RealtimeHistoryParams params,
+    RealtimeHistoryParams? params,
   ]);
 
   /// publishes messages onto the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
   Future<void> publish({
-    Message message,
-    List<Message> messages,
-    String name,
-    Object data,
+    Message? message,
+    List<Message>? messages,
+    String? name,
+    Object? data,
   });
 
   /// subscribes for messages on this channel
@@ -100,9 +100,9 @@ abstract class RealtimeChannelInterface
   /// by calling [StreamSubscription.cancel]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
-  Stream<Message> subscribe({
-    String name,
-    List<String> names,
+  Stream<Message?> subscribe({
+    String? name,
+    List<String>? names,
   });
 
   /// takes a [RealtimeChannelOptions]] object and sets or updates the

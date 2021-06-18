@@ -11,13 +11,13 @@ abstract class RestPresenceInterface {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSP3
   Future<PaginatedResultInterface<PresenceMessage>> get([
-    RestPresenceParams params,
+    RestPresenceParams? params,
   ]);
 
   /// Return the presence messages history for the channel.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSP4
   Future<PaginatedResultInterface<PresenceMessage>> history([
-    RestHistoryParams params,
+    RestHistoryParams? params,
   ]);
 }

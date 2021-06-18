@@ -26,7 +26,7 @@ void main() {
         connectionId: connectionId,
         data: data,
         encoding: encoding,
-        extras: MessageExtras(extras),
+        extras: const MessageExtras(extras),
         timestamp: timestamp,
       );
 
@@ -55,7 +55,7 @@ void main() {
       });
 
       test('#extras retrieves extras', () {
-        expect(message.extras.map, extras);
+        expect(message.extras!.map, extras);
       });
 
       test('#timestamp retrieves timestamp', () {
@@ -70,7 +70,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: MessageExtras(extras),
+          extras: const MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(message == message2, true);
@@ -86,7 +86,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: MessageExtras(extras),
+          extras: const MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(message == message2, false);
@@ -117,7 +117,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras.map, extras);
+          expect(message.extras!.map, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -148,7 +148,7 @@ void main() {
           expect(message.connectionId, connectionId);
           expect(message.data, data);
           expect(message.encoding, encoding);
-          expect(message.extras.map, extras);
+          expect(message.extras!.map, extras);
           expect(
             message.timestamp,
             DateTime.fromMillisecondsSinceEpoch(
@@ -167,8 +167,9 @@ void main() {
           expect(message.extras, null);
         });
         test('a map of extras is allowed', () {
-          final message = Message(extras: MessageExtras({'key': 'value'}));
-          expect(message.extras.map, const {'key': 'value'});
+          final message =
+              Message(extras: const MessageExtras({'key': 'value'}));
+          expect(message.extras!.map, const {'key': 'value'});
         });
       });
     });

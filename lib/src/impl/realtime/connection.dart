@@ -11,7 +11,7 @@ class Connection extends PlatformObject implements ConnectionInterface {
   /// Realtime client instance
   final Realtime realtime;
 
-  ConnectionState _state;
+  ConnectionState? _state;
 
   /// instantiates a connection with [realtime] client instance
   ///
@@ -20,7 +20,7 @@ class Connection extends PlatformObject implements ConnectionInterface {
   Connection(this.realtime) : super() {
     _state = ConnectionState.initialized;
     on().listen((event) {
-      if (event.reason?.code == ErrorCodes.authCallbackFailure) {
+      if (event!.reason?.code == ErrorCodes.authCallbackFailure) {
         realtime.awaitAuthUpdateAndReconnect();
       }
       _state = event.current;
@@ -31,30 +31,30 @@ class Connection extends PlatformObject implements ConnectionInterface {
   Future<int> createPlatformInstance() async => realtime.handle;
 
   @override
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 
   @override
-  String id;
+  String? id;
 
   @override
-  String key;
+  String? key;
 
   @override
-  String recoveryKey;
+  String? recoveryKey;
 
   @override
-  int serial;
+  int? serial;
 
   @override
-  ConnectionState get state => _state;
+  ConnectionState? get state => _state;
 
   @override
-  Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) =>
+  Stream<ConnectionStateChange?> on([ConnectionEvent? connectionEvent]) =>
       listen<ConnectionStateChange>(
         PlatformMethod.onRealtimeConnectionStateChanged,
       ).where((connectionStateChange) =>
           connectionEvent == null ||
-          connectionStateChange.event == connectionEvent);
+          connectionStateChange!.event == connectionEvent);
 
   @override
   Future<void> close() => realtime.close();
