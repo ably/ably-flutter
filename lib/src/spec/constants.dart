@@ -4,7 +4,7 @@ import '../../ably_flutter.dart';
 ///
 /// Can be used for [ClientOptions.logLevel]
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#TO3b
+/// https://docs.ably.com/client-lib-development-guide/features/#TO3b
 ///
 /// TODO(tiholic) convert [LogLevel] to enum and update encoder to pass
 ///  right numeric values to platform methods

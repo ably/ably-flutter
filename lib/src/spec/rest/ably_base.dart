@@ -22,7 +22,7 @@ abstract class AblyBase {
   /// a custom auth object to perform authentication related operations
   /// based on the [options]
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSC5
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
   Auth auth;
 
   /// a push object interacting with Push API
@@ -31,14 +31,14 @@ abstract class AblyBase {
 
   /// gets stats based on params as a [PaginatedResult]
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSC6
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
   Future<PaginatedResultInterface<Stats>> stats([
     Map<String, dynamic> params,
   ]);
 
   /// creates and sends a raw request to ably service
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSC19
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
   Future<HttpPaginatedResponse> request({
     @required String method,
     @required String path,
@@ -49,6 +49,6 @@ abstract class AblyBase {
 
   /// returns server time
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSC16
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
   Future<DateTime> time();
 }

@@ -10,17 +10,17 @@ plugin wrapping the
 [ably-cocoa](https://github.com/ably/ably-cocoa) (iOS)
 and
 [ably-java](https://github.com/ably/ably-java) (Android)
-client library SDKs for [Ably](https://ably.io/), the realtime data delivery platform.
+client library SDKs for [Ably](https://www.ably.com), the realtime data delivery platform.
 
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
 
 ## Resources
 
-- [Quickstart Guide](https://www.ably.io/documentation/quick-start-guide?lang=flutter)
-- [Introducing the Ably Flutter plugin](https://www.ably.io/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
-- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.io/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
-- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.io/topic/websockets-flutter)
+- [Quickstart Guide](https://www.ably.com/documentation/quick-start-guide?lang=flutter)
+- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
+- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
+- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
 
 ## Supported Platforms
 
@@ -455,9 +455,9 @@ channel
 ### RTE6a compliance
 
 Using the Streams based approach doesn't fully conform with
-[RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a)
+[RTE6a](https://docs.ably.com/client-lib-development-guide/features/#RTE6a)
 from our
-[client library features specification](https://docs.ably.io/client-lib-development-guide/features/).
+[client library features specification](https://docs.ably.com/client-lib-development-guide/features/).
 
 #### The Problem
 
@@ -479,7 +479,7 @@ subscriptionToBeCancelled = realtime.connection.on().listen((ably.ConnectionStat
 
 In the example above, the 2nd listener is cancelled when the 1st listener is notified about the "connected" event.
 As per
-[RTE6a](https://docs.ably.io/client-lib-development-guide/features/#RTE6a),
+[RTE6a](https://docs.ably.com/client-lib-development-guide/features/#RTE6a),
 the 2nd listener should also be triggered.
 It will not be as the 2nd listener was registered after the 1st listener and stream subscription is cancelled immediately after 1st listener is triggered.
 
