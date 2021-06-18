@@ -213,5 +213,5 @@ To check that everything is looking sensible to the Flutter tools, without publi
 
 We tend to use [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator) to collate the information required for a change log update.
 Your mileage may vary, but it seems the most reliable method to invoke the generator is something like:
-`github_changelog_generator -u ably -p ably-flutter --since-tag v1.0.0 --output delta.md`
-and then manually merge the delta contents in to the main change log (where `v1.0.0` in this case is the tag for the previous release).
+`github_changelog_generator -u ably -p ably-flutter --since-tag v1.2.0 --output delta.md`
+and then manually merge the delta contents in to the main change log (where `v1.2.0` in this case is the tag for the previous release).
