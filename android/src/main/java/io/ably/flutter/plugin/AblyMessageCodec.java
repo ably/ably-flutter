@@ -188,9 +188,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private void WriteJsonElement(ByteArrayOutputStream stream, JsonElement value) {
     if (value instanceof JsonObject) {
-      super.writeValue(stream, (gson).fromJson(value, Map.class));
+      super.writeValue(stream, gson.fromJson(value, Map.class));
     } else if (value instanceof JsonArray) {
-      super.writeValue(stream, (gson).fromJson(value, ArrayList.class));
+      super.writeValue(stream, gson.fromJson(value, ArrayList.class));
     }
   }
 
