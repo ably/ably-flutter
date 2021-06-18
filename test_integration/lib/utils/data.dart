@@ -52,3 +52,13 @@ List<List> getAllSubsets(List l) => l.fold<List<List>>(
           .expand((element) => element)
           .toList(),
     );
+
+const pushPayload = <String, dynamic>{
+  'push': {
+    'notification': {
+      'title': 'Hello from Ably!',
+      'body': 'Test push notification from Ably'
+    },
+    'data': {'foo': 'bar'}
+  }
+};

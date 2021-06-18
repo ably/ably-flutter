@@ -19,7 +19,7 @@ final _tests =
   TestGroup.rest: {
     'should publish': testRestPublish,
     'should retrieve history': testRestHistory,
-    'conforms to publish spec RSl1': testRestPublishSpec,
+    'conforms to publish spec': testRestPublishSpec,
     'should publish with AuthCallback': testRestPublishWithAuthCallback,
     'should get Presence Members': testRestPresenceGet,
     'should get Presence History': testRestPresenceHistory,

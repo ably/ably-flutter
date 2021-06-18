@@ -8,6 +8,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     //Other ably objects
     'clientOptions',
     'messageData',
+    'messageExtras',
     'message',
     'tokenParams',
     'tokenDetails',
@@ -132,6 +133,14 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'MessageData',
     'properties': <String>['data', 'type']
+  },
+  {
+    'name': 'DeltaExtras',
+    'properties': <String>['format', 'from']
+  },
+  {
+    'name': 'MessageExtras',
+    'properties': <String>['extras', 'delta']
   },
   {
     'name': 'ClientOptions',

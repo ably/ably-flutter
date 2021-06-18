@@ -92,6 +92,10 @@ class Codec extends StandardMessageCodec {
         _encodeChannelMessageData,
         _decodeChannelMessageData,
       ),
+      CodecTypes.messageExtras: _CodecPair<MessageExtras>(
+        _encodeChannelMessageExtras,
+        _decodeChannelMessageExtras,
+      ),
       CodecTypes.message:
           _CodecPair<Message>(_encodeChannelMessage, _decodeChannelMessage),
       CodecTypes.presenceMessage:
@@ -127,6 +131,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
+    } else if (value is MessageExtras) {
+      return CodecTypes.messageExtras;
     } else if (value is Message) {
       return CodecTypes.message;
     } else if (value is RealtimeHistoryParams) {
@@ -428,6 +434,16 @@ class Codec extends StandardMessageCodec {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxMessageData.data, v.data);
+    return jsonMap;
+  }
+
+  /// Encodes [MessageExtras] to a Map
+  /// returns null of [v] is null
+  Map<String, dynamic> _encodeChannelMessageExtras(final MessageExtras v) {
+    if (v == null) return null;
+    final jsonMap = <String, dynamic>{};
+    // Not encoding `delta`, as it is a readonly extension
+    _writeToJson(jsonMap, TxMessageExtras.extras, v.map);
     return jsonMap;
   }
 
@@ -792,11 +808,24 @@ class Codec extends StandardMessageCodec {
         _readFromJson<Object>(jsonMap, TxMessageData.data));
   }
 
+  /// Decodes value [jsonMap] to [MessageExtras]
+  /// returns null if [jsonMap] is null
+  MessageExtras _decodeChannelMessageExtras(Map<String, dynamic> jsonMap) {
+    if (jsonMap == null) return null;
+    return MessageExtras.fromMap(jsonMap);
+  }
+
   /// Decodes value [jsonMap] to [Message]
   /// returns null if [jsonMap] is null
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     if (jsonMap == null) return null;
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
+    // here extras may be a Map or a MessageExtras instance as
+    //  cocoa side doesn't have dedicated models to handle MessageExtras
+    var extras = _readFromJson<Object>(jsonMap, TxMessage.extras);
+    if (extras is! MessageExtras) {
+      extras = MessageExtras.fromMap(toJsonMap(extras as Map));
+    }
     return Message(
       name: _readFromJson<String>(jsonMap, TxMessage.name),
       clientId: _readFromJson<String>(jsonMap, TxMessage.clientId),
@@ -804,7 +833,7 @@ class Codec extends StandardMessageCodec {
       id: _readFromJson<String>(jsonMap, TxMessage.id),
       connectionId: _readFromJson<String>(jsonMap, TxMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxMessage.encoding),
-      extras: _readFromJson<Map>(jsonMap, TxMessage.extras),
+      extras: extras as MessageExtras,
       timestamp: (timestamp == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
@@ -845,7 +874,7 @@ class Codec extends StandardMessageCodec {
       connectionId:
           _readFromJson<String>(jsonMap, TxPresenceMessage.connectionId),
       encoding: _readFromJson<String>(jsonMap, TxPresenceMessage.encoding),
-      extras: toJsonMap(_readFromJson<Map>(jsonMap, TxPresenceMessage.extras)),
+      extras: _readFromJson<MessageExtras>(jsonMap, TxPresenceMessage.extras),
       timestamp: (timestamp == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(timestamp),

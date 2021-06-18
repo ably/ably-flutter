@@ -198,6 +198,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> all;
   List<Map<String, dynamic>> filteredWithName;
   List<Map<String, dynamic>> filteredWithNames;
+  List<Map<String, dynamic>> extrasMessages;
 
   List<Map<String, dynamic>> transformMessages(messages) =>
       List.from(messages as List)
@@ -211,6 +212,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
     filteredWithNames = transformMessages(
       response.payload['filteredWithNames'],
     );
+    extrasMessages = transformMessages(response.payload['extrasMessages']);
   });
 
   test(
@@ -254,6 +256,13 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
       expect(filteredWithNames[3]['data'], equals(['hello', 'ably']));
     },
   );
+
+  test('retrieves extras posted in message', () {
+    expect(extrasMessages[0]['name'], 'name');
+    expect(extrasMessages[0]['data'], 'data');
+    checkMessageExtras(extrasMessages[0]['extras']['extras'] as Map);
+    expect(extrasMessages[0]['extras']['delta'], null);
+  });
 }
 
 void testRealtimeHistory(FlutterDriver Function() getDriver) {

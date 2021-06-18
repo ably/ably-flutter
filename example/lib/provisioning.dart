@@ -5,7 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 
 const _capabilitySpec = {
-  '*': ['publish', 'subscribe', 'history', 'presence'],
+  '*': [
+    'publish',
+    'subscribe',
+    'history',
+    'presence',
+    'push-subscribe',
+    'push-admin',
+  ],
 };
 const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
@@ -15,6 +22,9 @@ String tokenDetailsURL(String keyName, [String prefix = '']) =>
 // per: https://docs.ably.io/client-lib-development-guide/test-api/
 final _appSpec = Map<String, List>.unmodifiable({
   // API Keys & Capabilities.
+  'namespaces': [
+    {'id': 'pushenabled', 'pushEnabled': true}
+  ],
   'keys': [
     {
       // The need to use jsonEncode here is a requirement of the

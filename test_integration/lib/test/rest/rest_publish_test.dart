@@ -59,7 +59,10 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(
     message: Message(
-        name: 'message-name1', data: 'message-data1', clientId: 'someClientId'),
+      name: 'message-name1',
+      data: 'message-data1',
+      clientId: 'someClientId',
+    ),
   );
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
@@ -113,11 +116,22 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
   final history3 = await getHistory(channel3);
 
+  final channelExtras = rest.channels.get('pushenabled:test:extras');
+  await channelExtras.publish(
+    message: Message(
+      name: 'name',
+      data: 'data',
+      extras: MessageExtras({...pushPayload}),
+    ),
+  );
+  final historyExtras = await getHistory(channelExtras);
+
   return {
     'handle': await rest.handle,
     'publishedMessages': history,
     'publishedMessages2': history2,
     'publishedMessages3': history3,
+    'publishedExtras': historyExtras,
     'exception': exception,
     'exception2': exception2,
     'exception3': exception3,

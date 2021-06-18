@@ -26,8 +26,10 @@ import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ClientOptions;
+import io.ably.lib.types.DeltaExtras;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
+import io.ably.lib.types.MessageExtras;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
 import io.flutter.plugin.common.StandardMessageCodec;
@@ -70,6 +72,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private Map<Byte, CodecPair> codecMap;
+  private static final Gson gson = new Gson();
 
   AblyMessageCodec() {
     final AblyMessageCodec self = this;
@@ -105,6 +108,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeErrorInfo, null));
         put(PlatformConstants.CodecTypes.messageData,
             new CodecPair<>(null, self::decodeChannelMessageData));
+        put(PlatformConstants.CodecTypes.messageExtras,
+            new CodecPair<>(self::encodeChannelMessageExtras, self::decodeChannelMessageExtras));
         put(PlatformConstants.CodecTypes.message,
             new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
         put(PlatformConstants.CodecTypes.presenceMessage,
@@ -155,6 +160,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.channelStateChange;
     } else if (value instanceof PresenceMessage) {
       return PlatformConstants.CodecTypes.presenceMessage;
+    } else if (value instanceof MessageExtras) {
+      return PlatformConstants.CodecTypes.messageExtras;
     } else if (value instanceof Message) {
       return PlatformConstants.CodecTypes.message;
     }
@@ -181,9 +188,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private void WriteJsonElement(ByteArrayOutputStream stream, JsonElement value) {
     if (value instanceof JsonObject) {
-      super.writeValue(stream, (new Gson()).fromJson(value, Map.class));
+      super.writeValue(stream, gson.fromJson(value, Map.class));
     } else if (value instanceof JsonArray) {
-      super.writeValue(stream, (new Gson()).fromJson(value, ArrayList.class));
+      super.writeValue(stream, gson.fromJson(value, ArrayList.class));
     }
   }
 
@@ -192,7 +199,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
    * returns null if these 2 types are a no-match
    */
   static JsonElement readValueAsJsonElement(final Object object) {
-    final Gson gson = new Gson();
     if (object instanceof Map) {
       return gson.fromJson(gson.toJson(object, Map.class), JsonObject.class);
     } else if (object instanceof ArrayList) {
@@ -444,6 +450,15 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return decodeMessageData(jsonMap.get(PlatformConstants.TxMessage.data));
   }
 
+  private MessageExtras decodeChannelMessageExtras(Map<String, Object> jsonMap) {
+    if (jsonMap == null) return null;
+    Object extras = jsonMap.get(PlatformConstants.TxMessageExtras.extras);
+    // extras received from dart side could be a nested map with dynamic value types
+    // So, converting to a json string and then using that to create a JSONObject
+    String extrasJson = gson.toJson(extras, Map.class);
+    return new MessageExtras(gson.fromJson(extrasJson, JsonObject.class));
+  }
+
   private Message decodeChannelMessage(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     final Message o = new Message();
@@ -452,10 +467,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> o.data = decodeMessageData(v));
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.encoding, v -> o.encoding = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> {
-      final Gson gson = new Gson();
-      o.extras = gson.fromJson(gson.toJson(v, Map.class), JsonObject.class);
-    });
+    readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> o.extras = (MessageExtras) v);
     return o;
   }
 
@@ -637,6 +649,20 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeChannelMessageExtras(MessageExtras c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap =
+        gson.<HashMap<String, Object>>fromJson(c.asJsonObject().toString(), HashMap.class);
+    DeltaExtras deltaExtras = c.getDelta();
+    if (deltaExtras != null) {
+      final HashMap<String, Object> deltaJson = new HashMap<>();
+      writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.format, deltaExtras.getFormat());
+      writeValueToJson(deltaJson, PlatformConstants.TxDeltaExtras.from, deltaExtras.getFrom());
+      writeValueToJson(jsonMap, PlatformConstants.TxMessageExtras.delta, deltaJson);
+    }
     return jsonMap;
   }
 

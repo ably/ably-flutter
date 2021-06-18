@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
         [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
         [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
+        [NSString stringWithFormat:@"%d", messageExtrasCodecType]: readChannelMessageExtras,
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
         [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
@@ -215,6 +216,10 @@ static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*
         o.modes = options;
     }, dictionary, TxRealtimeChannelOptions_modes);
     return o;
+};
+
+static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDictionary *const dictionary) {
+    return [dictionary objectForKey: TxMessageExtras_extras];
 };
 
 static AblyCodecDecoder readChannelMessage = ^ARTMessage*(NSDictionary *const dictionary) {
