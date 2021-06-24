@@ -1,8 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_example/provisioning.dart';
-import 'package:ably_flutter_integration_test/utils/data.dart';
 
 import '../../factory/reporter.dart';
+import '../../utils/data.dart';
 import '../../utils/encoders.dart';
 import '../../utils/realtime.dart';
 
@@ -20,8 +20,8 @@ Future<Realtime> _createRealtime(String apiKey) async {
 Future<List<Map<String, dynamic>>> _getAllMessages(
   String apiKey,
   String channelName, {
-  String messageName,
-  List<String> messageNames,
+  String? messageName,
+  List<String>? messageNames,
 }) async {
   final messages = <Map<String, dynamic>>[];
   final realtime = await _createRealtime(apiKey);
@@ -38,8 +38,8 @@ Future<List<Map<String, dynamic>>> _getAllMessages(
 }
 
 Future<Map<String, dynamic>> testRealtimeSubscribe({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final appKey = await provision('sandbox-');
 
@@ -66,7 +66,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
     message: Message(
       name: 'name',
       data: 'data',
-      extras: MessageExtras({...pushPayload}),
+      extras: const MessageExtras({...pushPayload}),
     ),
   );
   await Future.delayed(const Duration(seconds: 2));

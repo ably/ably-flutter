@@ -19,8 +19,8 @@ import '../test/rest/rest_publish_with_auth_callback_test.dart';
 import 'test_names.dart';
 
 typedef TestFactory = Future<Map<String, dynamic>> Function({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 });
 
 final testFactory = <String, TestFactory>{

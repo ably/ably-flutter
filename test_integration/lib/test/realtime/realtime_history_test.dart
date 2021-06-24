@@ -7,12 +7,12 @@ import '../../utils/encoders.dart';
 import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimeHistory({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String>>[];
+  final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
     options: ClientOptions.fromKey(appKey.toString())

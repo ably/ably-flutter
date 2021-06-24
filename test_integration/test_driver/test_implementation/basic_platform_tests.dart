@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.platformAndAblyVersion);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
   setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
   test('platformVersion is a string', () {
@@ -26,7 +26,7 @@ void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
 
 void testDemoDependencies(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.appKeyProvisioning);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
   setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
   test('appKey is a string', () {
@@ -35,7 +35,7 @@ void testDemoDependencies(FlutterDriver Function() getDriver) {
   });
 
   group('token request has', () {
-    Map tokenRequest;
+    late Map tokenRequest;
 
     setUp(() {
       tokenRequest = response.payload['tokenRequest'] as Map;

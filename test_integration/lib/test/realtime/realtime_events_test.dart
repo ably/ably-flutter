@@ -6,8 +6,8 @@ import '../../factory/reporter.dart';
 import '../../utils/encoders.dart';
 
 Future<Map<String, dynamic>> testRealtimeEvents({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final appKey = await provision('sandbox-');
 
