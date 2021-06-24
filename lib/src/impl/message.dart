@@ -1,7 +1,7 @@
 import '../../ably_flutter.dart';
 
 /// An encapsulating object used to pass data to/from platform for method calls
-class AblyMessage {
+class AblyMessage<T> {
   /// handle of rest/realtime instance
   final int? handle;
 
@@ -9,7 +9,7 @@ class AblyMessage {
   final int? type;
 
   /// message to be passed to platform / received from platform
-  final Object message;
+  final T message;
 
   /// creates instance with a non-null [message]
   ///

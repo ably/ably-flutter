@@ -43,7 +43,9 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
       TxTransportKeys.channelName: name,
       if (params != null) TxTransportKeys.params: params
     }) as FutureOr<AblyMessage>);
-    return PaginatedResult<Message>.fromAblyMessage(message);
+    return PaginatedResult<Message>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();

@@ -21,17 +21,17 @@ class PaginatedResult<T> extends PlatformObject
   /// this property. See [next] and [first] for usages
   int? _pageHandle;
 
-  late List<T> _items;
+  late final List<T> _items;
 
   /// items return page of results
   @override
   List<T> get items => _items;
 
-  bool? _hasNext;
+  final bool _hasNext;
 
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
-  PaginatedResult(this._items, {bool? hasNext})
+  PaginatedResult(this._items, {required bool hasNext})
       : _hasNext = hasNext,
         super(fetchHandle: false);
 
@@ -40,13 +40,11 @@ class PaginatedResult<T> extends PlatformObject
   ///
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
-  PaginatedResult.fromAblyMessage(AblyMessage message)
-      : super(fetchHandle: false) {
-    final rawResult = message.message as PaginatedResult<Object>;
-    _items = rawResult.items.map<T>((e) => e as T).toList();
-    _hasNext = rawResult.hasNext();
-    _pageHandle = message.handle;
-  }
+  PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult> message)
+      : _items = message.message.items.map<T>((e) => e as T).toList(),
+        _hasNext = message.message.hasNext(),
+        _pageHandle = message.handle,
+        super(fetchHandle: false);
 
   @override
   Future<int?> createPlatformInstance() async => _pageHandle;
@@ -54,18 +52,22 @@ class PaginatedResult<T> extends PlatformObject
   @override
   Future<PaginatedResult<T>> next() async {
     final message = (await invoke<AblyMessage>(PlatformMethod.nextPage))!;
-    return PaginatedResult<T>.fromAblyMessage(message);
+    return PaginatedResult<T>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   @override
   Future<PaginatedResult<T>> first() async {
     final message = (await invoke<AblyMessage>(PlatformMethod.firstPage))!;
-    return PaginatedResult<T>.fromAblyMessage(message);
+    return PaginatedResult<T>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   @override
-  bool? hasNext() => _hasNext;
+  bool hasNext() => _hasNext;
 
   @override
-  bool isLast() => !_hasNext!;
+  bool isLast() => !_hasNext;
 }

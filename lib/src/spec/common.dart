@@ -581,17 +581,17 @@ class ChannelStateChange {
 /// https://docs.ably.com/client-lib-development-guide/features/#TA1
 class ConnectionStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionEvent? event;
+  final ConnectionEvent event;
 
   /// current state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionState? current;
+  final ConnectionState current;
 
   /// previous state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  final ConnectionState? previous;
+  final ConnectionState previous;
 
   /// reason for failure, in case of a failed state
   ///
@@ -782,7 +782,7 @@ abstract class PaginatedResultInterface<T> {
   /// items contain page of results
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TG3
-  List<T>? get items;
+  List<T> get items;
 
   /// returns a new PaginatedResult loaded with the next page of results.
   ///
@@ -799,7 +799,7 @@ abstract class PaginatedResultInterface<T> {
   /// returns true if there are further pages
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TG6
-  bool? hasNext();
+  bool hasNext();
 
   /// returns true if this page is the last page
   ///

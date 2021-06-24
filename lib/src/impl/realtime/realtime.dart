@@ -49,10 +49,10 @@ class Realtime extends PlatformObject
   // The _connection instance keeps a reference to this platform object.
   // Ideally connection would be final, but that would need 'late final'
   // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  ConnectionInterface? _connection;
+  late Connection _connection;
 
   @override
-  ConnectionInterface? get connection => _connection;
+  Connection get connection => _connection;
 
   @override
   Auth? auth;
@@ -158,8 +158,8 @@ class Realtime extends PlatformObject
 
   @override
   Future<HttpPaginatedResponse> request({
-    String? method,
-    String? path,
+    required String method,
+    required String path,
     Map<String, dynamic>? params,
     Object? body,
     Map<String, String>? headers,

@@ -27,7 +27,9 @@ class RestPresence extends PlatformObject implements RestPresenceInterface {
         if (params != null) TxTransportKeys.params: params
       },
     ))!;
-    return PaginatedResult<PresenceMessage>.fromAblyMessage(message);
+    return PaginatedResult<PresenceMessage>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   @override
@@ -41,6 +43,8 @@ class RestPresence extends PlatformObject implements RestPresenceInterface {
         if (params != null) TxTransportKeys.params: params
       },
     ))!;
-    return PaginatedResult<PresenceMessage>.fromAblyMessage(message);
+    return PaginatedResult<PresenceMessage>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 }

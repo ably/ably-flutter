@@ -71,7 +71,7 @@ abstract class PlatformObject {
     return invokeRaw<T>(method, message);
   }
 
-  Future<Stream<T?>> _listen<T>(
+  Future<Stream<T>> _listen<T>(
     final String eventName, [
     final Object? payload,
   ]) async =>
@@ -84,9 +84,9 @@ abstract class PlatformObject {
 
   /// Listen for events
   @protected
-  Stream<T?> listen<T>(final String method, [final Object? payload]) {
+  Stream<T> listen<T>(final String method, [final Object? payload]) {
     // ignore: close_sinks, will be closed by listener
-    final controller = StreamController<T?>();
+    final controller = StreamController<T>();
     _listen<T>(method, payload).then(controller.addStream);
     return controller.stream;
   }

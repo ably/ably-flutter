@@ -45,7 +45,9 @@ class RealtimePresence extends PlatformObject
         if (params != null) TxTransportKeys.params: params
       },
     ))!;
-    return PaginatedResult<PresenceMessage>.fromAblyMessage(message);
+    return PaginatedResult<PresenceMessage>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   @override
@@ -90,7 +92,7 @@ class RealtimePresence extends PlatformObject
   }
 
   @override
-  Stream<PresenceMessage?> subscribe({
+  Stream<PresenceMessage> subscribe({
     PresenceAction? action,
     List<PresenceAction>? actions,
   }) {
@@ -98,6 +100,6 @@ class RealtimePresence extends PlatformObject
     return listen<PresenceMessage>(PlatformMethod.onRealtimePresenceMessage, {
       TxTransportKeys.channelName: _channel.name,
     }).where((presenceMessage) =>
-        actions == null || actions.contains(presenceMessage!.action));
+        actions == null || actions.contains(presenceMessage.action));
   }
 }

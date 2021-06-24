@@ -655,7 +655,7 @@ class Codec extends StandardMessageCodec {
       );
 
   /// Decodes [eventName] to [ConnectionEvent] enum if not null
-  ConnectionEvent? _decodeConnectionEvent(String? eventName) {
+  ConnectionEvent _decodeConnectionEvent(String? eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
         return ConnectionEvent.initialized;
@@ -675,14 +675,14 @@ class Codec extends StandardMessageCodec {
         return ConnectionEvent.failed;
       case TxEnumConstants.update:
         return ConnectionEvent.update;
-      default:
-        return null;
     }
+    throw AblyException(
+      'Platform communication error. Connection event is invalid: $eventName',
+    );
   }
 
   /// Decodes [state] to [ConnectionState] enum if not null
-  ConnectionState? _decodeConnectionState(String? state) {
-    if (state == null) return null;
+  ConnectionState _decodeConnectionState(String? state) {
     switch (state) {
       case TxEnumConstants.initialized:
         return ConnectionState.initialized;
@@ -700,13 +700,14 @@ class Codec extends StandardMessageCodec {
         return ConnectionState.closed;
       case TxEnumConstants.failed:
         return ConnectionState.failed;
-      default:
-        return null;
     }
+    throw AblyException(
+      'Platform communication error. Connection state is invalid: $state',
+    );
   }
 
   /// Decodes [eventName] to [ChannelEvent] enum if not null
-  ChannelEvent? _decodeChannelEvent(String? eventName) {
+  ChannelEvent _decodeChannelEvent(String? eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
         return ChannelEvent.initialized;
@@ -724,13 +725,14 @@ class Codec extends StandardMessageCodec {
         return ChannelEvent.failed;
       case TxEnumConstants.update:
         return ChannelEvent.update;
-      default:
-        return null;
     }
+    throw AblyException(
+      'Platform communication error. Channel event is invalid: $eventName',
+    );
   }
 
   /// Decodes [state] to [ChannelState] enum if not null
-  ChannelState? _decodeChannelState(String? state) {
+  ChannelState _decodeChannelState(String? state) {
     switch (state) {
       case TxEnumConstants.initialized:
         return ChannelState.initialized;
@@ -746,9 +748,10 @@ class Codec extends StandardMessageCodec {
         return ChannelState.suspended;
       case TxEnumConstants.failed:
         return ChannelState.failed;
-      default:
-        return null;
     }
+    throw AblyException(
+      'Platform communication error. Channel state is invalid: $state',
+    );
   }
 
   /// Decodes value [jsonMap] to [ConnectionStateChange]
@@ -875,9 +878,12 @@ class Codec extends StandardMessageCodec {
             ?.map((e) => codecMap[type]!.decode(toJsonMap(e as Map)) as Object)
             .toList() ??
         [];
-    return PaginatedResult(
-      items,
-      hasNext: _readFromJson(jsonMap, TxPaginatedResult.hasNext) as bool?,
-    );
+    final hasNext = _readFromJson<bool>(jsonMap, TxPaginatedResult.hasNext);
+    if (hasNext == null) {
+      throw AblyException(
+        'Platform communication error. PaginatedResult.hasNext is null',
+      );
+    }
+    return PaginatedResult(items, hasNext: hasNext);
   }
 }

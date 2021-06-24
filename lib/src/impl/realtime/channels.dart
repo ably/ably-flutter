@@ -33,7 +33,7 @@ class RealtimeChannel extends PlatformObject
   RealtimeChannel(this.realtime, this.name) : super() {
     _presence = RealtimePresence(this);
     state = ChannelState.initialized;
-    on().listen((event) => state = event!.current);
+    on().listen((event) => state = event.current);
   }
 
   /// createPlatformInstance will return realtimePlatformObject's handle
@@ -50,7 +50,9 @@ class RealtimeChannel extends PlatformObject
       TxTransportKeys.channelName: name,
       if (params != null) TxTransportKeys.params: params
     }) as FutureOr<AblyMessage>);
-    return PaginatedResult<Message>.fromAblyMessage(message);
+    return PaginatedResult<Message>.fromAblyMessage(
+      message as AblyMessage<PaginatedResult>,
+    );
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();
@@ -184,25 +186,23 @@ class RealtimeChannel extends PlatformObject
       });
 
   @override
-  Stream<ChannelStateChange?> on([ChannelEvent? channelEvent]) =>
+  Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
-        {
-          TxTransportKeys.channelName: name,
-        },
+        {TxTransportKeys.channelName: name},
       ).where(
         (stateChange) =>
-            channelEvent == null || stateChange!.event == channelEvent,
+            channelEvent == null || stateChange.event == channelEvent,
       );
 
   @override
-  Stream<Message?> subscribe({String? name, List<String>? names}) {
+  Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
       TxTransportKeys.channelName: this.name,
     }).where((message) =>
         subscribedNames.isEmpty ||
-        subscribedNames.any((n) => n == message!.name));
+        subscribedNames.any((n) => n == message.name));
   }
 }
 

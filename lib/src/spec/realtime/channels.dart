@@ -30,7 +30,7 @@ class RealtimeChannelOptions extends ChannelOptions {
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 abstract class RealtimeChannelInterface
-    extends EventEmitter<ChannelEvent, ChannelStateChange?> {
+    extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
   RealtimeChannelInterface(this.realtime, this.name);
 

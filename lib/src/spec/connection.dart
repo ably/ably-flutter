@@ -5,11 +5,11 @@ import 'enums.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTN1
 abstract class ConnectionInterface
-    implements EventEmitter<ConnectionEvent, ConnectionStateChange?> {
+    implements EventEmitter<ConnectionEvent, ConnectionStateChange> {
   /// current state of this connection
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
-  ConnectionState? get state;
+  ConnectionState get state;
 
   /// Error information associated with connection failure
   ///

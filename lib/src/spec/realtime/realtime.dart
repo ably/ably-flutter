@@ -11,10 +11,7 @@ abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
   RealtimeInterface({
     ClientOptions? options,
     final String? key,
-  }) : super(
-          options: options,
-          key: key,
-        );
+  }) : super(options: options, key: key);
 
   /// closes the [connection]
   void close();
@@ -25,7 +22,7 @@ abstract class RealtimeInterface<C extends RealtimeChannels> extends AblyBase {
   /// Provides access to the underlying Connection object
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
-  ConnectionInterface? get connection;
+  ConnectionInterface get connection;
 
   /// collection of [RealtimeChannelInterface] objects
   ///
