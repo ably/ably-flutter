@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 import '../platform.dart' as platform;
+import '../spec/common.dart';
 import '../spec/constants.dart';
 import 'message.dart';
 import 'streams_channel.dart';
@@ -61,6 +62,21 @@ abstract class PlatformObject {
     final Object? arguments,
   ]) async =>
       platform.invokePlatformMethod<T>(method, arguments);
+
+  /// invoke platform method channel with AblyMessage encapsulation
+  ///
+  /// this is similar to [invoke], but ensures the response is not null
+  Future<T> invokeRequest<T>(final String method,
+      [final Object? argument]) async {
+    final response = await invoke<T>(method, argument);
+    if (response == null) {
+      throw AblyException(
+        'Platform communication error. Response cannot be null for $method',
+      );
+    } else {
+      return response;
+    }
+  }
 
   /// invoke platform method channel with AblyMessage encapsulation
   Future<T?> invoke<T>(final String method, [final Object? argument]) async {

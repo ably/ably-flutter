@@ -22,13 +22,13 @@ class RealtimePresence extends PlatformObject
   Future<List<PresenceMessage>> get([
     RealtimePresenceParams? params,
   ]) async {
-    final presenceMessages = (await invoke<List>(
+    final presenceMessages = await invokeRequest<List>(
       PlatformMethod.realtimePresenceGet,
       {
         TxTransportKeys.channelName: _channel.name,
         if (params != null) TxTransportKeys.params: params
       },
-    ))!;
+    );
     return presenceMessages
         .map<PresenceMessage>((e) => e as PresenceMessage)
         .toList();
@@ -38,15 +38,15 @@ class RealtimePresence extends PlatformObject
   Future<PaginatedResult<PresenceMessage>> history([
     RealtimeHistoryParams? params,
   ]) async {
-    final message = (await invoke<AblyMessage>(
+    final message = await invokeRequest<AblyMessage>(
       PlatformMethod.realtimePresenceHistory,
       {
         TxTransportKeys.channelName: _channel.name,
         if (params != null) TxTransportKeys.params: params
       },
-    ))!;
+    );
     return PaginatedResult<PresenceMessage>.fromAblyMessage(
-      message as AblyMessage<PaginatedResult>,
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
     );
   }
 

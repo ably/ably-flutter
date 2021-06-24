@@ -21,6 +21,13 @@ class AblyMessage<T> {
     this.handle,
     this.type,
   });
+
+  /// Cast ably message from [G] to [T]
+  static AblyMessage<T> castFrom<G, T>(AblyMessage<G> source) => AblyMessage(
+        source.message as T,
+        handle: source.handle,
+        type: source.type,
+      );
 }
 
 /// An encapsulating object used to pass data to platform for registering events

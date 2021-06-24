@@ -39,12 +39,15 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   Future<PaginatedResult<Message>> history([
     RestHistoryParams? params,
   ]) async {
-    final message = await (invoke<AblyMessage>(PlatformMethod.restHistory, {
-      TxTransportKeys.channelName: name,
-      if (params != null) TxTransportKeys.params: params
-    }) as FutureOr<AblyMessage>);
+    final message = await invokeRequest<AblyMessage>(
+      PlatformMethod.restHistory,
+      {
+        TxTransportKeys.channelName: name,
+        if (params != null) TxTransportKeys.params: params
+      },
+    );
     return PaginatedResult<Message>.fromAblyMessage(
-      message as AblyMessage<PaginatedResult>,
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
     );
   }
 

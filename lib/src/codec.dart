@@ -873,9 +873,9 @@ class Codec extends StandardMessageCodec {
   /// Decodes value [jsonMap] to [PaginatedResult]
   /// returns null if [jsonMap] is null
   PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
-    final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type)!;
+    final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);
     final items = _readFromJson<List>(jsonMap, TxPaginatedResult.items)
-            ?.map((e) => codecMap[type]!.decode(toJsonMap(e as Map)) as Object)
+            ?.map((e) => codecMap[type]?.decode(toJsonMap(e as Map)) as Object)
             .toList() ??
         [];
     final hasNext = _readFromJson<bool>(jsonMap, TxPaginatedResult.hasNext);
