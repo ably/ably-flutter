@@ -56,7 +56,10 @@ class RealtimePresence extends PlatformObject
   String? get _realtimeClientId => _channel.realtime.options.clientId;
 
   @override
-  Future<void> enter([Object? data]) => enterClient(_realtimeClientId!, data);
+  Future<void> enter([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await enterClient(_realtimeClientId!, data);
+  }
 
   @override
   Future<void> enterClient(String clientId, [Object? data]) async {
@@ -68,7 +71,10 @@ class RealtimePresence extends PlatformObject
   }
 
   @override
-  Future<void> update([Object? data]) => updateClient(_realtimeClientId!, data);
+  Future<void> update([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await updateClient(_realtimeClientId!, data);
+  }
 
   @override
   Future<void> updateClient(String clientId, [Object? data]) async {
@@ -80,7 +86,10 @@ class RealtimePresence extends PlatformObject
   }
 
   @override
-  Future<void> leave([Object? data]) => leaveClient(_realtimeClientId!, data);
+  Future<void> leave([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await leaveClient(_realtimeClientId!, data);
+  }
 
   @override
   Future<void> leaveClient(String clientId, [Object? data]) async {
