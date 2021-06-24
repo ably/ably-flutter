@@ -7,12 +7,12 @@ import '../../utils/data.dart';
 import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePresenceHistory({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String>>[];
+  final logMessages = <List<String?>>[];
 
   final options = ClientOptions.fromKey(appKey.toString())
     ..environment = 'sandbox'

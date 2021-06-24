@@ -5,11 +5,11 @@ import '../../factory/reporter.dart';
 import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePublish({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  Reporter? reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String>>[];
+  final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
     options: ClientOptions.fromKey(appKey.toString())

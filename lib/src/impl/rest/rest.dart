@@ -7,11 +7,11 @@ import '../message.dart';
 import '../platform_object.dart';
 import 'channels.dart';
 
-Map<int, Rest> _restInstances = {};
-Map<int, Rest> _restInstancesUnmodifiableView;
+Map<int?, Rest> _restInstances = {};
+Map<int?, Rest>? _restInstancesUnmodifiableView;
 
 /// Returns readonly copy of instances of all [Rest] clients created.
-Map<int, Rest> get restInstances =>
+Map<int?, Rest> get restInstances =>
     _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 /// Ably's Rest client
@@ -23,16 +23,16 @@ class Rest extends PlatformObject
   ///
   /// raises [AssertionError] if both [options] and [key] are null
   Rest({
-    ClientOptions options,
-    final String key,
+    ClientOptions? options,
+    final String? key,
   })  : assert(options != null || key != null),
-        options = options ?? ClientOptions.fromKey(key),
+        options = options ?? ClientOptions.fromKey(key!),
         super() {
     channels = RestPlatformChannels(this);
   }
 
   @override
-  Future<int> createPlatformInstance() async {
+  Future<int?> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
       PlatformMethod.createRestWithOptions,
       AblyMessage(options),
@@ -54,24 +54,24 @@ class Rest extends PlatformObject
   }
 
   @override
-  Auth auth;
+  Auth? auth;
 
   @override
   ClientOptions options;
 
   @override
   Future<HttpPaginatedResponse> request({
-    String method,
-    String path,
-    Map<String, dynamic> params,
-    Object body,
-    Map<String, String> headers,
+    String? method,
+    String? path,
+    Map<String, dynamic>? params,
+    Object? body,
+    Map<String, String>? headers,
   }) {
     throw UnimplementedError();
   }
 
   @override
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]) {
+  Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
     throw UnimplementedError();
   }
 
@@ -81,8 +81,8 @@ class Rest extends PlatformObject
   }
 
   @override
-  Push push;
+  Push? push;
 
   @override
-  RestPlatformChannels channels;
+  late RestPlatformChannels channels;
 }

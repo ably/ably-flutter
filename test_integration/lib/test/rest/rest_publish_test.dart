@@ -8,12 +8,12 @@ import '../../utils/encoders.dart';
 import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPublish({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String>>[];
+  final logMessages = <List<String?>>[];
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())
@@ -31,8 +31,8 @@ Future<Map<String, dynamic>> testRestPublish({
 }
 
 Future<Map<String, dynamic>> testRestPublishSpec({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final appKey = await provision('sandbox-');
 
@@ -67,7 +67,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // publishing message with a different client id
-  Map<String, dynamic> exception;
+  Map<String, dynamic>? exception;
   try {
     await channel.publish(
         message: Message(name: 'name', clientId: 'client-id'));
@@ -95,7 +95,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   );
 
   // publish max allowed length - sandbox apps message limit is 16384
-  Map<String, dynamic> exception2;
+  Map<String, dynamic>? exception2;
   try {
     await channel2.publish(data: getRandomString(16384));
   } on AblyException catch (e) {
@@ -103,7 +103,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   }
 
   // publish more than max allowed length
-  Map<String, dynamic> exception3;
+  Map<String, dynamic>? exception3;
   try {
     await channel2.publish(data: getRandomString(16384 + 1));
   } on AblyException catch (e) {
@@ -121,7 +121,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
     message: Message(
       name: 'name',
       data: 'data',
-      extras: MessageExtras({...pushPayload}),
+      extras: const MessageExtras({...pushPayload}),
     ),
   );
   final historyExtras = await getHistory(channelExtras);

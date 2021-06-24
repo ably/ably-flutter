@@ -9,7 +9,7 @@ typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
 class MockMethodCallManager {
   int handleCounter = 0;
   bool isAuthenticated = false;
-  final channels = <int, AblyMessage>{};
+  final channels = <int, AblyMessage?>{};
   final publishedMessages = <AblyMessage>[];
   final methodChannel = platform.methodChannel;
 
@@ -32,13 +32,13 @@ class MockMethodCallManager {
       case PlatformMethod.createRestWithOptions:
       case PlatformMethod.createRealtimeWithOptions:
         final handle = ++handleCounter;
-        channels[handle] = methodCall.arguments as AblyMessage;
+        channels[handle] = methodCall.arguments as AblyMessage?;
         return handle;
 
       case PlatformMethod.publish:
         final message = methodCall.arguments as AblyMessage;
         final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle];
+        final ablyChannel = channels[handle!]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,
@@ -57,14 +57,13 @@ class MockMethodCallManager {
             details: ErrorInfo(),
           );
         }
-
         publishedMessages.add(message);
         return null;
 
       case PlatformMethod.publishRealtimeChannelMessage:
         final message = methodCall.arguments as AblyMessage;
         final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle];
+        final ablyChannel = channels[handle!]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,

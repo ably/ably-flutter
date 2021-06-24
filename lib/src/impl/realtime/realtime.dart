@@ -10,11 +10,11 @@ import '../platform_object.dart';
 import 'channels.dart';
 import 'connection.dart';
 
-Map<int, Realtime> _realtimeInstances = {};
-Map<int, Realtime> _realtimeInstancesUnmodifiableView;
+Map<int?, Realtime> _realtimeInstances = {};
+Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
 
 /// Returns readonly copy of instances of all [Realtime] clients created.
-Map<int, Realtime> get realtimeInstances =>
+Map<int?, Realtime> get realtimeInstances =>
     _realtimeInstancesUnmodifiableView ??=
         UnmodifiableMapView(_realtimeInstances);
 
@@ -27,17 +27,17 @@ class Realtime extends PlatformObject
   ///
   /// raises [AssertionError] if both [options] and [key] are null
   Realtime({
-    ClientOptions options,
-    final String key,
+    ClientOptions? options,
+    final String? key,
   })  : assert(options != null || key != null),
-        options = options ?? ClientOptions.fromKey(key),
+        options = options ?? ClientOptions.fromKey(key!),
         super() {
     _connection = Connection(this);
     _channels = RealtimePlatformChannels(this);
   }
 
   @override
-  Future<int> createPlatformInstance() async {
+  Future<int?> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
       PlatformMethod.createRealtimeWithOptions,
       AblyMessage(options),
@@ -49,21 +49,21 @@ class Realtime extends PlatformObject
   // The _connection instance keeps a reference to this platform object.
   // Ideally connection would be final, but that would need 'late final'
   // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  ConnectionInterface _connection;
+  late Connection _connection;
 
   @override
-  ConnectionInterface get connection => _connection;
+  Connection get connection => _connection;
 
   @override
-  Auth auth;
+  Auth? auth;
 
   @override
   ClientOptions options;
 
   @override
-  Push push;
+  Push? push;
 
-  RealtimePlatformChannels _channels;
+  late RealtimePlatformChannels _channels;
 
   @override
   RealtimePlatformChannels get channels => _channels;
@@ -72,7 +72,7 @@ class Realtime extends PlatformObject
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   final _connectQueue = Queue<Completer<void>>();
-  Completer<void> _authCallbackCompleter;
+  Completer<void>? _authCallbackCompleter;
 
   @override
   Future<void> connect() async {
@@ -127,7 +127,7 @@ class Realtime extends PlatformObject
     }
     _authCallbackCompleter = Completer<void>();
     try {
-      await _authCallbackCompleter.future.timeout(
+      await _authCallbackCompleter!.future.timeout(
           Timeouts.retryOperationOnAuthFailure,
           onTimeout: () => _connectQueue
               .where((e) => !e.isCompleted)
@@ -158,17 +158,17 @@ class Realtime extends PlatformObject
 
   @override
   Future<HttpPaginatedResponse> request({
-    String method,
-    String path,
-    Map<String, dynamic> params,
-    Object body,
-    Map<String, String> headers,
+    required String method,
+    required String path,
+    Map<String, dynamic>? params,
+    Object? body,
+    Map<String, String>? headers,
   }) {
     throw UnimplementedError();
   }
 
   @override
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params]) {
+  Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
     throw UnimplementedError();
   }
 

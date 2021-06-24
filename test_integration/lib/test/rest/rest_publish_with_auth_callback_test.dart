@@ -5,8 +5,8 @@ import '../../factory/reporter.dart';
 import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPublishWithAuthCallback({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   var authCallbackInvoked = false;

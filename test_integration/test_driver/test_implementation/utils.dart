@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-void checkMessageData(int index, Object data) {
+void checkMessageData(int index, Object? data) {
   switch (index) {
     case 0:
       expect(data, isNull);
@@ -76,10 +76,7 @@ void testAllPublishedMessages(Object messagesObject) {
   checkMessageData(7, messages[7]['data']);
 }
 
-void testAllPresenceMembers(
-  Object membersObject, {
-  Map<String, dynamic> filters,
-}) {
+void testAllPresenceMembers(Object membersObject) {
   expect(membersObject, isA<List<Map<String, dynamic>>>());
   final members = membersObject as List;
   for (var i = 0; i < members.length; i++) {
@@ -88,10 +85,7 @@ void testAllPresenceMembers(
   }
 }
 
-void testAllPresenceMessagesHistory(
-  Object messagesHistory, {
-  Map<String, dynamic> filters,
-}) {
+void testAllPresenceMessagesHistory(Object messagesHistory) {
   expect(messagesHistory, isA<List<Map<String, dynamic>>>());
   final history = messagesHistory as List;
   for (var i = 0; i < history.length; i++) {

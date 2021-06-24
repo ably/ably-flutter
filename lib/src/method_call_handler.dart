@@ -14,7 +14,7 @@ class AblyMethodCallHandler {
         case PlatformMethod.authCallback:
           return onAuthCallback(call.arguments as AblyMessage);
         case PlatformMethod.realtimeAuthCallback:
-          return onRealtimeAuthCallback(call.arguments as AblyMessage);
+          return onRealtimeAuthCallback(call.arguments as AblyMessage?);
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -26,7 +26,10 @@ class AblyMethodCallHandler {
   Future<Object> onAuthCallback(AblyMessage message) async {
     final tokenParams = message.message as ably.TokenParams;
     final rest = ably.restInstances[message.handle];
-    final callbackResponse = await rest.options.authCallback(tokenParams);
+    if (rest == null) {
+      throw ably.AblyException('invalid message handle ${message.handle}');
+    }
+    final callbackResponse = await rest.options.authCallback!(tokenParams);
     Future.delayed(Duration.zero, rest.authUpdateComplete);
     return callbackResponse;
   }
@@ -34,14 +37,17 @@ class AblyMethodCallHandler {
   bool _realtimeAuthInProgress = false;
 
   /// handles auth callback for realtime instances
-  Future<Object> onRealtimeAuthCallback(AblyMessage message) async {
+  Future<Object?> onRealtimeAuthCallback(AblyMessage? message) async {
     if (_realtimeAuthInProgress) {
       return null;
     }
     _realtimeAuthInProgress = true;
-    final tokenParams = message.message as ably.TokenParams;
+    final tokenParams = message!.message as ably.TokenParams;
     final realtime = ably.realtimeInstances[message.handle];
-    final callbackResponse = await realtime.options.authCallback(tokenParams);
+    if (realtime == null) {
+      throw ably.AblyException('invalid message handle ${message.handle}');
+    }
+    final callbackResponse = await realtime.options.authCallback!(tokenParams);
     Future.delayed(Duration.zero, realtime.authUpdateComplete);
     _realtimeAuthInProgress = false;
     return callbackResponse;

@@ -5,13 +5,13 @@ import 'encoders.dart';
 
 Future<void> publishMessages(RestChannel channel) async {
   for (final data in messagesToPublish) {
-    await channel.publish(name: data[0] as String, data: data[1]);
+    await channel.publish(name: data[0] as String?, data: data[1]);
   }
 }
 
 Future<List<Map<String, dynamic>>> getHistory(
   RestChannel channel, [
-  RestHistoryParams params,
+  RestHistoryParams? params,
 ]) async {
   var results = await channel.history(params);
   final messages = encodeList<Message>(results.items, encodeMessage);
@@ -24,7 +24,7 @@ Future<List<Map<String, dynamic>>> getHistory(
 
 Future<List<Map<String, dynamic>>> getPresenceHistory(
   RestChannel channel, [
-  RestHistoryParams params,
+  RestHistoryParams? params,
 ]) async {
   var results = await channel.presence.history(params);
   final messages =
@@ -39,7 +39,7 @@ Future<List<Map<String, dynamic>>> getPresenceHistory(
 
 Future<List<Map<String, dynamic>>> getPresenceMembers(
   RestChannel channel, [
-  RestPresenceParams params,
+  RestPresenceParams? params,
 ]) async {
   var results = await channel.presence.get(params);
   final messages =

@@ -1,20 +1,21 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-Map<String, dynamic> encodeMessageExtras(MessageExtras extras) => extras == null
-    ? null
-    : {
-        'extras': extras.map,
-        'delta': (extras.delta == null)
-            ? null
-            : {
-                'from': extras.delta.from,
-                'format': extras.delta.format,
-              },
-      };
+Map<String, dynamic>? encodeMessageExtras(MessageExtras? extras) =>
+    extras == null
+        ? null
+        : {
+            'extras': extras.map,
+            'delta': (extras.delta == null)
+                ? null
+                : {
+                    'from': extras.delta!.from,
+                    'format': extras.delta!.format,
+                  },
+          };
 
 Map<String, dynamic> encodeMessage(Message message) => {
       'id': message.id,
-      'timestamp': message.timestamp.toIso8601String(),
+      'timestamp': message.timestamp!.toIso8601String(),
       'clientId': message.clientId,
       'connectionId': message.connectionId,
       'encoding': message.encoding,
@@ -25,13 +26,13 @@ Map<String, dynamic> encodeMessage(Message message) => {
 
 Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
       'id': message.id,
-      'action': enumValueToString(message.action),
+      'action': enumValueToString(message.action!),
       'clientId': message.clientId,
       'connectionId': message.connectionId,
       'data': message.data,
       'encoding': message.encoding,
       'extras': encodeMessageExtras(message.extras),
-      'timestamp': message.timestamp.toIso8601String(),
+      'timestamp': message.timestamp!.toIso8601String(),
     };
 
 String enumValueToString(Object value) =>
@@ -73,11 +74,11 @@ Map<String, dynamic> encodeAblyException<T>(AblyException exception) => {
       'code': exception.code,
       'message': exception.message,
       'errorInfo': {
-        'code': exception.errorInfo.code,
-        'href': exception.errorInfo.href,
-        'message': exception.errorInfo.message,
-        'cause': exception.errorInfo.cause,
-        'statusCode': exception.errorInfo.statusCode,
-        'requestId': exception.errorInfo.requestId,
+        'code': exception.errorInfo!.code,
+        'href': exception.errorInfo!.href,
+        'message': exception.errorInfo!.message,
+        'cause': exception.errorInfo!.cause,
+        'statusCode': exception.errorInfo!.statusCode,
+        'requestId': exception.errorInfo!.requestId,
       }
     };

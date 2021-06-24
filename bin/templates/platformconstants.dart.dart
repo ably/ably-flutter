@@ -1,5 +1,4 @@
-String getPrefix(Object str) =>
-    ((str as String).length > 26) ? '\n      ' : ' ';
+String getPrefix(String str) => (str.length > 26) ? '\n      ' : ' ';
 
 String $(Map<String, dynamic> c) => '''
 // ignore_for_file: public_member_api_docs
@@ -10,7 +9,7 @@ ${c['types'].map((_) => "  static const int ${_['name']} ="
 }
 
 class PlatformMethod {
-${c['methods'].map((_) => "  static const String ${_['name']} =${getPrefix(_['value'])}'${_['value']}';").join('\n')}
+${c['methods'].map((_) => "  static const String ${_['name']} =${getPrefix(_['value'] as String)}'${_['value']}';").join('\n')}
 }
 
 ${c['objects'].map((_) => '''

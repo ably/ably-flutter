@@ -6,14 +6,14 @@ import '../test_dispatcher.dart';
 class Reporter {
   final TestControlMessage message;
   final DispatcherController controller;
-  final Completer<TestControlMessage> response;
+  final Completer<TestControlResponseMessage> response;
 
   Reporter(
     this.message,
     this.controller,
-  ) : response = Completer<TestControlMessage>();
+  ) : response = Completer<TestControlResponseMessage>();
 
-  String get testName => message?.testName;
+  String get testName => message.testName;
 
   final _log = <dynamic>[];
 
@@ -22,7 +22,7 @@ class Reporter {
 
   /// Create a response to a message from the driver reporting the test result.
   void reportTestCompletion(Map<String, dynamic> data) {
-    final msg = TestControlMessage(
+    final msg = TestControlResponseMessage(
       testName,
       payload: data,
       log: _log.toList(),

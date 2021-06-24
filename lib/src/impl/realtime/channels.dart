@@ -21,7 +21,7 @@ class RealtimeChannel extends PlatformObject
   @override
   final String name;
 
-  RealtimePresence _presence;
+  late RealtimePresence _presence;
 
   @override
   RealtimePresence get presence => _presence;
@@ -30,9 +30,10 @@ class RealtimeChannel extends PlatformObject
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
-  RealtimeChannel(this.realtime, this.name) : super() {
+  RealtimeChannel(this.realtime, this.name)
+      : state = ChannelState.initialized,
+        super() {
     _presence = RealtimePresence(this);
-    state = ChannelState.initialized;
     on().listen((event) => state = event.current);
   }
 
@@ -44,24 +45,27 @@ class RealtimeChannel extends PlatformObject
 
   @override
   Future<PaginatedResult<Message>> history([
-    RealtimeHistoryParams params,
+    RealtimeHistoryParams? params,
   ]) async {
-    final message = await invoke<AblyMessage>(PlatformMethod.realtimeHistory, {
+    final message =
+        await invokeRequest<AblyMessage>(PlatformMethod.realtimeHistory, {
       TxTransportKeys.channelName: name,
       if (params != null) TxTransportKeys.params: params
     });
-    return PaginatedResult<Message>.fromAblyMessage(message);
+    return PaginatedResult<Message>.fromAblyMessage(
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+    );
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();
-  Completer<void> _authCallbackCompleter;
+  Completer<void>? _authCallbackCompleter;
 
   @override
   Future<void> publish({
-    Message message,
-    List<Message> messages,
-    String name,
-    Object data,
+    Message? message,
+    List<Message>? messages,
+    String? name,
+    Object? data,
   }) async {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
@@ -111,7 +115,7 @@ class RealtimeChannel extends PlatformObject
           }
           _authCallbackCompleter = Completer<void>();
           try {
-            await _authCallbackCompleter.future.timeout(
+            await _authCallbackCompleter!.future.timeout(
                 Timeouts.retryOperationOnAuthFailure,
                 onTimeout: () => _publishQueue
                     .where((e) => !e.completer.isCompleted)
@@ -152,16 +156,16 @@ class RealtimeChannel extends PlatformObject
   }
 
   @override
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 
   @override
-  List<ChannelMode> modes;
+  List<ChannelMode>? modes;
 
   @override
-  Map<String, String> params;
+  Map<String, String>? params;
 
   @override
-  PushChannel push;
+  PushChannel? push;
 
   @override
   ChannelState state;
@@ -184,19 +188,17 @@ class RealtimeChannel extends PlatformObject
       });
 
   @override
-  Stream<ChannelStateChange> on([ChannelEvent channelEvent]) =>
+  Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
-        {
-          TxTransportKeys.channelName: name,
-        },
+        {TxTransportKeys.channelName: name},
       ).where(
         (stateChange) =>
             channelEvent == null || stateChange.event == channelEvent,
       );
 
   @override
-  Stream<Message> subscribe({String name, List<String> names}) {
+  Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
       TxTransportKeys.channelName: this.name,

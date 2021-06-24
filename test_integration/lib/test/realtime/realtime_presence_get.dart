@@ -6,7 +6,7 @@ import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 import '../../utils/realtime.dart';
 
-final logMessages = <List<String>>[];
+final logMessages = <List<String?>>[];
 
 ClientOptions getClientOptions(
   String appKey, [
@@ -20,8 +20,8 @@ ClientOptions getClientOptions(
           ({msg, exception}) => logMessages.add([msg, exception.toString()]);
 
 Future<Map<String, dynamic>> testRealtimePresenceGet({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();

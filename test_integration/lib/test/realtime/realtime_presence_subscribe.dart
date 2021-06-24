@@ -8,14 +8,14 @@ import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 import '../../utils/encoders.dart';
 
-final logMessages = <List<String>>[];
+final logMessages = <List<String?>>[];
 
 List<Map<String, dynamic>> _encode(List<PresenceMessage> messages) =>
     encodeList<PresenceMessage>(messages, encodePresenceMessage);
 
 Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();

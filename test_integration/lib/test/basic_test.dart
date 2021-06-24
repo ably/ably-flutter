@@ -4,8 +4,8 @@ import 'package:ably_flutter_example/provisioning.dart';
 import '../factory/reporter.dart';
 
 Future<Map<String, dynamic>> testAppKeyProvision({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async =>
     {
       'appKey': (await provision('sandbox-')).toString(),
@@ -13,8 +13,8 @@ Future<Map<String, dynamic>> testAppKeyProvision({
     };
 
 Future<Map<String, dynamic>> testPlatformAndAblyVersion({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final platformVersion = await ably.platformVersion();
   final ablyVersion = await ably.version();

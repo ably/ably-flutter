@@ -6,8 +6,8 @@ import '../utils.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MockMethodCallManager manager;
-  RestPlatformChannels channels;
+  late MockMethodCallManager manager;
+  late RestPlatformChannels channels;
 
   setUp(() {
     manager = MockMethodCallManager();
@@ -103,12 +103,6 @@ void main() {
         expect(channels.exists('channel-1'), true);
         expect(channels.exists('channel-2'), true);
       });
-    });
-  });
-
-  group('rest#channels#channel', () {
-    test('Allows only non-null String input for name', () {
-      expect(() => channels.get(null), throwsA(isA<AssertionError>()));
     });
   });
 }

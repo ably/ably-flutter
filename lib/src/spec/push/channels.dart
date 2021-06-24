@@ -31,6 +31,6 @@ abstract class PushChannel {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
   Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions([
-    Map<String, dynamic> params,
+    Map<String, dynamic>? params,
   ]);
 }

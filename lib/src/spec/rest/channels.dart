@@ -11,7 +11,7 @@ class ChannelOptions {
   final Object cipher;
 
   /// create channel options with a cipher
-  ChannelOptions(this.cipher) : assert(cipher != null, 'cipher cannot be null');
+  ChannelOptions(this.cipher);
 }
 
 /// A named channel through with rest client can interact with ably service.
@@ -38,16 +38,18 @@ abstract class RestChannelInterface {
   /// fetch message history on this channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2
-  Future<PaginatedResultInterface<Message>> history([RestHistoryParams params]);
+  Future<PaginatedResultInterface<Message>> history([
+    RestHistoryParams? params,
+  ]);
 
   /// publish messages on this channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
   Future<void> publish({
-    Message message,
-    List<Message> messages,
-    String name,
-    Object data,
+    Message? message,
+    List<Message>? messages,
+    String? name,
+    Object? data,
   });
 
   /// takes a ChannelOptions object and sets or updates the

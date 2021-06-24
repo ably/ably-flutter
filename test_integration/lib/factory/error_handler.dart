@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 /// Used to wire app unhandled exceptions and Flutter errors to be reported back
 /// to the test driver.
 class ErrorHandler {
-  static Map<String, String> encodeFlutterError(FlutterErrorDetails details) {
+  static Map<String, String?> encodeFlutterError(FlutterErrorDetails details) {
     print('Caught FlutterError::\n'
         'exception: ${details.exception}\n'
         'stack: ${details.stack}');

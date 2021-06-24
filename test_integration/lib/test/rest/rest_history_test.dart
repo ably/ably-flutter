@@ -7,12 +7,12 @@ import '../../utils/encoders.dart';
 import '../../utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestHistory({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String>>[];
+  final logMessages = <List<String?>>[];
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())

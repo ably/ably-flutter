@@ -40,17 +40,17 @@ final _tests =
 Map<TestGroup, Map<String, void Function(FlutterDriver Function())>>
     getTestsFor({
   bool all = false,
-  TestGroup group,
-  List<TestGroup> groups,
+  TestGroup? group,
+  List<TestGroup>? groups,
 }) {
   assert(group != null || groups != null || all != false);
-  List<TestGroup> _groups;
+  late List<TestGroup> _groups;
   if (all) {
     _groups = _tests.keys.toList();
   } else if (group != null) {
     _groups = [group];
   } else {
-    _groups = groups;
+    _groups = groups!;
   }
   return Map.from(_tests)..removeWhere((key, value) => !_groups.contains(key));
 }

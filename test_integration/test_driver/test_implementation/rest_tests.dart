@@ -6,7 +6,7 @@ import 'utils.dart';
 
 void testRestPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublish);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
   setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
   test('rest instance has a valid handle on publish', () {
@@ -17,14 +17,14 @@ void testRestPublish(FlutterDriver Function() getDriver) {
 
 void testRestPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishSpec);
-  TestControlMessage response;
-  List messages;
-  List messages2;
-  List messages3;
-  List messagesWithExtras;
-  Map<String, dynamic> exception;
-  Map<String, dynamic> exception2;
-  Map<String, dynamic> exception3;
+  late TestControlResponseMessage response;
+  late List messages;
+  late List messages2;
+  late List messages3;
+  late List messagesWithExtras;
+  Map<String, dynamic>? exception;
+  Map<String, dynamic>? exception2;
+  Map<String, dynamic>? exception3;
 
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
@@ -33,9 +33,9 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
     messages2 = response.payload['publishedMessages2'] as List;
     messages3 = response.payload['publishedMessages3'] as List;
     messagesWithExtras = response.payload['publishedExtras'] as List;
-    exception = response.payload['exception'] as Map<String, dynamic>;
-    exception2 = response.payload['exception2'] as Map<String, dynamic>;
-    exception3 = response.payload['exception3'] as Map<String, dynamic>;
+    exception = response.payload['exception'] as Map<String, dynamic>?;
+    exception2 = response.payload['exception2'] as Map<String, dynamic>?;
+    exception3 = response.payload['exception3'] as Map<String, dynamic>?;
   });
 
   group('RSl1', () {
@@ -154,7 +154,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 
 void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishWithAuthCallback);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
   setUpAll(() async => response = await getTestResponse(getDriver(), message));
 
   test('auth callback is invoked', () {
@@ -164,15 +164,15 @@ void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
 
 void testRestHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restHistory);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  Map<String, dynamic> paginatedResult;
-  List<Map<String, dynamic>> historyDefault;
-  List<Map<String, dynamic>> historyLimit4;
-  List<Map<String, dynamic>> historyLimit2;
-  List<Map<String, dynamic>> historyForwardLimit4;
-  List<Map<String, dynamic>> historyWithStart;
-  List<Map<String, dynamic>> historyWithStartAndEnd;
+  late Map<String, dynamic> paginatedResult;
+  late List<Map<String, dynamic>> historyDefault;
+  late List<Map<String, dynamic>> historyLimit4;
+  late List<Map<String, dynamic>> historyLimit2;
+  late List<Map<String, dynamic>> historyForwardLimit4;
+  late List<Map<String, dynamic>> historyWithStart;
+  late List<Map<String, dynamic>> historyWithStartAndEnd;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -236,14 +236,14 @@ void testRestHistory(FlutterDriver Function() getDriver) {
 
 void testRestPresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceGet);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> membersInitial;
-  List<Map<String, dynamic>> membersDefault;
-  List<Map<String, dynamic>> membersLimit4;
-  List<Map<String, dynamic>> membersLimit2;
-  List<Map<String, dynamic>> membersClientId;
-  List<Map<String, dynamic>> membersConnectionId;
+  late List<Map<String, dynamic>> membersInitial;
+  late List<Map<String, dynamic>> membersDefault;
+  late List<Map<String, dynamic>> membersLimit4;
+  late List<Map<String, dynamic>> membersLimit2;
+  late List<Map<String, dynamic>> membersClientId;
+  late List<Map<String, dynamic>> membersConnectionId;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -289,19 +289,19 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
 
 void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceHistory);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
-  List<Map<String, dynamic>> historyInitial;
-  List<Map<String, dynamic>> historyDefault;
-  List<Map<String, dynamic>> historyLimit4;
-  List<Map<String, dynamic>> historyLimit2;
-  List<Map<String, dynamic>> historyForwards;
-  List<Map<String, dynamic>> historyWithStart;
-  List<Map<String, dynamic>> historyWithStartAndEnd;
-  List<Map<String, dynamic>> historyAll;
+  late List<Map<String, dynamic>> historyInitial;
+  late List<Map<String, dynamic>> historyDefault;
+  late List<Map<String, dynamic>> historyLimit4;
+  late List<Map<String, dynamic>> historyLimit2;
+  late List<Map<String, dynamic>> historyForwards;
+  late List<Map<String, dynamic>> historyWithStart;
+  late List<Map<String, dynamic>> historyWithStartAndEnd;
+  late List<Map<String, dynamic>> historyAll;
 
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
@@ -357,8 +357,8 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
 
 void testCapabilityMatrix(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restCapabilities);
-  TestControlMessage response;
-  List<Map<String, dynamic>> capabilityMatrix;
+  late TestControlResponseMessage response;
+  late List<Map<String, dynamic>> capabilityMatrix;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();

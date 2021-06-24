@@ -24,7 +24,7 @@ final StreamsChannel streamsChannel =
 
 /// Initializing ably on platform side by invoking `register` platform method.
 /// Register will clear any stale instances on platform.
-Future _initializer;
+Future? _initializer;
 
 Future _initialize() async {
   if (_initializer == null) {
@@ -47,7 +47,7 @@ Future _initialize() async {
 /// calls an [_initialize] method before invoking any method so as to handle
 /// any cleanup tasks that are especially required while performing hot-restart
 /// (as hot-restart is known to not clear any objects on platform side)
-Future<T> invokePlatformMethod<T>(String method, [Object arguments]) async {
+Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
   await _initialize();
   try {
     return await methodChannel.invokeMethod<T>(method, arguments);

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:test/test.dart';
 
-typedef Injector = int Function(int id);
+typedef Injector = int? Function(int id);
 
 Stream<int> emitter(int id, Injector injector) async* {
   var injectable = injector(id);
@@ -25,15 +25,15 @@ class MockEmitter {
   int streamsCount;
   Map<int, int> indexes = {};
   List<int> injectables;
-  List<Stream<int>> streams;
+  late List<Stream<int>> streams;
 
   int emitCount = 0;
 
-  int injector(int id) {
+  int? injector(int id) {
     // ignore: avoid_returning_null
-    if (indexes[id] >= injectables.length) return null;
-    final ret = injectables[indexes[id]];
-    indexes[id]++;
+    if (indexes[id]! >= injectables.length) return null;
+    final ret = injectables[indexes[id]!];
+    indexes[id] = indexes[id]! + 1;
     return ret;
   }
 }
@@ -51,7 +51,7 @@ void main() {
     final streams = emitter.streams;
 
     StreamSubscription subscriptionPre;
-    StreamSubscription subscriptionPost;
+    late StreamSubscription subscriptionPost;
 
     subscriptionPre = streams[1].listen(resultsNestedPre.add);
 

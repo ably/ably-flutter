@@ -54,7 +54,7 @@ class AppKey {
 
 Future<Map> _provisionApp(
   final String environmentPrefix, [
-  Map<String, List> appSpec,
+  Map<String, List>? appSpec,
 ]) async {
   appSpec ??= _appSpec;
   final url = 'https://${environmentPrefix}rest.ably.io/apps';
@@ -74,7 +74,7 @@ Future<Map> _provisionApp(
 
 Future<AppKey> provision(
   String environmentPrefix, [
-  Map<String, List> appSpec,
+  Map<String, List>? appSpec,
 ]) async {
   final result = await const RetryOptions(
     maxAttempts: 5,

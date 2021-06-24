@@ -19,7 +19,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   String name;
 
-  RestPresence _presence;
+  late RestPresence _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   RestChannel(this.rest, this.name) {
@@ -37,24 +37,29 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
   @override
   Future<PaginatedResult<Message>> history([
-    RestHistoryParams params,
+    RestHistoryParams? params,
   ]) async {
-    final message = await invoke<AblyMessage>(PlatformMethod.restHistory, {
-      TxTransportKeys.channelName: name,
-      if (params != null) TxTransportKeys.params: params
-    });
-    return PaginatedResult<Message>.fromAblyMessage(message);
+    final message = await invokeRequest<AblyMessage>(
+      PlatformMethod.restHistory,
+      {
+        TxTransportKeys.channelName: name,
+        if (params != null) TxTransportKeys.params: params
+      },
+    );
+    return PaginatedResult<Message>.fromAblyMessage(
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+    );
   }
 
   final _publishQueue = Queue<_PublishQueueItem>();
-  Completer<void> _authCallbackCompleter;
+  Completer<void>? _authCallbackCompleter;
 
   @override
   Future<void> publish({
-    Message message,
-    List<Message> messages,
-    String name,
-    Object data,
+    Message? message,
+    List<Message>? messages,
+    String? name,
+    Object? data,
   }) async {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
@@ -106,7 +111,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
           }
           _authCallbackCompleter = Completer<void>();
           try {
-            await _authCallbackCompleter.future.timeout(
+            await _authCallbackCompleter!.future.timeout(
               Timeouts.retryOperationOnAuthFailure,
               onTimeout: () => _publishQueue
                   .where((e) => !e.completer.isCompleted)
