@@ -44,10 +44,10 @@ abstract class RealtimeChannelInterface
   ErrorInfo? errorReason;
 
   /// current state of channel
-  ChannelState? state;
+  abstract ChannelState state;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
-  RealtimePresenceInterface? get presence;
+  RealtimePresenceInterface get presence;
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
 

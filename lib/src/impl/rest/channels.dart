@@ -19,7 +19,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   @override
   String name;
 
-  RestPresence? _presence;
+  late RestPresence _presence;
 
   /// instantiates with [Rest], [name] and [ChannelOptions]
   RestChannel(this.rest, this.name) {
@@ -27,7 +27,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   }
 
   @override
-  RestPresence? get presence => _presence;
+  RestPresence get presence => _presence;
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance

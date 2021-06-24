@@ -541,17 +541,17 @@ class ChannelStateChange {
   /// the event that generated the channel state change
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH5
-  final ChannelEvent? event;
+  final ChannelEvent event;
 
   /// current state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
-  final ChannelState? current;
+  final ChannelState current;
 
   /// previous state of the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
-  final ChannelState? previous;
+  final ChannelState previous;
 
   /// reason for failure, in case of a failed state
   ///

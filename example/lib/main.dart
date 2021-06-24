@@ -535,7 +535,7 @@ class _MyAppState extends State<MyApp> {
       page: _restPresenceMembers,
       query: () async => _rest!.channels
           .get(defaultChannel)
-          .presence!
+          .presence
           .get(ably.RestPresenceParams(limit: 10)),
       onUpdate: (result) {
         setState(() {
@@ -550,7 +550,7 @@ class _MyAppState extends State<MyApp> {
           page: _restPresenceHistory,
           query: () async => _rest!.channels
               .get(defaultChannel)
-              .presence!
+              .presence
               .history(ably.RestHistoryParams(limit: 10)),
           onUpdate: (result) {
             setState(() {
@@ -587,7 +587,7 @@ class _MyAppState extends State<MyApp> {
                 _channelPresenceMessageSubscription == null)
             ? () {
                 final channel = _realtime!.channels.get(defaultChannel);
-                final presenceMessageStream = channel.presence!.subscribe();
+                final presenceMessageStream = channel.presence.subscribe();
                 _channelPresenceMessageSubscription =
                     presenceMessageStream.listen((presenceMessage) {
                   print('Channel presence message received: $presenceMessage');
@@ -623,7 +623,7 @@ class _MyAppState extends State<MyApp> {
             : () async {
                 _realtimePresenceMembers = await _realtime!.channels
                     .get(defaultChannel)
-                    .presence!
+                    .presence
                     .get(ably.RealtimePresenceParams());
                 setState(() {});
               },
@@ -638,7 +638,7 @@ class _MyAppState extends State<MyApp> {
           page: _realtimePresenceHistory,
           query: () async => _realtime!.channels
               .get(defaultChannel)
-              .presence!
+              .presence
               .history(ably.RealtimeHistoryParams(limit: 10)),
           onUpdate: (result) {
             setState(() {
@@ -686,7 +686,7 @@ class _MyAppState extends State<MyApp> {
             : () async {
                 await _realtime!.channels
                     .get(defaultChannel)
-                    .presence!
+                    .presence
                     .enter(_nextPresenceData);
                 setState(() {});
               },
@@ -700,7 +700,7 @@ class _MyAppState extends State<MyApp> {
             : () async {
                 await _realtime!.channels
                     .get(defaultChannel)
-                    .presence!
+                    .presence
                     .updateClient('flutter-example-app', _nextPresenceData);
                 setState(() {});
               },
@@ -714,7 +714,7 @@ class _MyAppState extends State<MyApp> {
             : () async {
                 await _realtime!.channels
                     .get(defaultChannel)
-                    .presence!
+                    .presence
                     .leave(_nextPresenceData);
                 setState(() {});
               },

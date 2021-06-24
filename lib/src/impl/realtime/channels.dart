@@ -21,18 +21,19 @@ class RealtimeChannel extends PlatformObject
   @override
   final String name;
 
-  RealtimePresence? _presence;
+  late RealtimePresence _presence;
 
   @override
-  RealtimePresence? get presence => _presence;
+  RealtimePresence get presence => _presence;
 
   /// instantiates with [Rest], [name] and [RealtimeChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
-  RealtimeChannel(this.realtime, this.name) : super() {
+  RealtimeChannel(this.realtime, this.name)
+      : state = ChannelState.initialized,
+        super() {
     _presence = RealtimePresence(this);
-    state = ChannelState.initialized;
     on().listen((event) => state = event.current);
   }
 
@@ -166,7 +167,7 @@ class RealtimeChannel extends PlatformObject
   PushChannel? push;
 
   @override
-  ChannelState? state;
+  ChannelState state;
 
   @override
   Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
