@@ -57,6 +57,15 @@ Features that we do not currently support, but we do plan to add in the future:
 - cd to `example` folder
 - run `flutter pub get` to install dependencies
 - `flutter run` will start the application on connected android / iOS device
+- Note for M1 Macs:
+  - Flutter has an open PR to add support for running apps on the [iOS simulator]() running on M1 architecture, but this is not yet released. In the mean time, you can change the iOS target to build for Mac in Xcode.
+- Note for users with `fatal error: 'ruby/config.h' file not found`: Ruby is required to install cocoapods and other tools which are used in the build process, and your machine may not have a supported version. To install an up-to-date version of Ruby:
+  - Run `brew install rbenv ruby-build`
+  - Install [rbenv](https://github.com/rbenv/rbenv#installation):
+    - Run `rbenv init` (and follow its recommended instructions)
+    - Run `rbenv install 3.0.1`
+  - Run `sudo gem install cocoapods ffi`
+    - Why do we need `ffi`?: https://github.com/CocoaPods/CocoaPods/issues/9907#issuecomment-729980327
 
 ## Usage
 
