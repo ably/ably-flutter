@@ -58,6 +58,30 @@ Features that we do not currently support, but we do plan to add in the future:
 - run `flutter pub get` to install dependencies
 - `flutter run` will start the application on connected android / iOS device
 
+### Push Notifications
+- To get push notifications working:
+  - For Android 🤖:
+    - **Optional:** Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) the example application in `example/android/app/build.gradle` to your unique application ID.
+    - Create a firebase project, and in the Project settings, add an Android App. Follow the steps provided on the setup process, or the following:
+      - Specify your application ID in this step.  
+      - You can leave `Debug signing certificate SHA-1` empty.
+      - Download the generated `google-services.json` file
+      - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it won't work for users, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it if you prefer.
+      - Update your build.gradle files according to the guide.
+  - For iOS 📱:
+    - **Pre-requisite:** You must be on the Apple Developer Program ($99/year) 
+    - **Required:** In Xcode, update the bundle ID of your application in Xcode to a unique bundle ID. You can open Xcode with `xed example/ios` and clicking `Runner` in the Project Navigator, and clicking the `General` tab. Modify the text field value for `Bundle Identifier` from `io.ably.flutter.PluginExample` to something unique to you. An App ID will be automatically generated on developer.apple.com. 
+    - Create a `.p12` (certificate) for that App ID using the Apple Guide, [Communicate with APNs using a TLS certificate](https://help.apple.com/developer-account/#/dev82a71386a). In the guide, this certificate is called a _client TLS identity_.
+    - Upload the `.p12` certificate to Ably, in the Notifications tab of your app dashboard on [Ably.com](https://Ably.com).
+    - You don't need to add your iOS project to Firebase.
+    - Follow the [Registering Your App with APNs article](https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns), or perform the following steps:
+      - In Xcode, add the `Push Notification` capability to your target in your Xcode project.
+      - In your 
+- **Done:** Launch the app and press the push notifications button, and a notification should be delivered to yourself.
+
+- TODO investigate if simulator/ emulator can use APNs/ FCM
+- TODO add usage of AvdLee/Poes CLI for iOS
+
 ## Usage
 
 ### Specify Dependency

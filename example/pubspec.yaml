@@ -1,5 +1,6 @@
 name: ably_flutter_example
 description: Demonstrates how to use the Ably Flutter plugin.
+version: 1.2.0
 publish_to: 'none'
 
 environment:
