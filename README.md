@@ -56,6 +56,7 @@ Features that we do not currently support, but we do plan to add in the future:
 - Clone the repo
 - cd to `example` folder
 - run `flutter pub get` to install dependencies
+- Android only: Create a firebase project add download a `google-services.json` file. Move this file to `example/android/app`.
 - `flutter run` will start the application on connected android / iOS device
 
 ### Push Notifications
