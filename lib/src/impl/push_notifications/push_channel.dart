@@ -1,8 +1,8 @@
+import '../../spec/common.dart';
+import '../../spec/push_notifications/channels.dart';
+import '../platform_object.dart';
 
-
-import 'package:ably_flutter/src/impl/platform_object.dart';
-
-class PushChannel extends PlatformObject {
+class PushChannelNative extends PlatformObject implements PushChannel {
 
   /// Subscribe device to the channel’s push notifications.
   void subscribe() {
@@ -19,15 +19,39 @@ class PushChannel extends PlatformObject {
 
   }
 
-  Future<PaginatedResult<PushChannelSubscription>> listSubscriptions() {
-
-  }
-
-
-
   @override
   Future<int?> createPlatformInstance() {
     // TODO: implement createPlatformInstance
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> subscribeClient() {
+    // TODO: implement subscribeClient
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> subscribeDevice() {
+    // TODO: implement subscribeDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> unsubscribeClient() {
+    // TODO: implement unsubscribeClient
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> unsubscribeDevice() {
+    // TODO: implement unsubscribeDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions([Map<String, dynamic>? params]) {
+    // TODO: implement listSubscriptions
     throw UnimplementedError();
   }
 

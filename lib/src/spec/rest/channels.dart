@@ -1,6 +1,7 @@
 import '../../../ably_flutter.dart';
 import '../common.dart';
 import '../message.dart';
+import '../push_notifications/channels.dart';
 import 'presence.dart';
 
 /// options provided when instantiating a channel
@@ -34,6 +35,8 @@ abstract class RestChannelInterface {
   /// can only query presence on the channel and presence history
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
   RestPresenceInterface get presence;
+
+  PushChannel? push;
 
   /// fetch message history on this channel
   ///

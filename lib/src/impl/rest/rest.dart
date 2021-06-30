@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import '../../spec/push_notifications/push.dart';
+
 import '../../../ably_flutter.dart';
 import '../../spec/spec.dart' as spec;
 import '../message.dart';

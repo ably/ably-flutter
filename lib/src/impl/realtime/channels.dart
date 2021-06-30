@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../../../ably_flutter.dart';
-import '../../spec/push/channels.dart';
+import '../../spec/push_notifications/channels.dart';
 import '../message.dart';
 import '../platform_object.dart';
 import 'presence.dart';

@@ -5,7 +5,7 @@ export 'connection.dart';
 export 'constants.dart';
 export 'enums.dart';
 export 'message.dart';
-export 'push/push.dart';
+export 'push_notifications/push.dart';
 export 'realtime/channels.dart';
 export 'realtime/presence.dart';
 export 'realtime/realtime.dart';

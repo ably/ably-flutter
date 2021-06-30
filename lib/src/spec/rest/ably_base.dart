@@ -1,7 +1,7 @@
 import '../../../ably_flutter.dart';
 import '../auth.dart';
 import '../common.dart';
-import '../push/push.dart';
+import '../push_notifications/push.dart';
 import 'options.dart';
 
 /// A base class for [Rest] and [Realtime]
