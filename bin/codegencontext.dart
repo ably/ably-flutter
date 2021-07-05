@@ -1,10 +1,11 @@
 ///Transmission protocol custom types. Will be used by codecs
 Iterable<Map<String, dynamic>> get _types sync* {
+  // Add a new key to create a new constant (containing integer) in CodecTypes
+  // which can be used to identify the type of a serialized buffer.
   const platformTypes = <String>[
     // Ably flutter plugin protocol message
     'ablyMessage',
     'ablyEventMessage',
-
     //Other ably objects
     'clientOptions',
     'messageData',
@@ -21,6 +22,10 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'restPresenceParams',
     'presenceMessage',
     'realtimePresenceParams',
+
+    // Push Notifications
+    'deviceDetails',
+
     'errorInfo',
 
     // Events
@@ -44,8 +49,10 @@ Iterable<Map<String, dynamic>> get _types sync* {
   }
 }
 
-///Platform method names
-const List<Map<String, dynamic>> _platformMethods = [
+/// Platform method names
+///
+/// The name is variable/ symbol name, and the value is the string value
+const List<Map<String, String>> _platformMethods = [
   {'name': 'getPlatformVersion', 'value': 'getPlatformVersion'},
   {'name': 'getVersion', 'value': 'getVersion'},
   {'name': 'registerAbly', 'value': 'registerAbly'},
@@ -76,6 +83,13 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimePresenceUpdate', 'value': 'realtimePresenceUpdate'},
   {'name': 'realtimePresenceLeave', 'value': 'realtimePresenceLeave'},
   {'name': 'onRealtimePresenceMessage', 'value': 'onRealtimePresenceMessage'},
+
+  // Push Notifications
+  {'name': 'pushActivate', 'value': 'pushActivate' },
+  {'name': 'pushDeactivate', 'value': 'pushDeactivate' },
+  {'name': 'pushSubscribe', 'value': 'pushSubscribe' },
+  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe' },
+
   {
     'name': 'publishRealtimeChannelMessage',
     'value': 'publishRealtimeChannelMessage'
@@ -100,6 +114,9 @@ const List<Map<String, dynamic>> _platformMethods = [
 ];
 
 const List<Map<String, dynamic>> _objects = [
+  // TransportKeys exist to synchronize the string constants used in data
+  // structures sent between platforms. For example, you can see
+  // usages of [TxTransportKeys.channelName]
   {
     'name': 'TransportKeys',
     'properties': <String>[
@@ -118,17 +135,6 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'AblyEventMessage',
     'properties': <String>['eventName', 'type', 'message']
-  },
-  {
-    'name': 'ErrorInfo',
-    'properties': <String>[
-      'code',
-      'message',
-      'statusCode',
-      'href',
-      'requestId',
-      'cause'
-    ]
   },
   {
     'name': 'MessageData',
@@ -256,14 +262,6 @@ const List<Map<String, dynamic>> _objects = [
     ]
   },
   {
-    'name': 'ConnectionStateChange',
-    'properties': <String>['current', 'previous', 'event', 'retryIn', 'reason']
-  },
-  {
-    'name': 'ChannelStateChange',
-    'properties': <String>['current', 'previous', 'event', 'resumed', 'reason']
-  },
-  {
     'name': 'Message',
     'properties': <String>[
       'id',
@@ -327,6 +325,35 @@ const List<Map<String, dynamic>> _objects = [
       'clientId',
       'connectionId',
     ]
+  },
+  {
+    'name': 'DeviceDetails',
+    'properties': <String>[
+      'id',
+      'platform',
+      'formFactor',
+      'clientId',
+      'metadata'
+    ]
+  },
+  {
+    'name': 'ErrorInfo',
+    'properties': <String>[
+      'code',
+      'message',
+      'statusCode',
+      'href',
+      'requestId',
+      'cause'
+    ]
+  },
+  {
+    'name': 'ConnectionStateChange',
+    'properties': <String>['current', 'previous', 'event', 'retryIn', 'reason']
+  },
+  {
+    'name': 'ChannelStateChange',
+    'properties': <String>['current', 'previous', 'event', 'resumed', 'reason']
   },
 ];
 

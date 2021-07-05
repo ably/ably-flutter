@@ -4,7 +4,7 @@ import '../../../ably_flutter.dart';
 import '../common.dart';
 import '../enums.dart';
 import '../message.dart';
-import '../push_notifications/channels.dart';
+import '../push_notifications/push_channel.dart';
 import '../rest/channels.dart';
 import 'presence.dart';
 import 'realtime.dart';

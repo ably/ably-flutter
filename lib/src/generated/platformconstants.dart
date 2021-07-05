@@ -23,9 +23,10 @@ class CodecTypes {
   static const int restPresenceParams = 142;
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
-  static const int errorInfo = 145;
-  static const int connectionStateChange = 146;
-  static const int channelStateChange = 147;
+  static const int deviceDetails = 145;
+  static const int errorInfo = 146;
+  static const int connectionStateChange = 147;
+  static const int channelStateChange = 148;
 }
 
 class PlatformMethod {
@@ -53,6 +54,10 @@ class PlatformMethod {
   static const String realtimePresenceUpdate = 'realtimePresenceUpdate';
   static const String realtimePresenceLeave = 'realtimePresenceLeave';
   static const String onRealtimePresenceMessage = 'onRealtimePresenceMessage';
+  static const String pushActivate = 'pushActivate';
+  static const String pushDeactivate = 'pushDeactivate';
+  static const String pushSubscribe = 'pushSubscribe';
+  static const String pushUnsubscribe = 'pushUnsubscribe';
   static const String publishRealtimeChannelMessage =
       'publishRealtimeChannelMessage';
   static const String releaseRealtimeChannel = 'releaseRealtimeChannel';
@@ -85,15 +90,6 @@ class TxAblyEventMessage {
   static const String eventName = 'eventName';
   static const String type = 'type';
   static const String message = 'message';
-}
-
-class TxErrorInfo {
-  static const String code = 'code';
-  static const String message = 'message';
-  static const String statusCode = 'statusCode';
-  static const String href = 'href';
-  static const String requestId = 'requestId';
-  static const String cause = 'cause';
 }
 
 class TxMessageData {
@@ -207,22 +203,6 @@ class TxEnumConstants {
   static const String presenceSubscribe = 'presenceSubscribe';
 }
 
-class TxConnectionStateChange {
-  static const String current = 'current';
-  static const String previous = 'previous';
-  static const String event = 'event';
-  static const String retryIn = 'retryIn';
-  static const String reason = 'reason';
-}
-
-class TxChannelStateChange {
-  static const String current = 'current';
-  static const String previous = 'previous';
-  static const String event = 'event';
-  static const String resumed = 'resumed';
-  static const String reason = 'reason';
-}
-
 class TxMessage {
   static const String id = 'id';
   static const String timestamp = 'timestamp';
@@ -276,4 +256,37 @@ class TxRealtimePresenceParams {
   static const String waitForSync = 'waitForSync';
   static const String clientId = 'clientId';
   static const String connectionId = 'connectionId';
+}
+
+class TxDeviceDetails {
+  static const String id = 'id';
+  static const String platform = 'platform';
+  static const String formFactor = 'formFactor';
+  static const String clientId = 'clientId';
+  static const String metadata = 'metadata';
+}
+
+class TxErrorInfo {
+  static const String code = 'code';
+  static const String message = 'message';
+  static const String statusCode = 'statusCode';
+  static const String href = 'href';
+  static const String requestId = 'requestId';
+  static const String cause = 'cause';
+}
+
+class TxConnectionStateChange {
+  static const String current = 'current';
+  static const String previous = 'previous';
+  static const String event = 'event';
+  static const String retryIn = 'retryIn';
+  static const String reason = 'reason';
+}
+
+class TxChannelStateChange {
+  static const String current = 'current';
+  static const String previous = 'previous';
+  static const String event = 'event';
+  static const String resumed = 'resumed';
+  static const String reason = 'reason';
 }

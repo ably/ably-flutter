@@ -83,6 +83,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
 
+    // Push Notifications
+    _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
+    _map.put(PlatformConstants.PlatformMethod.pushDeactivate, this::pushDeactivate);
+
     // paginated results
     _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
     _map.put(PlatformConstants.PlatformMethod.firstPage, this::getFirstPage);
@@ -601,8 +605,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             .first(this.paginatedResponseHandler(result, pageHandle)));
   }
 
-  <Arguments> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, Arguments> consumer) {
-    consumer.accept(_ably, (Arguments) message.message);
+  <T> void ablyDo(final AblyFlutterMessage message, final BiConsumer<AblyLibrary, T> consumer) {
+    consumer.accept(_ably, (T) message.message);
   }
 
   private void getPlatformVersion(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

@@ -1,5 +1,5 @@
 import '../../spec/common.dart';
-import '../../spec/push_notifications/channels.dart';
+import '../../spec/push_notifications/push_channel.dart';
 import '../platform_object.dart';
 
 class PushChannelNative extends PlatformObject implements PushChannel {

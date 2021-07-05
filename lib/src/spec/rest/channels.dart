@@ -1,7 +1,7 @@
 import '../../../ably_flutter.dart';
 import '../common.dart';
 import '../message.dart';
-import '../push_notifications/channels.dart';
+import '../push_notifications/push_channel.dart';
 import 'presence.dart';
 
 /// options provided when instantiating a channel

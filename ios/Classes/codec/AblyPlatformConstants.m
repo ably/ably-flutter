@@ -31,6 +31,10 @@ NSString *const AblyPlatformMethod_realtimePresenceEnter= @"realtimePresenceEnte
 NSString *const AblyPlatformMethod_realtimePresenceUpdate= @"realtimePresenceUpdate";
 NSString *const AblyPlatformMethod_realtimePresenceLeave= @"realtimePresenceLeave";
 NSString *const AblyPlatformMethod_onRealtimePresenceMessage= @"onRealtimePresenceMessage";
+NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
+NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
+NSString *const AblyPlatformMethod_pushSubscribe= @"pushSubscribe";
+NSString *const AblyPlatformMethod_pushUnsubscribe= @"pushUnsubscribe";
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChannel";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
@@ -57,14 +61,6 @@ NSString *const TxAblyMessage_message = @"message";
 NSString *const TxAblyEventMessage_eventName = @"eventName";
 NSString *const TxAblyEventMessage_type = @"type";
 NSString *const TxAblyEventMessage_message = @"message";
-
-// key constants for ErrorInfo
-NSString *const TxErrorInfo_code = @"code";
-NSString *const TxErrorInfo_message = @"message";
-NSString *const TxErrorInfo_statusCode = @"statusCode";
-NSString *const TxErrorInfo_href = @"href";
-NSString *const TxErrorInfo_requestId = @"requestId";
-NSString *const TxErrorInfo_cause = @"cause";
 
 // key constants for MessageData
 NSString *const TxMessageData_data = @"data";
@@ -167,20 +163,6 @@ NSString *const TxEnumConstants_publish = @"publish";
 NSString *const TxEnumConstants_subscribe = @"subscribe";
 NSString *const TxEnumConstants_presenceSubscribe = @"presenceSubscribe";
 
-// key constants for ConnectionStateChange
-NSString *const TxConnectionStateChange_current = @"current";
-NSString *const TxConnectionStateChange_previous = @"previous";
-NSString *const TxConnectionStateChange_event = @"event";
-NSString *const TxConnectionStateChange_retryIn = @"retryIn";
-NSString *const TxConnectionStateChange_reason = @"reason";
-
-// key constants for ChannelStateChange
-NSString *const TxChannelStateChange_current = @"current";
-NSString *const TxChannelStateChange_previous = @"previous";
-NSString *const TxChannelStateChange_event = @"event";
-NSString *const TxChannelStateChange_resumed = @"resumed";
-NSString *const TxChannelStateChange_reason = @"reason";
-
 // key constants for Message
 NSString *const TxMessage_id = @"id";
 NSString *const TxMessage_timestamp = @"timestamp";
@@ -228,3 +210,32 @@ NSString *const TxRestPresenceParams_connectionId = @"connectionId";
 NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
 NSString *const TxRealtimePresenceParams_clientId = @"clientId";
 NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
+
+// key constants for DeviceDetails
+NSString *const TxDeviceDetails_id = @"id";
+NSString *const TxDeviceDetails_platform = @"platform";
+NSString *const TxDeviceDetails_formFactor = @"formFactor";
+NSString *const TxDeviceDetails_clientId = @"clientId";
+NSString *const TxDeviceDetails_metadata = @"metadata";
+
+// key constants for ErrorInfo
+NSString *const TxErrorInfo_code = @"code";
+NSString *const TxErrorInfo_message = @"message";
+NSString *const TxErrorInfo_statusCode = @"statusCode";
+NSString *const TxErrorInfo_href = @"href";
+NSString *const TxErrorInfo_requestId = @"requestId";
+NSString *const TxErrorInfo_cause = @"cause";
+
+// key constants for ConnectionStateChange
+NSString *const TxConnectionStateChange_current = @"current";
+NSString *const TxConnectionStateChange_previous = @"previous";
+NSString *const TxConnectionStateChange_event = @"event";
+NSString *const TxConnectionStateChange_retryIn = @"retryIn";
+NSString *const TxConnectionStateChange_reason = @"reason";
+
+// key constants for ChannelStateChange
+NSString *const TxChannelStateChange_current = @"current";
+NSString *const TxChannelStateChange_previous = @"previous";
+NSString *const TxChannelStateChange_event = @"event";
+NSString *const TxChannelStateChange_resumed = @"resumed";
+NSString *const TxChannelStateChange_reason = @"reason";

@@ -26,9 +26,10 @@ final public class PlatformConstants {
         public static final byte restPresenceParams = (byte) 142;
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte errorInfo = (byte) 145;
-        public static final byte connectionStateChange = (byte) 146;
-        public static final byte channelStateChange = (byte) 147;
+        public static final byte deviceDetails = (byte) 145;
+        public static final byte errorInfo = (byte) 146;
+        public static final byte connectionStateChange = (byte) 147;
+        public static final byte channelStateChange = (byte) 148;
     }
 
     static final public class PlatformMethod {
@@ -56,6 +57,10 @@ final public class PlatformConstants {
         public static final String realtimePresenceUpdate = "realtimePresenceUpdate";
         public static final String realtimePresenceLeave = "realtimePresenceLeave";
         public static final String onRealtimePresenceMessage = "onRealtimePresenceMessage";
+        public static final String pushActivate = "pushActivate";
+        public static final String pushDeactivate = "pushDeactivate";
+        public static final String pushSubscribe = "pushSubscribe";
+        public static final String pushUnsubscribe = "pushUnsubscribe";
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
         public static final String releaseRealtimeChannel = "releaseRealtimeChannel";
         public static final String realtimeHistory = "realtimeHistory";
@@ -85,15 +90,6 @@ final public class PlatformConstants {
         public static final String eventName = "eventName";
         public static final String type = "type";
         public static final String message = "message";
-    }
-
-    static final public class TxErrorInfo {
-        public static final String code = "code";
-        public static final String message = "message";
-        public static final String statusCode = "statusCode";
-        public static final String href = "href";
-        public static final String requestId = "requestId";
-        public static final String cause = "cause";
     }
 
     static final public class TxMessageData {
@@ -207,22 +203,6 @@ final public class PlatformConstants {
         public static final String presenceSubscribe = "presenceSubscribe";
     }
 
-    static final public class TxConnectionStateChange {
-        public static final String current = "current";
-        public static final String previous = "previous";
-        public static final String event = "event";
-        public static final String retryIn = "retryIn";
-        public static final String reason = "reason";
-    }
-
-    static final public class TxChannelStateChange {
-        public static final String current = "current";
-        public static final String previous = "previous";
-        public static final String event = "event";
-        public static final String resumed = "resumed";
-        public static final String reason = "reason";
-    }
-
     static final public class TxMessage {
         public static final String id = "id";
         public static final String timestamp = "timestamp";
@@ -276,6 +256,39 @@ final public class PlatformConstants {
         public static final String waitForSync = "waitForSync";
         public static final String clientId = "clientId";
         public static final String connectionId = "connectionId";
+    }
+
+    static final public class TxDeviceDetails {
+        public static final String id = "id";
+        public static final String platform = "platform";
+        public static final String formFactor = "formFactor";
+        public static final String clientId = "clientId";
+        public static final String metadata = "metadata";
+    }
+
+    static final public class TxErrorInfo {
+        public static final String code = "code";
+        public static final String message = "message";
+        public static final String statusCode = "statusCode";
+        public static final String href = "href";
+        public static final String requestId = "requestId";
+        public static final String cause = "cause";
+    }
+
+    static final public class TxConnectionStateChange {
+        public static final String current = "current";
+        public static final String previous = "previous";
+        public static final String event = "event";
+        public static final String retryIn = "retryIn";
+        public static final String reason = "reason";
+    }
+
+    static final public class TxChannelStateChange {
+        public static final String current = "current";
+        public static final String previous = "previous";
+        public static final String event = "event";
+        public static final String resumed = "resumed";
+        public static final String reason = "reason";
     }
 
 }

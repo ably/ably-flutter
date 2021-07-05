@@ -23,9 +23,10 @@ typedef NS_ENUM(UInt8, _Value) {
     restPresenceParamsCodecType = 142,
     presenceMessageCodecType = 143,
     realtimePresenceParamsCodecType = 144,
-    errorInfoCodecType = 145,
-    connectionStateChangeCodecType = 146,
-    channelStateChangeCodecType = 147,
+    deviceDetailsCodecType = 145,
+    errorInfoCodecType = 146,
+    connectionStateChangeCodecType = 147,
+    channelStateChangeCodecType = 148,
 };
 
 
@@ -54,6 +55,10 @@ extern NSString *const AblyPlatformMethod_realtimePresenceEnter;
 extern NSString *const AblyPlatformMethod_realtimePresenceUpdate;
 extern NSString *const AblyPlatformMethod_realtimePresenceLeave;
 extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
+extern NSString *const AblyPlatformMethod_pushActivate;
+extern NSString *const AblyPlatformMethod_pushDeactivate;
+extern NSString *const AblyPlatformMethod_pushSubscribe;
+extern NSString *const AblyPlatformMethod_pushUnsubscribe;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
@@ -80,14 +85,6 @@ extern NSString *const TxAblyMessage_message;
 extern NSString *const TxAblyEventMessage_eventName;
 extern NSString *const TxAblyEventMessage_type;
 extern NSString *const TxAblyEventMessage_message;
-
-// key constants for ErrorInfo
-extern NSString *const TxErrorInfo_code;
-extern NSString *const TxErrorInfo_message;
-extern NSString *const TxErrorInfo_statusCode;
-extern NSString *const TxErrorInfo_href;
-extern NSString *const TxErrorInfo_requestId;
-extern NSString *const TxErrorInfo_cause;
 
 // key constants for MessageData
 extern NSString *const TxMessageData_data;
@@ -190,20 +187,6 @@ extern NSString *const TxEnumConstants_publish;
 extern NSString *const TxEnumConstants_subscribe;
 extern NSString *const TxEnumConstants_presenceSubscribe;
 
-// key constants for ConnectionStateChange
-extern NSString *const TxConnectionStateChange_current;
-extern NSString *const TxConnectionStateChange_previous;
-extern NSString *const TxConnectionStateChange_event;
-extern NSString *const TxConnectionStateChange_retryIn;
-extern NSString *const TxConnectionStateChange_reason;
-
-// key constants for ChannelStateChange
-extern NSString *const TxChannelStateChange_current;
-extern NSString *const TxChannelStateChange_previous;
-extern NSString *const TxChannelStateChange_event;
-extern NSString *const TxChannelStateChange_resumed;
-extern NSString *const TxChannelStateChange_reason;
-
 // key constants for Message
 extern NSString *const TxMessage_id;
 extern NSString *const TxMessage_timestamp;
@@ -251,3 +234,32 @@ extern NSString *const TxRestPresenceParams_connectionId;
 extern NSString *const TxRealtimePresenceParams_waitForSync;
 extern NSString *const TxRealtimePresenceParams_clientId;
 extern NSString *const TxRealtimePresenceParams_connectionId;
+
+// key constants for DeviceDetails
+extern NSString *const TxDeviceDetails_id;
+extern NSString *const TxDeviceDetails_platform;
+extern NSString *const TxDeviceDetails_formFactor;
+extern NSString *const TxDeviceDetails_clientId;
+extern NSString *const TxDeviceDetails_metadata;
+
+// key constants for ErrorInfo
+extern NSString *const TxErrorInfo_code;
+extern NSString *const TxErrorInfo_message;
+extern NSString *const TxErrorInfo_statusCode;
+extern NSString *const TxErrorInfo_href;
+extern NSString *const TxErrorInfo_requestId;
+extern NSString *const TxErrorInfo_cause;
+
+// key constants for ConnectionStateChange
+extern NSString *const TxConnectionStateChange_current;
+extern NSString *const TxConnectionStateChange_previous;
+extern NSString *const TxConnectionStateChange_event;
+extern NSString *const TxConnectionStateChange_retryIn;
+extern NSString *const TxConnectionStateChange_reason;
+
+// key constants for ChannelStateChange
+extern NSString *const TxChannelStateChange_current;
+extern NSString *const TxChannelStateChange_previous;
+extern NSString *const TxChannelStateChange_event;
+extern NSString *const TxChannelStateChange_resumed;
+extern NSString *const TxChannelStateChange_reason;
