@@ -7,7 +7,6 @@ import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
-import io.ably.lib.types.PaginatedResult;
 
 class AblyLibrary {
 
