@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/impl/message.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pedantic/pedantic.dart';
 
-import '../utils.dart';
+import '../mock_method_call_manager.dart';
+
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +16,10 @@ void main() {
 
   setUp(() {
     manager = MockMethodCallManager();
-    manager.methodChannel.setMockMethodCallHandler(manager.handler);
   });
 
   tearDown(() {
-    manager.methodChannel.setMockMethodCallHandler(null);
+    manager.reset();
   });
 
   group('realtime#channels#channel', () {
