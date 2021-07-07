@@ -1,7 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/impl/message.dart';
-import 'package:ably_flutter/src/method_call_handler.dart';
-import 'package:ably_flutter/src/platform.dart' as platform;
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:flutter/services.dart';
 
 typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
@@ -11,7 +9,6 @@ class MockMethodCallManager {
   bool isAuthenticated = false;
   final channels = <int, AblyMessage?>{};
   final publishedMessages = <AblyMessage>[];
-  final methodChannel = platform.methodChannel;
 
   MockMethodCallManager() {
     methodChannel.setMockMethodCallHandler(handler);
