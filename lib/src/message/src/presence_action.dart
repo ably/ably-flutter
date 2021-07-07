@@ -1,3 +1,5 @@
+import '../message.dart';
+
 /// Status on a presence message
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TP2

@@ -5,7 +5,8 @@ import '../realtime.dart';
 /// an abstract class for Ably's Realtime client
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTC1
-abstract class RealtimeInterface<C extends RealtimeChannelsInterface> extends AblyBase {
+abstract class RealtimeInterface<C extends RealtimeChannelsInterface>
+    extends AblyBase {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1
   RealtimeInterface({
     ClientOptions? options,

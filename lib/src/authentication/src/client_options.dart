@@ -1,4 +1,5 @@
 import '../../logging/logging.dart';
+import '../../realtime/realtime.dart';
 import '../authentication.dart';
 
 /// Ably library options used when instancing a REST or Realtime client library

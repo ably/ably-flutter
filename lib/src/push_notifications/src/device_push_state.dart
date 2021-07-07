@@ -1,3 +1,5 @@
+import '../push_notifications.dart';
+
 /// To indicate Push State of a device in [DeviceDetails] via [DevicePushState]
 /// while registering
 enum DevicePushState {

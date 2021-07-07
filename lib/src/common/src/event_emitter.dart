@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Interface implemented by Ably classes that can emit events,
 /// offering the capability to create listeners for those events.
 /// [E] is type of event to listen for

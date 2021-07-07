@@ -67,8 +67,9 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel).onRealtimeAuthCallback(
-              AblyMessage(TokenParams(timestamp: DateTime.now()),
+          await AblyMethodCallHandler(Platform.methodChannel)
+              .onRealtimeAuthCallback(AblyMessage(
+                  TokenParams(timestamp: DateTime.now()),
                   handle: handle));
           isAuthenticated = true;
           throw PlatformException(

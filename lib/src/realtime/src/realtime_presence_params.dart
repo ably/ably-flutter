@@ -1,3 +1,5 @@
+import '../../platform/platform.dart';
+
 /// Params used as a filter for querying presence on a channel
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTP11c

@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/message/message.dart';
-import 'package:ably_flutter/src/rest/rest.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../../../error/error.dart';
+import '../../../generated/platform_constants.dart';
+import '../../../message/message.dart';
+import '../../../rest/rest.dart';
 import '../../platform.dart';
 
 /// Plugin based implementation of Rest channel

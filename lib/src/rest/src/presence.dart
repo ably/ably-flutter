@@ -1,5 +1,6 @@
 import '../../common/common.dart';
 import '../../message/message.dart';
+import '../../platform/platform.dart';
 import 'rest_history_params.dart';
 import 'rest_presence_params.dart';
 

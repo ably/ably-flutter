@@ -1,3 +1,5 @@
+import '../push_notifications.dart';
+
 /// Params to filter push channel subscriptions.
 ///
 /// See [PushChannelSubscriptions.list], [PushChannelSubscriptions.removeWhere]

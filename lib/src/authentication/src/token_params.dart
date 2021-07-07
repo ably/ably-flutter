@@ -1,3 +1,5 @@
+import '../authentication.dart';
+
 /// A class providing parameters of a token request.
 ///
 /// Parameters for a token request

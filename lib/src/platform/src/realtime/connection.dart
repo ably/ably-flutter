@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
-
+import '../../../error/error.dart';
+import '../../../generated/platform_constants.dart';
+import '../../../realtime/realtime.dart';
 import '../../platform.dart';
 
 /// connects to Ably service

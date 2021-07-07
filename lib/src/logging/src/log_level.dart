@@ -1,3 +1,5 @@
+import '../../authentication/authentication.dart';
+
 /// Log levels - control verbosity of log messages
 ///
 /// Can be used for [ClientOptions.logLevel]

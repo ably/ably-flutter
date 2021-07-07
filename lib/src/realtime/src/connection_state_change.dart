@@ -1,4 +1,5 @@
 import '../../error/error.dart';
+import '../../platform/platform.dart';
 import 'connection_event.dart';
 import 'connection_state.dart';
 

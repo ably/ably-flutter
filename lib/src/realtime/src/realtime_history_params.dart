@@ -1,5 +1,6 @@
-// TODO stop extending RestHistoryParams like this
-import 'package:ably_flutter/src/rest/rest.dart';
+// TODO stop extending RestHistoryParams:
+//  RealtimeHistoryParams is not a RestHistoryParams
+import '../../rest/rest.dart';
 
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
 class RealtimeHistoryParams extends RestHistoryParams {

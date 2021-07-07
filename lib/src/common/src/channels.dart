@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 
+import '../../platform/platform.dart';
+
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
 abstract class Channels<ChannelType> extends Iterable<ChannelType> {

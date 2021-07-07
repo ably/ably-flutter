@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../generated/platform_constants.dart';
+import '../message.dart';
 
 /// Delta extension configuration for [MessageExtras]
 @immutable

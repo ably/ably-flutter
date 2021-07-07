@@ -1,3 +1,5 @@
+import '../push_notifications.dart';
+
 /// To indicate the type of device in [DeviceDetails] while registering
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#PCD4

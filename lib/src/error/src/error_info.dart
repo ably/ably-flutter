@@ -1,3 +1,5 @@
+import '../error.dart';
+
 /// An [AblyException] encapsulates [ErrorInfo] which carries details
 /// about information related to Ably-specific error [code],
 /// generic [statusCode], error [message],

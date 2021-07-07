@@ -1,3 +1,5 @@
+import '../realtime.dart';
+
 /// Connection event is same as [ConnectionState] except that it also handles
 /// update operations on a connection
 ///

@@ -1,5 +1,5 @@
 import '../../authentication/authentication.dart';
-import '../../authentication/src/auth.dart';
+import '../../platform/platform.dart';
 import '../../push_notifications/push_notifications.dart';
 import '../../stats/stats.dart';
 import '../common.dart';
@@ -27,7 +27,7 @@ abstract class AblyBase {
   /// viz., subscribing for push notifications, etc
   Push? push;
 
-  /// gets stats based on params as a [PaginatedResultNative]
+  /// gets stats based on params as a [PaginatedResult]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
   Future<PaginatedResultInterface<Stats>> stats([

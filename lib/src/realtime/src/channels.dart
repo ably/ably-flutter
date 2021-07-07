@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../authentication/authentication.dart';
 import '../../common/common.dart';
 import '../../common/src/channels.dart';
 import '../../common/src/event_emitter.dart';

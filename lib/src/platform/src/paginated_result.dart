@@ -16,7 +16,7 @@ class PaginatedResult<T> extends PlatformObject
   /// instantiated by the codec. So the code invoking platform method
   /// is bound to update this [_pageHandle]
   ///
-  /// [PaginatedResultInterface.fromAblyMessage] will act as a utility to update
+  /// [PaginatedResult.fromAblyMessage] will act as a utility to update
   /// this property. See [next] and [first] for usages
   int? _pageHandle;
 

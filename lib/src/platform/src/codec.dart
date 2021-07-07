@@ -1,12 +1,12 @@
-import 'package:ably_flutter/src/authentication/authentication.dart';
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/message/message.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
-import 'package:ably_flutter/src/rest/rest.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../../authentication/authentication.dart';
+import '../../error/error.dart';
+import '../../generated/platform_constants.dart';
+import '../../message/message.dart';
+import '../../realtime/realtime.dart';
+import '../../rest/rest.dart';
 import '../platform.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will

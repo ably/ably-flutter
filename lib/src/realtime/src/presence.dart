@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter/src/platform/platform.dart';
-
-import '../../common/common.dart';
 import '../../message/src/presence_action.dart';
 import '../../message/src/presence_message.dart';
+import '../../platform/platform.dart';
 import '../realtime.dart';
 import 'channels.dart';
 

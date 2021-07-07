@@ -14,11 +14,11 @@ class Platform {
 
   /// instance of method channel to interact with android/ios code
   static final MethodChannel methodChannel =
-  MethodChannel('io.ably.flutter.plugin', codec);
+      MethodChannel('io.ably.flutter.plugin', codec);
 
   /// instance of method channel to listen to android/ios events
   static final StreamsChannel streamsChannel =
-  StreamsChannel('io.ably.flutter.stream', codec);
+      StreamsChannel('io.ably.flutter.stream', codec);
 
   /// Initializing ably on platform side by invoking `register` platform method.
   /// Register will clear any stale instances on platform.
@@ -42,10 +42,11 @@ class Platform {
 
   /// invokes a platform [method] with [arguments]
   ///
-  /// calls an [_initialize] method before invoking any method so as to handle
-  /// any cleanup tasks that are especially required while performing hot-restart
+  /// calls an [_initialize] method before invoking any method to handle any
+  /// cleanup tasks that are especially required while performing hot-restart
   /// (as hot-restart is known to not clear any objects on platform side)
-  static Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
+  static Future<T?> invokePlatformMethod<T>(String method,
+      [Object? arguments]) async {
     await _initialize();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);

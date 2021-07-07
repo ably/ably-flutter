@@ -1,3 +1,4 @@
+import '../push_notifications.dart';
 import 'device_push_state.dart';
 
 /// Params to filter push device registrations.
