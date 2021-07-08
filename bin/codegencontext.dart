@@ -85,10 +85,10 @@ const List<Map<String, String>> _platformMethods = [
   {'name': 'onRealtimePresenceMessage', 'value': 'onRealtimePresenceMessage'},
 
   // Push Notifications
-  {'name': 'pushActivate', 'value': 'pushActivate' },
-  {'name': 'pushDeactivate', 'value': 'pushDeactivate' },
-  {'name': 'pushSubscribe', 'value': 'pushSubscribe' },
-  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe' },
+  {'name': 'pushActivate', 'value': 'pushActivate'},
+  {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
+  {'name': 'pushSubscribe', 'value': 'pushSubscribe'},
+  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe'},
 
   {
     'name': 'publishRealtimeChannelMessage',

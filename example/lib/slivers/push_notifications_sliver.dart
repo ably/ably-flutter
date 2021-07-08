@@ -4,7 +4,8 @@ class PushNotificationsSliver extends StatefulWidget {
   const PushNotificationsSliver({Key? key}) : super(key: key);
 
   @override
-  _PushNotificationsSliverState createState() => _PushNotificationsSliverState();
+  _PushNotificationsSliverState createState() =>
+      _PushNotificationsSliverState();
 }
 
 class _PushNotificationsSliverState extends State<PushNotificationsSliver> {

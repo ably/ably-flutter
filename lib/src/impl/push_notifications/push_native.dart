@@ -6,17 +6,17 @@ import '../../../ably_flutter.dart';
 import '../../spec/push_notifications/push.dart';
 
 class PushNative extends PlatformObject implements Push {
-   final int _handle;
+  final int _handle;
 
   ///
-  PushNative(this._handle): super();
+  PushNative(this._handle) : super();
 
   @override
   Future<DeviceDetails> activate() {
     return invokeRequest<DeviceDetails>(PlatformMethod.ac, {
-    TxTransportKeys.channelName: _channel.name,
-    TxTransportKeys.clientId: clientId,
-    if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
+      TxTransportKeys.channelName: _channel.name,
+      TxTransportKeys.clientId: clientId,
+      if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
     });
   }
 
@@ -36,5 +36,4 @@ class PushNative extends PlatformObject implements Push {
     // }
     return _handle;
   }
-
 }

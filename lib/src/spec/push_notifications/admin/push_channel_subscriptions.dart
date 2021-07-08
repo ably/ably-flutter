@@ -6,15 +6,15 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
   Future<PaginatedResultInterface<PushChannelSubscription>> list(
-      PushChannelSubscriptionParams params,
-      );
+    PushChannelSubscriptionParams params,
+  );
 
   /// List channels with at least one subscribed device.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
   Future<PaginatedResultInterface<String>> listChannels(
-      PushChannelsParams params,
-      );
+    PushChannelsParams params,
+  );
 
   /// Save push channel subscription for a device or client ID.
   ///

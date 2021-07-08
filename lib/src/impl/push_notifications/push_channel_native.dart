@@ -3,21 +3,14 @@ import '../../spec/push_notifications/push_channel.dart';
 import '../platform_object.dart';
 
 class PushChannelNative extends PlatformObject implements PushChannel {
-
   /// Subscribe device to the channel’s push notifications.
-  void subscribe() {
-
-  }
+  void subscribe() {}
 
   /// Unsubscribe device from the channel’s push notifications.
-  void unsubscribe() {
-
-  }
+  void unsubscribe() {}
 
   /// Unsubscribe all devices associated with your device’s clientId from the channel’s push notifications.
-  void unsubscribeAllClientsWithCurrentClientId() {
-
-  }
+  void unsubscribeAllClientsWithCurrentClientId() {}
 
   @override
   Future<int?> createPlatformInstance() {
@@ -50,9 +43,9 @@ class PushChannelNative extends PlatformObject implements PushChannel {
   }
 
   @override
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions([Map<String, dynamic>? params]) {
+  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
+      [Map<String, dynamic>? params]) {
     // TODO: implement listSubscriptions
     throw UnimplementedError();
   }
-
 }
