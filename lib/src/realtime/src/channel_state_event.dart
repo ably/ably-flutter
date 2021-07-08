@@ -37,10 +37,10 @@ class ChannelStateChange {
 
   /// initializes with [resumed] set to false
   ChannelStateChange(
-      this.current,
-      this.previous,
-      this.event, {
-        this.reason,
-        this.resumed = false,
-      });
+    this.current,
+    this.previous,
+    this.event, {
+    this.reason,
+    this.resumed = false,
+  });
 }

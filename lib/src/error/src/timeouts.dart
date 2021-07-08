@@ -1,5 +1,3 @@
-
-
 /// Static timeouts used inside the SDK
 class Timeouts {
   /// max time allowed for retrying an operation for auth failure

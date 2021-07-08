@@ -33,12 +33,12 @@ class TokenDetails {
 
   /// instantiates a [TokenDetails] with provided values
   TokenDetails(
-      this.token, {
-        this.expires,
-        this.issued,
-        this.capability,
-        this.clientId,
-      });
+    this.token, {
+    this.expires,
+    this.issued,
+    this.capability,
+    this.clientId,
+  });
 
   /// Creates an instance from the map
   ///

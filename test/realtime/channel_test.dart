@@ -8,7 +8,6 @@ import 'package:pedantic/pedantic.dart';
 
 import '../mock_method_call_manager.dart';
 
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 

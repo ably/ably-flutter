@@ -4,6 +4,6 @@ import '../../error/src/ably_exception.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
 typedef LogHandler = void Function({
-String? msg,
-AblyException? exception,
+  String? msg,
+  AblyException? exception,
 });

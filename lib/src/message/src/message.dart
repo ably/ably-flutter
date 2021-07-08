@@ -1,5 +1,3 @@
-
-
 import 'package:meta/meta.dart';
 
 import '../../rest/src/channel_options.dart';
@@ -67,24 +65,24 @@ class Message {
   @override
   bool operator ==(Object other) =>
       other is Message &&
-          other.id == id &&
-          other.name == name &&
-          other.data == data &&
-          other.extras == extras &&
-          other.encoding == encoding &&
-          other.clientId == clientId &&
-          other.timestamp == timestamp &&
-          other.connectionId == connectionId;
+      other.id == id &&
+      other.name == name &&
+      other.data == data &&
+      other.extras == extras &&
+      other.encoding == encoding &&
+      other.clientId == clientId &&
+      other.timestamp == timestamp &&
+      other.connectionId == connectionId;
 
   @override
   int get hashCode => '$id:'
-      '$name:'
-      '$encoding:'
-      '$clientId:'
-      '$timestamp:'
-      '$connectionId:'
-      '${data?.hashCode}:'
-      '${extras?.hashCode}:'
+          '$name:'
+          '$encoding:'
+          '$clientId:'
+          '$timestamp:'
+          '$connectionId:'
+          '${data?.hashCode}:'
+          '${extras?.hashCode}:'
       .hashCode;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
@@ -92,9 +90,9 @@ class Message {
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TM3
   Message.fromEncoded(
-      Map<String, dynamic> jsonObject, [
-        ChannelOptions? channelOptions,
-      ])  : id = jsonObject['id'] as String?,
+    Map<String, dynamic> jsonObject, [
+    ChannelOptions? channelOptions,
+  ])  : id = jsonObject['id'] as String?,
         name = jsonObject['name'] as String?,
         clientId = jsonObject['clientId'] as String?,
         connectionId = jsonObject['connectionId'] as String?,
@@ -107,15 +105,15 @@ class Message {
         ),
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
-          jsonObject['timestamp'] as int,
-        )
+                jsonObject['timestamp'] as int,
+              )
             : null;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static List<Message> fromEncodedArray(
-      List<Map<String, dynamic>> jsonArray, [
-        ChannelOptions? channelOptions,
-      ]) =>
+    List<Map<String, dynamic>> jsonArray, [
+    ChannelOptions? channelOptions,
+  ]) =>
       jsonArray.map((e) => Message.fromEncoded(e, channelOptions)).toList();
 
   @override

@@ -21,9 +21,9 @@ class RealtimeHistoryParams extends RestHistoryParams {
     int limit = 100,
     this.untilAttach,
   }) : super(
-    start: start,
-    end: end,
-    direction: direction,
-    limit: limit,
-  );
+          start: start,
+          end: end,
+          direction: direction,
+          limit: limit,
+        );
 }

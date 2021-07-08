@@ -1,4 +1,3 @@
-
 import '../common.dart';
 
 /// The response from an HTTP request containing an empty or

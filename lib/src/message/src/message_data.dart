@@ -17,13 +17,13 @@ class MessageData<T> {
       return null;
     }
     assert(
-    value is MessageData ||
-        value is Map ||
-        value is List ||
-        value is String ||
-        value is Uint8List,
-    'Message data must be either `Map`, `List`, `String` or `Uint8List`.'
-        ' Does not support $value ("${value.runtimeType}")',
+      value is MessageData ||
+          value is Map ||
+          value is List ||
+          value is String ||
+          value is Uint8List,
+      'Message data must be either `Map`, `List`, `String` or `Uint8List`.'
+      ' Does not support $value ("${value.runtimeType}")',
     );
     if (value is MessageData) {
       return value;
@@ -38,7 +38,7 @@ class MessageData<T> {
     } else {
       throw AssertionError(
         'Message data must be either `Map`, `List`, `String` or `Uint8List`.'
-            ' Does not support $value ("${value.runtimeType}")',
+        ' Does not support $value ("${value.runtimeType}")',
       );
     }
   }

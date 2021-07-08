@@ -91,4 +91,3 @@ abstract class AuthOptions {
 /// Java: io.ably.lib.rest.Auth.TokenCallback.getTokenRequest(TokenParams)
 /// returns either a [String] token or [TokenDetails] or [TokenRequest]
 typedef AuthCallback = Future<Object> Function(TokenParams params);
-

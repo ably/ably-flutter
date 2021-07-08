@@ -44,8 +44,8 @@ class MessageExtras {
   @override
   bool operator ==(Object other) =>
       other is MessageExtras &&
-          const MapEquality().equals(other.map, map) &&
-          other.delta == delta;
+      const MapEquality().equals(other.map, map) &&
+      other.delta == delta;
 
   @override
   int get hashCode => '${map.hashCode}:${delta.hashCode}'.hashCode;

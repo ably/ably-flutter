@@ -39,10 +39,10 @@ class ConnectionStateChange {
 
   /// initializes without any defaults
   ConnectionStateChange(
-      this.current,
-      this.previous,
-      this.event, {
-        this.reason,
-        this.retryIn,
-      });
+    this.current,
+    this.previous,
+    this.event, {
+    this.reason,
+    this.retryIn,
+  });
 }

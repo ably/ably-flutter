@@ -17,8 +17,7 @@ Map<int?, Rest> get restInstances =>
     _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 /// Ably's Rest client
-class Rest extends PlatformObject
-    implements RestInterface<RestChannels> {
+class Rest extends PlatformObject implements RestInterface<RestChannels> {
   /// instantiates with [ClientOptions] and a String [key]
   ///
   /// creates client options from key if [key] is provided

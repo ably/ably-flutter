@@ -218,8 +218,7 @@ class RealtimePlatformChannels
 
   @override
   @protected
-  RealtimeChannel createChannel(String name)
-  => RealtimeChannel(realtime, name);
+  RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
   @override
   void release(String name) {
