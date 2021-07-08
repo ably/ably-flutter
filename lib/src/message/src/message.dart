@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
 
-import '../../rest/src/channel_options.dart';
-import 'message_data.dart';
-import 'message_extras.dart';
+import '../../rest/rest.dart';
+import '../message.dart';
 
 /// An individual message to be sent/received by Ably
 ///
