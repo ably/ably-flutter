@@ -75,14 +75,14 @@ Some files in the project are generated to maintain sync between
 
 ## Implementing new codec types
 
-1. Add new type along with value in `_types` list at [bin/codegencontext.dart](bin/codegencontext.dart)
-2. Add an object definition  with object name and its properties to `objects` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
+2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
  This will create `Tx<ObjectName>` under which all properties are accessible.
  
 Generate platform constants and continue
 
-3. update `getCodecType` in [lib.src.codec.Codec](lib/src/native/platform_utilities/codec.dart) so new codec type is returned based on runtime type
-4. update `codecPair` in [lib.src.codec.Codec](lib/src/native/platform_utilities/codec.dart)  so new encoder/decoder is assigned for new type
+3. update `getCodecType` in [Codec.dart](lib/src/platform/src/codec.dart) so new codec type is returned based on runtime type
+4. update `codecPair` in [Codec.dart](lib/src/platform/src/codec.dart)  so new encoder/decoder is assigned for new type
 5. update `writeValue` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
  so new codec type is obtained from runtime type
 6. update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
@@ -94,7 +94,7 @@ Generate platform constants and continue
 
 ## Implementing new platform methods
 
-1. Add new method name in `_platformMethods` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 
 Generate platform constants and use wherever required
 
