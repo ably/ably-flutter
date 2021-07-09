@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'codegen_context.dart' show context;
-import 'templates/PlatformConstants.h.dart' as objc_header_template;
-import 'templates/PlatformConstants.java.dart' as java_template;
-import 'templates/PlatformConstants.m.dart' as objc_impl_template;
-import 'templates/platform_constants.dart.dart' as dart_template;
+import 'templates/platformconstants.dart.dart' as dart_template;
+import 'templates/platformconstants.h.dart' as objc_header_template;
+import 'templates/platformconstants.java.dart' as java_template;
+import 'templates/platformconstants.m.dart' as objc_impl_template;
 
 typedef Template = String Function(Map<String, dynamic> context);
 
