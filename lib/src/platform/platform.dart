@@ -6,6 +6,8 @@ export 'src/method_call_handler.dart';
 export 'src/paginated_result.dart';
 export 'src/platform.dart';
 export 'src/platform_object.dart';
+export 'src/push_channel_native.dart';
+export 'src/push_native.dart';
 export 'src/realtime/connection.dart';
 export 'src/realtime/presence.dart';
 export 'src/realtime/realtime.dart';

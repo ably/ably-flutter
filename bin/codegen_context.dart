@@ -21,6 +21,10 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'restPresenceParams',
     'presenceMessage',
     'realtimePresenceParams',
+
+    // Push Notifications
+    'deviceDetails',
+
     'errorInfo',
 
     // Events
@@ -83,6 +87,12 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'releaseRealtimeChannel', 'value': 'releaseRealtimeChannel'},
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
+  // Push Notifications
+  {'name': 'pushActivate', 'value': 'pushActivate'},
+  {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
+  {'name': 'pushSubscribe', 'value': 'pushSubscribe'},
+  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe'},
+
   // Realtime events
   {
     'name': 'onRealtimeConnectionStateChanged',
@@ -100,6 +110,9 @@ const List<Map<String, dynamic>> _platformMethods = [
 ];
 
 const List<Map<String, dynamic>> _objects = [
+  // TransportKeys exist to synchronize the string constants used in data
+  // structures sent between platforms. For example, you can see
+  // usages of [TxTransportKeys.channelName]
   {
     'name': 'TransportKeys',
     'properties': <String>[
@@ -252,7 +265,36 @@ const List<Map<String, dynamic>> _objects = [
       'presence',
       'publish',
       'subscribe',
-      'presenceSubscribe',
+      'presenceSubscribe'
+    ]
+  },
+  {
+    'name': 'FormFactorEnum',
+    'properties': <String>[
+      'phone',
+      'tablet',
+      'desktop',
+      'tv',
+      'watch',
+      'car',
+      'embedded',
+      'other'
+    ]
+  },
+  {
+    'name': 'DevicePlatformEnum',
+    'properties': <String>[
+      'ios',
+      'android',
+      'browser'
+    ]
+  },
+  {
+    'name': 'DevicePushStateEnum',
+    'properties': <String>[
+      'active',
+      'failing',
+      'failed'
     ]
   },
   {
@@ -326,6 +368,26 @@ const List<Map<String, dynamic>> _objects = [
       'waitForSync',
       'clientId',
       'connectionId',
+    ]
+  },
+  {
+    'name': 'DeviceDetails',
+    'properties': <String>[
+      'id',
+      'clientId',
+      'platform',
+      'formFactor',
+      'metadata',
+      'deviceSecret',
+      'devicePushDetails'
+    ]
+  },
+  {
+    'name': 'DevicePushDetails',
+    'properties': <String>[
+      'recipient',
+      'state',
+      'errorReason'
     ]
   },
 ];

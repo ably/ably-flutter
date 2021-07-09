@@ -34,6 +34,10 @@ NSString *const AblyPlatformMethod_onRealtimePresenceMessage= @"onRealtimePresen
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChannel";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
+NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
+NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
+NSString *const AblyPlatformMethod_pushSubscribe= @"pushSubscribe";
+NSString *const AblyPlatformMethod_pushUnsubscribe= @"pushUnsubscribe";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -167,6 +171,26 @@ NSString *const TxEnumConstants_publish = @"publish";
 NSString *const TxEnumConstants_subscribe = @"subscribe";
 NSString *const TxEnumConstants_presenceSubscribe = @"presenceSubscribe";
 
+// key constants for FormFactorEnum
+NSString *const TxFormFactorEnum_phone = @"phone";
+NSString *const TxFormFactorEnum_tablet = @"tablet";
+NSString *const TxFormFactorEnum_desktop = @"desktop";
+NSString *const TxFormFactorEnum_tv = @"tv";
+NSString *const TxFormFactorEnum_watch = @"watch";
+NSString *const TxFormFactorEnum_car = @"car";
+NSString *const TxFormFactorEnum_embedded = @"embedded";
+NSString *const TxFormFactorEnum_other = @"other";
+
+// key constants for DevicePlatformEnum
+NSString *const TxDevicePlatformEnum_ios = @"ios";
+NSString *const TxDevicePlatformEnum_android = @"android";
+NSString *const TxDevicePlatformEnum_browser = @"browser";
+
+// key constants for DevicePushStateEnum
+NSString *const TxDevicePushStateEnum_active = @"active";
+NSString *const TxDevicePushStateEnum_failing = @"failing";
+NSString *const TxDevicePushStateEnum_failed = @"failed";
+
 // key constants for ConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";
 NSString *const TxConnectionStateChange_previous = @"previous";
@@ -228,3 +252,17 @@ NSString *const TxRestPresenceParams_connectionId = @"connectionId";
 NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
 NSString *const TxRealtimePresenceParams_clientId = @"clientId";
 NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
+
+// key constants for DeviceDetails
+NSString *const TxDeviceDetails_id = @"id";
+NSString *const TxDeviceDetails_clientId = @"clientId";
+NSString *const TxDeviceDetails_platform = @"platform";
+NSString *const TxDeviceDetails_formFactor = @"formFactor";
+NSString *const TxDeviceDetails_metadata = @"metadata";
+NSString *const TxDeviceDetails_deviceSecret = @"deviceSecret";
+NSString *const TxDeviceDetails_devicePushDetails = @"devicePushDetails";
+
+// key constants for DevicePushDetails
+NSString *const TxDevicePushDetails_recipient = @"recipient";
+NSString *const TxDevicePushDetails_state = @"state";
+NSString *const TxDevicePushDetails_errorReason = @"errorReason";

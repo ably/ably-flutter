@@ -23,9 +23,10 @@ class CodecTypes {
   static const int restPresenceParams = 142;
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
-  static const int errorInfo = 145;
-  static const int connectionStateChange = 146;
-  static const int channelStateChange = 147;
+  static const int deviceDetails = 145;
+  static const int errorInfo = 146;
+  static const int connectionStateChange = 147;
+  static const int channelStateChange = 148;
 }
 
 class PlatformMethod {
@@ -57,6 +58,10 @@ class PlatformMethod {
       'publishRealtimeChannelMessage';
   static const String releaseRealtimeChannel = 'releaseRealtimeChannel';
   static const String realtimeHistory = 'realtimeHistory';
+  static const String pushActivate = 'pushActivate';
+  static const String pushDeactivate = 'pushDeactivate';
+  static const String pushSubscribe = 'pushSubscribe';
+  static const String pushUnsubscribe = 'pushUnsubscribe';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -207,6 +212,29 @@ class TxEnumConstants {
   static const String presenceSubscribe = 'presenceSubscribe';
 }
 
+class TxFormFactorEnum {
+  static const String phone = 'phone';
+  static const String tablet = 'tablet';
+  static const String desktop = 'desktop';
+  static const String tv = 'tv';
+  static const String watch = 'watch';
+  static const String car = 'car';
+  static const String embedded = 'embedded';
+  static const String other = 'other';
+}
+
+class TxDevicePlatformEnum {
+  static const String ios = 'ios';
+  static const String android = 'android';
+  static const String browser = 'browser';
+}
+
+class TxDevicePushStateEnum {
+  static const String active = 'active';
+  static const String failing = 'failing';
+  static const String failed = 'failed';
+}
+
 class TxConnectionStateChange {
   static const String current = 'current';
   static const String previous = 'previous';
@@ -276,4 +304,20 @@ class TxRealtimePresenceParams {
   static const String waitForSync = 'waitForSync';
   static const String clientId = 'clientId';
   static const String connectionId = 'connectionId';
+}
+
+class TxDeviceDetails {
+  static const String id = 'id';
+  static const String clientId = 'clientId';
+  static const String platform = 'platform';
+  static const String formFactor = 'formFactor';
+  static const String metadata = 'metadata';
+  static const String deviceSecret = 'deviceSecret';
+  static const String devicePushDetails = 'devicePushDetails';
+}
+
+class TxDevicePushDetails {
+  static const String recipient = 'recipient';
+  static const String state = 'state';
+  static const String errorReason = 'errorReason';
 }

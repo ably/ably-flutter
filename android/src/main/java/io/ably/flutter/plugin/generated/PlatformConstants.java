@@ -26,9 +26,10 @@ final public class PlatformConstants {
         public static final byte restPresenceParams = (byte) 142;
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte errorInfo = (byte) 145;
-        public static final byte connectionStateChange = (byte) 146;
-        public static final byte channelStateChange = (byte) 147;
+        public static final byte deviceDetails = (byte) 145;
+        public static final byte errorInfo = (byte) 146;
+        public static final byte connectionStateChange = (byte) 147;
+        public static final byte channelStateChange = (byte) 148;
     }
 
     static final public class PlatformMethod {
@@ -59,6 +60,10 @@ final public class PlatformConstants {
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
         public static final String releaseRealtimeChannel = "releaseRealtimeChannel";
         public static final String realtimeHistory = "realtimeHistory";
+        public static final String pushActivate = "pushActivate";
+        public static final String pushDeactivate = "pushDeactivate";
+        public static final String pushSubscribe = "pushSubscribe";
+        public static final String pushUnsubscribe = "pushUnsubscribe";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -207,6 +212,29 @@ final public class PlatformConstants {
         public static final String presenceSubscribe = "presenceSubscribe";
     }
 
+    static final public class TxFormFactorEnum {
+        public static final String phone = "phone";
+        public static final String tablet = "tablet";
+        public static final String desktop = "desktop";
+        public static final String tv = "tv";
+        public static final String watch = "watch";
+        public static final String car = "car";
+        public static final String embedded = "embedded";
+        public static final String other = "other";
+    }
+
+    static final public class TxDevicePlatformEnum {
+        public static final String ios = "ios";
+        public static final String android = "android";
+        public static final String browser = "browser";
+    }
+
+    static final public class TxDevicePushStateEnum {
+        public static final String active = "active";
+        public static final String failing = "failing";
+        public static final String failed = "failed";
+    }
+
     static final public class TxConnectionStateChange {
         public static final String current = "current";
         public static final String previous = "previous";
@@ -276,6 +304,22 @@ final public class PlatformConstants {
         public static final String waitForSync = "waitForSync";
         public static final String clientId = "clientId";
         public static final String connectionId = "connectionId";
+    }
+
+    static final public class TxDeviceDetails {
+        public static final String id = "id";
+        public static final String clientId = "clientId";
+        public static final String platform = "platform";
+        public static final String formFactor = "formFactor";
+        public static final String metadata = "metadata";
+        public static final String deviceSecret = "deviceSecret";
+        public static final String devicePushDetails = "devicePushDetails";
+    }
+
+    static final public class TxDevicePushDetails {
+        public static final String recipient = "recipient";
+        public static final String state = "state";
+        public static final String errorReason = "errorReason";
     }
 
 }

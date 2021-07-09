@@ -23,9 +23,10 @@ typedef NS_ENUM(UInt8, _Value) {
     restPresenceParamsCodecType = 142,
     presenceMessageCodecType = 143,
     realtimePresenceParamsCodecType = 144,
-    errorInfoCodecType = 145,
-    connectionStateChangeCodecType = 146,
-    channelStateChangeCodecType = 147,
+    deviceDetailsCodecType = 145,
+    errorInfoCodecType = 146,
+    connectionStateChangeCodecType = 147,
+    channelStateChangeCodecType = 148,
 };
 
 
@@ -57,6 +58,10 @@ extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
+extern NSString *const AblyPlatformMethod_pushActivate;
+extern NSString *const AblyPlatformMethod_pushDeactivate;
+extern NSString *const AblyPlatformMethod_pushSubscribe;
+extern NSString *const AblyPlatformMethod_pushUnsubscribe;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -190,6 +195,26 @@ extern NSString *const TxEnumConstants_publish;
 extern NSString *const TxEnumConstants_subscribe;
 extern NSString *const TxEnumConstants_presenceSubscribe;
 
+// key constants for FormFactorEnum
+extern NSString *const TxFormFactorEnum_phone;
+extern NSString *const TxFormFactorEnum_tablet;
+extern NSString *const TxFormFactorEnum_desktop;
+extern NSString *const TxFormFactorEnum_tv;
+extern NSString *const TxFormFactorEnum_watch;
+extern NSString *const TxFormFactorEnum_car;
+extern NSString *const TxFormFactorEnum_embedded;
+extern NSString *const TxFormFactorEnum_other;
+
+// key constants for DevicePlatformEnum
+extern NSString *const TxDevicePlatformEnum_ios;
+extern NSString *const TxDevicePlatformEnum_android;
+extern NSString *const TxDevicePlatformEnum_browser;
+
+// key constants for DevicePushStateEnum
+extern NSString *const TxDevicePushStateEnum_active;
+extern NSString *const TxDevicePushStateEnum_failing;
+extern NSString *const TxDevicePushStateEnum_failed;
+
 // key constants for ConnectionStateChange
 extern NSString *const TxConnectionStateChange_current;
 extern NSString *const TxConnectionStateChange_previous;
@@ -251,3 +276,17 @@ extern NSString *const TxRestPresenceParams_connectionId;
 extern NSString *const TxRealtimePresenceParams_waitForSync;
 extern NSString *const TxRealtimePresenceParams_clientId;
 extern NSString *const TxRealtimePresenceParams_connectionId;
+
+// key constants for DeviceDetails
+extern NSString *const TxDeviceDetails_id;
+extern NSString *const TxDeviceDetails_clientId;
+extern NSString *const TxDeviceDetails_platform;
+extern NSString *const TxDeviceDetails_formFactor;
+extern NSString *const TxDeviceDetails_metadata;
+extern NSString *const TxDeviceDetails_deviceSecret;
+extern NSString *const TxDeviceDetails_devicePushDetails;
+
+// key constants for DevicePushDetails
+extern NSString *const TxDevicePushDetails_recipient;
+extern NSString *const TxDevicePushDetails_state;
+extern NSString *const TxDevicePushDetails_errorReason;

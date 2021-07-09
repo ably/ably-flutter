@@ -1,3 +1,4 @@
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -87,6 +88,10 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimePresenceParams,
         null,
       ),
+
+      // Push Notifications
+      CodecTypes.deviceDetails:
+          _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -642,6 +647,80 @@ class Codec extends StandardMessageCodec {
       message,
       handle: jsonMap[TxAblyMessage.registrationHandle] as int?,
       type: type,
+    );
+  }
+
+  DeviceDetails _decodeDeviceDetails(Map<String, dynamic> jsonMap) {
+    FormFactor formFactor = _decodeFormFactor(
+        _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
+
+    return DeviceDetails(
+        jsonMap[TxDeviceDetails.id] as String,
+        jsonMap[TxDeviceDetails.clientId] as String,
+        _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+        formFactor,
+        jsonMap[TxDeviceDetails.metadata] as Map<String, String>,
+        jsonMap[TxDeviceDetails.deviceSecret] as String,
+        _decodeDevicePushDetails(jsonMap[TxDeviceDetails.devicePushDetails] as Map<String, dynamic>));
+  }
+
+  DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
+    return DevicePushDetails(
+        jsonMap[TxDevicePushDetails.recipient] as Map<String, String>,
+        _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
+        _decodeErrorInfo(
+            jsonMap[TxDevicePushDetails.errorReason] as Map<String, dynamic>));
+  }
+
+  FormFactor _decodeFormFactor(String? enumValue) {
+    switch (enumValue) {
+      case TxFormFactorEnum.phone:
+        return FormFactor.phone;
+      case TxFormFactorEnum.tablet:
+        return FormFactor.tablet;
+      case TxFormFactorEnum.desktop:
+        return FormFactor.desktop;
+      case TxFormFactorEnum.tv:
+        return FormFactor.tv;
+      case TxFormFactorEnum.watch:
+        return FormFactor.watch;
+      case TxFormFactorEnum.car:
+        return FormFactor.car;
+      case TxFormFactorEnum.embedded:
+        return FormFactor.embedded;
+      case TxFormFactorEnum.other:
+        return FormFactor.other;
+    }
+    throw AblyException(
+      'Platform communication error. FormFactor is invalid: $enumValue',
+    );
+  }
+
+  DevicePushState _decodeDevicePushState(String? enumValue) {
+    switch (enumValue) {
+      case TxDevicePushStateEnum.active:
+        return DevicePushState.active;
+      case TxDevicePushStateEnum.failing:
+        return DevicePushState.failing;
+      case TxDevicePushStateEnum.failed:
+        return DevicePushState.failed;
+    }
+    throw AblyException(
+      'Platform communication error. DevicePushState is invalid: $enumValue',
+    );
+  }
+
+  DevicePlatform _decodeDevicePlatform(String? enumValue) {
+    switch (enumValue) {
+      case TxDevicePlatformEnum.android:
+        return DevicePlatform.android;
+      case TxDevicePlatformEnum.ios:
+        return DevicePlatform.ios;
+      case TxDevicePlatformEnum.browser:
+        return DevicePlatform.browser;
+    }
+    throw AblyException(
+      'Platform communication error. DevicePlatform is invalid: $enumValue',
     );
   }
 

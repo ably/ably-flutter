@@ -36,6 +36,7 @@ class Realtime extends PlatformObject
         super() {
     _connection = Connection(this);
     _channels = RealtimePlatformChannels(this);
+    push = PushNative(handle);
   }
 
   @override
