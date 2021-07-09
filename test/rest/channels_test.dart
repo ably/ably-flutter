@@ -1,13 +1,13 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../utils.dart';
+import '../mock_method_call_manager.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late MockMethodCallManager manager;
-  late RestPlatformChannels channels;
+  late RestChannels channels;
 
   setUp(() {
     manager = MockMethodCallManager();
@@ -38,8 +38,8 @@ void main() {
 
     test('creates/returns channel with list accessor #[]', () {
       final channel2 = channels.get('channel-2');
-      final chanel2WithSyntacticSugar = channels['channel-2'];
-      expect(chanel2WithSyntacticSugar, channel2);
+      final channel2WithSyntacticSugar = channels['channel-2'];
+      expect(channel2WithSyntacticSugar, channel2);
 
       final channel3 = channels['channel-3'];
       expect(channel3.name, 'channel-3');

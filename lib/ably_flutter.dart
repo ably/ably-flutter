@@ -1,9 +1,12 @@
-export 'src/generated/platformconstants.dart';
-export 'src/impl/paginated_result.dart';
-export 'src/impl/realtime/channels.dart';
-export 'src/impl/realtime/connection.dart';
-export 'src/impl/realtime/realtime.dart';
-export 'src/impl/rest/channels.dart';
-export 'src/impl/rest/rest.dart';
-export 'src/info.dart';
-export 'src/spec/spec.dart';
+library ably_flutter;
+
+export 'src/authentication/authentication.dart';
+export 'src/common/common.dart';
+export 'src/error/error.dart';
+export 'src/logging/logging.dart';
+export 'src/message/message.dart';
+export 'src/platform/platform.dart';
+export 'src/push_notifications/push_notifications.dart';
+export 'src/realtime/realtime.dart';
+export 'src/rest/rest.dart';
+export 'src/stats/stats.dart';
