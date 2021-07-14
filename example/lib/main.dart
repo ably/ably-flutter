@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/ui/ably_account_sliver.dart';
 import 'package:flutter/material.dart';
 
+import 'op_state.dart';
 import 'provisioning.dart' as provisioning;
+import 'ui/system_details_sliver.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,19 +15,9 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-enum OpState {
-  notStarted,
-  inProgress,
-  succeeded,
-  failed,
-}
-
 const defaultChannel = 'test-channel';
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  String _ablyVersion = 'Unknown';
-  OpState _provisioningState = OpState.notStarted;
   provisioning.AppKey? _appKey;
   OpState _realtimeCreationState = OpState.notStarted;
   OpState _restCreationState = OpState.notStarted;
@@ -72,12 +65,6 @@ class _MyAppState extends State<MyApp> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  @override
   void dispose() {
     // This dispose would not be effective in this example as this is
     // a single view but subscriptions must be disposed when listeners are
@@ -88,61 +75,6 @@ class _MyAppState extends State<MyApp> {
       s.cancel();
     }
     super.dispose();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    print('initPlatformState()');
-
-    String platformVersion;
-    String ablyVersion;
-
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await ably.platformVersion();
-    } on ably.AblyException {
-      platformVersion = 'Failed to get platform version.';
-    }
-    try {
-      ablyVersion = await ably.version();
-    } on ably.AblyException {
-      ablyVersion = 'Failed to get Ably version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    print('queueing set state');
-    setState(() {
-      print('set state');
-      _platformVersion = platformVersion;
-      _ablyVersion = ablyVersion;
-    });
-  }
-
-  Future<void> provisionAbly() async {
-    setState(() {
-      _provisioningState = OpState.inProgress;
-    });
-
-    provisioning.AppKey appKey;
-    try {
-      appKey = await provisioning.provision('sandbox-');
-      print('App key acquired! `$appKey`');
-    } on Exception catch (error) {
-      print('Error provisioning Ably: $error');
-      setState(() {
-        _provisioningState = OpState.failed;
-      });
-      return;
-    }
-
-    setState(() {
-      _appKey = appKey;
-      _provisioningState = OpState.succeeded;
-    });
   }
 
   Future<void> createAblyRest() async {
@@ -316,9 +248,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-
-  Widget provisionButton() => button(_provisioningState, provisionAbly,
-      'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
 
   Widget createRestButton() => button(_restCreationState, createAblyRest,
       'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
@@ -733,17 +662,9 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
-                  const Text(
-                    'System Details',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Running on: $_platformVersion\n'),
-                  Text('Ably version: $_ablyVersion\n'),
-                  provisionButton(),
-                  Text(
-                    'App Key:'
-                    ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
-                  ),
+                  SystemDetailsSliver(),
+                  const Divider(),
+                  AblyAccountSliver(),
                   const Divider(),
                   const Text(
                     'Realtime',
@@ -857,6 +778,8 @@ class _MyAppState extends State<MyApp> {
                           .toList() ??
                       [],
                   releaseRestChannel(),
+                  const Divider(),
+                  // PushNotificationsSliver(_realtime)
                 ]),
           ),
         ),

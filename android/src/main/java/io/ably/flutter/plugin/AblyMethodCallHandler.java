@@ -587,6 +587,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     });
   }
 
+  private void pushActivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+
+  }
+
+  private void pushDeactivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+
+  }
+
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<Integer>ablyDo(
