@@ -857,6 +857,8 @@ class _MyAppState extends State<MyApp> {
                           .toList() ??
                       [],
                   releaseRestChannel(),
+                  const Divider(),
+                  // PushNotificationsSliver(_realtime)
                 ]),
           ),
         ),

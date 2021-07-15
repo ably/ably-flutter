@@ -30,6 +30,7 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
         options = options ?? ClientOptions.fromKey(key!),
         super() {
     channels = RestChannels(this);
+    push = PushNative(handle);
   }
 
   @override
@@ -82,7 +83,7 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
   }
 
   @override
-  Push? push;
+  late Push push;
 
   @override
   late RestChannels channels;
