@@ -8,7 +8,7 @@ Future<Map<String, dynamic>> testRealtimePublish({
   Reporter? reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final appKey = await provision('sandbox-');
+  final appKey = await createTemporaryApiKey('sandbox-');
   final logMessages = <List<String?>>[];
 
   final realtime = Realtime(

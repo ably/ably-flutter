@@ -9,8 +9,6 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final appKey = await provision('sandbox-');
-
   final connectionStates = <String>[];
   final connectionStateChanges = <Map<String, dynamic>>[];
   final filteredConnectionStateChanges = <Map<String, dynamic>>[];
@@ -20,7 +18,7 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   final filteredChannelStateChanges = <Map<String, dynamic>>[];
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
+    options: ClientOptions.fromKey(await createTemporaryApiKey('sandbox-'))
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
       ..autoConnect = false,

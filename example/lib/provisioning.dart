@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
@@ -41,17 +43,6 @@ const _requestHeaders = {
   'Accept': 'application/json',
 };
 
-class AppKey {
-  final String name;
-  final String secret;
-  final String _keyStr;
-
-  AppKey(this.name, this.secret, this._keyStr);
-
-  @override
-  String toString() => _keyStr;
-}
-
 Future<Map> _provisionApp(
   final String environmentPrefix, [
   Map<String, List>? appSpec,
@@ -72,7 +63,7 @@ Future<Map> _provisionApp(
   return jsonDecode(response.body) as Map;
 }
 
-Future<AppKey> provision(
+Future<String> createTemporaryApiKey(
   String environmentPrefix, [
   Map<String, List>? appSpec,
 ]) async {
@@ -80,12 +71,7 @@ Future<AppKey> provision(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
   ).retry(() => _provisionApp(environmentPrefix, appSpec));
-  final key = result['keys'][0];
-  return AppKey(
-    key['keyName'] as String,
-    key['keySecret'] as String,
-    key['keyStr'] as String,
-  );
+  return result['keys'][0]['keyStr'] as String;
 }
 
 Future<Map<String, dynamic>> getTokenRequest() async {
@@ -101,18 +87,20 @@ Future<Map<String, dynamic>> getTokenRequest() async {
   );
 }
 
-Future<Map<String, dynamic>> getTokenDetails(
-  String keyName,
-  String keySecret, [
-  String prefix = '',
+Future<ably.TokenDetails> getTokenDetails(
+  String key, [
+  String environmentPrefix = '',
 ]) async {
   final stringToBase64 = utf8.fuse(base64);
+  final keyComponents = key.split(":");
+  final keyName = keyComponents[0];
+  final keySecret = keyComponents[1];
   final encoded = stringToBase64.encode('$keyName:$keySecret');
   final r = await const RetryOptions(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
   ).retry(() => http.post(
-        Uri.parse(tokenDetailsURL(keyName, prefix)),
+        Uri.parse(tokenDetailsURL(keyName, environmentPrefix)),
         headers: {
           'Authorization': 'Basic $encoded',
           'Content-Type': 'application/json',
@@ -123,7 +111,9 @@ Future<Map<String, dynamic>> getTokenDetails(
         }),
       ));
   print('tokenDetails from server: ${r.body}');
-  return Map.castFrom<dynamic, dynamic, String, dynamic>(
-    jsonDecode(r.body) as Map,
-  );
+  // Map<String, dynamic> tokenDetailsMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
+  //   ,
+  // );
+
+  return ably.TokenDetails.fromMap(jsonDecode(r.body) as Map<String, dynamic>);
 }

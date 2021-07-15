@@ -12,7 +12,7 @@ Future<Map<String, dynamic>> testRestPublish({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = await provision('sandbox-');
+  final appKey = await createTemporaryApiKey('sandbox-');
   final logMessages = <List<String?>>[];
 
   final rest = Rest(
@@ -34,7 +34,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final appKey = await provision('sandbox-');
+  final appKey = await createTemporaryApiKey('sandbox-');
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())

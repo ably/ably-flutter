@@ -19,7 +19,7 @@ Future<Map<String, dynamic>> testRestCapabilities({
   for (var i = 0; i < combinations.length; i++) {
     capabilitySpec['channel-$i'] = combinations[i];
   }
-  final appKey = await provision('sandbox-', {
+  final appKey = await createTemporaryApiKey('sandbox-', {
     'keys': [
       {'capability': jsonEncode(capabilitySpec)},
     ],

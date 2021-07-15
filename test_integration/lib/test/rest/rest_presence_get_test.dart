@@ -24,7 +24,7 @@ Future<Map<String, dynamic>> testRestPresenceGet({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = (await createTemporaryApiKey('sandbox-')).toString();
 
   final rest = Rest(options: getClientOptions(appKey));
   final channel = rest.channels.get('test');

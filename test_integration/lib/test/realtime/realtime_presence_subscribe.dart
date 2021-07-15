@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = (await createTemporaryApiKey('sandbox-')).toString();
   final presence = Realtime(
     options: ClientOptions.fromKey(appKey)
       ..environment = 'sandbox'

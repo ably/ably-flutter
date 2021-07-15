@@ -41,7 +41,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final appKey = await provision('sandbox-');
+  final appKey = await createTemporaryApiKey('sandbox-');
 
   final allMessages = await _getAllMessages(appKey.toString(), 'test-all');
   final nameFiltered = await _getAllMessages(

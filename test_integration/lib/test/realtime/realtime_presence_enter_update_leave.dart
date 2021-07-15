@@ -23,7 +23,7 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = (await createTemporaryApiKey('sandbox-')).toString();
 
   final clientIds = [null, 'client-1', 'client-2'];
   final clientIDClashMatrix = <Map<String, dynamic>>[];

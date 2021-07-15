@@ -24,7 +24,7 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = (await createTemporaryApiKey('sandbox-')).toString();
 
   final realtime = Realtime(options: getClientOptions(appKey));
   final channel = realtime.channels.get('test');

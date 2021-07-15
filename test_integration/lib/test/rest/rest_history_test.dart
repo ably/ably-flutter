@@ -11,7 +11,7 @@ Future<Map<String, dynamic>> testRestHistory({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = await provision('sandbox-');
+  final appKey = await createTemporaryApiKey('sandbox-');
   final logMessages = <List<String?>>[];
 
   final rest = Rest(

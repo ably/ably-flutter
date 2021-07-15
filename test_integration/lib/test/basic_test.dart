@@ -8,7 +8,7 @@ Future<Map<String, dynamic>> testAppKeyProvision({
   Map<String, dynamic>? payload,
 }) async =>
     {
-      'appKey': (await provision('sandbox-')).toString(),
+      'appKey': (await createTemporaryApiKey('sandbox-')).toString(),
       'tokenRequest': await getTokenRequest(),
     };
 

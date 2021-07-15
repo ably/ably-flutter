@@ -1,4 +1,4 @@
-enum OpState {
+enum StageButtonStage {
   notStarted,
   inProgress,
   succeeded,
