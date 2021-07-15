@@ -2,7 +2,7 @@ package io.ably.flutter.plugin;
 
 import androidx.annotation.NonNull;
 
-class AblyFlutterMessage<T> {
+public class AblyFlutterMessage<T> {
     final Long handle;
     final T message;
 

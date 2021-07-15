@@ -2,6 +2,7 @@ package io.ably.flutter.plugin;
 
 import android.util.LongSparseArray;
 
+import io.ably.lib.push.Push;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
@@ -13,7 +14,6 @@ class AblyLibrary {
     private static AblyLibrary _instance;
     private long _nextHandle = 1;
 
-    // privatizing default constructor to enforce usage of getInstance
     private AblyLibrary() {
     }
 
@@ -24,8 +24,10 @@ class AblyLibrary {
         return _instance;
     }
 
-    //    using LongSparseArray as suggested by Studio
-    //    and as per this answer https://stackoverflow.com/a/31413003
+    // Android Studio warns against using HashMap with integer keys, and
+    // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
+    // It may be simpler to go back to HashMap because this is an unmeasured memory optimisation.
+    // > the Hashmap and the SparseArray are very similar for data structure sizes under 1,000
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
     private final LongSparseArray<Object> _restTokenData = new LongSparseArray<>();
 
@@ -69,6 +71,20 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
+    Push getPushFromAblyClient(final long handle) {
+        AblyRealtime realtime = getRealtime(handle);
+        if (realtime != null) {
+            return realtime.push;
+        }
+
+        AblyRest rest = getRest(handle);
+        if (rest != null) {
+            return rest.push;
+        }
+
+        return null;
+    }
+
     void setRealtimeToken(long handle, Object tokenDetails) {
         _realtimeTokenData.put(handle, tokenDetails);
     }
@@ -79,18 +95,18 @@ class AblyLibrary {
         return token;
     }
 
-    long setPaginatedResult(AsyncPaginatedResult result, Integer handle){
+    long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
-        if(handle==null){
+        if (handle == null) {
             longHandle = _nextHandle++;
-        }else {
+        } else {
             longHandle = handle.longValue();
         }
         _paginatedResults.put(longHandle, result);
         return longHandle;
     }
 
-    AsyncPaginatedResult<Object> getPaginatedResult(long handle){
+    AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
         return _paginatedResults.get(handle);
     }
 

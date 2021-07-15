@@ -14,6 +14,7 @@ import java.util.Map;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
+import io.ably.lib.push.Push;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.realtime.Presence;
@@ -28,7 +29,6 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static AblyMethodCallHandler _instance;
@@ -589,11 +589,27 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void pushActivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-
+    this.<Integer>ablyDo(message, (ablyLibrary, ablyClientHandle) -> {
+      Push ablyPush = ablyLibrary.getPushFromAblyClient(ablyClientHandle);
+      try {
+        ablyPush.activate();
+      } catch (AblyException e) {
+        handleAblyException(result, e);
+      }
+    });
   }
 
   private void pushDeactivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-
+    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+    this.<Integer>ablyDo(message, (ablyLibrary, ablyClientHandle) -> {
+      Push ablyPush = ablyLibrary.getPushFromAblyClient(ablyClientHandle);
+      try {
+        // TODO consider the
+        ablyPush.deactivate();
+      } catch (AblyException e) {
+        handleAblyException(result, e);
+      }
+    });
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

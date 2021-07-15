@@ -56,7 +56,12 @@ Features that we do not currently support, but we do plan to add in the future:
 - Clone the repo
 - cd to `example` folder
 - run `flutter pub get` to install dependencies
-- Android only: Create a firebase project add download a `google-services.json` file. Move this file to `example/android/app`.
+- Get/ create an Ably API key from your account on ably.com
+    - If starting the app using the command line, run `flutter run --dart-define=ABLY_API_KEY=put_your_api_key_here`
+    - If starting the app using Android Studio:
+        - Edit the example app run configuration
+          add the --dart-define flag to `additional run args`
+- Android only: Create a firebase project, add an Android app to it, add download a `google-services.json` file. Move this file to `example/android/app`.
 - `flutter run` will start the application on connected android / iOS device
 
 ### Push Notifications

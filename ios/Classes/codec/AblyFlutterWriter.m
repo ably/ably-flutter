@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_END
         return tokenParamsCodecType;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
         return paginatedResultCodecType;
+    } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
+        return deviceDetailsCodecType;
     }
     return 0;
 }
@@ -45,6 +47,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", presenceMessageCodecType]: encodePresenceMessage,
         [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
         [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
+        [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: encodeDeviceDetails,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -290,5 +293,29 @@ static AblyCodecEncoder encodePaginatedResult = ^NSMutableDictionary*(ARTPaginat
     
     return dictionary;
 };
+
+static AblyCodecEncoder encodeDeviceDetails = ^NSMutableDictionary*(ARTDeviceDetails *const deviceDetails) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+
+    WRITE_VALUE(dictionary, TxDeviceDetails_id, deviceDetails.id);
+    WRITE_VALUE(dictionary, TxDeviceDetails_clientId, deviceDetails.clientId);
+    WRITE_VALUE(dictionary, TxDeviceDetails_platform, deviceDetails.platform);
+    WRITE_VALUE(dictionary, TxDeviceDetails_formFactor, deviceDetails.formFactor);
+    WRITE_VALUE(dictionary, TxDeviceDetails_metadata, deviceDetails.metadata);
+    WRITE_VALUE(dictionary, TxDeviceDetails_deviceSecret, deviceDetails.secret);
+    WRITE_VALUE(dictionary, TxDeviceDetails_devicePushDetails, encodeDevicePushDetails(deviceDetails.push));
+
+    return dictionary;
+}
+
+static AblyCodecEncoder encodeDevicePushDetails = ^NSMutableDictionary*(ARTDevicePushDetails devicePushDetails) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+
+    WRITE_VALUE(dictionary, TxDevicePushDetails_recipient, devicePushDetails.recipient);
+    WRITE_VALUE(dictionary, TxDevicePushDetails_state, devicePushDetails.state);
+    WRITE_VALUE(dictionary, TxDevicePushDetails_errorReason, encodeErrorInfo(devicePushDetails.errorReason));
+
+    return dictionary;
+}
 
 @end

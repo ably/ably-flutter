@@ -3,20 +3,15 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 
+import 'op_state.dart';
 import 'provisioning.dart' as provisioning;
+import 'ui/push_notifications_sliver.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
-}
-
-enum OpState {
-  notStarted,
-  inProgress,
-  succeeded,
-  failed,
 }
 
 const defaultChannel = 'test-channel';
@@ -858,7 +853,7 @@ class _MyAppState extends State<MyApp> {
                       [],
                   releaseRestChannel(),
                   const Divider(),
-                  // PushNotificationsSliver(_realtime)
+                  PushNotificationsSliver(realtime: _realtime, rest: _rest)
                 ]),
           ),
         ),

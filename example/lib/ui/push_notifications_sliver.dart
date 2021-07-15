@@ -1,12 +1,21 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 
-import 'four_mode_text_button.dart';
+import '../op_state.dart';
 
 class PushNotificationsSliver extends StatefulWidget {
-  final ably.Realtime? _realtime;
+  late final ably.AblyBase? _client;
 
-  const PushNotificationsSliver(this._realtime, {Key? key}) : super(key: key);
+  PushNotificationsSliver({ably.Realtime? realtime, ably.Rest? rest, Key? key})
+      : super(key: key) {
+    if (realtime != null) {
+      _client = realtime;
+    } else if (rest != null) {
+      _client = rest;
+    } else {
+      _client = null;
+    }
+  }
 
   @override
   _PushNotificationsSliverState createState() =>
@@ -14,13 +23,19 @@ class PushNotificationsSliver extends StatefulWidget {
 }
 
 class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
-  bool _deviceActivationState = false;
+  OpState _deviceActivationState = OpState.notStarted;
 
-  // TODO determine if device has been activated any time in the past
+  @override
+  void initState() {
+    super.initState();
+    // TODO determine if device has been activated any time in the past
+      _deviceActivationState = OpState.notStarted;
+  }
+
   String? deviceId;
 
   Widget instantiateRealtimeWarning() {
-    if (widget._realtime == null) {
+    if (widget._client == null) {
       return RichText(
           text: TextSpan(children: [
         TextSpan(
@@ -37,6 +52,12 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget._client == null) {
+      return Container(
+          child: Text(
+              "No client exists, create either a rest or realtime client."));
+    }
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,25 +70,24 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
           (deviceId != null)
               ? Text("Device is registered with \(deviceId)")
               : Text("Device is not registered"),
-          FourModeActionButton(
-              actionText: "Activate",
-              opState: ,
+          TextButton(
+              child: Text("Activate device"),
+              // stage: _deviceActivationState,
               // disabled: widget._realtime == null,
               // isSuccessful: _deviceActivationState,
               onPressed: () async {
-                print(widget._realtime);
                 ably.DeviceDetails deviceDetails =
-                    await widget._realtime!.push.activate();
-                print(deviceDetails);
+                    await widget._client!.push.activate();
+                print("Device details: $deviceDetails");
                 setState(() {
-                  _deviceActivationState = true;
+                  _deviceActivationState = OpState.succeeded;
                 });
               }),
-          FourModeActionButton(
-              actionText: "Deactivate",
-              disabled: _deviceActivationState || widget._realtime == null,
+          TextButton(
+              child: Text("Deactivate device"),
+              // stage: OpState.notStarted,
               onPressed: () {
-                print(widget._realtime);
+                print(widget._client);
               }),
         ],
       ),
