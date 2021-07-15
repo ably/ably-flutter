@@ -475,10 +475,6 @@ channel
 );
 ```
 
-### Enabling Push Notifications
-- TODO add instructions for Android and iOS platform side
-- TODO add example code usage
-
 ## Caveats
 
 ### RTE6a compliance

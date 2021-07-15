@@ -64,7 +64,7 @@ class Realtime extends PlatformObject
   ClientOptions options;
 
   @override
-  late Push push;
+  Push? push;
 
   late RealtimePlatformChannels _channels;
 

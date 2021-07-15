@@ -25,7 +25,7 @@ abstract class AblyBase {
 
   /// a push object interacting with Push API
   /// viz., subscribing for push notifications, etc
-  late Push push;
+  Push? push;
 
   /// gets stats based on params as a [PaginatedResult]
   ///
