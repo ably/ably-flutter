@@ -8,8 +8,8 @@ class PushNative extends PlatformObject implements Push {
   PushNative(this._handle) : super();
 
   @override
-  Future<DeviceDetails> activate() =>
-      invokeRequest<DeviceDetails>(PlatformMethod.pushActivate);
+  Future<void> activate() =>
+      invoke(PlatformMethod.pushActivate);
 
   @override
   Future<String> deactivate() =>

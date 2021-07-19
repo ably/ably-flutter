@@ -72,9 +72,8 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
               onPressed: (widget._client == null)
                   ? null
                   : () async {
-                      ably.DeviceDetails deviceDetails =
-                          await widget._client!.push.activate();
-                      print("Device details: $deviceDetails");
+                      await widget._client!.push.activate();
+                      print("Push: ${widget._client?.push}");
                       setState(() {
                         _deviceActivationState = OpState.succeeded;
                       });

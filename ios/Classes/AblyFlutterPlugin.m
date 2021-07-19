@@ -517,30 +517,28 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 };
 
 typedef ARTPush* (^GetPushFromAblyClientHandler)(AblyFlutter * ably, FlutterMethodCall * call);
-static const GetPushFromAblyClientHandler getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter const* ably, FlutterMethodCall *const call) {
+static const GetPushFromAblyClientHandler _getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter const* ably, FlutterMethodCall *const call) {
     AblyFlutterMessage *const message = call.arguments;
-    AblyFlutterMessage *const data = message.message;
-    NSNumber *const ablyClientHandle = data.handle;
+    NSNumber *const ablyClientHandle = message.message;
     
-    ARTPush* push = nil;
     ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: ablyClientHandle];
     ARTRest *const restWithHandle = [ably getRest:ablyClientHandle];
     
     if (realtimeWithHandle != nil) {
-        push = realtimeWithHandle.push;
+        return realtimeWithHandle.push;
     } else if (restWithHandle != nil) {
-        push = restWithHandle.push;
-    } else {
-        // TODO Throw error
+        return restWithHandle.push;
     }
     
-    return push;
+    [NSException raise: NSInternalInconsistencyException
+                format: @"No ably client exists (rest or realtime)"];
+    return nil;
 };
 
 static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    ARTPush* push = getPushFromAblyClientHandle([plugin ably], call);
+    ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
     [push activate];
-    // TODO return a success code to the caller?
+    result(nil);
 };
 
 static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {

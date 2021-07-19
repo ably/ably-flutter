@@ -15,9 +15,8 @@ abstract class Push {
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.
   ///
-  /// returns DeviceDetails
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
-  Future<DeviceDetails> activate();
+  Future<void> activate();
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as GCM/APNS.
