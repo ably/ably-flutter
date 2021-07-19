@@ -1,25 +1,29 @@
 package io.ably.flutter.plugin;
 
+import android.content.Context;
 import android.util.LongSparseArray;
 
-import io.ably.lib.push.Push;
 import io.ably.lib.realtime.AblyRealtime;
+import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
+import io.ably.lib.types.ErrorInfo;
 
 class AblyLibrary {
 
     private static AblyLibrary _instance;
     private long _nextHandle = 1;
+    final private Context applicationContext;
 
-    private AblyLibrary() {
+    private AblyLibrary(Context applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
-    static synchronized AblyLibrary getInstance() {
+    static synchronized AblyLibrary getInstance(Context applicationContext) {
         if (null == _instance) {
-            _instance = new AblyLibrary();
+            _instance = new AblyLibrary(applicationContext);
         }
         return _instance;
     }
@@ -42,6 +46,7 @@ class AblyLibrary {
 
     long createRest(final ClientOptions clientOptions) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
+        rest.setAndroidContext(applicationContext);
         _restInstances.put(_nextHandle, rest);
         return _nextHandle++;
     }
@@ -63,6 +68,7 @@ class AblyLibrary {
 
     long createRealtime(final ClientOptions clientOptions) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
+        realtime.setAndroidContext(applicationContext);
         _realtimeInstances.put(_nextHandle, realtime);
         return _nextHandle++;
     }
@@ -71,18 +77,18 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
-    Push getPushFromAblyClient(final long handle) {
+    AblyBase getAblyClient(final long handle) throws AblyException {
         AblyRealtime realtime = getRealtime(handle);
         if (realtime != null) {
-            return realtime.push;
+            return realtime;
         }
 
         AblyRest rest = getRest(handle);
         if (rest != null) {
-            return rest.push;
+            return rest;
         }
 
-        return null;
+        throw AblyException.fromErrorInfo(new ErrorInfo("No Ably client exists", 400, 40000));
     }
 
     void setRealtimeToken(long handle, Object tokenDetails) {
