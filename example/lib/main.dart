@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
 import 'op_state.dart';
-import 'provisioning.dart' as provisioning;
 import 'ui/push_notifications_sliver.dart';
 
 void main() => runApp(MyApp());
@@ -19,8 +19,7 @@ const defaultChannel = 'test-channel';
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
-  OpState _provisioningState = OpState.notStarted;
-  provisioning.AppKey? _appKey;
+  final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   OpState _realtimeCreationState = OpState.notStarted;
   OpState _restCreationState = OpState.notStarted;
   ably.Realtime? _realtime;
@@ -117,48 +116,23 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> provisionAbly() async {
-    setState(() {
-      _provisioningState = OpState.inProgress;
-    });
-
-    provisioning.AppKey appKey;
-    try {
-      appKey = await provisioning.provision('sandbox-');
-      print('App key acquired! `$appKey`');
-    } on Exception catch (error) {
-      print('Error provisioning Ably: $error');
-      setState(() {
-        _provisioningState = OpState.failed;
-      });
-      return;
-    }
-
-    setState(() {
-      _appKey = appKey;
-      _provisioningState = OpState.succeeded;
-    });
-  }
-
   Future<void> createAblyRest() async {
     setState(() {
       _restCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions()
-          // .fromKey(_appKey.toString())
-          ..environment = 'sandbox'
+    final clientOptions = ably.ClientOptions
+          .fromKey(_apiKey)
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
             print('Custom logger :: $msg $exception');
           }
-          ..tokenDetails = ably.TokenDetails.fromMap(
+/*          ..tokenDetails = ably.TokenDetails.fromMap(
             await provisioning.getTokenDetails(
-              _appKey!.name,
-              _appKey!.secret,
+              _apiKey,
               'sandbox-',
             ),
-          )
+          )*/
         /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
         /*..authCallback = (params) async => ably.TokenRequest.fromMap(
             Map.castFrom<dynamic, dynamic, String, dynamic>(
@@ -207,8 +181,7 @@ class _MyAppState extends State<MyApp> {
       _realtimeCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
-      ..environment = 'sandbox'
+    final clientOptions = ably.ClientOptions.fromKey(_apiKey)
       ..clientId = 'flutter-example-app'
       ..logLevel = ably.LogLevel.verbose
       ..autoConnect = false
@@ -311,9 +284,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-
-  Widget provisionButton() => button(_provisioningState, provisionAbly,
-      'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
 
   Widget createRestButton() => button(_restCreationState, createAblyRest,
       'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
@@ -734,11 +704,31 @@ class _MyAppState extends State<MyApp> {
                   ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
-                  provisionButton(),
-                  Text(
-                    'App Key:'
-                    ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
-                  ),
+                  // provisionButton(),
+                  if (_apiKey == '')
+                    RichText(
+                      text: const TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                                text: "Warning: ",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                    'API key is not configured, use '),
+                            TextSpan(
+                                text:
+                                    '`flutter run --dart-define=ABLY_API_KEY=your_api_key`',
+                                style: TextStyle()),
+                            TextSpan(
+                              text: "or add this to the 'additional run args' in the run configuration in Android Studio."
+                            )
+                          ]),
+                    )
+                  else
+                    Text('API key: $_apiKey'),
                   const Divider(),
                   const Text(
                     'Realtime',
