@@ -29,20 +29,20 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
   void initState() {
     super.initState();
     // TODO determine if device has been activated any time in the past
-      _deviceActivationState = OpState.notStarted;
+    _deviceActivationState = OpState.notStarted;
   }
 
   String? deviceId;
 
-  Widget instantiateRealtimeWarning() {
+  Widget buildMissingAblyClientWarningText() {
     if (widget._client == null) {
       return RichText(
           text: TextSpan(children: [
         TextSpan(
             text: "Warning: ",
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.normal)),
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
         TextSpan(
-            text: "instantiate an Ably realtime client.",
+            text: "Create a realtime or rest client",
             style: TextStyle(color: Colors.black))
       ]));
     }
@@ -52,12 +52,6 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget._client == null) {
-      return Container(
-          child: Text(
-              "No client exists, create either a rest or realtime client."));
-    }
-
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,7 +60,7 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
             'Push Notifications',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          instantiateRealtimeWarning(),
+          buildMissingAblyClientWarningText(),
           (deviceId != null)
               ? Text("Device is registered with \(deviceId)")
               : Text("Device is not registered"),
@@ -75,20 +69,40 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
               // stage: _deviceActivationState,
               // disabled: widget._realtime == null,
               // isSuccessful: _deviceActivationState,
-              onPressed: () async {
-                ably.DeviceDetails deviceDetails =
-                    await widget._client!.push.activate();
-                print("Device details: $deviceDetails");
-                setState(() {
-                  _deviceActivationState = OpState.succeeded;
-                });
-              }),
+              onPressed: (widget._client == null)
+                  ? null
+                  : () async {
+                      ably.DeviceDetails deviceDetails =
+                          await widget._client!.push.activate();
+                      print("Device details: $deviceDetails");
+                      setState(() {
+                        _deviceActivationState = OpState.succeeded;
+                      });
+                    }),
           TextButton(
               child: Text("Deactivate device"),
               // stage: OpState.notStarted,
-              onPressed: () {
-                print(widget._client);
-              }),
+              onPressed: (widget._client == null)
+                  ? null
+                  : () async {
+                      print(widget._client);
+                    }),
+          TextButton(
+            child: Text("Subscribe device"),
+            onPressed: () {},
+          ),
+          TextButton(child: Text("Subscribe client"), onPressed: () {}),
+          TextButton(
+            child: Text("Unsubscribe device"),
+            onPressed: () {},
+          ),
+          TextButton(child: Text("Unsubscribe client"), onPressed: () {}),
+          TextButton(
+            child: Text("Publish to channel"),
+            onPressed: () {},
+          ),
+          TextButton(child: Text("Publish to client"), onPressed: () {}),
+          TextButton(child: Text("List subscriptions"), onPressed: () {}),
         ],
       ),
     );
