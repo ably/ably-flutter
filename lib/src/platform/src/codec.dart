@@ -1,4 +1,5 @@
 import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -92,6 +93,7 @@ class Codec extends StandardMessageCodec {
       // Push Notifications
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
+      CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -655,13 +657,14 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
-        jsonMap[TxDeviceDetails.id] as String,
-        jsonMap[TxDeviceDetails.clientId] as String,
-        _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
-        formFactor,
-        jsonMap[TxDeviceDetails.metadata] as Map<String, String>,
-        jsonMap[TxDeviceDetails.deviceSecret] as String,
-        _decodeDevicePushDetails(jsonMap[TxDeviceDetails.devicePushDetails] as Map<String, dynamic>));
+      jsonMap[TxDeviceDetails.id] as String,
+      jsonMap[TxDeviceDetails.clientId] as String,
+      _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+      formFactor,
+      jsonMap[TxDeviceDetails.metadata] as Map<String, String>,
+      _decodeDevicePushDetails(
+          jsonMap[TxDeviceDetails.devicePushDetails] as Map<String, dynamic>),
+    );
   }
 
   DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
@@ -671,6 +674,11 @@ class Codec extends StandardMessageCodec {
         _decodeErrorInfo(
             jsonMap[TxDevicePushDetails.errorReason] as Map<String, dynamic>));
   }
+
+  LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
+      _decodeDeviceDetails(jsonMap),
+      jsonMap[TxLocalDevice.deviceSecret] as String,
+      jsonMap[TxLocalDevice.deviceIdentityToken] as String);
 
   FormFactor _decodeFormFactor(String? enumValue) {
     switch (enumValue) {
@@ -721,6 +729,15 @@ class Codec extends StandardMessageCodec {
     }
     throw AblyException(
       'Platform communication error. DevicePlatform is invalid: $enumValue',
+    );
+  }
+
+  PushChannelSubscription _decodePushChannelSubscription(
+      Map<String, dynamic> jsonMap) {
+    return PushChannelSubscription(
+      channel: jsonMap[TxPushChannelSubscription.channel] as String,
+      clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
+      deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
     );
   }
 

@@ -6,6 +6,7 @@ export 'src/device_push_details.dart';
 export 'src/device_push_state.dart';
 export 'src/device_registration_params.dart';
 export 'src/form_factor.dart';
+export 'src/local_device.dart';
 export 'src/push.dart';
 export 'src/push_channel.dart';
 export 'src/push_channel_params.dart';

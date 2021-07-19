@@ -24,9 +24,10 @@ typedef NS_ENUM(UInt8, _Value) {
     presenceMessageCodecType = 143,
     realtimePresenceParamsCodecType = 144,
     deviceDetailsCodecType = 145,
-    errorInfoCodecType = 146,
-    connectionStateChangeCodecType = 147,
-    channelStateChangeCodecType = 148,
+    localDeviceCodecType = 146,
+    errorInfoCodecType = 147,
+    connectionStateChangeCodecType = 148,
+    channelStateChangeCodecType = 149,
 };
 
 
@@ -60,8 +61,12 @@ extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_pushActivate;
 extern NSString *const AblyPlatformMethod_pushDeactivate;
-extern NSString *const AblyPlatformMethod_pushSubscribe;
-extern NSString *const AblyPlatformMethod_pushUnsubscribe;
+extern NSString *const AblyPlatformMethod_pushSubscribeDevice;
+extern NSString *const AblyPlatformMethod_pushUnsubscribeDevice;
+extern NSString *const AblyPlatformMethod_pushSubscribeClient;
+extern NSString *const AblyPlatformMethod_pushUnsubscribeClient;
+extern NSString *const AblyPlatformMethod_pushListSubscriptions;
+extern NSString *const AblyPlatformMethod_pushDevice;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -283,10 +288,18 @@ extern NSString *const TxDeviceDetails_clientId;
 extern NSString *const TxDeviceDetails_platform;
 extern NSString *const TxDeviceDetails_formFactor;
 extern NSString *const TxDeviceDetails_metadata;
-extern NSString *const TxDeviceDetails_deviceSecret;
 extern NSString *const TxDeviceDetails_devicePushDetails;
 
 // key constants for DevicePushDetails
 extern NSString *const TxDevicePushDetails_recipient;
 extern NSString *const TxDevicePushDetails_state;
 extern NSString *const TxDevicePushDetails_errorReason;
+
+// key constants for LocalDevice
+extern NSString *const TxLocalDevice_deviceSecret;
+extern NSString *const TxLocalDevice_deviceIdentityToken;
+
+// key constants for PushChannelSubscription
+extern NSString *const TxPushChannelSubscription_channel;
+extern NSString *const TxPushChannelSubscription_deviceId;
+extern NSString *const TxPushChannelSubscription_clientId;

@@ -179,4 +179,8 @@ class Realtime extends PlatformObject
   Future<DateTime> time() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<LocalDevice> device() async =>
+      invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

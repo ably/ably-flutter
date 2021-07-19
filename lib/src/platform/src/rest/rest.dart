@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
+
 import '../../../authentication/authentication.dart';
 import '../../../common/common.dart';
 import '../../../generated/platform_constants.dart';
@@ -87,4 +89,8 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
 
   @override
   late RestChannels channels;
+
+  @override
+  Future<LocalDevice> device() async =>
+      invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

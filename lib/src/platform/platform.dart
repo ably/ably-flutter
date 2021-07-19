@@ -13,6 +13,7 @@ export 'src/realtime/presence.dart';
 export 'src/realtime/realtime.dart';
 export 'src/realtime/realtime_channel.dart';
 export 'src/rest/rest.dart';
+export 'src/rest/rest_channel.dart';
 export 'src/rest/rest_channels.dart';
 export 'src/rest/rest_presence.dart';
 export 'src/streams_channel.dart';

@@ -36,8 +36,12 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
-NSString *const AblyPlatformMethod_pushSubscribe= @"pushSubscribe";
-NSString *const AblyPlatformMethod_pushUnsubscribe= @"pushUnsubscribe";
+NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
+NSString *const AblyPlatformMethod_pushUnsubscribeDevice= @"pushUnsubscribeDevice";
+NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
+NSString *const AblyPlatformMethod_pushUnsubscribeClient= @"pushUnsubscribeClient";
+NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscriptions";
+NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -259,10 +263,18 @@ NSString *const TxDeviceDetails_clientId = @"clientId";
 NSString *const TxDeviceDetails_platform = @"platform";
 NSString *const TxDeviceDetails_formFactor = @"formFactor";
 NSString *const TxDeviceDetails_metadata = @"metadata";
-NSString *const TxDeviceDetails_deviceSecret = @"deviceSecret";
 NSString *const TxDeviceDetails_devicePushDetails = @"devicePushDetails";
 
 // key constants for DevicePushDetails
 NSString *const TxDevicePushDetails_recipient = @"recipient";
 NSString *const TxDevicePushDetails_state = @"state";
 NSString *const TxDevicePushDetails_errorReason = @"errorReason";
+
+// key constants for LocalDevice
+NSString *const TxLocalDevice_deviceSecret = @"deviceSecret";
+NSString *const TxLocalDevice_deviceIdentityToken = @"deviceIdentityToken";
+
+// key constants for PushChannelSubscription
+NSString *const TxPushChannelSubscription_channel = @"channel";
+NSString *const TxPushChannelSubscription_deviceId = @"deviceId";
+NSString *const TxPushChannelSubscription_clientId = @"clientId";

@@ -24,6 +24,8 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     // Push Notifications
     'deviceDetails',
+    'localDevice',
+    // 'pushChannelSubscription',
 
     'errorInfo',
 
@@ -90,8 +92,12 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
   {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
-  {'name': 'pushSubscribe', 'value': 'pushSubscribe'},
-  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe'},
+  {'name': 'pushSubscribeDevice', 'value': 'pushSubscribeDevice'},
+  {'name': 'pushUnsubscribeDevice', 'value': 'pushUnsubscribeDevice'},
+  {'name': 'pushSubscribeClient', 'value': 'pushSubscribeClient'},
+  {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
+  {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
+  {'name': 'pushDevice', 'value': 'pushDevice'},
 
   // Realtime events
   {
@@ -378,7 +384,6 @@ const List<Map<String, dynamic>> _objects = [
       'platform',
       'formFactor',
       'metadata',
-      'deviceSecret',
       'devicePushDetails'
     ]
   },
@@ -390,6 +395,21 @@ const List<Map<String, dynamic>> _objects = [
       'errorReason'
     ]
   },
+  {
+    'name': 'LocalDevice',
+    'properties': <String>[
+      'deviceSecret',
+      'deviceIdentityToken'
+    ]
+  },
+  {
+    'name': 'PushChannelSubscription',
+    'properties': <String>[
+      'channel',
+      'deviceId',
+      'clientId'
+    ]
+  }
 ];
 
 // exporting all the constants as a single map

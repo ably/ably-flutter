@@ -9,7 +9,8 @@ abstract class Push {
   /// and channel subscriptions.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
-  PushAdmin? admin;
+  // TODO Consider implementing the push admin API
+  // PushAdmin? admin;
 
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.

@@ -27,9 +27,10 @@ final public class PlatformConstants {
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
         public static final byte deviceDetails = (byte) 145;
-        public static final byte errorInfo = (byte) 146;
-        public static final byte connectionStateChange = (byte) 147;
-        public static final byte channelStateChange = (byte) 148;
+        public static final byte localDevice = (byte) 146;
+        public static final byte errorInfo = (byte) 147;
+        public static final byte connectionStateChange = (byte) 148;
+        public static final byte channelStateChange = (byte) 149;
     }
 
     static final public class PlatformMethod {
@@ -62,8 +63,12 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
-        public static final String pushSubscribe = "pushSubscribe";
-        public static final String pushUnsubscribe = "pushUnsubscribe";
+        public static final String pushSubscribeDevice = "pushSubscribeDevice";
+        public static final String pushUnsubscribeDevice = "pushUnsubscribeDevice";
+        public static final String pushSubscribeClient = "pushSubscribeClient";
+        public static final String pushUnsubscribeClient = "pushUnsubscribeClient";
+        public static final String pushListSubscriptions = "pushListSubscriptions";
+        public static final String pushDevice = "pushDevice";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -312,7 +317,6 @@ final public class PlatformConstants {
         public static final String platform = "platform";
         public static final String formFactor = "formFactor";
         public static final String metadata = "metadata";
-        public static final String deviceSecret = "deviceSecret";
         public static final String devicePushDetails = "devicePushDetails";
     }
 
@@ -320,6 +324,17 @@ final public class PlatformConstants {
         public static final String recipient = "recipient";
         public static final String state = "state";
         public static final String errorReason = "errorReason";
+    }
+
+    static final public class TxLocalDevice {
+        public static final String deviceSecret = "deviceSecret";
+        public static final String deviceIdentityToken = "deviceIdentityToken";
+    }
+
+    static final public class TxPushChannelSubscription {
+        public static final String channel = "channel";
+        public static final String deviceId = "deviceId";
+        public static final String clientId = "clientId";
     }
 
 }

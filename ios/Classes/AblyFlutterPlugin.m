@@ -516,6 +516,55 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 };
 
+typedef ARTPush* (^GetPushFromAblyClientHandler)(AblyFlutter * ably, FlutterMethodCall * call);
+static const GetPushFromAblyClientHandler getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter const* ably, FlutterMethodCall *const call) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutterMessage *const data = message.message;
+    NSNumber *const ablyClientHandle = data.handle;
+    
+    ARTPush* push = nil;
+    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: ablyClientHandle];
+    ARTRest *const restWithHandle = [ably getRest:ablyClientHandle];
+    
+    if (realtimeWithHandle != nil) {
+        push = realtimeWithHandle.push;
+    } else if (restWithHandle != nil) {
+        push = restWithHandle.push;
+    } else {
+        // TODO Throw error
+    }
+    
+    return push;
+};
+
+static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    ARTPush* push = getPushFromAblyClientHandle([plugin ably], call);
+    [push activate];
+    // TODO return a success code to the caller?
+};
+
+static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutter *const ably = [plugin ably];
+    
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutterMessage *const data = message.message;
+    NSNumber *const ablyClientHandle = data.handle;
+    
+    ARTPush* push = nil;
+    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: ablyClientHandle];
+    ARTRest *const restWithHandle = [ably getRest:ablyClientHandle];
+    
+    if (realtimeWithHandle != nil) {
+        push = realtimeWithHandle.push;
+    } else if (restWithHandle != nil) {
+        push = restWithHandle.push;
+    } else {
+        // TODO Throw error
+    }
+    
+    [push deactivate];
+    // TODO return a success code to the caller?
+};
 
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
@@ -589,6 +638,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
+        AblyPlatformMethod_pushActivate: _pushActivate,
+        AblyPlatformMethod_pushDeactivate: _pushDeactivate,
     };
     
     _nextRegistration = 1;

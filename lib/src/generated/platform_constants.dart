@@ -24,9 +24,10 @@ class CodecTypes {
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
   static const int deviceDetails = 145;
-  static const int errorInfo = 146;
-  static const int connectionStateChange = 147;
-  static const int channelStateChange = 148;
+  static const int localDevice = 146;
+  static const int errorInfo = 147;
+  static const int connectionStateChange = 148;
+  static const int channelStateChange = 149;
 }
 
 class PlatformMethod {
@@ -60,8 +61,12 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
-  static const String pushSubscribe = 'pushSubscribe';
-  static const String pushUnsubscribe = 'pushUnsubscribe';
+  static const String pushSubscribeDevice = 'pushSubscribeDevice';
+  static const String pushUnsubscribeDevice = 'pushUnsubscribeDevice';
+  static const String pushSubscribeClient = 'pushSubscribeClient';
+  static const String pushUnsubscribeClient = 'pushUnsubscribeClient';
+  static const String pushListSubscriptions = 'pushListSubscriptions';
+  static const String pushDevice = 'pushDevice';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -312,7 +317,6 @@ class TxDeviceDetails {
   static const String platform = 'platform';
   static const String formFactor = 'formFactor';
   static const String metadata = 'metadata';
-  static const String deviceSecret = 'deviceSecret';
   static const String devicePushDetails = 'devicePushDetails';
 }
 
@@ -320,4 +324,15 @@ class TxDevicePushDetails {
   static const String recipient = 'recipient';
   static const String state = 'state';
   static const String errorReason = 'errorReason';
+}
+
+class TxLocalDevice {
+  static const String deviceSecret = 'deviceSecret';
+  static const String deviceIdentityToken = 'deviceIdentityToken';
+}
+
+class TxPushChannelSubscription {
+  static const String channel = 'channel';
+  static const String deviceId = 'deviceId';
+  static const String clientId = 'clientId';
 }
