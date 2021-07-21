@@ -38,7 +38,7 @@ class RealtimeChannelOptions extends ChannelOptions {
 abstract class RealtimeChannelInterface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
-  RealtimeChannelInterface(this.realtime, this.name);
+  RealtimeChannelInterface(this.realtime, this.name, this.push);
 
   /// realtime client instance
   final RealtimeInterface realtime;
@@ -59,7 +59,7 @@ abstract class RealtimeChannelInterface
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
   /// (see IDL for more details)
-  PushChannel? push;
+  PushChannel push;
 
   /// modes of this channel as returned by Ably server
   ///

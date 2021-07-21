@@ -542,26 +542,94 @@ static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugi
 };
 
 static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
+    [push deactivate];
+    result(nil);
+};
+
+static const FlutterHandler _pushSubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutterMessage *const data = message.message;
-    NSNumber *const ablyClientHandle = data.handle;
+    NSNumber *const clientHandle = message.handle;
+    NSString *const channelName = message.message;
     
-    ARTPush* push = nil;
-    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: ablyClientHandle];
-    ARTRest *const restWithHandle = [ably getRest:ablyClientHandle];
+    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
+    ARTRest *const rest = [ably getRest: clientHandle];
     
-    if (realtimeWithHandle != nil) {
-        push = realtimeWithHandle.push;
-    } else if (restWithHandle != nil) {
-        push = restWithHandle.push;
-    } else {
-        // TODO Throw error
+    if (realtime != nil) {
+        [[realtime.channels get: channelName].push subscribeDevice];
+        result(nil);
+        return;
+    } else if (rest != nil) {
+        [[rest.channels get:channelName].push subscribeDevice];
+        result(nil);
+        return;
     }
     
-    [push deactivate];
-    // TODO return a success code to the caller?
+    [NSException raise: NSInternalInconsistencyException
+                format: @"No ably client exists (rest or realtime)"];
+    return;
+};
+
+static const FlutterHandler _pushUnsubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    
+    NSNumber *const clientHandle = message.handle;
+    NSString *const channelName = message.message;
+    
+    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
+    ARTRest *const rest = [ably getRest: clientHandle];
+    
+    if (realtime != nil) {
+        [[realtime.channels get: channelName].push unsubscribeDevice];
+        result(nil);
+        return;
+    } else if (rest != nil) {
+        [[rest.channels get:channelName].push unsubscribeDevice];
+        result(nil);
+        return;
+    }
+    
+    [NSException raise: NSInternalInconsistencyException
+                format: @"No ably client exists (rest or realtime)"];
+    return;
+};
+
+static const FlutterHandler _pushSubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+
+    result(nil);
+};
+
+static const FlutterHandler _pushUnsubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+
+    result(nil);
+};
+
+static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    
+    
+    result(nil);
+};
+
+static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutter *const ably = [plugin ably];
+    NSNumber *const clientHandle = message.message;
+    
+    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
+    ARTRest *const rest = [ably getRest: clientHandle];
+    
+    if (realtime != nil) {
+        ARTLocalDevice *const localDevice = [realtime device];
+        result(localDevice);
+        return;
+    } else if (rest != nil) {
+        ARTLocalDevice *const localDevice = [rest device];
+        result(localDevice);
+        return;
+    }
 };
 
 @implementation AblyFlutterPlugin {
@@ -638,6 +706,12 @@ static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plu
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         AblyPlatformMethod_pushActivate: _pushActivate,
         AblyPlatformMethod_pushDeactivate: _pushDeactivate,
+        AblyPlatformMethod_pushSubscribeDevice: _pushSubscribeDevice,
+        AblyPlatformMethod_pushUnsubscribeDevice: _pushUnsubscribeDevice,
+        AblyPlatformMethod_pushSubscribeClient: _pushSubscribeClient,
+        AblyPlatformMethod_pushUnsubscribeClient: _pushUnsubscribeClient,
+        AblyPlatformMethod_pushListSubscriptions: _pushListSubscriptions,
+        AblyPlatformMethod_pushDevice: _pushDevice,
     };
     
     _nextRegistration = 1;

@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 
 import '../op_state.dart';
 
+const String _pushChannel = 'push:test-push-channel';
+
 class PushNotificationsSliver extends StatefulWidget {
-  late final ably.AblyBase? _client;
+  late final ably.Realtime? _realtime;
+  late final ably.Rest? _rest;
+  late bool _useRealtimeClient;
 
   PushNotificationsSliver({ably.Realtime? realtime, ably.Rest? rest, Key? key})
       : super(key: key) {
-    if (realtime != null) {
-      _client = realtime;
-    } else if (rest != null) {
-      _client = rest;
+    _realtime = realtime;
+    _rest = rest;
+
+    if (_realtime != null) {
+      _useRealtimeClient = true;
     } else {
-      _client = null;
+      _useRealtimeClient = false;
     }
   }
 
@@ -34,8 +39,11 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
 
   String? deviceId;
 
+  bool get _ablyClientIsPresent =>
+      widget._realtime != null || widget._rest != null;
+
   Widget buildMissingAblyClientWarningText() {
-    if (widget._client == null) {
+    if (!_ablyClientIsPresent) {
       return RichText(
           text: TextSpan(children: [
         TextSpan(
@@ -65,15 +73,36 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
               ? Text("Device is registered with \(deviceId)")
               : Text("Device is not registered"),
           TextButton(
+            child: Text("Get device"), onPressed: (!_ablyClientIsPresent)
+              ? null
+              : () async {
+            if (widget._realtime != null) {
+              ably.LocalDevice localDevice = await widget._realtime!.device();
+              print("Local device is: ${localDevice}");
+              print("Push: ${widget._realtime?.push}");
+            } else {
+              await widget._rest!.device();
+              print("Push: ${widget._rest?.push}");
+            }
+            setState(() {
+              _deviceActivationState = OpState.succeeded;
+            });
+          },),
+          TextButton(
               child: Text("Activate device"),
               // stage: _deviceActivationState,
               // disabled: widget._realtime == null,
               // isSuccessful: _deviceActivationState,
-              onPressed: (widget._client == null)
+              onPressed: (!_ablyClientIsPresent)
                   ? null
                   : () async {
-                      await widget._client!.push.activate();
-                      print("Push: ${widget._client?.push}");
+                      if (widget._realtime != null) {
+                        await widget._realtime!.push.activate();
+                        print("Push: ${widget._realtime?.push}");
+                      } else {
+                        await widget._rest!.push.activate();
+                        print("Push: ${widget._rest?.push}");
+                      }
                       setState(() {
                         _deviceActivationState = OpState.succeeded;
                       });
@@ -81,15 +110,34 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
           TextButton(
               child: Text("Deactivate device"),
               // stage: OpState.notStarted,
-              onPressed: (widget._client == null)
+              onPressed: (!_ablyClientIsPresent)
                   ? null
                   : () async {
-                      print(widget._client);
+                      if (widget._realtime != null) {
+                        await widget._realtime!.push.deactivate();
+                        print("Push: ${widget._realtime?.push}");
+                      } else {
+                        await widget._rest!.push.deactivate();
+                        print("Push: ${widget._rest?.push}");
+                      }
                     }),
           TextButton(
-            child: Text("Subscribe device"),
-            onPressed: () {},
-          ),
+              child: Text("Subscribe device"),
+              onPressed: (!_ablyClientIsPresent)
+                  ? null
+                  : () async {
+                      if (widget._realtime != null) {
+                        widget._realtime!.channels
+                            .get(_pushChannel)
+                            .push
+                            .subscribeDevice();
+                      } else {
+                        widget._rest!.channels
+                            .get(_pushChannel)
+                            .push
+                            .subscribeDevice();
+                      }
+                    }),
           TextButton(child: Text("Subscribe client"), onPressed: () {}),
           TextButton(
             child: Text("Unsubscribe device"),
