@@ -172,6 +172,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.messageExtras;
     } else if (value instanceof Message) {
       return PlatformConstants.CodecTypes.message;
+    } else if (value instanceof DeviceDetails) {
+      return PlatformConstants.CodecTypes.deviceDetails;
+    } else if (value instanceof LocalDevice) {
+      return PlatformConstants.CodecTypes.localDevice;
     }
     return null;
   }
@@ -710,7 +714,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
-    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, c.push);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
 
     return jsonMap;
   }
