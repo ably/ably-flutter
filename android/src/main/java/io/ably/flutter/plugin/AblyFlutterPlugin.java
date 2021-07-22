@@ -22,7 +22,6 @@ public class AblyFlutterPlugin implements FlutterPlugin {
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         applicationContext = flutterPluginBinding.getApplicationContext();
-        Log.d("Crap", applicationContext.toString());
         setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
     }
 
