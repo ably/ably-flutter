@@ -516,7 +516,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 };
 
-typedef ARTPush* (^GetPushFromAblyClientHandler)(AblyFlutter * ably, FlutterMethodCall * call);
+typedef ARTPush* (^GetPushFromAblyClientHandler)(AblyFlutter *const ably, FlutterMethodCall *const call);
 static const GetPushFromAblyClientHandler _getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter const* ably, FlutterMethodCall *const call) {
     AblyFlutterMessage *const message = call.arguments;
     NSNumber *const ablyClientHandle = message.message;
@@ -535,6 +535,47 @@ static const GetPushFromAblyClientHandler _getPushFromAblyClientHandle = ^ARTPus
     return nil;
 };
 
+//typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
+typedef void (^RealtimeClientHandler)(ARTRealtime *const realtime,
+                                      FlutterMethodCall *const call,
+                                      const FlutterResult result);
+typedef void (^RestClientHandler)(ARTRest *const realtime,
+                                  FlutterMethodCall *const call,
+                                  const FlutterResult result);
+typedef void (^AblyClientReceiver)(AblyFlutterPlugin *const plugin,
+                                   FlutterMethodCall *const call,
+                                   const FlutterResult result,
+                                   RealtimeClientHandler const realtimeClientHandler,
+                                   RestClientHandler const restClientHandler);
+
+/// The dart side can provide a handle (Int) which gets a ARTRealtime or ARTRest Ably client.
+/// This block calls the correct handler (RealtimeClientHandler, RestClientHandler) based on what client this handle provides.
+static const AblyClientReceiver _ablyClientReceiver = ^void(AblyFlutterPlugin *const plugin,
+                                                   FlutterMethodCall *const call,
+                                                   FlutterResult const result,
+                                                   RealtimeClientHandler const realtimeClientHandler,
+                                                   RestClientHandler const restClientHandler) {
+    AblyFlutter *const ably = [plugin ably];
+    
+    AblyFlutterMessage *const message = call.arguments;
+    NSNumber *const clientHandle = message.handle;
+    
+    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
+    ARTRest *const rest = [ably getRest: clientHandle];
+    
+    if (realtime != nil) {
+        realtimeClientHandler(realtime, call, result);
+        return;
+    } else if (rest != nil) {
+        restClientHandler(rest, call, result);
+        return;
+    }
+    
+    [NSException raise: NSInternalInconsistencyException
+                format: @"No ably client exists (rest or realtime)"];
+    return;
+};
+
 static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
     [push activate];
@@ -549,87 +590,130 @@ static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plu
 
 static const FlutterHandler _pushSubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    AblyFlutter *const ably = [plugin ably];
-    
-    NSNumber *const clientHandle = message.handle;
     NSString *const channelName = message.message;
     
-    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
-    ARTRest *const rest = [ably getRest: clientHandle];
-    
-    if (realtime != nil) {
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
         [[realtime.channels get: channelName].push subscribeDevice];
         result(nil);
-        return;
-    } else if (rest != nil) {
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
         [[rest.channels get:channelName].push subscribeDevice];
         result(nil);
-        return;
     }
-    
-    [NSException raise: NSInternalInconsistencyException
-                format: @"No ably client exists (rest or realtime)"];
-    return;
+   );
 };
 
 static const FlutterHandler _pushUnsubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    AblyFlutter *const ably = [plugin ably];
-    
-    NSNumber *const clientHandle = message.handle;
     NSString *const channelName = message.message;
     
-    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
-    ARTRest *const rest = [ably getRest: clientHandle];
-    
-    if (realtime != nil) {
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
         [[realtime.channels get: channelName].push unsubscribeDevice];
         result(nil);
-        return;
-    } else if (rest != nil) {
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
         [[rest.channels get:channelName].push unsubscribeDevice];
         result(nil);
-        return;
     }
-    
-    [NSException raise: NSInternalInconsistencyException
-                format: @"No ably client exists (rest or realtime)"];
-    return;
+   );
 };
 
 static const FlutterHandler _pushSubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-
-    result(nil);
+    AblyFlutterMessage *const message = call.arguments;
+    NSString *const channelName = message.message;
+    
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
+        [[realtime.channels get: channelName].push subscribeClient];
+        result(nil);
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
+        [[rest.channels get:channelName].push subscribeClient];
+        result(nil);
+    }
+   );
 };
 
 static const FlutterHandler _pushUnsubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-
-    result(nil);
+    AblyFlutterMessage *const message = call.arguments;
+    NSString *const channelName = message.message;
+    
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
+        [[realtime.channels get: channelName].push unsubscribeClient];
+        result(nil);
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
+        [[rest.channels get:channelName].push unsubscribeClient];
+        result(nil);
+    }
+   );
 };
 
 static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutterMessage *const messageData = message.message;
     
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSString *const channelName = (NSString*)[_dataMap objectForKey:TxTransportKeys_channelName];
+    NSDictionary *const params = (NSDictionary<NSString *, NSString *> *)[_dataMap objectForKey:TxTransportKeys_params];
     
-    result(nil);
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
+        ARTPushChannel *const pushChannel = [realtime.channels get: channelName].push;
+        [pushChannel listSubscriptions: params callback: ^void(ARTPaginatedResult<ARTPushChannelSubscription *> *const pushChannelSubscriptionPaginatedResult, ARTErrorInfo *const errorInfo) {
+            if (errorInfo) {
+                result([
+                        FlutterError
+                        errorWithCode:[NSString stringWithFormat: @"%ld", (long)errorInfo.code]
+                        message:[NSString stringWithFormat:@"Error listing subscriptions from push Channel %@; err = %@", channelName, [errorInfo message]]
+                        details:errorInfo
+                        ]);
+            }
+            result(pushChannelSubscriptionPaginatedResult);
+        } error:nil];
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
+// TODO call the rest version of above
+    }
+   );
 };
 
 static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutter *const ably = [plugin ably];
-    NSNumber *const clientHandle = message.message;
-    
-    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
-    ARTRest *const rest = [ably getRest: clientHandle];
-    
-    if (realtime != nil) {
-        ARTLocalDevice *const localDevice = [realtime device];
-        result(localDevice);
-        return;
-    } else if (rest != nil) {
-        ARTLocalDevice *const localDevice = [rest device];
-        result(localDevice);
-        return;
+    _ablyClientReceiver(plugin, call, result,
+                       ^void(ARTRealtime *const realtime,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result) {
+        result([realtime device]);
+    },
+                       ^void(ARTRest *const rest,
+                             FlutterMethodCall *const call,
+                             const FlutterResult result){
+        result([rest device]);
     }
+   );
 };
 
 @implementation AblyFlutterPlugin {
