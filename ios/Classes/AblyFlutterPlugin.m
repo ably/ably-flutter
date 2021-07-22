@@ -558,7 +558,20 @@ static const AblyClientReceiver _ablyClientReceiver = ^void(AblyFlutterPlugin *c
     AblyFlutter *const ably = [plugin ably];
     
     AblyFlutterMessage *const message = call.arguments;
-    NSNumber *const clientHandle = message.handle;
+    // Make AblyMessage usage consistent on Dart side, instead of nesting AblyMessages
+    // See platform_object.dart invoke method: AblyMessage(AblyMessage(argument, handle: _handle))
+    NSNumber * clientHandle;
+    if ([message.message class] == [AblyFlutterMessage class]) {
+        AblyFlutterMessage *const messageData = message.message;
+        clientHandle = messageData.handle;
+    } else {
+        clientHandle = message.message;
+    }
+    
+    if (!clientHandle) {
+        [NSException raise: NSInternalInconsistencyException
+                    format: @"Client handle was null"];
+    }
     
     ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
     ARTRest *const rest = [ably getRest: clientHandle];
@@ -681,7 +694,12 @@ static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *co
                              FlutterMethodCall *const call,
                              const FlutterResult result) {
         ARTPushChannel *const pushChannel = [realtime.channels get: channelName].push;
-        [pushChannel listSubscriptions: params callback: ^void(ARTPaginatedResult<ARTPushChannelSubscription *> *const pushChannelSubscriptionPaginatedResult, ARTErrorInfo *const errorInfo) {
+        // The pushChannel:listSubscription API has 2 ways of returning errors:
+        // - If it is a network error or error called in `ARTPaginatedResult:executePaginated`, it provides an error in the callback you provide.
+        // - If it is a non-network error, it will mutate the errorPtr you pass in.
+        NSError * nsError;
+        bool ret = [pushChannel listSubscriptions: params
+                              callback: ^void(ARTPaginatedResult<ARTPushChannelSubscription *> *const pushChannelSubscriptionPaginatedResult, ARTErrorInfo * errorInfo) {
             if (errorInfo) {
                 result([
                         FlutterError
@@ -689,9 +707,25 @@ static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *co
                         message:[NSString stringWithFormat:@"Error listing subscriptions from push Channel %@; err = %@", channelName, [errorInfo message]]
                         details:errorInfo
                         ]);
+                return;
             }
             result(pushChannelSubscriptionPaginatedResult);
-        } error:nil];
+        }
+                                            error: &nsError];
+        if (nsError) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)nsError.code]
+                    message:[NSString stringWithFormat:@"Error listing subscriptions from push Channel %@; err = %@", channelName, nsError.localizedDescription]
+                    details:nil
+                    ]);
+            return;
+        }
+        
+        if (!ret) {
+            [NSException raise: NSInternalInconsistencyException
+                        format: @"ARTPushChannel.listSubscription could not make the network request for an unknown request"];
+        }
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
@@ -699,6 +733,7 @@ static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *co
 // TODO call the rest version of above
     }
    );
+
 };
 
 static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {

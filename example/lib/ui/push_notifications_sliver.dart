@@ -3,23 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../op_state.dart';
 
-const String _pushChannel = 'push:test-push-channel';
+const String _pushChannelName = 'push:test-push-channel';
 
 class PushNotificationsSliver extends StatefulWidget {
   late final ably.Realtime? _realtime;
   late final ably.Rest? _rest;
-  late bool _useRealtimeClient;
 
   PushNotificationsSliver({ably.Realtime? realtime, ably.Rest? rest, Key? key})
       : super(key: key) {
     _realtime = realtime;
     _rest = rest;
-
-    if (_realtime != null) {
-      _useRealtimeClient = true;
-    } else {
-      _useRealtimeClient = false;
-    }
   }
 
   @override
@@ -30,11 +23,28 @@ class PushNotificationsSliver extends StatefulWidget {
 class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
   OpState _deviceActivationState = OpState.notStarted;
 
+  ably.PushChannel? _pushChannel;
+
   @override
   void initState() {
     super.initState();
     // TODO determine if device has been activated any time in the past
     _deviceActivationState = OpState.notStarted;
+
+    if (widget._realtime != null || widget._rest != null) {
+      _pushChannel = _getPushChannel();
+    }
+  }
+
+  ably.PushChannel _getPushChannel() {
+    if (widget._realtime != null) {
+      return widget._realtime!.channels.get(_pushChannelName).push;
+    } else if (widget._rest != null) {
+      return widget._rest!.channels.get(_pushChannelName).push;
+    }
+
+    throw Exception(
+        "No Ably client exists. Improve this error message though?");
   }
 
   String? deviceId;
@@ -59,99 +69,100 @@ class _PushNotificationsSliverState extends State<PushNotificationsSliver> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Push Notifications',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          buildMissingAblyClientWarningText(),
-          (deviceId != null)
-              ? Text("Device is registered with \(deviceId)")
-              : Text("Device is not registered"),
-          TextButton(
-            child: Text("Get device"), onPressed: (!_ablyClientIsPresent)
-              ? null
-              : () async {
-            if (widget._realtime != null) {
-              ably.LocalDevice localDevice = await widget._realtime!.device();
-              print("Local device is: ${localDevice}");
-              print("Push: ${widget._realtime?.push}");
-            } else {
-              await widget._rest!.device();
-              print("Push: ${widget._rest?.push}");
-            }
-            setState(() {
-              _deviceActivationState = OpState.succeeded;
-            });
-          },),
-          TextButton(
-              child: Text("Activate device"),
-              // stage: _deviceActivationState,
-              // disabled: widget._realtime == null,
-              // isSuccessful: _deviceActivationState,
+  Widget build(BuildContext context) => Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Push Notifications',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            buildMissingAblyClientWarningText(),
+            if (deviceId != null)
+              const Text('Device is registered with \(deviceId)')
+            else
+              const Text('Device is not registered'),
+            TextButton(
               onPressed: (!_ablyClientIsPresent)
                   ? null
                   : () async {
                       if (widget._realtime != null) {
-                        await widget._realtime!.push.activate();
-                        print("Push: ${widget._realtime?.push}");
+                        ably.LocalDevice localDevice =
+                            await widget._realtime!.device();
+                        print("Local device is: ${localDevice}");
+                        print('Push: ${widget._realtime?.push}');
                       } else {
-                        await widget._rest!.push.activate();
-                        print("Push: ${widget._rest?.push}");
+                        await widget._rest!.device();
+                        print('Push: ${widget._rest?.push}');
                       }
                       setState(() {
                         _deviceActivationState = OpState.succeeded;
                       });
-                    }),
-          TextButton(
-              child: Text("Deactivate device"),
-              // stage: OpState.notStarted,
-              onPressed: (!_ablyClientIsPresent)
-                  ? null
-                  : () async {
-                      if (widget._realtime != null) {
-                        await widget._realtime!.push.deactivate();
-                        print("Push: ${widget._realtime?.push}");
-                      } else {
-                        await widget._rest!.push.deactivate();
-                        print("Push: ${widget._rest?.push}");
+                    },
+              child: Text("Get device"),
+            ),
+            TextButton(
+                onPressed: (!_ablyClientIsPresent)
+                    ? null
+                    : () async {
+                        if (widget._realtime != null) {
+                          await widget._realtime!.push.activate();
+                          print("Push: ${widget._realtime?.push}");
+                        } else {
+                          await widget._rest!.push.activate();
+                          print("Push: ${widget._rest?.push}");
+                        }
+                        setState(() {
+                          _deviceActivationState = OpState.succeeded;
+                        });
+                      },
+                child: Text("Activate device")),
+            TextButton(
+                onPressed: (!_ablyClientIsPresent)
+                    ? null
+                    : () async {
+                        if (widget._realtime != null) {
+                          await widget._realtime!.push.deactivate();
+                          print("Push: ${widget._realtime?.push}");
+                        } else {
+                          await widget._rest!.push.deactivate();
+                          print("Push: ${widget._rest?.push}");
+                        }
+                      },
+                child: Text("Deactivate device")),
+            TextButton(
+                onPressed: (!_ablyClientIsPresent)
+                    ? null
+                    : () async {
+                        await _pushChannel!.subscribeDevice();
+                      },
+                child: const Text('Subscribe device')),
+            TextButton(onPressed: () {}, child: Text("Subscribe client")),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Unsubscribe device'),
+            ),
+            TextButton(onPressed: () {}, child: Text("Unsubscribe client")),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Publish to channel'),
+            ),
+            TextButton(
+                onPressed: () {}, child: const Text('Publish to client')),
+            TextButton(
+                onPressed: _ablyClientIsPresent
+                    ? () async {
+                        ably.PaginatedResultInterface<
+                            ably.PushChannelSubscription>? subscriptions;
+                        if (_pushChannel != null) {
+                          subscriptions =
+                              await _pushChannel!.listSubscriptions({"channel": _pushChannelName});
+                          print('Subscriptions: ${subscriptions}');
+                        }
                       }
-                    }),
-          TextButton(
-              child: Text("Subscribe device"),
-              onPressed: (!_ablyClientIsPresent)
-                  ? null
-                  : () async {
-                      if (widget._realtime != null) {
-                        widget._realtime!.channels
-                            .get(_pushChannel)
-                            .push
-                            .subscribeDevice();
-                      } else {
-                        widget._rest!.channels
-                            .get(_pushChannel)
-                            .push
-                            .subscribeDevice();
-                      }
-                    }),
-          TextButton(child: Text("Subscribe client"), onPressed: () {}),
-          TextButton(
-            child: Text("Unsubscribe device"),
-            onPressed: () {},
-          ),
-          TextButton(child: Text("Unsubscribe client"), onPressed: () {}),
-          TextButton(
-            child: Text("Publish to channel"),
-            onPressed: () {},
-          ),
-          TextButton(child: Text("Publish to client"), onPressed: () {}),
-          TextButton(child: Text("List subscriptions"), onPressed: () {}),
-        ],
-      ),
-    );
-  }
+                    : null,
+                child: const Text('List subscriptions')),
+          ],
+        ),
+      );
 }

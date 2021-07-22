@@ -28,10 +28,10 @@ abstract class PushChannel {
   /// Lists subscriptions
   ///
   /// as [PushChannelSubscription] objects encapsulated in a paginated result.
-  /// Optional filters can be passed as a [params] map
+  /// Optional filters can be passed as a [params] map. These filters include
+  /// [channel, deviceId, clientId and limit](https://docs.ably.io/rest-api/#list-channel-subscriptions).
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions([
-    Map<String, dynamic>? params,
-  ]);
+  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
+      Map<String, String> params);
 }

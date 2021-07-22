@@ -606,7 +606,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       // Launch a Service of FirebaseMessagingService. Or should this be done during subscribe?
 
       try {
-      AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
+        AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
         client.push.activate();
         result.success(null);
       } catch (AblyException e) {
@@ -619,7 +619,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<Integer>ablyDo(message, (ablyLibrary, ablyClientHandle) -> {
       try {
-      AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
+        AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
         client.push.deactivate();
         result.success(null);
       } catch (AblyException e) {
@@ -699,8 +699,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
       final Map<String, Object> paramsMap = (Map<String, Object>) ablyMessage.message.get(PlatformConstants.TxTransportKeys.params);
       ArrayList<Param> params = new ArrayList<>();
-      for (Map.Entry<String, Object> entry: paramsMap.entrySet()) {
-        params.add(new Param(entry.getKey(), entry.getValue()));
+      if (paramsMap != null) {
+        for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+          params.add(new Param(entry.getKey(), entry.getValue()));
+        }
       }
 
       try {

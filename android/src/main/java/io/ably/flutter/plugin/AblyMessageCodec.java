@@ -172,12 +172,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.messageExtras;
     } else if (value instanceof Message) {
       return PlatformConstants.CodecTypes.message;
-    } else if (value instanceof DeviceDetails) {
-      return PlatformConstants.CodecTypes.deviceDetails;
     } else if (value instanceof LocalDevice) {
       return PlatformConstants.CodecTypes.localDevice;
+    } else if (value instanceof DeviceDetails) {
+      return PlatformConstants.CodecTypes.deviceDetails;
+    } else {
+      return null;
     }
-    return null;
   }
 
   @Override
@@ -690,6 +691,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private String encodeDevicePushDetailsState(DeviceDetails.Push.State state) {
+    if (state == null) return null;
+
     switch (state) {
       case ACTIVE:
         return PlatformConstants.TxDevicePushStateEnum.active;
