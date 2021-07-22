@@ -10,12 +10,12 @@ class DevicePushDetails {
   /// and address.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP3
-  Map<String, String> recipient;
+  Map<String, String>? recipient;
 
   /// The state of the push registration.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP4
-  DevicePushState state;
+  DevicePushState? state;
 
   /// Any error information associated with the registration.
   ///

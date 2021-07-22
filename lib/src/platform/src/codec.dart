@@ -657,19 +657,23 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
-      jsonMap[TxDeviceDetails.id] as String,
-      jsonMap[TxDeviceDetails.clientId] as String,
+      jsonMap[TxDeviceDetails.id] as String?,
+      jsonMap[TxDeviceDetails.clientId] as String?,
       _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
       formFactor,
-      jsonMap[TxDeviceDetails.metadata] as Map<String, String>,
+      Map<String, String>.from(
+          jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>),
       _decodeDevicePushDetails(
-          jsonMap[TxDeviceDetails.devicePushDetails] as Map<String, dynamic>),
+        Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
+            as Map<Object?, Object?>),
+      ),
     );
   }
 
   DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
     return DevicePushDetails(
-        jsonMap[TxDevicePushDetails.recipient] as Map<String, String>,
+        Map<String, String>.from(jsonMap[TxDevicePushDetails.recipient]
+        as Map<Object?, Object?>),
         _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
         _decodeErrorInfo(
             jsonMap[TxDevicePushDetails.errorReason] as Map<String, dynamic>));
@@ -704,7 +708,7 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  DevicePushState _decodeDevicePushState(String? enumValue) {
+  DevicePushState? _decodeDevicePushState(String? enumValue) {
     switch (enumValue) {
       case TxDevicePushStateEnum.active:
         return DevicePushState.active;
@@ -712,10 +716,12 @@ class Codec extends StandardMessageCodec {
         return DevicePushState.failing;
       case TxDevicePushStateEnum.failed:
         return DevicePushState.failed;
+      default:
+        return null;
     }
-    throw AblyException(
-      'Platform communication error. DevicePushState is invalid: $enumValue',
-    );
+    // throw AblyException(
+    //   'Platform communication error. DevicePushState is invalid: $enumValue',
+    // );
   }
 
   DevicePlatform _decodeDevicePlatform(String? enumValue) {

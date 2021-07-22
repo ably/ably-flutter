@@ -11,7 +11,7 @@ class DeviceDetails {
   /// Generated locally if not available
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD2
-  String id;
+  String? id;
 
   /// populated for device registrations associated with a clientId (optional)
   ///
