@@ -13,12 +13,6 @@ abstract class RestInterface<T extends RestChannelsInterface> extends AblyBase {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
   late T channels;
 
-  /// represents the current state of the device in respect of it being a
-  /// target for push notifications.
-  ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSH8
-  Future<LocalDevice> device();
-
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC1
   RestInterface({
     ClientOptions? options,
