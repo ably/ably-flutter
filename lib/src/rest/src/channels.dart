@@ -1,8 +1,7 @@
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-
 import '../../common/common.dart';
 import '../../common/src/channels.dart';
 import '../../message/src/message.dart';
+import '../../push_notifications/push_notifications.dart';
 import '../rest.dart';
 import 'channel_options.dart';
 import 'rest.dart';

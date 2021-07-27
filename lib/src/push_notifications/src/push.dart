@@ -19,9 +19,11 @@ abstract class Push {
   Future<void> activate();
 
   /// Deactivate this device for push notifications by removing
-  /// the registration with the push transport such as GCM/APNS.
+  /// the registration with the push transport such as FCM/APNS.
   ///
-  /// returns deviceId
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
-  Future<String> deactivate();
+  ///
+  /// On some platforms, this returns a deviceId (String), but the feature
+  /// spec doesn't mention this.
+  Future<void> deactivate();
 }

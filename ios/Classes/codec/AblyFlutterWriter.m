@@ -31,10 +31,11 @@ NS_ASSUME_NONNULL_END
         return tokenParamsCodecType;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
         return paginatedResultCodecType;
+    } else if ([value isKindOfClass:[ARTLocalDevice class]]) {
+        // Check for local device before device details, since it is more specific. If deviceDetailsCodecType was used, the other fields in localDevice won't be deserialised on dart side.
+        return localDeviceCodecType;
     } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
         return deviceDetailsCodecType;
-    } else if ([value isKindOfClass:[ARTLocalDevice class]]) {
-        return localDeviceCodecType;
     }
     return 0;
 }

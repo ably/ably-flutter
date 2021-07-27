@@ -36,20 +36,29 @@ class PushChannelNative extends PlatformObject implements PushChannel {
 
   @override
   Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
-      Map<String, String> params) {
+      Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&
         !params.containsKey('clientId') &&
         !params.containsKey('deviceClientId') &&
         !params.containsKey('channel')) {
-      throw ErrorInfo(
+      final errorInfo = ErrorInfo(
           code: 40000,
           href: 'https://help.ably.io/error/40000',
           message:
               "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
+
+      throw AblyException(
+          '40000',
+          "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'",
+          errorInfo);
     }
 
-    return invokeRequest<PaginatedResultInterface<PushChannelSubscription>>(
-        PlatformMethod.pushListSubscriptions,
-        {TxTransportKeys.params: params, TxTransportKeys.channelName: _name});
+    final message = await invokeRequest<AblyMessage>(
+      PlatformMethod.pushListSubscriptions,
+      {TxTransportKeys.params: params, TxTransportKeys.channelName: _name},
+    );
+
+    return PaginatedResult<PushChannelSubscription>.fromAblyMessage(
+        AblyMessage.castFrom<dynamic, PaginatedResult>(message));
   }
 }

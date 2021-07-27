@@ -128,6 +128,14 @@ class Codec extends StandardMessageCodec {
     return Map.castFrom<dynamic, dynamic, String, dynamic>(value);
   }
 
+  /// Converts a Map with dynamic keys and values to
+  /// a Map with String keys and dynamic values.
+  /// Returns null of [value] is null.
+  Map<String, T> toTypedJsonMap<T>(Map<dynamic, dynamic>? value) {
+    if (value == null) return <String, T>{};
+    return Map.castFrom<dynamic, dynamic, String, T>(value);
+  }
+
   /// Returns a value from [CodecTypes] based of the [Type] of [value]
   int? getCodecType(final Object? value) {
     if (value is ClientOptions) {
@@ -661,8 +669,8 @@ class Codec extends StandardMessageCodec {
       jsonMap[TxDeviceDetails.clientId] as String?,
       _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
       formFactor,
-      Map<String, String>.from(
-          jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>),
+      toTypedJsonMap<String>(
+          jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>?),
       _decodeDevicePushDetails(
         Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
             as Map<Object?, Object?>),
@@ -671,18 +679,22 @@ class Codec extends StandardMessageCodec {
   }
 
   DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
+    final jsonMapErrorReason =
+        jsonMap[TxDevicePushDetails.errorReason] as Map<Object?, Object?>?;
+
     return DevicePushDetails(
-        Map<String, String>.from(jsonMap[TxDevicePushDetails.recipient]
-        as Map<Object?, Object?>),
+        Map<String, String>.from(
+            jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>),
         _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
-        _decodeErrorInfo(
-            jsonMap[TxDevicePushDetails.errorReason] as Map<String, dynamic>));
+        (jsonMapErrorReason != null)
+            ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
+            : null);
   }
 
   LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
       _decodeDeviceDetails(jsonMap),
-      jsonMap[TxLocalDevice.deviceSecret] as String,
-      jsonMap[TxLocalDevice.deviceIdentityToken] as String);
+      jsonMap[TxLocalDevice.deviceSecret] as String?,
+      jsonMap[TxLocalDevice.deviceIdentityToken] as String?);
 
   FormFactor _decodeFormFactor(String? enumValue) {
     switch (enumValue) {
