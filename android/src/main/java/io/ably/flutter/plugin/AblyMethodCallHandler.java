@@ -698,17 +698,17 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, ablyMessage) -> {
 
       final Map<String, Object> paramsMap = (Map<String, Object>) ablyMessage.message.get(PlatformConstants.TxTransportKeys.params);
-      ArrayList<Param> params = new ArrayList<>();
-      if (paramsMap != null) {
-        for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
-          params.add(new Param(entry.getKey(), entry.getValue()));
-        }
+      Param[] params = new Param[paramsMap.size()];
+      int paramsSize = 0;
+      for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+        Param param = new Param(entry.getKey(), entry.getValue());
+        params[paramsSize] = param;
+        paramsSize += 1;
       }
 
       try {
         AblyBase client = ablyLibrary.getAblyClient(ablyMessage.handle);
-        PaginatedResult<PushBase.ChannelSubscription> subscriptions = client.push.admin.channelSubscriptions.list((Param[]) params.toArray());
-        result.success(subscriptions);
+        client.push.admin.channelSubscriptions.listAsync(params, this.paginatedResponseHandler(result, null));
       } catch (AblyException e) {
         handleAblyException(result, e);
       }

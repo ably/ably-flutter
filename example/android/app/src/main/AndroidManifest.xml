@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 <!--        TODO Find a way to declare this service in a different manifest?/ provided by plugin -->
-        <service android:name="io.ably.flutter.plugin.AblyPushNotificationService">
+        <service android:name="io.ably.flutter.plugin.push.AblyPushNotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
