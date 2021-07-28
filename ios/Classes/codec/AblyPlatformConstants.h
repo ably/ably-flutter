@@ -25,9 +25,10 @@ typedef NS_ENUM(UInt8, _Value) {
     realtimePresenceParamsCodecType = 144,
     deviceDetailsCodecType = 145,
     localDeviceCodecType = 146,
-    errorInfoCodecType = 147,
-    connectionStateChangeCodecType = 148,
-    channelStateChangeCodecType = 149,
+    pushChannelSubscriptionCodecType = 147,
+    errorInfoCodecType = 148,
+    connectionStateChangeCodecType = 149,
+    channelStateChangeCodecType = 150,
 };
 
 

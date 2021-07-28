@@ -25,7 +25,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     // Push Notifications
     'deviceDetails',
     'localDevice',
-    // 'pushChannelSubscription',
+    'pushChannelSubscription',
 
     'errorInfo',
 

@@ -15,6 +15,7 @@ import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.Consumer;
 import io.ably.lib.push.LocalDevice;
+import io.ably.lib.push.Push;
 import io.ably.lib.push.PushBase;
 import io.ably.lib.realtime.ChannelEvent;
 import io.ably.lib.realtime.ChannelState;
@@ -126,6 +127,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeDeviceDetails, null));
         put(PlatformConstants.CodecTypes.localDevice,
             new CodecPair<>(self::encodeLocalDevice, null));
+        put(PlatformConstants.CodecTypes.pushChannelSubscription,
+            new CodecPair<>(self::encodePushChannelSubscription, null));
       }
     };
   }
@@ -176,7 +179,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.localDevice;
     } else if (value instanceof DeviceDetails) {
       return PlatformConstants.CodecTypes.deviceDetails;
-    } else {
+    } else if (value instanceof Push.ChannelSubscription) {
+      return PlatformConstants.CodecTypes.pushChannelSubscription;
+    }
+    else {
       return null;
     }
   }
@@ -718,6 +724,17 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+
+    return jsonMap;
+  }
+  
+  private Map<String, Object> encodePushChannelSubscription(PushBase.ChannelSubscription c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.channel, c.channel);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.deviceId, c.deviceId);
 
     return jsonMap;
   }

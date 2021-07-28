@@ -28,9 +28,10 @@ final public class PlatformConstants {
         public static final byte realtimePresenceParams = (byte) 144;
         public static final byte deviceDetails = (byte) 145;
         public static final byte localDevice = (byte) 146;
-        public static final byte errorInfo = (byte) 147;
-        public static final byte connectionStateChange = (byte) 148;
-        public static final byte channelStateChange = (byte) 149;
+        public static final byte pushChannelSubscription = (byte) 147;
+        public static final byte errorInfo = (byte) 148;
+        public static final byte connectionStateChange = (byte) 149;
+        public static final byte channelStateChange = (byte) 150;
     }
 
     static final public class PlatformMethod {

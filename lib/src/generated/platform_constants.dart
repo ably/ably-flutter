@@ -25,9 +25,10 @@ class CodecTypes {
   static const int realtimePresenceParams = 144;
   static const int deviceDetails = 145;
   static const int localDevice = 146;
-  static const int errorInfo = 147;
-  static const int connectionStateChange = 148;
-  static const int channelStateChange = 149;
+  static const int pushChannelSubscription = 147;
+  static const int errorInfo = 148;
+  static const int connectionStateChange = 149;
+  static const int channelStateChange = 150;
 }
 
 class PlatformMethod {

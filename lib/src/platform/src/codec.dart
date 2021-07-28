@@ -94,6 +94,8 @@ class Codec extends StandardMessageCodec {
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
       CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
+      CodecTypes.pushChannelSubscription: _CodecPair<PushChannelSubscription>(
+          null, _decodePushChannelSubscription),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -751,13 +753,12 @@ class Codec extends StandardMessageCodec {
   }
 
   PushChannelSubscription _decodePushChannelSubscription(
-      Map<String, dynamic> jsonMap) {
-    return PushChannelSubscription(
-      channel: jsonMap[TxPushChannelSubscription.channel] as String,
-      clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
-      deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
-    );
-  }
+          Map<String, dynamic> jsonMap) =>
+      PushChannelSubscription(
+        channel: jsonMap[TxPushChannelSubscription.channel] as String,
+        clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
+        deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
+      );
 
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null
