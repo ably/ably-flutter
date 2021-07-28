@@ -11,7 +11,7 @@ import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 
-class AblyLibrary {
+public class AblyLibrary {
 
     private static AblyLibrary _instance;
     private long _nextHandle = 1;
@@ -77,18 +77,19 @@ class AblyLibrary {
         return _realtimeInstances.get(handle);
     }
 
-    AblyBase getAblyClient(final long handle) throws AblyException {
+    /**
+     * Gets the ably client (either rest or realtime) when the interface being
+     * used is the same (e.g. When using Push from AblyBase / when it does
+     * not matter).
+     *
+     * This method relies on the fact handles are unique between all ably clients,
+     * (both rest and realtime).
+     * @param handle integer handle to either AblyRealtime or AblyRest
+     * @return AblyBase
+     */
+    AblyBase getAblyClient(final long handle) {
         AblyRealtime realtime = getRealtime(handle);
-        if (realtime != null) {
-            return realtime;
-        }
-
-        AblyRest rest = getRest(handle);
-        if (rest != null) {
-            return rest;
-        }
-
-        throw AblyException.fromErrorInfo(new ErrorInfo("No Ably client exists", 400, 40000));
+        return (realtime != null) ? realtime : getRest(handle);
     }
 
     void setRealtimeToken(long handle, Object tokenDetails) {
