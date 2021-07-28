@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 import 'op_state.dart';
+import 'push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
 void main() => runApp(MyApp());
@@ -19,6 +20,7 @@ const defaultChannel = 'test-channel';
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
+
   // final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   OpState _realtimeCreationState = OpState.notStarted;
@@ -39,6 +41,8 @@ class _MyAppState extends State<MyApp> {
   ably.PresenceMessage? channelPresenceMessage;
   List<ably.PresenceMessage>? _realtimePresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage>? _realtimePresenceHistory;
+  late final PushNotificationService _pushNotificationService =
+      PushNotificationService();
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -122,8 +126,7 @@ class _MyAppState extends State<MyApp> {
       _restCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions
-          .fromKey(_apiKey)
+    final clientOptions = ably.ClientOptions.fromKey(_apiKey)
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
             print('Custom logger :: $msg $exception');
@@ -152,6 +155,7 @@ class _MyAppState extends State<MyApp> {
       });
       rethrow;
     }
+    _pushNotificationService.setRestClient(rest);
 
     setState(() {
       _rest = rest;
@@ -183,7 +187,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     final clientOptions = ably.ClientOptions.fromKey(_apiKey)
-      ..clientId = 'flutter-example-app'
+      ..clientId = Constants.clientId
       ..logLevel = ably.LogLevel.verbose
       ..autoConnect = false
       ..logHandler = ({msg, exception}) {
@@ -195,6 +199,7 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       final channel = realtime.channels.get(defaultChannel);
       listenRealtimeChannel(channel);
+      _pushNotificationService.setRealtimeClient(realtime);
       setState(() {
         _realtime = realtime;
         _realtimeCreationState = OpState.succeeded;
@@ -667,7 +672,7 @@ class _MyAppState extends State<MyApp> {
                 await _realtime!.channels
                     .get(defaultChannel)
                     .presence
-                    .updateClient('flutter-example-app', _nextPresenceData);
+                    .updateClient(Constants.clientId, _nextPresenceData);
                 setState(() {});
               },
         color: Colors.yellow,
@@ -712,20 +717,18 @@ class _MyAppState extends State<MyApp> {
                           style: TextStyle(color: Colors.black),
                           children: [
                             TextSpan(
-                                text: "Warning: ",
+                                text: 'Warning: ',
                                 style: TextStyle(
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text:
-                                    'API key is not configured, use '),
+                            TextSpan(text: 'API key is not configured, use '),
                             TextSpan(
                                 text:
                                     '`flutter run --dart-define=ABLY_API_KEY=your_api_key`',
                                 style: TextStyle()),
                             TextSpan(
-                              text: "or add this to the 'additional run args' in the run configuration in Android Studio."
-                            )
+                                text:
+                                    "or add this to the 'additional run args' in the run configuration in Android Studio.")
                           ]),
                     )
                   else
@@ -844,7 +847,7 @@ class _MyAppState extends State<MyApp> {
                       [],
                   releaseRestChannel(),
                   const Divider(),
-                  PushNotificationsSliver(realtime: _realtime, rest: _rest)
+                  PushNotificationsSliver(_pushNotificationService)
                 ]),
           ),
         ),

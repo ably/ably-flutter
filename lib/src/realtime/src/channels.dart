@@ -105,6 +105,9 @@ abstract class RealtimeChannelInterface
   /// as subscribe returns a stream which can be cancelled
   /// by calling [StreamSubscription.cancel]
   ///
+  /// Warning: the name/ names are not channel names, but message names.
+  /// See [Message.dart] for more information.
+  ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message?> subscribe({
     String? name,

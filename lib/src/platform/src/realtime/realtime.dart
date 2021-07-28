@@ -50,9 +50,7 @@ class Realtime extends PlatformObject
   }
 
   // The _connection instance keeps a reference to this platform object.
-  // Ideally connection would be final, but that would need 'late final'
-  // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  late Connection _connection;
+  late final Connection _connection;
 
   @override
   Connection get connection => _connection;

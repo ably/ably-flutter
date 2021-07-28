@@ -1,13 +1,12 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
 import '../../common/common.dart';
+import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../push_notifications/push_notifications.dart';
 import '../platform.dart';
 
 class PushChannelNative extends PlatformObject implements PushChannel {
-  String _name;
-  Future<int?> _handle;
+  final String _name;
+  final Future<int?> _handle;
 
   PushChannelNative(this._name, this._handle) : super();
 

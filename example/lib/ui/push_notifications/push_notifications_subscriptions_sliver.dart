@@ -1,30 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 import '../../constants.dart';
 import '../../op_state.dart';
+import '../../push_notification_service.dart';
+import '../bool_stream_enabled_button.dart';
 
-class PushNotificationsSubscriptionsSliver extends StatefulWidget {
-  final ably.PushChannel? _pushChannel;
-  final OpState _deviceActivationState;
-  final String? deviceId;
+class PushNotificationsSubscriptionsSliver extends StatelessWidget {
+  final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsSubscriptionsSliver(
-      this._pushChannel, this._deviceActivationState, this.deviceId,
+  const PushNotificationsSubscriptionsSliver(this._pushNotificationService,
       {Key? key})
       : super(key: key);
-
-  @override
-  _PushNotificationsSubscriptionsSliverState createState() =>
-      _PushNotificationsSubscriptionsSliverState();
-}
-
-class _PushNotificationsSubscriptionsSliverState
-    extends State<PushNotificationsSubscriptionsSliver> {
-  bool get enablePublishButtons =>
-      widget._deviceActivationState == OpState.succeeded &&
-      widget._pushChannel != null;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -36,41 +23,34 @@ class _PushNotificationsSubscriptionsSliverState
               'Subscriptions',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            TextButton(
-                onPressed:
-                    enablePublishButtons && widget.deviceId != null
-                        ? () async {
-                            ably.PaginatedResultInterface<
-                                ably.PushChannelSubscription>? subscriptions;
-                            if (widget._pushChannel != null) {
-                              subscriptions = await widget._pushChannel!
-                                  .listSubscriptions({
-                                'channel': Constants.channelNameForPushNotifications,
-                                'deviceId': widget.deviceId!
-                              });
-                              print('Subscriptions: $subscriptions');
-                            }
-                          }
-                        : null,
+            BoolStreamEnabledButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: () async {
+                  final subscriptions =
+                      await _pushNotificationService.listSubscriptions();
+                  print('Subscriptions: ${subscriptions.items}');
+                },
                 child: const Text('List subscriptions')),
             Row(
               children: [
                 Expanded(
-                  child: TextButton(
-                      onPressed: enablePublishButtons
-                          ? () async {
-                              await widget._pushChannel!.subscribeDevice();
-                            }
-                          : null,
+                  child: BoolStreamEnabledButton(
+                      streams: [
+                        _pushNotificationService.hasPushChannelStream,
+                        _pushNotificationService.deviceActivationStateStream
+                            .map((state) => state == OpState.succeeded)
+                      ],
+                      onPressed: _pushNotificationService.subscribeDevice,
                       child: const Text('Subscribe device')),
                 ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: enablePublishButtons
-                        ? () async {
-                            await widget._pushChannel!.unsubscribeDevice();
-                          }
-                        : null,
+                  child: BoolStreamEnabledButton(
+                    streams: [
+                      _pushNotificationService.hasPushChannelStream,
+                      _pushNotificationService.deviceActivationStateStream
+                          .map((state) => state == OpState.succeeded)
+                    ],
+                    onPressed: _pushNotificationService.unsubscribeDevice,
                     child: const Text('Unsubscribe device'),
                   ),
                 ),
@@ -79,25 +59,35 @@ class _PushNotificationsSubscriptionsSliverState
             Row(
               children: [
                 Expanded(
-                  child: TextButton(
-                      onPressed: enablePublishButtons
-                          ? () async {
-                              await widget._pushChannel!.subscribeClient();
-                            }
-                          : null,
+                  child: BoolStreamEnabledButton(
+                      streams: [
+                        _pushNotificationService.hasPushChannelStream,
+                        _pushNotificationService.deviceActivationStateStream
+                            .map((state) => state == OpState.succeeded)
+                      ],
+                      onPressed: _pushNotificationService.subscribeClient,
                       child: const Text('Subscribe client')),
                 ),
                 Expanded(
-                  child: TextButton(
-                      onPressed: enablePublishButtons
-                          ? () async {
-                              await widget._pushChannel!.unsubscribeClient();
-                            }
-                          : null,
+                  child: BoolStreamEnabledButton(
+                      streams: [
+                        _pushNotificationService.hasPushChannelStream,
+                        _pushNotificationService.deviceActivationStateStream
+                            .map((state) => state == OpState.succeeded)
+                      ],
+                      onPressed: _pushNotificationService.unsubscribeClient,
                       child: const Text('Unsubscribe client')),
                 )
               ],
             ),
+            const Text('To validate messages were sent, you can subscribe to '
+                'the channel and view the logs'),
+            BoolStreamEnabledButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: _pushNotificationService
+                    .subscribeToChannelWithPushChannelRule,
+                child: const Text('Subscribe to channel: '
+                    '"${Constants.channelNameForPushNotifications}"'))
           ],
         ),
       );
