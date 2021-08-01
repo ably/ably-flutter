@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../constants.dart';
 import '../../push_notification_service.dart';
-import '../bool_stream_enabled_button.dart';
+import '../bool_stream_button.dart';
 
 class PushNotificationsPublishingSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -20,11 +20,11 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                 'Publishing',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              BoolStreamEnabledButton(
+              BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: _pushNotificationService.publishToChannel,
-                child: const Text(
-                    'Broadcast to channel: "${Constants.channelNameForPushNotifications}"'),
+                child: const Text('Broadcast to channel: '
+                    '"${Constants.channelNameForPushNotifications}"'),
               ),
             ],
           ));

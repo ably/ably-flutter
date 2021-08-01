@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-/// [BoolStreamEnabledButton] makes sure that all Stream<bool> passed to it
+/// [BoolStreamButton] makes sure that all Stream<bool> passed to it
 /// has a true value before enabling the button. If any stream has a false
 /// value, it will be disabled.
 ///
 /// Pass it either 1 stream (using [this.stream])
 /// or multiple (using [this.streams]). To convert your stream of objects
 /// into a bool use a map.
-class BoolStreamEnabledButton extends StatelessWidget {
+class BoolStreamButton extends StatelessWidget {
   final Stream<bool>? stream;
   final List<Stream<bool>>? streams;
   final VoidCallback onPressed;
   final Widget child;
 
-  BoolStreamEnabledButton({
+  BoolStreamButton({
     required this.onPressed,
     required this.child,
     this.stream,

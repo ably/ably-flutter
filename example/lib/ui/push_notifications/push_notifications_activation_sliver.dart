@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../push_notification_service.dart';
-import '../bool_stream_enabled_button.dart';
+import '../bool_stream_button.dart';
 
 class PushNotificationsActivationSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -29,6 +29,10 @@ class PushNotificationsActivationSliver extends StatelessWidget {
                 Text('DevicePushDetails state: ${localDevice.push.state}'),
                 Text('DevicePushDetails recipient: '
                     '${localDevice.push.recipient}'),
+                TextButton(
+                  onPressed: _pushNotificationService.getDevice,
+                  child: const Text('Refresh local device information'),
+                ),
               ],
             );
           } else {
@@ -66,19 +70,14 @@ class PushNotificationsActivationSliver extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: BoolStreamEnabledButton(
-                    streams: [
-                      _pushNotificationService.hasPushChannelStream,
-                      _pushNotificationService.localDeviceStream
-                          .map((localDevice) => localDevice == null)
-                    ],
+                child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
                     onPressed: handleActivateDeviceButton,
                     child: const Text('Activate device')),
               ),
               Expanded(
-                child: BoolStreamEnabledButton(
-                    stream: _pushNotificationService.localDeviceStream
-                        .map((localDevice) => localDevice != null),
+                child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
                     onPressed: _pushNotificationService.deactivateDevice,
                     child: const Text('Deactivate device')),
               ),

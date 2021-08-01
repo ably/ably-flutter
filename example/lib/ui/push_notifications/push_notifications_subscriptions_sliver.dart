@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../constants.dart';
 import '../../op_state.dart';
 import '../../push_notification_service.dart';
-import '../bool_stream_enabled_button.dart';
+import '../bool_stream_button.dart';
 
 class PushNotificationsSubscriptionsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -23,7 +23,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
               'Subscriptions',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            BoolStreamEnabledButton(
+            BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: () async {
                   final subscriptions =
@@ -34,22 +34,14 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: BoolStreamEnabledButton(
-                      streams: [
-                        _pushNotificationService.hasPushChannelStream,
-                        _pushNotificationService.deviceActivationStateStream
-                            .map((state) => state == OpState.succeeded)
-                      ],
+                  child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
                       onPressed: _pushNotificationService.subscribeDevice,
                       child: const Text('Subscribe device')),
                 ),
                 Expanded(
-                  child: BoolStreamEnabledButton(
-                    streams: [
-                      _pushNotificationService.hasPushChannelStream,
-                      _pushNotificationService.deviceActivationStateStream
-                          .map((state) => state == OpState.succeeded)
-                    ],
+                  child: BoolStreamButton(
+                      stream: _pushNotificationService.hasPushChannelStream,
                     onPressed: _pushNotificationService.unsubscribeDevice,
                     child: const Text('Unsubscribe device'),
                   ),
@@ -59,30 +51,22 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: BoolStreamEnabledButton(
-                      streams: [
-                        _pushNotificationService.hasPushChannelStream,
-                        _pushNotificationService.deviceActivationStateStream
-                            .map((state) => state == OpState.succeeded)
-                      ],
+                  child: BoolStreamButton(
+                        stream: _pushNotificationService.hasPushChannelStream,
                       onPressed: _pushNotificationService.subscribeClient,
                       child: const Text('Subscribe client')),
                 ),
                 Expanded(
-                  child: BoolStreamEnabledButton(
-                      streams: [
-                        _pushNotificationService.hasPushChannelStream,
-                        _pushNotificationService.deviceActivationStateStream
-                            .map((state) => state == OpState.succeeded)
-                      ],
+                  child: BoolStreamButton(
+                      stream: _pushNotificationService.hasPushChannelStream,
                       onPressed: _pushNotificationService.unsubscribeClient,
                       child: const Text('Unsubscribe client')),
                 )
               ],
             ),
             const Text('To validate messages were sent, you can subscribe to '
-                'the channel and view the logs'),
-            BoolStreamEnabledButton(
+                'the channel and view the device logs'),
+            BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: _pushNotificationService
                     .subscribeToChannelWithPushChannelRule,
