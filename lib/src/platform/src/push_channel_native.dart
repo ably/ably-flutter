@@ -2,16 +2,34 @@ import '../../common/common.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../push_notifications/push_notifications.dart';
+import '../../realtime/realtime.dart';
+import '../../rest/rest.dart';
 import '../platform.dart';
 
+/// The native code implementation of [PushChannel].
 class PushChannelNative extends PlatformObject implements PushChannel {
   final String _name;
-  final Future<int?> _handle;
 
-  PushChannelNative(this._name, this._handle) : super();
+  /// A rest client used platform side to invoke push notification methods
+  final RestInterface? rest;
+
+  /// A realtime client used platform side to invoke push notification methods
+  final RealtimeInterface? realtime;
+
+  /// Pass the channel name and an Ably realtime or rest client.
+  PushChannelNative(this._name, {this.rest, this.realtime}) {
+    final ablyClientNotPresent = rest == null && realtime == null;
+    final moreThanOneAblyClientPresent = rest != null && realtime != null;
+    if (ablyClientNotPresent || moreThanOneAblyClientPresent) {
+      throw Exception(
+          'Specify one Ably client when creating ${(PushNative).toString()}.');
+    }
+  }
 
   @override
-  Future<int?> createPlatformInstance() => _handle;
+  Future<int?> createPlatformInstance() => (realtime != null)
+      ? (realtime as Realtime).handle
+      : (rest as Rest).handle;
 
   /// Subscribe device to the channel’s push notifications.
   @override
@@ -40,6 +58,9 @@ class PushChannelNative extends PlatformObject implements PushChannel {
         !params.containsKey('clientId') &&
         !params.containsKey('deviceClientId') &&
         !params.containsKey('channel')) {
+
+      // This error only happen on Android. They are thrown here
+      // for both platforms (iOS/ Android) to make the API more consistent.
       final errorInfo = ErrorInfo(
           code: 40000,
           href: 'https://help.ably.io/error/40000',

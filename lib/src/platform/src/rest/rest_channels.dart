@@ -15,7 +15,7 @@ class RestChannels extends RestChannelsInterface<RestChannel> {
   @override
   @protected
   RestChannel createChannel(String name) =>
-      RestChannel(rest, PushChannelNative(name, (rest as Rest).handle), name);
+      RestChannel(rest, PushChannelNative(name, rest: rest), name);
 
   @override
   void release(String name) {
