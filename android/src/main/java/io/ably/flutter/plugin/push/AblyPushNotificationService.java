@@ -16,16 +16,17 @@ public class AblyPushNotificationService extends FirebaseMessagingService {
 
   @Override
   public void onMessageReceived(@NonNull RemoteMessage message) {
-    //FCM data is received here.
-    // TODO Listen for `PUSH_NOTIFICATION_ACTION` in the flutterActivity? and there, call the callback set by the user dart-side?
     Intent intent = new Intent(PUSH_NOTIFICATION_ACTION);
     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    // TODO Implement Push Notifications listener https://github.com/ably/ably-flutter/issues/141
+    // Call a callback in dart side so the user can handle it.
+    // TODO Listen for `PUSH_NOTIFICATION_ACTION` and there, perform your own logic.
   }
 
   @Override
   public void onNewToken(@NonNull String s) {
-    super.onNewToken(s);
-    //Store token in Ably
     ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, s);
+    super.onNewToken(s);
   }
 }
+ 
