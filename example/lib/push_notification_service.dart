@@ -163,13 +163,16 @@ class PushNotificationService {
         throw Exception(
             'Device ID was null, but it needs to be specified on Android.');
       }
-    } else {
-
+      return _pushChannel!.listSubscriptions({
+        'channel': Constants.channelNameForPushNotifications,
+        // TODO does this work if deviceId is null?
+        'deviceId': deviceId,
+      });
     }
     return _pushChannel!.listSubscriptions({
       'channel': Constants.channelNameForPushNotifications,
-      // TODO does this work if deviceId is null?
       'deviceId': deviceId!,
+      // 'clientId': "put_your_client_id_here",
     });
   }
 
