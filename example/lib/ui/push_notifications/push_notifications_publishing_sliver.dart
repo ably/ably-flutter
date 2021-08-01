@@ -20,6 +20,14 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                 'Publishing',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+              const Text('To validate messages were sent, you can subscribe to '
+                  'the channel and view the device logs'),
+              BoolStreamButton(
+                  stream: _pushNotificationService.hasPushChannelStream,
+                  onPressed: _pushNotificationService
+                      .subscribeToChannelWithPushChannelRule,
+                  child: const Text('Subscribe to channel: '
+                      '"${Constants.channelNameForPushNotifications}"')),
               BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: _pushNotificationService.publishToChannel,

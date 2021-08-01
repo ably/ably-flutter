@@ -120,7 +120,8 @@ class PushNotificationService {
         },
       }));
 
-  void publishToChannel() {
+  Future<void> publishToChannel() async {
+    await ensureRealtimeClientConnected();
     if (_realtimeChannel != null) {
       _realtimeChannel!.publish(message: _pushMessage);
     } else if (_restChannel != null) {

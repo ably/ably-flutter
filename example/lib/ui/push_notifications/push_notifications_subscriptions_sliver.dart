@@ -28,7 +28,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 onPressed: () async {
                   final subscriptions =
                       await _pushNotificationService.listSubscriptions();
-                  print('Subscriptions: ${subscriptions.items}');
+                  print('Push subscriptions: ${subscriptions.items}');
                 },
                 child: const Text('List subscriptions')),
             Row(
@@ -63,15 +63,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                       child: const Text('Unsubscribe client')),
                 )
               ],
-            ),
-            const Text('To validate messages were sent, you can subscribe to '
-                'the channel and view the device logs'),
-            BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService
-                    .subscribeToChannelWithPushChannelRule,
-                child: const Text('Subscribe to channel: '
-                    '"${Constants.channelNameForPushNotifications}"'))
+            )
           ],
         ),
       );
