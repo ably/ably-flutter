@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_END
         return localDeviceCodecType;
     } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
         return deviceDetailsCodecType;
+    } else if ([value isKindOfClass:[ARTPushChannelSubscription class]]) {
+        return pushChannelSubscriptionCodecType;
     }
     return 0;
 }
@@ -52,6 +54,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
         [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: encodeDeviceDetails,
         [NSString stringWithFormat:@"%d", localDeviceCodecType]: encodeLocalDevice,
+        [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: encodePushChannelSubscription,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -334,6 +337,16 @@ static AblyCodecEncoder encodeLocalDevice = ^NSMutableDictionary*(ARTLocalDevice
     WRITE_VALUE(dictionary, TxDeviceDetails_formFactor, localDevice.formFactor);
     WRITE_VALUE(dictionary, TxDeviceDetails_metadata, localDevice.metadata);
     WRITE_VALUE(dictionary, TxDeviceDetails_devicePushDetails, encodeDevicePushDetails(localDevice.push));
+
+    return dictionary;
+};
+
+static AblyCodecEncoder encodePushChannelSubscription = ^NSMutableDictionary*(ARTPushChannelSubscription  *const pushChannelSubscription) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+
+    WRITE_VALUE(dictionary, TxPushChannelSubscription_channel, pushChannelSubscription.channel);
+    WRITE_VALUE(dictionary, TxPushChannelSubscription_clientId, pushChannelSubscription.clientId);
+    WRITE_VALUE(dictionary, TxPushChannelSubscription_deviceId, pushChannelSubscription.deviceId);
 
     return dictionary;
 };
