@@ -5,7 +5,6 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:rxdart/rxdart.dart';
 
 import 'constants.dart';
-import 'op_state.dart';
 
 class PushNotificationService {
   late final ably.Realtime? realtime;
@@ -27,12 +26,6 @@ class PushNotificationService {
   ably.PaginatedResultInterface<ably.PushChannelSubscription>
       get _pushChannelSubscription => _pushChannelSubscriptionSubject.value;
 
-  final BehaviorSubject<OpState> _deviceActivationStateSubject =
-      BehaviorSubject<OpState>.seeded(OpState.notStarted);
-
-  ValueStream<OpState> get deviceActivationStateStream =>
-      _deviceActivationStateSubject.stream;
-
   final BehaviorSubject<bool> _hasPushChannelSubject =
       BehaviorSubject<bool>.seeded(false);
 
@@ -50,6 +43,7 @@ class PushNotificationService {
   void setRealtimeClient(ably.Realtime realtime) {
     this.realtime = realtime;
     _getChannels();
+    getDevice();
   }
 
   Future<void> ensureRealtimeClientConnected() async {
@@ -73,7 +67,6 @@ class PushNotificationService {
     } else {
       throw Exception('No ably client available');
     }
-    _deviceActivationStateSubject.add(OpState.succeeded);
   }
 
   Future<void> deactivateDevice() async {
@@ -84,8 +77,7 @@ class PushNotificationService {
       await rest!.push.deactivate();
       print('Push: ${rest!.push}');
     }
-    _localDeviceSubject.add(null);
-    _deviceActivationStateSubject.add(OpState.notStarted);
+    await getDevice();
   }
 
   Future<void> getDevice() async {
@@ -96,7 +88,6 @@ class PushNotificationService {
       final localDevice = await rest!.device();
       _localDeviceSubject.add(localDevice);
     }
-    _deviceActivationStateSubject.add(OpState.succeeded);
   }
 
   /// Subscribes to the channel (not the push channel) which has a Push channel
@@ -128,21 +119,25 @@ class PushNotificationService {
             'title': 'Hello from Ably!',
             'body': 'Example push notification from Ably.'
           },
-          'data': {'foo': 'bar', 'baz': 'quz'}
+          'data': {'foo': 'bar', 'baz': 'quz'},
+          'apns': {
+            'aps': {
+              'content-available' : 1
+            }
+          }
         },
       }));
 
   Future<void> publishToChannel() async {
     await ensureRealtimeClientConnected();
     if (_realtimeChannel != null) {
-      _realtimeChannel!.publish(message: _pushMessage);
+      await _realtimeChannel!.publish(message: _pushMessage);
     } else if (_restChannel != null) {
-      _restChannel!.publish(message: _pushMessage);
+      await _restChannel!.publish(message: _pushMessage);
     }
   }
 
   void close() {
-    _deviceActivationStateSubject.close();
     _hasPushChannelSubject.close();
     _localDeviceSubject.close();
     _realtimeChannelStreamSubscription?.cancel();

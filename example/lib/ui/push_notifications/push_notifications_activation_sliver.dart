@@ -20,7 +20,6 @@ class PushNotificationsActivationSliver extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text('Device is registered'),
                 Text('deviceId: ${localDevice.id}'),
                 Text('clientId: ${localDevice.clientId}'),
                 Text('platform: ${localDevice.platform}'),
@@ -35,18 +34,17 @@ class PushNotificationsActivationSliver extends StatelessWidget {
                 ),
               ],
             );
-          } else {
-            return RichText(
-                text: const TextSpan(children: [
-              TextSpan(
-                  text: 'Warning: ',
-                  style: TextStyle(
-                      color: Colors.red, fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: 'Device is not activated.',
-                  style: TextStyle(color: Colors.black))
-            ]));
           }
+          return RichText(
+              text: const TextSpan(children: [
+            TextSpan(
+                text: 'Warning: ',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: 'no local device information yet.',
+                style: TextStyle(color: Colors.black))
+          ]));
         },
       );
 
