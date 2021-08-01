@@ -15,6 +15,18 @@ class PushNotificationService {
   ably.RestChannelInterface? _restChannel;
   late ably.PushChannel? _pushChannel;
 
+  final BehaviorSubject<
+          ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+      _pushChannelSubscriptionSubject = BehaviorSubject<
+          ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
+
+  ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+      get pushChannelSubscriptionStream =>
+          _pushChannelSubscriptionSubject.stream;
+
+  ably.PaginatedResultInterface<ably.PushChannelSubscription>
+      get _pushChannelSubscription => _pushChannelSubscriptionSubject.value;
+
   final BehaviorSubject<OpState> _deviceActivationStateSubject =
       BehaviorSubject<OpState>.seeded(OpState.notStarted);
 
@@ -164,17 +176,15 @@ class PushNotificationService {
         throw Exception(
             'Device ID was null, but it needs to be specified on Android.');
       }
-      return _pushChannel!.listSubscriptions({
-        'channel': Constants.channelNameForPushNotifications,
-        // TODO does this work if deviceId is null?
-        'deviceId': deviceId,
-      });
+
     }
-    return _pushChannel!.listSubscriptions({
+    final subscriptions = await _pushChannel!.listSubscriptions({
       'channel': Constants.channelNameForPushNotifications,
       'deviceId': deviceId!,
       // 'clientId': "put_your_client_id_here",
     });
+      _pushChannelSubscriptionSubject.add(subscriptions);
+      return subscriptions;
   }
 
   Future<void> subscribeClient() async {
