@@ -27,7 +27,7 @@ We handle the complexity of realtime messaging so you can focus on your code.
 
 ### iOS
 
-iOS 9 or newer.
+iOS 10 or newer.
 
 ### Android
 
@@ -61,32 +61,8 @@ Features that we do not currently support, but we do plan to add in the future:
     - If starting the app using Android Studio:
         - Edit the example app run configuration
           add the --dart-define flag to `additional run args`
-- Android only: Create a firebase project, add an Android app to it, add download a `google-services.json` file. Move this file to `example/android/app`.
+- Android only: Create a firebase project, add an Android app to it, add download a `google-services.json` file. Move this file to `example/android/app`. This is required because we depend on Firebase, which requires this file at launch. 
 - `flutter run` will start the application on connected android / iOS device
-
-### Push Notifications
-- To get push notifications working in the example app:
-    - For Android 🤖:
-        - **Optional:** Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) the example application in `example/android/app/build.gradle` to your unique application ID.
-        - Create a firebase project, and in the Project settings, add an Android App. Follow the steps provided on the setup process, or the following:
-            - Specify your application ID in this step.
-            - You can leave `Debug signing certificate SHA-1` empty.
-            - Download the generated `google-services.json` file
-            - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it won't work for users, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it if you prefer.
-            - Update your build.gradle files according to the guide.
-    - For iOS 📱:
-        - **Pre-requisite:** You must be on the Apple Developer Program ($99/year) and be running a physical device.
-        - **Required:** In Xcode, update the bundle ID of your application in Xcode to a unique bundle ID. You can open Xcode with `xed example/ios` and clicking `Runner` in the Project Navigator, and clicking the `General` tab. Modify the text field value for `Bundle Identifier` from `io.ably.flutter.PluginExample` to something unique to you. An App ID will be automatically generated on developer.apple.com.
-        - Create a `.p12` (certificate) for that App ID using the Apple Guide, [Communicate with APNs using a TLS certificate](https://help.apple.com/developer-account/#/dev82a71386a). In the guide, this certificate is called a _client TLS identity_.
-        - Upload the `.p12` certificate to Ably, in the Notifications tab of your app dashboard on [Ably.com](https://Ably.com).
-        - You don't need to add your iOS project to Firebase.
-        - Follow the [Registering Your App with APNs article](https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns), or perform the following steps:
-            - In Xcode, add the `Push Notification` capability to your target in your Xcode project.
-            - In your
-- **Done:** Launch the app and press the push notifications button, and a notification should be delivered to yourself.
-
-- TODO investigate if simulator/ emulator running APNs/ FCM
-- TODO add usage of AvdLee/Poes CLI for iOS
 
 ## Usage
 
@@ -480,10 +456,76 @@ channel
 );
 ```
 
-### Enabling Push Notifications
-- TODO add instructions for Android and iOS platform side
-- TODO add example code usage
+### Push Notifications
 
+#### Setting up push notifications
+
+- To get push notifications working in the example app:
+    - For Android 🤖:
+        - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to your unique application ID.
+        - Create a firebase project, and in the Project settings, add an Android App. Follow the steps provided on the setup process, or the following:
+            - Specify your application ID in this step.
+            - You can leave `Debug signing certificate SHA-1` empty.
+            - Download the generated `google-services.json` file
+            - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
+            - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the firebase guide.
+            - Declare the AblyPushNotificationService: In `AndroidManifest.xml`, declare a service already implemented in ably-flutter by adding the following between the `<application>` and `</application>` tags:
+```xml
+<service android:name="io.ably.flutter.plugin.push.AblyPushNotificationService">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+</service>
+```
+    - For iOS 📱:
+        - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
+        - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
+            - Register your bundle ID on App Store connect.
+            - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
+            - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
+            - Add `remote notification` Background mode:
+                - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
+                - Check `remote notifications`.
+
+#### Usage
+- Create a rest or realtime client: e.g. `final realtime = ably.Realtime(options: clientOptions);`
+- Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only 
+  needs to be done once.
+- Get the Realtime/ Rest channel: `final channel = realtime!.channels.get(Constants.channelNameForPushNotifications)`
+- Subscribe the device to the channel, by either using the deviceID or client ID:
+  - `channel.push.subscribeClient()` or `channel.push.subscribeDevice()` 
+- Optionally: List the subscriptions that the device or client is subscribed to: `final subscriptions = channel.push.listSubscriptions()`
+- Your device is now ready to receive and display user notifications to the user, when the application is in the background. 
+- To send a UI notification which will be shown to the user when the app is not in the foreground, publish the following message to the channel:
+```dart
+final message = ably.Message(
+  data: 'This is an Ably message published on channels that is also sent '
+      'as a notification message to registered push devices.',
+  extras: const ably.MessageExtras({
+    'push': {
+      'notification': {
+        'title': 'Hello from Ably!',
+        'body': 'Example push notification from Ably.'
+    }, 
+    'data': {'foo': 'bar', 'baz': 'quz'},
+  },
+}));
+```
+- To send a background/ data notification which will trigger the native code handler (Android) / delegate method (iOS), publish the following message to the channel:
+  - Warning: Handling these messages on the dart side is currently not implemented. Track this in https://github.com/ably/ably-flutter/issues/141
+```dart
+final _pushDataMessage = ably.Message(
+data: 'This is a Ably message published on channels that is also '
+    'sent as a data message to registered push devices.',
+  extras: const ably.MessageExtras({
+    'push': {
+      'data': {'foo': 'bar', 'baz': 'quz'},
+      'apns': {
+        'aps': {'content-available': 1}
+    } 
+  },
+}));
+```
 ## Caveats
 
 ### RTE6a compliance
