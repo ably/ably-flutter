@@ -146,8 +146,8 @@ class PushNotificationService {
   }
 
   final ably.Message _pushNotificationMessage = ably.Message(
-      data: 'This is a channel message that is also sent as a '
-          'notification message to registered push devices.',
+      data: 'This is an Ably message published on channels that is also sent '
+          'as a notification message to registered push devices.',
       extras: const ably.MessageExtras({
         'push': {
           'notification': {
@@ -168,8 +168,8 @@ class PushNotificationService {
   }
 
   final ably.Message _pushDataMessage = ably.Message(
-      data: 'This is a channel message that is also sent as a '
-          'data message to registered push devices.',
+      data: 'This is a Ably message published on channels that is also '
+          'sent as a data message to registered push devices.',
       extras: const ably.MessageExtras({
         'push': {
           'data': {'foo': 'bar', 'baz': 'quz'},
