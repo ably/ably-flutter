@@ -98,6 +98,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
   {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
   {'name': 'pushDevice', 'value': 'pushDevice'},
+  {
+    'name': 'pushRequestNotificationPermission',
+    'value': 'pushRequestNotificationPermission'
+  },
 
   // Realtime events
   {
@@ -409,6 +413,10 @@ const List<Map<String, dynamic>> _objects = [
       'deviceId',
       'clientId'
     ]
+  },
+  {
+    'name': 'PushRequestNotificationPermission',
+    'properties': <String>['provisionalPermissionRequest']
   }
 ];
 

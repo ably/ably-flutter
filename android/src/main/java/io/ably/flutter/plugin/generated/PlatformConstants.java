@@ -70,6 +70,7 @@ final public class PlatformConstants {
         public static final String pushUnsubscribeClient = "pushUnsubscribeClient";
         public static final String pushListSubscriptions = "pushListSubscriptions";
         public static final String pushDevice = "pushDevice";
+        public static final String pushRequestNotificationPermission = "pushRequestNotificationPermission";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -336,6 +337,10 @@ final public class PlatformConstants {
         public static final String channel = "channel";
         public static final String deviceId = "deviceId";
         public static final String clientId = "clientId";
+    }
+
+    static final public class TxPushRequestNotificationPermission {
+        public static final String provisionalPermissionRequest = "provisionalPermissionRequest";
     }
 
 }

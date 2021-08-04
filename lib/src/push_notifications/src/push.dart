@@ -1,22 +1,31 @@
-import '../push_notifications.dart';
-import 'admin/push_admin.dart';
-
 /// Class providing push notification functionality
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
 abstract class Push {
-  /// Admin features for push notifications like managing devices
-  /// and channel subscriptions.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
-  // TODO Consider implementing the push admin API
-  // PushAdmin? admin;
-
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   Future<void> activate();
+
+  /// Request permission from the user to show them notifications. This is
+  /// required to show user notifications. Otherwise, notifications may
+  /// silently get received by the application.
+  ///
+  /// This does nothing on Android, since you don't need permissions
+  /// to show notifications to the user.
+  ///
+  /// Params:
+  /// - iosProvisionalPermissionRequest (iOS only): Send notifications on a
+  /// trial basis, by delaying the permission request until the
+  /// user first sees the first notification. This is works on iOS12+.
+  /// The notification is first delivered quietly, and the user will
+  /// get an option to deliver it more prominently.
+  ///
+  /// For more information,
+  /// see [Use Provisional Authorization to Send Trial Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc)
+  Future<bool> requestNotificationPermission(
+      {bool provisionalPermissionRequest = false});
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.

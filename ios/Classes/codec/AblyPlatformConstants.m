@@ -42,6 +42,7 @@ NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
 NSString *const AblyPlatformMethod_pushUnsubscribeClient= @"pushUnsubscribeClient";
 NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscriptions";
 NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
+NSString *const AblyPlatformMethod_pushRequestNotificationPermission= @"pushRequestNotificationPermission";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -278,3 +279,6 @@ NSString *const TxLocalDevice_deviceIdentityToken = @"deviceIdentityToken";
 NSString *const TxPushChannelSubscription_channel = @"channel";
 NSString *const TxPushChannelSubscription_deviceId = @"deviceId";
 NSString *const TxPushChannelSubscription_clientId = @"clientId";
+
+// key constants for PushRequestNotificationPermission
+NSString *const TxPushRequestNotificationPermission_provisionalPermissionRequest = @"provisionalPermissionRequest";

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -45,6 +47,26 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
         return const SizedBox.shrink();
       });
 
+  Widget buildNotificationPermissionGrantedStatus() => StreamBuilder(
+        stream:
+            _pushNotificationService.userNotificationPermissionGrantedStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Text('User Notification Permission: '
+                'Permission not yet requested');
+          } else {
+            final permissionGranted = snapshot.data as bool;
+            if (permissionGranted) {
+              return const Text('User Notification Permission: '
+                  'Permission granted');
+            } else {
+              return const Text('User Notification Permission: '
+                  'Permission not granted.');
+            }
+          }
+        },
+      );
+
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 16),
@@ -55,6 +77,8 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
               'Subscriptions',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            const Text('If you subscribe both device and client, '
+                'the device will receive 2 notifications.'),
             Row(
               children: [
                 Expanded(
@@ -91,12 +115,26 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
             BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: () async {
-                  final subscriptions =
-                      await _pushNotificationService.listSubscriptions();
+                  final subscriptions = await _pushNotificationService
+                      .listSubscriptionsWithDeviceId();
                   print('Push subscriptions: ${subscriptions.items}');
                 },
-                child: const Text('List subscriptions')),
+                child: const Text('List subscriptions with current device ID')),
+            BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: () async {
+                  final subscriptions = await _pushNotificationService
+                      .listSubscriptionsWithClientId();
+                  print('Push subscriptions: ${subscriptions.items}');
+                },
+                child: const Text('List subscriptions with current client ID')),
             buildSubscriptionsList(),
+            BoolStreamButton(
+              stream: _pushNotificationService.hasPushChannelStream,
+              onPressed: _pushNotificationService.requestNotificationPermission,
+              child: const Text('Request User Permission (iOS only)'),
+            ),
+            buildNotificationPermissionGrantedStatus(),
           ],
         ),
       );

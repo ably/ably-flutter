@@ -20,6 +20,19 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                 'Publishing',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+              BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: _pushNotificationService
+                    .publishNotificationMessageToChannel,
+                child: const Text('Broadcast notification message to channel: '
+                    '"${Constants.channelNameForPushNotifications}"'),
+              ),
+              BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: _pushNotificationService.publishDataMessageToChannel,
+                child: const Text('Broadcast data message to channel: '
+                    '"${Constants.channelNameForPushNotifications}"'),
+              ),
               const Text('To validate messages were sent, you can subscribe to '
                   'the channel and view the device logs'),
               BoolStreamButton(
@@ -28,12 +41,14 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                       .subscribeToChannelWithPushChannelRule,
                   child: const Text('Subscribe to channel: '
                       '"${Constants.channelNameForPushNotifications}"')),
+              const Text('To debug push notifications, '
+                  'subscribe to the meta channel.'),
               BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService.publishToChannel,
-                child: const Text('Broadcast to channel: '
-                    '"${Constants.channelNameForPushNotifications}"'),
-              ),
+                  stream: _pushNotificationService.hasPushChannelStream,
+                  onPressed:
+                      _pushNotificationService.subscribeToPushLogMetachannel,
+                  child: const Text('Subscribe to push metachannel: '
+                      '${Constants.pushMetaChannelName}')),
             ],
           ));
 }

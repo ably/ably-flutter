@@ -623,11 +623,36 @@ static const AblyClientReceiver _ablyClientReceiver = ^void(AblyFlutterPlugin *c
 
 static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
-    
-    AblyFlutterMessage *const message = call.arguments;
-    NSNumber *const ablyClientHandle = message.message;
     [push activate];
     result(nil);
+};
+
+static const FlutterHandler _pushRequestNotificationPermission = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutterMessage *const messageData = message.message;
+    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
+    NSNumber const* provisionalPermissionRequest = (NSNumber *)[_dataMap objectForKey:TxPushRequestNotificationPermission_provisionalPermissionRequest];
+    
+    UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound
+        | UNAuthorizationOptionAlert | UNAuthorizationOptionProvidesAppNotificationSettings;
+    if ([provisionalPermissionRequest  isEqual: @(YES)]) {
+        if (@available(iOS 12, *)) {
+            options = options | UNAuthorizationOptionProvisional | UNAuthorizationOptionProvidesAppNotificationSettings;
+        }
+    }
+
+    [UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:options completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error requesting authorization to show user notifications; err = %@", error.localizedDescription]
+                    details:nil
+                    ]);
+            return;
+        }
+        result([NSNumber numberWithBool:granted]);
+    }];
 };
 
 static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -874,6 +899,7 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         AblyPlatformMethod_pushActivate: _pushActivate,
+        AblyPlatformMethod_pushRequestNotificationPermission: _pushRequestNotificationPermission,
         AblyPlatformMethod_pushDeactivate: _pushDeactivate,
         AblyPlatformMethod_pushSubscribeDevice: _pushSubscribeDevice,
         AblyPlatformMethod_pushUnsubscribeDevice: _pushUnsubscribeDevice,
@@ -924,7 +950,8 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
     // Calling registerForRemoteNotifications on didFinishLaunchingWithOptions because it may change between app launches
     // More information at https://stackoverflow.com/questions/29456954/ios-8-remote-notifications-when-should-i-call-registerforremotenotifications
     
-    // Silent notifications. The user still needs to request authorization to show notifications to the user.
+    // By default, this only allows "silent notifications".
+    // The user still needs to request authorization to show notifications to the user.
     // See https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications?language=objc
     // and https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorizationwithoptions?language=objc
     [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -937,7 +964,7 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 //    }];
 }
 
-#pragma mark - Push Notifications - UIApplicationDelegate
+#pragma mark - Push Notifications Registration - UIApplicationDelegate
 /// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // This deviceToken will be used when a new client gets made.
@@ -948,9 +975,17 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     _didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
-    
-// This only seems to be called when `'content-available' : 1` is set. Before this is called, didReceiveNotificationResponse is called?!?!
-// The app can still be in the foreground
+
+// Only called when the app is in the foreground
+#pragma mark - Push Notifications - UNUserNotificationCenterDelegate
+// https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
+    // Don't show the notification if the app is in the foreground. This is the default behaviour on Android.
+    // TODO allow the user to specify the behaviour here on dart side.
+    completionHandler(UNNotificationPresentationOptionNone);
+}
+
+// Only called when `'content-available' : 1` is set in the push payload
 # pragma mark - Push Notifications - FlutterApplicationLifeCycleDelegate (not UIApplicationDelegate)
 - (bool)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
     // TODO Implement Push Notifications listener https://github.com/ably/ably-flutter/issues/141
@@ -961,19 +996,11 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 //    } else {
 //        return NO;
 //    }
+    completionHandler(UIBackgroundFetchResultNewData);
     return NO;
 }
 
-#pragma mark - Push Notifications - UNUserNotificationCenterDelegate
-// https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
-
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
-    // TODO allow the user to specify the behaviour here on dart side.
-    completionHandler(UNNotificationPresentationOptionAlert);
-}
-
 #pragma mark - Push Notifications - UNNotificationContentExtension
-
 // From apple docs: The method will be called on the delegate when the user responded to the notification by opening the application, dismissing the notification or choosing a UNNotificationAction
 // TODO allow the user to specify the behaviour here on dart side.
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler  API_AVAILABLE(ios(10.0)){

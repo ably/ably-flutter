@@ -68,6 +68,7 @@ extern NSString *const AblyPlatformMethod_pushSubscribeClient;
 extern NSString *const AblyPlatformMethod_pushUnsubscribeClient;
 extern NSString *const AblyPlatformMethod_pushListSubscriptions;
 extern NSString *const AblyPlatformMethod_pushDevice;
+extern NSString *const AblyPlatformMethod_pushRequestNotificationPermission;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -304,3 +305,6 @@ extern NSString *const TxLocalDevice_deviceIdentityToken;
 extern NSString *const TxPushChannelSubscription_channel;
 extern NSString *const TxPushChannelSubscription_deviceId;
 extern NSString *const TxPushChannelSubscription_clientId;
+
+// key constants for PushRequestNotificationPermission
+extern NSString *const TxPushRequestNotificationPermission_provisionalPermissionRequest;

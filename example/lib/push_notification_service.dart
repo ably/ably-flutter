@@ -10,7 +10,7 @@ class PushNotificationService {
   late final ably.Realtime? realtime;
   late final ably.Rest? rest;
   ably.RealtimeChannelInterface? _realtimeChannel;
-  StreamSubscription<ably.Message?>? _realtimeChannelStreamSubscription;
+  ably.RealtimeChannelInterface? _pushLogMetachannel;
   ably.RestChannelInterface? _restChannel;
   late ably.PushChannel? _pushChannel;
 
@@ -40,6 +40,14 @@ class PushNotificationService {
 
   ably.LocalDevice? get localDevice => localDeviceStream.value;
 
+  final BehaviorSubject<bool> _userNotificationPermissionGrantedSubject =
+      BehaviorSubject();
+  late final ValueStream<bool> userNotificationPermissionGrantedStream =
+      _userNotificationPermissionGrantedSubject.stream;
+
+  bool get userNotificationPermissionGranted =>
+      userNotificationPermissionGrantedStream.value;
+
   void setRealtimeClient(ably.Realtime realtime) {
     this.realtime = realtime;
     _getChannels();
@@ -55,6 +63,18 @@ class PushNotificationService {
   void setRestClient(ably.Rest rest) {
     this.rest = rest;
     _getChannels();
+  }
+
+  Future<void> requestNotificationPermission() async {
+    if (realtime != null) {
+      final granted = await realtime!.push.requestNotificationPermission();
+      _userNotificationPermissionGrantedSubject.add(granted);
+    } else if (rest != null) {
+      final granted = await rest!.push.requestNotificationPermission();
+      _userNotificationPermissionGrantedSubject.add(granted);
+    } else {
+      throw Exception('No ably client available');
+    }
   }
 
   Future<void> activateDevice() async {
@@ -107,12 +127,27 @@ class PushNotificationService {
     return stream;
   }
 
+  StreamSubscription<ably.Message?>? _realtimeChannelStreamSubscription;
+
+  Future<Stream<ably.Message?>> subscribeToPushLogMetachannel() async {
+    await ensureRealtimeClientConnected();
+    final stream = _pushLogMetachannel!.subscribe();
+    _pushLogMetaChannelSubscription = stream.listen((message) {
+      print('MetaChannel message');
+      print(message);
+    });
+    return stream;
+  }
+
+  StreamSubscription<ably.Message?>? _pushLogMetaChannelSubscription;
+
   Future<void> unsubscribeToChannelWithPushChannelRule() async {
     await _realtimeChannelStreamSubscription?.cancel();
   }
 
-  final ably.Message _pushMessage = ably.Message(
-      data: 'Some data',
+  final ably.Message _pushNotificationMessage = ably.Message(
+      data: 'This is a channel message that is also sent as a '
+          'notification message to registered push devices.',
       extras: const ably.MessageExtras({
         'push': {
           'notification': {
@@ -120,28 +155,47 @@ class PushNotificationService {
             'body': 'Example push notification from Ably.'
           },
           'data': {'foo': 'bar', 'baz': 'quz'},
+        },
+      }));
+
+  Future<void> publishNotificationMessageToChannel() async {
+    await ensureRealtimeClientConnected();
+    if (_realtimeChannel != null) {
+      await _realtimeChannel!.publish(message: _pushNotificationMessage);
+    } else if (_restChannel != null) {
+      await _restChannel!.publish(message: _pushNotificationMessage);
+    }
+  }
+
+  final ably.Message _pushDataMessage = ably.Message(
+      data: 'This is a channel message that is also sent as a '
+          'data message to registered push devices.',
+      extras: const ably.MessageExtras({
+        'push': {
+          'data': {'foo': 'bar', 'baz': 'quz'},
           'apns': {
-            'aps': {
-              'content-available' : 1
-            }
+            'aps': {'content-available': 1}
           }
         },
       }));
 
-  Future<void> publishToChannel() async {
+  Future<void> publishDataMessageToChannel() async {
     await ensureRealtimeClientConnected();
     if (_realtimeChannel != null) {
-      await _realtimeChannel!.publish(message: _pushMessage);
+      await _realtimeChannel!.publish(message: _pushDataMessage);
     } else if (_restChannel != null) {
-      await _restChannel!.publish(message: _pushMessage);
+      await _restChannel!.publish(message: _pushDataMessage);
     }
   }
 
   void close() {
     _hasPushChannelSubject.close();
     _localDeviceSubject.close();
+    _userNotificationPermissionGrantedSubject.close();
     _realtimeChannelStreamSubscription?.cancel();
     _realtimeChannelStreamSubscription = null;
+    _pushLogMetaChannelSubscription?.cancel();
+    _pushLogMetaChannelSubscription = null;
   }
 
   void _getChannels() {
@@ -150,6 +204,8 @@ class PushNotificationService {
       _realtimeChannel =
           realtime!.channels.get(Constants.channelNameForPushNotifications);
       _pushChannel = _realtimeChannel!.push;
+      _pushLogMetachannel =
+          realtime!.channels.get(Constants.pushMetaChannelName);
       _hasPushChannelSubject.add(true);
     } else if (rest != null) {
       _restChannel =
@@ -162,24 +218,32 @@ class PushNotificationService {
     }
   }
 
+  /// Unfortunately ably-cocoa and ably-java are inconsistent here.
+  /// Ably-java will list all subscriptions (clientId and deviceId), where as
+  /// ably-cocoa will only give the one you specify in params.
+  /// This behavior is the same for [listSubscriptionsWithDeviceId]
   Future<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-      listSubscriptions() async {
+      listSubscriptionsWithClientId() async {
     await getDevice();
-    final deviceId = localDevice?.id;
-    if (Platform.isAndroid) {
-      if (deviceId == null) {
-        throw Exception(
-            'Device ID was null, but it needs to be specified on Android.');
-      }
-
-    }
     final subscriptions = await _pushChannel!.listSubscriptions({
-      'channel': Constants.channelNameForPushNotifications,
-      'deviceId': deviceId!,
-      // 'clientId': "put_your_client_id_here",
+      'clientId': Constants.clientId,
+      // Optionally, limit the size of the paginated response.
+      // 'limit': '1'
     });
-      _pushChannelSubscriptionSubject.add(subscriptions);
-      return subscriptions;
+    _pushChannelSubscriptionSubject.add(subscriptions);
+    return subscriptions;
+  }
+
+  Future<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+      listSubscriptionsWithDeviceId() async {
+    await getDevice();
+    final subscriptions = await _pushChannel!.listSubscriptions({
+      'deviceId': localDevice!.id!,
+      // Optionally, limit the size of the paginated response.
+      // 'limit': '1'
+    });
+    _pushChannelSubscriptionSubject.add(subscriptions);
+    return subscriptions;
   }
 
   Future<void> subscribeClient() async {

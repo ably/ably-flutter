@@ -68,6 +68,8 @@ class PlatformMethod {
   static const String pushUnsubscribeClient = 'pushUnsubscribeClient';
   static const String pushListSubscriptions = 'pushListSubscriptions';
   static const String pushDevice = 'pushDevice';
+  static const String pushRequestNotificationPermission =
+      'pushRequestNotificationPermission';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -336,4 +338,8 @@ class TxPushChannelSubscription {
   static const String channel = 'channel';
   static const String deviceId = 'deviceId';
   static const String clientId = 'clientId';
+}
+
+class TxPushRequestNotificationPermission {
+  static const String provisionalPermissionRequest = 'provisionalPermissionRequest';
 }

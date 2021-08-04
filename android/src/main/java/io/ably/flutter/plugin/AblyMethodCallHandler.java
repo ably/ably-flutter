@@ -92,6 +92,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
+    _map.put(PlatformConstants.PlatformMethod.pushRequestNotificationPermission, this::pushRequestNotificationPermission);
     _map.put(PlatformConstants.PlatformMethod.pushDeactivate, this::pushDeactivate);
     _map.put(PlatformConstants.PlatformMethod.pushSubscribeDevice, this::pushSubscribeDevice);
     _map.put(PlatformConstants.PlatformMethod.pushUnsubscribeDevice, this::pushUnsubscribeDevice);
@@ -613,6 +614,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         handleAblyException(result, e);
       }
     });
+  }
+
+  private void pushRequestNotificationPermission(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    result.success(true);
   }
 
   private void pushDeactivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

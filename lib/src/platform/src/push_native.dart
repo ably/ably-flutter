@@ -26,6 +26,14 @@ class PushNative extends PlatformObject implements Push {
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
   @override
+  Future<bool> requestNotificationPermission(
+          {bool provisionalPermissionRequest = false}) async =>
+      invokeRequest<bool>(PlatformMethod.pushRequestNotificationPermission, {
+        TxPushRequestNotificationPermission.provisionalPermissionRequest:
+            provisionalPermissionRequest
+      });
+
+  @override
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   // TODO Consider implementing the Push Admin API (it is designed for servers)

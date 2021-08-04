@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-const defaultChannel = 'test-channel';
+const defaultChannel = Constants.channelName;
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
@@ -710,7 +710,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
-                  // provisionButton(),
+                  Text('Ably Client ID: ${Constants.clientId}\n'),
                   if (_apiKey == '')
                     RichText(
                       text: const TextSpan(
