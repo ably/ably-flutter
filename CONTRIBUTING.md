@@ -75,8 +75,8 @@ Some files in the project are generated to maintain sync between
 
 ## Implementing new codec types
 
-1. Add new type along with value in `_types` list at [bin/codegencontext.dart](bin/codegencontext.dart)
-2. Add an object definition  with object name and its properties to `objects` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
+2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
  This will create `Tx<ObjectName>` under which all properties are accessible.
  
 Generate platform constants and continue
@@ -94,7 +94,7 @@ Generate platform constants and continue
 
 ## Implementing new platform methods
 
-1. Add new method name in `_platformMethods` list at [bin/codegencontext.dart](bin/codegencontext.dart)
+1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 
 Generate platform constants and use wherever required
 
