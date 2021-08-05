@@ -293,19 +293,11 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'DevicePlatformEnum',
-    'properties': <String>[
-      'ios',
-      'android',
-      'browser'
-    ]
+    'properties': <String>['ios', 'android', 'browser']
   },
   {
     'name': 'DevicePushStateEnum',
-    'properties': <String>[
-      'active',
-      'failing',
-      'failed'
-    ]
+    'properties': <String>['active', 'failing', 'failed']
   },
   {
     'name': 'ConnectionStateChange',
@@ -393,26 +385,15 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'DevicePushDetails',
-    'properties': <String>[
-      'recipient',
-      'state',
-      'errorReason'
-    ]
+    'properties': <String>['recipient', 'state', 'errorReason']
   },
   {
     'name': 'LocalDevice',
-    'properties': <String>[
-      'deviceSecret',
-      'deviceIdentityToken'
-    ]
+    'properties': <String>['deviceSecret', 'deviceIdentityToken']
   },
   {
     'name': 'PushChannelSubscription',
-    'properties': <String>[
-      'channel',
-      'deviceId',
-      'clientId'
-    ]
+    'properties': <String>['channel', 'deviceId', 'clientId']
   },
   {
     'name': 'PushRequestNotificationPermission',
