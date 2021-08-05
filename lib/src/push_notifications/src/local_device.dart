@@ -1,8 +1,8 @@
 import '../push_notifications.dart';
-import 'device_push_details.dart';
-import 'form_factor.dart';
 
-/// Current state of the device in respect of it being a target for push notifications.
+/// Current state of the device in respect of it being a target for
+/// push notifications.
+///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSH8
 class LocalDevice extends DeviceDetails {
   /// Device token. Generated locally, if not available.

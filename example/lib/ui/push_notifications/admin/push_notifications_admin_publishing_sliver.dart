@@ -26,15 +26,12 @@ class PushNotificationsAdminPublishingSliver extends StatelessWidget {
   Widget buildNativePushNotificationsButton(BuildContext context) {
     if (Platform.isAndroid) {
       return TextButton(
-          onPressed: enablePublishButtons
-              ? publishToFCMRegistrationToken
-              : null,
+          onPressed:
+              enablePublishButtons ? publishToFCMRegistrationToken : null,
           child: const Text('Publish to FCM registration token'));
     } else if (Platform.isIOS) {
       return TextButton(
-          onPressed: enablePublishButtons
-              ? publishToAPNsDeviceToken
-              : null,
+          onPressed: enablePublishButtons ? publishToAPNsDeviceToken : null,
           child: const Text('Publish to APNs deviceToken'));
     } else {
       return TextButton(
@@ -47,14 +44,10 @@ class PushNotificationsAdminPublishingSliver extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         children: [
           TextButton(
-              onPressed: enablePublishButtons
-                  ? publishToClientId
-                  : null,
+              onPressed: enablePublishButtons ? publishToClientId : null,
               child: const Text('Publish to clientId')),
           TextButton(
-              onPressed: enablePublishButtons
-                  ? publishToDeviceId
-                  : null,
+              onPressed: enablePublishButtons ? publishToDeviceId : null,
               child: const Text('Publish to deviceId')),
           buildNativePushNotificationsButton(context),
         ],

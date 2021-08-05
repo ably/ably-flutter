@@ -495,8 +495,8 @@ channel
 - Subscribe the device to the channel, by either using the deviceID or client ID:
   - `channel.push.subscribeClient()` or `channel.push.subscribeDevice()` 
 - Optionally: List the subscriptions that the device or client is subscribed to: `final subscriptions = channel.push.listSubscriptions()`
-- Your device is now ready to receive and display user notifications to the user, when the application is in the background. 
-- To send a UI notification which will be shown to the user when the app is not in the foreground, publish the following message to the channel:
+- Your device is now ready to receive and display user notifications (called alert notifications on iOS and notifications on Android) to the user, when the application is in the background. 
+- To send a user notification, publish the following message to the channel:
 ```dart
 final message = ably.Message(
   data: 'This is an Ably message published on channels that is also sent '

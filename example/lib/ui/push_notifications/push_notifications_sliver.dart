@@ -63,24 +63,24 @@ class PushNotificationsSliver extends StatelessWidget {
       );
 
   Widget buildSummaryText() => Column(
-    children: [
-      const Text(
-          'Activate your device, view your local device information, '
-          'subscribe with either your device or client ID, and then publish to the channel.',
-          style: TextStyle(color: Colors.black)),
-      const SizedBox(height: 16),
-      RichText(
-          text: const TextSpan(children: [
-        TextSpan(
-            text: 'Warning: ',
-            style: TextStyle(
-                color: Colors.red, fontWeight: FontWeight.bold)),
-        TextSpan(
-            text:
-                'You cannot listen/ react to push notification messages on the dart side of '
-                'ably-flutter yet. See https://github.com/ably/ably-flutter/issues/141 for more information',
-            style: TextStyle(color: Colors.black))
-      ])),
-    ],
-  );
+        children: [
+          const Text(
+              'Activate your device, view your local device information, '
+              'subscribe with either your device or client ID, and then publish to the channel.',
+              style: TextStyle(color: Colors.black)),
+          const SizedBox(height: 16),
+          RichText(
+              text: const TextSpan(children: [
+            TextSpan(
+                text: 'Warning: ',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            TextSpan(
+                text:
+                    'You cannot listen/ react to push notification messages on the dart side of '
+                    'ably-flutter yet. See https://github.com/ably/ably-flutter/issues/141 for more information',
+                style: TextStyle(color: Colors.black))
+          ])),
+        ],
+      );
 }

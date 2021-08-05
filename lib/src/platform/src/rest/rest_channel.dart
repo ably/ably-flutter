@@ -119,11 +119,11 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
               onTimeout: () => _publishQueue
                   .where((e) => !e.completer.isCompleted)
                   .forEach((e) => e.completer.completeError(
-                TimeoutException(
-                  'Timed out',
-                  Timeouts.retryOperationOnAuthFailure,
-                ),
-              )),
+                        TimeoutException(
+                          'Timed out',
+                          Timeouts.retryOperationOnAuthFailure,
+                        ),
+                      )),
             );
           } finally {
             _authCallbackCompleter = null;

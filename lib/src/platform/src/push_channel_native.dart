@@ -58,7 +58,6 @@ class PushChannelNative extends PlatformObject implements PushChannel {
         !params.containsKey('clientId') &&
         !params.containsKey('deviceClientId') &&
         !params.containsKey('channel')) {
-
       // This error only happen on Android. They are thrown here
       // for both platforms (iOS/ Android) to make the API more consistent.
       final errorInfo = ErrorInfo(

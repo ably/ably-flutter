@@ -18,5 +18,6 @@ class PushChannelSubscription {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS3
   String? clientId;
 
-  PushChannelSubscription({ required this.channel, this.deviceId, this.clientId});
+  PushChannelSubscription(
+      {required this.channel, this.deviceId, this.clientId});
 }
