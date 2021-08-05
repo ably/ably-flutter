@@ -543,7 +543,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 };
 
 typedef ARTPush* (^GetPushFromAblyClientHandle)(AblyFlutter *const ably, FlutterMethodCall *const call);
-static const GetPushFromAblyClientHandle _getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter const* ably, FlutterMethodCall *const call) {
+static const GetPushFromAblyClientHandle _getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter *const ably, FlutterMethodCall *const call) {
     AblyFlutterMessage *const message = call.arguments;
     NSNumber *const ablyClientHandle = message.message;
     
@@ -566,11 +566,11 @@ static const GetPushFromAblyClientHandle _getPushFromAblyClientHandle = ^ARTPush
 typedef void (^RealtimeClientHandler)(ARTRealtime *const realtime,
                                       FlutterMethodCall *const call,
                                       const FlutterResult result,
-                                      NSString const* _Nullable channelName);
+                                      NSString *const _Nullable channelName);
 typedef void (^RestClientHandler)(ARTRest *const realtime,
                                   FlutterMethodCall *const call,
                                   const FlutterResult result,
-                                  NSString const* _Nullable channelName);
+                                  NSString *const _Nullable channelName);
 typedef void (^AblyClientReceiver)(AblyFlutterPlugin *const plugin,
                                    FlutterMethodCall *const call,
                                    const FlutterResult result,
@@ -631,7 +631,7 @@ static const FlutterHandler _pushRequestNotificationPermission = ^void(AblyFlutt
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutterMessage *const messageData = message.message;
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
-    NSNumber const* provisionalPermissionRequest = (NSNumber *)[_dataMap objectForKey:TxPushRequestNotificationPermission_provisionalPermissionRequest];
+    NSNumber *const provisionalPermissionRequest = (NSNumber *)[_dataMap objectForKey:TxPushRequestNotificationPermission_provisionalPermissionRequest];
     
     UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound
         | UNAuthorizationOptionAlert | UNAuthorizationOptionProvidesAppNotificationSettings;
@@ -667,14 +667,14 @@ static const FlutterHandler _pushSubscribeDevice = ^void(AblyFlutterPlugin *cons
                              FlutterMethodCall *const call,
                              const FlutterResult result,
                              NSString *const channelName) {
-        ARTRealtimeChannel const* channel = [realtime.channels get: channelName];
+        ARTRealtimeChannel *const channel = [realtime.channels get: channelName];
         [channel.push subscribeDevice];
         result(nil);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName){
+                             NSString *const _Nullable channelName){
         [[rest.channels get:channelName].push subscribeDevice];
         result(nil);
     }
@@ -686,14 +686,14 @@ static const FlutterHandler _pushUnsubscribeDevice = ^void(AblyFlutterPlugin *co
                        ^void(ARTRealtime *const realtime,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName) {
+                             NSString *const _Nullable channelName) {
         [[realtime.channels get: channelName].push unsubscribeDevice];
         result(nil);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName){
+                             NSString *const _Nullable channelName){
         [[rest.channels get:channelName].push unsubscribeDevice];
         result(nil);
     }
@@ -705,14 +705,14 @@ static const FlutterHandler _pushSubscribeClient = ^void(AblyFlutterPlugin *cons
                        ^void(ARTRealtime *const realtime,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName) {
+                             NSString *const _Nullable channelName) {
         [[realtime.channels get: channelName].push subscribeClient];
         result(nil);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName){
+                             NSString *const _Nullable channelName){
         [[rest.channels get:channelName].push subscribeClient];
         result(nil);
     }
@@ -724,14 +724,14 @@ static const FlutterHandler _pushUnsubscribeClient = ^void(AblyFlutterPlugin *co
                        ^void(ARTRealtime *const realtime,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName) {
+                             NSString *const _Nullable channelName) {
         [[realtime.channels get: channelName].push unsubscribeClient];
         result(nil);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName){
+                             NSString *const _Nullable channelName){
         [[rest.channels get:channelName].push unsubscribeClient];
         result(nil);
     }
@@ -740,12 +740,12 @@ static const FlutterHandler _pushUnsubscribeClient = ^void(AblyFlutterPlugin *co
 
 typedef void (^ListSubscriptionsOnPushChannelHandler)(NSDictionary *const params,
                                                       ARTPushChannel *const pushChannel,
-                                                      NSString const* _Nullable channelName,
+                                                      NSString *const _Nullable channelName,
                                                       AblyFlutter *const ably,
                                                       const FlutterResult result);
 static const ListSubscriptionsOnPushChannelHandler _listSubscriptionsOnPushChannel = ^void(NSDictionary *const params,
                                                                                            ARTPushChannel *const pushChannel,
-                                                                                           NSString const* _Nullable channelName,
+                                                                                           NSString *const _Nullable channelName,
                                                                                            AblyFlutter *const ably,
                                                                                            const FlutterResult result) {
     // The pushChannel:listSubscription API has 2 ways of returning errors:
@@ -794,14 +794,14 @@ static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *co
                        ^void(ARTRealtime *const realtime,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName) {
+                             NSString *const _Nullable channelName) {
         ARTPushChannel *const pushChannel = [realtime.channels get: channelName].push;
         _listSubscriptionsOnPushChannel(params, pushChannel, channelName, ably, result);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable channelName){
+                             NSString *const _Nullable channelName){
         ARTPushChannel *const pushChannel = [rest.channels get: channelName].push;
         _listSubscriptionsOnPushChannel(params, pushChannel, channelName, ably, result);
     }
@@ -813,13 +813,13 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
                        ^void(ARTRealtime *const realtime,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable _) {
+                             NSString *const _Nullable _) {
         result([realtime device]);
     },
                        ^void(ARTRest *const rest,
                              FlutterMethodCall *const call,
                              const FlutterResult result,
-                             NSString const* _Nullable _){
+                             NSString *const _Nullable _){
         result([rest device]);
     }
    );
