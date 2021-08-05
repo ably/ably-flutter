@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: '39 4,15 * * *'
 
 jobs:
   check:
