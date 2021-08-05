@@ -81,8 +81,8 @@ Some files in the project are generated to maintain sync between
  
 Generate platform constants and continue
 
-3. update `getCodecType` in [lib.src.codec.Codec](lib/src/native/platform_utilities/codec.dart) so new codec type is returned based on runtime type
-4. update `codecPair` in [lib.src.codec.Codec](lib/src/native/platform_utilities/codec.dart) so new encoder/decoder is assigned for new type
+3. update `getCodecType` in [Codec.dart](lib/src/platform/src/codec.dart) so new codec type is returned based on runtime type
+4. update `codecPair` in [Codec.dart](lib/src/platform/src/codec.dart)  so new encoder/decoder is assigned for new type
 5. update `writeValue` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
  so new codec type is obtained from runtime type
 6. update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
