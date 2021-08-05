@@ -947,21 +947,15 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 -(void)uiApplicationDidFinishLaunchingWithOptionsNotificationHandler:(nonnull NSNotification *)notification {
     UNUserNotificationCenter *const notificationCenter = UNUserNotificationCenter.currentNotificationCenter;
     notificationCenter.delegate = self;
+    
     // Calling registerForRemoteNotifications on didFinishLaunchingWithOptions because it may change between app launches
     // More information at https://stackoverflow.com/questions/29456954/ios-8-remote-notifications-when-should-i-call-registerforremotenotifications
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-    // By default, this only allows "silent notifications".
-    // The user still needs to request authorization to show notifications to the user.
+    // By default, only "silent notifications" will be delivered to the device.
+    // The user still needs to requestAuthorizationWithOptions to show notifications to the user.
     // See https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications?language=objc
     // and https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorizationwithoptions?language=objc
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-//    UNAuthorizationOptions options = UNAuthorizationOptionBadge || UNAuthorizationOptionSound || UNAuthorizationOptionAlert || UNAuthorizationOptionProvidesAppNotificationSettings;
-//    [UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:options
-//                                                                      completionHandler:^(BOOL granted, NSError * _Nullable error) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [[UIApplication sharedApplication] registerForRemoteNotifications];
-//        });
-//    }];
 }
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
