@@ -633,15 +633,15 @@ static const FlutterHandler _pushRequestNotificationPermission = ^void(AblyFlutt
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSNumber *const provisionalPermissionRequest = (NSNumber *)[_dataMap objectForKey:TxPushRequestNotificationPermission_provisionalPermissionRequest];
     
-    UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound
-        | UNAuthorizationOptionAlert | UNAuthorizationOptionProvidesAppNotificationSettings;
+    UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert;
     if ([provisionalPermissionRequest  isEqual: @(YES)]) {
         if (@available(iOS 12, *)) {
             options = options | UNAuthorizationOptionProvisional | UNAuthorizationOptionProvidesAppNotificationSettings;
         }
     }
 
-    [UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:options completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    [UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:options
+                                                                      completionHandler:^(BOOL granted, NSError * _Nullable error) {
         if (error) {
             result([
                     FlutterError
@@ -961,12 +961,13 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
 /// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // This deviceToken will be used when a new client gets made.
+    // This deviceToken will be used when a new Ably client (either realtime or rest) is made.
     _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
 }
 
 /// Save the error if it occurred during APNs device registration provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    // This error will be used when the first Ably client is made.
     _didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
 
