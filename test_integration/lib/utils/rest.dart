@@ -9,6 +9,16 @@ Future<void> publishMessages(RestChannel channel) async {
   }
 }
 
+Future<List<T>> getPaginatedResultItems<T>(
+    PaginatedResultInterface<T> paginatedResult) async {
+  final items = <T>[...paginatedResult.items];
+  while (paginatedResult.hasNext()) {
+    paginatedResult = await paginatedResult.next();
+    items.addAll(paginatedResult.items);
+  }
+  return items;
+}
+
 Future<List<Map<String, dynamic>>> getHistory(
   RestChannel channel, [
   RestHistoryParams params,

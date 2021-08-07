@@ -5,8 +5,9 @@ import 'tests_config.dart';
 
 void main(List<String> args) {
   final parser = ArgParser();
-  final allowedModules =
-      TestGroup.values.map((group) => group.toString().split('.')[1]).toList();
+  final allowedModules = TestCategory.values
+      .map((group) => group.toString().split('.')[1])
+      .toList();
   parser
     ..addMultiOption(
       'modules',
@@ -30,14 +31,11 @@ void main(List<String> args) {
   final modules = argv['modules'] as List;
   if (modules.isEmpty) {
     runTests(all: true);
-  } else if (modules is List) {
+  } else {
     runTests(
         groups: modules
             .map((module) =>
-                TestGroup.values[allowedModules.indexOf(module as String)])
+                TestCategory.values[allowedModules.indexOf(module as String)])
             .toList());
-  } else {
-    runTests(
-        groupName: TestGroup.values[allowedModules.indexOf(modules as String)]);
   }
 }

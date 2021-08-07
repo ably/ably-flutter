@@ -2,10 +2,10 @@ import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
+void testPlatformAndAblyVersion(FlutterDriver driver) {
   const message = TestControlMessage(TestName.platformAndAblyVersion);
   TestControlMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(() async => response = await getTestResponse(driver, message));
 
   test('platformVersion is a string', () {
     expect(response.payload['platformVersion'], isA<String>());
@@ -24,10 +24,10 @@ void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
   });
 }
 
-void testDemoDependencies(FlutterDriver Function() getDriver) {
+void testDemoDependencies(FlutterDriver driver) {
   const message = TestControlMessage(TestName.appKeyProvisioning);
   TestControlMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(() async => response = await getTestResponse(driver, message));
 
   test('appKey is a string', () {
     expect(response.payload['appKey'], isA<String>());

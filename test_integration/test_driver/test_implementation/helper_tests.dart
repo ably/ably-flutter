@@ -2,10 +2,10 @@ import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-void testShouldReportUnhandledException(FlutterDriver Function() getDriver) {
+void testShouldReportUnhandledException(FlutterDriver driver) {
   const message = TestControlMessage(TestName.testHelperUnhandledExceptionTest);
   TestControlMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(() async => response = await getTestResponse(driver, message));
 
   test('returns appropriate error message', () {
     expect(response.payload['error']['exceptionType'], 'String');

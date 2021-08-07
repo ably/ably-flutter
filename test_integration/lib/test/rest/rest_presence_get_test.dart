@@ -28,7 +28,9 @@ Future<Map<String, dynamic>> testRestPresenceGet({
 
   final rest = Rest(options: getClientOptions(appKey));
   final channel = rest.channels.get('test');
-  final membersInitial = await getPresenceMembers(channel);
+
+  // final membersInitial = await getPresenceMembers(channel);
+  final membersInitial = getPaginatedResultItems(await channel.presence.get());
 
   // enter multiple clients
   for (var i = 0; i < messagesToPublish.length; i++) {

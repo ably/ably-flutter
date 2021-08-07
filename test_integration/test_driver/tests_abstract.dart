@@ -1,4 +1,5 @@
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -6,12 +7,10 @@ import 'tests_config.dart';
 
 void runTests({
   bool all = false,
-  TestGroup groupName,
-  List<TestGroup> groups,
+  List<TestCategory> groups,
 }) {
   final tests = getTestsFor(
     all: all,
-    group: groupName,
     groups: groups,
   );
 
@@ -31,18 +30,15 @@ void runTests({
     }
   });
 
-  FlutterDriver getDriver() => driver;
-
-  for (groupName in tests.keys) {
-    final name =
-        groupName.toString().substring(groupName.toString().indexOf('.') + 1);
-    tests[groupName].forEach((
-      testName,
-      void Function(FlutterDriver Function()) testFunction,
+  for (final testCategory in tests.keys) {
+    final testCategoryName = EnumToString.convertToString(testCategory);
+    tests[testCategory].forEach((
+      testGroupName,
+      void Function(FlutterDriver) testFunction,
     ) {
       group(
-        '$name $testName',
-        () => testFunction(getDriver),
+        '$testCategoryName: $testGroupName',
+        () => testFunction(driver),
         timeout: const Timeout(Duration(minutes: 2)),
       );
     });

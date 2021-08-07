@@ -27,6 +27,7 @@ Future<Map<String, dynamic>> testRestHistory({
 
   final paginatedResult = await channel.history();
   final historyDefault = await getHistory(channel);
+
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final historyLimit4 = await getHistory(channel, RestHistoryParams(limit: 4));

@@ -5,18 +5,18 @@ import 'test_implementation/helper_tests.dart';
 import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
-enum TestGroup { basicTests, helperTests, rest, realtime }
+enum TestCategory { basicTests, helperTests, rest, realtime }
 
 final _tests =
-    <TestGroup, Map<String, void Function(FlutterDriver Function())>>{
-  TestGroup.basicTests: {
+    <TestCategory, Map<String, void Function(FlutterDriver driver)>>{
+  TestCategory.basicTests: {
     'should return Platform and Ably version': testPlatformAndAblyVersion,
     'should provision AppKey': testDemoDependencies,
   },
-  TestGroup.helperTests: {
+  TestCategory.helperTests: {
     'should report unhandled exception': testShouldReportUnhandledException,
   },
-  TestGroup.rest: {
+  TestCategory.rest: {
     'should publish': testRestPublish,
     'should retrieve history': testRestHistory,
     'conforms to publish spec': testRestPublishSpec,
@@ -25,7 +25,7 @@ final _tests =
     'should get Presence History': testRestPresenceHistory,
     'conforms to capabilitySpec': testCapabilityMatrix,
   },
-  TestGroup.realtime: {
+  TestCategory.realtime: {
     'realtime#channels#channel#publish': testRealtimePublish,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
@@ -37,18 +37,15 @@ final _tests =
   }
 };
 
-Map<TestGroup, Map<String, void Function(FlutterDriver Function())>>
+Map<TestCategory, Map<String, void Function(FlutterDriver)>>
     getTestsFor({
   bool all = false,
-  TestGroup group,
-  List<TestGroup> groups,
+  List<TestCategory> groups,
 }) {
-  assert(group != null || groups != null || all != false);
-  List<TestGroup> _groups;
+  assert(groups != null || all != false);
+  List<TestCategory> _groups;
   if (all) {
     _groups = _tests.keys.toList();
-  } else if (group != null) {
-    _groups = [group];
   } else {
     _groups = groups;
   }

@@ -12,6 +12,7 @@ dependencies:
   ably_flutter_example:
     path: '../example'
   args: ^2.0.0
+  enum_to_string: ^2.0.1
   flutter:
     sdk: flutter
 

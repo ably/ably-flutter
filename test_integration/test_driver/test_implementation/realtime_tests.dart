@@ -4,14 +4,14 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
-void testRealtimePublish(FlutterDriver Function() getDriver) {
+void testRealtimePublish(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimePublish);
   const message2 = TestControlMessage(TestName.realtimePublishWithAuthCallback);
   TestControlMessage response;
   TestControlMessage response2;
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
-    response2 = await getTestResponse(getDriver(), message2);
+    response = await getTestResponse(driver, message);
+    response2 = await getTestResponse(driver, message2);
   });
 
   test('publishes message without any response', () {
@@ -23,7 +23,7 @@ void testRealtimePublish(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimeEvents(FlutterDriver Function() getDriver) {
+void testRealtimeEvents(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimeEvents);
   TestControlMessage response;
   List<String> connectionStates;
@@ -40,7 +40,7 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     connectionStates = transformState(response.payload['connectionStates']);
     connectionStateChanges = transformStateChange(
       response.payload['connectionStateChanges'],
@@ -192,7 +192,7 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
+void testRealtimeSubscribe(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimeSubscribe);
   TestControlMessage response;
   List<Map<String, dynamic>> all;
@@ -206,7 +206,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
           .toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     all = transformMessages(response.payload['all']);
     filteredWithName = transformMessages(response.payload['filteredWithName']);
     filteredWithNames = transformMessages(
@@ -265,7 +265,7 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimeHistory(FlutterDriver Function() getDriver) {
+void testRealtimeHistory(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimeHistory);
   TestControlMessage response;
 
@@ -281,7 +281,7 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     paginatedResult =
         response.payload['paginatedResult'] as Map<String, dynamic>;
     historyDefault = transform(response.payload['historyDefault']);
@@ -337,7 +337,7 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
+void testRealtimePresenceGet(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimePresenceGet);
   TestControlMessage response;
 
@@ -350,7 +350,7 @@ void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     membersInitial = transform(response.payload['membersInitial']);
     membersDefault = transform(response.payload['membersDefault']);
     membersClientId = transform(response.payload['membersClientId']);
@@ -379,7 +379,7 @@ void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
+void testRealtimePresenceHistory(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimePresenceHistory);
   TestControlMessage response;
 
@@ -396,7 +396,7 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     historyInitial = transform(response.payload['historyInitial']);
     historyDefault = transform(response.payload['historyDefault']);
     historyLimit4 = transform(response.payload['historyLimit4']);
@@ -445,7 +445,7 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
+void testRealtimeEnterUpdateLeave(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimePresenceEnterUpdateLeave);
   TestControlMessage response;
 
@@ -456,7 +456,7 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     clientIDClashMatrix = transform(response.payload['clientIDClashMatrix']);
     actionMatrix = transform(response.payload['actionMatrix']);
   });
@@ -571,7 +571,7 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
+void testRealtimePresenceSubscription(FlutterDriver driver) {
   const message = TestControlMessage(TestName.realtimePresenceSubscribe);
   TestControlMessage response;
   List<Map<String, dynamic>> allMessages;
@@ -583,7 +583,7 @@ void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     allMessages = transform(response.payload['allMessages']);
     enterMessages = transform(response.payload['enterMessages']);
     enterUpdateMessages = transform(response.payload['enterUpdateMessages']);

@@ -4,10 +4,10 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
-void testRestPublish(FlutterDriver Function() getDriver) {
+void testRestPublish(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restPublish);
   TestControlMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(() async => response = await getTestResponse(driver, message));
 
   test('rest instance has a valid handle on publish', () {
     expect(response.payload['handle'], isA<int>());
@@ -15,7 +15,7 @@ void testRestPublish(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRestPublishSpec(FlutterDriver Function() getDriver) {
+void testRestPublishSpec(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restPublishSpec);
   TestControlMessage response;
   List messages;
@@ -27,7 +27,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   Map<String, dynamic> exception3;
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
 
     messages = response.payload['publishedMessages'] as List;
     messages2 = response.payload['publishedMessages2'] as List;
@@ -152,17 +152,17 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
+void testRestPublishWithAuthCallback(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restPublishWithAuthCallback);
   TestControlMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(() async => response = await getTestResponse(driver, message));
 
   test('auth callback is invoked', () {
     expect(response.payload['authCallbackInvoked'], isTrue);
   });
 }
 
-void testRestHistory(FlutterDriver Function() getDriver) {
+void testRestHistory(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restHistory);
   TestControlMessage response;
 
@@ -178,7 +178,7 @@ void testRestHistory(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     paginatedResult =
         response.payload['paginatedResult'] as Map<String, dynamic>;
     historyDefault = transform(response.payload['historyDefault']);
@@ -234,7 +234,7 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRestPresenceGet(FlutterDriver Function() getDriver) {
+void testRestPresenceGet(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restPresenceGet);
   TestControlMessage response;
 
@@ -249,7 +249,7 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     membersInitial = transform(response.payload['membersInitial']);
     membersDefault = transform(response.payload['membersDefault']);
     membersLimit4 = transform(response.payload['membersLimit4']);
@@ -287,7 +287,7 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRestPresenceHistory(FlutterDriver Function() getDriver) {
+void testRestPresenceHistory(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restPresenceHistory);
   TestControlMessage response;
 
@@ -304,7 +304,7 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   List<Map<String, dynamic>> historyAll;
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     historyInitial = transform(response.payload['historyInitial']);
     historyDefault = transform(response.payload['historyDefault']);
     historyLimit4 = transform(response.payload['historyLimit4']);
@@ -355,7 +355,7 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   });
 }
 
-void testCapabilityMatrix(FlutterDriver Function() getDriver) {
+void testCapabilityMatrix(FlutterDriver driver) {
   const message = TestControlMessage(TestName.restCapabilities);
   TestControlMessage response;
   List<Map<String, dynamic>> capabilityMatrix;
@@ -364,7 +364,7 @@ void testCapabilityMatrix(FlutterDriver Function() getDriver) {
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
 
   setUpAll(() async {
-    response = await getTestResponse(getDriver(), message);
+    response = await getTestResponse(driver, message);
     capabilityMatrix = transform(response.payload['matrix']);
   });
 
