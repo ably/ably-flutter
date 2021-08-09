@@ -470,13 +470,13 @@ channel
             - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
             - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the firebase guide.
             - Declare the AblyPushNotificationService: In `AndroidManifest.xml`, declare a service already implemented in ably-flutter by adding the following between the `<application>` and `</application>` tags:
-```xml
-<service android:name="io.ably.flutter.plugin.push.AblyPushNotificationService">
-    <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT" />
-    </intent-filter>
-</service>
-```
+            ```xml
+            <service android:name="io.ably.flutter.plugin.push.AblyPushNotificationService">
+                <intent-filter>
+                    <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                </intent-filter>
+            </service>
+            ```
     - For iOS 📱:
         - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
         - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
