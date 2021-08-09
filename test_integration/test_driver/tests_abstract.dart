@@ -23,13 +23,10 @@ void runTests({
   });
 
   tearDownAll(() async {
-    // if (driver != null) {
-    // TODO can driver be null? :thinking:
     const message = TestControlMessage(TestName.getFlutterErrors);
     final flutterErrors = await getTestResponse(driver, message);
     print('Flutter errors: ${flutterErrors.payload}');
     final _ = driver.close();
-    // }
   });
 
   FlutterDriver getDriver() => driver;
