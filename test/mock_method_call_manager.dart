@@ -68,9 +68,9 @@ class MockMethodCallManager {
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
           await AblyMethodCallHandler(Platform.methodChannel)
-              .onRealtimeAuthCallback(AblyMessage(
-                  TokenParams(timestamp: DateTime.now()),
-                  handle: handle));
+              .onRealtimeAuthCallback(
+            AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
+          );
           isAuthenticated = true;
           throw PlatformException(
             code: ErrorCodes.authCallbackFailure.toString(),
