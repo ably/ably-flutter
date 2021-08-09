@@ -754,6 +754,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void getVersion(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    result.success(Defaults.ABLY_LIB_VERSION);
+    result.success(Defaults.ABLY_AGENT_VERSION);
   }
 }
