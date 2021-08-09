@@ -11,7 +11,7 @@ import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.ErrorInfo;
 
-public class AblyLibrary {
+class AblyLibrary {
 
     private static AblyLibrary _instance;
     private long _nextHandle = 1;
