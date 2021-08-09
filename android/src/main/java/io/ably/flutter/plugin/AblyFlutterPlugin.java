@@ -50,7 +50,7 @@ public class AblyFlutterPlugin implements FlutterPlugin {
                 // Streams channel will be reset on `register` method call
                 // and also on every hot-reload
                 streamsChannel::reset,
-            applicationContext
+                applicationContext
         );
         channel.setMethodCallHandler(methodCallHandler);
     }
