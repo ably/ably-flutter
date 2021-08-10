@@ -209,8 +209,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void listenRealtimeConnection(ably.Realtime realtime) {
-    Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage((message) => null)
     final alphaSubscription =
         realtime.connection.on().listen((stateChange) async {
       print('${DateTime.now()}:'
