@@ -604,8 +604,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void pushActivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<Integer>ablyDo(message, (ablyLibrary, ablyClientHandle) -> {
-      // Launch a Service of FirebaseMessagingService. Or should this be done during subscribe?
-
       try {
         AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
         client.push.activate();
