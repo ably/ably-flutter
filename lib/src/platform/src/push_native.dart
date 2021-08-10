@@ -36,10 +36,6 @@ class PushNative extends PlatformObject implements Push {
   @override
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
-  // TODO Consider implementing the Push Admin API (it is designed for servers)
-  // @override
-  // PushAdmin? admin;
-
   @override
   Future<int?> createPlatformInstance() => (realtime != null)
       ? (realtime as Realtime).handle

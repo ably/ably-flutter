@@ -135,23 +135,10 @@ class _MyAppState extends State<MyApp> {
     });
 
     final clientOptions = ably.ClientOptions.fromKey(_apiKey)
-          ..logLevel = ably.LogLevel.verbose
-          ..logHandler = ({msg, exception}) {
-            print('Custom logger :: $msg $exception');
-          }
-/*          ..tokenDetails = ably.TokenDetails.fromMap(
-            await provisioning.getTokenDetails(
-              _apiKey,
-              'sandbox-',
-            ),
-          )*/
-        /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
-        /*..authCallback = (params) async => ably.TokenRequest.fromMap(
-            Map.castFrom<dynamic, dynamic, String, dynamic>(
-              await provisioning.getTokenRequest(),
-            ),
-          )*/
-        ;
+      ..logLevel = ably.LogLevel.verbose
+      ..logHandler = ({msg, exception}) {
+        print('Custom logger :: $msg $exception');
+      };
 
     ably.Rest rest;
     try {

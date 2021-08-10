@@ -604,8 +604,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void pushActivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<Integer>ablyDo(message, (ablyLibrary, ablyClientHandle) -> {
-      // Launch a Service of FirebaseMessagingService. Or should this be done during subscribe?
-
       try {
         AblyBase client = ablyLibrary.getAblyClient(ablyClientHandle);
         client.push.activate();
@@ -617,6 +615,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void pushRequestNotificationPermission(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    // No permission is needed on Android to show notifications, so this always returns true/ success.
     result.success(true);
   }
 
@@ -754,6 +753,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void getVersion(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    result.success(Defaults.ABLY_LIB_VERSION);
+    result.success(Defaults.ABLY_AGENT_VERSION);
   }
 }

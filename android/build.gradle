@@ -9,7 +9,6 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
-        classpath 'com.google.gms:google-services:4.3.8'
     }
 }
 
@@ -23,11 +22,8 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation 'io.ably:ably-android:1.2.6'
+    implementation 'io.ably:ably-android:1.2.7'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
-    // firebase-iid is a temporary workaround because `:firebase-messaging:22.0.0` removed FirebaseInstanceId
-    // TODO Remove firebase-iid dependency once [PR](https://github.com/ably/ably-java/pull/687) is released
-    implementation 'com.google.firebase:firebase-iid:21.1.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 }
 

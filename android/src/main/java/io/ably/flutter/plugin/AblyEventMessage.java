@@ -6,10 +6,9 @@ class AblyEventMessage<T> {
 
     AblyEventMessage(final String eventName, final T message) {
         if (null == eventName) {
-            throw new NullPointerException("message cannot be null.");
+            throw new NullPointerException("eventName cannot be null.");
         }
         this.eventName = eventName;
         this.message = message;
     }
-
 }
