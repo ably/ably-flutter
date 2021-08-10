@@ -51,13 +51,6 @@ class PushNotificationsSliver extends StatelessWidget {
             PushNotificationsActivationSliver(_pushNotificationService),
             PushNotificationsSubscriptionsSliver(_pushNotificationService),
             PushNotificationsPublishingSliver(_pushNotificationService),
-            // TODO Implement Push Admin API and then use the following:
-            // PushNotificationsAdminPublishingSliver(
-            //   realtimeChannel: _realtimeChannel,
-            //   restChannel: _restChannel,
-            //   pushChannel: _pushChannel,
-            //   deviceActivationState: _deviceActivationState,
-            // ),
           ],
         ),
       );
@@ -66,7 +59,8 @@ class PushNotificationsSliver extends StatelessWidget {
         children: [
           const Text(
               'Activate your device, view your local device information, '
-              'subscribe with either your device or client ID, and then publish to the channel.',
+              'subscribe with either your device or client ID, '
+              'and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
           const SizedBox(height: 16),
           RichText(
