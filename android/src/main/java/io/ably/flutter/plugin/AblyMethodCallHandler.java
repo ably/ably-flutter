@@ -617,6 +617,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void pushRequestNotificationPermission(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    // No permission is needed on Android to show notifications, so this always returns true/ success.
     result.success(true);
   }
 
