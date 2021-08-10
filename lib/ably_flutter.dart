@@ -10,3 +10,5 @@ export 'src/push_notifications/push_notifications.dart';
 export 'src/realtime/realtime.dart';
 export 'src/rest/rest.dart';
 export 'src/stats/stats.dart';
+
+part 'src/platform/src/ably_push_notifications.dart';

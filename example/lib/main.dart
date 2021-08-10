@@ -8,7 +8,15 @@ import 'op_state.dart';
 import 'push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  ably.AblyPushNotifications.setAndroidBackgroundMessageHandler((message) async {
+    print(message);
+  });
+  ably.AblyPushNotifications.setIOSBackgroundMessageHandler((message) async {
+    print(message);
+  });
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -214,6 +222,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void listenRealtimeConnection(ably.Realtime realtime) {
+    Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage((message) => null)
     final alphaSubscription =
         realtime.connection.on().listen((stateChange) async {
       print('${DateTime.now()}:'
