@@ -21,14 +21,14 @@ void runTests({
     driver = await FlutterDriver.connect(printCommunication: true);
   });
 
-  FlutterDriver getDriver() => driver;
-
   tearDownAll(() async {
     const message = TestControlMessage(TestName.getFlutterErrors);
-    final flutterErrors = await requestDataForTest(getDriver(), message);
+    final flutterErrors = await requestDataForTest(driver, message);
     print('Flutter errors: ${flutterErrors.payload}');
     final _ = driver.close();
   });
+
+  FlutterDriver getDriver() => driver;
 
   for (final testModule in tests.keys) {
     final testModuleName = EnumToString.convertToString(testModule);
