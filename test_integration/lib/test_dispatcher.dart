@@ -17,9 +17,9 @@ class TestDispatcher extends StatefulWidget {
   final DispatcherController controller;
 
   const TestDispatcher({
-    Key key,
-    this.testFactory,
-    this.controller,
+    required this.testFactory,
+    required this.controller,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
   /// A map of active test names vs reporters
   final _reporters = <String, Reporter>{};
 
-  Map<String, String> _testResults;
+  late Map<String, String> _testResults;
 
   /// stores whether a test is success/failed/pending
   /// {'restPublish': true} => basic test passed,
@@ -47,7 +47,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
     };
   }
 
-  Future<TestControlMessage> handleDriverMessage(
+  Future<TestControlResponseMessage> handleDriverMessage(
     TestControlMessage message,
   ) {
     final reporter = Reporter(message, widget.controller);
@@ -66,16 +66,14 @@ class _TestDispatcherState extends State<TestDispatcher> {
           setState(() {
             _testStatuses[reporter.testName] = _TestStatus.progress;
           });
-          final testFunction = widget.testFactory[reporter.testName];
+          final testFunction = widget.testFactory[reporter.testName]!;
           await testFunction(
             reporter: reporter,
             payload: reporter.message.payload,
-          )
-              .then((response) => reporter?.reportTestCompletion(response))
-              .catchError(
+          ).then(reporter.reportTestCompletion).catchError(
                 (error, stack) => reporter.reportTestCompletion({
                   TestControlMessage.errorKey: ErrorHandler.encodeException(
-                    error,
+                    error as Object,
                     stack as StackTrace,
                   ),
                 }),
@@ -97,7 +95,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
     return reporter.response.future;
   }
 
-  final _flutterErrorLogs = <Map<String, String>>[];
+  final List<Map<String, String?>> _flutterErrorLogs = <Map<String, String>>[];
 
   void logFlutterErrors(FlutterErrorDetails details) =>
       _flutterErrorLogs.add(ErrorHandler.encodeFlutterError(details));
@@ -110,8 +108,9 @@ class _TestDispatcherState extends State<TestDispatcher> {
         return Colors.red;
       case _TestStatus.progress:
         return Colors.blue;
+      case null:
+        return Colors.grey;
     }
-    return Colors.grey;
   }
 
   Widget _getAction(String testName) {
@@ -135,8 +134,9 @@ class _TestDispatcherState extends State<TestDispatcher> {
           height: 18,
           child: CircularProgressIndicator(),
         );
+      case null:
+        return playIcon;
     }
-    return playIcon;
   }
 
   Widget _getStatus(String testName) {
@@ -147,8 +147,9 @@ class _TestDispatcherState extends State<TestDispatcher> {
         return const Icon(Icons.warning_amber_rounded);
       case _TestStatus.progress:
         return Container();
+      case null:
+        return Container();
     }
-    return Container();
   }
 
   Widget getTestRow(BuildContext context, String testName) => Row(
@@ -212,7 +213,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
         ),
       ));
 
-  void renderResponse(TestControlMessage message) {
+  void renderResponse(TestControlResponseMessage message) {
     final testName = message.testName;
     _testResults[testName] = message.toPrettyJson();
     setState(() {
@@ -226,7 +227,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
 }
 
 class DispatcherController {
-  _TestDispatcherState _dispatcher;
+  late _TestDispatcherState _dispatcher;
 
   // ignore: use_setters_to_change_properties
   void setDispatcher(_TestDispatcherState dispatcher) {
@@ -234,9 +235,9 @@ class DispatcherController {
     // more stuff
   }
 
-  Future<String> driveHandler(String encodedMessage) async {
+  Future<String> driveHandler(String? encodedMessage) async {
     final response = await _dispatcher.handleDriverMessage(
-      TestControlMessage.fromJson(json.decode(encodedMessage) as Map),
+      TestControlMessage.fromJson(json.decode(encodedMessage!) as Map),
     );
     return json.encode(response);
   }
@@ -245,7 +246,7 @@ class DispatcherController {
     _dispatcher.logFlutterErrors(details);
   }
 
-  void setResponse(TestControlMessage message) {
+  void setResponse(TestControlResponseMessage message) {
     _dispatcher.renderResponse(message);
   }
 }

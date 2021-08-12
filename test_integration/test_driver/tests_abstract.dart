@@ -6,8 +6,8 @@ import 'tests_config.dart';
 
 void runTests({
   bool all = false,
-  TestGroup groupName,
-  List<TestGroup> groups,
+  TestGroup? groupName,
+  List<TestGroup>? groups,
 }) {
   final tests = getTestsFor(
     all: all,
@@ -15,7 +15,7 @@ void runTests({
     groups: groups,
   );
 
-  FlutterDriver driver;
+  late FlutterDriver driver;
 
   // Connect to the Flutter driver before running any tests.
   setUpAll(() async {
@@ -23,12 +23,10 @@ void runTests({
   });
 
   tearDownAll(() async {
-    if (driver != null) {
-      const message = TestControlMessage(TestName.getFlutterErrors);
-      final flutterErrors = await getTestResponse(driver, message);
-      print('Flutter errors: ${flutterErrors.payload}');
-      final _ = driver.close();
-    }
+    const message = TestControlMessage(TestName.getFlutterErrors);
+    final flutterErrors = await getTestResponse(driver, message);
+    print('Flutter errors: ${flutterErrors.payload}');
+    final _ = driver.close();
   });
 
   FlutterDriver getDriver() => driver;
@@ -36,7 +34,7 @@ void runTests({
   for (groupName in tests.keys) {
     final name =
         groupName.toString().substring(groupName.toString().indexOf('.') + 1);
-    tests[groupName].forEach((
+    tests[groupName]!.forEach((
       testName,
       void Function(FlutterDriver Function()) testFunction,
     ) {

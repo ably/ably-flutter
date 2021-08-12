@@ -5,8 +5,8 @@ import '../../factory/reporter.dart';
 import '../../utils/realtime.dart';
 
 Future<Map<String, dynamic>> testRealtimePublishWithAuthCallback({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   var authCallbackInvoked = false;
   final realtime = Realtime(

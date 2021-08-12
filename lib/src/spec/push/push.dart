@@ -38,8 +38,8 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b1
   Future<DeviceDetails> get({
-    DeviceDetails deviceDetails,
-    String deviceId,
+    DeviceDetails? deviceDetails,
+    String? deviceId,
   });
 
   /// List registered devices filtered by optional params.
@@ -58,8 +58,8 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b4
   Future<void> remove({
-    DeviceDetails deviceDetails,
-    String deviceId,
+    DeviceDetails? deviceDetails,
+    String? deviceId,
   });
 
   /// Remove device matching where params.
@@ -76,12 +76,12 @@ abstract class PushAdmin {
   /// Manage device registrations.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b
-  PushDeviceRegistrations deviceRegistrations;
+  PushDeviceRegistrations? deviceRegistrations;
 
   /// Manage channel subscriptions for devices or clients.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c
-  PushChannelSubscriptions channelSubscriptions;
+  PushChannelSubscriptions? channelSubscriptions;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1a
   Future<void> publish(Map<String, dynamic> recipient, Map payload);
@@ -95,7 +95,7 @@ abstract class Push {
   /// and channel subscriptions.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
-  PushAdmin admin;
+  PushAdmin? admin;
 
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.

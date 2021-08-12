@@ -11,12 +11,12 @@ abstract class RestInterface<C extends RestChannels> extends AblyBase {
   /// collection of [RestChannelInterface] objects
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
-  C channels;
+  late C channels;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC1
   RestInterface({
-    ClientOptions options,
-    final String key,
+    ClientOptions? options,
+    final String? key,
   }) : super(
           options: options,
           key: key,

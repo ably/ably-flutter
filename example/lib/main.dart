@@ -25,24 +25,25 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
   OpState _provisioningState = OpState.notStarted;
-  provisioning.AppKey _appKey;
+  provisioning.AppKey? _appKey;
   OpState _realtimeCreationState = OpState.notStarted;
   OpState _restCreationState = OpState.notStarted;
-  ably.Realtime _realtime;
-  ably.Rest _rest;
-  ably.ConnectionState _realtimeConnectionState;
-  ably.ChannelState _realtimeChannelState;
+  ably.Realtime? _realtime;
+  ably.Rest? _rest;
+  ably.ConnectionState? _realtimeConnectionState;
+  ably.ChannelState? _realtimeChannelState;
   final _subscriptionsToDispose = <StreamSubscription>[];
-  StreamSubscription<ably.Message> _channelMessageSubscription;
-  ably.Message channelMessage;
-  ably.PaginatedResult<ably.Message> _restHistory;
-  ably.PaginatedResult<ably.Message> _realtimeHistory;
-  ably.PaginatedResult<ably.PresenceMessage> _restPresenceMembers;
-  ably.PaginatedResult<ably.PresenceMessage> _restPresenceHistory;
-  StreamSubscription<ably.PresenceMessage> _channelPresenceMessageSubscription;
-  ably.PresenceMessage channelPresenceMessage;
-  List<ably.PresenceMessage> _realtimePresenceMembers;
-  ably.PaginatedResult<ably.PresenceMessage> _realtimePresenceHistory;
+  StreamSubscription<ably.Message?>? _channelMessageSubscription;
+  ably.Message? channelMessage;
+  ably.PaginatedResult<ably.Message>? _restHistory;
+  ably.PaginatedResult<ably.Message>? _realtimeHistory;
+  ably.PaginatedResult<ably.PresenceMessage>? _restPresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage>? _restPresenceHistory;
+  StreamSubscription<ably.PresenceMessage?>?
+      _channelPresenceMessageSubscription;
+  ably.PresenceMessage? channelPresenceMessage;
+  List<ably.PresenceMessage>? _realtimePresenceMembers;
+  ably.PaginatedResult<ably.PresenceMessage>? _realtimePresenceHistory;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -158,8 +159,8 @@ class _MyAppState extends State<MyApp> {
           }
           ..tokenDetails = ably.TokenDetails.fromMap(
             await provisioning.getTokenDetails(
-              _appKey.name,
-              _appKey.secret,
+              _appKey!.name,
+              _appKey!.secret,
               'sandbox-',
             ),
           )
@@ -251,7 +252,7 @@ class _MyAppState extends State<MyApp> {
     _subscriptionsToDispose.add(alphaSubscription);
   }
 
-  void listenRealtimeChannel(ably.RealtimeChannelInterface channel) {
+  void listenRealtimeChannel(ably.RealtimeChannel channel) {
     final _channelStateChangeSubscription = channel.on().listen((stateChange) {
       print('ChannelStateChange: ${stateChange.current}'
           '\nReason: ${stateChange.reason}');
@@ -331,14 +332,14 @@ class _MyAppState extends State<MyApp> {
 
   Widget createRTCConnectButton() => FlatButton(
         padding: EdgeInsets.zero,
-        onPressed: _realtime?.connect,
+        onPressed: (_realtime == null) ? null : _realtime!.connect,
         child: const Text('Connect'),
       );
 
   Widget createRTCloseButton() => FlatButton(
         padding: EdgeInsets.zero,
         onPressed: (_realtimeConnectionState == ably.ConnectionState.connected)
-            ? _realtime?.close
+            ? _realtime!.close
             : null,
         child: const Text('Close Connection'),
       );
@@ -347,7 +348,7 @@ class _MyAppState extends State<MyApp> {
         padding: EdgeInsets.zero,
         onPressed: (_realtimeConnectionState == ably.ConnectionState.connected)
             ? () async {
-                final channel = _realtime.channels.get(defaultChannel);
+                final channel = _realtime!.channels.get(defaultChannel);
                 print('Attaching to channel ${channel.name}.'
                     ' Current state ${channel.state}.');
                 try {
@@ -364,7 +365,7 @@ class _MyAppState extends State<MyApp> {
         padding: EdgeInsets.zero,
         onPressed: (_realtimeChannelState == ably.ChannelState.attached)
             ? () {
-                final channel = _realtime.channels.get(defaultChannel);
+                final channel = _realtime!.channels.get(defaultChannel);
                 print('Detaching from channel ${channel.name}.'
                     ' Current state ${channel.state}.');
                 channel.detach();
@@ -378,7 +379,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
                 _channelMessageSubscription == null)
             ? () {
-                final channel = _realtime.channels.get(defaultChannel);
+                final channel = _realtime!.channels.get(defaultChannel);
                 final messageStream =
                     channel.subscribe(names: ['message-data', 'Hello']);
                 _channelMessageSubscription = messageStream.listen((message) {
@@ -392,7 +393,7 @@ class _MyAppState extends State<MyApp> {
                   });
                 });
                 print('Channel messages subscribed');
-                _subscriptionsToDispose.add(_channelMessageSubscription);
+                _subscriptionsToDispose.add(_channelMessageSubscription!);
               }
             : null,
         child: const Text('Subscribe'),
@@ -401,7 +402,7 @@ class _MyAppState extends State<MyApp> {
   Widget createChannelUnSubscribeButton() => FlatButton(
         onPressed: (_channelMessageSubscription != null)
             ? () async {
-                await _channelMessageSubscription.cancel();
+                await _channelMessageSubscription!.cancel();
                 print('Channel messages unsubscribed');
                 setState(() {
                   _channelMessageSubscription = null;
@@ -424,17 +425,17 @@ class _MyAppState extends State<MyApp> {
                 try {
                   switch (typeCounter % 3) {
                     case 0:
-                      await _realtime.channels
+                      await _realtime!.channels
                           .get(defaultChannel)
                           .publish(name: 'Hello', data: data);
                       break;
                     case 1:
-                      await _realtime.channels
+                      await _realtime!.channels
                           .get(defaultChannel)
                           .publish(message: m);
                       break;
                     case 2:
-                      await _realtime.channels
+                      await _realtime!.channels
                           .get(defaultChannel)
                           .publish(messages: [m, m]);
                   }
@@ -464,7 +465,7 @@ class _MyAppState extends State<MyApp> {
             : () async {
                 print('Sending rest message');
                 try {
-                  await _rest.channels
+                  await _rest!.channels
                       .get(defaultChannel)
                       .publish(name: 'Hello', data: 'Flutter $msgCounter');
                   print('Rest message sent.');
@@ -480,11 +481,11 @@ class _MyAppState extends State<MyApp> {
       );
 
   Widget getPageNavigator<T>({
-    String name,
-    bool enabled,
-    ably.PaginatedResult<T> page,
-    Future<ably.PaginatedResult<T>> Function() query,
-    Function(ably.PaginatedResult<T> result) onUpdate,
+    required bool enabled,
+    required String name,
+    required Future<ably.PaginatedResult<T>> Function() query,
+    required Function(ably.PaginatedResult<T> result) onUpdate,
+    ably.PaginatedResult<T>? page,
   }) =>
       FlatButton(
         onPressed: !enabled
@@ -518,7 +519,7 @@ class _MyAppState extends State<MyApp> {
       enabled: _rest != null,
       page: _restHistory,
       query: () async =>
-          _rest.channels.get(defaultChannel).history(ably.RestHistoryParams(
+          _rest!.channels.get(defaultChannel).history(ably.RestHistoryParams(
                 direction: 'forwards',
                 limit: 10,
               )),
@@ -532,7 +533,7 @@ class _MyAppState extends State<MyApp> {
       name: 'Rest presence members',
       enabled: _rest != null,
       page: _restPresenceMembers,
-      query: () async => _rest.channels
+      query: () async => _rest!.channels
           .get(defaultChannel)
           .presence
           .get(ably.RestPresenceParams(limit: 10)),
@@ -547,7 +548,7 @@ class _MyAppState extends State<MyApp> {
           name: 'Rest presence history',
           enabled: _rest != null,
           page: _restPresenceHistory,
-          query: () async => _rest.channels
+          query: () async => _rest!.channels
               .get(defaultChannel)
               .presence
               .history(ably.RestHistoryParams(limit: 10)),
@@ -561,7 +562,7 @@ class _MyAppState extends State<MyApp> {
         color: Colors.deepOrangeAccent[100],
         onPressed: (_rest == null)
             ? null
-            : () => _rest.channels.release(defaultChannel),
+            : () => _rest!.channels.release(defaultChannel),
         child: const Text('Release Rest channel'),
       );
 
@@ -569,7 +570,7 @@ class _MyAppState extends State<MyApp> {
       name: 'Realtime history',
       enabled: _realtime != null,
       page: _realtimeHistory,
-      query: () async => _realtime.channels.get(defaultChannel).history(
+      query: () async => _realtime!.channels.get(defaultChannel).history(
             ably.RealtimeHistoryParams(
               limit: 10,
               untilAttach: true,
@@ -585,7 +586,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtimeChannelState == ably.ChannelState.attached &&
                 _channelPresenceMessageSubscription == null)
             ? () {
-                final channel = _realtime.channels.get(defaultChannel);
+                final channel = _realtime!.channels.get(defaultChannel);
                 final presenceMessageStream = channel.presence.subscribe();
                 _channelPresenceMessageSubscription =
                     presenceMessageStream.listen((presenceMessage) {
@@ -596,7 +597,8 @@ class _MyAppState extends State<MyApp> {
                 });
                 setState(() {});
                 print('Channel presence messages subscribed');
-                _subscriptionsToDispose.add(_channelMessageSubscription);
+                _subscriptionsToDispose
+                    .add(_channelPresenceMessageSubscription!);
               }
             : null,
         child: const Text('Subscribe'),
@@ -605,7 +607,7 @@ class _MyAppState extends State<MyApp> {
   Widget createChannelPresenceUnSubscribeButton() => FlatButton(
         onPressed: (_channelPresenceMessageSubscription != null)
             ? () async {
-                await _channelPresenceMessageSubscription.cancel();
+                await _channelPresenceMessageSubscription!.cancel();
                 print('Channel presence messages unsubscribed');
                 setState(() {
                   _channelPresenceMessageSubscription = null;
@@ -619,7 +621,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtime == null)
             ? null
             : () async {
-                _realtimePresenceMembers = await _realtime.channels
+                _realtimePresenceMembers = await _realtime!.channels
                     .get(defaultChannel)
                     .presence
                     .get(ably.RealtimePresenceParams());
@@ -634,7 +636,7 @@ class _MyAppState extends State<MyApp> {
           name: 'Realtime presence history',
           enabled: _realtime != null,
           page: _realtimePresenceHistory,
-          query: () async => _realtime.channels
+          query: () async => _realtime!.channels
               .get(defaultChannel)
               .presence
               .history(ably.RealtimeHistoryParams(limit: 10)),
@@ -648,7 +650,7 @@ class _MyAppState extends State<MyApp> {
         color: Colors.deepOrangeAccent[100],
         onPressed: (_realtime == null)
             ? null
-            : () => _realtime.channels.release(defaultChannel),
+            : () => _realtime!.channels.release(defaultChannel),
         child: const Text('Release Realtime channel'),
       );
 
@@ -674,7 +676,7 @@ class _MyAppState extends State<MyApp> {
       _presenceData[_presenceDataIncrementer++ % _presenceData.length]
           .toString();
 
-  Object get _currentPresenceData => (_presenceDataIncrementer == 0)
+  Object? get _currentPresenceData => (_presenceDataIncrementer == 0)
       ? null
       : _presenceData[(_presenceDataIncrementer - 1) % _presenceData.length];
 
@@ -682,7 +684,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtime == null)
             ? null
             : () async {
-                await _realtime.channels
+                await _realtime!.channels
                     .get(defaultChannel)
                     .presence
                     .enter(_nextPresenceData);
@@ -696,7 +698,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtime == null)
             ? null
             : () async {
-                await _realtime.channels
+                await _realtime!.channels
                     .get(defaultChannel)
                     .presence
                     .updateClient('flutter-example-app', _nextPresenceData);
@@ -710,7 +712,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtime == null)
             ? null
             : () async {
-                await _realtime.channels
+                await _realtime!.channels
                     .get(defaultChannel)
                     .presence
                     .leave(_nextPresenceData);
@@ -784,8 +786,8 @@ class _MyAppState extends State<MyApp> {
                   createChannelPublishButton(),
                   getRealtimeChannelHistory(),
                   ..._realtimeHistory?.items
-                          ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
-                          ?.toList() ??
+                          .map((m) => Text('${m.name}:${m.data?.toString()}'))
+                          .toList() ??
                       [],
                   const Text(
                     'Presence',
@@ -818,12 +820,12 @@ class _MyAppState extends State<MyApp> {
                   getRealtimeChannelPresence(),
                   ..._realtimePresenceMembers
                           ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                          ?.toList() ??
+                          .toList() ??
                       [],
                   getRealtimeChannelPresenceHistory(),
                   ..._realtimePresenceHistory?.items
-                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                          ?.toList() ??
+                          .map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          .toList() ??
                       [],
                   releaseRealtimeChannel(),
                   const Divider(),
@@ -841,18 +843,18 @@ class _MyAppState extends State<MyApp> {
                   ),
                   getRestChannelHistory(),
                   ..._restHistory?.items
-                          ?.map((m) => Text('${m.name}:${m.data?.toString()}'))
-                          ?.toList() ??
+                          .map((m) => Text('${m.name}:${m.data?.toString()}'))
+                          .toList() ??
                       [],
                   getRestChannelPresence(),
                   ..._restPresenceMembers?.items
-                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                          ?.toList() ??
+                          .map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          .toList() ??
                       [],
                   getRestChannelPresenceHistory(),
                   ..._restPresenceHistory?.items
-                          ?.map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-                          ?.toList() ??
+                          .map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+                          .toList() ??
                       [],
                   releaseRestChannel(),
                 ]),

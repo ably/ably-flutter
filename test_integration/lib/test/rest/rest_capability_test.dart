@@ -8,8 +8,8 @@ import '../../utils/data.dart';
 import '../../utils/encoders.dart';
 
 Future<Map<String, dynamic>> testRestCapabilities({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   final capabilitySpec = <String, List>{};
   final combinations = getAllSubsets(['publish', 'history', 'subscribe'])
@@ -34,10 +34,10 @@ Future<Map<String, dynamic>> testRestCapabilities({
 
   final matrix = <Map>[];
   for (final entry in capabilitySpec.entries) {
-    Map<String, dynamic> publishException;
-    Map<String, dynamic> historyException;
-    Map<String, dynamic> presenceException;
-    Map<String, dynamic> presenceHistoryException;
+    Map<String, dynamic>? publishException;
+    Map<String, dynamic>? historyException;
+    Map<String, dynamic>? presenceException;
+    Map<String, dynamic>? presenceHistoryException;
 
     final channel = rest.channels.get(entry.key);
     try {
