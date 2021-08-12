@@ -7,7 +7,7 @@ export 'config/test_names.dart';
 /// Send a message to run a widget test and receive a response.
 ///
 /// Helper to minimize repeatedly used code in driver tests.
-Future<TestControlResponseMessage> getTestResponse(
+Future<TestControlResponseMessage> requestDataForTest(
   FlutterDriver driver,
   TestControlMessage message,
 ) async {
