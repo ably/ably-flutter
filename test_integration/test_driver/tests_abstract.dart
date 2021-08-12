@@ -17,7 +17,7 @@ void runTests({
 
   late FlutterDriver driver;
 
-  // Connect to the Flutter driver before running any tests.
+  // Connect this driver to the application before running any tests.
   setUpAll(() async {
     driver = await FlutterDriver.connect(printCommunication: true);
   });
