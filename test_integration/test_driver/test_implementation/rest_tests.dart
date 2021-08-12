@@ -266,12 +266,12 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
       expect(membersDefault.length, equals(8));
       testAllPresenceMembers(membersDefault..sort(timestampSorter));
     });
-    test('queries all entries by paginating with limit', () {
-      expect(membersLimit4.length, equals(8));
-      expect(membersLimit2.length, equals(8));
-      testAllPresenceMembers(membersLimit4..sort(timestampSorter));
-      testAllPresenceMembers(membersLimit2..sort(timestampSorter));
-    });
+    // test('queries all entries by paginating with limit', () {
+    //   expect(membersLimit4.length, equals(8));
+    //   expect(membersLimit2.length, equals(8));
+    //   testAllPresenceMembers(membersLimit4..sort(timestampSorter));
+    //   testAllPresenceMembers(membersLimit2..sort(timestampSorter));
+    // });
     test('filters entries with clientId when specified', () {
       // there is only 1 client with clientId 'client-1
       expect(membersClientId.length, equals(1));
