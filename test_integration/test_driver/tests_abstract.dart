@@ -37,7 +37,7 @@ void runTests({
       testFunction,
     ) {
       group(
-        'Module: $testModuleName. Group: $testGroupName',
+        'Module: $testModuleName. Group: $testGroupName. Test: ',
         () => testFunction(getDriver),
         timeout: const Timeout(Duration(minutes: 2)),
       );
