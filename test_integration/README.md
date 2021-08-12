@@ -1,8 +1,22 @@
 # Ably Realtime integration tests
 
-This is for tests that depend on the Ably plugin to be available and
-functional and for tests to be executed on Android and iOS devices or 
-emulators.
+Integration tests allow for tests to execute on Android and iOS. This allows us to ensure
+platform specific behaviour (native ably-flutter code and dependencies, ably-cocoa and ably-java)
+are behaving as expected.
+
+This project has only one integration test target, `main.dart`. 
+To run all tests: 
+ - run `flutter drive --target lib/main.dart`, or 
+ - run `flutter drive` which runs them all (one and only, `main.dart`).
+
+To run a specific test:
+- In [tests_config.dart](test_driver/tests_config.dart), comment out the key: value pairs which you don't want to run.
+- Launch both integration test app and driver:
+  - Launch `Integration Test` compound run configuration in Android, or
+  - Launch `Integration Test App` and `Integration Test Driver` run configurations, or
+  - Launch each application manually:
+    - Launch the integration test app manually
+    - Launch the driver: `dart test_integration/test_driver/runner.dart`
 
 ## Execute the Flutter Driver Tests
 
