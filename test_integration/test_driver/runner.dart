@@ -1,17 +1,17 @@
 import 'package:args/args.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 import 'tests_abstract.dart';
 import 'tests_config.dart';
 
 void main(List<String> args) {
   final parser = ArgParser();
-  final allowedModules =
-      TestGroup.values.map((group) => group.toString().split('.')[1]).toList();
+
   parser
     ..addMultiOption(
       'modules',
       abbr: 'm',
-      allowed: allowedModules,
+      allowed: TestModules.values.map(EnumToString.convertToString).toSet(),
     )
     ..addFlag(
       'help',
@@ -27,17 +27,21 @@ void main(List<String> args) {
     return;
   }
 
-  final modules = argv['modules'] as List;
-  if (modules.isEmpty) {
+  final selectedModules =
+      _parseModulesStringIntoTestModules(argv['modules'] as List<String>);
+
+  if (selectedModules.isEmpty) {
     runTests(all: true);
-  } else if (modules is List) {
-    runTests(
-        groups: modules
-            .map((module) =>
-                TestGroup.values[allowedModules.indexOf(module as String)])
-            .toList());
-  } else {
-    runTests(
-        groupName: TestGroup.values[allowedModules.indexOf(modules as String)]);
+  } else if (selectedModules is Iterable) {
+    runTests(testModules: selectedModules);
   }
+}
+
+Iterable<TestModules> _parseModulesStringIntoTestModules(
+    List<String> modulesStrings) {
+  final modules = modulesStrings
+      .map((module) => EnumToString.fromString(TestModules.values, module))
+      .whereType<TestModules>()
+      .toSet();
+  return TestModules.values.toSet().intersection(modules);
 }
