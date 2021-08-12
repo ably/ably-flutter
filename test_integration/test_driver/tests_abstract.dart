@@ -33,12 +33,12 @@ void runTests({
   for (final testModule in tests.keys) {
     final testModuleName = EnumToString.convertToString(testModule);
     tests[testModule]!.forEach((
-        testGroupName,
-        testFunction,
-        ) {
+      testGroupName,
+      testFunction,
+    ) {
       group(
         'Module: $testModuleName. Group: $testGroupName',
-            () => testFunction(getDriver),
+        () => testFunction(getDriver),
         timeout: const Timeout(Duration(minutes: 2)),
       );
     });

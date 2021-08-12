@@ -7,7 +7,8 @@ import 'utils.dart';
 void testRestPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublish);
   late TestControlResponseMessage response;
-  setUpAll(() async => response = await requestDataForTest(getDriver(), message));
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
 
   test('rest instance has a valid handle on publish', () {
     expect(response.payload['handle'], isA<int>());
@@ -155,7 +156,8 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishWithAuthCallback);
   late TestControlResponseMessage response;
-  setUpAll(() async => response = await requestDataForTest(getDriver(), message));
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
 
   test('auth callback is invoked', () {
     expect(response.payload['authCallbackInvoked'], isTrue);
