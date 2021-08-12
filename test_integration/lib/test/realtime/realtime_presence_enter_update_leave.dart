@@ -5,11 +5,11 @@ import 'package:ably_flutter_example/provisioning.dart';
 import '../../factory/reporter.dart';
 import '../../utils/data.dart';
 
-final logMessages = <List<String>>[];
+final logMessages = <List<String?>>[];
 
 ClientOptions getClientOptions(
   String appKey, [
-  String clientId = 'someClientId',
+  String? clientId = 'someClientId',
 ]) =>
     ClientOptions.fromKey(appKey)
       ..environment = 'sandbox'
@@ -19,8 +19,8 @@ ClientOptions getClientOptions(
           ({msg, exception}) => logMessages.add([msg, exception.toString()]);
 
 Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
-  Reporter reporter,
-  Map<String, dynamic> payload,
+  required Reporter reporter,
+  Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
   final appKey = (await provision('sandbox-')).toString();
@@ -47,13 +47,15 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
         result['enter'] = false;
       }
 
-      try {
-        await presence.enterClient(clientId2);
-        result['enterClient'] = true;
-      } on AssertionError {
+      if (clientId2 == null) {
         result['enterClient'] = false;
-      } on Exception {
-        result['enterClient'] = false;
+      } else {
+        try {
+          await presence.enterClient(clientId2);
+          result['enterClient'] = true;
+        } on Exception {
+          result['enterClient'] = false;
+        }
       }
 
       try {
@@ -65,13 +67,15 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
         result['update'] = false;
       }
 
-      try {
-        await presence.updateClient(clientId2);
-        result['updateClient'] = true;
-      } on AssertionError {
+      if (clientId2 == null) {
         result['updateClient'] = false;
-      } on Exception {
-        result['updateClient'] = false;
+      } else {
+        try {
+          await presence.updateClient(clientId2);
+          result['updateClient'] = true;
+        } on Exception {
+          result['updateClient'] = false;
+        }
       }
 
       try {
@@ -83,13 +87,15 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
         result['leave'] = false;
       }
 
-      try {
-        await presence.leaveClient(clientId2);
-        result['leaveClient'] = true;
-      } on AssertionError {
+      if (clientId2 == null) {
         result['leaveClient'] = false;
-      } on Exception {
-        result['leaveClient'] = false;
+      } else {
+        try {
+          await presence.leaveClient(clientId2);
+          result['leaveClient'] = true;
+        } on Exception {
+          result['leaveClient'] = false;
+        }
       }
       clientIDClashMatrix.add(result);
     }

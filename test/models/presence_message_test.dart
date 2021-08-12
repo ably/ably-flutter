@@ -25,7 +25,7 @@ void main() {
         connectionId: connectionId,
         data: data,
         encoding: encoding,
-        extras: MessageExtras(extras),
+        extras: const MessageExtras(extras),
         timestamp: timestamp,
       );
       test('#id retrieves id', () {
@@ -47,7 +47,7 @@ void main() {
         expect(presenceMessage.encoding, encoding);
       });
       test('#extras retrieves extras', () {
-        expect(presenceMessage.extras.map, extras);
+        expect(presenceMessage.extras!.map, extras);
       });
       test('#timestamp retrieves timestamp', () {
         expect(presenceMessage.timestamp, timestamp);
@@ -61,7 +61,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: MessageExtras(extras),
+          extras: const MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(presenceMessage == presenceMessage2, true);
@@ -77,7 +77,7 @@ void main() {
           connectionId: connectionId,
           data: data,
           encoding: encoding,
-          extras: MessageExtras(extras),
+          extras: const MessageExtras(extras),
           timestamp: timestamp,
         );
         expect(presenceMessage == presenceMessage2, false);
@@ -131,7 +131,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras.map, extras);
+        expect(presenceMessage.extras!.map, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -160,7 +160,7 @@ void main() {
         expect(presenceMessage.connectionId, connectionId);
         expect(presenceMessage.data, data);
         expect(presenceMessage.encoding, encoding);
-        expect(presenceMessage.extras.map, extras);
+        expect(presenceMessage.extras!.map, extras);
         expect(
           presenceMessage.timestamp,
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch),
@@ -178,9 +178,9 @@ void main() {
       });
       test('a map of extras is allowed', () {
         final message = PresenceMessage(
-          extras: MessageExtras({'key': 'value'}),
+          extras: const MessageExtras({'key': 'value'}),
         );
-        expect(message.extras.map, const {'key': 'value'});
+        expect(message.extras!.map, const {'key': 'value'});
       });
     });
   });

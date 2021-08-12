@@ -17,8 +17,9 @@ class Connection extends PlatformObject implements ConnectionInterface {
   ///
   /// sets default [state] to [ConnectionState.initialized] and starts listening
   /// for updates to the connection [state].
-  Connection(this.realtime) : super() {
-    _state = ConnectionState.initialized;
+  Connection(this.realtime)
+      : _state = ConnectionState.initialized,
+        super() {
     on().listen((event) {
       if (event.reason?.code == ErrorCodes.authCallbackFailure) {
         realtime.awaitAuthUpdateAndReconnect();
@@ -31,25 +32,25 @@ class Connection extends PlatformObject implements ConnectionInterface {
   Future<int> createPlatformInstance() async => realtime.handle;
 
   @override
-  ErrorInfo errorReason;
+  ErrorInfo? errorReason;
 
   @override
-  String id;
+  String? id;
 
   @override
-  String key;
+  String? key;
 
   @override
-  String recoveryKey;
+  String? recoveryKey;
 
   @override
-  int serial;
+  int? serial;
 
   @override
   ConnectionState get state => _state;
 
   @override
-  Stream<ConnectionStateChange> on([ConnectionEvent connectionEvent]) =>
+  Stream<ConnectionStateChange> on([ConnectionEvent? connectionEvent]) =>
       listen<ConnectionStateChange>(
         PlatformMethod.onRealtimeConnectionStateChanged,
       ).where((connectionStateChange) =>

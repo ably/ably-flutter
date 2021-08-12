@@ -20,9 +20,9 @@ class RealtimePresence extends PlatformObject
 
   @override
   Future<List<PresenceMessage>> get([
-    RealtimePresenceParams params,
+    RealtimePresenceParams? params,
   ]) async {
-    final presenceMessages = await invoke<List>(
+    final presenceMessages = await invokeRequest<List>(
       PlatformMethod.realtimePresenceGet,
       {
         TxTransportKeys.channelName: _channel.name,
@@ -36,32 +36,33 @@ class RealtimePresence extends PlatformObject
 
   @override
   Future<PaginatedResult<PresenceMessage>> history([
-    RealtimeHistoryParams params,
+    RealtimeHistoryParams? params,
   ]) async {
-    final message = await invoke<AblyMessage>(
+    final message = await invokeRequest<AblyMessage>(
       PlatformMethod.realtimePresenceHistory,
       {
         TxTransportKeys.channelName: _channel.name,
         if (params != null) TxTransportKeys.params: params
       },
     );
-    return PaginatedResult<PresenceMessage>.fromAblyMessage(message);
+    return PaginatedResult<PresenceMessage>.fromAblyMessage(
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+    );
   }
 
   @override
-  bool syncComplete;
+  bool? syncComplete;
 
-  String get _realtimeClientId => _channel.realtime.options.clientId;
-
-  @override
-  Future<void> enter([Object data]) => enterClient(_realtimeClientId, data);
+  String? get _realtimeClientId => _channel.realtime.options.clientId;
 
   @override
-  Future<void> enterClient(String clientId, [Object data]) async {
-    assert(
-        clientId != null,
-        'Channel ${_channel.name}:'
-        ' unable to enter presence channel (null clientId specified)');
+  Future<void> enter([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await enterClient(_realtimeClientId!, data);
+  }
+
+  @override
+  Future<void> enterClient(String clientId, [Object? data]) async {
     await invoke(PlatformMethod.realtimePresenceEnter, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
@@ -70,14 +71,13 @@ class RealtimePresence extends PlatformObject
   }
 
   @override
-  Future<void> update([Object data]) => updateClient(_realtimeClientId, data);
+  Future<void> update([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await updateClient(_realtimeClientId!, data);
+  }
 
   @override
-  Future<void> updateClient(String clientId, [Object data]) async {
-    assert(
-        clientId != null,
-        'Channel ${_channel.name}:'
-        ' unable to update presence channel (null clientId specified)');
+  Future<void> updateClient(String clientId, [Object? data]) async {
     await invoke(PlatformMethod.realtimePresenceUpdate, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
@@ -86,14 +86,13 @@ class RealtimePresence extends PlatformObject
   }
 
   @override
-  Future<void> leave([Object data]) => leaveClient(_realtimeClientId, data);
+  Future<void> leave([Object? data]) async {
+    assert(_realtimeClientId != null, 'No client id specified on realtime');
+    await leaveClient(_realtimeClientId!, data);
+  }
 
   @override
-  Future<void> leaveClient(String clientId, [Object data]) async {
-    assert(
-        clientId != null,
-        'Channel ${_channel.name}:'
-        ' unable to leave presence channel (null clientId specified)');
+  Future<void> leaveClient(String clientId, [Object? data]) async {
     await invoke(PlatformMethod.realtimePresenceLeave, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
@@ -103,8 +102,8 @@ class RealtimePresence extends PlatformObject
 
   @override
   Stream<PresenceMessage> subscribe({
-    PresenceAction action,
-    List<PresenceAction> actions,
+    PresenceAction? action,
+    List<PresenceAction>? actions,
   }) {
     if (action != null) actions ??= [action];
     return listen<PresenceMessage>(PlatformMethod.onRealtimePresenceMessage, {

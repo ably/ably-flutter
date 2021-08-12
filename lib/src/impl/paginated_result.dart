@@ -19,19 +19,19 @@ class PaginatedResult<T> extends PlatformObject
   ///
   /// [PaginatedResult.fromAblyMessage] will act as a utility to update
   /// this property. See [next] and [first] for usages
-  int _pageHandle;
+  int? _pageHandle;
 
-  List<T> _items;
+  late final List<T> _items;
 
   /// items return page of results
   @override
   List<T> get items => _items;
 
-  bool _hasNext;
+  final bool _hasNext;
 
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
-  PaginatedResult(this._items, {bool hasNext})
+  PaginatedResult(this._items, {required bool hasNext})
       : _hasNext = hasNext,
         super(fetchHandle: false);
 
@@ -40,27 +40,29 @@ class PaginatedResult<T> extends PlatformObject
   ///
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
-  PaginatedResult.fromAblyMessage(AblyMessage message)
-      : super(fetchHandle: false) {
-    final rawResult = message.message as PaginatedResult<Object>;
-    _items = rawResult.items.map<T>((e) => e as T).toList();
-    _hasNext = rawResult.hasNext();
-    _pageHandle = message.handle;
-  }
+  PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult> message)
+      : _items = message.message.items.map<T>((e) => e as T).toList(),
+        _hasNext = message.message.hasNext(),
+        _pageHandle = message.handle,
+        super(fetchHandle: false);
 
   @override
-  Future<int> createPlatformInstance() async => _pageHandle;
+  Future<int?> createPlatformInstance() async => _pageHandle;
 
   @override
   Future<PaginatedResult<T>> next() async {
-    final message = await invoke<AblyMessage>(PlatformMethod.nextPage);
-    return PaginatedResult<T>.fromAblyMessage(message);
+    final message = await invokeRequest<AblyMessage>(PlatformMethod.nextPage);
+    return PaginatedResult<T>.fromAblyMessage(
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+    );
   }
 
   @override
   Future<PaginatedResult<T>> first() async {
-    final message = await invoke<AblyMessage>(PlatformMethod.firstPage);
-    return PaginatedResult<T>.fromAblyMessage(message);
+    final message = await invokeRequest<AblyMessage>(PlatformMethod.firstPage);
+    return PaginatedResult<T>.fromAblyMessage(
+      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+    );
   }
 
   @override

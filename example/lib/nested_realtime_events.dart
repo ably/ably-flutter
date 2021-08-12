@@ -21,7 +21,7 @@ void listenRealtimeConnection(ably.Realtime realtime) {
 
   //DISPOSE ON CONNECTED
   final stream = realtime.connection.on();
-  StreamSubscription omegaSubscription;
+  late StreamSubscription omegaSubscription;
   omegaSubscription = stream.listen((stateChange) async {
     print('DISPOSABLE LISTENER ω :: Change event arrived!:'
         ' ${stateChange.event}');
@@ -45,7 +45,7 @@ void listenRealtimeConnection(ably.Realtime realtime) {
   });
 
   StreamSubscription preZetaSubscription;
-  StreamSubscription postZetaSubscription;
+  late StreamSubscription postZetaSubscription;
   preZetaSubscription = realtime.connection.on().listen((stateChange) {
     //This listener "pre ζ" will be cancelled from γ
     print('NESTED LISTENER "pre ζ": ${stateChange.event}');

@@ -7,8 +7,8 @@ import 'utils.dart';
 void testRealtimePublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePublish);
   const message2 = TestControlMessage(TestName.realtimePublishWithAuthCallback);
-  TestControlMessage response;
-  TestControlMessage response2;
+  late TestControlResponseMessage response;
+  late TestControlResponseMessage response2;
   setUpAll(() async {
     response = await getTestResponse(getDriver(), message);
     response2 = await getTestResponse(getDriver(), message2);
@@ -25,13 +25,13 @@ void testRealtimePublish(FlutterDriver Function() getDriver) {
 
 void testRealtimeEvents(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEvents);
-  TestControlMessage response;
-  List<String> connectionStates;
-  List<Map<String, dynamic>> connectionStateChanges;
-  List<Map<String, dynamic>> filteredConnectionStateChanges;
-  List<String> channelStates;
-  List<Map<String, dynamic>> channelStateChanges;
-  List<Map<String, dynamic>> filteredChannelStateChanges;
+  late TestControlResponseMessage response;
+  late List<String> connectionStates;
+  late List<Map<String, dynamic>> connectionStateChanges;
+  late List<Map<String, dynamic>> filteredConnectionStateChanges;
+  late List<String> channelStates;
+  late List<Map<String, dynamic>> channelStateChanges;
+  late List<Map<String, dynamic>> filteredChannelStateChanges;
 
   List<String> transformState(items) =>
       List.from(items as List).map((t) => t as String).toList();
@@ -194,11 +194,11 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
 
 void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeSubscribe);
-  TestControlMessage response;
-  List<Map<String, dynamic>> all;
-  List<Map<String, dynamic>> filteredWithName;
-  List<Map<String, dynamic>> filteredWithNames;
-  List<Map<String, dynamic>> extrasMessages;
+  late TestControlResponseMessage response;
+  late List<Map<String, dynamic>> all;
+  late List<Map<String, dynamic>> filteredWithName;
+  late List<Map<String, dynamic>> filteredWithNames;
+  late List<Map<String, dynamic>> extrasMessages;
 
   List<Map<String, dynamic>> transformMessages(messages) =>
       List.from(messages as List)
@@ -267,15 +267,15 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
 
 void testRealtimeHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeHistory);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  Map<String, dynamic> paginatedResult;
-  List<Map<String, dynamic>> historyDefault;
-  List<Map<String, dynamic>> historyLimit4;
-  List<Map<String, dynamic>> historyLimit2;
-  List<Map<String, dynamic>> historyForwardLimit4;
-  List<Map<String, dynamic>> historyWithStart;
-  List<Map<String, dynamic>> historyWithStartAndEnd;
+  late Map<String, dynamic> paginatedResult;
+  late List<Map<String, dynamic>> historyDefault;
+  late List<Map<String, dynamic>> historyLimit4;
+  late List<Map<String, dynamic>> historyLimit2;
+  late List<Map<String, dynamic>> historyForwardLimit4;
+  late List<Map<String, dynamic>> historyWithStart;
+  late List<Map<String, dynamic>> historyWithStartAndEnd;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -339,12 +339,12 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
 
 void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceGet);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> membersInitial;
-  List<Map<String, dynamic>> membersDefault;
-  List<Map<String, dynamic>> membersClientId;
-  List<Map<String, dynamic>> membersConnectionId;
+  late List<Map<String, dynamic>> membersInitial;
+  late List<Map<String, dynamic>> membersDefault;
+  late List<Map<String, dynamic>> membersClientId;
+  late List<Map<String, dynamic>> membersConnectionId;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -381,16 +381,16 @@ void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
 
 void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceHistory);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> historyInitial;
-  List<Map<String, dynamic>> historyDefault;
-  List<Map<String, dynamic>> historyLimit4;
-  List<Map<String, dynamic>> historyLimit2;
-  List<Map<String, dynamic>> historyForwards;
-  List<Map<String, dynamic>> historyWithStart;
-  List<Map<String, dynamic>> historyWithStartAndEnd;
-  List<Map<String, dynamic>> historyAll;
+  late List<Map<String, dynamic>> historyInitial;
+  late List<Map<String, dynamic>> historyDefault;
+  late List<Map<String, dynamic>> historyLimit4;
+  late List<Map<String, dynamic>> historyLimit2;
+  late List<Map<String, dynamic>> historyForwards;
+  late List<Map<String, dynamic>> historyWithStart;
+  late List<Map<String, dynamic>> historyWithStartAndEnd;
+  late List<Map<String, dynamic>> historyAll;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -447,10 +447,10 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
 
 void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceEnterUpdateLeave);
-  TestControlMessage response;
+  late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> clientIDClashMatrix;
-  List<Map<String, dynamic>> actionMatrix;
+  late List<Map<String, dynamic>> clientIDClashMatrix;
+  late List<Map<String, dynamic>> actionMatrix;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
@@ -507,8 +507,8 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
       ' the one passed to presence enter/update/leave APIs.'
       ' If unequal, throw error.', () {
     for (final clashEntry in clientIDClashMatrix) {
-      final realtimeClientID = clashEntry['realtimeClientId'] as String;
-      final presenceClientID = clashEntry['presenceClientId'] as String;
+      final realtimeClientID = clashEntry['realtimeClientId'] as String?;
+      final presenceClientID = clashEntry['presenceClientId'] as String?;
 
       if (realtimeClientID != presenceClientID) {
         if (realtimeClientID == null) {
@@ -573,11 +573,11 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
 
 void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceSubscribe);
-  TestControlMessage response;
-  List<Map<String, dynamic>> allMessages;
-  List<Map<String, dynamic>> enterMessages;
-  List<Map<String, dynamic>> enterUpdateMessages;
-  List<Map<String, dynamic>> partialMessages;
+  late TestControlResponseMessage response;
+  late List<Map<String, dynamic>> allMessages;
+  late List<Map<String, dynamic>> enterMessages;
+  late List<Map<String, dynamic>> enterUpdateMessages;
+  late List<Map<String, dynamic>> partialMessages;
 
   List<Map<String, dynamic>> transform(items) =>
       List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
