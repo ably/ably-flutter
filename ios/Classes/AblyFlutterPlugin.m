@@ -1,6 +1,7 @@
 #import "AblyFlutterPlugin.h"
 
 @import Ably;
+@import FirebaseMessaging;
 
 #import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
@@ -193,7 +194,6 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const
 };
 
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-//    UNUserNotificationCenterDelegate *const delegate = UNUserNotificationCenter.currentNotificationCenter.delegate;
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     NSNumber *const realtimeHandle = [ably createRealtimeWithOptions:message.message];
@@ -622,6 +622,7 @@ static const AblyClientReceiver _ablyClientReceiver = ^void(AblyFlutterPlugin *c
 };
 
 static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+    [FIRMessaging messaging].autoInitEnabled = YES;
     ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
     [push activate];
     result(nil);
@@ -837,6 +838,8 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     LOG(@"registrar: %@", [registrar class]);
     
+    [FIRMessaging messaging].autoInitEnabled = YES;
+    
     // Initializing reader writer and method codecs
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
     FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
@@ -945,8 +948,7 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 }
 
 -(void)uiApplicationDidFinishLaunchingWithOptionsNotificationHandler:(nonnull NSNotification *)notification {
-//    UNUserNotificationCenter *const notificationCenter = UNUserNotificationCenter.currentNotificationCenter;
-//    notificationCenter.delegate = self;
+//    UNUserNotificationCenter.currentNotificationCenter.delegate = self;
     
     // Calling registerForRemoteNotifications on didFinishLaunchingWithOptions because it may change between app launches
     // More information at https://stackoverflow.com/questions/29456954/ios-8-remote-notifications-when-should-i-call-registerforremotenotifications
@@ -970,36 +972,5 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
     // This error will be used when the first Ably client is made.
     _didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
-
-//// Only called when the app is in the foreground
-//#pragma mark - Push Notifications - UNUserNotificationCenterDelegate
-//// https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
-//- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
-//    // Don't show the notification if the app is in the foreground. This is the default behaviour on Android.
-//    // TODO allow the user to specify the behaviour here on dart side.
-//    completionHandler(UNNotificationPresentationOptionNone);
-//}
-//
-//// Only called when `'content-available' : 1` is set in the push payload
-//# pragma mark - Push Notifications - FlutterApplicationLifeCycleDelegate (not UIApplicationDelegate)
-//- (bool)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
-//    // TODO Implement Push Notifications listener https://github.com/ably/ably-flutter/issues/141
-//    // Call a callback in dart side so the user can handle it.
-////    bool handled = handleRemoteNotificationOnDartSide(userInfo, completionHandler);
-////    if (handled) {
-////        return YES;
-////    } else {
-////        return NO;
-////    }
-//    completionHandler(UIBackgroundFetchResultNewData);
-//    return NO;
-//}
-//
-//#pragma mark - Push Notifications - UNNotificationContentExtension
-//// From apple docs: The method will be called on the delegate when the user responded to the notification by opening the application, dismissing the notification or choosing a UNNotificationAction
-//// TODO allow the user to specify the behaviour here on dart side.
-//- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler  API_AVAILABLE(ios(10.0)){
-//    completionHandler();
-//}
 
 @end
