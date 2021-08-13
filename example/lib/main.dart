@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -8,13 +11,82 @@ import 'op_state.dart';
 import 'push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
-void main() {
-  ably.AblyPushNotifications.setAndroidBackgroundMessageHandler((message) async {
-    print(message);
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  // UI notification is immediately shown for a data + notification message.
+  print('Handling a background message: ${message.messageId}');
+}
+
+
+Future<void> setupMessageHandlers() async {
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // A nice way to integrate with Ably, migrating from Firebase.
+  // At app startup, just give ably the latest token.
+  if (Platform.isIOS) {
+    final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print("iOS Device's apnsToken: $apnsToken");
+    print("iOS Device's fcmToken: $fcmToken");
+    // In ably, we can just give it the apnsToken or fcmToken. Do this everytime at launch.
+    // ably.updatePushToken(apnsToken);
+    // ably.push.activate();
+
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  } else if (Platform.isAndroid) {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print('fcmToken: $fcmToken');
+    // In ably, we can just give it the apnsToken or fcmToken. Do this everytime at launch.
+    // ably.updatePushToken(fcmToken);
+    // ably.push.activate();
+
+    // TODO Confirm that Ably messages are received safely by FCM on iOS.
+    // TODO set up notification channels on Android on **dart side**
+    // TODO set up notification channels on Android on android side
+    // by reinstalling firebase_core and firebase_messaging in ably example app
+  }
+
+  FirebaseMessaging.onMessage.listen((message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
   });
-  ably.AblyPushNotifications.setIOSBackgroundMessageHandler((message) async {
-    print(message);
-  });
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await setupMessageHandlers();
+
+  // ably.AblyPushNotifications.setAndroidBackgroundMessageHandler((message) async {
+  //   print(message);
+  // });
+  // ably.AblyPushNotifications.setIOSBackgroundMessageHandler((message) async {
+  //   print(message);
+  // });
   runApp(MyApp());
 }
 
