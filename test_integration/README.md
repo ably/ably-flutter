@@ -4,13 +4,29 @@ Integration tests allow for tests to execute on Android and iOS. This allows us 
 platform specific behaviour (native ably-flutter code and dependencies, ably-cocoa and ably-java)
 are behaving as expected.
 
+## Test Structure 
+
+### Test Target
+
 This project has only one integration test target, `main.dart`. 
 To run all tests: 
  - run `flutter drive --target lib/main.dart`, or 
  - run `flutter drive` which runs them all (one and only, `main.dart`).
 
-To run a specific test:
-- In [tests_config.dart](test_driver/tests_config.dart), comment out the key: value pairs which you don't want to run.
+### Test Module
+
+Test modules include `basicTests` and `realtime` (For the full list, `TestModules` in [tests_config.dart](./test_driver/tests_config.dart)). To run one module (a collection of test groups), either:
+- In Android Studio: 
+  - Modify the `Integration Test Driver` run/debug configuration by adding `-m module_name_1,module_name_2` in `Program Arguments`.
+    - Note: No spaces between module_names. Alternatively, specify the modules separately: `-m module_name_1 -m module_name_2` 
+- Launch each application manually:
+  - Launch the integration test app manually
+  - Launch the driver and pass the modules with the `-m` option: `dart test_integration/test_driver/runner.dart -m rest,realtime`
+
+### Test Group
+
+To run a specific test group:
+- In [tests_config.dart](test_driver/tests_config.dart), comment out the **test group** key: value pairs which you don't want to run.
 - Launch both integration test app and driver:
   - Launch `Integration Test` compound run configuration in Android, or
   - Launch `Integration Test App` and `Integration Test Driver` run configurations, or
