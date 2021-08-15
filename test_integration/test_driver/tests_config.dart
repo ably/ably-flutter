@@ -5,18 +5,18 @@ import 'test_implementation/helper_tests.dart';
 import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
-enum TestGroup { basicTests, helperTests, rest, realtime }
+enum TestModules { basicTests, helperTests, rest, realtime }
 
 final _tests =
-    <TestGroup, Map<String, void Function(FlutterDriver Function())>>{
-  TestGroup.basicTests: {
+    <TestModules, Map<String, void Function(FlutterDriver Function())>>{
+  TestModules.basicTests: {
     'should return Platform and Ably version': testPlatformAndAblyVersion,
     'should provision AppKey': testDemoDependencies,
   },
-  TestGroup.helperTests: {
+  TestModules.helperTests: {
     'should report unhandled exception': testShouldReportUnhandledException,
   },
-  TestGroup.rest: {
+  TestModules.rest: {
     'should publish': testRestPublish,
     'should retrieve history': testRestHistory,
     'conforms to publish spec': testRestPublishSpec,
@@ -25,7 +25,7 @@ final _tests =
     'should get Presence History': testRestPresenceHistory,
     'conforms to capabilitySpec': testCapabilityMatrix,
   },
-  TestGroup.realtime: {
+  TestModules.realtime: {
     'realtime#channels#channel#publish': testRealtimePublish,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
@@ -37,20 +37,18 @@ final _tests =
   }
 };
 
-Map<TestGroup, Map<String, void Function(FlutterDriver Function())>>
+Map<TestModules, Map<String, void Function(FlutterDriver Function())>>
     getTestsFor({
   bool all = false,
-  TestGroup? group,
-  List<TestGroup>? groups,
+  Iterable<TestModules>? testModules,
 }) {
-  assert(group != null || groups != null || all != false);
-  late List<TestGroup> _groups;
+  assert(testModules != null || all != false);
+  late Iterable<TestModules> _testModules;
   if (all) {
-    _groups = _tests.keys.toList();
-  } else if (group != null) {
-    _groups = [group];
+    _testModules = _tests.keys.toList();
   } else {
-    _groups = groups!;
+    _testModules = testModules!;
   }
-  return Map.from(_tests)..removeWhere((key, value) => !_groups.contains(key));
+  return Map.from(_tests)
+    ..removeWhere((key, value) => !_testModules.contains(key));
 }
