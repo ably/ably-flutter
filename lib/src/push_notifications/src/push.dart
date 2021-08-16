@@ -12,7 +12,7 @@ abstract class Push {
   /// required to show user notifications. Otherwise, notifications may
   /// silently get received by the application.
   ///
-  /// This does nothing on Android, since you don't need permissions
+  /// This always returns true on Android, since you don't need permissions
   /// to show notifications to the user.
   ///
   /// Params:
