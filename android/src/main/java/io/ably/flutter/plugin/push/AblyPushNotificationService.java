@@ -36,4 +36,3 @@ public class AblyPushNotificationService extends FirebaseMessagingService {
     super.onNewToken(s);
   }
 }
- 
