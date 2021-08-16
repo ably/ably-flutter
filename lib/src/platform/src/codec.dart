@@ -733,9 +733,6 @@ class Codec extends StandardMessageCodec {
       default:
         return null;
     }
-    // throw AblyException(
-    //   'Platform communication error. DevicePushState is invalid: $enumValue',
-    // );
   }
 
   DevicePlatform _decodeDevicePlatform(String? enumValue) {
