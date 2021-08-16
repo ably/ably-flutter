@@ -1,3 +1,5 @@
+import 'dart:io' as io show Platform;
+
 import '../../generated/platform_constants.dart';
 import '../../push_notifications/push_notifications.dart';
 import '../../realtime/realtime.dart';
@@ -27,11 +29,17 @@ class PushNative extends PlatformObject implements Push {
 
   @override
   Future<bool> requestNotificationPermission(
-          {bool provisionalPermissionRequest = false}) async =>
-      invokeRequest<bool>(PlatformMethod.pushRequestNotificationPermission, {
+      {bool provisionalPermissionRequest = false}) async {
+    if (io.Platform.isIOS) {
+      return invokeRequest<bool>(
+          PlatformMethod.pushRequestNotificationPermission, {
         TxPushRequestNotificationPermission.provisionalPermissionRequest:
             provisionalPermissionRequest
       });
+    } else {
+      return true;
+    }
+  }
 
   @override
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
