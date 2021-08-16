@@ -30,6 +30,13 @@ class AblyException implements Exception {
         message = exception.message,
         errorInfo = exception.details as ErrorInfo?;
 
+  AblyException.fromMessage(int code, this.message)
+      : code = code.toString(),
+        errorInfo = ErrorInfo(
+            code: code,
+            href: 'https://help.ably.io/error/40000',
+            message: message);
+
   @override
   String toString() {
     if (message == null) {

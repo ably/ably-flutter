@@ -42,6 +42,4 @@ class ErrorInfo {
       ' code=$code'
       ' statusCode=$statusCode'
       ' href=$href';
-
-  static createErrorInfo(int code, String message) {}
 }
