@@ -1,5 +1,29 @@
 # Changelog
 
+## [v1.2.1](https://github.com/ably/ably-flutter/tree/v1.2.1)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.0...v1.2.1)
+
+**Implemented enhancements:**
+
+- Migrate to null safety [\#82](https://github.com/ably/ably-flutter/issues/82)
+
+**Closed issues:**
+
+- Investigate libraries that can help leverage our push implementation [\#142](https://github.com/ably/ably-flutter/issues/142)
+- Could not find method coreLibraryDesugaring\(\) for arguments [\#130](https://github.com/ably/ably-flutter/issues/130)
+- Create code snippets for homepage \(flutter\) [\#124](https://github.com/ably/ably-flutter/issues/124)
+- Make this SDK ready for the first non-preview release  [\#102](https://github.com/ably/ably-flutter/issues/102)
+- Activate and getting Push Notifications [\#54](https://github.com/ably/ably-flutter/issues/54)
+
+**Merged pull requests:**
+
+- Bump ws from 5.2.2 to 5.2.3 in /example/test\_harness [\#145](https://github.com/ably/ably-flutter/pull/145) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Skip 1 failing test, fix 1 failing test and schedule tests on main twice a day [\#144](https://github.com/ably/ably-flutter/pull/144) ([ben-xD](https://github.com/ben-xD))
+- Refactor large files into 1 file per class [\#138](https://github.com/ably/ably-flutter/pull/138) ([ben-xD](https://github.com/ben-xD))
+- Add instructions for M1 macs and fixing ruby fatal error for example apps [\#137](https://github.com/ably/ably-flutter/pull/137) ([ben-xD](https://github.com/ben-xD))
+- Migrate to null-safety [\#136](https://github.com/ably/ably-flutter/pull/136) ([tiholic](https://github.com/tiholic))
+
 ## [v1.2.0](https://github.com/ably/ably-flutter/tree/v1.2.0)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.2...v1.2.0)
