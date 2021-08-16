@@ -16,6 +16,9 @@ const _capabilitySpec = {
 };
 const _authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
+String tokenDetailsURL(String keyName, [String prefix = '']) =>
+    'https://${prefix}rest.ably.io/keys/$keyName/requestToken';
+
 // per: https://docs.ably.com/client-lib-development-guide/test-api/
 final _appSpec = Map<String, List>.unmodifiable({
   // API Keys & Capabilities.
@@ -83,6 +86,33 @@ Future<Map<String, dynamic>> getTokenRequest() async {
     delayFactor: Duration(seconds: 2),
   ).retry(() => http.get(Uri.parse(_authURL)));
   print('tokenRequest from tokenRequest server: ${r.body}');
+  return Map.castFrom<dynamic, dynamic, String, dynamic>(
+    jsonDecode(r.body) as Map,
+  );
+}
+
+Future<Map<String, dynamic>> getTokenDetails(
+  String keyName,
+  String keySecret, [
+  String prefix = '',
+]) async {
+  final stringToBase64 = utf8.fuse(base64);
+  final encoded = stringToBase64.encode('$keyName:$keySecret');
+  final r = await const RetryOptions(
+    maxAttempts: 5,
+    delayFactor: Duration(seconds: 2),
+  ).retry(() => http.post(
+        Uri.parse(tokenDetailsURL(keyName, prefix)),
+        headers: {
+          'Authorization': 'Basic $encoded',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'keyName': keyName,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+        }),
+      ));
+  print('tokenDetails from server: ${r.body}');
   return Map.castFrom<dynamic, dynamic, String, dynamic>(
     jsonDecode(r.body) as Map,
   );
