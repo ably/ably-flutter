@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ably: 863d35bb6a6aa5fc537304ef19f85cfa51d1bbde
-  ably_flutter: 31894faaa659febdd3a57cdc03c1fc2c218d2c95
+  ably_flutter: f2235538e3cbee569611031a76163dfb56250ed1
   AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   msgpack: a14de9216d29cfd0a7aff5af5150601a27e899a4
