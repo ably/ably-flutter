@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'codegencontext.dart' show context;
+import 'codegen_context.dart' show context;
 import 'templates/platformconstants.dart.dart' as dart_template;
 import 'templates/platformconstants.h.dart' as objc_header_template;
 import 'templates/platformconstants.java.dart' as java_template;
@@ -12,7 +12,7 @@ const String projectRoot = '../';
 
 Map<Template, String> toGenerate = {
   // input template method vs output file path
-  dart_template.$: '${projectRoot}lib/src/generated/platformconstants.dart',
+  dart_template.$: '${projectRoot}lib/src/generated/platform_constants.dart',
   java_template.$:
       '${projectRoot}android/src/main/java/io/ably/flutter/plugin/generated/PlatformConstants.java',
   objc_header_template.$:

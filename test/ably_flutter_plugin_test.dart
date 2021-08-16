@@ -1,11 +1,9 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/impl/rest/rest.dart';
-import 'package:ably_flutter/src/info.dart';
-import 'package:ably_flutter/src/platform.dart' as platform;
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final channel = platform.methodChannel;
+  final channel = Platform.methodChannel;
 
   TestWidgetsFlutterBinding.ensureInitialized();
   var counter = 0;
