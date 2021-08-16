@@ -341,5 +341,6 @@ class TxPushChannelSubscription {
 }
 
 class TxPushRequestNotificationPermission {
-  static const String provisionalPermissionRequest = 'provisionalPermissionRequest';
+  static const String provisionalPermissionRequest =
+      'provisionalPermissionRequest';
 }

@@ -27,29 +27,36 @@ class PushChannelNative extends PlatformObject implements PushChannel {
   }
 
   @override
-  Future<int?> createPlatformInstance() => (realtime != null)
-      ? (realtime as Realtime).handle
-      : (rest as Rest).handle;
+  Future<int?> createPlatformInstance() =>
+      (realtime != null)
+          ? (realtime as Realtime).handle
+          : (rest as Rest).handle;
 
   /// Subscribe device to the channel’s push notifications.
   @override
-  Future<void> subscribeDevice() => invoke(
-      PlatformMethod.pushSubscribeDevice, {TxTransportKeys.channelName: _name});
+  Future<void> subscribeDevice() =>
+      invoke(
+          PlatformMethod.pushSubscribeDevice,
+          {TxTransportKeys.channelName: _name});
 
   /// Unsubscribe device from the channel’s push notifications.
   @override
-  Future<void> unsubscribeDevice() => invoke(
-      PlatformMethod.pushUnsubscribeDevice,
-      {TxTransportKeys.channelName: _name});
+  Future<void> unsubscribeDevice() =>
+      invoke(
+          PlatformMethod.pushUnsubscribeDevice,
+          {TxTransportKeys.channelName: _name});
 
   @override
-  Future<void> subscribeClient() => invoke(
-      PlatformMethod.pushSubscribeClient, {TxTransportKeys.channelName: _name});
+  Future<void> subscribeClient() =>
+      invoke(
+          PlatformMethod.pushSubscribeClient,
+          {TxTransportKeys.channelName: _name});
 
   @override
-  Future<void> unsubscribeClient() => invoke(
-      PlatformMethod.pushUnsubscribeClient,
-      {TxTransportKeys.channelName: _name});
+  Future<void> unsubscribeClient() =>
+      invoke(
+          PlatformMethod.pushUnsubscribeClient,
+          {TxTransportKeys.channelName: _name});
 
   @override
   Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
@@ -58,18 +65,10 @@ class PushChannelNative extends PlatformObject implements PushChannel {
         !params.containsKey('clientId') &&
         !params.containsKey('deviceClientId') &&
         !params.containsKey('channel')) {
-      // This error only happen on Android. They are thrown here
+      // This error only happen on Androids. They are thrown here
       // for both platforms (iOS/ Android) to make the API more consistent.
-      final errorInfo = ErrorInfo(
-          code: 40000,
-          href: 'https://help.ably.io/error/40000',
-          message:
-              "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
-
-      throw AblyException(
-          '40000',
-          "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'",
-          errorInfo);
+      throw AblyException.fromMessage(40000,
+          "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
     }
 
     final message = await invokeRequest<AblyMessage>(
