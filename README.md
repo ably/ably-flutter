@@ -55,16 +55,51 @@ Features that we do not currently support, but we do plan to add in the future:
 
 ### Running example app
 
-- Clone the repo
-- cd to `example` folder
-- run `flutter pub get` to install dependencies
-- Get/ create an Ably API key from your account on ably.com
-    - If starting the app using the command line, run `flutter run --dart-define=ABLY_API_KEY=put_your_api_key_here`
-    - If starting the app using Android Studio:
-        - Edit the example app run configuration
-          add the --dart-define flag to `additional run args`
-- Android only: Create a firebase project, add an Android app to it, add download a `google-services.json` file. Move this file to `example/android/app`. This is required because we depend on Firebase, which requires this file at launch. 
-- `flutter run` will start the application on connected android / iOS device
+- To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) with a generous free tier, and use your API key in the example app.
+- Clone the project: `git clone https://github.com/ably/ably-flutter.git` or `git clone git@github.com:ably/ably-flutter.git` 
+
+#### Running in Android Studio/ IntelliJ Idea
+
+Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
+
+![run-configuration-1](images/run-configuration-1.png)
+
+![run-configuration-2](images/run-configuration-2.png)
+
+#### Running in Visual Studio Code
+
+- Under `Run and Debug`,
+  - Select the gear icon to view `launch.json`
+  - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
+  - To choose a specific device when more than 1 are connected: to launch on a specific device, make sure it is the only device plugged in. To run on a specific device when you have multiple plugged in, and another element to the `configuration.args` value, with `--device-id=replace_with_device_id`
+    - Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`
+-  select the `example` configuration
+
+#### Running in Command Line
+
+- Change into the example app directory: `cd example`
+- Install dependencies: `flutter pub get`
+- Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
+  - To choose a specific device when more than 1 are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
+
+### Example App Push Notifications
+    - To get push notifications setup in your own app, read []().
+    - Android:
+        - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to your unique application ID.
+        - Create a firebase project, and in the Project settings, add an Android App with your unique application ID. Follow the steps provided on the setup process, or the following:
+            - You can leave `Debug signing certificate SHA-1` empty.
+            - Download the generated `google-services.json` file
+            - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
+            - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the firebase guide.
+    - iOS:
+        - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
+        - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
+            - Register your bundle ID on App Store connect.
+            - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
+            - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
+            - Add `remote notification` Background mode:
+                - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
+                - Check `remote notifications`.
 
 ### Troubleshooting
 
@@ -474,24 +509,21 @@ channel
 
 #### Setting up push notifications
 
-- To get push notifications working in the example app:
-    - For Android 🤖:
-        - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to your unique application ID.
-        - Create a firebase project, and in the Project settings, add an Android App. Follow the steps provided on the setup process, or the following:
-            - Specify your application ID in this step.
-            - You can leave `Debug signing certificate SHA-1` empty.
-            - Download the generated `google-services.json` file
-            - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
-            - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the firebase guide.
-    - For iOS 📱:
-        - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
-        - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
-            - Register your bundle ID on App Store connect.
-            - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
-            - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
-            - Add `remote notification` Background mode:
-                - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
-                - Check `remote notifications`.
+- Android:
+  - Create a firebase project
+  - Set up firebase in your Android app, following the [Set up the SDK](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) step.
+  - Add your android app to the firebase project
+  - In your firebase project settings, [create and add a server key](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
+  - TODO: Update instructions here once I've tested in a fresh project.
+- iOS:
+  - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
+  - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
+    - Register your bundle ID on App Store connect.
+    - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
+    - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
+    - Add `remote notification` Background mode: 
+      - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
+      - Check `remote notifications`.
 
 #### Usage
 - Create a rest or realtime client: e.g. `final realtime = ably.Realtime(options: clientOptions);`
