@@ -1,8 +1,8 @@
 # Changelog
 
-## [1.2.1](https://github.com/ably/ably-flutter/tree/1.2.1)
+## [v1.2.1](https://github.com/ably/ably-flutter/tree/v1.2.1)
 
-[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0...1.2.1)
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.0...v1.2.1)
 
 **Implemented enhancements:**
 
@@ -24,9 +24,9 @@
 - Add instructions for M1 macs and fixing ruby fatal error for example apps [\#137](https://github.com/ably/ably-flutter/pull/137) ([ben-xD](https://github.com/ben-xD))
 - Migrate to null-safety [\#136](https://github.com/ably/ably-flutter/pull/136) ([tiholic](https://github.com/tiholic))
 
-## [v1.2.0](https://github.com/ably/ably-flutter/tree/1.2.0)
+## [v1.2.0](https://github.com/ably/ably-flutter/tree/v1.2.0)
 
-[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.2...1.2.0)
+[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.0-preview.2...v1.2.0)
 
 **Merged pull requests:**
 
