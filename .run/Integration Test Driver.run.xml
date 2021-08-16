@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Integration Test Driver" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <option name="filePath" value="$PROJECT_DIR$/test_integration/test_driver/runner.dart" />
+    <method v="2" />
+  </configuration>
+</component>

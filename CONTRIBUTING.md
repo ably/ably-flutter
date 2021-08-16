@@ -207,7 +207,9 @@ The release process must include the following steps:
 7. Gain approval(s) for the release PR from maintainer(s)
 8. Land the release PR to `main`
 9. Execute `flutter pub publish` from the root of this repository
-10. Create a tag named like `v1.2.3` and push it to GitHub
+10. Create a tag named like `v1.2.3`, using `git tag v1.2.3`
+11. Push the newly created tag to GitHub: `git push origin v1.2.3`
+12. Create a release on [GitHub](https://github.com/ably/ably-flutter/releases) following the previous releases as examples.
 
 To check that everything is looking sensible to the Flutter tools, without publishing, you can use:
 
