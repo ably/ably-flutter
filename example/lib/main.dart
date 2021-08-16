@@ -440,10 +440,10 @@ class _MyAppState extends State<MyApp> {
 
   Widget getPageNavigator<T>({
     required bool enabled,
-    String? name,
+    required String name,
+    required Future<ably.PaginatedResult<T>> Function() query,
+    required Function(ably.PaginatedResult<T> result) onUpdate,
     ably.PaginatedResult<T>? page,
-    Future<ably.PaginatedResult<T>> Function()? query,
-    Function(ably.PaginatedResult<T> result)? onUpdate,
   }) =>
       FlatButton(
         onPressed: !enabled
@@ -453,11 +453,11 @@ class _MyAppState extends State<MyApp> {
                 print('$name: getting ${next ? 'next' : 'first'} page');
                 try {
                   if (page == null || page.items.isEmpty) {
-                    onUpdate!(await query!());
+                    onUpdate(await query());
                   } else if (next) {
-                    onUpdate!(await page.next());
+                    onUpdate(await page.next());
                   } else {
-                    onUpdate!(await page.first());
+                    onUpdate(await page.first());
                   }
                 } on ably.AblyException catch (e) {
                   print('failed to get $name:: $e :: ${e.errorInfo}');
@@ -466,7 +466,7 @@ class _MyAppState extends State<MyApp> {
         onLongPress: !enabled
             ? null
             : () async {
-                onUpdate!(await query!());
+                onUpdate(await query());
               },
         color: Colors.yellow,
         child: Text('Get $name'),

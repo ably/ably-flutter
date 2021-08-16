@@ -5,7 +5,8 @@ import 'package:test/test.dart';
 void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.platformAndAblyVersion);
   late TestControlResponseMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
 
   test('platformVersion is a string', () {
     expect(response.payload['platformVersion'], isA<String>());
@@ -27,7 +28,8 @@ void testPlatformAndAblyVersion(FlutterDriver Function() getDriver) {
 void testDemoDependencies(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.appKeyProvisioning);
   late TestControlResponseMessage response;
-  setUpAll(() async => response = await getTestResponse(getDriver(), message));
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
 
   test('appKey is a string', () {
     expect(response.payload['appKey'], isA<String>());

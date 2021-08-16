@@ -1,6 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-import '../../config/test_config.dart';
+import '../../config/test_constants.dart';
 import '../../factory/reporter.dart';
 import '../../provisioning.dart';
 import '../../utils/data.dart';
