@@ -82,9 +82,9 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 - Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
   - To choose a specific device when more than 1 are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
 
-### Example App Push Notifications
+### Getting Push Notifications working in the Example App
 
-- To get push notifications setup in your own app, read [Setting up push notifications](#setting-up-push-notifications).
+- Setting up push notifications is more involved that running the example app. This is because it requires set up in your Firebase project for Android, and Apple developer account for iOS. To get push notifications setup in your own app, read [Setting up push notifications](#setting-up-push-notifications).
 - Android:
     - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to your unique application ID.
     - Create a firebase project, and in the Project settings, add an Android App with your unique application ID. Follow the steps provided on the setup process, or the following:
