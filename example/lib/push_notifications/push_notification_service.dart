@@ -2,17 +2,23 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'constants.dart';
+import '../../constants.dart';
 
 class PushNotificationService {
+  final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   late final ably.Realtime? realtime;
   late final ably.Rest? rest;
   ably.RealtimeChannelInterface? _realtimeChannel;
   ably.RealtimeChannelInterface? _pushLogMetachannel;
   ably.RestChannelInterface? _restChannel;
   late ably.PushChannel? _pushChannel;
+
+  PushNotificationService() {
+    setUpAndroidNotificationChannels();
+  }
 
   final BehaviorSubject<
           ably.PaginatedResultInterface<ably.PushChannelSubscription>>
@@ -47,6 +53,20 @@ class PushNotificationService {
 
   bool get userNotificationPermissionGranted =>
       userNotificationPermissionGrantedStream.value;
+
+  Future<void> setUpAndroidNotificationChannels() async {
+    const channel = AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      'This channel is used for important notifications.', // description
+      importance: Importance.max,
+    );
+
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  }
 
   void setRealtimeClient(ably.Realtime realtime) {
     this.realtime = realtime;
