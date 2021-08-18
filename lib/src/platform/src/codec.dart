@@ -684,9 +684,11 @@ class Codec extends StandardMessageCodec {
     final jsonMapErrorReason =
         jsonMap[TxDevicePushDetails.errorReason] as Map<Object?, Object?>?;
 
+    final recipient =
+        jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>?;
+
     return DevicePushDetails(
-        Map<String, String>.from(
-            jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>),
+        recipient != null ? Map<String, String>.from(recipient) : null,
         _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
         (jsonMapErrorReason != null)
             ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
