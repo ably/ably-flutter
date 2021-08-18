@@ -31,8 +31,8 @@ public class AblyPushNotificationService extends FirebaseMessagingService {
   }
 
   @Override
-  public void onNewToken(@NonNull String s) {
-    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, s);
-    super.onNewToken(s);
+  public void onNewToken(@NonNull String registrationToken) {
+    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+    super.onNewToken(registrationToken);
   }
 }
