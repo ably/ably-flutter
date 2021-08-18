@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../push_notification_service.dart';
+import '../../push_notifications/push_notification_service.dart';
 import '../bool_stream_button.dart';
 
 class PushNotificationsSubscriptionsSliver extends StatelessWidget {

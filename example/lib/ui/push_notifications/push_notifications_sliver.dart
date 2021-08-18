@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../push_notification_service.dart';
+import '../../push_notifications/push_notification_service.dart';
 import 'push_notifications_activation_sliver.dart';
 import 'push_notifications_publishing_sliver.dart';
 import 'push_notifications_subscriptions_sliver.dart';

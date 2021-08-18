@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../constants.dart';
-import '../../push_notification_service.dart';
+import '../../push_notifications/push_notification_service.dart';
 import '../bool_stream_button.dart';
 
 class PushNotificationsPublishingSliver extends StatelessWidget {

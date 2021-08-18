@@ -2,7 +2,7 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../push_notification_service.dart';
+import '../../push_notifications/push_notification_service.dart';
 import '../bool_stream_button.dart';
 
 class PushNotificationsActivationSliver extends StatelessWidget {
@@ -54,6 +54,12 @@ class PushNotificationsActivationSliver extends StatelessWidget {
     await _pushNotificationService.getDevice();
   }
 
+  Future<void> handleDeactivateDeviceButton() async {
+    await _pushNotificationService.deactivateDevice();
+    // Just getting the device details immediately.
+    await _pushNotificationService.getDevice();
+  }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,7 +82,7 @@ class PushNotificationsActivationSliver extends StatelessWidget {
               Expanded(
                 child: BoolStreamButton(
                     stream: _pushNotificationService.hasPushChannelStream,
-                    onPressed: _pushNotificationService.deactivateDevice,
+                    onPressed: handleDeactivateDeviceButton,
                     child: const Text('Deactivate device')),
               ),
             ],
