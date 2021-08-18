@@ -851,7 +851,7 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
     AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel registrar:registrar];
     
-    // regustering method channel with registrar
+    // registering method channel with registrar
     [registrar addMethodCallDelegate:plugin channel:channel];
     
     // setting up stream handler factory for eventChannel to handle multiple listeners
