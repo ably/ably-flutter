@@ -1,4 +1,6 @@
 @import Ably;
+@import UserNotifications;
+#import <ably_flutter/ably_flutter-Swift.h>
 #import "AblyFlutterWriter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
@@ -32,12 +34,15 @@ NS_ASSUME_NONNULL_END
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
         return paginatedResultCodecType;
     } else if ([value isKindOfClass:[ARTLocalDevice class]]) {
-        // Check for local device before device details, since it is more specific. If deviceDetailsCodecType was used, the other fields in localDevice won't be deserialised on dart side.
+        // Check for ARTLocalDevice before ARTLocalDevice, since ARTLocalDevice extends ARTDeviceDetails.
+        // If deviceDetailsCodecType was used first, the ARTLocalDevice fields won't be serialized.
         return localDeviceCodecType;
     } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
         return deviceDetailsCodecType;
     } else if ([value isKindOfClass:[ARTPushChannelSubscription class]]) {
         return pushChannelSubscriptionCodecType;
+    } else if ([value isKindOfClass:[UNNotificationSettings class]]) {
+        return unNotificationSettingsCodecType;
     }
     return 0;
 }
@@ -52,9 +57,10 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", presenceMessageCodecType]: encodePresenceMessage,
         [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
         [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
-        [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: encodeDeviceDetails,
-        [NSString stringWithFormat:@"%d", localDeviceCodecType]: encodeLocalDevice,
-        [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: encodePushChannelSubscription,
+        [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: PushNotificationEncoders.encodeDeviceDetails,
+        [NSString stringWithFormat:@"%d", localDeviceCodecType]: PushNotificationEncoders.encodeLocalDevice,
+        [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
+        [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -298,56 +304,6 @@ static AblyCodecEncoder encodePaginatedResult = ^NSMutableDictionary*(ARTPaginat
     }
     WRITE_VALUE(dictionary, TxPaginatedResult_hasNext, @([result hasNext]));
     
-    return dictionary;
-};
-
-static AblyCodecEncoder encodeDevicePushDetails = ^NSMutableDictionary*(ARTDevicePushDetails *const devicePushDetails) {
-    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-
-    WRITE_VALUE(dictionary, TxDevicePushDetails_recipient, devicePushDetails.recipient);
-    WRITE_VALUE(dictionary, TxDevicePushDetails_state, devicePushDetails.state);
-    WRITE_VALUE(dictionary, TxDevicePushDetails_errorReason, encodeErrorInfo(devicePushDetails.errorReason));
-
-    return dictionary;
-};
-
-static AblyCodecEncoder encodeDeviceDetails = ^NSMutableDictionary*(ARTDeviceDetails *const deviceDetails) {
-    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-
-    WRITE_VALUE(dictionary, TxDeviceDetails_id, deviceDetails.id);
-    WRITE_VALUE(dictionary, TxDeviceDetails_clientId, deviceDetails.clientId);
-    WRITE_VALUE(dictionary, TxDeviceDetails_platform, deviceDetails.platform);
-    WRITE_VALUE(dictionary, TxDeviceDetails_formFactor, deviceDetails.formFactor);
-    WRITE_VALUE(dictionary, TxDeviceDetails_metadata, deviceDetails.metadata);
-    WRITE_VALUE(dictionary, TxDeviceDetails_devicePushDetails, encodeDevicePushDetails(deviceDetails.push));
-
-    return dictionary;
-};
-
-static AblyCodecEncoder encodeLocalDevice = ^NSMutableDictionary*(ARTLocalDevice *const localDevice) {
-    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-
-    WRITE_VALUE(dictionary, TxLocalDevice_deviceSecret, localDevice.secret);
-    WRITE_VALUE(dictionary, TxLocalDevice_deviceIdentityToken, localDevice.identityTokenDetails.token);
-
-    // These fields are inherited from DeviceDetails
-    WRITE_VALUE(dictionary, TxDeviceDetails_id, localDevice.id);
-    WRITE_VALUE(dictionary, TxDeviceDetails_clientId, localDevice.clientId);
-    WRITE_VALUE(dictionary, TxDeviceDetails_platform, localDevice.platform);
-    WRITE_VALUE(dictionary, TxDeviceDetails_formFactor, localDevice.formFactor);
-    WRITE_VALUE(dictionary, TxDeviceDetails_metadata, localDevice.metadata);
-    WRITE_VALUE(dictionary, TxDeviceDetails_devicePushDetails, encodeDevicePushDetails(localDevice.push));
-
-    return dictionary;
-};
-
-static AblyCodecEncoder encodePushChannelSubscription = ^NSMutableDictionary*(ARTPushChannelSubscription  *const pushChannelSubscription) {
-    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
-
-    WRITE_VALUE(dictionary, TxPushChannelSubscription_channel, pushChannelSubscription.channel);
-    WRITE_VALUE(dictionary, TxPushChannelSubscription_clientId, pushChannelSubscription.clientId);
-    WRITE_VALUE(dictionary, TxPushChannelSubscription_deviceId, pushChannelSubscription.deviceId);
-
     return dictionary;
 };
 

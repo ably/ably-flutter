@@ -1,6 +1,7 @@
-#import "AblyFlutterPlugin.h"
-
 @import Ably;
+
+#import "AblyFlutterPlugin.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 #import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
@@ -542,289 +543,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 };
 
-typedef ARTPush* (^GetPushFromAblyClientHandle)(AblyFlutter *const ably, FlutterMethodCall *const call);
-static const GetPushFromAblyClientHandle _getPushFromAblyClientHandle = ^ARTPush*(AblyFlutter *const ably, FlutterMethodCall *const call) {
-    AblyFlutterMessage *const message = call.arguments;
-    NSNumber *const ablyClientHandle = message.message;
-    
-    ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: ablyClientHandle];
-    ARTRest *const restWithHandle = [ably getRest:ablyClientHandle];
-    
-    if (realtimeWithHandle != nil) {
-        return realtimeWithHandle.push;
-    } else if (restWithHandle != nil) {
-        return restWithHandle.push;
-    }
-    
-    [NSException raise: NSInternalInconsistencyException
-                format: @"No ably client exists (rest or realtime)"];
-    return nil;
-};
-
-/// Typedefs related to _ablyClientReceiver:
-/// (running a callback based on whether dart side gave a handle to ARTRealtime or ARTRest client.)
-typedef void (^RealtimeClientHandler)(ARTRealtime *const realtime,
-                                      FlutterMethodCall *const call,
-                                      const FlutterResult result,
-                                      NSString *const _Nullable channelName);
-typedef void (^RestClientHandler)(ARTRest *const realtime,
-                                  FlutterMethodCall *const call,
-                                  const FlutterResult result,
-                                  NSString *const _Nullable channelName);
-typedef void (^AblyClientReceiver)(AblyFlutterPlugin *const plugin,
-                                   FlutterMethodCall *const call,
-                                   const FlutterResult result,
-                                   RealtimeClientHandler const realtimeClientHandler,
-                                   RestClientHandler const restClientHandler);
-
-/// The dart side can provide a handle (Int) which gets a ARTRealtime or ARTRest Ably client.
-/// This block calls the correct handler (RealtimeClientHandler, RestClientHandler) based on what client this handle provides.
-static const AblyClientReceiver _ablyClientReceiver = ^void(AblyFlutterPlugin *const plugin,
-                                                   FlutterMethodCall *const call,
-                                                   FlutterResult const result,
-                                                   RealtimeClientHandler const realtimeClientHandler,
-                                                   RestClientHandler const restClientHandler) {
-    AblyFlutter *const ably = [plugin ably];
-    
-    AblyFlutterMessage *const message = call.arguments;
-    // Make AblyMessage usage consistent on Dart side, instead of nesting AblyMessages
-    // See platform_object.dart invoke method: AblyMessage(AblyMessage(argument, handle: _handle))
-    NSNumber * clientHandle;
-    NSString * channelName;
-    if ([message.message class] == [AblyFlutterMessage class]) {
-        AblyFlutterMessage *const messageData = message.message;
-        clientHandle = messageData.handle;
-        NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
-        channelName = (NSString*)[_dataMap objectForKey:TxTransportKeys_channelName];
-    } else {
-        clientHandle = message.message;
-    }
-    
-    if (!clientHandle) {
-        [NSException raise: NSInternalInconsistencyException
-                    format: @"Client handle was null"];
-    }
-    
-    ARTRealtime *const realtime = [ably realtimeWithHandle: clientHandle];
-    ARTRest *const rest = [ably getRest: clientHandle];
-    
-    if (realtime != nil) {
-        realtimeClientHandler(realtime, call, result, channelName);
-        return;
-    } else if (rest != nil) {
-        restClientHandler(rest, call, result, channelName);
-        return;
-    }
-    
-    [NSException raise: NSInternalInconsistencyException
-                format: @"No ably client exists (rest or realtime)"];
-    return;
-};
-
-static const FlutterHandler _pushActivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
-    [push activate];
-    result(nil);
-};
-
-static const FlutterHandler _pushRequestNotificationPermission = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutterMessage *const messageData = message.message;
-    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
-    NSNumber *const provisionalPermissionRequest = (NSNumber *)[_dataMap objectForKey:TxPushRequestNotificationPermission_provisionalPermissionRequest];
-    
-    UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert;
-    if ([provisionalPermissionRequest  isEqual: @(YES)]) {
-        if (@available(iOS 12, *)) {
-            options = options | UNAuthorizationOptionProvisional | UNAuthorizationOptionProvidesAppNotificationSettings;
-        }
-    }
-
-    [UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:options
-                                                                      completionHandler:^(BOOL granted, NSError * _Nullable error) {
-        if (error) {
-            result([
-                    FlutterError
-                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Error requesting authorization to show user notifications; err = %@", error.localizedDescription]
-                    details:nil
-                    ]);
-            return;
-        }
-        result([NSNumber numberWithBool:granted]);
-    }];
-};
-
-static const FlutterHandler _pushDeactivate = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    ARTPush *const push = _getPushFromAblyClientHandle([plugin ably], call);
-    [push deactivate];
-    result(nil);
-};
-
-static const FlutterHandler _pushSubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const channelName) {
-        ARTRealtimeChannel *const channel = [realtime.channels get: channelName];
-        [channel.push subscribeDevice];
-        result(nil);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName){
-        [[rest.channels get:channelName].push subscribeDevice];
-        result(nil);
-    }
-   );
-};
-
-static const FlutterHandler _pushUnsubscribeDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName) {
-        [[realtime.channels get: channelName].push unsubscribeDevice];
-        result(nil);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName){
-        [[rest.channels get:channelName].push unsubscribeDevice];
-        result(nil);
-    }
-   );
-};
-
-static const FlutterHandler _pushSubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName) {
-        [[realtime.channels get: channelName].push subscribeClient];
-        result(nil);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName){
-        [[rest.channels get:channelName].push subscribeClient];
-        result(nil);
-    }
-   );
-};
-
-static const FlutterHandler _pushUnsubscribeClient = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName) {
-        [[realtime.channels get: channelName].push unsubscribeClient];
-        result(nil);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName){
-        [[rest.channels get:channelName].push unsubscribeClient];
-        result(nil);
-    }
-   );
-};
-
-typedef void (^ListSubscriptionsOnPushChannelHandler)(NSDictionary *const params,
-                                                      ARTPushChannel *const pushChannel,
-                                                      NSString *const _Nullable channelName,
-                                                      AblyFlutter *const ably,
-                                                      const FlutterResult result);
-static const ListSubscriptionsOnPushChannelHandler _listSubscriptionsOnPushChannel = ^void(NSDictionary *const params,
-                                                                                           ARTPushChannel *const pushChannel,
-                                                                                           NSString *const _Nullable channelName,
-                                                                                           AblyFlutter *const ably,
-                                                                                           const FlutterResult result) {
-    // The pushChannel:listSubscription API has 2 ways of returning errors:
-    // - If it is a network error or error called in `ARTPaginatedResult:executePaginated`, it provides an error in the callback you provide.
-    // - If it is a non-network error, it will mutate the errorPtr you pass in.
-    NSError * nsError;
-    bool ret = [pushChannel listSubscriptions: params
-                          callback: ^void(ARTPaginatedResult<ARTPushChannelSubscription *> *const pushChannelSubscriptionPaginatedResult, ARTErrorInfo * errorInfo) {
-        if (errorInfo) {
-            result([
-                    FlutterError
-                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)errorInfo.code]
-                    message:[NSString stringWithFormat:@"Error listing subscriptions from push Channel %@; err = %@", channelName, [errorInfo message]]
-                    details:errorInfo
-                    ]);
-            return;
-        }
-        NSNumber *const paginatedResultHandle = [ably setPaginatedResult:pushChannelSubscriptionPaginatedResult handle:nil];
-        result([[AblyFlutterMessage alloc] initWithMessage:pushChannelSubscriptionPaginatedResult handle: paginatedResultHandle]);
-    }
-                                        error: &nsError];
-    if (nsError) {
-        result([
-                FlutterError
-                errorWithCode:[NSString stringWithFormat: @"%ld", (long)nsError.code]
-                message:[NSString stringWithFormat:@"Error listing subscriptions from push Channel %@; err = %@", channelName, nsError.localizedDescription]
-                details:nil
-                ]);
-        return;
-    }
-    
-    if (!ret) {
-        [NSException raise: NSInternalInconsistencyException
-                    format: @"ARTPushChannel.listSubscription could not make the network request for an unknown request"];
-    }
-};
-
-static const FlutterHandler _pushListSubscriptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutter *const ably = [plugin ably];
-    AblyFlutterMessage *const message = call.arguments;
-    AblyFlutterMessage *const messageData = message.message;
-    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
-    NSDictionary *const params = (NSDictionary<NSString *, NSString *> *)[_dataMap objectForKey:TxTransportKeys_params];
-    
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName) {
-        ARTPushChannel *const pushChannel = [realtime.channels get: channelName].push;
-        _listSubscriptionsOnPushChannel(params, pushChannel, channelName, ably, result);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable channelName){
-        ARTPushChannel *const pushChannel = [rest.channels get: channelName].push;
-        _listSubscriptionsOnPushChannel(params, pushChannel, channelName, ably, result);
-    }
-   );
-};
-
-static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    _ablyClientReceiver(plugin, call, result,
-                       ^void(ARTRealtime *const realtime,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable _) {
-        result([realtime device]);
-    },
-                       ^void(ARTRest *const rest,
-                             FlutterMethodCall *const call,
-                             const FlutterResult result,
-                             NSString *const _Nullable _){
-        result([rest device]);
-    }
-   );
-};
-
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
@@ -898,15 +616,17 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
-        AblyPlatformMethod_pushActivate: _pushActivate,
-        AblyPlatformMethod_pushRequestNotificationPermission: _pushRequestNotificationPermission,
-        AblyPlatformMethod_pushDeactivate: _pushDeactivate,
-        AblyPlatformMethod_pushSubscribeDevice: _pushSubscribeDevice,
-        AblyPlatformMethod_pushUnsubscribeDevice: _pushUnsubscribeDevice,
-        AblyPlatformMethod_pushSubscribeClient: _pushSubscribeClient,
-        AblyPlatformMethod_pushUnsubscribeClient: _pushUnsubscribeClient,
-        AblyPlatformMethod_pushListSubscriptions: _pushListSubscriptions,
-        AblyPlatformMethod_pushDevice: _pushDevice,
+        // Push Notification Handlers
+        AblyPlatformMethod_pushActivate: PushNotificationHandlers.activate,
+        AblyPlatformMethod_pushRequestPermission: PushNotificationHandlers.requestPermission,
+        AblyPlatformMethod_pushGetNotificationSettings: PushNotificationHandlers.getNotificationSettings,
+        AblyPlatformMethod_pushDeactivate: PushNotificationHandlers.deactivate,
+        AblyPlatformMethod_pushSubscribeDevice: PushNotificationHandlers.subscribeDevice,
+        AblyPlatformMethod_pushUnsubscribeDevice: PushNotificationHandlers.unsubscribeDevice,
+        AblyPlatformMethod_pushSubscribeClient: PushNotificationHandlers.subscribeClient,
+        AblyPlatformMethod_pushUnsubscribeClient: PushNotificationHandlers.unsubscribeClient,
+        AblyPlatformMethod_pushListSubscriptions: PushNotificationHandlers.listSubscriptions,
+        AblyPlatformMethod_pushDevice: PushNotificationHandlers.device,
     };
     
     _nextRegistration = 1;
@@ -975,8 +695,10 @@ static const FlutterHandler _pushDevice = ^void(AblyFlutterPlugin *const plugin,
 #pragma mark - Push Notifications - UNUserNotificationCenterDelegate
 // https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
-    // Don't show the notification if the app is in the foreground. This is the default behaviour on Android.
-    // TODO allow the user to specify the behaviour here on dart side.
+    // Currently not showing the notification if the app is in the foreground. This is the default
+    // behaviour on Android. To show a message in the foreground on Android, users need to send a
+    // background message and show a local notification manually.
+    // TODO allow the user to specify the behaviour here on dart side. They can set a boolean at launch, and we will use it.
     completionHandler(UNNotificationPresentationOptionNone);
 }
 
