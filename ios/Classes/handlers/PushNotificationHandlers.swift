@@ -116,7 +116,7 @@ public class PushNotificationHandlers: NSObject {
                         return
                     }
                     let handle = plugin.ably.setPaginatedResult(paginatedSubscription as! ARTPaginatedResult<AnyObject>, handle: nil)
-                    result(AblyFlutterMessage(message: paginatedSubscription, handle: handle))
+                    result(AblyFlutterMessage(message: paginatedSubscription as Any, handle: handle))
                 })
             } catch {
                 result(FlutterError(code: "listSubscriptions_error", message: "Error listing subscriptions from push Channel \(pushChannel); err = \(error.localizedDescription)", details: nil))
