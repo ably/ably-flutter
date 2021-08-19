@@ -26,9 +26,10 @@ class CodecTypes {
   static const int deviceDetails = 145;
   static const int localDevice = 146;
   static const int pushChannelSubscription = 147;
-  static const int errorInfo = 148;
-  static const int connectionStateChange = 149;
-  static const int channelStateChange = 150;
+  static const int unNotificationSettings = 148;
+  static const int errorInfo = 149;
+  static const int connectionStateChange = 150;
+  static const int channelStateChange = 151;
 }
 
 class PlatformMethod {
@@ -68,8 +69,11 @@ class PlatformMethod {
   static const String pushUnsubscribeClient = 'pushUnsubscribeClient';
   static const String pushListSubscriptions = 'pushListSubscriptions';
   static const String pushDevice = 'pushDevice';
-  static const String pushRequestNotificationPermission =
-      'pushRequestNotificationPermission';
+  static const String pushRequestPermission = 'pushRequestPermission';
+  static const String pushGetNotificationSettings =
+      'pushGetNotificationSettings';
+  static const String pushOpenSettingsForNotification =
+      'pushOpenSettingsForNotification';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -340,7 +344,56 @@ class TxPushChannelSubscription {
   static const String clientId = 'clientId';
 }
 
-class TxPushRequestNotificationPermission {
-  static const String provisionalPermissionRequest =
-      'provisionalPermissionRequest';
+class TxPushRequestPermission {
+  static const String badge = 'badge';
+  static const String sound = 'sound';
+  static const String alert = 'alert';
+  static const String carPlay = 'carPlay';
+  static const String criticalAlert = 'criticalAlert';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
+  static const String provisional = 'provisional';
+  static const String announcement = 'announcement';
+}
+
+class TxUNNotificationSettings {
+  static const String authorizationStatus = 'authorizationStatus';
+  static const String soundSetting = 'soundSetting';
+  static const String badgeSetting = 'badgeSetting';
+  static const String alertSetting = 'alertSetting';
+  static const String notificationCenterSetting = 'notificationCenterSetting';
+  static const String lockScreenSetting = 'lockScreenSetting';
+  static const String carPlaySetting = 'carPlaySetting';
+  static const String alertStyle = 'alertStyle';
+  static const String showPreviewsSetting = 'showPreviewsSetting';
+  static const String criticalAlertSetting = 'criticalAlertSetting';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
+  static const String announcementSetting = 'announcementSetting';
+  static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
+  static const String timeSensitiveSetting = 'timeSensitiveSetting';
+}
+
+class TxUNNotificationSettingEnum {
+  static const String notSupported = 'notSupported';
+  static const String disabled = 'disabled';
+  static const String enabled = 'enabled';
+}
+
+class TxUNAlertStyleEnum {
+  static const String none = 'none';
+  static const String banner = 'banner';
+  static const String alert = 'alert';
+}
+
+class TxUNAuthorizationStatusEnum {
+  static const String notDetermined = 'notDetermined';
+  static const String denied = 'denied';
+  static const String authorized = 'authorized';
+  static const String provisional = 'provisional';
+  static const String ephemeral = 'ephemeral';
+}
+
+class TxUNShowPreviewsSettingEnum {
+  static const String always = 'always';
+  static const String whenAuthenticated = 'whenAuthenticated';
+  static const String never = 'never';
 }

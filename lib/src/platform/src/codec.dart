@@ -96,6 +96,8 @@ class Codec extends StandardMessageCodec {
       CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
       CodecTypes.pushChannelSubscription: _CodecPair<PushChannelSubscription>(
           null, _decodePushChannelSubscription),
+      CodecTypes.unNotificationSettings: _CodecPair<UNNotificationSettings>(
+          null, _decodeUNNotificationSettings),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -758,6 +760,97 @@ class Codec extends StandardMessageCodec {
         clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
         deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
       );
+
+  UNNotificationSettings _decodeUNNotificationSettings(
+          Map<String, dynamic> jsonMap) =>
+      UNNotificationSettings(
+        authorizationStatus: _decodeUNAuthorizationStatus(
+            jsonMap[TxUNNotificationSettings.authorizationStatus] as String),
+        soundSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.soundSetting] as String),
+        badgeSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.badgeSetting] as String),
+        alertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.alertSetting] as String),
+        notificationCenterSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.notificationCenterSetting]
+                as String),
+        lockScreenSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.lockScreenSetting] as String),
+        carPlaySetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.carPlaySetting] as String),
+        alertStyle: _decodeUNAlertStyle(
+            jsonMap[TxUNNotificationSettings.alertStyle] as String),
+        showPreviewsSetting: _decodeUNShowPreviewsSetting(
+            jsonMap[TxUNNotificationSettings.showPreviewsSetting] as String),
+        criticalAlertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.criticalAlertSetting] as String),
+        providesAppNotificationSettings:
+            jsonMap[TxUNNotificationSettings.providesAppNotificationSettings]
+                as bool,
+        announcementSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.announcementSetting] as String),
+      );
+
+  UNShowPreviewsSetting _decodeUNShowPreviewsSetting(String setting) {
+    switch (setting) {
+      case TxUNShowPreviewsSettingEnum.always:
+        return UNShowPreviewsSetting.always;
+      case TxUNShowPreviewsSettingEnum.whenAuthenticated:
+        return UNShowPreviewsSetting.whenAuthenticated;
+      case TxUNShowPreviewsSettingEnum.never:
+        return UNShowPreviewsSetting.never;
+    }
+    throw AblyException(
+      'Platform communication error. UNShowPreviewsSetting is invalid: $setting',
+    );
+  }
+
+  UNAlertStyle _decodeUNAlertStyle(String style) {
+    switch (style) {
+      case TxUNAlertStyleEnum.alert:
+        return UNAlertStyle.alert;
+      case TxUNAlertStyleEnum.banner:
+        return UNAlertStyle.banner;
+      case TxUNAlertStyleEnum.none:
+        return UNAlertStyle.none;
+    }
+    throw AblyException(
+      'Platform communication error. UNAlertStyle is invalid: $style',
+    );
+  }
+
+  UNAuthorizationStatus _decodeUNAuthorizationStatus(String status) {
+    switch (status) {
+      case TxUNAuthorizationStatusEnum.notDetermined:
+        return UNAuthorizationStatus.notDetermined;
+      case TxUNAuthorizationStatusEnum.denied:
+        return UNAuthorizationStatus.denied;
+      case TxUNAuthorizationStatusEnum.authorized:
+        return UNAuthorizationStatus.authorized;
+      case TxUNAuthorizationStatusEnum.provisional:
+        return UNAuthorizationStatus.provisional;
+      case TxUNAuthorizationStatusEnum.ephemeral:
+        return UNAuthorizationStatus.ephemeral;
+    }
+    throw AblyException(
+      'Platform communication error. UNAuthorizationStatus is invalid: $status',
+    );
+  }
+
+  UNNotificationSetting _decodeUNNotificationSetting(String setting) {
+    switch (setting) {
+      case TxUNNotificationSettingEnum.disabled:
+        return UNNotificationSetting.disabled;
+      case TxUNNotificationSettingEnum.enabled:
+        return UNNotificationSetting.enabled;
+      case TxUNNotificationSettingEnum.notSupported:
+        return UNNotificationSetting.notSupported;
+    }
+    throw AblyException(
+      'Platform communication error. UNNotificationSetting is invalid: $setting',
+    );
+  }
 
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null

@@ -1,3 +1,5 @@
+import 'ios_notification_settings.dart';
+
 /// Class providing push notification functionality
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
@@ -16,16 +18,31 @@ abstract class Push {
   /// to show notifications to the user.
   ///
   /// Params:
-  /// - iosProvisionalPermissionRequest (iOS only): Send notifications on a
+  /// - provisional: Send notifications on a
   /// trial basis, by delaying the permission request until the
   /// user first sees the first notification. This is works on iOS12+.
   /// The notification is first delivered quietly, and the user will
-  /// get an option to deliver it more prominently.
-  ///
-  /// For more information,
+  /// get an option to deliver it more prominently. For more information,
   /// see [Use Provisional Authorization to Send Trial Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc)
-  Future<bool> requestNotificationPermission(
-      {bool provisionalPermissionRequest = false});
+  /// - announcement: Only available on iOS 13+. Deprecated (permission always given) in iOS 15+)
+  Future<bool> requestPermission(
+      {bool badge = true,
+      bool sound = true,
+      bool alert = true,
+      bool carPlay = true,
+      bool criticalAlert = false,
+      bool provisional = false,
+      bool providesAppNotificationSettings = false,
+      bool announcement = true});
+
+  /// for more information, see [userNotificationCenter:openSettingsForNotification:](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/2981869-usernotificationcenter?language=objc)
+  Future<void> openSettings();
+
+  /// A UNNotificationSettings object contains the current authorization
+  /// status and notification-related settings for your app.
+  ///
+  /// This type is dart equivalent of https://developer.apple.com/documentation/usernotifications/unnotificationsettings
+  Future<UNNotificationSettings> getNotificationSettings();
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
