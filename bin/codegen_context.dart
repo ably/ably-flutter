@@ -415,7 +415,6 @@ const List<Map<String, dynamic>> _objects = [
       'providesAppNotificationSettings',
       'provisional',
       'announcement',
-      'none'
     ]
   },
   {

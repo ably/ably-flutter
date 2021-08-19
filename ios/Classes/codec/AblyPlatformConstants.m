@@ -291,7 +291,6 @@ NSString *const TxPushRequestPermission_criticalAlert = @"criticalAlert";
 NSString *const TxPushRequestPermission_providesAppNotificationSettings = @"providesAppNotificationSettings";
 NSString *const TxPushRequestPermission_provisional = @"provisional";
 NSString *const TxPushRequestPermission_announcement = @"announcement";
-NSString *const TxPushRequestPermission_none = @"none";
 
 // key constants for UNNotificationSettings
 NSString *const TxUNNotificationSettings_authorizationStatus = @"authorizationStatus";

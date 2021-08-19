@@ -318,7 +318,6 @@ extern NSString *const TxPushRequestPermission_criticalAlert;
 extern NSString *const TxPushRequestPermission_providesAppNotificationSettings;
 extern NSString *const TxPushRequestPermission_provisional;
 extern NSString *const TxPushRequestPermission_announcement;
-extern NSString *const TxPushRequestPermission_none;
 
 // key constants for UNNotificationSettings
 extern NSString *const TxUNNotificationSettings_authorizationStatus;

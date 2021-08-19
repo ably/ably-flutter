@@ -351,7 +351,6 @@ final public class PlatformConstants {
         public static final String providesAppNotificationSettings = "providesAppNotificationSettings";
         public static final String provisional = "provisional";
         public static final String announcement = "announcement";
-        public static final String none = "none";
     }
 
     static final public class TxUNNotificationSettings {
