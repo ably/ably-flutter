@@ -12,58 +12,41 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
       {Key? key})
       : super(key: key);
 
-  Widget buildSubscriptionsList() => StreamBuilder<
-          ably.PaginatedResultInterface<ably.PushChannelSubscription>>(
-      stream: _pushNotificationService.pushChannelSubscriptionStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final subscriptions = snapshot.data
-              as ably.PaginatedResultInterface<ably.PushChannelSubscription>;
-          return Column(children: [
-            ...subscriptions.items
-                .map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Container(
-                      color: Colors.grey[200],
-                      child: Column(children: [
-                        Text('Channel: ${e.channel}'),
-                        if (e.deviceId != null)
-                          Text('DeviceId: ${e.deviceId!}')
-                        else
-                          Text('ClientId: ${e.clientId}'),
-                      ]),
-                    ),
-                  ),
-                )
-                .toList(),
-            (subscriptions.hasNext()
-                ? const Text('and more...')
-                : const SizedBox.shrink())
-          ]);
-        }
-        return const SizedBox.shrink();
-      });
-
-  Widget buildNotificationPermissionGrantedStatus() => StreamBuilder(
-        stream:
-            _pushNotificationService.userNotificationPermissionGrantedStream,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Text('User Notification Permission: '
-                'Permission not yet requested');
-          } else {
-            final permissionGranted = snapshot.data as bool;
-            if (permissionGranted) {
-              return const Text('User Notification Permission: '
-                  'Permission granted');
-            } else {
-              return const Text('User Notification Permission: '
-                  'Permission not granted.');
+  Widget buildSubscriptionsList(
+          Stream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+              stream) =>
+      StreamBuilder<
+              ably.PaginatedResultInterface<ably.PushChannelSubscription>>(
+          stream: stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final subscriptions = snapshot.data as ably
+                  .PaginatedResultInterface<ably.PushChannelSubscription>;
+              return Column(children: [
+                ...subscriptions.items
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Container(
+                          color: Colors.grey[200],
+                          child: Column(children: [
+                            Text('Channel: ${e.channel}'),
+                            if (e.deviceId != null)
+                              Text('DeviceId: ${e.deviceId!}')
+                            else
+                              Text('ClientId: ${e.clientId}'),
+                          ]),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                (subscriptions.hasNext()
+                    ? const Text('and more...')
+                    : const SizedBox.shrink())
+              ]);
             }
-          }
-        },
-      );
+            return const SizedBox.shrink();
+          });
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -72,10 +55,11 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Subscriptions',
+              'Push channel subscriptions',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const Text('If you subscribe both device and client, '
+            const Text(
+                'If you subscribe both device and client to the channel, '
                 'the device will receive 2 notifications.'),
             Row(
               children: [
@@ -118,6 +102,8 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                   print('Push subscriptions: ${subscriptions.items}');
                 },
                 child: const Text('List subscriptions with current device ID')),
+            buildSubscriptionsList(
+                _pushNotificationService.pushChannelDeviceSubscriptionsStream),
             BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: () async {
@@ -126,13 +112,8 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                   print('Push subscriptions: ${subscriptions.items}');
                 },
                 child: const Text('List subscriptions with current client ID')),
-            buildSubscriptionsList(),
-            BoolStreamButton(
-              stream: _pushNotificationService.hasPushChannelStream,
-              onPressed: _pushNotificationService.requestNotificationPermission,
-              child: const Text('Request User Permission (iOS only)'),
-            ),
-            buildNotificationPermissionGrantedStatus(),
+            buildSubscriptionsList(
+                _pushNotificationService.pushChannelClientSubscriptionsStream),
           ],
         ),
       );

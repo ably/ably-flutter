@@ -59,8 +59,8 @@ class PushNotificationsSliver extends StatelessWidget {
         children: [
           const Text(
               'Activate your device, view your local device information, '
-              'subscribe with either your device or client ID, '
-              'and then publish to the channel.',
+              'subscribe to a push channel with either your device or '
+              'client ID, and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
           const SizedBox(height: 16),
           RichText(

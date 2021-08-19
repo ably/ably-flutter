@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:rxdart/rxdart.dart';
 
-import '../../constants.dart';
+import '../constants.dart';
 import 'android_push_notification_configuration.dart';
 
 class PushNotificationService {
   final _androidPushNotificationConfiguration =
-  AndroidPushNotificationConfiguration();
+      AndroidPushNotificationConfiguration();
   late final ably.Realtime? realtime;
   late final ably.Rest? rest;
   ably.RealtimeChannelInterface? _realtimeChannel;
@@ -19,42 +19,48 @@ class PushNotificationService {
 
   final BehaviorSubject<
           ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-      _pushChannelSubscriptionSubject = BehaviorSubject<
+      _pushChannelDeviceSubscriptionsSubject = BehaviorSubject<
           ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
 
   ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-      get pushChannelSubscriptionStream =>
-          _pushChannelSubscriptionSubject.stream;
+      get pushChannelDeviceSubscriptionsStream =>
+          _pushChannelDeviceSubscriptionsSubject.stream;
 
-  ably.PaginatedResultInterface<ably.PushChannelSubscription>
-      get _pushChannelSubscription => _pushChannelSubscriptionSubject.value;
+  final BehaviorSubject<
+      ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  _pushChannelClientSubscriptionsSubject = BehaviorSubject<
+      ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
+
+  ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  get pushChannelClientSubscriptionsStream =>
+      _pushChannelClientSubscriptionsSubject.stream;
 
   final BehaviorSubject<bool> _hasPushChannelSubject =
       BehaviorSubject<bool>.seeded(false);
-
   ValueStream<bool> get hasPushChannelStream => _hasPushChannelSubject.stream;
-
-  bool get hasPushChannel => _hasPushChannelSubject.value;
 
   final BehaviorSubject<ably.LocalDevice?> _localDeviceSubject =
       BehaviorSubject.seeded(null);
   late final ValueStream<ably.LocalDevice?> localDeviceStream =
       _localDeviceSubject.stream;
 
-  ably.LocalDevice? get localDevice => localDeviceStream.value;
-
   final BehaviorSubject<bool> _userNotificationPermissionGrantedSubject =
       BehaviorSubject();
   late final ValueStream<bool> userNotificationPermissionGrantedStream =
       _userNotificationPermissionGrantedSubject.stream;
 
-  bool get userNotificationPermissionGranted =>
-      userNotificationPermissionGrantedStream.value;
+  final BehaviorSubject<ably.UNNotificationSettings>
+      _notificationSettingsSubject = BehaviorSubject();
+  late final ValueStream<ably.UNNotificationSettings>
+      notificationSettingsStream = _notificationSettingsSubject.stream;
 
   void setRealtimeClient(ably.Realtime realtime) {
     this.realtime = realtime;
     _getChannels();
     getDevice();
+    if (Platform.isIOS) {
+      updateNotificationSettings();
+    }
   }
 
   Future<void> ensureRealtimeClientConnected() async {
@@ -66,15 +72,34 @@ class PushNotificationService {
   void setRestClient(ably.Rest rest) {
     this.rest = rest;
     _getChannels();
+    if (Platform.isIOS) {
+      updateNotificationSettings();
+    }
   }
 
-  Future<void> requestNotificationPermission() async {
+  Future<void> requestNotificationPermission(
+      {required bool provisional}) async {
     if (realtime != null) {
-      final granted = await realtime!.push.requestNotificationPermission();
+      final granted =
+          await realtime!.push.requestPermission(provisional: provisional);
       _userNotificationPermissionGrantedSubject.add(granted);
     } else if (rest != null) {
-      final granted = await rest!.push.requestNotificationPermission();
+      final granted =
+          await rest!.push.requestPermission(provisional: provisional);
       _userNotificationPermissionGrantedSubject.add(granted);
+    } else {
+      throw Exception('No ably client available');
+    }
+    await updateNotificationSettings();
+  }
+
+  Future<void> updateNotificationSettings() async {
+    if (realtime != null) {
+      final settings = await realtime!.push.getNotificationSettings();
+      _notificationSettingsSubject.add(settings);
+    } else if (rest != null) {
+      _notificationSettingsSubject
+          .add(await rest!.push.getNotificationSettings());
     } else {
       throw Exception('No ably client available');
     }
@@ -229,11 +254,11 @@ class PushNotificationService {
       listSubscriptionsWithClientId() async {
     await getDevice();
     final subscriptions = await _pushChannel!.listSubscriptions({
-      'clientId': Constants.clientId,
+      'clientId': localDeviceStream.value!.clientId!,
       // Optionally, limit the size of the paginated response.
       // 'limit': '1'
     });
-    _pushChannelSubscriptionSubject.add(subscriptions);
+    _pushChannelClientSubscriptionsSubject.add(subscriptions);
     return subscriptions;
   }
 
@@ -241,11 +266,11 @@ class PushNotificationService {
       listSubscriptionsWithDeviceId() async {
     await getDevice();
     final subscriptions = await _pushChannel!.listSubscriptions({
-      'deviceId': localDevice!.id!,
+      'deviceId': localDeviceStream.value!.id!,
       // Optionally, limit the size of the paginated response.
       // 'limit': '1'
     });
-    _pushChannelSubscriptionSubject.add(subscriptions);
+    _pushChannelDeviceSubscriptionsSubject.add(subscriptions);
     return subscriptions;
   }
 

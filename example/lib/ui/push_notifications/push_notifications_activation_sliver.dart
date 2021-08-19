@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -60,6 +62,79 @@ class PushNotificationsActivationSliver extends StatelessWidget {
     await _pushNotificationService.getDevice();
   }
 
+  Widget buildNotificationSettingsSliver() =>
+      StreamBuilder<ably.UNNotificationSettings?>(
+        stream: _pushNotificationService.notificationSettingsStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Text('No iOS permission information to show yet.');
+          } else {
+            final unNotificationSettings =
+                snapshot.data as ably.UNNotificationSettings;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'iOS Notification Settings',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text('Authorization Status: '
+                    '${unNotificationSettings.authorizationStatus}'),
+                Text('Sound: ${unNotificationSettings.soundSetting}'),
+                Text('Badge: ${unNotificationSettings.badgeSetting}'),
+                Text('Alert: ${unNotificationSettings.alertSetting}'),
+                Text('Notification Center: '
+                    '${unNotificationSettings.notificationCenterSetting}'),
+                Text(
+                    'Lock Screen: ${unNotificationSettings.lockScreenSetting}'),
+                Text('Alert Style: ${unNotificationSettings.alertStyle}'),
+                Text('Shows Preview: '
+                    '${unNotificationSettings.showPreviewsSetting}'),
+                Text('Critical Alerts: '
+                    '${unNotificationSettings.criticalAlertSetting}'),
+                Text('providesAppNotificationSettings: '
+                    '${unNotificationSettings.providesAppNotificationSettings}'),
+                Text('Siri announcements: '
+                    '${unNotificationSettings.announcementSetting}'),
+              ],
+            );
+          }
+        },
+      );
+
+  Widget buildUserPermissionSliver() {
+    if (Platform.isIOS) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'iOS Permissions',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed: () {
+              _pushNotificationService.requestNotificationPermission(
+                  provisional: true);
+            },
+            child: const Text('Request Provisional User Permission (no alert)'),
+          ),
+          BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed: () {
+              _pushNotificationService.requestNotificationPermission(
+                  provisional: false);
+            },
+            child: const Text('Request User Permission'),
+          ),
+          buildNotificationSettingsSliver(),
+        ],
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,6 +161,13 @@ class PushNotificationsActivationSliver extends StatelessWidget {
                     child: const Text('Deactivate device')),
               ),
             ],
+          ),
+          buildUserPermissionSliver(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: const Text('Once devices are activated, a Push Admin can '
+                'send push messages to devices by it\'s device ID or'
+                ' client ID.'),
           ),
           const Text(
             'Local Device information',
