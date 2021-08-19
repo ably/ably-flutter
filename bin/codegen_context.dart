@@ -26,6 +26,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'deviceDetails',
     'localDevice',
     'pushChannelSubscription',
+    'unNotificationSettings',
 
     'errorInfo',
 
@@ -99,8 +100,16 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
   {'name': 'pushDevice', 'value': 'pushDevice'},
   {
-    'name': 'pushRequestNotificationPermission',
-    'value': 'pushRequestNotificationPermission'
+    'name': 'pushRequestPermission',
+    'value': 'pushRequestPermission',
+  },
+  {
+    'name': 'pushGetNotificationSettings',
+    'value': 'pushGetNotificationSettings',
+  },
+  {
+    'name': 'pushOpenSettingsForNotification',
+    'value': 'pushOpenSettingsForNotification',
   },
 
   // Realtime events
@@ -396,8 +405,59 @@ const List<Map<String, dynamic>> _objects = [
     'properties': <String>['channel', 'deviceId', 'clientId']
   },
   {
-    'name': 'PushRequestNotificationPermission',
-    'properties': <String>['provisionalPermissionRequest']
+    'name': 'PushRequestPermission',
+    'properties': <String>[
+      'badge',
+      'sound',
+      'alert',
+      'carPlay',
+      'criticalAlert',
+      'providesAppNotificationSettings',
+      'provisional',
+      'announcement',
+      'none'
+    ]
+  },
+  {
+    'name': 'UNNotificationSettings',
+    'properties': <String>[
+      'authorizationStatus',
+      'soundSetting',
+      'badgeSetting',
+      'alertSetting',
+      'notificationCenterSetting',
+      'lockScreenSetting',
+      'carPlaySetting',
+      'alertStyle',
+      'showPreviewsSetting',
+      'criticalAlertSetting',
+      'providesAppNotificationSettings',
+      'announcementSetting',
+      'scheduledDeliverySetting',
+      'timeSensitiveSetting',
+    ]
+  },
+  {
+    'name': 'UNNotificationSettingEnum',
+    'properties': ['notSupported', 'disabled', 'enabled']
+  },
+  {
+    'name': 'UNAlertStyleEnum',
+    'properties': ['none', 'banner', 'alert']
+  },
+  {
+    'name': 'UNAuthorizationStatusEnum',
+    'properties': <String>[
+      'notDetermined',
+      'denied',
+      'authorized',
+      'provisional',
+      'ephemeral',
+    ]
+  },
+  {
+    'name': 'UNShowPreviewsSettingEnum',
+    'properties': ['always', 'whenAuthenticated', 'never']
   }
 ];
 

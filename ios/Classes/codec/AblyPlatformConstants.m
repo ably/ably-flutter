@@ -42,7 +42,9 @@ NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
 NSString *const AblyPlatformMethod_pushUnsubscribeClient= @"pushUnsubscribeClient";
 NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscriptions";
 NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
-NSString *const AblyPlatformMethod_pushRequestNotificationPermission= @"pushRequestNotificationPermission";
+NSString *const AblyPlatformMethod_pushRequestPermission= @"pushRequestPermission";
+NSString *const AblyPlatformMethod_pushGetNotificationSettings= @"pushGetNotificationSettings";
+NSString *const AblyPlatformMethod_pushOpenSettingsForNotification= @"pushOpenSettingsForNotification";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -280,5 +282,51 @@ NSString *const TxPushChannelSubscription_channel = @"channel";
 NSString *const TxPushChannelSubscription_deviceId = @"deviceId";
 NSString *const TxPushChannelSubscription_clientId = @"clientId";
 
-// key constants for PushRequestNotificationPermission
-NSString *const TxPushRequestNotificationPermission_provisionalPermissionRequest = @"provisionalPermissionRequest";
+// key constants for PushRequestPermission
+NSString *const TxPushRequestPermission_badge = @"badge";
+NSString *const TxPushRequestPermission_sound = @"sound";
+NSString *const TxPushRequestPermission_alert = @"alert";
+NSString *const TxPushRequestPermission_carPlay = @"carPlay";
+NSString *const TxPushRequestPermission_criticalAlert = @"criticalAlert";
+NSString *const TxPushRequestPermission_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxPushRequestPermission_provisional = @"provisional";
+NSString *const TxPushRequestPermission_announcement = @"announcement";
+NSString *const TxPushRequestPermission_none = @"none";
+
+// key constants for UNNotificationSettings
+NSString *const TxUNNotificationSettings_authorizationStatus = @"authorizationStatus";
+NSString *const TxUNNotificationSettings_soundSetting = @"soundSetting";
+NSString *const TxUNNotificationSettings_badgeSetting = @"badgeSetting";
+NSString *const TxUNNotificationSettings_alertSetting = @"alertSetting";
+NSString *const TxUNNotificationSettings_notificationCenterSetting = @"notificationCenterSetting";
+NSString *const TxUNNotificationSettings_lockScreenSetting = @"lockScreenSetting";
+NSString *const TxUNNotificationSettings_carPlaySetting = @"carPlaySetting";
+NSString *const TxUNNotificationSettings_alertStyle = @"alertStyle";
+NSString *const TxUNNotificationSettings_showPreviewsSetting = @"showPreviewsSetting";
+NSString *const TxUNNotificationSettings_criticalAlertSetting = @"criticalAlertSetting";
+NSString *const TxUNNotificationSettings_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxUNNotificationSettings_announcementSetting = @"announcementSetting";
+NSString *const TxUNNotificationSettings_scheduledDeliverySetting = @"scheduledDeliverySetting";
+NSString *const TxUNNotificationSettings_timeSensitiveSetting = @"timeSensitiveSetting";
+
+// key constants for UNNotificationSettingEnum
+NSString *const TxUNNotificationSettingEnum_notSupported = @"notSupported";
+NSString *const TxUNNotificationSettingEnum_disabled = @"disabled";
+NSString *const TxUNNotificationSettingEnum_enabled = @"enabled";
+
+// key constants for UNAlertStyleEnum
+NSString *const TxUNAlertStyleEnum_none = @"none";
+NSString *const TxUNAlertStyleEnum_banner = @"banner";
+NSString *const TxUNAlertStyleEnum_alert = @"alert";
+
+// key constants for UNAuthorizationStatusEnum
+NSString *const TxUNAuthorizationStatusEnum_notDetermined = @"notDetermined";
+NSString *const TxUNAuthorizationStatusEnum_denied = @"denied";
+NSString *const TxUNAuthorizationStatusEnum_authorized = @"authorized";
+NSString *const TxUNAuthorizationStatusEnum_provisional = @"provisional";
+NSString *const TxUNAuthorizationStatusEnum_ephemeral = @"ephemeral";
+
+// key constants for UNShowPreviewsSettingEnum
+NSString *const TxUNShowPreviewsSettingEnum_always = @"always";
+NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated = @"whenAuthenticated";
+NSString *const TxUNShowPreviewsSettingEnum_never = @"never";

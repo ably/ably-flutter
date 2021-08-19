@@ -26,9 +26,10 @@ typedef NS_ENUM(UInt8, _Value) {
     deviceDetailsCodecType = 145,
     localDeviceCodecType = 146,
     pushChannelSubscriptionCodecType = 147,
-    errorInfoCodecType = 148,
-    connectionStateChangeCodecType = 149,
-    channelStateChangeCodecType = 150,
+    unNotificationSettingsCodecType = 148,
+    errorInfoCodecType = 149,
+    connectionStateChangeCodecType = 150,
+    channelStateChangeCodecType = 151,
 };
 
 
@@ -68,7 +69,9 @@ extern NSString *const AblyPlatformMethod_pushSubscribeClient;
 extern NSString *const AblyPlatformMethod_pushUnsubscribeClient;
 extern NSString *const AblyPlatformMethod_pushListSubscriptions;
 extern NSString *const AblyPlatformMethod_pushDevice;
-extern NSString *const AblyPlatformMethod_pushRequestNotificationPermission;
+extern NSString *const AblyPlatformMethod_pushRequestPermission;
+extern NSString *const AblyPlatformMethod_pushGetNotificationSettings;
+extern NSString *const AblyPlatformMethod_pushOpenSettingsForNotification;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -306,5 +309,51 @@ extern NSString *const TxPushChannelSubscription_channel;
 extern NSString *const TxPushChannelSubscription_deviceId;
 extern NSString *const TxPushChannelSubscription_clientId;
 
-// key constants for PushRequestNotificationPermission
-extern NSString *const TxPushRequestNotificationPermission_provisionalPermissionRequest;
+// key constants for PushRequestPermission
+extern NSString *const TxPushRequestPermission_badge;
+extern NSString *const TxPushRequestPermission_sound;
+extern NSString *const TxPushRequestPermission_alert;
+extern NSString *const TxPushRequestPermission_carPlay;
+extern NSString *const TxPushRequestPermission_criticalAlert;
+extern NSString *const TxPushRequestPermission_providesAppNotificationSettings;
+extern NSString *const TxPushRequestPermission_provisional;
+extern NSString *const TxPushRequestPermission_announcement;
+extern NSString *const TxPushRequestPermission_none;
+
+// key constants for UNNotificationSettings
+extern NSString *const TxUNNotificationSettings_authorizationStatus;
+extern NSString *const TxUNNotificationSettings_soundSetting;
+extern NSString *const TxUNNotificationSettings_badgeSetting;
+extern NSString *const TxUNNotificationSettings_alertSetting;
+extern NSString *const TxUNNotificationSettings_notificationCenterSetting;
+extern NSString *const TxUNNotificationSettings_lockScreenSetting;
+extern NSString *const TxUNNotificationSettings_carPlaySetting;
+extern NSString *const TxUNNotificationSettings_alertStyle;
+extern NSString *const TxUNNotificationSettings_showPreviewsSetting;
+extern NSString *const TxUNNotificationSettings_criticalAlertSetting;
+extern NSString *const TxUNNotificationSettings_providesAppNotificationSettings;
+extern NSString *const TxUNNotificationSettings_announcementSetting;
+extern NSString *const TxUNNotificationSettings_scheduledDeliverySetting;
+extern NSString *const TxUNNotificationSettings_timeSensitiveSetting;
+
+// key constants for UNNotificationSettingEnum
+extern NSString *const TxUNNotificationSettingEnum_notSupported;
+extern NSString *const TxUNNotificationSettingEnum_disabled;
+extern NSString *const TxUNNotificationSettingEnum_enabled;
+
+// key constants for UNAlertStyleEnum
+extern NSString *const TxUNAlertStyleEnum_none;
+extern NSString *const TxUNAlertStyleEnum_banner;
+extern NSString *const TxUNAlertStyleEnum_alert;
+
+// key constants for UNAuthorizationStatusEnum
+extern NSString *const TxUNAuthorizationStatusEnum_notDetermined;
+extern NSString *const TxUNAuthorizationStatusEnum_denied;
+extern NSString *const TxUNAuthorizationStatusEnum_authorized;
+extern NSString *const TxUNAuthorizationStatusEnum_provisional;
+extern NSString *const TxUNAuthorizationStatusEnum_ephemeral;
+
+// key constants for UNShowPreviewsSettingEnum
+extern NSString *const TxUNShowPreviewsSettingEnum_always;
+extern NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated;
+extern NSString *const TxUNShowPreviewsSettingEnum_never;

@@ -29,9 +29,10 @@ final public class PlatformConstants {
         public static final byte deviceDetails = (byte) 145;
         public static final byte localDevice = (byte) 146;
         public static final byte pushChannelSubscription = (byte) 147;
-        public static final byte errorInfo = (byte) 148;
-        public static final byte connectionStateChange = (byte) 149;
-        public static final byte channelStateChange = (byte) 150;
+        public static final byte unNotificationSettings = (byte) 148;
+        public static final byte errorInfo = (byte) 149;
+        public static final byte connectionStateChange = (byte) 150;
+        public static final byte channelStateChange = (byte) 151;
     }
 
     static final public class PlatformMethod {
@@ -70,7 +71,9 @@ final public class PlatformConstants {
         public static final String pushUnsubscribeClient = "pushUnsubscribeClient";
         public static final String pushListSubscriptions = "pushListSubscriptions";
         public static final String pushDevice = "pushDevice";
-        public static final String pushRequestNotificationPermission = "pushRequestNotificationPermission";
+        public static final String pushRequestPermission = "pushRequestPermission";
+        public static final String pushGetNotificationSettings = "pushGetNotificationSettings";
+        public static final String pushOpenSettingsForNotification = "pushOpenSettingsForNotification";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -339,8 +342,59 @@ final public class PlatformConstants {
         public static final String clientId = "clientId";
     }
 
-    static final public class TxPushRequestNotificationPermission {
-        public static final String provisionalPermissionRequest = "provisionalPermissionRequest";
+    static final public class TxPushRequestPermission {
+        public static final String badge = "badge";
+        public static final String sound = "sound";
+        public static final String alert = "alert";
+        public static final String carPlay = "carPlay";
+        public static final String criticalAlert = "criticalAlert";
+        public static final String providesAppNotificationSettings = "providesAppNotificationSettings";
+        public static final String provisional = "provisional";
+        public static final String announcement = "announcement";
+        public static final String none = "none";
+    }
+
+    static final public class TxUNNotificationSettings {
+        public static final String authorizationStatus = "authorizationStatus";
+        public static final String soundSetting = "soundSetting";
+        public static final String badgeSetting = "badgeSetting";
+        public static final String alertSetting = "alertSetting";
+        public static final String notificationCenterSetting = "notificationCenterSetting";
+        public static final String lockScreenSetting = "lockScreenSetting";
+        public static final String carPlaySetting = "carPlaySetting";
+        public static final String alertStyle = "alertStyle";
+        public static final String showPreviewsSetting = "showPreviewsSetting";
+        public static final String criticalAlertSetting = "criticalAlertSetting";
+        public static final String providesAppNotificationSettings = "providesAppNotificationSettings";
+        public static final String announcementSetting = "announcementSetting";
+        public static final String scheduledDeliverySetting = "scheduledDeliverySetting";
+        public static final String timeSensitiveSetting = "timeSensitiveSetting";
+    }
+
+    static final public class TxUNNotificationSettingEnum {
+        public static final String notSupported = "notSupported";
+        public static final String disabled = "disabled";
+        public static final String enabled = "enabled";
+    }
+
+    static final public class TxUNAlertStyleEnum {
+        public static final String none = "none";
+        public static final String banner = "banner";
+        public static final String alert = "alert";
+    }
+
+    static final public class TxUNAuthorizationStatusEnum {
+        public static final String notDetermined = "notDetermined";
+        public static final String denied = "denied";
+        public static final String authorized = "authorized";
+        public static final String provisional = "provisional";
+        public static final String ephemeral = "ephemeral";
+    }
+
+    static final public class TxUNShowPreviewsSettingEnum {
+        public static final String always = "always";
+        public static final String whenAuthenticated = "whenAuthenticated";
+        public static final String never = "never";
     }
 
 }
