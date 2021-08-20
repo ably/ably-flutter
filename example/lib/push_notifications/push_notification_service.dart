@@ -27,13 +27,13 @@ class PushNotificationService {
           _pushChannelDeviceSubscriptionsSubject.stream;
 
   final BehaviorSubject<
-      ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-  _pushChannelClientSubscriptionsSubject = BehaviorSubject<
-      ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
+          ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+      _pushChannelClientSubscriptionsSubject = BehaviorSubject<
+          ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
 
   ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-  get pushChannelClientSubscriptionsStream =>
-      _pushChannelClientSubscriptionsSubject.stream;
+      get pushChannelClientSubscriptionsStream =>
+          _pushChannelClientSubscriptionsSubject.stream;
 
   final BehaviorSubject<bool> _hasPushChannelSubject =
       BehaviorSubject<bool>.seeded(false);

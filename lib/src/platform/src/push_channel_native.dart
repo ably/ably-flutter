@@ -27,36 +27,29 @@ class PushChannelNative extends PlatformObject implements PushChannel {
   }
 
   @override
-  Future<int?> createPlatformInstance() =>
-      (realtime != null)
-          ? (realtime as Realtime).handle
-          : (rest as Rest).handle;
+  Future<int?> createPlatformInstance() => (realtime != null)
+      ? (realtime as Realtime).handle
+      : (rest as Rest).handle;
 
   /// Subscribe device to the channel’s push notifications.
   @override
-  Future<void> subscribeDevice() =>
-      invoke(
-          PlatformMethod.pushSubscribeDevice,
-          {TxTransportKeys.channelName: _name});
+  Future<void> subscribeDevice() => invoke(
+      PlatformMethod.pushSubscribeDevice, {TxTransportKeys.channelName: _name});
 
   /// Unsubscribe device from the channel’s push notifications.
   @override
-  Future<void> unsubscribeDevice() =>
-      invoke(
-          PlatformMethod.pushUnsubscribeDevice,
-          {TxTransportKeys.channelName: _name});
+  Future<void> unsubscribeDevice() => invoke(
+      PlatformMethod.pushUnsubscribeDevice,
+      {TxTransportKeys.channelName: _name});
 
   @override
-  Future<void> subscribeClient() =>
-      invoke(
-          PlatformMethod.pushSubscribeClient,
-          {TxTransportKeys.channelName: _name});
+  Future<void> subscribeClient() => invoke(
+      PlatformMethod.pushSubscribeClient, {TxTransportKeys.channelName: _name});
 
   @override
-  Future<void> unsubscribeClient() =>
-      invoke(
-          PlatformMethod.pushUnsubscribeClient,
-          {TxTransportKeys.channelName: _name});
+  Future<void> unsubscribeClient() => invoke(
+      PlatformMethod.pushUnsubscribeClient,
+      {TxTransportKeys.channelName: _name});
 
   @override
   Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(

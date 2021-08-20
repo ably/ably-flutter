@@ -1,6 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 class AndroidPushNotificationConfiguration {
   final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -18,8 +17,7 @@ class AndroidPushNotificationConfiguration {
 
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
-
 }
