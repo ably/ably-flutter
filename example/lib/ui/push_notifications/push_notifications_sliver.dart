@@ -1,3 +1,5 @@
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
 import 'package:flutter/material.dart';
 
 import '../../push_notifications/push_notification_service.dart';
@@ -49,6 +51,9 @@ class PushNotificationsSliver extends StatelessWidget {
             buildCreateAblyClientText(),
             buildSummaryText(),
             PushNotificationsActivationSliver(_pushNotificationService),
+            PushNotificationsDeviceInformation(_pushNotificationService),
+            PushNotificationsIOSNotificationSettingsSliver(
+                _pushNotificationService),
             PushNotificationsSubscriptionsSliver(_pushNotificationService),
             PushNotificationsPublishingSliver(_pushNotificationService),
           ],

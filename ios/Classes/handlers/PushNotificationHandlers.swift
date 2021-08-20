@@ -47,35 +47,37 @@ public class PushNotificationHandlers: NSObject {
         
         var options: UNAuthorizationOptions = []
         
-        dataMap.forEach { key, value in
-            switch(key) {
-            case TxPushRequestPermission_badge:
-                options.insert(.badge)
-            case TxPushRequestPermission_sound:
-                options.insert(.sound)
-            case TxPushRequestPermission_alert:
-                options.insert(.alert)
-            case TxPushRequestPermission_carPlay:
-                options.insert(.carPlay)
-            case TxPushRequestPermission_criticalAlert:
-                if #available(iOS 12.0, *) {
-                    options.insert(.criticalAlert)
-                }
-            case TxPushRequestPermission_provisional:
-                if #available(iOS 12.0, *) {
-                    options.insert(.provisional)
-                }
-            case TxPushRequestPermission_announcement:
-                if #available(iOS 13.0, *) {
-                    options.insert(.announcement)
-                }
-            default:
-                break
-            }
-        }
-        
         if (dataMap[TxPushRequestPermission_badge] as! Bool) {
             options.insert(.badge)
+        }
+        if (dataMap[TxPushRequestPermission_sound] as! Bool) {
+            options.insert(.sound)
+        }
+        if (dataMap[TxPushRequestPermission_alert] as! Bool) {
+            options.insert(.alert)
+        }
+        if (dataMap[TxPushRequestPermission_carPlay] as! Bool) {
+            options.insert(.carPlay)
+        }
+        if (dataMap[TxPushRequestPermission_criticalAlert] as! Bool) {
+            if #available(iOS 12.0, *) {
+                options.insert(.criticalAlert)
+            }
+        }
+        if (dataMap[TxPushRequestPermission_provisional] as! Bool) {
+            if #available(iOS 12.0, *) {
+                options.insert(.provisional)
+            }
+        }
+        if (dataMap[TxPushRequestPermission_providesAppNotificationSettings] as! Bool) {
+            if #available(iOS 12.0, *) {
+                options.insert(.providesAppNotificationSettings)
+            }
+        }
+        if (dataMap[TxPushRequestPermission_announcement] as! Bool) {
+            if #available(iOS 13.0, *) {
+                options.insert(.announcement)
+            }
         }
         
         UNUserNotificationCenter.current().requestAuthorization(options: options) { granted, error in

@@ -42,6 +42,7 @@ class PushNative extends PlatformObject implements Push {
     if (io.Platform.isIOS) {
       return invokeRequest<bool>(PlatformMethod.pushRequestPermission, {
         TxPushRequestPermission.badge: badge,
+        TxPushRequestPermission.sound: sound,
         TxPushRequestPermission.alert: alert,
         TxPushRequestPermission.carPlay: carPlay,
         TxPushRequestPermission.criticalAlert: criticalAlert,
@@ -61,7 +62,7 @@ class PushNative extends PlatformObject implements Push {
       return invokeRequest<UNNotificationSettings>(
           PlatformMethod.pushGetNotificationSettings);
     } else {
-      throw UnsupportedError('This is an iOS-only method.');
+      throw UnsupportedError('getNotificationSettings is only valid on iOS.');
     }
   }
 

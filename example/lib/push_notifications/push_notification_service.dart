@@ -78,7 +78,7 @@ class PushNotificationService {
   }
 
   Future<void> requestNotificationPermission(
-      {required bool provisional}) async {
+      {bool provisional = false}) async {
     if (realtime != null) {
       final granted =
           await realtime!.push.requestPermission(provisional: provisional);

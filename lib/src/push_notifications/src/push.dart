@@ -22,7 +22,10 @@ abstract class Push {
   /// trial basis, by delaying the permission request until the
   /// user first sees the first notification. This is works on iOS12+.
   /// The notification is first delivered quietly, and the user will
-  /// get an option to deliver it more prominently. For more information,
+  /// get an option to deliver it more prominently. If provisional is true,
+  /// the permission request alert will not be shown to the user, regardless
+  /// of other options passed in.
+  /// For more information,
   /// see [Use Provisional Authorization to Send Trial Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc)
   /// - announcement: Only available on iOS 13+. Deprecated (permission always given) in iOS 15+)
   Future<bool> requestPermission(

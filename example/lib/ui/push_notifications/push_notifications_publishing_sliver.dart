@@ -11,44 +11,48 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
   const PushNotificationsPublishingSliver(this._pushNotificationService);
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<Object>(
-      stream: null,
-      builder: (context, snapshot) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Publishing',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService
-                    .publishNotificationMessageToChannel,
-                child: const Text('Broadcast notification message to channel: '
-                    '"${Constants.channelNameForPushNotifications}"'),
-              ),
-              BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService.publishDataMessageToChannel,
-                child: const Text('Broadcast data message to channel: '
-                    '"${Constants.channelNameForPushNotifications}"'),
-              ),
-              const Text('To validate messages were sent, you can subscribe to '
-                  'the channel and view the device logs'),
-              BoolStreamButton(
-                  stream: _pushNotificationService.hasPushChannelStream,
-                  onPressed: _pushNotificationService
-                      .subscribeToChannelWithPushChannelRule,
-                  child: const Text('Subscribe to channel: '
-                      '"${Constants.channelNameForPushNotifications}"')),
-              const Text('To debug push notifications, '
-                  'subscribe to the meta channel.'),
-              BoolStreamButton(
-                  stream: _pushNotificationService.hasPushChannelStream,
-                  onPressed:
-                      _pushNotificationService.subscribeToPushLogMetachannel,
-                  child: const Text('Subscribe to push metachannel: '
-                      '${Constants.pushMetaChannelName}')),
-            ],
-          ));
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Text(
+          'Publishing',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        BoolStreamButton(
+          stream: _pushNotificationService.hasPushChannelStream,
+          onPressed: _pushNotificationService
+              .publishNotificationMessageToChannel,
+          child: const Text('Broadcast notification message to channel: '
+              '"${Constants.channelNameForPushNotifications}"'),
+        ),
+        BoolStreamButton(
+          stream: _pushNotificationService.hasPushChannelStream,
+          onPressed: _pushNotificationService.publishDataMessageToChannel,
+          child: const Text('Broadcast data message to channel: '
+              '"${Constants.channelNameForPushNotifications}"'),
+        ),
+        const Text('To validate messages were sent, you can subscribe to '
+            'the channel and view the device logs. Data messages '
+            'are not currently available through Ably-flutter. '
+            'You should implement the relevant delegate methods on iOS'
+            ' and extend FirebaseMessagingService on Android.'),
+        BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed: _pushNotificationService
+                .subscribeToChannelWithPushChannelRule,
+            child: const Text('Subscribe to channel: '
+                '"${Constants.channelNameForPushNotifications}"')),
+        const Text('To debug push notifications, '
+            'subscribe to the meta channel.'),
+        BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed:
+            _pushNotificationService.subscribeToPushLogMetachannel,
+            child: const Text('Subscribe to push metachannel: '
+                '${Constants.pushMetaChannelName}')),
+      ],
+    ),
+  );
 }

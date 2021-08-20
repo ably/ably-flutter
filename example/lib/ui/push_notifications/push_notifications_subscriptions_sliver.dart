@@ -22,11 +22,20 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
             if (snapshot.hasData) {
               final subscriptions = snapshot.data as ably
                   .PaginatedResultInterface<ably.PushChannelSubscription>;
+
+              if (subscriptions.items.isEmpty) {
+                return const Text('No subscriptions');
+              }
+
+              final theresMoreSubscriptionsWidget = subscriptions.hasNext()
+                  ? const Text('and more...')
+                  : const SizedBox.shrink();
+
               return Column(children: [
                 ...subscriptions.items
                     .map(
                       (e) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
                           color: Colors.grey[200],
                           child: Column(children: [
@@ -40,23 +49,24 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                       ),
                     )
                     .toList(),
-                (subscriptions.hasNext()
-                    ? const Text('and more...')
-                    : const SizedBox.shrink())
+                theresMoreSubscriptionsWidget
               ]);
             }
-            return const SizedBox.shrink();
+            return const Text('List subscription button not pressed.');
           });
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Push channel subscriptions',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: const Text(
+                'Push channel subscriptions',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
             const Text(
                 'If you subscribe both device and client to the channel, '
@@ -78,6 +88,16 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 ),
               ],
             ),
+            BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: () async {
+                  final subscriptions = await _pushNotificationService
+                      .listSubscriptionsWithDeviceId();
+                  print('Push subscriptions: ${subscriptions.items}');
+                },
+                child: const Text('List subscriptions with current device ID')),
+            buildSubscriptionsList(
+                _pushNotificationService.pushChannelDeviceSubscriptionsStream),
             Row(
               children: [
                 Expanded(
@@ -94,16 +114,6 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 )
               ],
             ),
-            BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: () async {
-                  final subscriptions = await _pushNotificationService
-                      .listSubscriptionsWithDeviceId();
-                  print('Push subscriptions: ${subscriptions.items}');
-                },
-                child: const Text('List subscriptions with current device ID')),
-            buildSubscriptionsList(
-                _pushNotificationService.pushChannelDeviceSubscriptionsStream),
             BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: () async {
