@@ -70,16 +70,6 @@ class PushNative extends PlatformObject implements Push {
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   @override
-  Future<void> openSettings() {
-    if (io.Platform.isIOS) {
-      return invokeRequest<UNNotificationSettings>(
-          PlatformMethod.pushOpenSettingsForNotification);
-    } else {
-      throw UnsupportedError('This is an iOS-only method.');
-    }
-  }
-
-  @override
   Future<int?> createPlatformInstance() => (realtime != null)
       ? (realtime as Realtime).handle
       : (rest as Rest).handle;

@@ -71,7 +71,6 @@ extern NSString *const AblyPlatformMethod_pushListSubscriptions;
 extern NSString *const AblyPlatformMethod_pushDevice;
 extern NSString *const AblyPlatformMethod_pushRequestPermission;
 extern NSString *const AblyPlatformMethod_pushGetNotificationSettings;
-extern NSString *const AblyPlatformMethod_pushOpenSettingsForNotification;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;

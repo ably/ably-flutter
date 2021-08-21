@@ -44,7 +44,6 @@ NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscription
 NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
 NSString *const AblyPlatformMethod_pushRequestPermission= @"pushRequestPermission";
 NSString *const AblyPlatformMethod_pushGetNotificationSettings= @"pushGetNotificationSettings";
-NSString *const AblyPlatformMethod_pushOpenSettingsForNotification= @"pushOpenSettingsForNotification";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";

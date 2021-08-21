@@ -38,8 +38,6 @@ abstract class Push {
       bool providesAppNotificationSettings = false,
       bool announcement = true});
 
-  /// for more information, see [userNotificationCenter:openSettingsForNotification:](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/2981869-usernotificationcenter?language=objc)
-  Future<void> openSettings();
 
   /// A UNNotificationSettings object contains the current authorization
   /// status and notification-related settings for your app.

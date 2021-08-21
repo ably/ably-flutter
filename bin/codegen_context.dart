@@ -99,17 +99,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
   {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
   {'name': 'pushDevice', 'value': 'pushDevice'},
-  {
-    'name': 'pushRequestPermission',
-    'value': 'pushRequestPermission',
-  },
+  {'name': 'pushRequestPermission', 'value': 'pushRequestPermission'},
   {
     'name': 'pushGetNotificationSettings',
-    'value': 'pushGetNotificationSettings',
-  },
-  {
-    'name': 'pushOpenSettingsForNotification',
-    'value': 'pushOpenSettingsForNotification',
+    'value': 'pushGetNotificationSettings'
   },
 
   // Realtime events
