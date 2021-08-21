@@ -5,6 +5,7 @@ import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../platform.dart';
 import 'ably_message.dart';
+import 'push_events_native.dart';
 
 /// Handles method calls invoked from platform side to dart side
 class AblyMethodCallHandler {
@@ -17,6 +18,12 @@ class AblyMethodCallHandler {
           return onAuthCallback(call.arguments as AblyMessage);
         case PlatformMethod.realtimeAuthCallback:
           return onRealtimeAuthCallback(call.arguments as AblyMessage?);
+        case PlatformMethod.pushOnActivate:
+          return onPushOnActivate(call.arguments as AblyMessage);
+        case PlatformMethod.pushOnDeactivate:
+          return onPushOnDeactivate(call.arguments as AblyMessage);
+        case PlatformMethod.pushOnUpdateFailed:
+          return onPushOnUpdateFailed(call.arguments as AblyMessage);
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -54,4 +61,23 @@ class AblyMethodCallHandler {
     _realtimeAuthInProgress = false;
     return callbackResponse;
   }
+
+  Future<Object?> onPushOnActivate(AblyMessage message) async {
+    final error = message.message as ErrorInfo?;
+    PushEventsNative.shared.activateStreamController.add(error);
+    return null;
+  }
+
+  Future<Object?> onPushOnDeactivate(AblyMessage message) async {
+    final error = message.message as ErrorInfo?;
+    PushEventsNative.shared.activateStreamController.add(error);
+    return null;
+  }
+
+  Future<Object?> onPushOnUpdateFailed(AblyMessage message) async {
+    final error = message.message as ErrorInfo;
+    PushEventsNative.shared.activateStreamController.add(error);
+    return null;
+  }
 }
+

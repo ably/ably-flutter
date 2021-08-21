@@ -8,6 +8,14 @@ import '../constants.dart';
 import 'android_push_notification_configuration.dart';
 
 class PushNotificationService {
+  /// Sets up some handlers for push events
+  /// TODO warn if certain handlers are set but the callback is not called (especially the didFail)
+  static void setUpEventHandlers() {
+    ably.Push.pushEvents.onActivate.listen((error) => print(error));
+    ably.Push.pushEvents.onDeactivate.listen((error) => print(error));
+    ably.Push.pushEvents.onUpdateFailed.listen((error) => print(error));
+  }
+
   final _androidPushNotificationConfiguration =
       AndroidPushNotificationConfiguration();
   late final ably.Realtime? realtime;
@@ -37,6 +45,7 @@ class PushNotificationService {
 
   final BehaviorSubject<bool> _hasPushChannelSubject =
       BehaviorSubject<bool>.seeded(false);
+
   ValueStream<bool> get hasPushChannelStream => _hasPushChannelSubject.stream;
 
   final BehaviorSubject<ably.LocalDevice?> _localDeviceSubject =
@@ -77,8 +86,7 @@ class PushNotificationService {
     }
   }
 
-  Future<void> requestNotificationPermission(
-      {bool provisional = false}) async {
+  Future<void> requestNotificationPermission({bool provisional = false}) async {
     if (realtime != null) {
       final granted =
           await realtime!.push.requestPermission(provisional: provisional);

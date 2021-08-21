@@ -4,6 +4,7 @@
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 
 @implementation AblyFlutter {

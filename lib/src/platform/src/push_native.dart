@@ -1,5 +1,6 @@
 import 'dart:io' as io show Platform;
 
+import 'package:ably_flutter/src/platform/src/push_events_native.dart';
 import 'package:ably_flutter/src/push_notifications/src/ios_notification_settings.dart';
 
 import '../../generated/platform_constants.dart';
@@ -10,6 +11,8 @@ import '../platform.dart';
 
 /// The native code implementation of [Push].
 class PushNative extends PlatformObject implements Push {
+  static PushEvents pushEvents = PushEventsNative.shared;
+
   /// A rest client used platform side to invoke push notification methods
   final RestInterface? rest;
 

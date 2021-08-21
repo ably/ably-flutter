@@ -14,3 +14,4 @@ export 'src/push_channel_params.dart';
 export 'src/push_channel_subscription.dart';
 export 'src/push_channel_subscription_params.dart';
 export 'src/push_channel_subscriptions.dart';
+export 'src/push_events.dart';

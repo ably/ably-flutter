@@ -9,9 +9,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nullable) FlutterMethodChannel * channel;
 
--(void) setChannel:(FlutterMethodChannel *)channel;
++ (instancetype)sharedInstance;
 
 -(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *)options;
 

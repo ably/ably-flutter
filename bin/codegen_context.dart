@@ -104,6 +104,10 @@ const List<Map<String, dynamic>> _platformMethods = [
     'name': 'pushGetNotificationSettings',
     'value': 'pushGetNotificationSettings'
   },
+  // Push Notification Events
+  {'name': 'pushOnActivate', 'value': 'pushActivate'},
+  {'name': 'pushOnDeactivate', 'value': 'pushOnDeactivate'},
+  {'name': 'pushOnUpdateFailed', 'value': 'pushOnUpdateFailed'},
 
   // Realtime events
   {

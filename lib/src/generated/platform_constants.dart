@@ -72,6 +72,9 @@ class PlatformMethod {
   static const String pushRequestPermission = 'pushRequestPermission';
   static const String pushGetNotificationSettings =
       'pushGetNotificationSettings';
+  static const String pushOnActivate = 'pushActivate';
+  static const String pushOnDeactivate = 'pushOnDeactivate';
+  static const String pushOnUpdateFailed = 'pushOnUpdateFailed';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =

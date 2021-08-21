@@ -42,7 +42,9 @@ static const FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, F
 static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    NSNumber *const restHandle = [ably createRestWithOptions:message.message];
+    AblyFlutterClientOptions *const options = message.message;
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    NSNumber *const restHandle = [ably createRestWithOptions:options];
     ARTRest *const rest = [ably getRest:restHandle];
     
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
@@ -197,7 +199,9 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
 //    UNUserNotificationCenterDelegate *const delegate = UNUserNotificationCenter.currentNotificationCenter.delegate;
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    NSNumber *const realtimeHandle = [ably createRealtimeWithOptions:message.message];
+    AblyFlutterClientOptions *const options = message.message;
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    NSNumber *const realtimeHandle = [ably createRealtimeWithOptions:options];
     ARTRealtime *const realtime = [ably realtimeWithHandle:realtimeHandle];
     
     // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).

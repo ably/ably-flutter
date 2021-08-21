@@ -14,8 +14,8 @@ public class PushNotificationHandlers: NSObject {
     public static let activate: FlutterHandler = { plugin, call, result in
         let push = getPushFromAblyClient(ably: plugin.ably, call: call)
         if let push = push {
+            PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate = result
             push.activate()
-            result(nil)
         } else {
             result(FlutterError(code: String(40000), message: "No ably client exists (rest or realtime)", details: nil))
         }
@@ -25,8 +25,8 @@ public class PushNotificationHandlers: NSObject {
     public static let deactivate: FlutterHandler = { plugin, call, result in
         let push = getPushFromAblyClient(ably: plugin.ably, call: call)
         if let push = push {
+            PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate = result
             push.deactivate()
-            result(nil)
         } else {
             result(FlutterError(code: String(40000), message: "No ably client exists (rest or realtime)", details: nil))
         }
