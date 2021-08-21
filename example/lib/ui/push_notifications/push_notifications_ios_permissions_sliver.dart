@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +42,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
                 _pushNotificationService.requestNotificationPermission();
                 Fluttertoast.showToast(
                     msg:
-                    "Notifications will be delivered silently to the notification center.",
+                        "Notifications will be delivered silently to the notification center.",
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     backgroundColor: Colors.red,
@@ -59,58 +60,61 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
   }
 
   Widget buildIOSNotificationSettings() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: StreamBuilder<ably.UNNotificationSettings?>(
-      stream: _pushNotificationService.notificationSettingsStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data == null) {
-          return const Text('No iOS permission information to show yet.');
-        } else {
-          final unNotificationSettings =
-          snapshot.data as ably.UNNotificationSettings;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'iOS Notification Settings',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text('Authorization Status: '
-                  '${unNotificationSettings.authorizationStatus}'),
-              Text('Sound: ${unNotificationSettings.soundSetting}'),
-              Text('Badge: ${unNotificationSettings.badgeSetting}'),
-              Text('Alert: ${unNotificationSettings.alertSetting}'),
-              Text('Notification Center: '
-                  '${unNotificationSettings.notificationCenterSetting}'),
-              Text(
-                  'Lock Screen: ${unNotificationSettings.lockScreenSetting}'),
-              Text('Alert Style: ${unNotificationSettings.alertStyle}'),
-              Text('Shows Preview: '
-                  '${unNotificationSettings.showPreviewsSetting}'),
-              Text('Critical Alerts: '
-                  '${unNotificationSettings.criticalAlertSetting}'),
-              Text('providesAppNotificationSettings: '
-                  '${unNotificationSettings.providesAppNotificationSettings}'),
-              Text('Siri announcements: '
-                  '${unNotificationSettings.announcementSetting}'),
-              TextButton(
-                onPressed:
-                _pushNotificationService.updateNotificationSettings,
-                child: const Text('Refresh notification settings'),
-              ),
-            ],
-          );
-        }
-      },
-    ),
-  );
-
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: StreamBuilder<ably.UNNotificationSettings?>(
+          stream: _pushNotificationService.notificationSettingsStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null) {
+              return const Text('No iOS permission information to show yet.');
+            } else {
+              final unNotificationSettings =
+                  snapshot.data as ably.UNNotificationSettings;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'iOS Notification Settings',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  TextWithLabel('Authorization Status',
+                      '${unNotificationSettings.authorizationStatus}'),
+                  TextWithLabel(
+                      'Sound', '${unNotificationSettings.soundSetting}'),
+                  TextWithLabel(
+                      'Badge', '${unNotificationSettings.badgeSetting}'),
+                  TextWithLabel(
+                      'Alert', '${unNotificationSettings.alertSetting}'),
+                  TextWithLabel('Notification Center',
+                      '${unNotificationSettings.notificationCenterSetting}'),
+                  TextWithLabel('Lock Screen',
+                      '${unNotificationSettings.lockScreenSetting}'),
+                  TextWithLabel(
+                      'Alert Style', '${unNotificationSettings.alertStyle}'),
+                  TextWithLabel('Shows Preview',
+                      '${unNotificationSettings.showPreviewsSetting}'),
+                  TextWithLabel('Critical Alerts',
+                      '${unNotificationSettings.criticalAlertSetting}'),
+                  TextWithLabel('providesAppNotificationSettings',
+                      '${unNotificationSettings.providesAppNotificationSettings}'),
+                  TextWithLabel('Siri announcements',
+                      '${unNotificationSettings.announcementSetting}'),
+                  TextButton(
+                    onPressed:
+                        _pushNotificationService.updateNotificationSettings,
+                    child: const Text('Refresh notification settings'),
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      );
 
   @override
   Widget build(BuildContext context) => Column(
-    children: [
-      buildIOSPermissionSliver(),
-      buildIOSNotificationSettings(),
-    ],
-  );
+        children: [
+          buildIOSPermissionSliver(),
+          buildIOSNotificationSettings(),
+        ],
+      );
 }
