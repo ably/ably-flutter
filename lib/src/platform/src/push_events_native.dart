@@ -6,22 +6,24 @@ import '../../push_notifications/push_notifications.dart';
 class PushEventsNative extends PushEvents {
   static PushEventsNative shared = PushEventsNative();
 
-  StreamController<ErrorInfo?> activateStreamController = StreamController();
-  StreamController<ErrorInfo?> deactivateStreamController = StreamController();
-  StreamController<ErrorInfo> updateFailedStreamController = StreamController();
+  StreamController<ErrorInfo?> onActivateStreamController = StreamController();
+  StreamController<ErrorInfo?> onDeactivateStreamController =
+      StreamController();
+  StreamController<ErrorInfo> onUpdateFailedStreamController =
+      StreamController();
 
   @override
-  Stream<ErrorInfo?> get onActivate => activateStreamController.stream;
+  Stream<ErrorInfo?> get onActivate => onActivateStreamController.stream;
 
   @override
-  Stream<ErrorInfo?> get onDeactivate => deactivateStreamController.stream;
+  Stream<ErrorInfo?> get onDeactivate => onDeactivateStreamController.stream;
 
   @override
-  Stream<ErrorInfo> get onUpdateFailed => updateFailedStreamController.stream;
+  Stream<ErrorInfo> get onUpdateFailed => onUpdateFailedStreamController.stream;
 
   void _close() {
-    activateStreamController.close();
-    deactivateStreamController.close();
-    updateFailedStreamController.close();
+    onActivateStreamController.close();
+    onDeactivateStreamController.close();
+    onUpdateFailedStreamController.close();
   }
 }

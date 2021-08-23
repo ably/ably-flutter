@@ -63,17 +63,17 @@ class AblyMethodCallHandler {
   }
 
   Future<Object?> onPushOnActivate(ErrorInfo? error) async {
-    PushEventsNative.shared.activateStreamController.add(error);
+    PushEventsNative.shared.onActivateStreamController.add(error);
     return null;
   }
 
   Future<Object?> onPushOnDeactivate(ErrorInfo? error) async {
-    PushEventsNative.shared.activateStreamController.add(error);
+    PushEventsNative.shared.onDeactivateStreamController.add(error);
     return null;
   }
 
   Future<Object?> onPushOnUpdateFailed(ErrorInfo error) async {
-    PushEventsNative.shared.activateStreamController.add(error);
+    PushEventsNative.shared.onUpdateFailedStreamController.add(error);
     return null;
   }
 }
