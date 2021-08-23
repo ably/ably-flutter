@@ -15,7 +15,7 @@ class AblyException implements Exception {
   final String? message;
 
   /// error message from ably native sdk
-  final ErrorInfo? errorInfo;
+  late final ErrorInfo? errorInfo;
 
   /// initializes with no defaults
   AblyException([
@@ -30,12 +30,10 @@ class AblyException implements Exception {
         message = exception.message,
         errorInfo = exception.details as ErrorInfo?;
 
-  AblyException.fromMessage(int code, this.message)
-      : code = code.toString(),
+  AblyException.fromMessage({required int code, required this.message})
+      : code = null,
         errorInfo = ErrorInfo(
-            code: code,
-            href: 'https://help.ably.io/error/40000',
-            message: message);
+            href: 'https://help.ably.io/error/$code', message: message);
 
   @override
   String toString() {

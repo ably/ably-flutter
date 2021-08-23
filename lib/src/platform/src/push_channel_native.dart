@@ -60,8 +60,8 @@ class PushChannelNative extends PlatformObject implements PushChannel {
         !params.containsKey('channel')) {
       // This error only happen on Androids. They are thrown here
       // for both platforms (iOS/ Android) to make the API more consistent.
-      throw AblyException.fromMessage(40000,
-          "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
+      throw AblyException.fromMessage(code: 40000,
+          message: "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
     }
 
     final message = await invokeRequest<AblyMessage>(
