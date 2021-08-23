@@ -62,13 +62,13 @@ public class PushActivationEventHandlers {
       @Nullable ErrorInfo errorInfo = IntentUtils.getErrorInfo(intent);
       switch (action) {
         case PUSH_ACTIVATE_ACTION:
-          returnMethodCallResult(resultForActivate, errorInfo);
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnActivate, errorInfo);
+          returnMethodCallResult(resultForActivate, errorInfo);
           resultForActivate = null;
           break;
         case PUSH_DEACTIVATE_ACTION:
-          returnMethodCallResult(resultForDeactivate, errorInfo);
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnDeactivate, errorInfo);
+          returnMethodCallResult(resultForDeactivate, errorInfo);
           resultForDeactivate = null;
           break;
         case PUSH_UPDATE_FAILED_ACTION:
