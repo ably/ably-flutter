@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="io.ably.flutter.plugin">
     <!-- This service declaration is commented out because we do not send messages to the dart side yet and an application can only register one service to respond to a broadcast intent. We do not want this service to compete with the user's. In the future, we will implement this and broadcast our own intent which the users can listen to if they still want to listen to messages on the platform side. However, at that point, users should just listen to messages on the dart side. -->
-    <application>
-        <service android:name="io.ably.flutter.plugin.push.PushMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-    </application>
+<!--    <application>-->
+<!--        <service android:name="io.ably.flutter.plugin.push.PushMessagingService">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+<!--    </application>-->
 </manifest>
