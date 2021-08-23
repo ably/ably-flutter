@@ -13,6 +13,8 @@ abstract class Push {
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.
   ///
+  /// throws: AblyException
+  ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   Future<void> activate();
 
@@ -60,6 +62,8 @@ abstract class Push {
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
+  ///
+  /// throws: AblyException
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   Future<void> deactivate();

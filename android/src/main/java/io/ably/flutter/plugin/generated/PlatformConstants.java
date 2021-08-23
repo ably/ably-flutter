@@ -73,7 +73,7 @@ final public class PlatformConstants {
         public static final String pushDevice = "pushDevice";
         public static final String pushRequestPermission = "pushRequestPermission";
         public static final String pushGetNotificationSettings = "pushGetNotificationSettings";
-        public static final String pushOnActivate = "pushActivate";
+        public static final String pushOnActivate = "pushOnActivate";
         public static final String pushOnDeactivate = "pushOnDeactivate";
         public static final String pushOnUpdateFailed = "pushOnUpdateFailed";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";

@@ -196,7 +196,6 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const
 };
 
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-//    UNUserNotificationCenterDelegate *const delegate = UNUserNotificationCenter.currentNotificationCenter.delegate;
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
