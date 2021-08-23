@@ -29,13 +29,12 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
     // FlutterResults to return result as Future<void> or throws an error. This is the convenient API.
     public var flutterResultForActivate: FlutterResult? = nil;
     public var flutterResultForDeactivate: FlutterResult? = nil;
-    // There is no result available for didAblyPushRegistrationFail, because there is dart side method call.
+    // There is no result stored for didAblyPushRegistrationFail, because there is dart side method call to return values to.
     
-    // MethodChannel to send result to handlers implemented in dart side. This handles the case
-    // where . We need this for activate and deactivate because the new token can be provided.
+    // MethodChannel to send result to handlers implemented in dart side. This provides values to the listeners
+    // implement on the dart side. We need this for activate and deactivate because the new token can be provided.
     // We probably don't need this for deactivate, since it will happen immediately,
     // and the return values will be sufficient.
-    // TODO does ably-flutter have a way to call methods to dart side currently?
     private var methodChannel: FlutterMethodChannel
     
     public func didActivateAblyPush(_ error: ARTErrorInfo?) {
