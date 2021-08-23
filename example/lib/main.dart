@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -10,6 +12,8 @@ import 'ui/push_notifications/push_notifications_sliver.dart';
 
 void main() {
   PushNotificationService.setUpEventHandlers();
+  // PushNotificationService.setUpMessageHandlers();
+
   runApp(MyApp());
 }
 
@@ -46,6 +50,7 @@ class _MyAppState extends State<MyApp> {
   ably.PaginatedResult<ably.PresenceMessage>? _realtimePresenceHistory;
   late final PushNotificationService _pushNotificationService =
       PushNotificationService();
+  bool isIOSSimulator = false;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -98,6 +103,13 @@ class _MyAppState extends State<MyApp> {
 
     String platformVersion;
     String ablyVersion;
+
+    if (Platform.isIOS) {
+      final iosInfo = await DeviceInfoPlugin().iosInfo;
+      setState(() {
+        isIOSSimulator = !iosInfo.isPhysicalDevice;
+      });
+    }
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -837,7 +849,10 @@ class _MyAppState extends State<MyApp> {
                       [],
                   releaseRestChannel(),
                   const Divider(),
-                  PushNotificationsSliver(_pushNotificationService)
+                  PushNotificationsSliver(
+                    _pushNotificationService,
+                    isIOSSimulator: isIOSSimulator,
+                  )
                 ]),
           ),
         ),

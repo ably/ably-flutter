@@ -8,6 +8,8 @@ PODS:
     - Ably (= 1.2.4)
     - Flutter
   - AblyDeltaCodec (1.2.0)
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -21,6 +23,7 @@ PODS:
 
 DEPENDENCIES:
   - ably_flutter (from `.symlinks/plugins/ably_flutter/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -37,6 +40,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   ably_flutter:
     :path: ".symlinks/plugins/ably_flutter/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -48,6 +53,7 @@ SPEC CHECKSUMS:
   Ably: 863d35bb6a6aa5fc537304ef19f85cfa51d1bbde
   ably_flutter: 04d8c843fa12aafe0d1c6947a5ed3009b1958e3a
   AblyDeltaCodec: 6123f31df5b04a0f5452968505a46ba16a9eb689
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
@@ -58,4 +64,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.10.1

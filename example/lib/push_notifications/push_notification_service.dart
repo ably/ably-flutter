@@ -86,6 +86,7 @@ class PushNotificationService {
     }
   }
 
+  /// Only valid on iOS
   Future<void> requestNotificationPermission({bool provisional = false}) async {
     if (realtime != null) {
       final granted =
@@ -101,6 +102,7 @@ class PushNotificationService {
     await updateNotificationSettings();
   }
 
+  /// Only valid on iOS
   Future<void> updateNotificationSettings() async {
     if (realtime != null) {
       final settings = await realtime!.push.getNotificationSettings();

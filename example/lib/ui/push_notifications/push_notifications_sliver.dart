@@ -1,16 +1,18 @@
-import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
-import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
 import 'package:flutter/material.dart';
 
 import '../../push_notifications/push_notification_service.dart';
 import 'push_notifications_activation_sliver.dart';
+import 'push_notifications_device_information.dart';
+import 'push_notifications_ios_permissions_sliver.dart';
 import 'push_notifications_publishing_sliver.dart';
 import 'push_notifications_subscriptions_sliver.dart';
 
 class PushNotificationsSliver extends StatelessWidget {
-  late final PushNotificationService _pushNotificationService;
+  final PushNotificationService _pushNotificationService;
+  final bool isIOSSimulator;
 
-  PushNotificationsSliver(this._pushNotificationService, {Key? key})
+  const PushNotificationsSliver(this._pushNotificationService,
+      {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
   Widget buildCreateAblyClientText() => StreamBuilder(
@@ -50,7 +52,10 @@ class PushNotificationsSliver extends StatelessWidget {
             ),
             buildCreateAblyClientText(),
             buildSummaryText(),
-            PushNotificationsActivationSliver(_pushNotificationService),
+            PushNotificationsActivationSliver(
+              _pushNotificationService,
+              isIOSSimulator: isIOSSimulator,
+            ),
             PushNotificationsDeviceInformation(_pushNotificationService),
             PushNotificationsIOSNotificationSettingsSliver(
                 _pushNotificationService),
@@ -68,18 +73,6 @@ class PushNotificationsSliver extends StatelessWidget {
               'client ID, and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
           const SizedBox(height: 16),
-          RichText(
-              text: const TextSpan(children: [
-            TextSpan(
-                text: 'Warning: ',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-            TextSpan(
-                text:
-                    'You cannot listen/ react to push notification messages on the dart side of '
-                    'ably-flutter yet. See https://github.com/ably/ably-flutter/issues/141 for more information',
-                style: TextStyle(color: Colors.black))
-          ])),
         ],
       );
 }

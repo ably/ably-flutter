@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../push_notifications/push_notification_service.dart';
 import '../bool_stream_button.dart';
+import '../text_with_label.dart';
 
 class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -28,35 +28,41 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
               'iOS Permissions',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            BoolStreamButton(
-              stream: _pushNotificationService.hasPushChannelStream,
-              onPressed: () {
-                _pushNotificationService.requestNotificationPermission(
-                    provisional: true);
-              },
-              child: const Text('Request Provisional Permission (no alert)'),
-            ),
-            BoolStreamButton(
-              stream: _pushNotificationService.hasPushChannelStream,
-              onPressed: () {
-                _pushNotificationService.requestNotificationPermission();
-                Fluttertoast.showToast(
-                    msg:
-                        "Notifications will be delivered silently to the notification center.",
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16);
-              },
-              child: const Text('Request Permission'),
-            ),
+            buildRequestProvisionalPermissionButton(),
+            buildRequestNotificationPermissionButton(),
           ],
         ),
       );
     } else {
       return const SizedBox.shrink();
     }
+  }
+
+  BoolStreamButton buildRequestProvisionalPermissionButton() {
+    return BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed: () {
+              _pushNotificationService.requestNotificationPermission(
+                  provisional: true);
+              Fluttertoast.showToast(
+                  msg: 'Notifications will be delivered silently to '
+                      'the notification center.',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.CENTER,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16);
+            },
+            child: const Text('Request Provisional Permission (no alert)'),
+          );
+  }
+
+  BoolStreamButton buildRequestNotificationPermissionButton() {
+    return BoolStreamButton(
+            stream: _pushNotificationService.hasPushChannelStream,
+            onPressed: _pushNotificationService.requestNotificationPermission,
+            child: const Text('Request Permission'),
+          );
   }
 
   Widget buildIOSNotificationSettings() => Padding(
