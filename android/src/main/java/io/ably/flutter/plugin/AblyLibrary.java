@@ -3,6 +3,8 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.util.LongSparseArray;
 
+import io.ably.lib.push.Push;
+import io.ably.lib.push.PushChannel;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
@@ -90,6 +92,17 @@ class AblyLibrary {
     AblyBase getAblyClient(final long handle) {
         AblyRealtime realtime = getRealtime(handle);
         return (realtime != null) ? realtime : getRest(handle);
+    }
+    
+    Push getPush(final long handle) {
+        AblyRealtime realtime = getRealtime(handle);
+        return (realtime != null) ? realtime.push : getRest(handle).push;
+    }
+    
+    PushChannel getPushChannel(final long handle, String channelName) {
+        return getAblyClient(handle)
+                .channels
+                .get(channelName).push;
     }
 
     void setRealtimeToken(long handle, Object tokenDetails) {
