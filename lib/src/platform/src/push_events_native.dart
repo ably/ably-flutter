@@ -7,11 +7,11 @@ class PushEventsNative extends PushEvents {
   static PushEventsNative shared = PushEventsNative();
 
   StreamController<ErrorInfo?> activateStreamController =
-      StreamController.broadcast();
+      StreamController();
   StreamController<ErrorInfo?> deactivateStreamController =
-      StreamController.broadcast();
+      StreamController();
   StreamController<ErrorInfo> updateFailedStreamController =
-      StreamController.broadcast();
+      StreamController();
 
   @override
   Stream<ErrorInfo?> get onActivate => activateStreamController.stream;

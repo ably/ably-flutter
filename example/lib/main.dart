@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 import 'op_state.dart';
+import 'push_notifications/push_notification_event_handlers.dart';
 import 'push_notifications/push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
 void main() {
-  PushNotificationService.setUpEventHandlers();
+  PushNotificationHandlers.setUpEventHandlers();
   // PushNotificationService.setUpMessageHandlers();
 
   runApp(MyApp());

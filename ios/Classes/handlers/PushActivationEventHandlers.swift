@@ -20,10 +20,10 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
     
     private static var instance: PushActivationEventHandlers?;
     @objc public static func getInstance(methodChannel: FlutterMethodChannel) -> PushActivationEventHandlers {
-        if let instance = PushActivationEventHandlers.instance {
-            return instance
+        if instance == nil {
+            instance = PushActivationEventHandlers(methodChannel: methodChannel)
         }
-        return PushActivationEventHandlers(methodChannel: methodChannel)
+        return instance!
     }
     
     // FlutterResults to return result as Future<void> or throws an error. This is the convenient API.
@@ -38,33 +38,40 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
     private var methodChannel: FlutterMethodChannel
     
     public func didActivateAblyPush(_ error: ARTErrorInfo?) {
+        defer {
+            flutterResultForDeactivate = nil
+        }
+        
         guard let result = flutterResultForActivate else {
-            // TODO throw no flutterResult to give back the result. This is a SDK developer error.
+            let error = FlutterError(code: "didActivateAblyPush_error", message: "Failed to asynchronously return a value because flutterResultForActivate was nil", details: nil)
+            methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
+            // TODO throw NSError/ NSException?
             return
         }
         if let error = error {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
             result(FlutterError(code: String(error.code), message: error.message, details: error))
         } else {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: nil, result: nil)
             result(nil)
         }
-        flutterResultForActivate = nil
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
     }
     
     public func didDeactivateAblyPush(_ error: ARTErrorInfo?) {
+        defer {
+            flutterResultForDeactivate = nil
+        }
+        
         guard let result = flutterResultForDeactivate else {
-            // TODO throw no flutterResult to give back the result. This is a SDK developer error.
+            let error = FlutterError(code: "didDeactivateAblyPush_error", message: "Failed to asynchronously return a value because flutterResultForDeactivate was nil", details: nil)
+            methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: error, result: nil)
             return
         }
         if let error = error {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: error, result: nil)
             result(FlutterError(code: String(error.code), message: error.message, details: error))
         } else {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: nil, result: nil)
             result(nil)
         }
-        flutterResultForDeactivate = nil
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: error, result: nil)
     }
     
     public func didAblyPushRegistrationFail(_ error: ARTErrorInfo?) {

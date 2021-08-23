@@ -19,11 +19,11 @@ class AblyMethodCallHandler {
         case PlatformMethod.realtimeAuthCallback:
           return onRealtimeAuthCallback(call.arguments as AblyMessage?);
         case PlatformMethod.pushOnActivate:
-          return onPushOnActivate(call.arguments as AblyMessage);
+          return onPushOnActivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnDeactivate:
-          return onPushOnDeactivate(call.arguments as AblyMessage);
+          return onPushOnDeactivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnUpdateFailed:
-          return onPushOnUpdateFailed(call.arguments as AblyMessage);
+          return onPushOnUpdateFailed(call.arguments as ErrorInfo);
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -62,22 +62,18 @@ class AblyMethodCallHandler {
     return callbackResponse;
   }
 
-  Future<Object?> onPushOnActivate(AblyMessage message) async {
-    final error = message.message as ErrorInfo?;
+  Future<Object?> onPushOnActivate(ErrorInfo? error) async {
     PushEventsNative.shared.activateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnDeactivate(AblyMessage message) async {
-    final error = message.message as ErrorInfo?;
+  Future<Object?> onPushOnDeactivate(ErrorInfo? error) async {
     PushEventsNative.shared.activateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnUpdateFailed(AblyMessage message) async {
-    final error = message.message as ErrorInfo;
+  Future<Object?> onPushOnUpdateFailed(ErrorInfo error) async {
     PushEventsNative.shared.activateStreamController.add(error);
     return null;
   }
 }
-

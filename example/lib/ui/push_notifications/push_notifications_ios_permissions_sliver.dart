@@ -38,32 +38,30 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
     }
   }
 
-  BoolStreamButton buildRequestProvisionalPermissionButton() {
-    return BoolStreamButton(
-            stream: _pushNotificationService.hasPushChannelStream,
-            onPressed: () {
-              _pushNotificationService.requestNotificationPermission(
-                  provisional: true);
-              Fluttertoast.showToast(
-                  msg: 'Notifications will be delivered silently to '
-                      'the notification center.',
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.CENTER,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16);
-            },
-            child: const Text('Request Provisional Permission (no alert)'),
-          );
-  }
+  BoolStreamButton buildRequestProvisionalPermissionButton() =>
+      BoolStreamButton(
+        stream: _pushNotificationService.hasPushChannelStream,
+        onPressed: () {
+          _pushNotificationService.requestNotificationPermission(
+              provisional: true);
+          Fluttertoast.showToast(
+              msg: 'Notifications will be delivered silently to '
+                  'the notification center.',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16);
+        },
+        child: const Text('Request Provisional Permission (no alert)'),
+      );
 
-  BoolStreamButton buildRequestNotificationPermissionButton() {
-    return BoolStreamButton(
-            stream: _pushNotificationService.hasPushChannelStream,
-            onPressed: _pushNotificationService.requestNotificationPermission,
-            child: const Text('Request Permission'),
-          );
-  }
+  BoolStreamButton buildRequestNotificationPermissionButton() =>
+      BoolStreamButton(
+        stream: _pushNotificationService.hasPushChannelStream,
+        onPressed: _pushNotificationService.requestNotificationPermission,
+        child: const Text('Request Permission'),
+      );
 
   Widget buildIOSNotificationSettings() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
