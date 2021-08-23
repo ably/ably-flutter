@@ -1,10 +1,3 @@
-//
-//  PushActivationEventHandlers.swift
-//  ably_flutter
-//
-//  Created by Ben Butterworth on 21/08/2021.
-//
-
 import Foundation
 import Ably
 

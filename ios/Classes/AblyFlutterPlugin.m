@@ -620,16 +620,16 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         // Push Notification Handlers
-        AblyPlatformMethod_pushActivate: PushNotificationHandlers.activate,
-        AblyPlatformMethod_pushRequestPermission: PushNotificationHandlers.requestPermission,
-        AblyPlatformMethod_pushGetNotificationSettings: PushNotificationHandlers.getNotificationSettings,
-        AblyPlatformMethod_pushDeactivate: PushNotificationHandlers.deactivate,
-        AblyPlatformMethod_pushSubscribeDevice: PushNotificationHandlers.subscribeDevice,
-        AblyPlatformMethod_pushUnsubscribeDevice: PushNotificationHandlers.unsubscribeDevice,
-        AblyPlatformMethod_pushSubscribeClient: PushNotificationHandlers.subscribeClient,
-        AblyPlatformMethod_pushUnsubscribeClient: PushNotificationHandlers.unsubscribeClient,
-        AblyPlatformMethod_pushListSubscriptions: PushNotificationHandlers.listSubscriptions,
-        AblyPlatformMethod_pushDevice: PushNotificationHandlers.device,
+        AblyPlatformMethod_pushActivate: PushHandlers.activate,
+        AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
+        AblyPlatformMethod_pushGetNotificationSettings: PushHandlers.getNotificationSettings,
+        AblyPlatformMethod_pushDeactivate: PushHandlers.deactivate,
+        AblyPlatformMethod_pushSubscribeDevice: PushHandlers.subscribeDevice,
+        AblyPlatformMethod_pushUnsubscribeDevice: PushHandlers.unsubscribeDevice,
+        AblyPlatformMethod_pushSubscribeClient: PushHandlers.subscribeClient,
+        AblyPlatformMethod_pushUnsubscribeClient: PushHandlers.unsubscribeClient,
+        AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
+        AblyPlatformMethod_pushDevice: PushHandlers.device,
     };
     
     _nextRegistration = 1;
