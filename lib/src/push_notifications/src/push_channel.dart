@@ -31,6 +31,8 @@ abstract class PushChannel {
   /// Optional filters can be passed as a [params] map. These filters include
   /// [channel, deviceId, clientId and limit](https://docs.ably.io/rest-api/#list-channel-subscriptions).
   ///
+  /// Requires Push Admin capability
+  ///
   /// To listSubscriptions on Android, params must include a `deviceId` key.
   /// This is because the package plugin uses ably-java.
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e

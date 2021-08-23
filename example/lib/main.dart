@@ -29,8 +29,7 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
 
-  // final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
-  String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
+  final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   OpState _realtimeCreationState = OpState.notStarted;
   OpState _restCreationState = OpState.notStarted;
   ably.Realtime? _realtime;

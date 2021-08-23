@@ -63,7 +63,9 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
         child: const Text('Request Permission'),
       );
 
-  Widget buildIOSNotificationSettings() => Padding(
+  Widget buildIOSNotificationSettings() {
+    if (Platform.isIOS) {
+      return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: StreamBuilder<ably.UNNotificationSettings?>(
           stream: _pushNotificationService.notificationSettingsStream,
@@ -72,7 +74,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
               return const Text('No iOS permission information to show yet.');
             } else {
               final unNotificationSettings =
-                  snapshot.data as ably.UNNotificationSettings;
+              snapshot.data as ably.UNNotificationSettings;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -104,7 +106,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
                       '${unNotificationSettings.announcementSetting}'),
                   TextButton(
                     onPressed:
-                        _pushNotificationService.updateNotificationSettings,
+                    _pushNotificationService.updateNotificationSettings,
                     child: const Text('Refresh notification settings'),
                   ),
                 ],
@@ -113,6 +115,10 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
           },
         ),
       );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Column(

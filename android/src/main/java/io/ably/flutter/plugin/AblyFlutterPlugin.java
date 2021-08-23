@@ -4,6 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.lang.reflect.Method;
+
+import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -15,14 +18,11 @@ import io.flutter.plugin.common.StandardMethodCodec;
 public class AblyFlutterPlugin implements FlutterPlugin {
     private Context applicationContext;
 
-    private static MethodCodec createCodec() {
-        return new StandardMethodCodec(new AblyMessageCodec());
-    }
-
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         applicationContext = flutterPluginBinding.getApplicationContext();
-        setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
+        MethodChannel methodChannel = setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
+        PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
     }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -35,10 +35,11 @@ public class AblyFlutterPlugin implements FlutterPlugin {
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
     public void registerWith(Registrar registrar) {
-        AblyFlutterPlugin.setupChannels(registrar.messenger(), applicationContext);
+        MethodChannel methodChannel = AblyFlutterPlugin.setupChannels(registrar.messenger(), applicationContext);
+        PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
     }
 
-    private static void setupChannels(BinaryMessenger messenger, Context applicationContext) {
+    private static MethodChannel setupChannels(BinaryMessenger messenger, Context applicationContext) {
         final MethodCodec codec = createCodec();
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
@@ -53,10 +54,15 @@ public class AblyFlutterPlugin implements FlutterPlugin {
                 applicationContext
         );
         channel.setMethodCallHandler(methodCallHandler);
+        return channel;
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         System.out.println("Ably Plugin onDetachedFromEngine");
+    }
+
+    private static MethodCodec createCodec() {
+        return new StandardMethodCodec(new AblyMessageCodec());
     }
 }

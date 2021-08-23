@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.push.PushBase;
@@ -603,8 +604,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void pushActivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
-      _ably.getPush((long) message.message).activate();
-      result.success(null);
+      Integer handle = (Integer) message.message;
+      PushActivationEventHandlers.setResultForActivate(result);
+      _ably.getPush(handle).activate();
     } catch (AblyException e) {
       handleAblyException(result, e);
     }
@@ -613,9 +615,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void pushDeactivate(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
-      long handle = (long) message.message;
+      Integer handle = (Integer) message.message;
+      PushActivationEventHandlers.setResultForDeactivate(result);
       _ably.getPush(handle).deactivate();
-      result.success(null);
     } catch (AblyException e) {
       handleAblyException(result, e);
     }

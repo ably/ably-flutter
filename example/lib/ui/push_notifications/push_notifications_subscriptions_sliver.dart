@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -61,15 +63,17 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
                 'Push channel subscriptions',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             const Text(
-                'If you subscribe both device and client to the channel, '
+                'You need to use a token/ key with the Push Admin capability '
+                    'to list subscriptions by client ID or device ID. '
+                    'If you subscribe both device and client to the channel, '
                 'the device will receive 2 notifications.'),
             Row(
               children: [
@@ -124,7 +128,30 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 child: const Text('List subscriptions with current client ID')),
             buildSubscriptionsList(
                 _pushNotificationService.pushChannelClientSubscriptionsStream),
+            buildWarningTextForListSubscriptionsOnAndroid(),
           ],
         ),
       );
+
+  Widget buildWarningTextForListSubscriptionsOnAndroid() {
+    if (Platform.isAndroid) {
+      return Padding(
+        child: RichText(
+          text:
+              const TextSpan(style: TextStyle(color: Colors.black), children: [
+            TextSpan(
+                text: 'Warning: ',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: 'A bug in ably-java means all client ID and device '
+                    'ID subscriptions are returned when you call '
+                    'push.listSubscriptions. Track ably-java issue #705'),
+          ]),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+      );
+    }
+    return const SizedBox.shrink();
+  }
 }
