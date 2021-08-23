@@ -72,8 +72,8 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
             ),
             const Text(
                 'You need to use a token/ key with the Push Admin capability '
-                    'to list subscriptions by client ID or device ID. '
-                    'If you subscribe both device and client to the channel, '
+                'to list subscriptions by client ID or device ID. '
+                'If you subscribe both device and client to the channel, '
                 'the device will receive 2 notifications.'),
             Row(
               children: [

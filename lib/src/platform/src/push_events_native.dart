@@ -6,12 +6,9 @@ import '../../push_notifications/push_notifications.dart';
 class PushEventsNative extends PushEvents {
   static PushEventsNative shared = PushEventsNative();
 
-  StreamController<ErrorInfo?> activateStreamController =
-      StreamController();
-  StreamController<ErrorInfo?> deactivateStreamController =
-      StreamController();
-  StreamController<ErrorInfo> updateFailedStreamController =
-      StreamController();
+  StreamController<ErrorInfo?> activateStreamController = StreamController();
+  StreamController<ErrorInfo?> deactivateStreamController = StreamController();
+  StreamController<ErrorInfo> updateFailedStreamController = StreamController();
 
   @override
   Stream<ErrorInfo?> get onActivate => activateStreamController.stream;

@@ -74,7 +74,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
               return const Text('No iOS permission information to show yet.');
             } else {
               final unNotificationSettings =
-              snapshot.data as ably.UNNotificationSettings;
+                  snapshot.data as ably.UNNotificationSettings;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -106,7 +106,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
                       '${unNotificationSettings.announcementSetting}'),
                   TextButton(
                     onPressed:
-                    _pushNotificationService.updateNotificationSettings,
+                        _pushNotificationService.updateNotificationSettings,
                     child: const Text('Refresh notification settings'),
                   ),
                 ],
