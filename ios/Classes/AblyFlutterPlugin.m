@@ -694,37 +694,4 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     _didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
 
-// Only called when the app is in the foreground
-#pragma mark - Push Notifications - UNUserNotificationCenterDelegate
-// https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
-    // Currently not showing the notification if the app is in the foreground. This is the default
-    // behaviour on Android. To show a message in the foreground on Android, users need to send a
-    // background message and show a local notification manually.
-    // TODO allow the user to specify the behaviour here on dart side. They can set a boolean at launch, and we will use it.
-    completionHandler(UNNotificationPresentationOptionNone);
-}
-
-// Only called when `'content-available' : 1` is set in the push payload
-# pragma mark - Push Notifications - FlutterApplicationLifeCycleDelegate (not UIApplicationDelegate)
-- (bool)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
-    // TODO Implement Push Notifications listener https://github.com/ably/ably-flutter/issues/141
-    // Call a callback in dart side so the user can handle it.
-//    bool handled = handleRemoteNotificationOnDartSide(userInfo, completionHandler);
-//    if (handled) {
-//        return YES;
-//    } else {
-//        return NO;
-//    }
-    completionHandler(UIBackgroundFetchResultNewData);
-    return NO;
-}
-
-#pragma mark - Push Notifications - UNNotificationContentExtension
-// From apple docs: The method will be called on the delegate when the user responded to the notification by opening the application, dismissing the notification or choosing a UNNotificationAction
-// TODO allow the user to specify the behaviour here on dart side.
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler  API_AVAILABLE(ios(10.0)){
-    completionHandler();
-}
-
 @end
