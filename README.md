@@ -46,7 +46,6 @@ Features that we do not currently support, but we do plan to add in the future:
 - Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
 - Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
 - REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
-- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
 - Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 - Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
@@ -83,6 +82,7 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
   - To choose a specific device when more than 1 are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
 
 ### Getting Push Notifications working in the Example App
+
 See the [Push Notifications](./Push%20Notifications.md) documentation.
 
 ### Troubleshooting
@@ -490,8 +490,6 @@ channel
 ```
 
 ### Push Notifications
-
-#### Setting up push notifications
 
 See the [Push Notifications](./Push%20Notifications.md) documentation.
 
