@@ -28,12 +28,12 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - iOS:
     - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
     - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
-        - Register your bundle ID on App Store connect.
-        - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
+        - Register your bundle ID on App Store connect if it is not yet registered (It may already be automatically registered by Xcode).
+        - Create a push notification certificate (`.p12`) and upload it to the Ably dashboard to allow Ably to authenticate with APNs on your behalf, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
         - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
-        - Add `remote notification` Background mode:
+        - Add `remote notification` background mode:
             - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
-            - Check `remote notifications`.
+            - Check/ enable `remote notifications`.
 
 ## Setting up your own App
 
@@ -57,7 +57,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 
 ### Summary
 
-Devices need to be [activated](#device-activation) with Ably once. Once activated, you can use their device ID, client ID or push token (APNs device token/ FCM registration token) to push messages to them using the Ably dashboard or a [Push Admin](https://ably.com/documentation/general/push/admin) (SDKs which provide push admin functionality, such as [Ably-java](https://github.com/ably/ably-java), [Ably-js](https://github.com/ably/ably-js), etc.). However, to send push notifications through Ably channels, devices need to [subscribe to the channel](#subscribing-to-channels). Once subscribed, messages on that channel with a [push payload](#creating-push-messages-payloads) will be sent to devices which are subscribed to that channel.
+Devices need to be [activated](#device-activation) with Ably once. Once activated, you can use their device ID, client ID or push token (APNs device token/ FCM registration token) to push messages to them using the Ably dashboard or a [Push Admin](https://ably.com/documentation/general/push/admin) (SDKs which provide push admin functionality, such as [Ably-java](https://github.com/ably/ably-java), [Ably-js](https://github.com/ably/ably-js), etc.). However, to send push notifications through Ably channels, devices need to [subscribe to a channel](#subscribing-to-channels). Once subscribed, messages on that channel with a [push payload](#creating-push-messages-payloads) will be sent to devices which are subscribed to that channel.
 
 ### Device activation
 
@@ -156,7 +156,7 @@ data: 'This is a Ably message published on channels that is also '
 }));
 ```
 
-To have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message.) 
+**Warning:** To have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). See [Sending a data & notification messages](#sending-a-data--notification-messages).
 
 #### Sending a data & notification messages
 ```dart
@@ -187,8 +187,8 @@ You cannot handle notification messages as they are shown to the user without ca
 Ably-flutter currently does not pass the messages to the Flutter application/ dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
 - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`.
 - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
-        - To send a background/ data notification which will trigger the native code handler (Android) / delegate method (iOS), publish the following message to the channel:
     
+
 For further help on implementing the Platform specific message handlers, see "On Android" and "On iOS" sections on [Push Notifications - Device activation and subscription](https://ably.com/documentation/general/push/activate-subscribe).
 
 ### Deactivating the device
