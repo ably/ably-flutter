@@ -16,6 +16,12 @@ jobs:
       - name: 'List Simulators'
         run: 'xcrun instruments -s'
 
+      - name: 'Print Swift version'
+        run: 'swift --version'
+      - name: 'Print Xcode version'
+        run: 'xed --version'
+
+
       - name: 'Start Simulator'
         run: |
           # grep, extract trim `[` and `]` and pick first result, in case there are many
