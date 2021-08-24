@@ -17,22 +17,23 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Publishing',
+              'Publishing to '
+              '"${Constants.channelNameForPushNotifications}"',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            BoolStreamButton(
-              stream: _pushNotificationService.hasPushChannelStream,
-              onPressed:
-                  _pushNotificationService.publishNotificationMessageToChannel,
-              child: const Text('Broadcast notification message to channel: '
-                  '"${Constants.channelNameForPushNotifications}"'),
-            ),
-            BoolStreamButton(
-              stream: _pushNotificationService.hasPushChannelStream,
-              onPressed: _pushNotificationService.publishDataMessageToChannel,
-              child: const Text('Broadcast data message to channel: '
-                  '"${Constants.channelNameForPushNotifications}"'),
-            ),
+            Row(children: [
+              BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed:
+                _pushNotificationService.publishNotificationMessageToChannel,
+                child: const Text('Notification Message'),
+              ),
+              BoolStreamButton(
+                stream: _pushNotificationService.hasPushChannelStream,
+                onPressed: _pushNotificationService.publishDataMessageToChannel,
+                child: const Text('Data Message'),
+              ),
+            ],),
             const Text('To validate messages were sent, you can subscribe to '
                 'the channel and view the device logs. Data messages '
                 'are not currently available through Ably-flutter. '

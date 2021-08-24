@@ -2,7 +2,8 @@
 
 Push Notifications allow you to reach users who do not have your application open (in the foreground). On iOS, Ably connects to [APNs](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html) to send messages to devices. On Android, Ably connects to [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) to send messages to devices. As both services do not guarantee message delivery and may even throttle messages to specific devices based on battery level, message frequency, and other criteria, messages may arrive much later than sent or ignored.
 
-## Known issues/ unimplemented:
+## Known Limitations
+
 - [Handling messages in the dart side](https://github.com/ably/ably-flutter/issues/141): Ably-flutter currently does not pass the messages to the Flutter application/ dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information. 
       - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. 
           - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`. 
@@ -155,6 +156,8 @@ data: 'This is a Ably message published on channels that is also '
 }));
 ```
 
+To have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message.) 
+
 #### Sending a data & notification messages
 ```dart
 final message = ably.Message(
@@ -175,6 +178,12 @@ final message = ably.Message(
 
 ### Receiving messages
 
+#### Notification messages
+
+You cannot handle notification messages as they are shown to the user without calling any methods in your application. To create notifications which launch the application to a certain page (notifications which contain deep links, app links, URLs/ URL schemes or universal links), or notifications which contain buttons/ actions, images, and inline replies, you should send a [data message](#data-messages) and create a notification when the message is received. On Android, you can follow [Create a Notification](https://developer.android.com/training/notify-user/build-notification). On iOS, you can follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app).
+
+#### Data messages
+
 Ably-flutter currently does not pass the messages to the Flutter application/ dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
 - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`.
 - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
@@ -193,3 +202,47 @@ Do this only if you do not want the device to receive push notifications at all.
       // Handle/ log the error.
     }
 ```
+
+## Troubleshooting/ FAQ
+
+### Why are notifications not received when the app is open on Android?
+
+When the app is in the foreground (open by the user), firebase messaging ignores the message. You would need to send a data message and build a local notification instead.
+
+### Messaging generated from the "compose notification" in Firebase cloud messaging console are not received.
+
+Ensure your Android app contains the firebase configuration `android/app/google-services.json` file. You can download this from your Firebase project settings.
+
+### "FCM Reporting dashboard" in Firebase cloud messaging console does not show any messages being received.
+
+You need to add the firebase-analytics dependency to your `app/build.gradle` file. This was optional when following the [Firebase Android client setup guide](https://firebase.google.com/docs/cloud-messaging/android/client), for example: `implementation 'com.google.firebase:firebase-analytics:version_number'`. Find the latest version number from [MVNRepository](https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics).
+
+### Why does my iOS device message not get received, and the error message returned is `BadDeviceToken`?
+
+This is an error passed straight from APNs. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
+
+When running a debug application, the sandbox/ development APNs server would be used. Make sure to use an application with "Use APNS sandbox environment" enabled in the Ably dashboard (push notification tab).
+
+You may try to change the `entitlements` file to `production` string, but this does not make the debug application use the production APNs server. For more information about this limitation, see [How do I make my debug app version receive production push notifications on iOS?](https://stackoverflow.com/a/46118155/7365866)
+
+>**Debug** builds will always get *sandbox* APNS tokens.
+>
+>**Release** builds (ad-hoc or app store) will always get *production* APNS tokens.
+
+For more information, take a look at [What are the possible reasons to get APNs responses BadDeviceToken or Unregistered?](https://stackoverflow.com/questions/42511476/what-are-the-possible-reasons-to-get-apns-responses-baddevicetoken-or-unregister).
+
+### Push notification messages are not being delivered to my device, but normal messages in the same channel are.
+
+From the [flutterfire guide](https://firebase.flutter.dev/docs/messaging/usage/) on firebase_messaging:
+
+> For Android, you can view Logcat logs which will give a  descriptive message on why a notification was not delivered. On Apple platforms the "console.app" application will display "CANCELED" logs for those it chose to ignore, however doesn't provide a description as to why.
+
+For Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs. For iOS, we recommend you check the Console.app on your mac, looking for CANCELED logs to see if the device is throttling your usage of push notifications.
+
+### Android only: When I look in ably.com's dashboard, i see "InvalidRegistration"
+
+This means your registration token is invalid. Ably is may not have your device's FCM registration token. `FirebaseMessagingService.onNewToken` is only called when a new token is available, so if Ably was installed in a new app update and the token has **not** been changed, Ably won't know it. If you have previously registered with FCM without Ably, you should make sure to give ably the latest token, by getting it and calling:
+
+  ```java
+  ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+  ```

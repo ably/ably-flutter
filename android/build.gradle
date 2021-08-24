@@ -22,8 +22,10 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation 'io.ably:ably-android:1.2.7'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    // TODO Once https://github.com/ably/ably-flutter/issues/141 is implemented, make these dependencies `implementation`
+    // Since users are expected to implement the handlers in Android, both dependencies are required.
+    api 'io.ably:ably-android:1.2.7'
+    api 'com.google.firebase:firebase-messaging:22.0.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
 

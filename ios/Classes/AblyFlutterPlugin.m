@@ -638,7 +638,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     [registrar addApplicationDelegate:self];
     [[NSNotificationCenter defaultCenter]
         addObserver:self
-           selector:@selector(uiApplicationDidFinishLaunchingWithOptionsNotificationHandler:)
+           selector:@selector(application_didFinishLaunchingWithOptionsNotificationHandler:)
                name:UIApplicationDidFinishLaunchingNotification
              object:nil];
     
@@ -667,18 +667,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 }
 
--(void)uiApplicationDidFinishLaunchingWithOptionsNotificationHandler:(nonnull NSNotification *)notification {
-    UNUserNotificationCenter *const notificationCenter = UNUserNotificationCenter.currentNotificationCenter;
-    notificationCenter.delegate = self;
-    
-    // Calling registerForRemoteNotifications on didFinishLaunchingWithOptions because it may change between app launches
-    // More information at https://stackoverflow.com/questions/29456954/ios-8-remote-notifications-when-should-i-call-registerforremotenotifications
+-(void)application_didFinishLaunchingWithOptionsNotificationHandler:(nonnull NSNotification *)notification {
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    
-    // By default, only "silent notifications" will be delivered to the device.
-    // The user still needs to requestAuthorizationWithOptions to show notifications to the user.
-    // See https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications?language=objc
-    // and https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorizationwithoptions?language=objc
 }
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate

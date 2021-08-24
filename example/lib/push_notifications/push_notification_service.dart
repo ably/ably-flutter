@@ -175,7 +175,6 @@ class PushNotificationService {
             'title': 'Hello from Ably!',
             'body': 'Example push notification from Ably.'
           },
-          'data': {'foo': 'bar', 'baz': 'quz'},
         },
       }));
 

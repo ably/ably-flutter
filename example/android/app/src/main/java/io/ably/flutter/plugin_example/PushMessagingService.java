@@ -1,4 +1,4 @@
-package io.ably.flutter.plugin.push;
+package io.ably.flutter.plugin_example;
 
 import android.content.Intent;
 

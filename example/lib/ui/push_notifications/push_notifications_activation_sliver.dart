@@ -17,18 +17,23 @@ class PushNotificationsActivationSliver extends StatelessWidget {
       {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
+  Future<void> showErrorDialog(
+      BuildContext context, ably.AblyException error) async {
+    await showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Error'),
+        content: Text(error.message ?? 'No error message'),
+      ),
+    );
+  }
+
   Future<void> handleActivateDeviceButton(BuildContext context) async {
     try {
       await _pushNotificationService.activateDevice();
-      showPermissionReminder(context);
+      await showPermissionReminder(context);
     } on ably.AblyException catch (error) {
-      await showDialog(
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: const Text('Error'),
-          content: Text(error.message ?? 'No error message'),
-        ),
-      );
+      await showErrorDialog(context, error);
     }
     await _pushNotificationService.getDevice();
   }
@@ -37,13 +42,7 @@ class PushNotificationsActivationSliver extends StatelessWidget {
     try {
       await _pushNotificationService.deactivateDevice();
     } on ably.AblyException catch (error) {
-      await showDialog(
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: const Text('Error'),
-          content: Text(error.message ?? 'No error message'),
-        ),
-      );
+      await showErrorDialog(context, error);
     }
     await _pushNotificationService.getDevice();
   }
