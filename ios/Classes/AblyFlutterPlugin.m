@@ -684,4 +684,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     _didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
 
+- (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    // This needs to return NO allow the message to arrive to the users application AppDelegate.
+    return NO;
+}
+
 @end
