@@ -124,23 +124,38 @@ if (Platform.isIOS) {
 
 ### Sending messages
 
-#### Sending notification messages
+#### Sending notification messages/ alert push notification
+
+This type of shows a notification to the user immediately when it is received by a device.
+
+Android: this is known as a [notification message](https://firebase.google.com/docs/cloud-messaging/concept-options). A notification message cannot be customised or handled (e.g. run logic when a user taps the notification). To handle user taps or create a richer notification, send a [data message](#sending-data-messages-background-notifications) and [create a local notification](https://developer.android.com/guide/topics/ui/notifiers/notifications).
+iOS: this is known as an [alert push notification](https://developer.apple.com/documentation/usernotifications/). An alert notification can be [customised](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications).
+
 - To send a user notification, publish the following message to the channel:
 ```dart
 final message = ably.Message(
   data: 'This is an Ably message published on channels that is also sent '
-      'as a notification message to registered push devices.',
+      'as a notification message to registered push devices.', // Optional data field sent not sent in push messages.
   extras: const ably.MessageExtras({
     'push': {
       'notification': {
         'title': 'Hello from Ably!',
-        'body': 'Example push notification from Ably.'
-    }, 
+        'body': 'Example push notification from Ably.',
+        'sound': 'default',
+    },
   },
 }));
 ```
 
-#### Sending data messages
+#### Sending data messages/ background notifications
+
+This type of message allows you to run logic in your application, such as download the latest content, perform local processing, create a local notification. On Android, you would use a background notification to trigger your app to create a local notification to create richer [notifications](https://developer.android.com/guide/topics/ui/notifiers/notifications) which are not supported with notification messages. On iOS, an alert notification is sufficient to create [richer notifications](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications).
+
+Android: this is known as a [data message](https://firebase.google.com/docs/cloud-messaging/concept-options).
+iOS: this is known as a background notification. These messages must have a priority of `5`, a push-type of `background`, and the `content-available` set to `1`, as shown in the code snippet below. To learn more about the message structure required by APNs, read [
+Pushing Background Updates to Your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app). You may see this documented as "silent notification" in Firebase documentation.
+
+On iOS, a background notification may not be throttled to 2 or 3 messages per hour. To ensure your messages arrive promptly, you may send a message with both notification and data, which will show a notification to the user.
 
 ```dart
 final _pushDataMessage = ably.Message(
@@ -150,15 +165,28 @@ data: 'This is a Ably message published on channels that is also '
     'push': {
       'data': {'foo': 'bar', 'baz': 'quz'},
       'apns': {
-        'aps': {'content-available': 1}
+        "headers": {
+          "apns-push-type": "background",
+          "apns-priority": "5",
+        },
+        'aps': {
+          'content-available': 1
+        }
     } 
   },
 }));
 ```
 
-**Warning:** To have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). See [Sending a data & notification messages](#sending-a-data--notification-messages).
+**Warning:** All background notification are currently ignored by iOS devices because Ably automatically adds high-priority (`10` aka. immediately) to each push message, even if you specified normal priority (`5` aka. conserve power). This is a bug and the bug fix will be released soon. In the mean time, to have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). See [Sending a data & notification messages](#sending-a-data--notification-messages). This is a bug in Ably servers which do not respect the priority.
 
-#### Sending a data & notification messages
+#### Sending a notification messages/ alert push notification **and** data message / background notification
+
+On iOS, you may send this type of notification to show the user an alert notification, but then use the data accompanying the notification once a user pressed the notification. You may use this data to navigate to the correct page. This is not possible on Android.  
+
+Because the behaviour is inconsistent between Android and iOS, it may be confusing to use. Sending messages which contain `notification` and `data` keys simultaneously should be left for advanced use cases.
+- On Android, your message handler (`onMessageReceived`) will only be called when the [app is in the foreground](https://firebase.google.com/docs/cloud-messaging/android/receive), and your notification will only show when the app is in the background/ terminated. 
+- On iOS, the notification will be shown and the message handler (`didReceiveRemoteNotification`) will be called in all cases (when your app is terminated, in the background or in the foreground, though not when it was force quit).
+
 ```dart
 final message = ably.Message(
   data: 'This is an Ably message published on channels that is also sent '
@@ -167,7 +195,8 @@ final message = ably.Message(
     'push': {
       'notification': {
         'title': 'Hello from Ably!',
-        'body': 'Example push notification from Ably.'
+        'body': 'Example push notification from Ably.',
+        'sound': 'default',
     },
     'data': {'foo': 'bar', 'baz': 'quz'},
     'apns': {
@@ -205,9 +234,23 @@ Do this only if you do not want the device to receive push notifications at all.
 
 ## Troubleshooting/ FAQ
 
-### Why are notifications not received when the app is open on Android?
+### Push notification messages are not being delivered to my device.
 
-When the app is in the foreground (open by the user), firebase messaging ignores the message. You would need to send a data message and build a local notification instead.
+If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard,
+
+On iOS, we recommend using the Console.app (this is different to Terminal.app or iTerm2.app) installed on your mac.
+- To confirm your application received the push message/ check for errors related to push notifications, find relevant logs by:
+    - search for the following log messages:
+        - Both failures and success: `com.apple.pushLaunch`
+        - Failures only: `CANCELED: com.apple.pushLaunch`. For example, this may show the log line: CANCELED: com.apple.pushLaunch.com.example.app:DBA43D at priority 10 <private>!
+        - Success only: `COMPLETED com.apple.pushLaunch.package_name:XXXXXX at priority 5 <private>!`
+    - filter for `dasd` process either by right clicking a log line with `dasd` and click `Show Process 'dasd'`.
+
+On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
+
+### Why are notifications not shown to the user when the app is open on Android?
+
+When the app is in the foreground (open by the user), firebase messaging ignores the message. You would need to send a data message and build a local notification instead. On iOS, you can specify this in your `UNUserNotificationCenterDelegate`'s `userNotificationCenter:_willPresentNotification:withCompletionHandler` method. In the example app, this is implemented in `AppDelegate.m`, where the notification is always shown. You can perform logic to decide if it should be shown or not based on the notification.
 
 ### Messaging generated from the "compose notification" in Firebase cloud messaging console are not received.
 
@@ -217,27 +260,22 @@ Ensure your Android app contains the firebase configuration `android/app/google-
 
 You need to add the firebase-analytics dependency to your `app/build.gradle` file. This was optional when following the [Firebase Android client setup guide](https://firebase.google.com/docs/cloud-messaging/android/client), for example: `implementation 'com.google.firebase:firebase-analytics:version_number'`. Find the latest version number from [MVNRepository](https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics).
 
-### Why does my iOS device message not get received, and the error message returned is `BadDeviceToken`?
+### Why does my iOS device message not get received, and the error message returned is e.g. `BadDeviceToken`?
 
 This is an error passed straight from APNs. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
 
-When running a debug application, the sandbox/ development APNs server would be used. Make sure to use an application with "Use APNS sandbox environment" enabled in the Ably dashboard (push notification tab).
+For a full list of errors and what they mean, look at [Values for the APNs JSON `reason` key](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1).
 
-You may try to change the `entitlements` file to `production` string, but this does not make the debug application use the production APNs server. For more information about this limitation, see [How do I make my debug app version receive production push notifications on iOS?](https://stackoverflow.com/a/46118155/7365866)
+For example, for `BadDeviceToken`:
+> The specified device token was bad. Verify that the request contains a valid token and that the token matches the environment.
+
+When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with "Use APNS sandbox environment" enabled in the Ably dashboard (push notification tab).  Do not try to change the `.entitlements` file to `production`, but this does not make the debug application use the production APNs server. For more information about this limitation, see [How do I make my debug app version receive production push notifications on iOS?](https://stackoverflow.com/a/46118155/7365866).
 
 >**Debug** builds will always get *sandbox* APNS tokens.
 >
 >**Release** builds (ad-hoc or app store) will always get *production* APNS tokens.
 
 For more information, take a look at [What are the possible reasons to get APNs responses BadDeviceToken or Unregistered?](https://stackoverflow.com/questions/42511476/what-are-the-possible-reasons-to-get-apns-responses-baddevicetoken-or-unregister).
-
-### Push notification messages are not being delivered to my device, but normal messages in the same channel are.
-
-From the [flutterfire guide](https://firebase.flutter.dev/docs/messaging/usage/) on firebase_messaging:
-
-> For Android, you can view Logcat logs which will give a  descriptive message on why a notification was not delivered. On Apple platforms the "console.app" application will display "CANCELED" logs for those it chose to ignore, however doesn't provide a description as to why.
-
-For Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs. For iOS, we recommend you check the Console.app on your mac, looking for CANCELED logs to see if the device is throttling your usage of push notifications.
 
 ### Android only: When I look in ably.com's dashboard, i see "InvalidRegistration"
 
