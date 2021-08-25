@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../constants.dart';
 import 'android_push_notification_configuration.dart';
+import 'push_notification_message_examples.dart';
 
 class PushNotificationService {
   final _androidPushNotificationConfiguration =
@@ -166,45 +167,36 @@ class PushNotificationService {
     await _realtimeChannelStreamSubscription?.cancel();
   }
 
-  final ably.Message _pushNotificationMessage = ably.Message(
-      data: 'This is an Ably message published on channels that is also sent '
-          'as a notification message to registered push devices.',
-      extras: const ably.MessageExtras({
-        'push': {
-          'notification': {
-            'title': 'Hello from Ably!',
-            'body': 'Example push notification from Ably.'
-          },
-        },
-      }));
-
   Future<void> publishNotificationMessageToChannel() async {
     await ensureRealtimeClientConnected();
     if (_realtimeChannel != null) {
-      await _realtimeChannel!.publish(message: _pushNotificationMessage);
+      await _realtimeChannel!.publish(
+          message: PushNotificationMessageExamples.pushNotificationMessage);
     } else if (_restChannel != null) {
-      await _restChannel!.publish(message: _pushNotificationMessage);
+      await _restChannel!.publish(
+          message: PushNotificationMessageExamples.pushNotificationMessage);
     }
   }
-
-  final ably.Message _pushDataMessage = ably.Message(
-      data: 'This is a Ably message published on channels that is also '
-          'sent as a data message to registered push devices.',
-      extras: const ably.MessageExtras({
-        'push': {
-          'data': {'foo': 'bar', 'baz': 'quz'},
-          'apns': {
-            'aps': {'content-available': 1}
-          }
-        },
-      }));
 
   Future<void> publishDataMessageToChannel() async {
     await ensureRealtimeClientConnected();
     if (_realtimeChannel != null) {
-      await _realtimeChannel!.publish(message: _pushDataMessage);
+      await _realtimeChannel!
+          .publish(message: PushNotificationMessageExamples.pushDataMessage);
     } else if (_restChannel != null) {
-      await _restChannel!.publish(message: _pushDataMessage);
+      await _restChannel!
+          .publish(message: PushNotificationMessageExamples.pushDataMessage);
+    }
+  }
+
+  Future<void> publishDataNotificationMessageToChannel() async {
+    await ensureRealtimeClientConnected();
+    if (_realtimeChannel != null) {
+      await _realtimeChannel!.publish(
+          message: PushNotificationMessageExamples.pushDataNotificationMessage);
+    } else if (_restChannel != null) {
+      await _restChannel!.publish(
+          message: PushNotificationMessageExamples.pushDataNotificationMessage);
     }
   }
 

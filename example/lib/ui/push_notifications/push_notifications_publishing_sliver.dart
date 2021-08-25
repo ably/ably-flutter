@@ -21,6 +21,11 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
               '"${Constants.channelNameForPushNotifications}"',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text('Each message sent contains a push payload, '
+                  'in the ably.Message.extras field.'),
+            ),
             Row(
               children: [
                 BoolStreamButton(
@@ -36,6 +41,12 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                   child: const Text('Data Message'),
                 ),
               ],
+            ),
+            BoolStreamButton(
+              stream: _pushNotificationService.hasPushChannelStream,
+              onPressed: _pushNotificationService
+                  .publishDataNotificationMessageToChannel,
+              child: const Text('Data + Notification Message'),
             ),
             const Text('To validate messages were sent, you can subscribe to '
                 'the channel and view the device logs. Data messages '
