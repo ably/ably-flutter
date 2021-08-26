@@ -83,7 +83,7 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 
 ### Getting Push Notifications working in the Example App
 
-See the [Push Notifications](./Push%20Notifications.md) documentation.
+See the [Push Notifications](./PushNotifications.md) documentation.
 
 ### Troubleshooting
 
@@ -491,7 +491,7 @@ channel
 
 ### Push Notifications
 
-See the [Push Notifications](./Push%20Notifications.md) documentation.
+See the [Push Notifications](./PushNotifications.md) documentation.
 
 ## Caveats
 
