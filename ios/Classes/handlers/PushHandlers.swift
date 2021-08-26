@@ -198,20 +198,20 @@ public class PushHandlers: NSObject {
             clientHandle = (message.message as! NSNumber)
         }
 
-        guard let clientHandle = clientHandle else {
+        guard let unwrappedClientHandle = clientHandle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
-        guard let channelName = channelName else {
+        guard let unwrappedChannelName = channelName else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
             return nil
         }
 
-        let realtime = ably.realtime(withHandle: clientHandle)
-        if let realtime = realtime {
-            return realtime.channels.get(channelName).push
-        } else if let rest = ably.getRest(clientHandle) {
-            return rest.channels.get(channelName).push
+        let realtime = ably.realtime(withHandle: unwrappedClientHandle)
+        if let unwrappedRealtime = realtime {
+            return unwrappedRealtime.channels.get(unwrappedChannelName).push
+        } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
+            return unwrappedRest.channels.get(unwrappedChannelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
             return nil
