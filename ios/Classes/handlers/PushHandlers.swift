@@ -6,7 +6,7 @@ public class PushHandlers: NSObject {
     @objc
     public static let activate: FlutterHandler = { plugin, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate != nil) {
-            methodAlreadyRunning(result: result, methodName: "activate")
+            returnMethodAlreadyRunningError(result: result, methodName: "activate")
         } else if let push = getPush(ably: plugin.ably, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate = result
             push.activate()
@@ -16,16 +16,11 @@ public class PushHandlers: NSObject {
     @objc
     public static let deactivate: FlutterHandler = { plugin, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate != nil) {
-            methodAlreadyRunning(result: result, methodName: "deactivate")
+            returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
         } else if let push = getPush(ably: plugin.ably, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate = result
             push.deactivate()
         }
-    }
-
-    private static func methodAlreadyRunning(result: FlutterResult, methodName: String) {
-        let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to activate before the previous call completes", details: nil)
-        result(error)
     }
 
     @objc
@@ -33,6 +28,11 @@ public class PushHandlers: NSObject {
         UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
             result(settings)
         }
+    }
+    
+    private static func returnMethodAlreadyRunningError(result: FlutterResult, methodName: String) {
+        let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to activate before the previous call completes", details: nil)
+        result(error)
     }
 
     @objc
