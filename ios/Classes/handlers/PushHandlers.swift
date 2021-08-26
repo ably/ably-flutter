@@ -24,7 +24,7 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let getPushNotificationSettings: FlutterHandler = { plugin, call, result in
+    public static let getNotificationSettings: FlutterHandler = { plugin, call, result in
         UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
             result(settings)
         }

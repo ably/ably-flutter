@@ -622,7 +622,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         // Push Notification Handlers
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
-        AblyPlatformMethod_pushGetNotificationSettings: PushHandlers.getPushNotificationSettings,
+        AblyPlatformMethod_pushGetNotificationSettings: PushHandlers.getNotificationSettings,
         AblyPlatformMethod_pushDeactivate: PushHandlers.deactivate,
         AblyPlatformMethod_pushSubscribeDevice: PushHandlers.subscribeDevice,
         AblyPlatformMethod_pushUnsubscribeDevice: PushHandlers.unsubscribeDevice,
