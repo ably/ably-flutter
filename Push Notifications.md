@@ -11,9 +11,10 @@ Push Notifications allow you to reach users who do not have your application ope
 - [Push Admin API](https://ably.com/documentation/general/push/admin): The Push APIs in this SDK are limited to managing the push notification features related to current device. The Push Admin API allows you to manage device registrations and subscriptions related to other devices. This is functionality designed for servers.
 
 ## Supported platforms
-- iOS Device (not iOS Simulator)
+- iOS Device
 - Android device
 - Android emulator (with Google APIs)
+- **Not supported:** iOS Simulator. Calling `UIApplication:registerForRemoteNotifications` will result in `application:didFailToRegisterForRemoteNotificationsWithError` delegate method being called with an error: `remote notifications are not supported in the simulator`).
 
 ## Setting up the Example App
 
@@ -52,6 +53,8 @@ To get push notifications setup in your own app, read [Setting up your own app](
         - Add `remote notification` Background mode:
             - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
             - Check `remote notifications`.
+    - In your `AppDelegate.swift` or `AppDelegate.m`, implement [`application:didFailToRegisterForRemoteNotificationsWithError:`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622962-application). During development, place a breakpoint in this method to diagnose why your device cannot register with APNs. This is shown in the example app, `AppDelegate.m`. This method will be called when there is an error, for example, if entitlements are not configured or when registering for APNs on the iOS simulator. You can check the `error` argument. [From the `application(_:didFailToRegisterForRemoteNotificationsWithError:)` documentation](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622962-application):
+    > UIKit calls this method if it was unable to register your app with APNs or if your app is not properly configured for remote notifications. During development, make sure your app has the proper entitlements and that its App ID is configured to support push notifications. You might use your implementation of this method to make a note of the failed registration so that you can try again later.
 
 ## Usage
 
