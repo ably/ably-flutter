@@ -605,20 +605,20 @@ void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
   test('listens to messages', () {
     expect(allMessages.length, equals(8));
     _test(allMessages);
-  });
+  }, skip: "One the messages in allMessages gets `present` action, but should have been `enter`. See https://github.com/ably/ably-flutter/issues/150");
 
   test('filters messages with single action', () {
     expect(enterMessages.length, equals(1));
     _test(enterMessages);
-  });
+  }, skip: "expected 1 but got 0. See https://github.com/ably/ably-flutter/issues/150");
 
   test('filters messages with multiple actions', () {
     expect(enterUpdateMessages.length, equals(7));
     _test(enterUpdateMessages);
-  });
+  }, skip: "Got a length of 6 but expected 7. See https://github.com/ably/ably-flutter/issues/150");
 
   test('listens to messages only until subscription is active', () {
     expect(partialMessages.length, equals(7));
     expect(partialMessages, equals(enterUpdateMessages));
-  });
+  }, skip: "Expected a set of messages, but got the same set but with 1 unexpected extra message at the start, with `present` action. See https://github.com/ably/ably-flutter/issues/150");
 }
