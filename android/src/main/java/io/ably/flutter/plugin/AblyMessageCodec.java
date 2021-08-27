@@ -182,9 +182,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     } else if (value instanceof Push.ChannelSubscription) {
       return PlatformConstants.CodecTypes.pushChannelSubscription;
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
   @Override
