@@ -4,7 +4,7 @@ Push Notifications allow you to reach users who do not have your application ope
 
 ## Known Limitations
 
-- [Handling messages in the Dart side](https://github.com/ably/ably-flutter/issues/141): ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information. 
+- [Handling messages in the Dart side](https://github.com/ably/ably-flutter/issues/141): ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
       - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. 
           - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`. 
 - [Activating devices from your server](https://ably.com/documentation/general/push/activate-subscribe#activation-from-server): Device activation is automatic in ably-flutter, just call `Push#activate`. However, Ably-java and ably-cocoa allow you to implement delegate methods to activate devices manually on your server instead of automatically.
@@ -127,16 +127,18 @@ if (Platform.isIOS) {
 }
 ```
 
-### Sending messages
+### Sending Messages
 
-#### Sending notification messages/ alert push notification
+#### Notification Message / Alert Push Notification
 
-This type of shows a notification to the user immediately when it is received by a device.
+Shows a notification to the user immediately when it is received by their device.
 
-Android: this is known as a [notification message](https://firebase.google.com/docs/cloud-messaging/concept-options). A notification message cannot be customised or handled (e.g. run logic when a user taps the notification). To handle user taps or create a richer notification, send a [data message](#sending-data-messages-background-notifications) and [create a local notification](https://developer.android.com/guide/topics/ui/notifiers/notifications).
-iOS: this is known as an [alert push notification](https://developer.apple.com/documentation/usernotifications/). An alert notification can be [customised](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications).
+**Android**: This is known as a [notification message](https://firebase.google.com/docs/cloud-messaging/concept-options). A notification message cannot be customised or handled (e.g. run logic when a user taps the notification) - therefore, if you need to handle user taps or create a richer notification, send a data message and [create a local notification](https://developer.android.com/guide/topics/ui/notifiers/notifications).
 
-- To send a user notification, publish the following message to the channel:
+**iOS**: This is known as an [alert push notification](https://developer.apple.com/documentation/usernotifications/). An alert notification can be [customised](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications).
+
+To send a user notification, publish the following message to the channel:
+
 ```dart
 final message = ably.Message(
   data: 'This is an Ably message published on channels that is also sent '
@@ -152,12 +154,13 @@ final message = ably.Message(
 }));
 ```
 
-#### Sending data messages/ background notifications
+#### Data Message / Background Notification
 
-This type of message allows you to run logic in your application, such as download the latest content, perform local processing, create a local notification. On Android, you would use a background notification to trigger your app to create a local notification to create richer [notifications](https://developer.android.com/guide/topics/ui/notifiers/notifications) which are not supported with notification messages. On iOS, an alert notification is sufficient to create [richer notifications](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications).
+Allows you to run logic in your application, such as download the latest content, perform local processing and creating a local notification.
 
-Android: this is known as a [data message](https://firebase.google.com/docs/cloud-messaging/concept-options).
-iOS: this is known as a background notification. These messages must have a priority of `5`, a push-type of `background`, and the `content-available` set to `1`, as shown in the code snippet below. To learn more about the message structure required by APNs, read [
+**Android**: This is known as a [data message](https://firebase.google.com/docs/cloud-messaging/concept-options).
+
+**iOS**: This is known as a background notification. These messages must have a priority of `5`, a push-type of `background`, and the `content-available` set to `1`, as shown in the code snippet below. To learn more about the message structure required by APNs, read [
 Pushing Background Updates to Your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app). You may see this documented as "silent notification" in Firebase documentation.
 
 On iOS, a background notification may not be throttled to 2 or 3 messages per hour. To ensure your messages arrive promptly, you may send a message with both notification and data, which will show a notification to the user.
@@ -182,15 +185,17 @@ data: 'This is a Ably message published on channels that is also '
 }));
 ```
 
-**Warning:** All background notification are currently ignored by iOS devices because Ably automatically adds high-priority (`10` aka. immediately) to each push message, even if you specified normal priority (`5` aka. conserve power). This is a bug and the bug fix will be released soon. In the mean time, to have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). See [Sending a data & notification messages](#sending-a-data--notification-messages). This is a bug in Ably servers which do not respect the priority.
+**Warning**: All background notification are currently ignored by iOS devices because Ably automatically adds high-priority (`10` aka. immediately) to each push message, even if you specified normal priority (`5` aka. conserve power). This is a bug and the bug fix will be released soon. In the mean time, to have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). This is a bug in Ably servers which do not respect the priority.
 
-#### Sending a notification messages/ alert push notification **and** data message / background notification
+#### Alert Notification **and** Background / Data Message
 
 On iOS, you may send this type of notification to show the user an alert notification, but then use the data accompanying the notification once a user pressed the notification. You may use this data to navigate to the correct page. This is not possible on Android.  
 
 Because the behaviour is inconsistent between Android and iOS, it may be confusing to use. Sending messages which contain `notification` and `data` keys simultaneously should be left for advanced use cases.
-- On Android, your message handler (`onMessageReceived`) will only be called when the [app is in the foreground](https://firebase.google.com/docs/cloud-messaging/android/receive), and your notification will only show when the app is in the background/ terminated. 
-- On iOS, the notification will be shown and the message handler (`didReceiveRemoteNotification`) will be called in all cases (when your app is terminated, in the background or in the foreground, though not when it was force quit).
+
+**Android**: Your message handler (`onMessageReceived`) will only be called when the [app is in the foreground](https://firebase.google.com/docs/cloud-messaging/android/receive), and your notification will only show when the app is in the background/ terminated. 
+
+**iOS**: The notification will be shown and the message handler (`didReceiveRemoteNotification`) will be called in all cases (when your app is terminated, in the background or in the foreground, though not when it was force quit).
 
 ```dart
 final message = ably.Message(
@@ -210,19 +215,21 @@ final message = ably.Message(
 }));
 ```
 
-### Receiving messages
+### Receiving Messages
 
-#### Data messages/ background notifications
+#### Notification Message / Alert Push Notification
 
-On Android, You cannot handle notification messages as they are shown to the user without calling any methods in your application. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a [data message](#data-messages) and create a notification when the message is received.
+**Android**: You cannot handle notification messages as they are shown to the user without calling any methods in your application. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received.
 
-On iOS, you can send a [background message](#sending-notification-messages-alert-push-notification) and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
+**iOS**: You can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
 
-#### Data message / background notification
+#### Data Message / Background Notification
 
 ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
-- On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
-- On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
+
+**Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
+
+**iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
 Take a look at the example app platform specific code to handle messages. For iOS, this is `AppDelegate.m`, and in Android, it is `PushMessagingService.java`. For further help on implementing the Platform specific message handlers, see "On Android" and "On iOS" sections on [Push Notifications - Device activation and subscription](https://ably.com/documentation/general/push/activate-subscribe).
 
@@ -290,4 +297,3 @@ This means your registration token is invalid. Ably is may not have your device'
   ```java
   ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
   ```
-  
