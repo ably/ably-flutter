@@ -284,13 +284,18 @@ On iOS, to show alert notifications, you need to request provisional permission 
         ```
         - `cameraIsActive` error:
         ```bash
+        com.apple.pushLaunch.io.ably.flutter.plugin-example:4935F4:[
         {name: MemoryPressurePolicy, policyWeight: 5.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{cameraIsActive == 1}]}}
-         ], FinalDecision: Must Not Proceed}
-        ```
-        - Successful delivery:
+        ], FinalDecision: Must Not Proceed}
         ```bash
         {name: ApplicationPolicy, policyWeight: 50.000, response: {Decision: Absolutely Must Proceed, Score: 1.00, Rationale: [{[appIsForeground]: Required:1.00, Observed:1.00},]}}
          ], FinalDecision: Absolutely Must Proceed}
+        ```
+        - Another successful delivery:
+        ```bash
+        com.apple.pushLaunch.io.ably.flutter.plugin-example:5E1C66:[
+        {name: DeviceActivityPolicy, policyWeight: 5.000, response: {Decision: Can Proceed, Score: 0.25}}
+        ] sumScores:93.270000, denominator:97.020000, FinalDecision: Can Proceed FinalScore: 0.961348}
         ```
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
