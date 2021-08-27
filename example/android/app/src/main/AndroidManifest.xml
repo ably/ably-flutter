@@ -9,8 +9,6 @@
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="ably_flutter_example">
-        <!--TODO Remove this once https://github.com/ably/ably-flutter/issues/141 is implemented -->
-        <!-- since this service would be declared in the ably-flutter plugin manifest -->
         <service android:name="io.ably.flutter.plugin_example.PushMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
