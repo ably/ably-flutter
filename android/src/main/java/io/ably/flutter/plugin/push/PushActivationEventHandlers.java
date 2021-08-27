@@ -74,6 +74,9 @@ public class PushActivationEventHandlers {
         case PUSH_UPDATE_FAILED_ACTION:
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnUpdateFailed, errorInfo);
           break;
+        default:
+          Log.e(TAG, String.format("Received unknown intent action: %s", action));
+          break;
       }
     }
 
