@@ -99,7 +99,7 @@ class AblyLibrary {
         return (realtime != null) ? realtime.push : getRest(handle).push;
     }
     
-    PushChannel getPushChannel(final long handle, String channelName) {
+    PushChannel getPushChannel(final long handle, final String channelName) {
         return getAblyClient(handle)
                 .channels
                 .get(channelName).push;
