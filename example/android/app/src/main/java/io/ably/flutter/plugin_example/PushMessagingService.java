@@ -28,9 +28,9 @@ public class PushMessagingService extends FirebaseMessagingService {
   public void onMessageReceived(@NonNull RemoteMessage message) {
     RemoteMessage.Notification messageNotification = message.getNotification();
     if (messageNotification != null) {
-    Intent intent = new Intent(PUSH_NOTIFICATION_ACTION);
-    intent.putExtra("remoteMessage", message);
-    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+      Intent intent = new Intent(PUSH_NOTIFICATION_ACTION);
+      intent.putExtra("remoteMessage", message);
+      LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     } else {
       Intent intent = new Intent(PUSH_DATA_ACTION);
       intent.putExtra("remoteMessage", message);
