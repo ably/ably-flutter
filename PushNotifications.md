@@ -36,7 +36,8 @@ To get push notifications setup in your own app, read [Setting up your own app](
 
 - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
 - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
-    - Register your bundle ID on App Store connect if it is not yet registered (It may already be automatically registered by Xcode).
+    - Add your developer account in Xcode, in `Preferences` > `Accounts`.
+    - In the project navigator, click `Runner` > Click `Runner` target (not project) > `General`. Change the bundle identifier to a unique identifier. Then, under the `Signing & Capabilities` tab > `Team` dropdown menu, select your developer team associated with your developer account. This will register your bundle ID on App Store connect if it is not yet registered.
     - Create a push notification certificate (`.p12`) and upload it to the Ably dashboard to allow Ably to authenticate with APNs on your behalf, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
     - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
     - Add `remote notification` background mode:
