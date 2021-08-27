@@ -115,9 +115,38 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 ### Configure a Client Options object
 
+For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/documentation/core-features/authentication/#selecting-auth).
+
+Authenticating using [basic authentication/ API key](https://ably.com/documentation/core-features/authentication/#basic-authentication) (for running example app/ test apps and not for production)
+
 ```dart
-final clientOptions = ably.ClientOptions.fromKey("<YOUR APP KEY>");
+// Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
+final String ablyApiKey = const String.fromEnvironment(Constants.ablyApiKey);
+final clientOptions = ably.ClientOptions.fromKey(ablyApiKey);
 clientOptions.logLevel = ably.LogLevel.verbose;  // optional
+```
+
+Authenticating using [token authentication](https://ably.com/documentation/core-features/authentication/#token-authentication)
+
+```dart
+// Used to create a clientId when a client first doesn't have one. 
+// Note: you should implement `createTokenRequest`, which makes a request to your server that uses your Ably API key directly.
+final clientOptions = ably.ClientOptions()
+// ..clientId = _clientId // Optionally set the clientId
+  ..autoConnect = false
+  ..authCallback = (TokenParams tokenParams) async {
+    try {
+      // If a clientId was set in ClientOptions, it will be available in Ably.TokenParams.
+      final tokenRequestMap =
+      await createTokenRequest(tokenParams: tokenParams);
+      return ably.TokenRequest.fromMap(tokenRequestMap);
+    } catch (e) {
+      print("Something went wrong in the authCallback:");
+      print(e);
+    }
+  };
+this._ablyClient = new ably.Realtime(options: clientOptions);
+await this._ablyClient.connect();
 ```
 
 ### Using the REST API

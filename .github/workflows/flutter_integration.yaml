@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Runs on the 39th minute of the 4 & 15th hour of each day. i.e. 4:39 and 15:39.
+    # See more cron syntax documentation at https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+    - cron: '39 4,15 * * *'
 
 jobs:
   ios:
