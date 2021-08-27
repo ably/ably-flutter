@@ -80,7 +80,7 @@ class AblyLibrary {
     }
 
     /**
-     * Gets the ably client (either rest or realtime) when the interface being
+     * Gets the Ably client (either REST or Realtime) when the interface being
      * used is the same (e.g. When using Push from AblyBase / when it does
      * not matter).
      *

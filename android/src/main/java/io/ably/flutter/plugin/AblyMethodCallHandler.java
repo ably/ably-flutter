@@ -45,7 +45,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     void trigger();
   }
 
-  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel, final OnHotRestart listener, Context applicationContext) {
+  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
     if (null == _instance) {
       _instance = new AblyMethodCallHandler(channel, listener, applicationContext);
     }
