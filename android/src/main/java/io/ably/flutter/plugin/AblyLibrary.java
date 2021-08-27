@@ -80,11 +80,11 @@ class AblyLibrary {
     }
 
     /**
-     * Gets the ably client (either rest or realtime) when the interface being
+     * Gets the Ably client (either REST or Realtime) when the interface being
      * used is the same (e.g. When using Push from AblyBase / when it does
      * not matter).
      *
-     * This method relies on the fact handles are unique between all ably clients,
+     * This method relies on the fact handles are unique between all Ably clients,
      * (both rest and realtime).
      * @param handle integer handle to either AblyRealtime or AblyRest
      * @return AblyBase
@@ -99,7 +99,7 @@ class AblyLibrary {
         return (realtime != null) ? realtime.push : getRest(handle).push;
     }
     
-    PushChannel getPushChannel(final long handle, String channelName) {
+    PushChannel getPushChannel(final long handle, final String channelName) {
         return getAblyClient(handle)
                 .channels
                 .get(channelName).push;
