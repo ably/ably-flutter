@@ -25,23 +25,25 @@ abstract class Push {
   /// This always returns true on Android, since you don't need permissions
   /// to show notifications to the user.
   ///
-  /// Params:
-  /// - badge: The ability to update the app’s badge.
-  /// - sound: The ability to play sounds.
-  /// - alert: The ability to display alerts.
-  /// - carPlay: The ability to display notifications in a CarPlay environment.
-  /// - criticalAlerts: The ability to play sounds for critical alerts.
-  /// - providesAppNotificationSettings: An option indicating the system should
-  ///     display a button for in-app notification settings.
-  /// - provisional: Send notifications on a
-  /// trial basis, by delaying the permission request until the
-  /// user first sees the first notification. This is works on iOS12+.
-  /// The notification is first delivered quietly, and the user will
-  /// get an option to deliver it more prominently. If provisional is true,
-  /// the permission request alert will not be shown to the user, regardless
-  /// of other options passed in. For more information, see [Use Provisional Authorization to Send Trial Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc)
-  /// - announcement: Only available on iOS 13+. Deprecated in iOS 15+, because
-  ///   it is automatically/ always granted.
+  /// @param badge The ability to update the app’s badge.
+  /// @param sound The ability to play sounds.
+  /// @param alert The ability to display alerts.
+  /// @param carPlay The ability to display notifications in a CarPlay
+  ///   environment.
+  /// @param criticalAlerts ignore the mute switch and Do Not Disturb. iOS 12+
+  ///   and requires a special entitlement issued by Apple.
+  /// @param providesAppNotificationSettings An option indicating the system
+  ///   should display a button for in-app notification settings. iOS 12+
+  /// @param provisional Send notifications on a trial basis, by delaying
+  ///   the permission request until the user first sees the first notification.
+  ///   iOS 12+. The notification is first delivered quietly, and the user will
+  ///   get an option to deliver it more prominently. If provisional is true,
+  ///   the permission request alert will not be shown to the user, regardless
+  ///   of other options passed in. For more information, see [Use Provisional Authorization to Send Trial Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc)
+  /// @param announcement The ability for Siri to automatically read out
+  ///   messages over AirPods. iOS 13+. Deprecated in iOS 15+, because it is
+  ///   automatically/ always granted.
+  /// @returns bool Permission was granted.
   ///
   /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorization)
   Future<bool> requestPermission(
