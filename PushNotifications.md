@@ -62,6 +62,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
     - Register your bundle ID on App Store connect.
     - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
+       - When running your application debug mode, it will always use the sandbox/ development APNs environment. When running in release mode, it will always use the production environment. There is an iOS limitation. Keep this in mind when checking the `Use APNS sandbox environment?` checkbox in Ably dashboard (notifications tab). If running a debug application, ensure this checkbox is ticked.
     - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
     - Add `remote notification` Background mode:
         - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
