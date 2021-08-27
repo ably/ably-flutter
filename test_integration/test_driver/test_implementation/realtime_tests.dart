@@ -607,7 +607,7 @@ void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
     _test(allMessages);
   },
       skip:
-          "One the messages in allMessages gets `present` action, but should have been `enter`. See https://github.com/ably/ably-flutter/issues/150");
+          "One message in allMessages gets `present` action, but should have been `enter`. See https://github.com/ably/ably-flutter/issues/150");
 
   test('filters messages with single action', () {
     expect(enterMessages.length, equals(1));
