@@ -30,7 +30,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
     - You can leave `Debug signing certificate SHA-1` empty.
     - Download the generated `google-services.json` file
     - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our Firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
-    - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the Firebase guide.
+- Provide ably with the FCM server key: In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
 
 ### iOS
 
@@ -48,10 +48,11 @@ To get push notifications setup in your own app, read [Setting up your own app](
 ### Android
 
 - Create a Firebase project if you do not have one
+- Tip: Follow the steps below with Android Studio opened with the Android project, instead of the flutter project.
 - Set up Firebase in your Android app, following only the [Set up the SDK](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) and [Edit your app manifest](https://firebase.google.com/docs/cloud-messaging/android/client#manifest) steps from the Firebase guide. The guide will instruct you to create a firebase project, add the firebase configuration file (`google-services.json`), add the `google-services` to the classpath (`classpath`), and apply the plugin (`apply plugin:`) the `app` module.
 - In your `app/build.gradle`, ensure that your `minSdkVersion` is set to 19 or above.
 - Add your android app to the firebase project
-- In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
+- Provide ably with the FCM server key: In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
 - Handle messages received on your device by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService). An example is shown in the example app, [`PushMessagingService`](./example/android/app/src/main/java/io/ably/flutter/plugin_example/PushMessagingService.java). This is the service class you specify in the `AndroidManifest.xml`. For more information, have a look at the [receiving messages](#receiving-messages) section.
 
 ### iOS
