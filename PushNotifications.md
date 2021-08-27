@@ -277,7 +277,7 @@ On iOS, to show alert notifications, you need to request provisional permission 
         - Success only: `COMPLETED com.apple.pushLaunch.package_name:XXXXXX at priority 5 <private>!`
     - filter for `dasd` process either by right clicking a log line with `dasd` and click `Show Process 'dasd'`.
     - If you are sending a background notification, it may be throttled by iOS. If the message is being throttled, it will eventually arrive to your application, and your `didReceiveRemoteNotification` message will be called, often within a few minutes. If you look in the Console.app logs, you may find sending the exact same message gives different outcomes:
-        - ThunderingHerdPolicy error: 
+        - `ThunderingHerdPolicy` error: 
         ```bash
         {name: ThunderingHerdPolicy, policyWeight: 1.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{deviceInUse == 1 AND timeSinceThunderingHerdTriggerEvent < 900}]}}
          ], FinalDecision: Must Not Proceed}
@@ -287,6 +287,8 @@ On iOS, to show alert notifications, you need to request provisional permission 
         com.apple.pushLaunch.io.ably.flutter.plugin-example:4935F4:[
         {name: MemoryPressurePolicy, policyWeight: 5.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{cameraIsActive == 1}]}}
         ], FinalDecision: Must Not Proceed}
+        ```
+        - A successful delivery: 
         ```bash
         {name: ApplicationPolicy, policyWeight: 50.000, response: {Decision: Absolutely Must Proceed, Score: 1.00, Rationale: [{[appIsForeground]: Required:1.00, Observed:1.00},]}}
          ], FinalDecision: Absolutely Must Proceed}
