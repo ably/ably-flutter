@@ -69,6 +69,7 @@ Devices need to be [activated](#device-activation) with Ably once. Once activate
 - Create a rest or realtime client: e.g. `final realtime = ably.Realtime(options: clientOptions);`
 - Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only
   needs to be done once, and will be used across all future app launches, as long as the app is not deactivated. This method will throw an AblyException if it fails.
+
 ```dart
 try {
   await push.activate();
@@ -76,8 +77,10 @@ try {
   // Handle/ log the error.
 }
 ```
+
 - Listen to push events: You should listen to the `Push.pushEvents.onUpdateFailed` stream to be informed when a new token update (FCM registration token/ APNs device token) fails to be updated with Ably. If this update process fails, Ably servers will attempt to use the old tokens to send messages to devices and potentially fail.
     - Optional: listen to `Push.pushEvents.onActivate` and `Push.pushEvents.onDeactivate`. This is optional because `Push.activate` and `Push.deactivate` will return when it succeeds, and throw when it fails.
+
 ```dart
 void main() {
   setUpPushEventHandlers();
@@ -295,6 +298,6 @@ For more information, take a look at [What are the possible reasons to get APNs 
 
 This means your registration token is invalid. Ably is may not have your device's FCM registration token. `FirebaseMessagingService.onNewToken` is only called when a new token is available, so if Ably was installed in a new app update and the token has **not** been changed, Ably won't know it. If you have previously registered with FCM without Ably, you should make sure to give ably the latest token, by getting it and calling:
 
-  ```java
-  ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
-  ```
+```java
+ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+```
