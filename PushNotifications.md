@@ -11,6 +11,7 @@ Push Notifications allow you to reach users who do not have your application ope
 - [Push Admin API](https://ably.com/documentation/general/push/admin): The Push APIs in this SDK are limited to managing the push notification features related to current device. The Push Admin API allows you to manage device registrations and subscriptions related to other devices. This is functionality designed for servers.
 
 ## Supported platforms
+
 - iOS Device
 - Android device
 - Android emulator (with Google APIs)
@@ -18,7 +19,8 @@ Push Notifications allow you to reach users who do not have your application ope
 
 ## Setting up the Example App
 
-To get push notifications setup in your own app, read [Setting up your own app](#setting-up-your-own-app)
+To get push notifications setup in your own app, read [Setting up your own app](#setting-up-your-own-app).
+
 - Android:
     - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to a unique application ID.
     - Create a Firebase project, and in the Project settings, add an Android App with your unique application ID. Follow the steps provided on the setup process, or the following:
@@ -288,3 +290,4 @@ This means your registration token is invalid. Ably is may not have your device'
   ```java
   ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
   ```
+  
