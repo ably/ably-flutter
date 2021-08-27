@@ -15,7 +15,7 @@ import io.ably.lib.types.RegistrationToken;
 /// declared in the AndroidManifest.xml, and is present in the final merged manifest of the app.
 public class PushMessagingService extends FirebaseMessagingService {
   public static final String PUSH_NOTIFICATION_ACTION = "io.ably.flutter.plugin_example.PUSH_NOTIFICATION_MESSAGE";
-  public static final String PUSH_DATA_ACTION = "io.ably.broadcast.PUSH_DATA_MESSAGE";
+  public static final String PUSH_DATA_ACTION = "io.ably.flutter.plugin_example.PUSH_DATA_MESSAGE";
 
   // This method is called when either:
   //   - `notification` is *not* set in the message, OR
