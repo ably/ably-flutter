@@ -4,7 +4,7 @@ Push Notifications allow you to reach users who do not have your application ope
 
 ## Known Limitations
 
-- [Handling messages in the dart side](https://github.com/ably/ably-flutter/issues/141): Ably-flutter currently does not pass the messages to the Flutter application/ dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information. 
+- [Handling messages in the Dart side](https://github.com/ably/ably-flutter/issues/141): Ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information. 
       - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. 
           - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`. 
 - [Activating devices from your server](https://ably.com/documentation/general/push/activate-subscribe#activation-from-server): Device activation is automatic in Ably-flutter, just call `Push#activate`. However, Ably-java and ably-cocoa allow you to implement delegate methods to activate devices manually on your server instead of automatically.
@@ -218,7 +218,7 @@ On iOS, you can send a [background message](#sending-notification-messages-alert
 
 #### Data message / background notification
 
-Ably-flutter currently does not pass the messages to the Flutter application/ dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
+Ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
 - On Android, this means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
 - On iOS, implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
