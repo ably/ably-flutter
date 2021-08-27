@@ -11,7 +11,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import io.ably.lib.push.ActivationContext;
 import io.ably.lib.types.RegistrationToken;
 
-/// This service will only be listening/ launched in response to for broadcast intents if it is
+/// This service will only be listening/ launched in response to broadcast intents if it is
 /// declared in the AndroidManifest.xml, and is present in the final merged manifest of the app.
 public class PushMessagingService extends FirebaseMessagingService {
   public static final String PUSH_NOTIFICATION_ACTION = "io.ably.broadcast.PUSH_NOTIFICATION_MESSAGE";
