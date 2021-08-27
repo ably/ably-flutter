@@ -21,6 +21,10 @@ class PushNotificationMessageExamples {
         'push': {
           'data': {'foo': 'bar', 'baz': 'quz'},
           'apns': {
+            'apns-headers': {
+              'apns-push-type': 'background',
+              'apns-priority': '5',
+            },
             'aps': {'content-available': 1}
           }
         },

@@ -183,7 +183,7 @@ Allows you to run logic in your application, such as download the latest content
 **iOS**: This is known as a background notification. These messages must have a priority of `5`, a push-type of `background`, and the `content-available` set to `1`, as shown in the code snippet below. To learn more about the message structure required by APNs, read [
 Pushing Background Updates to Your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app). You may see this documented as "silent notification" in Firebase documentation.
 
-On iOS, a background notification may not be throttled to 2 or 3 messages per hour. To ensure your messages arrive promptly, you may send a message with both notification and data, which will show a notification to the user.
+On iOS, a background notification may not be throttled to 2 or 3 messages per hour, or limited for other reasons (for example, your app was just installed recently). To ensure your messages arrive promptly, you may send a message with both notification and data, which will show a notification to the user.
 
 ```dart
 final _pushDataMessage = ably.Message(
@@ -193,9 +193,9 @@ data: 'This is a Ably message published on channels that is also '
     'push': {
       'data': {'foo': 'bar', 'baz': 'quz'},
       'apns': {
-        "headers": {
-          "apns-push-type": "background",
-          "apns-priority": "5",
+        'apns-headers': {
+          'apns-push-type': 'background',
+          'apns-priority': '5',
         },
         'aps': {
           'content-available': 1
@@ -204,8 +204,6 @@ data: 'This is a Ably message published on channels that is also '
   },
 }));
 ```
-
-**Warning**: All background notification are currently ignored by iOS devices because Ably automatically adds high-priority (`10` aka. immediately) to each push message, even if you specified normal priority (`5` aka. conserve power). This is a bug and the bug fix will be released soon. In the mean time, to have a data message arrive in the iOS, send a notification alongside the data message (i.e. a message which is simultaneously a notification and data message). This is a bug in Ably servers which do not respect the priority.
 
 #### Alert Notification **and** Background / Data Message
 
@@ -278,6 +276,18 @@ On iOS, we recommend using the Console.app (this is different to Terminal.app or
         - Failures only: `CANCELED: com.apple.pushLaunch`. For example, this may show the log line: CANCELED: com.apple.pushLaunch.com.example.app:DBA43D at priority 10 <private>!
         - Success only: `COMPLETED com.apple.pushLaunch.package_name:XXXXXX at priority 5 <private>!`
     - filter for `dasd` process either by right clicking a log line with `dasd` and click `Show Process 'dasd'`.
+    - If you are sending a background notification, it may be throttled by iOS. if you look in the Console.app logs, you may find sending the exact same message gives different outcomes:
+```bash
+{name: ThunderingHerdPolicy, policyWeight: 1.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{deviceInUse == 1 AND timeSinceThunderingHerdTriggerEvent < 900}]}}
+ ], FinalDecision: Must Not Proceed}
+```
+
+On success:
+```bash
+com.apple.pushLaunch.io.ably.flutter.plugin-example:500796:[
+	{name: ApplicationPolicy, policyWeight: 50.000, response: {Decision: Absolutely Must Proceed, Score: 1.00, Rationale: [{[appIsForeground]: Required:1.00, Observed:1.00},]}}
+ ], FinalDecision: Absolutely Must Proceed}
+```
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
 
