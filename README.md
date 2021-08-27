@@ -55,7 +55,7 @@ Features that we do not currently support, but we do plan to add in the future:
 ### Running example app
 
 - To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) with a generous free tier, and use your API key in the example app.
-- Clone the project: `git clone https://github.com/ably/ably-flutter.git` or `git clone git@github.com:ably/ably-flutter.git` 
+- Clone the project
 
 #### Running in Android Studio/ IntelliJ Idea
 
