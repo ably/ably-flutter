@@ -59,9 +59,9 @@ got both iOS and Android emulators open:
 
 ## Debugging notes (Android Studio)
 
-To debug both platform and dart code simultaneously:
-- In Android: in the flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
-- In iOS: In the flutter project window, launch the application in debug mode in Android Studio. Then, in Xcode, on the menu bar, click `Debug` > `Attach to Process` > `Runner`.
+To debug both platform and Dart code simultaneously:
+- In Android: in the Flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
+- In iOS: In the Flutter project window, launch the application in debug mode in Android Studio. Then, in Xcode, on the menu bar, click `Debug` > `Attach to Process` > `Runner`.
 
 ## Helpful Resources
 

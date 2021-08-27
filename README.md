@@ -57,7 +57,7 @@ Features that we do not currently support, but we do plan to add in the future:
 - To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app.
 - Clone the project
 
-#### Running in Android Studio/ IntelliJ Idea
+#### Android Studio / IntelliJ Idea
 
 Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
 
@@ -65,25 +65,25 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 
 ![run-configuration-2](images/run-configuration-2.png)
 
-#### Running in Visual Studio Code
+#### Visual Studio Code
 
 - Under `Run and Debug`,
   - Select the gear icon to view `launch.json`
   - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
-  - To choose a specific device when more than 1 are connected: to launch on a specific device, make sure it is the only device plugged in. To run on a specific device when you have multiple plugged in, and another element to the `configuration.args` value, with `--device-id=replace_with_device_id`
+  - To choose a specific device when more than one are connected: to launch on a specific device, make sure it is the only device plugged in. To run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`
     - Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`
 -  select the `example` configuration
 
-#### Running in Command Line
+#### Command Line using the Flutter Tool
 
 - Change into the example app directory: `cd example`
 - Install dependencies: `flutter pub get`
 - Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
-  - To choose a specific device when more than 1 are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
+  - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
 
-### Getting Push Notifications working in the Example App
+### Push Notifications
 
-See the [Push Notifications](./PushNotifications.md) documentation.
+See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
 ### Troubleshooting
 
@@ -491,7 +491,7 @@ channel
 
 ### Push Notifications
 
-See the [Push Notifications](./PushNotifications.md) documentation.
+See [PushNotifications.md](PushNotifications.md) for detailed information on using PN with this plugin.
 
 ## Caveats
 

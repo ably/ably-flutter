@@ -84,7 +84,7 @@ class AblyLibrary {
      * used is the same (e.g. When using Push from AblyBase / when it does
      * not matter).
      *
-     * This method relies on the fact handles are unique between all ably clients,
+     * This method relies on the fact handles are unique between all Ably clients,
      * (both rest and realtime).
      * @param handle integer handle to either AblyRealtime or AblyRest
      * @return AblyBase
