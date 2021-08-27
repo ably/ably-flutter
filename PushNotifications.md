@@ -21,11 +21,11 @@ Push Notifications allow you to reach users who do not have your application ope
 To get push notifications setup in your own app, read [Setting up your own app](#setting-up-your-own-app)
 - Android:
     - Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to a unique application ID.
-    - Create a firebase project, and in the Project settings, add an Android App with your unique application ID. Follow the steps provided on the setup process, or the following:
+    - Create a Firebase project, and in the Project settings, add an Android App with your unique application ID. Follow the steps provided on the setup process, or the following:
         - You can leave `Debug signing certificate SHA-1` empty.
         - Download the generated `google-services.json` file
-        - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
-        - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the firebase guide.
+        - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our Firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
+        - Update your build.gradle files according to the [Set up the SDK section](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) of the Firebase guide.
 - iOS:
     - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
     - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
@@ -39,10 +39,10 @@ To get push notifications setup in your own app, read [Setting up your own app](
 ## Setting up your own App
 
 - Android:
-    - Create a firebase project if you do not have one
-    - Set up firebase in your Android app, following the [Set up the SDK](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) step.
-    - Add your android app to the firebase project
-    - In your firebase project settings, [create and add a server key](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
+    - Create a Firebase project if you do not have one
+    - Set up Firebase in your Android app, following the [Set up the SDK](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) step.
+    - Add your android app to the Firebase project
+    - In your Firebase project settings, [create and add a server key](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
     - TODO: Update instructions here once I've tested in a fresh project.
 - iOS:
     - You need to have a [Apple developer program](https://developer.apple.com/programs/) membership ($99/year)
@@ -254,11 +254,11 @@ On Android, you can use logcat built into Android Studio or [pidcat](https://git
 
 ### Why are notifications not shown to the user when the app is open on Android?
 
-When the app is in the foreground (open by the user), firebase messaging ignores the message. You would need to send a data message and build a local notification instead. On iOS, you can specify this in your `UNUserNotificationCenterDelegate`'s `userNotificationCenter:_willPresentNotification:withCompletionHandler` method. In the example app, this is implemented in `AppDelegate.m`, where the notification is always shown. You can perform logic to decide if it should be shown or not based on the notification.
+When the app is in the foreground (open by the user), Firebase messaging ignores the message. You would need to send a data message and build a local notification instead. On iOS, you can specify this in your `UNUserNotificationCenterDelegate`'s `userNotificationCenter:_willPresentNotification:withCompletionHandler` method. In the example app, this is implemented in `AppDelegate.m`, where the notification is always shown. You can perform logic to decide if it should be shown or not based on the notification.
 
 ### Messaging generated from the "compose notification" in Firebase cloud messaging console are not received.
 
-Ensure your Android app contains the firebase configuration `android/app/google-services.json` file. You can download this from your Firebase project settings.
+Ensure your Android app contains the Firebase configuration `android/app/google-services.json` file. You can download this from your Firebase project settings.
 
 ### "FCM Reporting dashboard" in Firebase cloud messaging console does not show any messages being received.
 
