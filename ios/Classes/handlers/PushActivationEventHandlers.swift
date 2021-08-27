@@ -38,7 +38,6 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
         guard let result = flutterResultForActivate else {
             let error = FlutterError(code: "didActivateAblyPush_error", message: "Failed to asynchronously return a value because flutterResultForActivate was nil", details: nil)
             methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
-            // TODO throw NSError/ NSException?
             return
         }
         if let error = error {

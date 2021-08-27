@@ -265,29 +265,33 @@ Do this only if you do not want the device to receive push notifications at all.
 
 ## Troubleshooting/ FAQ
 
-### Push notification messages are not being delivered to my device.
+### Push messages are not being delivered to my device.
 
 If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard,
 
-On iOS, we recommend using the Console.app (this is different to Terminal.app or iTerm2.app) installed on your mac.
+On iOS, to show alert notifications, you need to request provisional permission or explicit permission from the user. When debugging further, we recommend using the Console.app (this is different to Terminal.app or iTerm2.app) installed on your mac.
 - To confirm your application received the push message/ check for errors related to push notifications, find relevant logs by:
     - search for the following log messages:
         - Both failures and success: `com.apple.pushLaunch`
         - Failures only: `CANCELED: com.apple.pushLaunch`. For example, this may show the log line: CANCELED: com.apple.pushLaunch.com.example.app:DBA43D at priority 10 <private>!
         - Success only: `COMPLETED com.apple.pushLaunch.package_name:XXXXXX at priority 5 <private>!`
     - filter for `dasd` process either by right clicking a log line with `dasd` and click `Show Process 'dasd'`.
-    - If you are sending a background notification, it may be throttled by iOS. if you look in the Console.app logs, you may find sending the exact same message gives different outcomes:
-```bash
-{name: ThunderingHerdPolicy, policyWeight: 1.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{deviceInUse == 1 AND timeSinceThunderingHerdTriggerEvent < 900}]}}
- ], FinalDecision: Must Not Proceed}
-```
-
-On success:
-```bash
-com.apple.pushLaunch.io.ably.flutter.plugin-example:500796:[
-	{name: ApplicationPolicy, policyWeight: 50.000, response: {Decision: Absolutely Must Proceed, Score: 1.00, Rationale: [{[appIsForeground]: Required:1.00, Observed:1.00},]}}
- ], FinalDecision: Absolutely Must Proceed}
-```
+    - If you are sending a background notification, it may be throttled by iOS. If the message is being throttled, it will eventually arrive to your application, and your `didReceiveRemoteNotification` message will be called, often within a few minutes. If you look in the Console.app logs, you may find sending the exact same message gives different outcomes:
+        - ThunderingHerdPolicy error: 
+        ```bash
+        {name: ThunderingHerdPolicy, policyWeight: 1.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{deviceInUse == 1 AND timeSinceThunderingHerdTriggerEvent < 900}]}}
+         ], FinalDecision: Must Not Proceed}
+        ```
+        - `cameraIsActive` error:
+        ```bash
+        {name: MemoryPressurePolicy, policyWeight: 5.000, response: {Decision: Must Not Proceed, Score: 0.00, Rationale: [{cameraIsActive == 1}]}}
+         ], FinalDecision: Must Not Proceed}
+        ```
+        - Successful delivery:
+        ```bash
+        {name: ApplicationPolicy, policyWeight: 50.000, response: {Decision: Absolutely Must Proceed, Score: 1.00, Rationale: [{[appIsForeground]: Required:1.00, Observed:1.00},]}}
+         ], FinalDecision: Absolutely Must Proceed}
+        ```
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
 
