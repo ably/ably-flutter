@@ -16,8 +16,7 @@
 // https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate?language=objc
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler  API_AVAILABLE(ios(10.0)){
     // You can decide to show/ hide the notification when the app is in the foreground.
-    // On Android, notifications are always hidden when the app is in the foreground.
-    // To hide foreground notifications on Android, use UNNotificationPresentationOptionNone.
+    // To hide foreground notifications, use UNNotificationPresentationOptionNone
     if (@available(iOS 14.0, *)) {
         completionHandler(UNNotificationPresentationOptionBanner);
     } else {
