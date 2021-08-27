@@ -49,6 +49,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 
 - Create a Firebase project if you do not have one
 - Set up Firebase in your Android app, following only the [Set up the SDK](https://firebase.google.com/docs/cloud-messaging/android/client#set_up_the_sdk) and [Edit your app manifest](https://firebase.google.com/docs/cloud-messaging/android/client#manifest) steps from the Firebase guide. The guide will instruct you to create a firebase project, add the firebase configuration file (`google-services.json`), add the `google-services` to the classpath (`classpath`), and apply the plugin (`apply plugin:`) the `app` module.
+- In your `app/build.gradle`, ensure that your `minSdkVersion` is set to 19 or above.
 - Add your android app to the firebase project
 - In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
 - Handle messages received on your device by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService). An example is shown in the example app, [`PushMessagingService`](./example/android/app/src/main/java/io/ably/flutter/plugin_example/PushMessagingService.java). This is the service class you specify in the `AndroidManifest.xml`. For more information, have a look at the [receiving messages](#receiving-messages) section.
@@ -313,3 +314,7 @@ This means your registration token is invalid. Ably is may not have your device'
 ```java
 ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
 ```
+
+### When building my application, I get the following error: `Manifest merger failed : uses-sdk:minSdkVersion 16 cannot be smaller than version 19 declared in library [:ably_flutter]`
+
+A fresh Flutter project generates an Android project with a `minSdkVersion` of 16, but Ably-flutter only supports API level 19 (Android Kitkat 4.4, which was released in 2013) and above. In `android/app/build.gradle`, change `minSdkVersion 16` to `minSdkVersion 19`.
