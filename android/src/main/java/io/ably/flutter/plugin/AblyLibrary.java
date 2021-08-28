@@ -1,31 +1,39 @@
 package io.ably.flutter.plugin;
 
+import android.content.Context;
 import android.util.LongSparseArray;
 
+import io.ably.lib.push.Push;
+import io.ably.lib.push.PushChannel;
 import io.ably.lib.realtime.AblyRealtime;
+import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
+import io.ably.lib.types.ErrorInfo;
 
 class AblyLibrary {
 
     private static AblyLibrary _instance;
     private long _nextHandle = 1;
+    final private Context applicationContext;
 
-    // privatizing default constructor to enforce usage of getInstance
-    private AblyLibrary() {
+    private AblyLibrary(Context applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
-    static synchronized AblyLibrary getInstance() {
+    static synchronized AblyLibrary getInstance(Context applicationContext) {
         if (null == _instance) {
-            _instance = new AblyLibrary();
+            _instance = new AblyLibrary(applicationContext);
         }
         return _instance;
     }
 
-    //    using LongSparseArray as suggested by Studio
-    //    and as per this answer https://stackoverflow.com/a/31413003
+    // Android Studio warns against using HashMap with integer keys, and
+    // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
+    // It may be simpler to go back to HashMap because this is an unmeasured memory optimisation.
+    // > the Hashmap and the SparseArray are very similar for data structure sizes under 1,000
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
     private final LongSparseArray<Object> _restTokenData = new LongSparseArray<>();
 
@@ -40,6 +48,7 @@ class AblyLibrary {
 
     long createRest(final ClientOptions clientOptions) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
+        rest.setAndroidContext(applicationContext);
         _restInstances.put(_nextHandle, rest);
         return _nextHandle++;
     }
@@ -61,12 +70,39 @@ class AblyLibrary {
 
     long createRealtime(final ClientOptions clientOptions) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
+        realtime.setAndroidContext(applicationContext);
         _realtimeInstances.put(_nextHandle, realtime);
         return _nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
         return _realtimeInstances.get(handle);
+    }
+
+    /**
+     * Gets the Ably client (either REST or Realtime) when the interface being
+     * used is the same (e.g. When using Push from AblyBase / when it does
+     * not matter).
+     *
+     * This method relies on the fact handles are unique between all Ably clients,
+     * (both rest and realtime).
+     * @param handle integer handle to either AblyRealtime or AblyRest
+     * @return AblyBase
+     */
+    AblyBase getAblyClient(final long handle) {
+        AblyRealtime realtime = getRealtime(handle);
+        return (realtime != null) ? realtime : getRest(handle);
+    }
+    
+    Push getPush(final long handle) {
+        AblyRealtime realtime = getRealtime(handle);
+        return (realtime != null) ? realtime.push : getRest(handle).push;
+    }
+    
+    PushChannel getPushChannel(final long handle, final String channelName) {
+        return getAblyClient(handle)
+                .channels
+                .get(channelName).push;
     }
 
     void setRealtimeToken(long handle, Object tokenDetails) {
@@ -79,18 +115,18 @@ class AblyLibrary {
         return token;
     }
 
-    long setPaginatedResult(AsyncPaginatedResult result, Integer handle){
+    long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
-        if(handle==null){
+        if (handle == null) {
             longHandle = _nextHandle++;
-        }else {
+        } else {
             longHandle = handle.longValue();
         }
         _paginatedResults.put(longHandle, result);
         return longHandle;
     }
 
-    AsyncPaginatedResult<Object> getPaginatedResult(long handle){
+    AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
         return _paginatedResults.get(handle);
     }
 

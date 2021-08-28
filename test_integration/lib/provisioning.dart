@@ -14,7 +14,7 @@ const _capabilitySpec = {
     'push-admin',
   ],
 };
-const authURL = 'https://www.ably.io/ably-auth/token-request/demos';
+const _authURL = 'https://www.ably.io/ably-auth/token-request/demos';
 
 String tokenDetailsURL(String keyName, [String prefix = '']) =>
     'https://${prefix}rest.ably.io/keys/$keyName/requestToken';
@@ -41,17 +41,6 @@ const _requestHeaders = {
   'Accept': 'application/json',
 };
 
-class AppKey {
-  final String name;
-  final String secret;
-  final String _keyStr;
-
-  AppKey(this.name, this.secret, this._keyStr);
-
-  @override
-  String toString() => _keyStr;
-}
-
 Future<Map> _provisionApp(
   final String environmentPrefix, [
   Map<String, List>? appSpec,
@@ -72,7 +61,7 @@ Future<Map> _provisionApp(
   return jsonDecode(response.body) as Map;
 }
 
-Future<AppKey> provision(
+Future<String> provision(
   String environmentPrefix, [
   Map<String, List>? appSpec,
 ]) async {
@@ -81,11 +70,12 @@ Future<AppKey> provision(
     delayFactor: Duration(seconds: 2),
   ).retry(() => _provisionApp(environmentPrefix, appSpec));
   final key = result['keys'][0];
-  return AppKey(
-    key['keyName'] as String,
-    key['keySecret'] as String,
-    key['keyStr'] as String,
-  );
+  // return AppKey(
+  //   key['keyName'] as String,
+  //   key['keySecret'] as String,
+  //   key['keyStr'] as String,
+  // );
+  return key['keyStr'] as String;
 }
 
 Future<Map<String, dynamic>> getTokenRequest() async {
@@ -94,7 +84,7 @@ Future<Map<String, dynamic>> getTokenRequest() async {
   final r = await const RetryOptions(
     maxAttempts: 5,
     delayFactor: Duration(seconds: 2),
-  ).retry(() => http.get(Uri.parse(authURL)));
+  ).retry(() => http.get(Uri.parse(_authURL)));
   print('tokenRequest from tokenRequest server: ${r.body}');
   return Map.castFrom<dynamic, dynamic, String, dynamic>(
     jsonDecode(r.body) as Map,

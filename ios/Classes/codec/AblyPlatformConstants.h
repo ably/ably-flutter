@@ -23,9 +23,13 @@ typedef NS_ENUM(UInt8, _Value) {
     restPresenceParamsCodecType = 142,
     presenceMessageCodecType = 143,
     realtimePresenceParamsCodecType = 144,
-    errorInfoCodecType = 145,
-    connectionStateChangeCodecType = 146,
-    channelStateChangeCodecType = 147,
+    deviceDetailsCodecType = 145,
+    localDeviceCodecType = 146,
+    pushChannelSubscriptionCodecType = 147,
+    unNotificationSettingsCodecType = 148,
+    errorInfoCodecType = 149,
+    connectionStateChangeCodecType = 150,
+    channelStateChangeCodecType = 151,
 };
 
 
@@ -57,6 +61,19 @@ extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
+extern NSString *const AblyPlatformMethod_pushActivate;
+extern NSString *const AblyPlatformMethod_pushDeactivate;
+extern NSString *const AblyPlatformMethod_pushSubscribeDevice;
+extern NSString *const AblyPlatformMethod_pushUnsubscribeDevice;
+extern NSString *const AblyPlatformMethod_pushSubscribeClient;
+extern NSString *const AblyPlatformMethod_pushUnsubscribeClient;
+extern NSString *const AblyPlatformMethod_pushListSubscriptions;
+extern NSString *const AblyPlatformMethod_pushDevice;
+extern NSString *const AblyPlatformMethod_pushRequestPermission;
+extern NSString *const AblyPlatformMethod_pushGetNotificationSettings;
+extern NSString *const AblyPlatformMethod_pushOnActivate;
+extern NSString *const AblyPlatformMethod_pushOnDeactivate;
+extern NSString *const AblyPlatformMethod_pushOnUpdateFailed;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -190,6 +207,26 @@ extern NSString *const TxEnumConstants_publish;
 extern NSString *const TxEnumConstants_subscribe;
 extern NSString *const TxEnumConstants_presenceSubscribe;
 
+// key constants for FormFactorEnum
+extern NSString *const TxFormFactorEnum_phone;
+extern NSString *const TxFormFactorEnum_tablet;
+extern NSString *const TxFormFactorEnum_desktop;
+extern NSString *const TxFormFactorEnum_tv;
+extern NSString *const TxFormFactorEnum_watch;
+extern NSString *const TxFormFactorEnum_car;
+extern NSString *const TxFormFactorEnum_embedded;
+extern NSString *const TxFormFactorEnum_other;
+
+// key constants for DevicePlatformEnum
+extern NSString *const TxDevicePlatformEnum_ios;
+extern NSString *const TxDevicePlatformEnum_android;
+extern NSString *const TxDevicePlatformEnum_browser;
+
+// key constants for DevicePushStateEnum
+extern NSString *const TxDevicePushStateEnum_active;
+extern NSString *const TxDevicePushStateEnum_failing;
+extern NSString *const TxDevicePushStateEnum_failed;
+
 // key constants for ConnectionStateChange
 extern NSString *const TxConnectionStateChange_current;
 extern NSString *const TxConnectionStateChange_previous;
@@ -251,3 +288,73 @@ extern NSString *const TxRestPresenceParams_connectionId;
 extern NSString *const TxRealtimePresenceParams_waitForSync;
 extern NSString *const TxRealtimePresenceParams_clientId;
 extern NSString *const TxRealtimePresenceParams_connectionId;
+
+// key constants for DeviceDetails
+extern NSString *const TxDeviceDetails_id;
+extern NSString *const TxDeviceDetails_clientId;
+extern NSString *const TxDeviceDetails_platform;
+extern NSString *const TxDeviceDetails_formFactor;
+extern NSString *const TxDeviceDetails_metadata;
+extern NSString *const TxDeviceDetails_devicePushDetails;
+
+// key constants for DevicePushDetails
+extern NSString *const TxDevicePushDetails_recipient;
+extern NSString *const TxDevicePushDetails_state;
+extern NSString *const TxDevicePushDetails_errorReason;
+
+// key constants for LocalDevice
+extern NSString *const TxLocalDevice_deviceSecret;
+extern NSString *const TxLocalDevice_deviceIdentityToken;
+
+// key constants for PushChannelSubscription
+extern NSString *const TxPushChannelSubscription_channel;
+extern NSString *const TxPushChannelSubscription_deviceId;
+extern NSString *const TxPushChannelSubscription_clientId;
+
+// key constants for PushRequestPermission
+extern NSString *const TxPushRequestPermission_badge;
+extern NSString *const TxPushRequestPermission_sound;
+extern NSString *const TxPushRequestPermission_alert;
+extern NSString *const TxPushRequestPermission_carPlay;
+extern NSString *const TxPushRequestPermission_criticalAlert;
+extern NSString *const TxPushRequestPermission_providesAppNotificationSettings;
+extern NSString *const TxPushRequestPermission_provisional;
+extern NSString *const TxPushRequestPermission_announcement;
+
+// key constants for UNNotificationSettings
+extern NSString *const TxUNNotificationSettings_authorizationStatus;
+extern NSString *const TxUNNotificationSettings_soundSetting;
+extern NSString *const TxUNNotificationSettings_badgeSetting;
+extern NSString *const TxUNNotificationSettings_alertSetting;
+extern NSString *const TxUNNotificationSettings_notificationCenterSetting;
+extern NSString *const TxUNNotificationSettings_lockScreenSetting;
+extern NSString *const TxUNNotificationSettings_carPlaySetting;
+extern NSString *const TxUNNotificationSettings_alertStyle;
+extern NSString *const TxUNNotificationSettings_showPreviewsSetting;
+extern NSString *const TxUNNotificationSettings_criticalAlertSetting;
+extern NSString *const TxUNNotificationSettings_providesAppNotificationSettings;
+extern NSString *const TxUNNotificationSettings_announcementSetting;
+extern NSString *const TxUNNotificationSettings_scheduledDeliverySetting;
+extern NSString *const TxUNNotificationSettings_timeSensitiveSetting;
+
+// key constants for UNNotificationSettingEnum
+extern NSString *const TxUNNotificationSettingEnum_notSupported;
+extern NSString *const TxUNNotificationSettingEnum_disabled;
+extern NSString *const TxUNNotificationSettingEnum_enabled;
+
+// key constants for UNAlertStyleEnum
+extern NSString *const TxUNAlertStyleEnum_none;
+extern NSString *const TxUNAlertStyleEnum_banner;
+extern NSString *const TxUNAlertStyleEnum_alert;
+
+// key constants for UNAuthorizationStatusEnum
+extern NSString *const TxUNAuthorizationStatusEnum_notDetermined;
+extern NSString *const TxUNAuthorizationStatusEnum_denied;
+extern NSString *const TxUNAuthorizationStatusEnum_authorized;
+extern NSString *const TxUNAuthorizationStatusEnum_provisional;
+extern NSString *const TxUNAuthorizationStatusEnum_ephemeral;
+
+// key constants for UNShowPreviewsSettingEnum
+extern NSString *const TxUNShowPreviewsSettingEnum_always;
+extern NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated;
+extern NSString *const TxUNShowPreviewsSettingEnum_never;

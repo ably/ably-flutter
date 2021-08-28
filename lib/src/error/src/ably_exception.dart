@@ -15,7 +15,7 @@ class AblyException implements Exception {
   final String? message;
 
   /// error message from ably native sdk
-  final ErrorInfo? errorInfo;
+  late final ErrorInfo? errorInfo;
 
   /// initializes with no defaults
   AblyException([

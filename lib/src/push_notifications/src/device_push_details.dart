@@ -5,7 +5,7 @@ import 'device_push_state.dart';
 /// Details of the push registration for a given device
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#PCP1
-abstract class DevicePushDetails {
+class DevicePushDetails {
   /// A map of string key/value pairs containing details of the push transport
   /// and address.
   ///
@@ -21,4 +21,6 @@ abstract class DevicePushDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP2
   ErrorInfo? errorReason;
+
+  DevicePushDetails(this.recipient, this.state, this.errorReason);
 }

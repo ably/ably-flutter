@@ -1,11 +1,11 @@
 /// Details of a push subscription to a channel.
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#PCS1
-abstract class PushChannelSubscription {
+class PushChannelSubscription {
   /// the channel name associated with this subscription
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS4
-  String? channel;
+  String channel;
 
   /// populated for subscriptions made for a specific device registration
   /// (optional)
@@ -17,4 +17,7 @@ abstract class PushChannelSubscription {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS3
   String? clientId;
+
+  PushChannelSubscription(
+      {required this.channel, this.deviceId, this.clientId});
 }

@@ -1,31 +1,35 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
-import 'provisioning.dart' as provisioning;
+import 'constants.dart';
+import 'op_state.dart';
+import 'push_notifications/push_notification_event_handlers.dart';
+import 'push_notifications/push_notification_service.dart';
+import 'ui/push_notifications/push_notifications_sliver.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  PushNotificationHandlers.setUpEventHandlers();
+  // PushNotificationService.setUpMessageHandlers();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-enum OpState {
-  notStarted,
-  inProgress,
-  succeeded,
-  failed,
-}
-
-const defaultChannel = 'test-channel';
+const defaultChannel = Constants.channelName;
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _ablyVersion = 'Unknown';
-  OpState _provisioningState = OpState.notStarted;
-  provisioning.AppKey? _appKey;
+
+  final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   OpState _realtimeCreationState = OpState.notStarted;
   OpState _restCreationState = OpState.notStarted;
   ably.Realtime? _realtime;
@@ -44,6 +48,9 @@ class _MyAppState extends State<MyApp> {
   ably.PresenceMessage? channelPresenceMessage;
   List<ably.PresenceMessage>? _realtimePresenceMembers;
   ably.PaginatedResult<ably.PresenceMessage>? _realtimePresenceHistory;
+  late final PushNotificationService _pushNotificationService =
+      PushNotificationService();
+  bool isIOSSimulator = false;
 
   //Storing different message types here to be publishable
   List<dynamic> messagesToPublish = [
@@ -97,6 +104,13 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     String ablyVersion;
 
+    if (Platform.isIOS) {
+      final iosInfo = await DeviceInfoPlugin().iosInfo;
+      setState(() {
+        isIOSSimulator = !iosInfo.isPhysicalDevice;
+      });
+    }
+
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await ably.platformVersion();
@@ -122,55 +136,16 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> provisionAbly() async {
-    setState(() {
-      _provisioningState = OpState.inProgress;
-    });
-
-    provisioning.AppKey appKey;
-    try {
-      appKey = await provisioning.provision('sandbox-');
-      print('App key acquired! `$appKey`');
-    } on Exception catch (error) {
-      print('Error provisioning Ably: $error');
-      setState(() {
-        _provisioningState = OpState.failed;
-      });
-      return;
-    }
-
-    setState(() {
-      _appKey = appKey;
-      _provisioningState = OpState.succeeded;
-    });
-  }
-
   Future<void> createAblyRest() async {
     setState(() {
       _restCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions()
-          // .fromKey(_appKey.toString())
-          ..environment = 'sandbox'
-          ..logLevel = ably.LogLevel.verbose
-          ..logHandler = ({msg, exception}) {
-            print('Custom logger :: $msg $exception');
-          }
-          ..tokenDetails = ably.TokenDetails.fromMap(
-            await provisioning.getTokenDetails(
-              _appKey!.name,
-              _appKey!.secret,
-              'sandbox-',
-            ),
-          )
-        /*..defaultTokenParams = ably.TokenParams(ttl: 20000)*/
-        /*..authCallback = (params) async => ably.TokenRequest.fromMap(
-            Map.castFrom<dynamic, dynamic, String, dynamic>(
-              await provisioning.getTokenRequest(),
-            ),
-          )*/
-        ;
+    final clientOptions = ably.ClientOptions.fromKey(_apiKey)
+      ..logLevel = ably.LogLevel.verbose
+      ..logHandler = ({msg, exception}) {
+        print('Custom logger :: $msg $exception');
+      };
 
     ably.Rest rest;
     try {
@@ -182,6 +157,7 @@ class _MyAppState extends State<MyApp> {
       });
       rethrow;
     }
+    _pushNotificationService.setRestClient(rest);
 
     setState(() {
       _rest = rest;
@@ -212,9 +188,8 @@ class _MyAppState extends State<MyApp> {
       _realtimeCreationState = OpState.inProgress;
     });
 
-    final clientOptions = ably.ClientOptions.fromKey(_appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'flutter-example-app'
+    final clientOptions = ably.ClientOptions.fromKey(_apiKey)
+      ..clientId = Constants.clientId
       ..logLevel = ably.LogLevel.verbose
       ..autoConnect = false
       ..logHandler = ({msg, exception}) {
@@ -226,6 +201,7 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       final channel = realtime.channels.get(defaultChannel);
       listenRealtimeChannel(channel);
+      _pushNotificationService.setRealtimeClient(realtime);
       setState(() {
         _realtime = realtime;
         _realtimeCreationState = OpState.succeeded;
@@ -316,9 +292,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-
-  Widget provisionButton() => button(_provisioningState, provisionAbly,
-      'Provision Ably', 'Provisioning Ably', 'Ably Provisioned');
 
   Widget createRestButton() => button(_restCreationState, createAblyRest,
       'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
@@ -701,7 +674,7 @@ class _MyAppState extends State<MyApp> {
                 await _realtime!.channels
                     .get(defaultChannel)
                     .presence
-                    .updateClient('flutter-example-app', _nextPresenceData);
+                    .updateClient(Constants.clientId, _nextPresenceData);
                 setState(() {});
               },
         color: Colors.yellow,
@@ -739,11 +712,29 @@ class _MyAppState extends State<MyApp> {
                   ),
                   Text('Running on: $_platformVersion\n'),
                   Text('Ably version: $_ablyVersion\n'),
-                  provisionButton(),
-                  Text(
-                    'App Key:'
-                    ' ${_appKey?.toString() ?? 'Ably not provisioned yet.'}',
-                  ),
+                  Text('Ably Client ID: ${Constants.clientId}\n'),
+                  if (_apiKey == '')
+                    RichText(
+                      text: const TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                                text: 'Warning: ',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(text: 'API key is not configured, use '),
+                            TextSpan(
+                                text:
+                                    '`flutter run --dart-define=ABLY_API_KEY=your_api_key`',
+                                style: TextStyle()),
+                            TextSpan(
+                                text:
+                                    "or add this to the 'additional run args' in the run configuration in Android Studio.")
+                          ]),
+                    )
+                  else
+                    Text('API key: $_apiKey'),
                   const Divider(),
                   const Text(
                     'Realtime',
@@ -857,6 +848,11 @@ class _MyAppState extends State<MyApp> {
                           .toList() ??
                       [],
                   releaseRestChannel(),
+                  const Divider(),
+                  PushNotificationsSliver(
+                    _pushNotificationService,
+                    isIOSSimulator: isIOSSimulator,
+                  )
                 ]),
           ),
         ),

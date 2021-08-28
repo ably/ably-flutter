@@ -34,6 +34,19 @@ NSString *const AblyPlatformMethod_onRealtimePresenceMessage= @"onRealtimePresen
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChannel";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
+NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
+NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
+NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
+NSString *const AblyPlatformMethod_pushUnsubscribeDevice= @"pushUnsubscribeDevice";
+NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
+NSString *const AblyPlatformMethod_pushUnsubscribeClient= @"pushUnsubscribeClient";
+NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscriptions";
+NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
+NSString *const AblyPlatformMethod_pushRequestPermission= @"pushRequestPermission";
+NSString *const AblyPlatformMethod_pushGetNotificationSettings= @"pushGetNotificationSettings";
+NSString *const AblyPlatformMethod_pushOnActivate= @"pushOnActivate";
+NSString *const AblyPlatformMethod_pushOnDeactivate= @"pushOnDeactivate";
+NSString *const AblyPlatformMethod_pushOnUpdateFailed= @"pushOnUpdateFailed";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -167,6 +180,26 @@ NSString *const TxEnumConstants_publish = @"publish";
 NSString *const TxEnumConstants_subscribe = @"subscribe";
 NSString *const TxEnumConstants_presenceSubscribe = @"presenceSubscribe";
 
+// key constants for FormFactorEnum
+NSString *const TxFormFactorEnum_phone = @"phone";
+NSString *const TxFormFactorEnum_tablet = @"tablet";
+NSString *const TxFormFactorEnum_desktop = @"desktop";
+NSString *const TxFormFactorEnum_tv = @"tv";
+NSString *const TxFormFactorEnum_watch = @"watch";
+NSString *const TxFormFactorEnum_car = @"car";
+NSString *const TxFormFactorEnum_embedded = @"embedded";
+NSString *const TxFormFactorEnum_other = @"other";
+
+// key constants for DevicePlatformEnum
+NSString *const TxDevicePlatformEnum_ios = @"ios";
+NSString *const TxDevicePlatformEnum_android = @"android";
+NSString *const TxDevicePlatformEnum_browser = @"browser";
+
+// key constants for DevicePushStateEnum
+NSString *const TxDevicePushStateEnum_active = @"active";
+NSString *const TxDevicePushStateEnum_failing = @"failing";
+NSString *const TxDevicePushStateEnum_failed = @"failed";
+
 // key constants for ConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";
 NSString *const TxConnectionStateChange_previous = @"previous";
@@ -228,3 +261,73 @@ NSString *const TxRestPresenceParams_connectionId = @"connectionId";
 NSString *const TxRealtimePresenceParams_waitForSync = @"waitForSync";
 NSString *const TxRealtimePresenceParams_clientId = @"clientId";
 NSString *const TxRealtimePresenceParams_connectionId = @"connectionId";
+
+// key constants for DeviceDetails
+NSString *const TxDeviceDetails_id = @"id";
+NSString *const TxDeviceDetails_clientId = @"clientId";
+NSString *const TxDeviceDetails_platform = @"platform";
+NSString *const TxDeviceDetails_formFactor = @"formFactor";
+NSString *const TxDeviceDetails_metadata = @"metadata";
+NSString *const TxDeviceDetails_devicePushDetails = @"devicePushDetails";
+
+// key constants for DevicePushDetails
+NSString *const TxDevicePushDetails_recipient = @"recipient";
+NSString *const TxDevicePushDetails_state = @"state";
+NSString *const TxDevicePushDetails_errorReason = @"errorReason";
+
+// key constants for LocalDevice
+NSString *const TxLocalDevice_deviceSecret = @"deviceSecret";
+NSString *const TxLocalDevice_deviceIdentityToken = @"deviceIdentityToken";
+
+// key constants for PushChannelSubscription
+NSString *const TxPushChannelSubscription_channel = @"channel";
+NSString *const TxPushChannelSubscription_deviceId = @"deviceId";
+NSString *const TxPushChannelSubscription_clientId = @"clientId";
+
+// key constants for PushRequestPermission
+NSString *const TxPushRequestPermission_badge = @"badge";
+NSString *const TxPushRequestPermission_sound = @"sound";
+NSString *const TxPushRequestPermission_alert = @"alert";
+NSString *const TxPushRequestPermission_carPlay = @"carPlay";
+NSString *const TxPushRequestPermission_criticalAlert = @"criticalAlert";
+NSString *const TxPushRequestPermission_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxPushRequestPermission_provisional = @"provisional";
+NSString *const TxPushRequestPermission_announcement = @"announcement";
+
+// key constants for UNNotificationSettings
+NSString *const TxUNNotificationSettings_authorizationStatus = @"authorizationStatus";
+NSString *const TxUNNotificationSettings_soundSetting = @"soundSetting";
+NSString *const TxUNNotificationSettings_badgeSetting = @"badgeSetting";
+NSString *const TxUNNotificationSettings_alertSetting = @"alertSetting";
+NSString *const TxUNNotificationSettings_notificationCenterSetting = @"notificationCenterSetting";
+NSString *const TxUNNotificationSettings_lockScreenSetting = @"lockScreenSetting";
+NSString *const TxUNNotificationSettings_carPlaySetting = @"carPlaySetting";
+NSString *const TxUNNotificationSettings_alertStyle = @"alertStyle";
+NSString *const TxUNNotificationSettings_showPreviewsSetting = @"showPreviewsSetting";
+NSString *const TxUNNotificationSettings_criticalAlertSetting = @"criticalAlertSetting";
+NSString *const TxUNNotificationSettings_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxUNNotificationSettings_announcementSetting = @"announcementSetting";
+NSString *const TxUNNotificationSettings_scheduledDeliverySetting = @"scheduledDeliverySetting";
+NSString *const TxUNNotificationSettings_timeSensitiveSetting = @"timeSensitiveSetting";
+
+// key constants for UNNotificationSettingEnum
+NSString *const TxUNNotificationSettingEnum_notSupported = @"notSupported";
+NSString *const TxUNNotificationSettingEnum_disabled = @"disabled";
+NSString *const TxUNNotificationSettingEnum_enabled = @"enabled";
+
+// key constants for UNAlertStyleEnum
+NSString *const TxUNAlertStyleEnum_none = @"none";
+NSString *const TxUNAlertStyleEnum_banner = @"banner";
+NSString *const TxUNAlertStyleEnum_alert = @"alert";
+
+// key constants for UNAuthorizationStatusEnum
+NSString *const TxUNAuthorizationStatusEnum_notDetermined = @"notDetermined";
+NSString *const TxUNAuthorizationStatusEnum_denied = @"denied";
+NSString *const TxUNAuthorizationStatusEnum_authorized = @"authorized";
+NSString *const TxUNAuthorizationStatusEnum_provisional = @"provisional";
+NSString *const TxUNAuthorizationStatusEnum_ephemeral = @"ephemeral";
+
+// key constants for UNShowPreviewsSettingEnum
+NSString *const TxUNShowPreviewsSettingEnum_always = @"always";
+NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated = @"whenAuthenticated";
+NSString *const TxUNShowPreviewsSettingEnum_never = @"never";

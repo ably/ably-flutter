@@ -1,4 +1,6 @@
 @import Ably;
+@import UserNotifications;
+#import <ably_flutter/ably_flutter-Swift.h>
 #import "AblyFlutterWriter.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
@@ -31,6 +33,16 @@ NS_ASSUME_NONNULL_END
         return tokenParamsCodecType;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
         return paginatedResultCodecType;
+    } else if ([value isKindOfClass:[ARTLocalDevice class]]) {
+        // Check for ARTLocalDevice before ARTLocalDevice, since ARTLocalDevice extends ARTDeviceDetails.
+        // If deviceDetailsCodecType was used first, the ARTLocalDevice fields won't be serialized.
+        return localDeviceCodecType;
+    } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
+        return deviceDetailsCodecType;
+    } else if ([value isKindOfClass:[ARTPushChannelSubscription class]]) {
+        return pushChannelSubscriptionCodecType;
+    } else if ([value isKindOfClass:[UNNotificationSettings class]]) {
+        return unNotificationSettingsCodecType;
     }
     return 0;
 }
@@ -45,6 +57,10 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", presenceMessageCodecType]: encodePresenceMessage,
         [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
         [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
+        [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: PushNotificationEncoders.encodeDeviceDetails,
+        [NSString stringWithFormat:@"%d", localDeviceCodecType]: PushNotificationEncoders.encodeLocalDevice,
+        [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
+        [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }

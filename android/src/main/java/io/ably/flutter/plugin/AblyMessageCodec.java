@@ -14,6 +14,9 @@ import java.util.Map;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.Consumer;
+import io.ably.lib.push.LocalDevice;
+import io.ably.lib.push.Push;
+import io.ably.lib.push.PushBase;
 import io.ably.lib.realtime.ChannelEvent;
 import io.ably.lib.realtime.ChannelState;
 import io.ably.lib.realtime.ChannelStateListener;
@@ -22,6 +25,7 @@ import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
+import io.ably.lib.rest.DeviceDetails;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ChannelOptions;
@@ -30,6 +34,7 @@ import io.ably.lib.types.DeltaExtras;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
+import io.ably.lib.types.PaginatedResult;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
 import io.flutter.plugin.common.StandardMessageCodec;
@@ -118,6 +123,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeConnectionStateChange, null));
         put(PlatformConstants.CodecTypes.channelStateChange,
             new CodecPair<>(self::encodeChannelStateChange, null));
+        put(PlatformConstants.CodecTypes.deviceDetails,
+            new CodecPair<>(self::encodeDeviceDetails, null));
+        put(PlatformConstants.CodecTypes.localDevice,
+            new CodecPair<>(self::encodeLocalDevice, null));
+        put(PlatformConstants.CodecTypes.pushChannelSubscription,
+            new CodecPair<>(self::encodePushChannelSubscription, null));
       }
     };
   }
@@ -164,6 +175,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.messageExtras;
     } else if (value instanceof Message) {
       return PlatformConstants.CodecTypes.message;
+    } else if (value instanceof LocalDevice) {
+      return PlatformConstants.CodecTypes.localDevice;
+    } else if (value instanceof DeviceDetails) {
+      return PlatformConstants.CodecTypes.deviceDetails;
+    } else if (value instanceof Push.ChannelSubscription) {
+      return PlatformConstants.CodecTypes.pushChannelSubscription;
     }
     return null;
   }
@@ -649,6 +666,74 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeDeviceDetails(DeviceDetails c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.id, c.id);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeDevicePushDetails(DeviceDetails.Push c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.recipient, c.recipient);
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.state, encodeDevicePushDetailsState(c.state));
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.errorReason, encodeErrorInfo(c.errorReason));
+
+    return jsonMap;
+  }
+
+  private String encodeDevicePushDetailsState(DeviceDetails.Push.State state) {
+    if (state == null) return null;
+
+    switch (state) {
+      case ACTIVE:
+        return PlatformConstants.TxDevicePushStateEnum.active;
+      case FAILING:
+        return PlatformConstants.TxDevicePushStateEnum.failing;
+      case FAILED:
+        return PlatformConstants.TxDevicePushStateEnum.failed;
+      default:
+        return null;
+    }
+  }
+
+  private Map<String, Object> encodeLocalDevice(LocalDevice c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceSecret, c.deviceSecret);
+    writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceIdentityToken, c.deviceIdentityToken);
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.id, c.id);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+
+    return jsonMap;
+  }
+  
+  private Map<String, Object> encodePushChannelSubscription(PushBase.ChannelSubscription c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.channel, c.channel);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.deviceId, c.deviceId);
+
     return jsonMap;
   }
 

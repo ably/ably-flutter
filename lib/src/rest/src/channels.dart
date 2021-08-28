@@ -1,6 +1,7 @@
 import '../../common/common.dart';
 import '../../common/src/channels.dart';
 import '../../message/src/message.dart';
+import '../../push_notifications/push_notifications.dart';
 import '../rest.dart';
 import 'channel_options.dart';
 import 'rest.dart';
@@ -12,10 +13,13 @@ import 'rest.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
 abstract class RestChannelInterface {
   /// creates a Rest channel instance
-  RestChannelInterface(this.rest, this.name);
+  RestChannelInterface(this.rest, this.push, this.name);
 
   /// reference to Rest client
   RestInterface rest;
+
+  /// Channel to receive push notifications on
+  PushChannel push;
 
   /// name of the channel
   String name;

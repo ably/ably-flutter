@@ -1,5 +1,6 @@
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
+import '../../push_notifications/push_notifications.dart';
 import '../realtime.dart';
 
 /// an abstract class for Ably's Realtime client

@@ -21,6 +21,13 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'restPresenceParams',
     'presenceMessage',
     'realtimePresenceParams',
+
+    // Push Notifications
+    'deviceDetails',
+    'localDevice',
+    'pushChannelSubscription',
+    'unNotificationSettings',
+
     'errorInfo',
 
     // Events
@@ -83,6 +90,25 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'releaseRealtimeChannel', 'value': 'releaseRealtimeChannel'},
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
 
+  // Push Notifications
+  {'name': 'pushActivate', 'value': 'pushActivate'},
+  {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
+  {'name': 'pushSubscribeDevice', 'value': 'pushSubscribeDevice'},
+  {'name': 'pushUnsubscribeDevice', 'value': 'pushUnsubscribeDevice'},
+  {'name': 'pushSubscribeClient', 'value': 'pushSubscribeClient'},
+  {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
+  {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
+  {'name': 'pushDevice', 'value': 'pushDevice'},
+  {'name': 'pushRequestPermission', 'value': 'pushRequestPermission'},
+  {
+    'name': 'pushGetNotificationSettings',
+    'value': 'pushGetNotificationSettings'
+  },
+  // Push Notification Events
+  {'name': 'pushOnActivate', 'value': 'pushOnActivate'},
+  {'name': 'pushOnDeactivate', 'value': 'pushOnDeactivate'},
+  {'name': 'pushOnUpdateFailed', 'value': 'pushOnUpdateFailed'},
+
   // Realtime events
   {
     'name': 'onRealtimeConnectionStateChanged',
@@ -100,6 +126,9 @@ const List<Map<String, dynamic>> _platformMethods = [
 ];
 
 const List<Map<String, dynamic>> _objects = [
+  // TransportKeys exist to synchronize the string constants used in data
+  // structures sent between platforms. For example, you can see
+  // usages of [TxTransportKeys.channelName]
   {
     'name': 'TransportKeys',
     'properties': <String>[
@@ -252,8 +281,29 @@ const List<Map<String, dynamic>> _objects = [
       'presence',
       'publish',
       'subscribe',
-      'presenceSubscribe',
+      'presenceSubscribe'
     ]
+  },
+  {
+    'name': 'FormFactorEnum',
+    'properties': <String>[
+      'phone',
+      'tablet',
+      'desktop',
+      'tv',
+      'watch',
+      'car',
+      'embedded',
+      'other'
+    ]
+  },
+  {
+    'name': 'DevicePlatformEnum',
+    'properties': <String>['ios', 'android', 'browser']
+  },
+  {
+    'name': 'DevicePushStateEnum',
+    'properties': <String>['active', 'failing', 'failed']
   },
   {
     'name': 'ConnectionStateChange',
@@ -328,6 +378,83 @@ const List<Map<String, dynamic>> _objects = [
       'connectionId',
     ]
   },
+  {
+    'name': 'DeviceDetails',
+    'properties': <String>[
+      'id',
+      'clientId',
+      'platform',
+      'formFactor',
+      'metadata',
+      'devicePushDetails'
+    ]
+  },
+  {
+    'name': 'DevicePushDetails',
+    'properties': <String>['recipient', 'state', 'errorReason']
+  },
+  {
+    'name': 'LocalDevice',
+    'properties': <String>['deviceSecret', 'deviceIdentityToken']
+  },
+  {
+    'name': 'PushChannelSubscription',
+    'properties': <String>['channel', 'deviceId', 'clientId']
+  },
+  {
+    'name': 'PushRequestPermission',
+    'properties': <String>[
+      'badge',
+      'sound',
+      'alert',
+      'carPlay',
+      'criticalAlert',
+      'providesAppNotificationSettings',
+      'provisional',
+      'announcement',
+    ]
+  },
+  {
+    'name': 'UNNotificationSettings',
+    'properties': <String>[
+      'authorizationStatus',
+      'soundSetting',
+      'badgeSetting',
+      'alertSetting',
+      'notificationCenterSetting',
+      'lockScreenSetting',
+      'carPlaySetting',
+      'alertStyle',
+      'showPreviewsSetting',
+      'criticalAlertSetting',
+      'providesAppNotificationSettings',
+      'announcementSetting',
+      'scheduledDeliverySetting',
+      'timeSensitiveSetting',
+    ]
+  },
+  {
+    'name': 'UNNotificationSettingEnum',
+    'properties': ['notSupported', 'disabled', 'enabled']
+  },
+  {
+    'name': 'UNAlertStyleEnum',
+    'properties': ['none', 'banner', 'alert']
+  },
+  {
+    'name': 'UNAuthorizationStatusEnum',
+    'properties': <String>[
+      'notDetermined',
+      'denied',
+      'authorized',
+      'provisional',
+      'ephemeral',
+    ]
+  },
+  {
+    'name': 'UNShowPreviewsSettingEnum',
+    'properties': ['always', 'whenAuthenticated', 'never']
+  }
 ];
 
 // exporting all the constants as a single map

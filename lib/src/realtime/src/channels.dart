@@ -38,7 +38,7 @@ class RealtimeChannelOptions extends ChannelOptions {
 abstract class RealtimeChannelInterface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
-  RealtimeChannelInterface(this.realtime, this.name);
+  RealtimeChannelInterface(this.realtime, this.name, this.push);
 
   /// realtime client instance
   final RealtimeInterface realtime;
@@ -59,7 +59,7 @@ abstract class RealtimeChannelInterface
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
   /// (see IDL for more details)
-  PushChannel? push;
+  PushChannel push;
 
   /// modes of this channel as returned by Ably server
   ///
@@ -104,6 +104,9 @@ abstract class RealtimeChannelInterface
   /// there is no unsubscribe api in flutter like in other Ably client SDK's
   /// as subscribe returns a stream which can be cancelled
   /// by calling [StreamSubscription.cancel]
+  ///
+  /// Warning: the name/ names are not channel names, but message names.
+  /// See [Message.dart] for more information.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message?> subscribe({

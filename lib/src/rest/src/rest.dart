@@ -1,3 +1,5 @@
+import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
+
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
 import 'channels.dart';

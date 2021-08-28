@@ -34,6 +34,7 @@ class RealtimeChannel extends PlatformObject
       : state = ChannelState.initialized,
         super() {
     _presence = RealtimePresence(this);
+    push = PushChannelNative(name, realtime: realtime);
     on().listen((event) => state = event.current);
   }
 
@@ -165,7 +166,7 @@ class RealtimeChannel extends PlatformObject
   Map<String, String>? params;
 
   @override
-  PushChannel? push;
+  late PushChannel push;
 
   @override
   ChannelState state;

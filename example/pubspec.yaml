@@ -11,6 +11,13 @@ dependencies:
 
   http: ^0.13.3
   retry: ^3.1.0
+  rxdart: ^0.27.1
+  async: ^2.6.1
+  stream_transform: ^2.0.0
+  enum_to_string: ^2.0.1
+  flutter_local_notifications: ^8.1.1+1
+  fluttertoast: ^8.0.8
+  device_info_plus: ^2.1.0
 
 dev_dependencies:
   ably_flutter:

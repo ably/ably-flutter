@@ -1,3 +1,5 @@
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -88,6 +90,15 @@ class Codec extends StandardMessageCodec {
         null,
       ),
 
+      // Push Notifications
+      CodecTypes.deviceDetails:
+          _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
+      CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
+      CodecTypes.pushChannelSubscription: _CodecPair<PushChannelSubscription>(
+          null, _decodePushChannelSubscription),
+      CodecTypes.unNotificationSettings: _CodecPair<UNNotificationSettings>(
+          null, _decodeUNNotificationSettings),
+
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
       CodecTypes.messageData: _CodecPair<MessageData?>(
@@ -119,6 +130,14 @@ class Codec extends StandardMessageCodec {
   Map<String, dynamic>? toJsonMap(Map<dynamic, dynamic>? value) {
     if (value == null) return null;
     return Map.castFrom<dynamic, dynamic, String, dynamic>(value);
+  }
+
+  /// Converts a Map with dynamic keys and values to
+  /// a Map with String keys and dynamic values.
+  /// Returns null of [value] is null.
+  Map<String, T> toTypedJsonMap<T>(Map<dynamic, dynamic>? value) {
+    if (value == null) return <String, T>{};
+    return Map.castFrom<dynamic, dynamic, String, T>(value);
   }
 
   /// Returns a value from [CodecTypes] based of the [Type] of [value]
@@ -642,6 +661,194 @@ class Codec extends StandardMessageCodec {
       message,
       handle: jsonMap[TxAblyMessage.registrationHandle] as int?,
       type: type,
+    );
+  }
+
+  DeviceDetails _decodeDeviceDetails(Map<String, dynamic> jsonMap) {
+    FormFactor formFactor = _decodeFormFactor(
+        _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
+
+    return DeviceDetails(
+      jsonMap[TxDeviceDetails.id] as String?,
+      jsonMap[TxDeviceDetails.clientId] as String?,
+      _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+      formFactor,
+      toTypedJsonMap<String>(
+          jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>?),
+      _decodeDevicePushDetails(
+        Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
+            as Map<Object?, Object?>),
+      ),
+    );
+  }
+
+  DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
+    final jsonMapErrorReason =
+        jsonMap[TxDevicePushDetails.errorReason] as Map<Object?, Object?>?;
+
+    final recipient =
+        jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>?;
+
+    return DevicePushDetails(
+        recipient != null ? Map<String, String>.from(recipient) : null,
+        _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
+        (jsonMapErrorReason != null)
+            ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
+            : null);
+  }
+
+  LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
+      _decodeDeviceDetails(jsonMap),
+      jsonMap[TxLocalDevice.deviceSecret] as String?,
+      jsonMap[TxLocalDevice.deviceIdentityToken] as String?);
+
+  FormFactor _decodeFormFactor(String? enumValue) {
+    switch (enumValue) {
+      case TxFormFactorEnum.phone:
+        return FormFactor.phone;
+      case TxFormFactorEnum.tablet:
+        return FormFactor.tablet;
+      case TxFormFactorEnum.desktop:
+        return FormFactor.desktop;
+      case TxFormFactorEnum.tv:
+        return FormFactor.tv;
+      case TxFormFactorEnum.watch:
+        return FormFactor.watch;
+      case TxFormFactorEnum.car:
+        return FormFactor.car;
+      case TxFormFactorEnum.embedded:
+        return FormFactor.embedded;
+      case TxFormFactorEnum.other:
+        return FormFactor.other;
+    }
+    throw AblyException(
+      'Platform communication error. FormFactor is invalid: $enumValue',
+    );
+  }
+
+  DevicePushState? _decodeDevicePushState(String? enumValue) {
+    switch (enumValue) {
+      case TxDevicePushStateEnum.active:
+        return DevicePushState.active;
+      case TxDevicePushStateEnum.failing:
+        return DevicePushState.failing;
+      case TxDevicePushStateEnum.failed:
+        return DevicePushState.failed;
+      default:
+        return null;
+    }
+  }
+
+  DevicePlatform _decodeDevicePlatform(String? enumValue) {
+    switch (enumValue) {
+      case TxDevicePlatformEnum.android:
+        return DevicePlatform.android;
+      case TxDevicePlatformEnum.ios:
+        return DevicePlatform.ios;
+      case TxDevicePlatformEnum.browser:
+        return DevicePlatform.browser;
+    }
+    throw AblyException(
+      'Platform communication error. DevicePlatform is invalid: $enumValue',
+    );
+  }
+
+  PushChannelSubscription _decodePushChannelSubscription(
+          Map<String, dynamic> jsonMap) =>
+      PushChannelSubscription(
+        channel: jsonMap[TxPushChannelSubscription.channel] as String,
+        clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
+        deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
+      );
+
+  UNNotificationSettings _decodeUNNotificationSettings(
+          Map<String, dynamic> jsonMap) =>
+      UNNotificationSettings(
+        authorizationStatus: _decodeUNAuthorizationStatus(
+            jsonMap[TxUNNotificationSettings.authorizationStatus] as String),
+        soundSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.soundSetting] as String),
+        badgeSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.badgeSetting] as String),
+        alertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.alertSetting] as String),
+        notificationCenterSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.notificationCenterSetting]
+                as String),
+        lockScreenSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.lockScreenSetting] as String),
+        carPlaySetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.carPlaySetting] as String),
+        alertStyle: _decodeUNAlertStyle(
+            jsonMap[TxUNNotificationSettings.alertStyle] as String),
+        showPreviewsSetting: _decodeUNShowPreviewsSetting(
+            jsonMap[TxUNNotificationSettings.showPreviewsSetting] as String),
+        criticalAlertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.criticalAlertSetting] as String),
+        providesAppNotificationSettings:
+            jsonMap[TxUNNotificationSettings.providesAppNotificationSettings]
+                as bool,
+        announcementSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.announcementSetting] as String),
+      );
+
+  UNShowPreviewsSetting _decodeUNShowPreviewsSetting(String setting) {
+    switch (setting) {
+      case TxUNShowPreviewsSettingEnum.always:
+        return UNShowPreviewsSetting.always;
+      case TxUNShowPreviewsSettingEnum.whenAuthenticated:
+        return UNShowPreviewsSetting.whenAuthenticated;
+      case TxUNShowPreviewsSettingEnum.never:
+        return UNShowPreviewsSetting.never;
+    }
+    throw AblyException(
+      'Platform communication error. UNShowPreviewsSetting is invalid: $setting',
+    );
+  }
+
+  UNAlertStyle _decodeUNAlertStyle(String style) {
+    switch (style) {
+      case TxUNAlertStyleEnum.alert:
+        return UNAlertStyle.alert;
+      case TxUNAlertStyleEnum.banner:
+        return UNAlertStyle.banner;
+      case TxUNAlertStyleEnum.none:
+        return UNAlertStyle.none;
+    }
+    throw AblyException(
+      'Platform communication error. UNAlertStyle is invalid: $style',
+    );
+  }
+
+  UNAuthorizationStatus _decodeUNAuthorizationStatus(String status) {
+    switch (status) {
+      case TxUNAuthorizationStatusEnum.notDetermined:
+        return UNAuthorizationStatus.notDetermined;
+      case TxUNAuthorizationStatusEnum.denied:
+        return UNAuthorizationStatus.denied;
+      case TxUNAuthorizationStatusEnum.authorized:
+        return UNAuthorizationStatus.authorized;
+      case TxUNAuthorizationStatusEnum.provisional:
+        return UNAuthorizationStatus.provisional;
+      case TxUNAuthorizationStatusEnum.ephemeral:
+        return UNAuthorizationStatus.ephemeral;
+    }
+    throw AblyException(
+      'Platform communication error. UNAuthorizationStatus is invalid: $status',
+    );
+  }
+
+  UNNotificationSetting _decodeUNNotificationSetting(String setting) {
+    switch (setting) {
+      case TxUNNotificationSettingEnum.disabled:
+        return UNNotificationSetting.disabled;
+      case TxUNNotificationSettingEnum.enabled:
+        return UNNotificationSetting.enabled;
+      case TxUNNotificationSettingEnum.notSupported:
+        return UNNotificationSetting.notSupported;
+    }
+    throw AblyException(
+      'Platform communication error. UNNotificationSetting is invalid: $setting',
     );
   }
 

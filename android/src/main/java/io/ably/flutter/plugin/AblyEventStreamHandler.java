@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -30,7 +31,11 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
    * As ablyLibrary is a singleton,
    * all ably object instance will be accessible
    */
-  private final AblyLibrary ablyLibrary = AblyLibrary.getInstance();
+  private final AblyLibrary ablyLibrary;
+
+  public AblyEventStreamHandler(Context applicationContext) {
+    ablyLibrary = AblyLibrary.getInstance(applicationContext);
+  }
 
   /**
    * Refer to the comments on AblyMethodCallHandler.MethodResultWrapper

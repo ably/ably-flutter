@@ -36,6 +36,7 @@ class Realtime extends PlatformObject
         super() {
     _connection = Connection(this);
     _channels = RealtimePlatformChannels(this);
+    push = PushNative(realtime: this);
   }
 
   @override
@@ -49,9 +50,7 @@ class Realtime extends PlatformObject
   }
 
   // The _connection instance keeps a reference to this platform object.
-  // Ideally connection would be final, but that would need 'late final'
-  // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  late Connection _connection;
+  late final Connection _connection;
 
   @override
   Connection get connection => _connection;
@@ -63,7 +62,7 @@ class Realtime extends PlatformObject
   ClientOptions options;
 
   @override
-  Push? push;
+  late Push push;
 
   late RealtimePlatformChannels _channels;
 
@@ -178,4 +177,8 @@ class Realtime extends PlatformObject
   Future<DateTime> time() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<LocalDevice> device() async =>
+      invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
