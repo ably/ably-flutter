@@ -332,7 +332,7 @@ In this case, the device token is invalid. Make sure the environment for push no
 
 When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in `.entitlements` file to `production` does not make the debug application use the production APNs server.
 
->**Development/ Sandbox APNs:** Local builds through Xcode/ Android Studio/ command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also result in *sandbox* APNs tokens.
+>**Development/ Sandbox APNs:** Local builds through Xcode/ Android Studio/ command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also get *sandbox* APNs tokens.
 >
 >**Production APNs:** Apps distributed through App Store Connect (TestFlight and App Store), Ad Hoc and Enterprise distribution methods will always get *production* APNs tokens.
 
