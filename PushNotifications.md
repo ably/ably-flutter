@@ -304,7 +304,7 @@ On Android, you can use logcat built into Android Studio or [pidcat](https://git
 
 ### I have confirmed messages are not being received by the device (no logs of being cancelled), but no errors are thrown when I sent the message.
 
-Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. An error may be returned by APNs/ FCM when an error occurs when Ably attempts to push to a specific device. You should retrieve the device registration using a Push Admin or the Ably Dashboard. You should be able to see any errors. For example, if your application has a bundle ID which does not match APNs certificate generated from developer.apple.com,  you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
+Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. However, push notification messages may not be delivered to specific devices if there is an error returned by APNs/ FCM. You should retrieve the device registration using a Push Admin or the Ably Dashboard. For example, if your application has a bundle ID which does not match APNs certificate generated from developer.apple.com,  you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
 
 ![Ably Dashboard showing APNs error](images/ably-dashboard-1.png)
 
