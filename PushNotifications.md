@@ -302,6 +302,16 @@ On iOS, to show alert notifications, you need to request provisional permission 
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
 
+### I have confirmed messages are not being received by the device (no logs of being cancelled), but no errors are thrown when I sent the message.
+
+Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. An error may be returned by APNs/ FCM when an error occurs when Ably attempts to push to a specific device. You should retrieve the device registration using a Push Admin or the Ably Dashboard. You should be able to see any errors. For example, if your application has a bundle ID which does not match APNs certificate generated from developer.apple.com,  you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
+
+![Ably Dashboard showing APNs error](images/ably-dashboard-1.png)
+
+For iOS device registrations, the device push state error are errors passed directly from APNs. For a full list of errors and what they mean, look at [Values for the APNs JSON `reason` key](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1).
+
+For Android device registrations, the device push state error are errors passed directly from FCM. For a full list of errors and what they mean, look at [Downstream message error response codes](https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=ur#error-codes). 
+
 ### Why are notifications not shown to the user when the app is open on Android?
 
 When the app is in the foreground (open by the user), Firebase messaging ignores the message. You would need to send a data message and build a local notification instead. On iOS, you can specify this in your `UNUserNotificationCenterDelegate`'s `userNotificationCenter:_willPresentNotification:withCompletionHandler` method. In the example app, this is implemented in `AppDelegate.m`, where the notification is always shown. You can perform logic to decide if it should be shown or not based on the notification.
@@ -314,13 +324,10 @@ Ensure your Android app contains the Firebase configuration `android/app/google-
 
 You need to add the firebase-analytics dependency to your `app/build.gradle` file. This was optional when following the [Firebase Android client setup guide](https://firebase.google.com/docs/cloud-messaging/android/client), for example: `implementation 'com.google.firebase:firebase-analytics:version_number'`. Find the latest version number from [MVNRepository](https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics).
 
-### Why does my iOS device message not get received, and the error message returned is e.g. `BadDeviceToken`?
+### When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is e.g. `BadDeviceToken`?
 
-This is an error passed straight from APNs. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
+In this case, the device token is invalid. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
 
-For a full list of errors and what they mean, look at [Values for the APNs JSON `reason` key](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1).
-
-For example, for `BadDeviceToken`:
 > The specified device token was bad. Verify that the request contains a valid token and that the token matches the environment.
 
 When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in `.entitlements` file to `production` does not make the debug application use the production APNs server.
@@ -331,7 +338,7 @@ When running a debug application, the sandbox/ development APNs server is used. 
 
 For more information, take a look at [What are the possible reasons to get APNs responses BadDeviceToken or Unregistered?](https://stackoverflow.com/questions/42511476/what-are-the-possible-reasons-to-get-apns-responses-baddevicetoken-or-unregister).
 
-### Android only: When I look in ably.com's dashboard, i see "InvalidRegistration"
+### Android: When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is `InvalidRegistration`?
 
 This means your registration token is invalid. Ably is may not have your device's FCM registration token. `FirebaseMessagingService.onNewToken` is only called when a new token is available, so if Ably was installed in a new app update and the token has **not** been changed, Ably won't know it. If you have previously registered with FCM without Ably, you should make sure to give ably the latest token, by getting it and calling:
 
