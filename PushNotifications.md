@@ -323,7 +323,7 @@ For a full list of errors and what they mean, look at [Values for the APNs JSON 
 For example, for `BadDeviceToken`:
 > The specified device token was bad. Verify that the request contains a valid token and that the token matches the environment.
 
-When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab).  Do not try to change the `.entitlements` file to `production`, but this does not make the debug application use the production APNs server. For more information about this limitation, see [How do I make my debug app version receive production push notifications on iOS?](https://stackoverflow.com/a/46118155/7365866).
+When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in `.entitlements` file to `production` does not make the debug application use the production APNs server.
 
 >**Development/ Sandbox APNs:** Local builds through Xcode/ Android Studio/ command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also result in *sandbox* APNs tokens.
 >
