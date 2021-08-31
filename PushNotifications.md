@@ -62,7 +62,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
     - Ensure your application bundle ID is registered on App Store connect. This is done automatically by Xcode when you select your team under `Signing & Capabilities`.
     - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
-       - When running your application via Xcode or your machine (Android Studio, command line), your application runs in either debug, profile or release mode. In all cases, your application will use the sandbox/ development APNs environment. When distributing your app in the App Store, Ad Hoc or through App Store Connect, it will always use the production environment. If distributing through `Development`, the sandbox/ development APNs environment is used. Keep in mind your distribution method when checking the `Use APNS sandbox environment?` checkbox in a Ably application on the Ably dashboard (notifications tab). Ensure your application connects to an Ably application configured to use production APNs if the application is being distributed publicly.
+       - When running your application via Xcode or your machine (Android Studio, command line), your application runs in either debug, profile or release mode. In all cases, your application will use the sandbox/ development APNs environment. When distributing your app in the App Store, Ad Hoc or through App Store Connect, it will always use the production environment. If distributing through `Development`, the sandbox / development APNs environment is used. Keep in mind your distribution method when checking the `Use APNS sandbox environment?` checkbox in an Ably application on the Ably dashboard (notifications tab). Ensure your application connects to an Ably application configured to use production APNs if the application is being distributed publicly.
     - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
     - Add `remote notification` Background mode:
         - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
@@ -302,9 +302,9 @@ On iOS, to show alert notifications, you need to request provisional permission 
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
 
-### I have confirmed messages are not being received by the device (no logs of being cancelled), but no errors are thrown when I sent the message.
+### I have confirmed messages are not being received by the device (no logs of being cancelled), but no errors are thrown when I send the message
 
-Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. However, push notification messages may not be delivered to specific devices if there is an error returned by APNs/ FCM. You should retrieve the device registration using a Push Admin or the Ably Dashboard. For example, if your application has a bundle ID which does not match APNs certificate generated from developer.apple.com,  you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
+Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. However, push notification messages may not be delivered to specific devices if there is an error returned by APNs / FCM. You should retrieve the device registration using a Push Admin or the Ably Dashboard. For example, if your application has a bundle ID which does not match APNs certificate generated from [developer.apple.com](https://developer.apple.com/account/resources/identifiers/list), you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
 
 ![Ably Dashboard showing APNs error](images/ably-dashboard-1.png)
 
@@ -330,15 +330,15 @@ In this case, the device token is invalid. Make sure the environment for push no
 
 > The specified device token was bad. Verify that the request contains a valid token and that the token matches the environment.
 
-When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in `.entitlements` file to `production` does not make the debug application use the production APNs server.
+When running a debug application, the sandbox / development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in the `.entitlements` file to `production` does not make the debug application use the production APNs server.
 
->**Development/ Sandbox APNs:** Local builds through Xcode/ Android Studio/ command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also get *sandbox* APNs tokens.
+> **Development / Sandbox APNs:** Local builds through Xcode / Android Studio/ command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also get *sandbox* APNs tokens.
 >
->**Production APNs:** Apps distributed through App Store Connect (TestFlight and App Store), Ad Hoc and Enterprise distribution methods will always get *production* APNs tokens.
+> **Production APNs:** Apps distributed through App Store Connect (TestFlight and App Store), Ad Hoc and Enterprise distribution methods will always get *production* APNs tokens.
 
 For more information, take a look at [What are the possible reasons to get APNs responses BadDeviceToken or Unregistered?](https://stackoverflow.com/questions/42511476/what-are-the-possible-reasons-to-get-apns-responses-baddevicetoken-or-unregister).
 
-### Android: When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is `InvalidRegistration`?
+### Android: When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is `InvalidRegistration`
 
 This means your registration token is invalid. Ably is may not have your device's FCM registration token. `FirebaseMessagingService.onNewToken` is only called when a new token is available, so if Ably was installed in a new app update and the token has **not** been changed, Ably won't know it. If you have previously registered with FCM without Ably, you should make sure to give ably the latest token, by getting it and calling:
 
