@@ -268,7 +268,7 @@ Do this only if you do not want the device to receive push notifications at all.
 
 ### Push messages are not being delivered to my device.
 
-If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard,
+If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard or using a Push Admin.
 
 On iOS, to show alert notifications, you need to request provisional permission or explicit permission from the user. When debugging further, we recommend using the Console.app (this is different to Terminal.app or iTerm2.app) installed on your mac.
 - To confirm your application received the push message/ check for errors related to push notifications, find relevant logs by:
