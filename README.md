@@ -61,9 +61,9 @@ Features that we do not currently support, but we do plan to add in the future:
 
 Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
 
-![Drop down menu for Run/Debug Configurations in Android Studio](https://raw.githubusercontent.com/ably/ably-flutter/main/images/run-configuration-1.png)
+![Drop down menu for Run/Debug Configurations in Android Studio](images/run-configuration-1.png)
 
-![Run/Debug Configurations window in Android Studio](https://raw.githubusercontent.com/ably/ably-flutter/main/images/run-configuration-2.png)
+![Run/Debug Configurations window in Android Studio](images/run-configuration-2.png)
 
 #### Visual Studio Code
 
