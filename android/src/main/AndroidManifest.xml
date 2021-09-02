@@ -1,3 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="io.ably.flutter.plugin">
+    <application>
+        <!-- Receive new tokens if firebase_messaging flutter library is not installed-->
+        <service android:name="io.ably.flutter.plugin.push.AblyFlutterMessagingService"
+            android:exported="false">
+            <!-- We want a lower priority than firebase_messaging firebase library (priority 0),
+            since it will send a intent broadcast when it receives a new token which we can listen
+            to it. This service should only run on an app without firebase_messaging flutter
+            library. -->
+            <intent-filter android:priority="-1">
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- TODO register a runtime broadcast receiver for io.flutter.plugins.firebase.messaging.TOKEN. -->
+        <!--Receive messages-->
+        <receiver android:name="io.ably.flutter.plugin.push.AblyFlutterMessagingReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

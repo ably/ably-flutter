@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import java.lang.reflect.Method;
 
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushNotificationEventHandlers;
 import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -23,6 +24,7 @@ public class AblyFlutterPlugin implements FlutterPlugin {
         applicationContext = flutterPluginBinding.getApplicationContext();
         MethodChannel methodChannel = setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
+        PushNotificationEventHandlers.instantiate(applicationContext, methodChannel);
     }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
