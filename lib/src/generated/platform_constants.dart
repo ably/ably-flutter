@@ -27,9 +27,10 @@ class CodecTypes {
   static const int localDevice = 146;
   static const int pushChannelSubscription = 147;
   static const int unNotificationSettings = 148;
-  static const int errorInfo = 149;
-  static const int connectionStateChange = 150;
-  static const int channelStateChange = 151;
+  static const int remoteMessage = 149;
+  static const int errorInfo = 150;
+  static const int connectionStateChange = 151;
+  static const int channelStateChange = 152;
 }
 
 class PlatformMethod {
@@ -75,6 +76,14 @@ class PlatformMethod {
   static const String pushOnActivate = 'pushOnActivate';
   static const String pushOnDeactivate = 'pushOnDeactivate';
   static const String pushOnUpdateFailed = 'pushOnUpdateFailed';
+  static const String pushNotificationTapLaunchedAppFromTerminated =
+      'pushNotificationTapLaunchedAppFromTerminated';
+  static const String pushOnShowNotificationInForeground =
+      'pushOnShowNotificationInForeground';
+  static const String pushOnMessage = 'pushOnMessage';
+  static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
+  static const String pushOnNotificationTap = 'pushOnNotificationTap';
+  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -351,8 +360,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -368,8 +376,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';
@@ -399,4 +406,14 @@ class TxUNShowPreviewsSettingEnum {
   static const String always = 'always';
   static const String whenAuthenticated = 'whenAuthenticated';
   static const String never = 'never';
+}
+
+class TxRemoteMessage {
+  static const String data = 'data';
+  static const String notification = 'notification';
+}
+
+class TxNotification {
+  static const String title = 'title';
+  static const String body = 'body';
 }

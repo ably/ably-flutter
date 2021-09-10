@@ -1,11 +1,14 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/services.dart';
 
 import '../../authentication/authentication.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../platform.dart';
+import '../platform_internal.dart';
 import 'ably_message.dart';
-import 'push_events_native.dart';
+import 'push_activation_events_native.dart';
+import 'push_notification_events_native.dart';
 
 /// Handles method calls invoked from platform side to dart side
 class AblyMethodCallHandler {
@@ -24,6 +27,10 @@ class AblyMethodCallHandler {
           return onPushOnDeactivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnUpdateFailed:
           return onPushOnUpdateFailed(call.arguments as ErrorInfo);
+        case PlatformMethod.pushOnMessage:
+          return onPushOnMessage(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnBackgroundMessage:
+          return onPushBackgroundMessage(call.arguments as RemoteMessage);
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -62,18 +69,31 @@ class AblyMethodCallHandler {
     return callbackResponse;
   }
 
+  PushActivationEventsNative _pushActivationEvents =
+      PushNative.activationEvents as PushActivationEventsNative;
+  PushNotificationEventsNative _pushNotificationEvents =
+      PushNative.notificationEvents as PushNotificationEventsNative;
+
   Future<Object?> onPushOnActivate(ErrorInfo? error) async {
-    PushEventsNative.shared.onActivateStreamController.add(error);
+    _pushActivationEvents.onActivateStreamController.add(error);
     return null;
   }
 
   Future<Object?> onPushOnDeactivate(ErrorInfo? error) async {
-    PushEventsNative.shared.onDeactivateStreamController.add(error);
+    _pushActivationEvents.onDeactivateStreamController.add(error);
     return null;
   }
 
   Future<Object?> onPushOnUpdateFailed(ErrorInfo error) async {
-    PushEventsNative.shared.onUpdateFailedStreamController.add(error);
+    _pushActivationEvents.onUpdateFailedStreamController.add(error);
     return null;
+  }
+
+  Future<Object?> onPushOnMessage(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.onMessageStreamController.add(remoteMessage);
+  }
+
+  Future<Object?> onPushBackgroundMessage(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
   }
 }

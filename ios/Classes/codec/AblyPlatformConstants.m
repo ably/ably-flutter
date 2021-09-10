@@ -47,6 +47,12 @@ NSString *const AblyPlatformMethod_pushGetNotificationSettings= @"pushGetNotific
 NSString *const AblyPlatformMethod_pushOnActivate= @"pushOnActivate";
 NSString *const AblyPlatformMethod_pushOnDeactivate= @"pushOnDeactivate";
 NSString *const AblyPlatformMethod_pushOnUpdateFailed= @"pushOnUpdateFailed";
+NSString *const AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated= @"pushNotificationTapLaunchedAppFromTerminated";
+NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground= @"pushOnShowNotificationInForeground";
+NSString *const AblyPlatformMethod_pushOnMessage= @"pushOnMessage";
+NSString *const AblyPlatformMethod_pushOnBackgroundMessage= @"pushOnBackgroundMessage";
+NSString *const AblyPlatformMethod_pushOnNotificationTap= @"pushOnNotificationTap";
+NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage= @"pushSetOnBackgroundMessage";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -331,3 +337,11 @@ NSString *const TxUNAuthorizationStatusEnum_ephemeral = @"ephemeral";
 NSString *const TxUNShowPreviewsSettingEnum_always = @"always";
 NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated = @"whenAuthenticated";
 NSString *const TxUNShowPreviewsSettingEnum_never = @"never";
+
+// key constants for RemoteMessage
+NSString *const TxRemoteMessage_data = @"data";
+NSString *const TxRemoteMessage_notification = @"notification";
+
+// key constants for Notification
+NSString *const TxNotification_title = @"title";
+NSString *const TxNotification_body = @"body";

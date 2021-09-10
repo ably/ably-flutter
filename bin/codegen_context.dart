@@ -27,6 +27,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'localDevice',
     'pushChannelSubscription',
     'unNotificationSettings',
+    'remoteMessage',
 
     'errorInfo',
 
@@ -104,10 +105,24 @@ const List<Map<String, dynamic>> _platformMethods = [
     'name': 'pushGetNotificationSettings',
     'value': 'pushGetNotificationSettings'
   },
-  // Push Notification Events
+  // Push Activation Events
   {'name': 'pushOnActivate', 'value': 'pushOnActivate'},
   {'name': 'pushOnDeactivate', 'value': 'pushOnDeactivate'},
   {'name': 'pushOnUpdateFailed', 'value': 'pushOnUpdateFailed'},
+  // Push Notification Events
+  {
+    'name': 'pushNotificationTapLaunchedAppFromTerminated',
+    'value': 'pushNotificationTapLaunchedAppFromTerminated'
+  },
+  {
+    'name': 'pushOnShowNotificationInForeground',
+    'value': 'pushOnShowNotificationInForeground'
+  },
+  {'name': 'pushOnMessage', 'value': 'pushOnMessage'},
+  {'name': 'pushOnBackgroundMessage', 'value': 'pushOnBackgroundMessage'},
+  {'name': 'pushOnNotificationTap', 'value': 'pushOnNotificationTap'},
+  // Used only on Android
+  {'name': 'pushSetOnBackgroundMessage', 'value': 'pushSetOnBackgroundMessage'},
 
   // Realtime events
   {
@@ -443,7 +458,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'UNAuthorizationStatusEnum',
-    'properties': <String>[
+    'properties': [
       'notDetermined',
       'denied',
       'authorized',
@@ -454,6 +469,17 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'UNShowPreviewsSettingEnum',
     'properties': ['always', 'whenAuthenticated', 'never']
+  },
+  {
+    'name': 'RemoteMessage',
+    'properties': [
+      'data',
+      'notification',
+    ]
+  },
+  {
+    'name': 'Notification',
+    'properties': ['title', 'body']
   }
 ];
 

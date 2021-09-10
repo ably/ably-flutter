@@ -1,30 +1,34 @@
 package io.ably.flutter.plugin;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import java.lang.reflect.Method;
+import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
-import io.ably.flutter.plugin.push.PushNotificationEventHandlers;
+import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodCodec;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-public class AblyFlutterPlugin implements FlutterPlugin {
+public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware {
     private Context applicationContext;
+    private AblyMethodCallHandler methodCallHandler;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         applicationContext = flutterPluginBinding.getApplicationContext();
-        MethodChannel methodChannel = setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
-        PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
-        PushNotificationEventHandlers.instantiate(applicationContext, methodChannel);
+        setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
     }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -37,11 +41,10 @@ public class AblyFlutterPlugin implements FlutterPlugin {
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
     public void registerWith(Registrar registrar) {
-        MethodChannel methodChannel = AblyFlutterPlugin.setupChannels(registrar.messenger(), applicationContext);
-        PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
+        setupChannels(registrar.messenger(), applicationContext);
     }
 
-    private static MethodChannel setupChannels(BinaryMessenger messenger, Context applicationContext) {
+    private void setupChannels(BinaryMessenger messenger, Context applicationContext) {
         final MethodCodec codec = createCodec();
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
@@ -55,8 +58,8 @@ public class AblyFlutterPlugin implements FlutterPlugin {
                 streamsChannel::reset,
                 applicationContext
         );
-        channel.setMethodCallHandler(methodCallHandler);
-        return channel;
+        PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
+        PushMessagingEventHandlers.instantiate(applicationContext, methodChannel);
     }
 
     @Override
@@ -66,5 +69,32 @@ public class AblyFlutterPlugin implements FlutterPlugin {
 
     private static MethodCodec createCodec() {
         return new StandardMethodCodec(new AblyMessageCodec());
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        Activity activity = binding.getActivity();
+        Intent intent = activity.getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            RemoteMessage message = new RemoteMessage(extras);
+            if (message.getData().size() > 0 || message.getNotification() != null) {
+                // Only send the RemoteMessage to the dart side if it was actually a RemoteMessage.
+                methodCallHandler.setRemoteMessageFromUserTapLaunchesApp(message);
+            }
+        }
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    }
+
+    // This method does not get called when the app goes into the background
+    @Override
+    public void onDetachedFromActivity() {
     }
 }

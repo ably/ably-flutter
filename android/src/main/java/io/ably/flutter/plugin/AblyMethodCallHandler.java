@@ -7,6 +7,8 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.messaging.RemoteMessage;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushBackgroundIsolateService;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -35,13 +38,16 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static AblyMethodCallHandler _instance;
+  private Context applicationContext;
 
   public interface OnHotRestart {
     // this method will be called on every fresh start and on every hot restart
     void trigger();
   }
 
-  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
+  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel,
+                                                        final OnHotRestart listener,
+                                                        final Context applicationContext) {
     if (null == _instance) {
       _instance = new AblyMethodCallHandler(channel, listener, applicationContext);
     }
@@ -52,9 +58,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private final OnHotRestart onHotRestartListener;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
+  @Nullable
+  private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
   private AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
+    channel.setMethodCallHandler(this);
     this.channel = channel;
+    this.applicationContext = applicationContext;
     this.onHotRestartListener = listener;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
@@ -96,6 +106,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.pushUnsubscribeClient, this::pushUnsubscribeClient);
     _map.put(PlatformConstants.PlatformMethod.pushListSubscriptions, this::pushListSubscriptions);
     _map.put(PlatformConstants.PlatformMethod.pushDevice, this::pushDevice);
+    _map.put(PlatformConstants.PlatformMethod.pushNotificationTapLaunchedAppFromTerminated, this::pushNotificationTapLaunchedAppFromTerminated);
+    _map.put(PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage, this::pushSetOnBackgroundMessage);
 
     // paginated results
     _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
@@ -693,6 +705,20 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     } catch (AblyException e) {
       handleAblyException(result, e);
     }
+  }
+
+  public void setRemoteMessageFromUserTapLaunchesApp(@Nullable RemoteMessage message) {
+    remoteMessageFromUserTapLaunchesApp = message;
+  }
+
+  private void pushNotificationTapLaunchedAppFromTerminated(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    result.success(remoteMessageFromUserTapLaunchesApp);
+    remoteMessageFromUserTapLaunchesApp = null;
+  }
+
+  private void pushSetOnBackgroundMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    Long backgroundMessageHandlerHandle = (Long) call.arguments;
+    PushBackgroundIsolateService.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
