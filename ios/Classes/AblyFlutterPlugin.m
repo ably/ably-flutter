@@ -551,6 +551,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
+    PushNotificationEventHandlers* _pushNotificationEventHandlers;
 }
 
 @synthesize ably = _ably;
@@ -571,6 +572,10 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
     AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel registrar:registrar];
+    
+    UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
+        plugin->_pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
+    center.delegate = plugin->_pushNotificationEventHandlers;
     
     // registering method channel with registrar
     [registrar addMethodCallDelegate:plugin channel:channel];
@@ -619,7 +624,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
-        // Push Notification Handlers
+        // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
         AblyPlatformMethod_pushGetNotificationSettings: PushHandlers.getNotificationSettings,
@@ -630,6 +635,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushUnsubscribeClient: PushHandlers.unsubscribeClient,
         AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
         AblyPlatformMethod_pushDevice: PushHandlers.device,
+//        AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated:
     };
     
     _nextRegistration = 1;
@@ -685,8 +691,10 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 }
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    // This needs to return NO allow the message to arrive to the users application AppDelegate.
-    return NO;
+    [_pushNotificationEventHandlers application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+    // TODO try this, to give other plugins and AppDelegate a chance to receive the remote notification as well. If NO/ false is returned, the user's didReceiveRemoteNotification delegate method will be called
+    // TODO This might return too early though
+    return YES;
 }
 
 @end

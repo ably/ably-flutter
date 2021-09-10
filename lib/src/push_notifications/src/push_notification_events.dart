@@ -27,6 +27,11 @@ abstract class PushNotificationEvents {
   /// TODO: has the notification been seen?
   Stream<RemoteMessage> get onMessage;
 
+  /// This method will be called when a notification or data message is
+  /// received by the device.
+  ///
+  /// Warning: only set a top-level function or static callback function. This
+  /// is a limitation of a Dart API being used internally, [PluginUtilities.getCallbackHandle](https://api.flutter.dev/flutter/dart-ui/PluginUtilities/getCallbackHandle.html)
   set onBackgroundMessage(BackgroundMessageHandler handler);
 
   // Set this to run heavy processing. This will be called the same time as

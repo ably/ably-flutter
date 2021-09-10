@@ -11,10 +11,10 @@ import 'push_notifications/push_notification_event_handlers.dart';
 import 'push_notifications/push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   PushNotificationHandlers.setUpEventHandlers();
-  // PushNotificationService.setUpMessageHandlers();
-
+  PushNotificationHandlers.setUpMessageHandlers();
   runApp(MyApp());
 }
 
