@@ -5,6 +5,7 @@ import '../../push_notifications/push_notifications.dart';
 import '../../realtime/realtime.dart';
 import '../../rest/rest.dart';
 import '../platform.dart';
+import '../platform_internal.dart';
 
 /// The native code implementation of [PushChannel].
 class PushChannelNative extends PlatformObject implements PushChannel {

@@ -11,6 +11,7 @@ import '../../../message/message.dart';
 import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 
 /// Plugin based implementation of Realtime channel
 class RealtimeChannel extends PlatformObject

@@ -9,6 +9,7 @@ import '../../../push_notifications/src/local_device.dart';
 import '../../../rest/rest.dart';
 import '../../../stats/stats.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 
 Map<int?, Rest> _restInstances = {};
 Map<int?, Rest>? _restInstancesUnmodifiableView;

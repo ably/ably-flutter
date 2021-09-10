@@ -3,10 +3,10 @@ import '../push_notifications.dart';
 
 /// Methods that will be called back when events happen related to push
 /// notifications, such as device activation, deactivation, update fails.
-abstract class PushEvents {
+abstract class PushActivationEvents {
   /// Called when device completes activation with Ably for push notifications.
   /// If successful, errorInfo will be null.
-  ///
+  //
   /// Listening to onDeactivate is optional since [Push.activate]
   //  will return when it succeeds, and throw when it fails.
   Stream<ErrorInfo?> get onActivate;
