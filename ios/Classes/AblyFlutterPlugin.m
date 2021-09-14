@@ -49,10 +49,8 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
     
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken rest:rest];
-        plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = nil;
     } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
         [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error rest:rest];
-        plugin.didFailToRegisterForRemoteNotificationsWithError_error = nil;
     }
     
     result(restHandle);
@@ -210,10 +208,8 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
     // This is similarly repeated for in _createRestWithOptions
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken realtime:realtime];
-        plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = nil;
     } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
         [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error realtime:realtime];
-        plugin.didFailToRegisterForRemoteNotificationsWithError_error = nil;
     }
     
     result(realtimeHandle);
