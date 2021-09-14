@@ -50,9 +50,9 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware {
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
         streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(applicationContext));
 
-        final MethodChannel channel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
+        final MethodChannel methodChannel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
         AblyMethodCallHandler methodCallHandler = AblyMethodCallHandler.getInstance(
-                channel,
+                methodChannel,
                 // Streams channel will be reset on `register` method call
                 // and also on every hot-reload
                 streamsChannel::reset,
