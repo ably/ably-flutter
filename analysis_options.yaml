@@ -21,7 +21,6 @@ linter:
     ## Error Rules
     # personal preference this conflicts with prefer_relative_imports
     # - always_use_package_imports
-    - prefer_relative_imports # personal preference
     - avoid_returning_null_for_future
     - avoid_slow_async_io
     - avoid_type_to_string
@@ -35,6 +34,7 @@ linter:
     - invariant_booleans
     - literal_only_boolean_expressions
     - no_adjacent_strings_in_list
+    - prefer_relative_imports # personal preference
     - test_types_in_equals
     - throw_in_finally
     - unnecessary_statements
