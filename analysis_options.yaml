@@ -1,7 +1,3 @@
-# Updated according to
-# https://dart-lang.github.io/linter/lints/index.html
-# at 2020-08-10
-
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
