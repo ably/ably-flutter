@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/services.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../../../../ably_flutter.dart';
 import '../../../error/error.dart';
