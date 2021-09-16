@@ -11,8 +11,8 @@ import 'push_notification_message_examples.dart';
 class PushNotificationService {
   final _androidPushNotificationConfiguration =
       AndroidPushNotificationConfiguration();
-  late final ably.Realtime? realtime;
-  late final ably.Rest? rest;
+  ably.Realtime? realtime;
+  ably.Rest? rest;
   ably.RealtimeChannelInterface? _realtimeChannel;
   ably.RealtimeChannelInterface? _pushLogMetachannel;
   ably.RestChannelInterface? _restChannel;

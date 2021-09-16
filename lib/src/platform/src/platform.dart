@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../platform.dart';
+import 'background_method_call_handler.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
@@ -15,6 +16,11 @@ class Platform {
   /// instance of method channel to interact with android/ios code
   static final MethodChannel methodChannel =
       MethodChannel('io.ably.flutter.plugin', codec);
+
+  /// A method channel used to communicate with the user's app isolate
+  /// we explicitly launched when a RemoteMessage is received. Used only on Android.
+  static final MethodChannel backgroundMethodChannel =
+  MethodChannel('io.ably.flutter.plugin.background', codec);
 
   /// instance of method channel to listen to android/ios events
   static final StreamsChannel streamsChannel =
@@ -27,6 +33,7 @@ class Platform {
   static Future _initialize() async {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
+      BackgroundMethodCallHandler(backgroundMethodChannel);
       _initializer = methodChannel
           .invokeMethod(PlatformMethod.registerAbly)
           .timeout(Timeouts.initializeTimeout, onTimeout: () {

@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:io' as io show Platform;
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
+
 import '../../generated/platform_constants.dart';
 import '../../push_notifications/src/push_notification_events.dart';
 import '../../push_notifications/src/remote_message.dart';
 import '../platform.dart';
 
 class PushNotificationEventsNative implements PushNotificationEvents {
-  Future<ForegroundNotificationConfiguration> Function(RemoteMessage message)?
+  Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
@@ -29,39 +31,32 @@ class PushNotificationEventsNative implements PushNotificationEvents {
 
   @override
   void setOnShowNotificationInForeground(
-      Future<ForegroundNotificationConfiguration> Function(
-              RemoteMessage message)
-          callback) {
+      Future<bool> Function(RemoteMessage message) callback) {
     onShowNotificationInForegroundHandler = callback;
   }
 
-  Future<ForegroundNotificationConfiguration> showNotificationInForeground(
-      RemoteMessage message) async {
+  /// An internal method that is called from the Platform side to check if the user
+  /// wants notifications to be shown when the app is in the foreground.
+  Future<bool> showNotificationInForeground(RemoteMessage message) async {
     if (onShowNotificationInForegroundHandler == null) {
-      return ForegroundNotificationConfiguration();
+      return false;
     }
     return onShowNotificationInForegroundHandler!(message);
   }
 
   BackgroundMessageHandler? _onBackgroundMessage = null;
 
-  set onBackgroundMessage(BackgroundMessageHandler handler) {
+  void setOnBackgroundMessage(BackgroundMessageHandler handler) async {
+    _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
-      final handlerHandle = PluginUtilities.getCallbackHandle(handler);
-      if (handlerHandle == null) {
-        // TODO throw an error because the user did not set it to a top level function or something else.
+      try {
+        await Platform.backgroundMethodChannel
+            .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
+      } on MissingPluginException {
+        // Ignore MissingPluginException(No implementation found for method pushSetOnBackgroundMessage on channel io.ably.flutter.plugin.background)
+        // This platform method is only available by Android side when the
+        // user's app was launched manually by the plugin to handle messages.
       }
-      Platform.methodChannel.invokeMethod(
-          PlatformMethod.pushSetOnBackgroundMessage,
-          handlerHandle!.toRawHandle());
-    } else {
-      // Don't set it for Android, since we don't want to call it on the dart side.
-      // This is because we can only call it on the dart side in some cases, and
-      // it's simpler to create a new isolate every time.
-      // Instead, an isolate will run the callback
-      // TODO consider just creating an isolate and using it forever. Or caching it
-      //  There would be upfront cost but not regular costs.
-      _onBackgroundMessage = handler;
     }
   }
 
@@ -70,6 +65,7 @@ class PushNotificationEventsNative implements PushNotificationEvents {
       _onBackgroundMessage!(remoteMessage);
     } else {
       //  TODO throw an exception, so users knows that their message wasn't handled
+      // Receive RemoteMessage but no handler was set. Set `onBackgroundMessage`.
     }
   }
 }

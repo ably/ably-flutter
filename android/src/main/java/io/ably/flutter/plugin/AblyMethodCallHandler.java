@@ -16,7 +16,7 @@ import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
-import io.ably.flutter.plugin.push.PushBackgroundIsolateService;
+import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -45,15 +45,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     void trigger();
   }
 
-  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel,
-                                                        final OnHotRestart listener,
-                                                        final Context applicationContext) {
-    if (null == _instance) {
-      _instance = new AblyMethodCallHandler(channel, listener, applicationContext);
-    }
-    return _instance;
-  }
-
   private final MethodChannel channel;
   private final OnHotRestart onHotRestartListener;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
@@ -61,8 +52,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
-  private AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
-    channel.setMethodCallHandler(this);
+  public AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
     this.channel = channel;
     this.applicationContext = applicationContext;
     this.onHotRestartListener = listener;
@@ -718,7 +708,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void pushSetOnBackgroundMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     Long backgroundMessageHandlerHandle = (Long) call.arguments;
-    PushBackgroundIsolateService.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
+    PushBackgroundIsolateRunner.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

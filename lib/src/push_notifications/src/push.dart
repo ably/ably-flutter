@@ -18,7 +18,12 @@ abstract class Push {
   /// Activate this device for push notifications by registering
   /// with the push transport such as GCM/APNS.
   ///
-  /// throws: AblyException
+  /// In the case of network issues, this method will not complete until
+  /// network connection is recovered. If the device is
+  /// restarted, the results will still be returned by
+  /// [PushActivationEvents.onActivate]
+  ///
+  /// throws: AblyException when the server returns an error.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   Future<void> activate();
@@ -69,6 +74,11 @@ abstract class Push {
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
+  ///
+  /// In the case or authentication or network issues with Ably, this method
+  /// will not complete until these issues are resolved. In the device is
+  /// restarted, the results will be returned by
+  /// [PushActivationEvents.onDeactivate]
   ///
   /// throws: AblyException
   ///

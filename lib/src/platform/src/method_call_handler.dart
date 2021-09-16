@@ -22,15 +22,20 @@ class AblyMethodCallHandler {
         case PlatformMethod.realtimeAuthCallback:
           return onRealtimeAuthCallback(call.arguments as AblyMessage?);
         case PlatformMethod.pushOnActivate:
-          return onPushOnActivate(call.arguments as ErrorInfo?);
+          return _onPushOnActivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnDeactivate:
-          return onPushOnDeactivate(call.arguments as ErrorInfo?);
+          return _onPushOnDeactivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnUpdateFailed:
-          return onPushOnUpdateFailed(call.arguments as ErrorInfo);
+          return _onPushOnUpdateFailed(call.arguments as ErrorInfo);
         case PlatformMethod.pushOnMessage:
-          return onPushOnMessage(call.arguments as RemoteMessage);
+          return _onPushOnMessage(call.arguments as RemoteMessage);
         case PlatformMethod.pushOnBackgroundMessage:
-          return onPushBackgroundMessage(call.arguments as RemoteMessage);
+          return _onPushBackgroundMessage(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnShowNotificationInForeground:
+          return _pushNotificationEvents
+              .showNotificationInForeground(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnNotificationTap:
+          return onNotificationTap(call.arguments as RemoteMessage);
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -74,26 +79,30 @@ class AblyMethodCallHandler {
   PushNotificationEventsNative _pushNotificationEvents =
       PushNative.notificationEvents as PushNotificationEventsNative;
 
-  Future<Object?> onPushOnActivate(ErrorInfo? error) async {
+  Future<Object?> _onPushOnActivate(ErrorInfo? error) async {
     _pushActivationEvents.onActivateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnDeactivate(ErrorInfo? error) async {
+  Future<Object?> _onPushOnDeactivate(ErrorInfo? error) async {
     _pushActivationEvents.onDeactivateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnUpdateFailed(ErrorInfo error) async {
+  Future<Object?> _onPushOnUpdateFailed(ErrorInfo error) async {
     _pushActivationEvents.onUpdateFailedStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnMessage(RemoteMessage remoteMessage) async {
+  Future<Object?> _onPushOnMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.onMessageStreamController.add(remoteMessage);
   }
 
-  Future<Object?> onPushBackgroundMessage(RemoteMessage remoteMessage) async {
+  Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
+  }
+
+  Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.onNotificationTapStreamController.add(remoteMessage);
   }
 }

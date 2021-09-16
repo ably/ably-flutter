@@ -22,26 +22,26 @@ class PushNotificationHandlers {
     });
   }
 
-  static void setUpMessageHandlers(
-      ably.BackgroundMessageHandler backgroundMessageHandler) async {
+  static void setUpMessageHandlers() async {
     getLaunchMessage();
 
-    notificationEvents.onBackgroundMessage = _backgroundMessageHandler;
+    notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 
     notificationEvents.onMessage.listen((remoteMessage) {
       print('Message was delivered to app while the app was in the foreground: '
           '$remoteMessage');
+
+      notificationEvents.setOnShowNotificationInForeground((message) async {
+        return true;
+      });
     });
 
     notificationEvents.onNotificationTap.listen((remoteMessage) {
-      // TODO add another notification tap handler, for app in foreground?/ background.
-      print('Notification was tapped while ..?: $remoteMessage');
+      print('Notification was tapped: $remoteMessage');
     });
   }
 
-  /**
-   * You can get the notification which launched the app by a user tapping it.
-   */
+  /// You can get the notification which launched the app by a user tapping it.
   static void getLaunchMessage() {
     PushNotificationHandlers
         .notificationEvents.notificationTapLaunchedAppFromTerminated
@@ -53,11 +53,10 @@ class PushNotificationHandlers {
     });
   }
 
-  static Future<void> _backgroundMessageHandler(ably.RemoteMessage message) async {
-    print('Just got a background message');
-    // On Android, the notification for a data + notification message is shown
-    // immediately after this method completes, or if it returns a Future, when it resolves.
-    // On iOS,
-    print(message);
+  static Future<void> _backgroundMessageHandler(
+      ably.RemoteMessage message) async {
+    print('Just received a background message, with:');
+    print('RemoteMessage.Notification: ${message.notification}');
+    print('RemoteMessage.Data: ${message.data}');
   }
 }

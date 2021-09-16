@@ -80,7 +80,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Map<Byte, CodecPair> codecMap;
   private static final Gson gson = new Gson();
 
-  AblyMessageCodec() {
+  public AblyMessageCodec() {
     final AblyMessageCodec self = this;
     codecMap = new HashMap<Byte, CodecPair>() {
       {
