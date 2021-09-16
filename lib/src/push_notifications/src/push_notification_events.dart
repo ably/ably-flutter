@@ -16,7 +16,7 @@ abstract class PushNotificationEvents {
   /// On Android, a local Android notification will be generated to create an
   /// identical notification as iOS.
   void setOnShowNotificationInForeground(
-      Future<ForegroundNotificationConfiguration> Function(
+      Future<bool> Function(
               RemoteMessage message)
           callback);
 
@@ -31,17 +31,9 @@ abstract class PushNotificationEvents {
   /// received by the device.
   ///
   /// Warning: only set a top-level function or static callback function. This
-  /// is a limitation of a Dart API being used internally, [PluginUtilities.getCallbackHandle](https://api.flutter.dev/flutter/dart-ui/PluginUtilities/getCallbackHandle.html)
-  set onBackgroundMessage(BackgroundMessageHandler handler);
-
-  // Set this to run heavy processing. This will be called the same time as
-  // OnMessage on a separate Isolate, but with more runtime (execution time)
-  // privileges. You should not duplicate work.
-  // setOnMessageForHeavyProcessing(BackgroundMessageHandler handler);
-
-  ///
-  /// Notification Taps
-  ///
+  /// is a limitation of a Dart API being used internally,
+  /// [PluginUtilities.getCallbackHandle](https://api.flutter.dev/flutter/dart-ui/PluginUtilities/getCallbackHandle.html)
+  void setOnBackgroundMessage(BackgroundMessageHandler handler);
 
   /// Called when notification is tapped while the app is already in the foreground or in the background
   ///
@@ -52,8 +44,4 @@ abstract class PushNotificationEvents {
   /// to launch from from a terminated state. `null` if app was not launched
   /// from a notification.
   Future<RemoteMessage?> get notificationTapLaunchedAppFromTerminated;
-}
-
-class ForegroundNotificationConfiguration {
-  // TODO by default, do not show the notification
 }
