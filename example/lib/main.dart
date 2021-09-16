@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'constants.dart';
 import 'op_state.dart';
@@ -12,6 +13,7 @@ import 'push_notifications/push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 
 Future<void> main() async {
+  // Before calling any Ably methods, ensure the widget binding is ready.
   WidgetsFlutterBinding.ensureInitialized();
   PushNotificationHandlers.setUpEventHandlers();
   PushNotificationHandlers.setUpMessageHandlers();
@@ -218,6 +220,9 @@ class _MyAppState extends State<MyApp> {
   void listenRealtimeConnection(ably.Realtime realtime) {
     final alphaSubscription =
         realtime.connection.on().listen((stateChange) async {
+          if (stateChange.current == ably.ConnectionState.failed) {
+            logAndDisplayError(stateChange.reason);
+          }
       print('${DateTime.now()}:'
           ' ConnectionStateChange event: ${stateChange.event}'
           '\nReason: ${stateChange.reason}');
@@ -303,7 +308,18 @@ class _MyAppState extends State<MyApp> {
       'Creating Ably Realtime',
       'Ably Realtime Created');
 
-  Widget createRTCConnectButton() => FlatButton(
+  void logAndDisplayError(ably.ErrorInfo? errorInfo) {
+    print(errorInfo?.message);
+    Fluttertoast.showToast(
+        msg: errorInfo?.message ?? 'No error message provided',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16);
+  }
+
+  Widget createRTConnectButton() => FlatButton(
         padding: EdgeInsets.zero,
         onPressed: (_realtime == null) ? null : _realtime!.connect,
         child: const Text('Connect'),
@@ -750,7 +766,7 @@ class _MyAppState extends State<MyApp> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: createRTCConnectButton(),
+                        child: createRTConnectButton(),
                       ),
                       Expanded(
                         child: createRTCloseButton(),
