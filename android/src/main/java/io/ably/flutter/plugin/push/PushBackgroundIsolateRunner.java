@@ -35,7 +35,6 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private final RemoteMessage remoteMessage;
   private MethodChannel backgroundMethodChannel;
 
-  // TODO confirm this is called on main thread
   public PushBackgroundIsolateRunner(Context context, BroadcastReceiver.PendingResult asyncCompletionHandlerPendingResult, RemoteMessage message) {
     this.asyncCompletionHandlerPendingResult = asyncCompletionHandlerPendingResult;
     this.remoteMessage = message;
