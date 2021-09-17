@@ -210,6 +210,12 @@ data: 'This is a Ably message published on channels that is also '
 }));
 ```
 
+#### Prioritising messages
+
+Only use high priority when it requires immediate user attention/ interaction. Use the normal priority (5) otherwise. Messages with priority wake a device from a battery saving state, using more of the user device battery.
+- High priority: `'priority': 'high'` inside `push.fcm.android` for Android. `apns-priority: '10'` inside `push.apns.apns-headers` for iOS.
+- Normal priority:  `'priority': 'normal'` inside `push.fcm.android` for Android. `apns-priority: '5'` inside `push.apns.apns-headers` for iOS.
+
 #### Alert Notification **and** Background / Data Message
 
 Push notifications containing both the notification and data objects will be treated as both alert notifications and data messages.
@@ -307,7 +313,7 @@ ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 ```
   - This method can be synchronous or `async`.
 
-##### Advanced: native message handling
+#### Advanced: native message handling
 
 Users can listen to messages in each platform using the native message listeners instead of listening to messages on the dart side. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications).
 
@@ -316,6 +322,12 @@ Users can listen to messages in each platform using the native message listeners
 **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
 Take a look at the example app platform specific code to handle messages. For iOS, this is `AppDelegate.m`, and in Android, it is `PushMessagingService.java`. For further help on implementing the Platform specific message handlers, see "On Android" and "On iOS" sections on [Push Notifications - Device activation and subscription](https://ably.com/documentation/general/push/activate-subscribe).
+
+### Additional considerations and resources
+- For tips on how best to use push messaging on Android, read [Notifying your users with FCM](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html)
+  - For example, show a notification to the user as soon as possible without any additional data usage or processing. Perform additional synchronization work asynchronously after that, using [workmanager](https://pub.dev/packages/workmanager). You can also update the notification with a nicer notification, such as with buttons.
+  - Avoid background services: As recommended by FCM, Ably Flutter does not instantiate any background services or schedule any jobs on your behalf. Libraries/ applications which do this, for example Firebase Messaging may face `IllegalStateException` exceptions and reduced execution time.
+- For more Android tips, read [About FCM messages](https://firebase.google.com/docs/cloud-messaging/concept-options)
 
 ### Deactivating the device
 
