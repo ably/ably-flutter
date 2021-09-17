@@ -28,14 +28,7 @@ class Platform {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
       _initializer = methodChannel
-          .invokeMethod(PlatformMethod.registerAbly)
-          .timeout(Timeouts.initializeTimeout, onTimeout: () {
-        _initializer = null;
-        throw TimeoutException(
-          'Initialization timed out.',
-          Timeouts.initializeTimeout,
-        );
-      });
+          .invokeMethod(PlatformMethod.registerAbly);
     }
     return _initializer;
   }
