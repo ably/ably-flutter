@@ -103,6 +103,7 @@ class AblyMethodCallHandler {
   }
 
   Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
-    _pushNotificationEvents.onNotificationTapStreamController.add(remoteMessage);
+    _pushNotificationEvents.onNotificationTapStreamController
+        .add(remoteMessage);
   }
 }

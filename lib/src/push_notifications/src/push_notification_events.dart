@@ -16,9 +16,7 @@ abstract class PushNotificationEvents {
   /// On Android, a local Android notification will be generated to create an
   /// identical notification as iOS.
   void setOnShowNotificationInForeground(
-      Future<bool> Function(
-              RemoteMessage message)
-          callback);
+      Future<bool> Function(RemoteMessage message) callback);
 
   /// Called with [ApplicationState] available in [RemoteMessage]
   ///

@@ -220,9 +220,9 @@ class _MyAppState extends State<MyApp> {
   void listenRealtimeConnection(ably.Realtime realtime) {
     final alphaSubscription =
         realtime.connection.on().listen((stateChange) async {
-          if (stateChange.current == ably.ConnectionState.failed) {
-            logAndDisplayError(stateChange.reason);
-          }
+      if (stateChange.current == ably.ConnectionState.failed) {
+        logAndDisplayError(stateChange.reason);
+      }
       print('${DateTime.now()}:'
           ' ConnectionStateChange event: ${stateChange.event}'
           '\nReason: ${stateChange.reason}');
