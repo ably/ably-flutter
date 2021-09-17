@@ -1,6 +1,3 @@
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
-import 'package:ably_flutter/src/push_notifications/src/notification.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +5,8 @@ import '../../authentication/authentication.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../message/message.dart';
+import '../../push_notifications/push_notifications.dart';
+import '../../push_notifications/src/local_device.dart';
 import '../../realtime/realtime.dart';
 import '../../rest/rest.dart';
 import '../platform.dart';

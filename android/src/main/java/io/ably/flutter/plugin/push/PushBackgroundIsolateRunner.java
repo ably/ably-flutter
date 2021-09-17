@@ -27,7 +27,7 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private static final String TAG = PushBackgroundIsolateRunner.class.getName();
   private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
   private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
-  private static final String DART_ENTRYPOINT_HANDLE_KEY = "DART_ENTRYPOINT_HANDLE_KEY";
+  
   @Nullable
   private FlutterEngine flutterEngine;
 

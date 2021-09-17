@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io' as io show Platform;
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
@@ -8,12 +7,15 @@ import '../../generated/platform_constants.dart';
 import '../../push_notifications/src/push_notification_events.dart';
 import '../../push_notifications/src/remote_message.dart';
 import '../platform.dart';
+import 'background_android_isolate_platform.dart';
 
 class PushNotificationEventsNative implements PushNotificationEvents {
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
+
+  /// Controller used
   StreamController<RemoteMessage> onNotificationTapStreamController =
       StreamController();
 
@@ -44,13 +46,15 @@ class PushNotificationEventsNative implements PushNotificationEvents {
     return onShowNotificationInForegroundHandler!(message);
   }
 
-  BackgroundMessageHandler? _onBackgroundMessage = null;
+  BackgroundMessageHandler? _onBackgroundMessage;
 
+  /// Implementation of setOnBackgroundMessage. For more documentation,
+  /// see [PushNotificationEvents.setOnBackgroundMessage]
   void setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
       try {
-        await Platform.backgroundMethodChannel
+        await BackgroundIsolateAndroidPlatform.methodChannel
             .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
       } on MissingPluginException {
         // Ignore MissingPluginException(No implementation found for method pushSetOnBackgroundMessage on channel io.ably.flutter.plugin.background)
@@ -60,12 +64,16 @@ class PushNotificationEventsNative implements PushNotificationEvents {
     }
   }
 
+  /// Handles a RemoteMessage passed from the platform side.
   void handleBackgroundMessage(RemoteMessage remoteMessage) {
     if (_onBackgroundMessage != null) {
       _onBackgroundMessage!(remoteMessage);
     } else {
-      //  TODO throw an exception, so users knows that their message wasn't handled
-      // Receive RemoteMessage but no handler was set. Set `onBackgroundMessage`.
+      // ignore:avoid_print
+      print('Received RemoteMessage but no handler was set. '
+          'RemoteMessage.data: ${remoteMessage.data}. '
+          'RemoteMessage.notification: ${remoteMessage.notification}. '
+          'Set `ably.Push.notificationEvents.setOnBackgroundMessage()`.');
     }
   }
 }

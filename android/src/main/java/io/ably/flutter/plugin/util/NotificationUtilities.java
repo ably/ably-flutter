@@ -29,6 +29,16 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 
+/**
+ * A collection of utility methods adapted from Firebase Android SDK to allow us to create 
+ * notifications in a similar way as the Firebase Android SDK, in the cases where the SDK
+ * does not create notifications. This allows us to be consistent with iOS, and show notifications
+ * to the user even when the app is in the foreground.
+ * 
+ * We could remove this, either being inconsistent with iOS, or restricting iOS to be consistent
+ * with this limitation from Firebase Android SDK (by preventing users from customizing 
+ * whether push notifications are shown when the app is in the foreground).
+ */
 public class NotificationUtilities {
   private static final String TAG = NotificationUtilities.class.getName();
 
@@ -58,7 +68,6 @@ public class NotificationUtilities {
         manifestMetadata
         );
     notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
-    //    notificationManager.notify(notificationId, localNotification);
   }
 
   /**

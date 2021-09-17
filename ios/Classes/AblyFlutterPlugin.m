@@ -569,10 +569,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
     AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel registrar:registrar];
     
-    UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
-        plugin->_pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
-    center.delegate = plugin->_pushNotificationEventHandlers;
-    
     // registering method channel with registrar
     [registrar addMethodCallDelegate:plugin channel:channel];
     
@@ -592,6 +588,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     _ably = [AblyFlutter sharedInstance];
     [_ably setChannel: channel];
     self->_streamsChannel = streamsChannel;
+    UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
+    _pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
+    center.delegate = _pushNotificationEventHandlers;
     
     _handlers = @{
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
@@ -631,19 +630,13 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushUnsubscribeClient: PushHandlers.unsubscribeClient,
         AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
         AblyPlatformMethod_pushDevice: PushHandlers.device,
-//        AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated:
+        AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
     };
     
     _nextRegistration = 1;
     _channel = channel;
     
     [registrar addApplicationDelegate:self];
-    [[NSNotificationCenter defaultCenter]
-        addObserver:self
-           selector:@selector(application_didFinishLaunchingWithOptionsNotificationHandler:)
-               name:UIApplicationDidFinishLaunchingNotification
-             object:nil];
-    
     return self;
 }
 
@@ -669,8 +662,18 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 }
 
--(void)application_didFinishLaunchingWithOptionsNotificationHandler:(nonnull NSNotification *)notification {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UIApplication sharedApplication] registerForRemoteNotifications];
+    // Check if application was launched from a notification tap.
+    
+    // https://stackoverflow.com/a/21611009/7365866
+    NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notification) {
+        PushHandlers.pushNotificationTapLaunchedAppFromTerminatedData = notification;
+    }
+    
+    NSLog(@"didFinishLaunchingWithOptions: %@, \n %@", launchOptions, launchOptions.allKeys, launchOptions.allValues);
+    return NO;
 }
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate

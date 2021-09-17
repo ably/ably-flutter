@@ -30,9 +30,6 @@ abstract class PushNotificationEvents {
   /// This method will be called when a notification or data message is
   /// received by the device.
   ///
-  /// Warning: only set a top-level function or static callback function. This
-  /// is a limitation of a Dart API being used internally,
-  /// [PluginUtilities.getCallbackHandle](https://api.flutter.dev/flutter/dart-ui/PluginUtilities/getCallbackHandle.html)
   void setOnBackgroundMessage(BackgroundMessageHandler handler);
 
   /// Called when notification is tapped while the app is already in the foreground or in the background

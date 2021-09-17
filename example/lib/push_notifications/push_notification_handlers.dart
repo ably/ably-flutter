@@ -30,10 +30,12 @@ class PushNotificationHandlers {
     notificationEvents.onMessage.listen((remoteMessage) {
       print('Message was delivered to app while the app was in the foreground: '
           '$remoteMessage');
+    });
 
-      notificationEvents.setOnShowNotificationInForeground((message) async {
-        return true;
-      });
+    notificationEvents.setOnShowNotificationInForeground((message) async {
+      print(
+          'Opting to show the notification when the app is in the foreground.');
+      return true;
     });
 
     notificationEvents.onNotificationTap.listen((remoteMessage) {
@@ -43,8 +45,7 @@ class PushNotificationHandlers {
 
   /// You can get the notification which launched the app by a user tapping it.
   static void getLaunchMessage() {
-    PushNotificationHandlers
-        .notificationEvents.notificationTapLaunchedAppFromTerminated
+    notificationEvents.notificationTapLaunchedAppFromTerminated
         .then((remoteMessage) {
       if (remoteMessage != null) {
         print('The app was launched by the user by tapping the notification');

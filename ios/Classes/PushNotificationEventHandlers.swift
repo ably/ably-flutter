@@ -14,26 +14,38 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        if let delegate = delegate {
-            // TODO Call dart side to say error, we did not call this because the delegate was already set.
-            delegate.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler)
-        } else {
-            // TODO give message to dart side to ask user whether to show or not.
-            if #available(iOS 14.0, *) {
-                completionHandler(.banner)
+        let message = RemoteMessage.fromNotificationContent(content:notification.request.content);
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOnShowNotificationInForeground, arguments: message) { result in
+            if let result = result as? NSNumber, result == NSNumber(value: true) {
+                if #available(iOS 14.0, *) {
+                    completionHandler(.banner)
+                } else {
+                    completionHandler(.alert)
+                }
             } else {
-                completionHandler(.alert)
+                completionHandler([])
             }
         }
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let remoteMessage = RemoteMessage.fromNotificationContent(content: response.notification.request.content)
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOnNotificationTap, arguments: remoteMessage, result: nil)
+        
         if let delegate = delegate {
             // TODO Call dart side to say error, we did not call this because the delegate was already set.
             delegate.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler)
         } else {
             // TODO give the response to the user
             completionHandler()
+        }
+    }
+    
+    // Do nothing, but pass the arguments to the original delegate.
+    @available(iOS 12.0, *)
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+        if let delegate = delegate {
+            delegate.userNotificationCenter?(center, openSettingsFor: notification)
         }
     }
     
