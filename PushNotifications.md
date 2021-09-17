@@ -3,10 +3,7 @@
 Push Notifications allow you to reach users who have your application in the foreground, background and terminated, including when your application is not connected to Ably. Push notifications allow you to run code and show alerts to the user. On iOS, Ably connects to [APNs](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html) to send messages to devices. On Android, Ably connects to [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) to send messages to devices. As both services do not guarantee message delivery and may even throttle messages to specific devices based on battery level, message frequency, and other criteria, messages may arrive much later than sent or ignored.
 
 ## Known Limitations
-
-- [Handling messages in the Dart side](https://github.com/ably/ably-flutter/issues/141): ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
-    - **Android**: Implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. 
-    - **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`. 
+ 
 - [Activating devices from your server](https://ably.com/documentation/general/push/activate-subscribe#activation-from-server): Device activation is automatic in ably-flutter, just call `Push#activate`. However, Ably-java and ably-cocoa allow you to implement delegate methods to activate devices manually on your server instead of automatically.
 - [Push Admin API](https://ably.com/documentation/general/push/admin): The Push APIs in this SDK are limited to managing the push notification features related to current device. The Push Admin API allows you to manage device registrations and subscriptions related to other devices. This is functionality designed for servers.
 - [Push Registrations cannot be updated on Android: fails with `No authentication information provided`](https://github.com/ably/ably-flutter/issues/167). If you listen to `activationEvents.onUpdateFailed`, you should get an error: `No authentication information provided`. This is a problem you would commonly face during development, since FCM may change the device token when the app is reinstalled. However, this is less of a problem in production. 
@@ -79,6 +76,12 @@ To get push notifications setup in your own app, read [Setting up your own app](
 ### Summary
 
 Devices need to be [activated](#device-activation) with Ably once. Once activated, you can use their device ID, client ID or push token (APNs device token/ FCM registration token) to push messages to them using the Ably dashboard or a [Push Admin](https://ably.com/documentation/general/push/admin) (SDKs which provide push admin functionality, such as [Ably-java](https://github.com/ably/ably-java), [Ably-js](https://github.com/ably/ably-js), etc.). However, to send push notifications through Ably channels, devices need to [subscribe to a channel for push notifications](#subscribing-to-channels-for-push-notifications). Once subscribed, messages on that channel with a [push payload](#sending-messages) will be sent to devices which are subscribed to that channel.
+
+### Ensure `WidgetsBinding` is initialized
+
+If calling any methods from the `ably_flutter` package in your `main` function, call `WidgetsFlutterBinding.ensureInitialized();`. 
+You only need to do this if calling the functions before calling `runApp()`.
+This is done to ensure all platform methods will be successfully received by the native Ably plugin on the host platform.
 
 ### Device activation
 
@@ -209,13 +212,7 @@ data: 'This is a Ably message published on channels that is also '
 
 #### Alert Notification **and** Background / Data Message
 
-On iOS, you may send this type of notification to show the user an alert notification, but then use the data accompanying the notification once a user pressed the notification. You may use this data to navigate to the correct page. This is not possible on Android.  
-
-Because the behaviour is inconsistent between Android and iOS, it may be confusing to use. Sending messages which contain `notification` and `data` keys simultaneously should be left for advanced use cases.
-
-**Android**: Your message handler (`onMessageReceived`) will only be called when the [app is in the foreground](https://firebase.google.com/docs/cloud-messaging/android/receive), and your notification will only show when the app is in the background/ terminated. 
-
-**iOS**: The notification will be shown and the message handler (`didReceiveRemoteNotification`) will be called in all cases (when your app is terminated, in the background or in the foreground, though not when it was force quit).
+Push notifications containing both the notification and data objects will be treated as both alert notifications and data messages.
 
 ```dart
 final message = ably.Message(
@@ -237,15 +234,82 @@ final message = ably.Message(
 
 ### Receiving Messages
 
+To see an example of receiving messages and handling other notification related behaviour, look at [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app.
+
 #### Notification Message / Alert Push Notification
 
-**Android**: You cannot handle notification messages as they are shown to the user without calling any methods in your application. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received.
+**Android**: In the case where the app is in the background/ terminated, you cannot configure/ disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
 
-**iOS**: You can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
+**iOS**: In the case where the app is in the background/ terminated, Ably Flutter doesn't provide the functionality to configure/ extend alert notifications on iOS, and these will automatically be shown to the user.
+
+To create richer (more content or more interactive) local notifications once a data message is received on both Android and iOS, take a look at [awesome_notifications](https://pub.dev/packages/awesome_notifications).
+  - Advanced usage: 
+    - To do this natively on Android instead, you could use [`notificationManager.notify`](https://developer.android.com/reference/android/app/NotificationManager#notify(int,%20android.app.Notification)). 
+    - To this natively on iOS, You can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
+
+#### Foreground notifications
+
+On both Android and iOS, Ably Flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground.  To configure if a notification is shown in the foreground:
+
+```dart
+ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
+  // TODO add logic to show notification based on message contents. 
+  print('Opting to show the notification when the app is in the foreground.');
+  return true;
+});
+```
+
+Internally: On Android, the SDK does this by generating the same notification Firebase creates when the app is in the background. On iOS, the SDK does this by implementing [`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter).
+
+#### Notification taps
+
+- To be informed when a notification tap launches the application:
+
+```dart
+ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
+    .then((remoteMessage) {
+  if (remoteMessage != null) {
+    print('The app was launched by the user by tapping the notification');
+    print(remoteMessage.data);
+  }
+});
+```
+  
+- To be informed when a notification is tapped by the user whilst app is in the foreground:
+
+```dart
+ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
+  print('Notification was tapped: $remoteMessage');
+});
+```
 
 #### Data Message / Background Notification
 
-ably-flutter currently does not pass the messages to the Flutter application/ Dart-side, so users will need to listen to messages in each platform. See [Implement Push Notifications listener](https://github.com/ably/ably-flutter/issues/141) for more information.
+- When the app is in the foreground, you can listen to messages using:
+
+```dart
+ably.Push.notificationEvents.onMessage.listen((remoteMessage) {
+  print('Message was delivered to app while the app was in the foreground: '
+      '$remoteMessage');
+});
+```
+  - This method can be synchronous or `async`.
+
+- When the app is terminated or in the background, you can listen to messages using:
+
+```dart
+Future<void> _backgroundMessageHandler(ably.RemoteMessage message) async {
+  print('Just received a background message, with:');
+  print('RemoteMessage.Notification: ${message.notification}');
+  print('RemoteMessage.Data: ${message.data}');
+}
+ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
+```
+  - This method can be synchronous or `async`.
+
+##### Advanced: native message handling
+
+Users can listen to messages in each platform using the native message listeners instead of listening to messages on the dart side. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications).
 
 **Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
 
@@ -340,6 +404,12 @@ This means your registration token is invalid. Ably is may not have your device'
 ```java
 ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
 ```
+
+### My notifications do not make a sound when they are shown on the device.
+
+Android: Ensure you have set up a Notification channel (which displays as notification "categories" to Android users within your application settings). The example app shows how to do this by using [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) to configure `AndroidNotificationChannel`.
+
+iOS: Ensure you set the `sound` key in the `push.notification` object when sending the Ably message.
 
 ### When building my application, I get the following error: `Manifest merger failed : uses-sdk:minSdkVersion 16 cannot be smaller than version 19 declared in library [:ably_flutter]`
 

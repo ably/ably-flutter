@@ -113,12 +113,6 @@ See:
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 ```
 
-### Ensure `WidgetsBinding` is initialized
-
-In your `main` function, call `WidgetsFlutterBinding.ensureInitialized();`. 
-Make sure to do this before calling any methods from the `ably_flutter` package. 
-This is done to ensure all platform methods will be successfully received by the native Ably plugin on the host platform.
-
 ### Configure a Client Options object
 
 For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/documentation/core-features/authentication/#selecting-auth).
