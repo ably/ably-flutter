@@ -27,16 +27,15 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private static final String TAG = PushBackgroundIsolateRunner.class.getName();
   private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
   private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
-  
-  @Nullable
-  private FlutterEngine flutterEngine;
-
-  private final BroadcastReceiver.PendingResult asyncCompletionHandlerPendingResult;
+  private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private MethodChannel backgroundMethodChannel;
 
-  public PushBackgroundIsolateRunner(Context context, BroadcastReceiver.PendingResult asyncCompletionHandlerPendingResult, RemoteMessage message) {
-    this.asyncCompletionHandlerPendingResult = asyncCompletionHandlerPendingResult;
+  @Nullable
+  private FlutterEngine flutterEngine;
+
+  public PushBackgroundIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
+    this.broadcastReceiver = receiver;
     this.remoteMessage = message;
     flutterEngine = new FlutterEngine(context, null);
     DartExecutor executor = flutterEngine.getDartExecutor();
@@ -44,6 +43,9 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
     backgroundMethodChannel.setMethodCallHandler(this);
     // Get and launch the users app isolate manually:
     executor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
+    // Even though lifecycle parameter is @NonNull, the implementation `FlutterEngineConnectionRegistry`
+    // does not use it, because it is a bug in the API design. See https://github.com/flutter/flutter/issues/90316
+    flutterEngine.getBroadcastReceiverControlSurface().attachToBroadcastReceiver(receiver, null);
   }
 
   /**
@@ -58,10 +60,7 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    if (call.method.equals("onFinish")) {
-      asyncCompletionHandlerPendingResult.finish();
-      result.success(true);
-    } else if (call.method.equals(pushSetOnBackgroundMessage)) {
+    if (call.method.equals(pushSetOnBackgroundMessage)) {
       // This signals that the manually spawned app is ready to receive a message to handle.
       // We ask the user to set the background message handler early on.
       backgroundMethodChannel.invokeMethod(pushOnBackgroundMessage, remoteMessage, new MethodChannel.Result() {
@@ -94,8 +93,9 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
 
   private void finish() {
     assert flutterEngine != null;
+    flutterEngine.getBroadcastReceiverControlSurface().detachFromBroadcastReceiver();
     flutterEngine.destroy();
-    asyncCompletionHandlerPendingResult.finish();
     flutterEngine = null;
+    FirebaseMessagingReceiver.finish();
   }
 }
