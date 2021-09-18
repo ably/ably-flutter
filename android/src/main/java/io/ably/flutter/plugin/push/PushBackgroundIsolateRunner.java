@@ -35,21 +35,15 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private final RemoteMessage remoteMessage;
   private MethodChannel backgroundMethodChannel;
 
-  // TODO confirm this is called on main thread
   public PushBackgroundIsolateRunner(Context context, BroadcastReceiver.PendingResult asyncCompletionHandlerPendingResult, RemoteMessage message) {
     this.asyncCompletionHandlerPendingResult = asyncCompletionHandlerPendingResult;
     this.remoteMessage = message;
-
-    FlutterLoader flutterLoader = FlutterInjector.instance().flutterLoader();
-    flutterLoader.startInitialization(context); // Starts initialization when Dart VM is not yet running, e.g. The main app is terminated.
-    flutterLoader.ensureInitializationComplete(context, null); // Blocks the thread so we can be sure the future methods will be fine. This is probably optional.
     flutterEngine = new FlutterEngine(context, null);
     DartExecutor executor = flutterEngine.getDartExecutor();
     backgroundMethodChannel = new MethodChannel(executor.getBinaryMessenger(), "io.ably.flutter.plugin.background", new StandardMethodCodec(new AblyMessageCodec()));
     backgroundMethodChannel.setMethodCallHandler(this);
     // Get and launch the users app isolate manually:
-    DartExecutor.DartEntrypoint appEntrypoint = DartExecutor.DartEntrypoint.createDefault();
-    executor.executeDartEntrypoint(appEntrypoint);
+    executor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
   }
 
   /**
