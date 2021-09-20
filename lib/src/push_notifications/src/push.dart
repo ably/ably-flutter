@@ -11,7 +11,7 @@ abstract class Push {
   static PushEvents pushEvents = PushNative.pushEvents;
 
   /// Activate this device for push notifications by registering
-  /// with the push transport such as GCM/APNS.
+  /// with the push transport such as FCM/APNs.
   ///
   /// throws: AblyException
   ///
