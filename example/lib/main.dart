@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -307,17 +308,6 @@ class _MyAppState extends State<MyApp> {
       'Create Ably Realtime',
       'Creating Ably Realtime',
       'Ably Realtime Created');
-
-  void logAndDisplayError(ably.ErrorInfo? errorInfo) {
-    print(errorInfo?.message);
-    Fluttertoast.showToast(
-        msg: errorInfo?.message ?? 'No error message provided',
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16);
-  }
 
   Widget createRTConnectButton() => FlatButton(
         padding: EdgeInsets.zero,
