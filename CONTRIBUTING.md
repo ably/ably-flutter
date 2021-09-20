@@ -40,7 +40,7 @@ appropriate for programmer's failures on the Dart side of things. But time will 
 
 #### Debugging the app from launch
 
-- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not android directory) in Android Studio. Then in the Android project in Android Studio, attach the debugger.
+- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not the `android` directory) in Android Studio. Then in the Android project in Android Studio, attach the debugger.
 - iOS: In Xcode, build the Xcode app scheme with launch option: "Wait for the executable to be launched" instead of "Automatically". You need to repeat this for every launch. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 #### Push Notifications activation / deactivation
