@@ -690,9 +690,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [_pushNotificationEventHandlers application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-    // TODO try this, to give other plugins and AppDelegate a chance to receive the remote notification as well. If NO/ false is returned, the user's didReceiveRemoteNotification delegate method will be called
-    // TODO This might return too early though
-    return YES;
+    return NO;
 }
 
 @end
