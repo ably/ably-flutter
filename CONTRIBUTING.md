@@ -40,12 +40,12 @@ appropriate for programmer's failures on the Dart side of things. But time will 
 
 #### Debugging the app from launch
 
-- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not android directory) in Android Studio. Then in the Android project in Android Studio, attach the debugger.
+- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not the `android` directory) in Android Studio. Then in the Android project in Android Studio, attach the debugger.
 - iOS: In Xcode, build the Xcode app scheme with launch option: "Wait for the executable to be launched" instead of "Automatically". You need to repeat this for every launch. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 #### Push Notifications activation / deactivation
 
-The platform SDKs (ably-java, ably-cocoa) provide ways to check if device activation, deactivation or registration update fails. In Ably-java, these errors are sent in Intents which you should register for at runtime. In Ably-cocoa, your errors are provided through `ARTPushRegistererDelegate` methods. However, this error does not get returned immediately/quickly in all cases. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the intent will be sent / delegate methods will be called.
+The platform SDKs ([ably-android](https://github.com/ably/ably-java), [ably-cocoa](https://github.com/ably/ably-cocoa)) provide ways to check if device activation, deactivation or registration update fails. On Android, these errors are sent in Intents which you should register for at runtime. In Cocoa, your errors are provided through `ARTPushRegistererDelegate` methods. However, this error does not get returned immediately/quickly in all cases. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the intent will be sent / delegate methods will be called.
 
 Implementation wise, we do this by passing a reference to the `FlutterResult` we can use to pass back the result, when. This makes it convenient for users: they can `await push.activate()`. However, they should not rely on this Future completing, in the case of network issues.
 
@@ -55,18 +55,18 @@ Android's firebase-messaging/ FCM library allows users to select the Intent acti
 
 #### Notifications generation
 
-iOS allows users to show the notification even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM/ Android does not provide this functionality. To be consistent with iOS, Ably listens for messages with notifications, and asks the user on the dart side if they'd like this notification shown, and if so, show it on behalf of the user. Because of this, we have a large file containing code taken from Firebase messaging's Android SDK, stored within `NotificationUtilities.java`.
+iOS allows users to show the notification even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM / Android does not provide this functionality. To be consistent with iOS, Ably listens for messages with notifications, and asks the user on the dart side if they'd like this notification shown, and if so, show it on behalf of the user. Because of this, we have a large file containing code taken from Firebase messaging's Android SDK, stored within `NotificationUtilities.java`.
 
 #### Push Notifications Background Message Handling
 
 Background processing in Flutter is a complicated subject that has not been explained very much in public. It involves creating Flutter Engines/isolates manually (for Android), passing messages back and forth, etc.
 
-Differences between Ably-Flutter and Firebase Messaging implementation (Android only):
+Differences between ably-Flutter and Firebase Messaging implementation (Android only):
 - **Entrypoint:** In Firebase messaging, they explicitly define a new DartEntrypoint (e.g. A Callback which is launched in it's own isolate) which will be launched by the Dart VM. We do not launch our custom isolate / entrypoint, we re-use the users default entry point (their application). In Ably-Flutter, we use re-use the users main application. Therefore, we provide the same environment for message handling on both Android and iOS: their application **is running** when we handle the message.
 - **Resource consumption tradeoffs:** Firebase launches an isolate capable of only handling messages at app launch, even if they don't need it. They keep this isolate launching throughout the app, and have a queue process to queue messages. To do this, they maintain an Android Service. This allows them 10 minutes of execution time, where as on iOS the same library only has 30 seconds of execution time. Instead, we launch a new isolate on every message. Instead of creating a service and queueing work for it for each message. FCM will hold the messages until we are ready anyway (they are our queue). A new message will spawn a new engine.
 - **Execution / wall clock time:** We have an execution time of 30 seconds on both Android and iOS for each message. Firebase messaging has an execution time of 10 minutes for all consecutive messages on Android between the service runs out of execution time, and 30 seconds on iOS. If users want more execution time, we recommend [package:workmanager](https://pub.dev/packages/workmanager).
   
-Because of this architecture simplicity, we do not need to use [`PluginUtilies`](https://stackoverflow.com/questions/69208164/what-does-pluginutilities-do-in-flutters-dartui-library-and-how-do-i-use/69208165#69208165), pass references of 2 methods between dart and platform side, save/ load these methods in SharedPreferences. We avoid conflicts between the default FlutterEngine launched in an Activity and by ourselves, by using separate method channels (unique channel names).
+Because of this architectural simplicity, we do not need to use [`PluginUtilies`](https://stackoverflow.com/questions/69208164/what-does-pluginutilities-do-in-flutters-dartui-library-and-how-do-i-use/69208165#69208165), pass references of 2 methods between Dart and platform side, or save / load these methods in `SharedPreferences`. We avoid conflicts between the default `FlutterEngine` launched in an `Activity` and by ourselves, by using separate method channels (unique channel names).
 
 ## Platform Notes
 
