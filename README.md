@@ -121,7 +121,7 @@ Authenticating using [basic authentication/ API key](https://ably.com/documentat
 
 ```dart
 // Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
-final String ablyApiKey = const String.fromEnvironment(Constants.ablyApiKey);
+final String ablyApiKey = const String.fromEnvironment("ABLY_API_KEY");
 final clientOptions = ably.ClientOptions.fromKey(ablyApiKey);
 clientOptions.logLevel = ably.LogLevel.verbose;  // optional
 ```
