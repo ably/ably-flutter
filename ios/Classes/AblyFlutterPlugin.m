@@ -672,7 +672,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         PushHandlers.pushNotificationTapLaunchedAppFromTerminatedData = notification;
     }
     
-    NSLog(@"didFinishLaunchingWithOptions: %@, \n %@", launchOptions, launchOptions.allKeys, launchOptions.allValues);
     return NO;
 }
 
