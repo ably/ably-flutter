@@ -414,7 +414,7 @@ This means your registration token is invalid. Ably is may not have your device'
 ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
 ```
 
-### My notifications do not make a sound when they are shown on the device.
+### My notifications do not make a sound when they are shown on the device
 
 Android: Ensure you have set up a Notification channel (which displays as notification "categories" to Android users within your application settings). The example app shows how to do this by using [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) to configure `AndroidNotificationChannel`.
 
