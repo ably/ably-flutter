@@ -27,15 +27,7 @@ class Platform {
   static Future _initialize() async {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
-      _initializer = methodChannel
-          .invokeMethod(PlatformMethod.registerAbly)
-          .timeout(Timeouts.initializeTimeout, onTimeout: () {
-        _initializer = null;
-        throw TimeoutException(
-          'Initialization timed out.',
-          Timeouts.initializeTimeout,
-        );
-      });
+      _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
     }
     return _initializer;
   }
