@@ -240,16 +240,16 @@ To see an example of receiving messages and handling other notification related 
 
 **Android**: In the case where the app is in the background/ terminated, you cannot configure/ disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
 
-**iOS**: In the case where the app is in the background/ terminated, Ably Flutter doesn't provide the functionality to configure/ extend alert notifications on iOS, and these will automatically be shown to the user.
+**iOS**: In the case where the app is in the background / terminated, ably-flutter doesn't provide the functionality to configure / extend alert notifications on iOS, and these will automatically be shown to the user.
 
 To create richer (more content or more interactive) local notifications once a data message is received on both Android and iOS, take a look at [awesome_notifications](https://pub.dev/packages/awesome_notifications).
   - Advanced usage: 
     - To do this natively on Android instead, you could use [`notificationManager.notify`](https://developer.android.com/reference/android/app/NotificationManager#notify(int,%20android.app.Notification)). 
-    - To this natively on iOS, You can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
+    - To do this natively on iOS, you can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
 
 #### Foreground notifications
 
-On both Android and iOS, Ably Flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground.  To configure if a notification is shown in the foreground:
+On both Android and iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
 
 ```dart
 ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
@@ -263,7 +263,7 @@ Internally: On Android, the SDK does this by generating the same notification Fi
 
 #### Notification taps
 
-- To be informed when a notification tap launches the application:
+- To be informed when a notification tap launches the app:
 
 ```dart
 ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
@@ -275,7 +275,7 @@ ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
 });
 ```
   
-- To be informed when a notification is tapped by the user whilst app is in the foreground:
+- To be informed when a notification is tapped by the user whilst the app is in the foreground:
 
 ```dart
 ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
