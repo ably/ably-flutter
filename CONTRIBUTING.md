@@ -51,7 +51,7 @@ Implementation wise, we do this by passing a reference to the `FlutterResult` we
 
 #### Notification tap handling
 
-Android's firebase-messaging/ FCM library allows users to select the Intent action used when the automatically generated notification is tapped by the user. You can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
+Android's firebase-messaging / FCM library allows users to select the Intent action used when the automatically generated notification is tapped by the user. You can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
 
 #### Notifications generation
 
