@@ -61,9 +61,9 @@ Features that we do not currently support, but we do plan to add in the future:
 
 Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
 
-![run-configuration-1](images/run-configuration-1.png)
+![Drop down menu for Run/Debug Configurations in Android Studio](images/run-configuration-1.png)
 
-![run-configuration-2](images/run-configuration-2.png)
+![Run/Debug Configurations window in Android Studio](images/run-configuration-2.png)
 
 #### Visual Studio Code
 
@@ -121,7 +121,7 @@ Authenticating using [basic authentication/ API key](https://ably.com/documentat
 
 ```dart
 // Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
-final String ablyApiKey = const String.fromEnvironment(Constants.ablyApiKey);
+final String ablyApiKey = const String.fromEnvironment("ABLY_API_KEY");
 final clientOptions = ably.ClientOptions.fromKey(ablyApiKey);
 clientOptions.logLevel = ably.LogLevel.verbose;  // optional
 ```
