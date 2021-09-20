@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
@@ -185,18 +186,24 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
             Object token = ablyLibrary.getRestToken(handle);
             if (token != null) return token;
+
+            final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
               AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
               channel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
                 @Override
                 public void success(@Nullable Object result) {
                   ablyLibrary.setRestToken(handle, result);
+                  latch.countDown();
                 }
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
                   System.out.println(errorDetails);
-                  //Do nothing, let another request go to flutter side!
+                  if (errorMessage != null) {
+                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
+                  }
+                  latch.countDown();
                 }
 
                 @Override
@@ -206,7 +213,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
               });
             });
 
-            return null;
+            try {
+              latch.await();
+            } catch (InterruptedException e) {
+              throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
+            }
+
+            return ablyLibrary.getRestToken(handle);
           };
         }
         result.success(ablyLibrary.createRest(clientOptions.options));
@@ -433,7 +446,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+    final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
         final long handle = ablyLibrary.getCurrentHandle();
@@ -441,20 +454,26 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
             Object token = ablyLibrary.getRealtimeToken(handle);
             if (token != null) return token;
+
+            final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
-              AblyFlutterMessage channelMessage = new AblyFlutterMessage<>(params, handle);
+              AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
               channel.invokeMethod(PlatformConstants.PlatformMethod.realtimeAuthCallback, channelMessage, new MethodChannel.Result() {
                 @Override
                 public void success(@Nullable Object result) {
                   if (result != null) {
                     ablyLibrary.setRealtimeToken(handle, result);
+                    latch.countDown();
                   }
                 }
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
                   System.out.println(errorDetails);
-                  //Do nothing, let another request go to flutter side!
+                  if (errorMessage != null) {
+                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
+                  }
+                  latch.countDown();
                 }
 
                 @Override
@@ -463,7 +482,14 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 }
               });
             });
-            return null;
+
+            try {
+              latch.await();
+            } catch (InterruptedException e) {
+              throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
+            }
+
+            return ablyLibrary.getRealtimeToken(handle);
           };
         }
         result.success(ablyLibrary.createRealtime(clientOptions.options));
