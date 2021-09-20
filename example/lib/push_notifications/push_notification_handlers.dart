@@ -26,6 +26,10 @@ class PushNotificationHandlers {
 
     notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 
+    notificationEvents.setOnOpenSettings(() {
+      print('The iOS user has asked to see the In-app Notification Settings');
+    });
+
     notificationEvents.onMessage.listen((remoteMessage) {
       print('Message was delivered to app while the app was in the foreground: '
           '$remoteMessage');

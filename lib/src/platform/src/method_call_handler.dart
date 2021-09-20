@@ -36,6 +36,8 @@ class AblyMethodCallHandler {
               .showNotificationInForeground(call.arguments as RemoteMessage);
         case PlatformMethod.pushOnNotificationTap:
           return onNotificationTap(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOpenSettingsFor:
+          return onOpenSettingsFor();
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -74,9 +76,9 @@ class AblyMethodCallHandler {
     return callbackResponse;
   }
 
-  PushActivationEventsNative _pushActivationEvents =
+  final PushActivationEventsNative _pushActivationEvents =
       PushNative.activationEvents as PushActivationEventsNative;
-  PushNotificationEventsNative _pushNotificationEvents =
+  final PushNotificationEventsNative _pushNotificationEvents =
       PushNative.notificationEvents as PushNotificationEventsNative;
 
   Future<Object?> _onPushOnActivate(ErrorInfo? error) async {
@@ -105,5 +107,11 @@ class AblyMethodCallHandler {
   Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.onNotificationTapStreamController
         .add(remoteMessage);
+  }
+
+  Future<Object?> onOpenSettingsFor() async {
+    if (_pushNotificationEvents.onOpenSettingsHandler != null) {
+      _pushNotificationEvents.onOpenSettingsHandler!();
+    }
   }
 }

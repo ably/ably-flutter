@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io show Platform;
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
@@ -10,12 +11,13 @@ import '../platform.dart';
 import 'background_android_isolate_platform.dart';
 
 class PushNotificationEventsNative implements PushNotificationEvents {
+  VoidCallback? onOpenSettingsHandler;
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
 
-  /// Controller used
+  /// Controller used to indicate notification was tapped
   StreamController<RemoteMessage> onNotificationTapStreamController =
       StreamController();
 
@@ -30,6 +32,11 @@ class PushNotificationEventsNative implements PushNotificationEvents {
   @override
   Stream<RemoteMessage> get onNotificationTap =>
       onNotificationTapStreamController.stream;
+
+  @override
+  void setOnOpenSettings(VoidCallback callback) {
+    onOpenSettingsHandler = callback;
+  }
 
   @override
   void setOnShowNotificationInForeground(
@@ -57,7 +64,9 @@ class PushNotificationEventsNative implements PushNotificationEvents {
         await BackgroundIsolateAndroidPlatform.methodChannel
             .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
       } on MissingPluginException {
-        // Ignore MissingPluginException(No implementation found for method pushSetOnBackgroundMessage on channel io.ably.flutter.plugin.background)
+        // Ignore MissingPluginException(No implementation found for method
+        // pushSetOnBackgroundMessage on channel
+        // io.ably.flutter.plugin.background)
         // This platform method is only available by Android side when the
         // user's app was launched manually by the plugin to handle messages.
       }
@@ -75,5 +84,10 @@ class PushNotificationEventsNative implements PushNotificationEvents {
           'RemoteMessage.notification: ${remoteMessage.notification}. '
           'Set `ably.Push.notificationEvents.setOnBackgroundMessage()`.');
     }
+  }
+
+  void close() {
+    onMessageStreamController.close();
+    onNotificationTapStreamController.close();
   }
 }

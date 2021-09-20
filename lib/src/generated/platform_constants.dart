@@ -73,6 +73,7 @@ class PlatformMethod {
   static const String pushRequestPermission = 'pushRequestPermission';
   static const String pushGetNotificationSettings =
       'pushGetNotificationSettings';
+  static const String pushOpenSettingsFor = 'pushOpenSettingsFor';
   static const String pushOnActivate = 'pushOnActivate';
   static const String pushOnDeactivate = 'pushOnDeactivate';
   static const String pushOnUpdateFailed = 'pushOnUpdateFailed';
@@ -360,8 +361,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -377,8 +377,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';
