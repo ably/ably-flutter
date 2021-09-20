@@ -63,6 +63,10 @@ To debug both platform and Dart code simultaneously:
 - In Android: in the Flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
 - In iOS: To debug iOS code, you must use/ set breakpoints in Xcode. In Android Studio or command line, run the flutter run --dart-define` command you would usually run. This ensures when you build with Xcode, the environment variables are available to the app. Then, re-run the application using Xcode. Then, in Android Studio, click `Run` > `Flutter Attach`, or click the `Flutter Attach` button.
 
+## Writing documentation
+
+As features are developed, ensure documentation (both in the public API/ interface) and in relevant markdown files are updated. When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
+
 ## Helpful Resources
 
 - Flutter
