@@ -4,7 +4,6 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../mock_method_call_manager.dart';
 
