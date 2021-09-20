@@ -27,8 +27,7 @@ class Platform {
   static Future _initialize() async {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
-      _initializer = methodChannel
-          .invokeMethod(PlatformMethod.registerAbly);
+      _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
     }
     return _initializer;
   }
