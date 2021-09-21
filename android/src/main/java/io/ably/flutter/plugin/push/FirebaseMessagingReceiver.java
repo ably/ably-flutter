@@ -26,11 +26,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    Boolean isApplicationInForeground = isApplicationInForeground(context);
-    RemoteMessage message = new RemoteMessage(intent.getExtras());
-    RemoteMessage.Notification notification = message.getNotification();
-    Boolean isNotificationMessage = notification != null;
-    Boolean isDataMessage = !message.getData().isEmpty();
+    final Boolean isApplicationInForeground = isApplicationInForeground(context);
+    final RemoteMessage message = new RemoteMessage(intent.getExtras());
+    final RemoteMessage.Notification notification = message.getNotification();
+    final Boolean isNotificationMessage = notification != null;
+    final Boolean isDataMessage = !message.getData().isEmpty();
     if (!isDataMessage) {
       // Do not send a RemoteMessage without any data, to be consistent with iOS: 
       // it doesn't call `didReceiveRemoteNotification` in this case.
@@ -45,12 +45,12 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
     if (isApplicationInForeground) {
       // Send message to Dart side app already running
-      Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
+      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
       onMessageReceivedIntent.putExtras(intent.getExtras());
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
-    } else if (AblyFlutterPlugin.isActivityRunning) {
+    } else if (AblyFlutterPlugin.isMainActivityRunning) {
       // Flutter is already running, just send a background message to it.
-      Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
+      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
       onMessageReceivedIntent.putExtras(intent.getExtras());
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
     } else {
@@ -59,9 +59,9 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     }
   }
 
-  Boolean isApplicationInForeground(Context context) {
-    ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+  Boolean isApplicationInForeground(final Context context) {
+    final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
     // This only shows processes for the current android app.
     assert (appProcesses.size() == 1); // We have not tested multiple processes running on 1 app.
 
