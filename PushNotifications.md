@@ -27,7 +27,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - Create a Firebase project, and in the Project settings, add an android app with your unique application ID. Follow the steps provided on the setup process, or the following:
     - You can leave `Debug signing certificate SHA-1` empty.
     - Download the generated `google-services.json` file
-    - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our Firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/ colleagues.
+    - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our Firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/colleagues.
 - Provide ably with the FCM server key: In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
 
 ### iOS
@@ -40,7 +40,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
     - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
     - Add `remote notification` background mode:
         - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
-        - Check/ enable `remote notifications`.
+        - Check `remote notifications`.
 
 ## Setting up your own App
 
@@ -60,7 +60,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - Open your iOS app in Xcode: when in your project directory, run `xed ios` or double click `ios/Runner.xcworkspace` in `your_project_name/ios`
     - Ensure your application bundle ID is registered on App Store connect. This is done automatically by Xcode when you select your team under `Signing & Capabilities`.
     - Create a `.p12` certificate and upload it to the Ably dashboard to allow Ably to authenticate with APNs on behalf of you, using [How do I obtain the APNs certificates needed for iOS Push Notifications?](https://knowledge.ably.com/how-do-i-obtain-the-apns-certificates-needed-for-ios-push-notifications).
-       - When running your application debug mode, it will always use the sandbox/ development APNs environment. When running in release mode, it will always use the production environment. This is an iOS limitation. Keep this in mind when checking the `Use APNS sandbox environment?` checkbox in Ably dashboard (notifications tab). When running an application in debug mode, ensure this checkbox is ticked, and when running a release build, ensure you are using an application with this checkbox disabled. 
+       - When running your application via Xcode or your machine (Android Studio, command line), your application runs in either debug, profile or release mode. In all cases, your application will use the sandbox/development APNs environment. When distributing your app in the App Store, Ad Hoc or through App Store Connect, it will always use the production environment. If distributing through `Development`, the sandbox / development APNs environment is used. Keep in mind your distribution method when checking the `Use APNS sandbox environment?` checkbox in an Ably application on the Ably dashboard (notifications tab). Ensure your application connects to an Ably application configured to use production APNs if the application is being distributed publicly.
     - Add `Push Notifications` capability: Click Runner in project navigator, click `Runner` target, under the **Signing & Capabilities** tab, click `+ Capability`, and select `Push Notifications`.
     - Add `remote notification` Background mode:
         - Under the **Signing & Capabilities** tab, click `+ Capability` and select `Background Modes`.
@@ -98,7 +98,7 @@ try {
 }
 ```
 
-- Listen to push events: You should listen to the `Push.pushEvents.onUpdateFailed` stream to be informed when a new token update (FCM registration token/ APNs device token) fails to be updated with Ably. If this update process fails, Ably servers will attempt to use the old tokens to send messages to devices and potentially fail.
+- Listen to push events: You should listen to the `Push.pushEvents.onUpdateFailed` stream to be informed when a new token update (FCM registration token / APNs device token) fails to be updated with Ably. If this update process fails, Ably servers will attempt to use the old tokens to send messages to devices and potentially fail.
     - Optional: listen to `Push.pushEvents.onActivate` and `Push.pushEvents.onDeactivate`. This is optional because `Push.activate` and `Push.deactivate` will return when it succeeds, and throw when it fails.
 
 ```dart
@@ -246,16 +246,16 @@ To see an example of receiving messages and handling other notification related 
 
 **Android**: In the case where the app is in the background/ terminated, you cannot configure/ disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
 
-**iOS**: In the case where the app is in the background/ terminated, Ably Flutter doesn't provide the functionality to configure/ extend alert notifications on iOS, and these will automatically be shown to the user.
+**iOS**: In the case where the app is in the background / terminated, ably-flutter doesn't provide the functionality to configure / extend alert notifications on iOS, and these will automatically be shown to the user.
 
 To create richer (more content or more interactive) local notifications once a data message is received on both Android and iOS, take a look at [awesome_notifications](https://pub.dev/packages/awesome_notifications).
   - Advanced usage: 
     - To do this natively on Android instead, you could use [`notificationManager.notify`](https://developer.android.com/reference/android/app/NotificationManager#notify(int,%20android.app.Notification)). 
-    - To this natively on iOS, You can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
+    - To do this natively on iOS, you can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
 
 #### Foreground notifications
 
-On both Android and iOS, Ably Flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground.  To configure if a notification is shown in the foreground:
+On both Android and iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
 
 ```dart
 ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
@@ -269,7 +269,7 @@ Internally: On Android, the SDK does this by generating the same notification Fi
 
 #### Notification taps
 
-- To be informed when a notification tap launches the application:
+- To be informed when a notification tap launches the app:
 
 ```dart
 ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
@@ -281,7 +281,7 @@ ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
 });
 ```
   
-- To be informed when a notification is tapped by the user whilst app is in the foreground:
+- To be informed when a notification is tapped by the user whilst the app is in the foreground:
 
 ```dart
 ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
@@ -291,6 +291,8 @@ ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
 
 #### Data Message / Background Notification
 
+- On iOS, if a notification is also present, it will be shown before `onMessage` or the callback passed to `ably.Push.notificationEvents.setOnBackgroundMessage` is called.
+- On Android, if a notification is also present, it will be shown after these methods finish (or it's Future completes).
 - When the app is in the foreground, you can listen to messages using:
 
 ```dart
@@ -299,7 +301,7 @@ ably.Push.notificationEvents.onMessage.listen((remoteMessage) {
       '$remoteMessage');
 });
 ```
-  - This method can be synchronous or `async`.
+- This method can be synchronous or `async`.
 
 - When the app is terminated or in the background, you can listen to messages using:
 
@@ -345,7 +347,7 @@ Do this only if you do not want the device to receive push notifications at all.
 
 ### Push messages are not being delivered to my device.
 
-If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard,
+If sending a push message from a channel, ensure your device ID or client ID is subscribed to that channel. After sending a message with a push payload on an ably channel, check the push state of the device either on the Ably Dashboard or using a Push Admin.
 
 On iOS, to show alert notifications, you need to request provisional permission or explicit permission from the user. When debugging further, we recommend using the Console.app (this is different to Terminal.app or iTerm2.app) installed on your mac.
 - To confirm your application received the push message/ check for errors related to push notifications, find relevant logs by:
@@ -380,6 +382,16 @@ On iOS, to show alert notifications, you need to request provisional permission 
 
 On Android, you can use logcat built into Android Studio or [pidcat](https://github.com/JakeWharton/pidcat) to view the logs.
 
+### I have confirmed messages are not being received by the device (no logs of being cancelled), but no errors are thrown when I send the message
+
+Sending an Ably message with a push payload will succeed if the message is successfully delivered to Ably, including delivery guarantees for channel subscriptions. However, push notification messages may not be delivered to specific devices if there is an error returned by APNs / FCM. You should retrieve the device registration using a Push Admin or the Ably Dashboard. For example, if your application has a bundle ID which does not match APNs certificate generated from [developer.apple.com](https://developer.apple.com/account/resources/identifiers/list), you would get `DeviceTokenNotForTopic`, on the Ably dashboard, this would look like:
+
+![Ably Dashboard showing APNs error](images/ably-dashboard-1.png)
+
+For iOS device registrations, the device push state error are errors passed directly from APNs. For a full list of errors and what they mean, look at [Values for the APNs JSON `reason` key](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1).
+
+For Android device registrations, the device push state error are errors passed directly from FCM. For a full list of errors and what they mean, look at [Downstream message error response codes](https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=ur#error-codes). 
+
 ### Why are notifications not shown to the user when the app is open on Android?
 
 When the app is in the foreground (open by the user), Firebase messaging ignores the message. You would need to send a data message and build a local notification instead. On iOS, you can specify this in your `UNUserNotificationCenterDelegate`'s `userNotificationCenter:_willPresentNotification:withCompletionHandler` method. In the example app, this is implemented in `AppDelegate.m`, where the notification is always shown. You can perform logic to decide if it should be shown or not based on the notification.
@@ -392,24 +404,21 @@ Ensure your Android app contains the Firebase configuration `android/app/google-
 
 You need to add the firebase-analytics dependency to your `app/build.gradle` file. This was optional when following the [Firebase Android client setup guide](https://firebase.google.com/docs/cloud-messaging/android/client), for example: `implementation 'com.google.firebase:firebase-analytics:version_number'`. Find the latest version number from [MVNRepository](https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics).
 
-### Why does my iOS device message not get received, and the error message returned is e.g. `BadDeviceToken`?
+### When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is e.g. `BadDeviceToken`?
 
-This is an error passed straight from APNs. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
+In this case, the device token is invalid. Make sure the environment for push notifications on the app (`Runner.entitlements`) matches the environment set in Ably dashboard (push notification tab).
 
-For a full list of errors and what they mean, look at [Values for the APNs JSON `reason` key](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1).
-
-For example, for `BadDeviceToken`:
 > The specified device token was bad. Verify that the request contains a valid token and that the token matches the environment.
 
-When running a debug application, the sandbox/ development APNs server is used. Make sure to use an application with "Use APNS sandbox environment" enabled in the Ably dashboard (push notification tab).  Do not try to change the `.entitlements` file to `production`, but this does not make the debug application use the production APNs server. For more information about this limitation, see [How do I make my debug app version receive production push notifications on iOS?](https://stackoverflow.com/a/46118155/7365866).
+When running a debug application, the sandbox / development APNs server is used. Make sure to use an application with `Use APNS sandbox environment?` enabled in the Ably dashboard (push notification tab). Changing the `aps-environment` value in the `.entitlements` file to `production` does not make the debug application use the production APNs server.
 
->**Debug** builds will always get *sandbox* APNS tokens.
+> **Development / Sandbox APNs:** Local builds through Xcode / Android Studio / command line will always get *sandbox* APNs tokens. Apps distributed through `Development` methods will also get *sandbox* APNs tokens.
 >
->**Release** builds (ad-hoc or app store) will always get *production* APNS tokens.
+> **Production APNs:** Apps distributed through App Store Connect (TestFlight and App Store), Ad Hoc and Enterprise distribution methods will always get *production* APNs tokens.
 
 For more information, take a look at [What are the possible reasons to get APNs responses BadDeviceToken or Unregistered?](https://stackoverflow.com/questions/42511476/what-are-the-possible-reasons-to-get-apns-responses-baddevicetoken-or-unregister).
 
-### Android only: When I look in ably.com's dashboard, i see "InvalidRegistration"
+### Android: When retrieving a device registration using a Push Admin or using the Ably dashboard, the device push state is is `InvalidRegistration`
 
 This means your registration token is invalid. Ably is may not have your device's FCM registration token. `FirebaseMessagingService.onNewToken` is only called when a new token is available, so if Ably was installed in a new app update and the token has **not** been changed, Ably won't know it. If you have previously registered with FCM without Ably, you should make sure to give ably the latest token, by getting it and calling:
 
@@ -417,7 +426,7 @@ This means your registration token is invalid. Ably is may not have your device'
 ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
 ```
 
-### My notifications do not make a sound when they are shown on the device.
+### My notifications do not make a sound when they are shown on the device
 
 Android: Ensure you have set up a Notification channel (which displays as notification "categories" to Android users within your application settings). The example app shows how to do this by using [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) to configure `AndroidNotificationChannel`.
 

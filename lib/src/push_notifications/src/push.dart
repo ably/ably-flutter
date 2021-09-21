@@ -16,7 +16,7 @@ abstract class Push {
       PushNative.notificationEvents;
 
   /// Activate this device for push notifications by registering
-  /// with the push transport such as GCM/APNS.
+  /// with the push transport such as FCM/APNs.
   ///
   /// In the case of network issues, this method will not complete until
   /// network connection is recovered. If the device is

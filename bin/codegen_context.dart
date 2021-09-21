@@ -100,11 +100,15 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
   {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
   {'name': 'pushDevice', 'value': 'pushDevice'},
+  // Used only on iOS
   {'name': 'pushRequestPermission', 'value': 'pushRequestPermission'},
+  // Used only on iOS
   {
     'name': 'pushGetNotificationSettings',
     'value': 'pushGetNotificationSettings'
   },
+  // Used only on iOS
+  {'name': 'pushOpenSettingsFor', 'value': 'pushOpenSettingsFor'},
   // Push Activation Events
   {'name': 'pushOnActivate', 'value': 'pushOnActivate'},
   {'name': 'pushOnDeactivate', 'value': 'pushOnDeactivate'},

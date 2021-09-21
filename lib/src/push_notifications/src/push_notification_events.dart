@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'remote_message.dart';
 
 typedef BackgroundMessageHandler = void Function(RemoteMessage message);
@@ -21,19 +23,22 @@ abstract class PushNotificationEvents {
   /// Called with [ApplicationState] available in [RemoteMessage]
   ///
   /// The notification has not yet been tapped.
-  ///
-  /// TODO: has the notification been seen?
   Stream<RemoteMessage> get onMessage;
 
   /// This method will be called when a notification or data message is
   /// received by the device.
-  ///
   void setOnBackgroundMessage(BackgroundMessageHandler handler);
 
   /// Called when notification is tapped while the app is already in the foreground or in the background
   ///
   /// Check the [ApplicationState] to know if the app was in foreground or background.
   Stream<RemoteMessage> get onNotificationTap;
+
+  /// Called when the user visits the "In-app settings", such as when in the iOS Settings > App Name > Notifications > "Customize in App"
+  ///
+  /// iOS only: Specifically when [`userNotificationCenter(_:openSettingsFor:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/2981869-usernotificationcenter)
+  /// is called.
+  void setOnOpenSettings(VoidCallback callback);
 
   /// Future resolves to the notification which was tapped to cause the app
   /// to launch from from a terminated state. `null` if app was not launched

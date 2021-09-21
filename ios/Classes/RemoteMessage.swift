@@ -7,7 +7,7 @@ public class RemoteMessage: NSObject {
     @objc
     let notification: Notification?;
     
-    init(data: NSDictionary?, notification: Notification) {
+    init(data: NSDictionary?, notification: Notification?) {
         self.data = data;
         self.notification = notification;
     }

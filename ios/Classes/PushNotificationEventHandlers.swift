@@ -1,9 +1,10 @@
 import Foundation
 import Flutter
 
-// This class implements UNUserNotificationCenterDelegate but makes sure to also call the users
-// original UNUserNotificationCenterDelegate methods implemented on the user's delegate set on
-// UNUserNotificationCenter.delegate
+// This class is used to replace the UNUserNotificationCenterDelegate set by the user.
+//
+// It makes sure to also call the same delegate methods implemented on the original
+// UNUserNotificationCenter.delegate, if it exists
 public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDelegate {
     var delegate: UNUserNotificationCenterDelegate? = nil;
     let methodChannel: FlutterMethodChannel
@@ -32,44 +33,35 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
         let remoteMessage = RemoteMessage.fromNotificationContent(content: response.notification.request.content)
         methodChannel.invokeMethod(AblyPlatformMethod_pushOnNotificationTap, arguments: remoteMessage, result: nil)
         
-        if let delegate = delegate {
-            // TODO Call dart side to say error, we did not call this because the delegate was already set.
+        // `as` is used because userNotificationCenter on its own is ambiguous (userNotificationCenter corresponds to 3 methods).
+        // See https://stackoverflow.com/questions/35658334/how-do-i-resolve-ambiguous-use-of-compile-error-with-swift-selector-syntax
+        let didReceiveDelegateMethodSelector = #selector(userNotificationCenter as (UNUserNotificationCenter, UNNotificationResponse, @escaping () -> Void) -> Void)
+        if let delegate = delegate, delegate.responds(to: didReceiveDelegateMethodSelector) {
+            // Allow users AppDelegate gets a chance to respond.
             delegate.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler)
         } else {
-            // TODO give the response to the user
             completionHandler()
         }
     }
     
-    // Do nothing, but pass the arguments to the original delegate.
     @available(iOS 12.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
-        if let delegate = delegate {
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOpenSettingsFor, arguments: nil, result: nil)
+        let openSettingsForDelegateMethodSelector = #selector(userNotificationCenter as (UNUserNotificationCenter, UNNotification?) -> Void)
+        if let delegate = delegate, delegate.responds(to: openSettingsForDelegateMethodSelector) {
             delegate.userNotificationCenter?(center, openSettingsFor: notification)
         }
     }
     
     @objc
     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        // TODO check if foreground, background or inactive? See https://developer.apple.com/documentation/uikit/uiapplicationstate?language=objc
-        // TODO call dart with userInfo, and run processing, including background processing.
-        // It should return an enum, such as `newData`, `NoData`, `failed`, or nil
-        if (application.applicationState == .background) {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnBackgroundMessage, arguments: userInfo) { flutterResult in
-                if let result = flutterResult as? UIBackgroundFetchResult {
-                    completionHandler(result);
-                } else {
-                    completionHandler(.noData);
-                }
-            }
-        } else {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnMessage, arguments: userInfo) { flutterResult in
-                if let result = flutterResult as? UIBackgroundFetchResult {
-                    completionHandler(result);
-                } else {
-                    completionHandler(.noData);
-                }
-            }
+        var methodName = AblyPlatformMethod_pushOnMessage;
+        if (application.applicationState == .background || application.applicationState == .inactive) {
+            methodName = AblyPlatformMethod_pushOnBackgroundMessage
+        }
+        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: nil);
+        methodChannel.invokeMethod(methodName, arguments: remoteMessage) { flutterResult in
+            completionHandler(.newData);
         }
     }
 }

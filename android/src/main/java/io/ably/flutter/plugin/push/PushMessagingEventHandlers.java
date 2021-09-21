@@ -58,12 +58,12 @@ final public class PushMessagingEventHandlers {
         case PUSH_ON_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnMessage,
               message,
-              () -> displayForegroundNotification(context, intentExtras, this::completeAsyncMessagingBroadcastReceiver));
+              () -> displayForegroundNotification(context, intentExtras, FirebaseMessagingReceiver::finish));
           break;
         case PUSH_ON_BACKGROUND_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnBackgroundMessage,
               message,
-              this::completeAsyncMessagingBroadcastReceiver);
+              FirebaseMessagingReceiver::finish);
           break;
         default:
           Log.e(TAG, String.format("Received unknown intent action: %s", action));
@@ -132,16 +132,6 @@ final public class PushMessagingEventHandlers {
           }
         }
       });
-    }
-
-    /**
-     * This method informs Android that AblyFlutterMessagingReceiver has completed it's work.
-     */
-    private void completeAsyncMessagingBroadcastReceiver() {
-      if (FirebaseMessagingReceiver.asyncCompletionHandlerPendingResult != null) {
-        FirebaseMessagingReceiver.asyncCompletionHandlerPendingResult.finish();
-        FirebaseMessagingReceiver.asyncCompletionHandlerPendingResult = null;
-      }
     }
   }
 }

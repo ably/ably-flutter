@@ -29,6 +29,4 @@ public class PushMessagingService extends FirebaseMessagingService {
     // This class does not do anything in onMessageReceived, since [AblyFlutterMessagingReceiver]
     // listens to `com.google.android.c2dm.intent.RECEIVE` declared in the manifest.
   }
-
-
 }

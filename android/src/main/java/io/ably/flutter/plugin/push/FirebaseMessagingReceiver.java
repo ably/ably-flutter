@@ -20,10 +20,10 @@ import io.ably.flutter.plugin.AblyFlutterPlugin;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
-  
+
   @Nullable
-  public static PendingResult asyncCompletionHandlerPendingResult = null;
-  
+  private static PendingResult asyncCompletionHandlerPendingResult = null;
+
   @Override
   public void onReceive(Context context, Intent intent) {
     Boolean isApplicationInForeground = isApplicationInForeground(context);
@@ -55,7 +55,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
     } else {
       // No existing Flutter Activity is running, create a FlutterEngine and pass it the RemoteMessage
-      new PushBackgroundIsolateRunner(context, asyncCompletionHandlerPendingResult, message);
+      new PushBackgroundIsolateRunner(context, this, message);
     }
   }
 
@@ -76,6 +76,14 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
       }
     }
 
+    return false;
+  }
+
+  static boolean finish() {
+    if (asyncCompletionHandlerPendingResult != null) {
+      asyncCompletionHandlerPendingResult.finish();
+      return true;
+    }
     return false;
   }
 }

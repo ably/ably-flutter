@@ -1,4 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,23 +10,25 @@ class PushNotificationHandlers {
 
   static void setUpEventHandlers() {
     activationEvents.onUpdateFailed.listen((error) async {
-      print('onUpdateFailed error:');
-      print(error);
+      logAndDisplayError(error,
+          prefixMessage: 'Push update registration failed');
     });
-    // Optional
     activationEvents.onActivate.listen((error) async {
-      print(error);
+      logAndDisplayError(error, prefixMessage: 'Push activation failed');
     });
-    // Optional
     activationEvents.onDeactivate.listen((error) async {
-      print(error);
+      logAndDisplayError(error, prefixMessage: 'Push deactivation failed');
     });
   }
 
-  static void setUpMessageHandlers() async {
+  static void setUpMessageHandlers() {
     getLaunchMessage();
 
     notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
+
+    notificationEvents.setOnOpenSettings(() {
+      print('The iOS user has asked to see the In-app Notification Settings');
+    });
 
     notificationEvents.onMessage.listen((remoteMessage) {
       print('Message was delivered to app while the app was in the foreground: '

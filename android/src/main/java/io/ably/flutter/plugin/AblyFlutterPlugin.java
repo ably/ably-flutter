@@ -126,11 +126,10 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
             return false;
         }
         RemoteMessage message = new RemoteMessage(intent.getExtras());
-        // TODO should i sent a RemoteMessage if only notificaiton is populated
-            if (message.getData().size() > 0 || message.getNotification() != null) {
-                completionHandler.call(message);
-                return true;
-            }
+        if (message.getData().size() > 0) {
+            completionHandler.call(message);
+            return true;
+        }
         return false;
     }
 }
