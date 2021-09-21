@@ -21,6 +21,7 @@ final public class PushMessagingEventHandlers {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
   public static final String PUSH_ON_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_MESSAGE_RECEIVED";
   public static final String PUSH_ON_BACKGROUND_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_RECEIVED";
+  public static final String PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_COMPLETE";
   static PushMessagingEventHandlers instance;
 
   public static void instantiate(Context context, MethodChannel methodChannel) {
@@ -53,17 +54,16 @@ final public class PushMessagingEventHandlers {
       String action = intent.getAction();
       Bundle intentExtras = intent.getExtras();
       RemoteMessage message = new RemoteMessage(intent.getExtras());
-      // TODO can we change this by using a different click_action?
       switch (action) {
         case PUSH_ON_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnMessage,
               message,
-              () -> displayForegroundNotification(context, intentExtras, FirebaseMessagingReceiver::finish));
+              () -> displayForegroundNotification(context, intentExtras, () -> finish(context)));
           break;
         case PUSH_ON_BACKGROUND_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnBackgroundMessage,
               message,
-              FirebaseMessagingReceiver::finish);
+              () -> finish(context));
           break;
         default:
           Log.e(TAG, String.format("Received unknown intent action: %s", action));
@@ -91,7 +91,7 @@ final public class PushMessagingEventHandlers {
 
         @Override
         public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-          System.out.println(String.format("`pushOnShowNotificationInForeground` failed: %s", errorMessage));
+          System.out.printf("`pushOnShowNotificationInForeground` failed: %s%n", errorMessage);
           finish.call();
         }
 
@@ -101,10 +101,6 @@ final public class PushMessagingEventHandlers {
           finish.call();
         }
       });
-    }
-
-    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage) {
-      sendRemoteMessageToDartSide(methodName, remoteMessage, null);
     }
 
     // Used to send the RemoteMessage, which may (or may not) contain Data and RemoteMessage.Notification
@@ -132,6 +128,11 @@ final public class PushMessagingEventHandlers {
           }
         }
       });
+    }
+
+    void finish(final Context context) {
+      final Intent backgroundMessageCompleteIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE);
+      LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundMessageCompleteIntent);
     }
   }
 }
