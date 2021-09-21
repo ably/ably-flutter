@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin.push;
 
+import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE;
 import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_RECEIVED;
 import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_MESSAGE_RECEIVED;
 
@@ -7,6 +8,7 @@ import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -29,8 +31,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     final Boolean isApplicationInForeground = isApplicationInForeground(context);
     final RemoteMessage message = new RemoteMessage(intent.getExtras());
     final RemoteMessage.Notification notification = message.getNotification();
-    final Boolean isNotificationMessage = notification != null;
-    final Boolean isDataMessage = !message.getData().isEmpty();
+    final boolean isDataMessage = !message.getData().isEmpty();
     if (!isDataMessage) {
       // Do not send a RemoteMessage without any data, to be consistent with iOS: 
       // it doesn't call `didReceiveRemoteNotification` in this case.
@@ -41,6 +42,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     // , Firebase messaging library will automatically create a notification. 
     // On iOS, the notification may be shown before the  message is processed by the application.
     // goAsync() also increases the execution time from 10s/ 20s (depending on API level) to 30s
+    new BackgroundMessageProcessingCompleteReceiver(context);
     asyncCompletionHandlerPendingResult = goAsync();
 
     if (isApplicationInForeground) {
@@ -79,11 +81,27 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     return false;
   }
 
-  boolean finish() {
+  class BackgroundMessageProcessingCompleteReceiver extends BroadcastReceiver {
+    BackgroundMessageProcessingCompleteReceiver(final Context context) {
+      final IntentFilter filter = new IntentFilter();
+      filter.addAction(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE);
+      LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      String action = intent.getAction();
+      if (action.equals(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE)) {
+        finish();
+      } else {
+        Log.e(TAG, String.format("Received unknown intent action: %s", action));
+      }
+    }
+  }
+
+  void finish() {
     if (asyncCompletionHandlerPendingResult != null) {
       asyncCompletionHandlerPendingResult.finish();
-      return true;
     }
-    return false;
   }
 }
