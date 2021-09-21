@@ -59,8 +59,8 @@ class PushNotificationHandlers {
 
   static Future<void> _backgroundMessageHandler(
       ably.RemoteMessage message) async {
-    print('Just received a background message, with:');
-    print('RemoteMessage.Notification: ${message.notification}');
-    print('RemoteMessage.Data: ${message.data}');
+    print('Just received a background message, with:\n'
+        'RemoteMessage.Notification: ${message.notification}'
+        'RemoteMessage.Data: ${message.data}');
   }
 }
