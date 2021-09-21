@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.nio.channels.CompletionHandler;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.CompletionHandlerWithRemoteMessage;
@@ -28,10 +24,10 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
 public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
-    public static Boolean isActivityRunning = false;
     private Context applicationContext;
     private AblyMethodCallHandler methodCallHandler;
     private Activity mainActivity;
+    public static Boolean isMainActivityRunning = false;
     private MethodChannel methodChannel;
 
     @Override
@@ -86,11 +82,11 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        isActivityRunning = true;
+        isMainActivityRunning = true;
         mainActivity = binding.getActivity();
         binding.addOnNewIntentListener(this);
         Intent intent = mainActivity.getIntent();
-        doIfIntentContainsRemoteMessage(intent, (message) -> {
+        handleRemoteMessageIntent(intent, (message) -> {
             // Only send the RemoteMessage to the dart side if it was actually a RemoteMessage.
             methodCallHandler.setRemoteMessageFromUserTapLaunchesApp(message);
         });
@@ -109,28 +105,29 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     // This method does not get called when the app goes into the background
     @Override
     public void onDetachedFromActivity() {
-        isActivityRunning = false;
+        mainActivity = null;
+        isMainActivityRunning = false;
     }
 
     @Override
     public boolean onNewIntent(Intent intent) {
-        mainActivity.setIntent(intent);
-        doIfIntentContainsRemoteMessage(intent, (message) -> {
+        if (mainActivity != null) {
+          mainActivity.setIntent(intent);
+        }
+        handleRemoteMessageIntent(intent, (message) -> {
             methodChannel.invokeMethod(PlatformConstants.PlatformMethod.pushOnNotificationTap, message);
         });
         return false;
     }
 
-    private Boolean doIfIntentContainsRemoteMessage(Intent intent, CompletionHandlerWithRemoteMessage completionHandler) {
+    private void handleRemoteMessageIntent(Intent intent, CompletionHandlerWithRemoteMessage completionHandler) {
         Bundle extras = intent.getExtras();
         if (extras == null) {
-            return false;
+            return;
         }
-        RemoteMessage message = new RemoteMessage(intent.getExtras());
+        final RemoteMessage message = new RemoteMessage(intent.getExtras());
         if (message.getData().size() > 0) {
-            completionHandler.call(message);
-            return true;
+            completionHandler.onRemoteMessage(message);
         }
-        return false;
     }
 }
