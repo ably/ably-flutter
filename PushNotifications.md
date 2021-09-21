@@ -313,7 +313,14 @@ ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 
 Users can listen to messages in each platform using the native message listeners instead of listening to messages on the Dart side. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications).
 
-**Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the `Service` in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
+**Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the `Service` in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification). As declaring this service would override the service used internal by Ably Flutter, be sure to provide Ably Flutter with your registration token. Implement the following `onNewToken` method in `FirebaseMessagingService`:
+```java
+  @Override
+  public void onNewToken(@NonNull String registrationToken) {
+    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+    super.onNewToken(registrationToken);
+  }
+```
 
 **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
