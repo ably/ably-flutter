@@ -49,10 +49,11 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
-    public void registerWith(Registrar registrar) {
-        applicationContext = registrar.context().getApplicationContext();
-        registrar.addNewIntentListener(this);
-        setupChannels(registrar.messenger(), applicationContext);
+    public static void registerWith(Registrar registrar) {
+        Context applicationContext = registrar.context().getApplicationContext();
+        final AblyFlutterPlugin ably = new AblyFlutterPlugin();
+        registrar.addNewIntentListener(ably);
+        ably.setupChannels(registrar.messenger(), applicationContext);
     }
 
     private void setupChannels(BinaryMessenger messenger, Context applicationContext) {
