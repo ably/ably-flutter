@@ -41,22 +41,22 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static AblyMethodCallHandler _instance;
   private Context applicationContext;
 
-  public interface OnHotRestart {
+  public interface OnHotRestartListener {
     // this method will be called on every fresh start and on every hot restart
     void trigger();
   }
 
   private final MethodChannel channel;
-  private final OnHotRestart onHotRestartListener;
+  private final OnHotRestartListener onHotRestartListener;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
-  public AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
+  public AblyMethodCallHandler(final MethodChannel channel, final OnHotRestartListener onHotRestartListener, final Context applicationContext) {
     this.channel = channel;
     this.applicationContext = applicationContext;
-    this.onHotRestartListener = listener;
+    this.onHotRestartListener = onHotRestartListener;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
