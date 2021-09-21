@@ -29,7 +29,7 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
-  private MethodChannel backgroundMethodChannel;
+  private final MethodChannel backgroundMethodChannel;
 
   @Nullable
   private FlutterEngine flutterEngine;
@@ -96,6 +96,6 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
     flutterEngine.getBroadcastReceiverControlSurface().detachFromBroadcastReceiver();
     flutterEngine.destroy();
     flutterEngine = null;
-    FirebaseMessagingReceiver.finish();
+    broadcastReceiver.finish();
   }
 }

@@ -22,7 +22,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
 
   @Nullable
-  private static PendingResult asyncCompletionHandlerPendingResult = null;
+  private PendingResult asyncCompletionHandlerPendingResult = null;
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -79,7 +79,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     return false;
   }
 
-  static boolean finish() {
+  boolean finish() {
     if (asyncCompletionHandlerPendingResult != null) {
       asyncCompletionHandlerPendingResult.finish();
       return true;
