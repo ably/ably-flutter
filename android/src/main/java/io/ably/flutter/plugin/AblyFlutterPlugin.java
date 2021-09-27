@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
-import io.ably.flutter.plugin.push.CompletionHandlerWithRemoteMessage;
+import io.ably.flutter.plugin.push.RemoteMessageCallback;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -120,14 +120,14 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         return false;
     }
 
-    private void handleRemoteMessageIntent(Intent intent, CompletionHandlerWithRemoteMessage completionHandler) {
+    private void handleRemoteMessageIntent(Intent intent, RemoteMessageCallback callback) {
         Bundle extras = intent.getExtras();
         if (extras == null) {
             return;
         }
         final RemoteMessage message = new RemoteMessage(intent.getExtras());
         if (message.getData().size() > 0) {
-            completionHandler.onRemoteMessage(message);
+            callback.onRemoteMessage(message);
         }
     }
 }

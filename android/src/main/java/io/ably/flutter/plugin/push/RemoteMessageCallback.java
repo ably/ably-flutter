@@ -2,6 +2,6 @@ package io.ably.flutter.plugin.push;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-public interface CompletionHandlerWithRemoteMessage {
+public interface RemoteMessageCallback {
   void onRemoteMessage(RemoteMessage message);
 }

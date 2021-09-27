@@ -24,7 +24,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
 
   @Nullable
-  private PendingResult asyncCompletionHandlerPendingResult = null;
+  private PendingResult asyncProcessingPendingResult = null;
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -43,7 +43,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     // On iOS, the notification may be shown before the  message is processed by the application.
     // goAsync() also increases the execution time from 10s/ 20s (depending on API level) to 30s
     new BackgroundMessageProcessingCompleteReceiver(context);
-    asyncCompletionHandlerPendingResult = goAsync();
+    asyncProcessingPendingResult = goAsync();
 
     if (isApplicationInForeground) {
       // Send message to Dart side app already running
@@ -100,8 +100,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   }
 
   void finish() {
-    if (asyncCompletionHandlerPendingResult != null) {
-      asyncCompletionHandlerPendingResult.finish();
+    if (asyncProcessingPendingResult != null) {
+      asyncProcessingPendingResult.finish();
     }
   }
 }

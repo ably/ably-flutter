@@ -71,7 +71,7 @@ final public class PushMessagingEventHandlers {
       }
     }
 
-    private void displayForegroundNotification(Context context, Bundle intentExtras, CompletionHandler finish) {
+    private void displayForegroundNotification(Context context, Bundle intentExtras, Runnable finish) {
       RemoteMessage message = new RemoteMessage(intentExtras);
       if (message.getNotification() == null) {
         return;
@@ -86,45 +86,45 @@ final public class PushMessagingEventHandlers {
           if (willShowNotification) {
             NotificationUtilities.showNotification(context, message, intentExtras);
           }
-          finish.call();
+          finish.run();
         }
 
         @Override
         public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
           System.out.printf("`pushOnShowNotificationInForeground` failed: %s%n", errorMessage);
-          finish.call();
+          finish.run();
         }
 
         @Override
         public void notImplemented() {
           System.out.println("`pushOnShowNotificationInForeground` not implemented.");
-          finish.call();
+          finish.run();
         }
       });
     }
 
     // Used to send the RemoteMessage, which may (or may not) contain Data and RemoteMessage.Notification
-    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, CompletionHandler completionHandler) {
+    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, Runnable callback) {
       this.methodChannel.invokeMethod(methodName, remoteMessage, new MethodChannel.Result() {
         @Override
         public void success(@Nullable Object result) {
-          if (completionHandler != null) {
-            completionHandler.call();
+          if (callback != null) {
+            callback.run();
           }
         }
 
         @Override
         public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-          if (completionHandler != null) {
-            completionHandler.call();
+          if (callback != null) {
+            callback.run();
           }
         }
 
         @Override
         public void notImplemented() {
-          System.out.println("`asyncCompletionHandlerPendingResult` not implemented.");
-          if (completionHandler != null) {
-            completionHandler.call();
+          System.out.printf("`%s` platform method not implemented. %n", methodName);
+          if (callback != null) {
+            callback.run();
           }
         }
       });
