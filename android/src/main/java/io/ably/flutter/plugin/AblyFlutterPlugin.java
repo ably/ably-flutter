@@ -63,11 +63,12 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         methodChannel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
         methodCallHandler = new AblyMethodCallHandler(
             methodChannel,
-            // Called when `registerAbly` platform method is call
-            // (usually when app restarts or hot-restart, but not hot-reload)
+            // Called when `registerAbly` platform method is called: when app restarts or
+            // hot restarts, but not hot-reload.
             streamsChannel::reset,
             applicationContext
         );
+        BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
         PushMessagingEventHandlers.instantiate(applicationContext, methodChannel);
