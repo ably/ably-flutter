@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -24,6 +25,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
 public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
+    private static final String TAG = AblyFlutterPlugin.class.getName();
     private Context applicationContext;
     private AblyMethodCallHandler methodCallHandler;
     private Activity mainActivity;
@@ -82,6 +84,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        Log.v(TAG, "ActivityAware#onAttachedToActivity called");
         isMainActivityRunning = true;
         mainActivity = binding.getActivity();
         binding.addOnNewIntentListener(this);
@@ -94,17 +97,22 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        Log.v(TAG, "ActivityAware#onDetachedFromActivityForConfigChanges called");
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        Log.v(TAG, "ActivityAware#onReattachedToActivityForConfigChanges called");
         mainActivity = binding.getActivity();
         binding.addOnNewIntentListener(this);
     }
 
-    // This method does not get called when the app goes into the background
+    // This method gets called when an Activity is detached from the FlutterEngine, either when
+    // 1. when a different Activity is being attached to the FlutterEngine, or 2. the Activity is
+    // being destroyed. It does not get called when the app goes into the background.
     @Override
     public void onDetachedFromActivity() {
+        Log.v(TAG, "ActivityAware#onDetachedFromActivity called");
         mainActivity = null;
         isMainActivityRunning = false;
     }
