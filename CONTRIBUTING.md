@@ -53,9 +53,9 @@ Implementation wise, we do this by passing a reference to the `FlutterResult` we
 
 Android's firebase-messaging / FCM library allows users to select the Intent action used when the automatically generated notification is tapped by the user. You can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
 
-#### Notifications generation
+#### Notifications generation for Foreground Apps
 
-iOS allows users to show the notification even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM / Android does not provide this functionality. To be consistent with iOS, Ably listens for messages with notifications, and asks the user on the dart side if they'd like this notification shown, and if so, show it on behalf of the user. Because of this, we have a large file containing code taken from Firebase messaging's Android SDK, stored within `NotificationUtilities.java`.
+iOS allows users to show the notification even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM / Android does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`. 
 
 #### Push Notifications Background Message Handling
 

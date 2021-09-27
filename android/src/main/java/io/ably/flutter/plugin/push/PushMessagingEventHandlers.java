@@ -14,7 +14,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
-import io.ably.flutter.plugin.util.NotificationUtilities;
 import io.flutter.plugin.common.MethodChannel;
 
 final public class PushMessagingEventHandlers {
@@ -58,7 +57,7 @@ final public class PushMessagingEventHandlers {
         case PUSH_ON_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnMessage,
               message,
-              () -> displayForegroundNotification(context, intentExtras, () -> finish(context)));
+              () -> finish(context));
           break;
         case PUSH_ON_BACKGROUND_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnBackgroundMessage,
@@ -69,38 +68,6 @@ final public class PushMessagingEventHandlers {
           Log.e(TAG, String.format("Received unknown intent action: %s", action));
           break;
       }
-    }
-
-    private void displayForegroundNotification(Context context, Bundle intentExtras, Runnable finish) {
-      RemoteMessage message = new RemoteMessage(intentExtras);
-      if (message.getNotification() == null) {
-        return;
-      }
-
-      methodChannel.invokeMethod(pushOnShowNotificationInForeground, message, new MethodChannel.Result() {
-        @Override
-        public void success(@Nullable Object result) {
-          Boolean willShowNotification = (Boolean) result;
-          RemoteMessage.Notification notification = message.getNotification();
-          assert (notification != null);
-          if (willShowNotification) {
-            NotificationUtilities.showNotification(context, message, intentExtras);
-          }
-          finish.run();
-        }
-
-        @Override
-        public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-          System.out.printf("`pushOnShowNotificationInForeground` failed: %s%n", errorMessage);
-          finish.run();
-        }
-
-        @Override
-        public void notImplemented() {
-          System.out.println("`pushOnShowNotificationInForeground` not implemented.");
-          finish.run();
-        }
-      });
     }
 
     // Used to send the RemoteMessage, which may (or may not) contain Data and RemoteMessage.Notification
