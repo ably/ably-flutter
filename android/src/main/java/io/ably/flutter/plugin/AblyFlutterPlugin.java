@@ -136,7 +136,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         }
         final RemoteMessage message = new RemoteMessage(intent.getExtras());
         if (message.getData().size() > 0) {
-            callback.onRemoteMessage(message);
+            callback.onReceive(message);
         }
     }
 }
