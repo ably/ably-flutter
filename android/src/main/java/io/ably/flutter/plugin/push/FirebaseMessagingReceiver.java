@@ -63,9 +63,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
   Boolean isApplicationInForeground(final Context context) {
     final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
     // This only shows processes for the current android app.
-    assert (appProcesses.size() == 1); // We have not tested multiple processes running on 1 app.
+    final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
     for (ActivityManager.RunningAppProcessInfo process : appProcesses) {
       // Importance is IMPORTANCE_SERVICE (not IMPORTANCE_FOREGROUND)
