@@ -38,7 +38,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static AblyMethodCallHandler _instance;
   private Context applicationContext;
 
   public interface HotRestartCallback {
