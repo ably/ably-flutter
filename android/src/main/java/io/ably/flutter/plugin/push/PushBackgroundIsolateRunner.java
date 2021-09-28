@@ -4,7 +4,6 @@ import static android.content.Context.MODE_PRIVATE;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushOnBackgroundMessage;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -15,10 +14,8 @@ import androidx.annotation.Nullable;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.AblyMessageCodec;
-import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
-import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.StandardMethodCodec;
@@ -31,8 +28,8 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
 
-  @Nullable
-  private FlutterEngine flutterEngine;
+  @NonNull
+  private final FlutterEngine flutterEngine;
 
   public PushBackgroundIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
     this.broadcastReceiver = receiver;
@@ -92,10 +89,8 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   }
 
   private void finish() {
-    assert flutterEngine != null;
     flutterEngine.getBroadcastReceiverControlSurface().detachFromBroadcastReceiver();
     flutterEngine.destroy();
-    flutterEngine = null;
     broadcastReceiver.finish();
   }
 }
