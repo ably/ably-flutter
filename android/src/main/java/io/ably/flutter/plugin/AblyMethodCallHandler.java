@@ -41,22 +41,22 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static AblyMethodCallHandler _instance;
   private Context applicationContext;
 
-  public interface OnHotRestartListener {
-    // this method will be called on every fresh start and on every hot restart
-    void trigger();
+  public interface HotRestartCallback {
+    // Called on every fresh start and on every hot restart
+    void on();
   }
 
   private final MethodChannel channel;
-  private final OnHotRestartListener onHotRestartListener;
+  private final HotRestartCallback hotRestartCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
-  public AblyMethodCallHandler(final MethodChannel channel, final OnHotRestartListener onHotRestartListener, final Context applicationContext) {
+  public AblyMethodCallHandler(final MethodChannel channel, final HotRestartCallback hotRestartCallback, final Context applicationContext) {
     this.channel = channel;
     this.applicationContext = applicationContext;
-    this.onHotRestartListener = onHotRestartListener;
+    this.hotRestartCallback = hotRestartCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -172,7 +172,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     System.out.println("Registering library instance to clean up any existing instances");
-    onHotRestartListener.trigger();
+    hotRestartCallback.on();
     _ably.dispose();
     result.success(null);
   }
