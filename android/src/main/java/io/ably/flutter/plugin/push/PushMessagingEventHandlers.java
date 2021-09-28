@@ -70,20 +70,24 @@ final public class PushMessagingEventHandlers {
       }
     }
 
+    private interface CompletionCallback {
+      void onComplete();
+    }
+
     // Used to send the RemoteMessage, which may (or may not) contain Data and RemoteMessage.Notification
-    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, Runnable callback) {
+    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, CompletionCallback callback) {
       this.methodChannel.invokeMethod(methodName, remoteMessage, new MethodChannel.Result() {
         @Override
         public void success(@Nullable Object result) {
           if (callback != null) {
-            callback.run();
+            callback.onComplete();
           }
         }
 
         @Override
         public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
           if (callback != null) {
-            callback.run();
+            callback.onComplete();
           }
         }
 
@@ -91,7 +95,7 @@ final public class PushMessagingEventHandlers {
         public void notImplemented() {
           System.out.printf("`%s` platform method not implemented. %n", methodName);
           if (callback != null) {
-            callback.run();
+            callback.onComplete();
           }
         }
       });
