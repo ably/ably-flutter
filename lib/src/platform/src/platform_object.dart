@@ -36,16 +36,8 @@ abstract class PlatformObject {
   /// updates [_handle] and returns it.
   Future<int> get handle async => _handle ??= _acquireHandle();
 
-  Future<int> _acquireHandle() => createPlatformInstance().timeout(
-        Timeouts.acquireHandleTimeout,
-        onTimeout: () {
-          _handle = null;
-          throw TimeoutException(
-            'Acquiring handle timed out.',
-            Timeouts.acquireHandleTimeout,
-          );
-        },
-      ).then((value) => (_handleValue = value)!);
+  Future<int> _acquireHandle() =>
+      createPlatformInstance().then((value) => (_handleValue = value)!);
 
   /// [MethodChannel] to make method calls to platform side
   MethodChannel get methodChannel => Platform.methodChannel;

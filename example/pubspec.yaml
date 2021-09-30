@@ -24,9 +24,7 @@ dev_dependencies:
     path: ../
   flutter_test:
     sdk: flutter
-
-  # Stricter Linting
-  pedantic: ^1.11.1
+  flutter_lints: ^1.0.4
 
 flutter:
   uses-material-design: true
