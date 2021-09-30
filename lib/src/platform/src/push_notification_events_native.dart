@@ -60,16 +60,8 @@ class PushNotificationEventsNative implements PushNotificationEvents {
   void setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
-      try {
-        await BackgroundIsolateAndroidPlatform.methodChannel
-            .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
-      } on MissingPluginException {
-        // Ignore MissingPluginException(No implementation found for method
-        // pushSetOnBackgroundMessage on channel
-        // io.ably.flutter.plugin.background)
-        // This platform method is only available by Android side when the
-        // user's app was launched manually by the plugin to handle messages.
-      }
+      await BackgroundIsolateAndroidPlatform.methodChannel
+          .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
     }
   }
 

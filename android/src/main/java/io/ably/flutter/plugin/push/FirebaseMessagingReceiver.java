@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin.push;
 
+import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE;
 import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_RECEIVED;
 import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_MESSAGE_RECEIVED;
 
@@ -7,6 +8,7 @@ import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -22,15 +24,14 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
 
   @Nullable
-  private static PendingResult asyncCompletionHandlerPendingResult = null;
+  private PendingResult asyncProcessingPendingResult = null;
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    Boolean isApplicationInForeground = isApplicationInForeground(context);
-    RemoteMessage message = new RemoteMessage(intent.getExtras());
-    RemoteMessage.Notification notification = message.getNotification();
-    Boolean isNotificationMessage = notification != null;
-    Boolean isDataMessage = !message.getData().isEmpty();
+    final Boolean isApplicationInForeground = isApplicationInForeground(context);
+    final RemoteMessage message = new RemoteMessage(intent.getExtras());
+    final RemoteMessage.Notification notification = message.getNotification();
+    final boolean isDataMessage = !message.getData().isEmpty();
     if (!isDataMessage) {
       // Do not send a RemoteMessage without any data, to be consistent with iOS: 
       // it doesn't call `didReceiveRemoteNotification` in this case.
@@ -41,16 +42,17 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     // , Firebase messaging library will automatically create a notification. 
     // On iOS, the notification may be shown before the  message is processed by the application.
     // goAsync() also increases the execution time from 10s/ 20s (depending on API level) to 30s
-    asyncCompletionHandlerPendingResult = goAsync();
+    new BackgroundMessageProcessingCompleteReceiver(context);
+    asyncProcessingPendingResult = goAsync();
 
     if (isApplicationInForeground) {
       // Send message to Dart side app already running
-      Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
+      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
       onMessageReceivedIntent.putExtras(intent.getExtras());
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
-    } else if (AblyFlutterPlugin.isActivityRunning) {
+    } else if (AblyFlutterPlugin.isMainActivityRunning) {
       // Flutter is already running, just send a background message to it.
-      Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
+      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
       onMessageReceivedIntent.putExtras(intent.getExtras());
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
     } else {
@@ -59,11 +61,10 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     }
   }
 
-  Boolean isApplicationInForeground(Context context) {
-    ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+  Boolean isApplicationInForeground(final Context context) {
+    final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     // This only shows processes for the current android app.
-    assert (appProcesses.size() == 1); // We have not tested multiple processes running on 1 app.
+    final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
     for (ActivityManager.RunningAppProcessInfo process : appProcesses) {
       // Importance is IMPORTANCE_SERVICE (not IMPORTANCE_FOREGROUND)
@@ -79,11 +80,27 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     return false;
   }
 
-  static boolean finish() {
-    if (asyncCompletionHandlerPendingResult != null) {
-      asyncCompletionHandlerPendingResult.finish();
-      return true;
+  class BackgroundMessageProcessingCompleteReceiver extends BroadcastReceiver {
+    BackgroundMessageProcessingCompleteReceiver(final Context context) {
+      final IntentFilter filter = new IntentFilter();
+      filter.addAction(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE);
+      LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
     }
-    return false;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      String action = intent.getAction();
+      if (action.equals(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE)) {
+        finish();
+      } else {
+        Log.e(TAG, String.format("Received unknown intent action: %s", action));
+      }
+    }
+  }
+
+  void finish() {
+    if (asyncProcessingPendingResult != null) {
+      asyncProcessingPendingResult.finish();
+    }
   }
 }

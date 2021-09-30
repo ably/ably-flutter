@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:pedantic/pedantic.dart';
-
 import '../../../authentication/authentication.dart';
 import '../../../common/common.dart';
 import '../../../error/error.dart';
