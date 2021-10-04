@@ -333,7 +333,7 @@ Users can listen to messages in each platform using the native message listeners
 Take a look at the example app platform specific code to handle messages. For iOS, this is `AppDelegate.m`, and in Android, it is `PushMessagingService.java`. For further help on implementing the Platform specific message handlers, see "On Android" and "On iOS" sections on [Push Notifications - Device activation and subscription](https://ably.com/documentation/general/push/activate-subscribe).
 
 ### Additional considerations and resources
-- For tips on how best to use push messaging on Android, read [Notifying your users with FCM](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html)
+- For tips on how best to use push messaging on Android, read [Notifying your users with FCM](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html). For example:
   - For example, show a notification to the user as soon as possible without any additional data usage or processing. Perform additional synchronization work asynchronously after that, using [workmanager](https://pub.dev/packages/workmanager). You can also update the notification with a nicer notification, such as with buttons.
   - Avoid background services: As recommended by FCM, Ably Flutter does not instantiate any background services or schedule any jobs on your behalf. Libraries/ applications which do this, for example Firebase Messaging may face `IllegalStateException` exceptions and reduced execution time.
 - For more Android tips, read [About FCM messages](https://firebase.google.com/docs/cloud-messaging/concept-options)
