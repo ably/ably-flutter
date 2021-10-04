@@ -212,7 +212,7 @@ data: 'This is a Ably message published on channels that is also '
 
 #### Prioritising messages
 
-Only use high priority when it requires immediate user attention/ interaction. Use the normal priority (5) otherwise. Messages with priority wake a device from a battery saving state, using more of the user device battery.
+Only use high priority when it requires immediate user attention or interaction. Use the normal priority (5) otherwise. Messages with a high priority wake a device from a battery saving state, which drains the battery even more.
 - High priority: `'priority': 'high'` inside `push.fcm.android` for Android. `apns-priority: '10'` inside `push.apns.apns-headers` for iOS.
 - Normal priority:  `'priority': 'normal'` inside `push.fcm.android` for Android. `apns-priority: '5'` inside `push.apns.apns-headers` for iOS.
 
