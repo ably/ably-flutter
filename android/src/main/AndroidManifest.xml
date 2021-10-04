@@ -3,7 +3,11 @@
     <application>
         <service
             android:name="io.ably.flutter.plugin.push.PushMessagingService"
-            android:exported="false"></service>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <receiver
             android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
             android:exported="true"

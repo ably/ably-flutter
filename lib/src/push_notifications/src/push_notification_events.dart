@@ -15,8 +15,9 @@ abstract class PushNotificationEvents {
   /// `userNotificationCenter:willPresentNotification` to decide how to show
   /// the notification while the app is in the foreground
   ///
-  /// On Android, a local Android notification will be generated to create an
-  /// identical notification as iOS.
+  /// On Android, notifications will not be shown in the foreground. To create
+  /// notifications while the app is in the foreground, manually create one
+  /// when a [onMessage] or [BackgroundMessageHandler] is called.
   void setOnShowNotificationInForeground(
       Future<bool> Function(RemoteMessage message) callback);
 

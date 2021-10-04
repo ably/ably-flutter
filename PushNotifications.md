@@ -212,7 +212,7 @@ data: 'This is a Ably message published on channels that is also '
 
 #### Prioritising messages
 
-Only use high priority when it requires immediate user attention/ interaction. Use the normal priority (5) otherwise. Messages with priority wake a device from a battery saving state, using more of the user device battery.
+Only use high priority when it requires immediate user attention or interaction. Use the normal priority (5) otherwise. Messages with a high priority wake a device from a battery saving state, which drains the battery even more.
 - High priority: `'priority': 'high'` inside `push.fcm.android` for Android. `apns-priority: '10'` inside `push.apns.apns-headers` for iOS.
 - Normal priority:  `'priority': 'normal'` inside `push.fcm.android` for Android. `apns-priority: '5'` inside `push.apns.apns-headers` for iOS.
 
@@ -244,7 +244,7 @@ To see an example of receiving messages and handling other notification related 
 
 #### Notification Message / Alert Push Notification
 
-**Android**: In the case where the app is in the background/ terminated, you cannot configure/ disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons/ actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
+**Android**: In the case where the app is in the background / terminated, you cannot configure / disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons / actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
 
 **iOS**: In the case where the app is in the background / terminated, ably-flutter doesn't provide the functionality to configure / extend alert notifications on iOS, and these will automatically be shown to the user.
 
@@ -317,18 +317,25 @@ ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 
 #### Advanced: native message handling
 
-Users can handle push notification messages and user interactions with notifications in each platform using the native message listeners instead of listening to messages on the Dart side. This is not recommended as users have to write native platform code (Kotlin/Java on Android, Swift/Objective-C on iOS). Doing this would allow you to create local notifications natively using the platform APIs, create Services, and **avoid** using other plugins. We recommend creating local notification and scheduling background work in the Dart side, such as by using other popular packages: [awesome_notifications](https://pub.dev/packages/awesome_notifications), [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) and [workmanager](https://pub.dev/packages/workmanager). You may have to resort to this to use new platform API functionality before packages implement them.
+Users can listen to messages in each platform using the native message listeners instead of listening to messages on the Dart side. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications).
 
-**Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the Service in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification).
+**Android**: This means implementing [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and overriding `onMessageReceived` method. You must also declare the `Service` in your `AndroidManifest.xml`. Once you receive your message, you could create a richer notification, by following [Create a Notification](https://developer.android.com/training/notify-user/build-notification). As declaring this service would override the service used internal by Ably Flutter, be sure to provide Ably Flutter with your registration token. Implement the following `onNewToken` method in `FirebaseMessagingService`:
+```java
+  @Override
+  public void onNewToken(@NonNull String registrationToken) {
+    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+    super.onNewToken(registrationToken);
+  }
+```
 
 **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
 Take a look at the example app platform specific code to handle messages. For iOS, this is `AppDelegate.m`, and in Android, it is `PushMessagingService.java`. For further help on implementing the Platform specific message handlers, see "On Android" and "On iOS" sections on [Push Notifications - Device activation and subscription](https://ably.com/documentation/general/push/activate-subscribe).
 
 ### Additional considerations and resources
-- For tips on how best to use push messaging on Android, read [Notifying your users with FCM](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html)
-  - For example, show a notification to the user as soon as possible without any additional data usage or processing. Perform additional synchronization work asynchronously after that, using [workmanager](https://pub.dev/packages/workmanager). You can also update the notification with a nicer notification, such as with buttons.
-  - Avoid background services: As recommended by FCM, Ably Flutter does not instantiate any background services or schedule any jobs on your behalf. Libraries/ applications which do this, for example Firebase Messaging may face `IllegalStateException` exceptions and reduced execution time.
+- For tips on how best to use push messaging on Android, read [Notifying your users with FCM](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html). For example:
+  - Show a notification to the user as soon as possible without any additional data usage or processing. Perform additional synchronization work asynchronously after that, using [workmanager](https://pub.dev/packages/workmanager). You can also update the notification with a nicer notification, such as with buttons.
+  - Avoid background services: As recommended by FCM, Ably Flutter does not instantiate any background services or schedule any jobs on your behalf. Libraries and applications which do this, for example Firebase Messaging may face `IllegalStateException` exceptions and reduced execution time.
 - For more Android tips, read [About FCM messages](https://firebase.google.com/docs/cloud-messaging/concept-options)
 
 ### Deactivating the device
@@ -351,7 +358,7 @@ You may want to validate or debug situations where your application is terminate
 
 ![Developer options showing "Wait for debugger" option](images/android-developer-options-debugger.png)
 
-- iOS: In Xcode, build the Xcode app scheme with launch option: "Wait for the executable to be launched" instead of "Automatically". You need to repeat this for every launch. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
+- iOS: In Xcode, configure your Xcode app scheme's **launch option** to "Wait for the executable to be launched" instead of "Automatically". Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 ![Xcode project scheme showing "Wait for the executable to be launched" selected](images/ios-xcode-scheme.png)
 

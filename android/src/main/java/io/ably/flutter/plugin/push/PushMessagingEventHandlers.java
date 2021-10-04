@@ -14,13 +14,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
-import io.ably.flutter.plugin.util.NotificationUtilities;
 import io.flutter.plugin.common.MethodChannel;
 
 final public class PushMessagingEventHandlers {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
   public static final String PUSH_ON_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_MESSAGE_RECEIVED";
   public static final String PUSH_ON_BACKGROUND_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_RECEIVED";
+  public static final String PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_COMPLETE";
   static PushMessagingEventHandlers instance;
 
   public static void instantiate(Context context, MethodChannel methodChannel) {
@@ -53,17 +53,16 @@ final public class PushMessagingEventHandlers {
       String action = intent.getAction();
       Bundle intentExtras = intent.getExtras();
       RemoteMessage message = new RemoteMessage(intent.getExtras());
-      // TODO can we change this by using a different click_action?
       switch (action) {
         case PUSH_ON_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnMessage,
               message,
-              () -> displayForegroundNotification(context, intentExtras, FirebaseMessagingReceiver::finish));
+              () -> finish(context));
           break;
         case PUSH_ON_BACKGROUND_MESSAGE_RECEIVED:
           sendRemoteMessageToDartSide(PlatformConstants.PlatformMethod.pushOnBackgroundMessage,
               message,
-              FirebaseMessagingReceiver::finish);
+              () -> finish(context));
           break;
         default:
           Log.e(TAG, String.format("Received unknown intent action: %s", action));
@@ -71,67 +70,40 @@ final public class PushMessagingEventHandlers {
       }
     }
 
-    private void displayForegroundNotification(Context context, Bundle intentExtras, CompletionHandler finish) {
-      RemoteMessage message = new RemoteMessage(intentExtras);
-      if (message.getNotification() == null) {
-        return;
-      }
-
-      methodChannel.invokeMethod(pushOnShowNotificationInForeground, message, new MethodChannel.Result() {
-        @Override
-        public void success(@Nullable Object result) {
-          Boolean willShowNotification = (Boolean) result;
-          RemoteMessage.Notification notification = message.getNotification();
-          assert (notification != null);
-          if (willShowNotification) {
-            NotificationUtilities.showNotification(context, message, intentExtras);
-          }
-          finish.call();
-        }
-
-        @Override
-        public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-          System.out.println(String.format("`pushOnShowNotificationInForeground` failed: %s", errorMessage));
-          finish.call();
-        }
-
-        @Override
-        public void notImplemented() {
-          System.out.println("`pushOnShowNotificationInForeground` not implemented.");
-          finish.call();
-        }
-      });
-    }
-
-    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage) {
-      sendRemoteMessageToDartSide(methodName, remoteMessage, null);
+    private interface CompletionCallback {
+      void onComplete();
     }
 
     // Used to send the RemoteMessage, which may (or may not) contain Data and RemoteMessage.Notification
-    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, CompletionHandler completionHandler) {
+    private void sendRemoteMessageToDartSide(String methodName, RemoteMessage remoteMessage, CompletionCallback callback) {
       this.methodChannel.invokeMethod(methodName, remoteMessage, new MethodChannel.Result() {
         @Override
         public void success(@Nullable Object result) {
-          if (completionHandler != null) {
-            completionHandler.call();
+          if (callback != null) {
+            callback.onComplete();
           }
         }
 
         @Override
         public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-          if (completionHandler != null) {
-            completionHandler.call();
+          if (callback != null) {
+            callback.onComplete();
           }
         }
 
         @Override
         public void notImplemented() {
-          System.out.println("`asyncCompletionHandlerPendingResult` not implemented.");
-          if (completionHandler != null) {
-            completionHandler.call();
+          System.out.printf("`%s` platform method not implemented. %n", methodName);
+          if (callback != null) {
+            callback.onComplete();
           }
         }
       });
+    }
+
+    void finish(final Context context) {
+      final Intent backgroundMessageCompleteIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE);
+      LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundMessageCompleteIntent);
     }
   }
 }
