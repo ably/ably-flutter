@@ -343,6 +343,18 @@ Do this only if you do not want the device to receive push notifications at all.
     }
 ```
 
+## Debugging applications from launch
+
+You may want to validate or debug situations where your application is terminated, in the background or in the foreground. 
+
+- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not `android` directory) in Android Studio. This ensures any `--dart-define` variables are used by the application. Then in the Android project in Android Studio, attach the debugger. This allows you to debug Java code, such as the message handlers. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
+
+![Developer options showing "Wait for debugger" option](images/android-developer-options-debugger.png)
+
+- iOS: In Xcode, build the Xcode app scheme with launch option: "Wait for the executable to be launched" instead of "Automatically". You need to repeat this for every launch. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
+
+![Xcode project scheme showing "Wait for the executable to be launched" selected](images/ios-xcode-scheme.png)
+
 ## Troubleshooting/ FAQ
 
 ### Push messages are not being delivered to my device.
