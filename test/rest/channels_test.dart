@@ -72,11 +72,15 @@ void main() {
     });
 
     test('allows querying length', () {
-      channels..get('channel-1')..get('channel-2');
+      channels
+        ..get('channel-1')
+        ..get('channel-2');
 
       expect(channels.length, 2);
 
-      channels..get('channel-3')..get('channel-33');
+      channels
+        ..get('channel-3')
+        ..get('channel-33');
 
       expect(channels.length, 4);
     });
@@ -85,7 +89,9 @@ void main() {
       test(
           '(RSN4a) Takes one argument, the channel name,'
           ' and releases the corresponding channel entity', () {
-        channels..get('channel-1')..get('channel-2');
+        channels
+          ..get('channel-1')
+          ..get('channel-2');
         expect(channels.length, 2);
         channels.release('channel-1');
         expect(channels.length, 1);
@@ -96,7 +102,9 @@ void main() {
           '(RSN4b) Calling release() with a channel name'
           ' that does not correspond to an extant channel'
           ' entity must return without error', () {
-        channels..get('channel-1')..get('channel-2');
+        channels
+          ..get('channel-1')
+          ..get('channel-2');
         expect(channels.length, 2);
         channels.release('channel-3');
         expect(channels.length, 2);
