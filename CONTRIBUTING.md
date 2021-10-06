@@ -54,7 +54,7 @@ iOS enables users to show the notification received remotely even if the app is 
 
 #### Push Notifications Background Message Handling
 
-Background processing in Flutter is a complicated subject that has not been explained very much in public. It involves creating Flutter Engines/isolates manually (for Android), passing messages back and forth, etc.
+Background processing in Flutter is a complicated subject that has not been explored publicly in detail. It involves creating Flutter Engines/isolates manually (for Android), passing messages back and forth, etc.
 
 Differences between ably-Flutter and Firebase Messaging implementation (Android only):
 - **Isolate code:** In Firebase Messaging, they explicitly define a callback which is launched in it's own isolate. We do not launch a custom entrypoint/ dart code, but instead re-use the user's default entrypoint (their app code), by using `DartExecutor.DartEntrypoint.createDefault()`. Therefore, we provide the same environment for message handling on both Android and iOS: their application **is running** when we handle the message.
