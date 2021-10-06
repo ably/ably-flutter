@@ -238,7 +238,7 @@ final message = ably.Message(
 
 ### Receiving Messages
 
-To see an example of receiving messages and handling other notification related behaviour, look at [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app.
+For examples of handling incoming messages and dealing with notifications, see [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app.
 
 #### Notification Message / Alert Push Notification
 
