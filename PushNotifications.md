@@ -354,11 +354,11 @@ Do this only if you do not want the device to receive push notifications at all.
 
 During development, you may want to validate or debug situations where your application is either in the terminated state, in the background or in the foreground. 
 
-- Android: Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not `android` directory) in Android Studio. This ensures any `--dart-define` variables are used by the application. Then in the Android project in Android Studio, attach the debugger. This allows you to debug Java code, such as the message handlers. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
+**Android:** Go into developer options and use the "Wait for debugger" option. Launch the app from the Flutter project (not `android` directory) in Android Studio. This ensures any `--dart-define` variables are used by the application. Then in the Android project in Android Studio, attach the debugger. This allows you to debug Java code, such as the message handlers. Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 ![Developer options showing "Wait for debugger" option](images/android-developer-options-debugger.png)
 
-- iOS: In Xcode, configure your Xcode app scheme's **launch option** to "Wait for the executable to be launched" instead of "Automatically". Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
+**iOS:** In Xcode, configure your Xcode app scheme's **launch option** to "Wait for the executable to be launched" instead of "Automatically". Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 ![Xcode project scheme showing "Wait for the executable to be launched" selected](images/ios-xcode-scheme.png)
 
@@ -447,9 +447,9 @@ ActivationContext.getActivationContext(this).onNewRegistrationToken(Registration
 
 ### My notifications do not make a sound when they are shown on the device
 
-Android: Ensure you have set up a Notification channel (which displays as notification "categories" to Android users within your application settings). The example app shows how to do this by using [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) to configure `AndroidNotificationChannel`.
+**Android:** Ensure you have set up a [`NotificationChannel`](https://developer.android.com/training/notify-user/channels#importance) (which displays as notification "categories" to Android users within your application settings). The example app shows how to do this by using [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) to configure `AndroidNotificationChannel`.
 
-iOS: Ensure you set the `sound` key in the `push.notification` object when sending the Ably message.
+**iOS:** Ensure you set the `sound` key in the `push.notification` object when sending the Ably message.
 
 ### When building my application, I get the following error: `Manifest merger failed : uses-sdk:minSdkVersion 16 cannot be smaller than version 19 declared in library [:ably_flutter]`
 
