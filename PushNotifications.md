@@ -253,7 +253,7 @@ To create richer (more content or more interactive) local notifications once a d
 
 #### Foreground notifications
 
-On both Android and iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
+On iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
 
 ```dart
 ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
@@ -263,7 +263,7 @@ ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
 });
 ```
 
-Internally: On Android, the SDK does this by generating the same notification Firebase creates when the app is in the background. On iOS, the SDK does this by implementing [`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter).
+The SDK does this by implementing [`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter). This feature is not available on Android.
 
 #### Notification taps
 
