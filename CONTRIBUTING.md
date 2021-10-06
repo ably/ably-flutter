@@ -50,7 +50,7 @@ Android's firebase-messaging / FCM library allows users to select the Intent act
 
 #### Notifications generation for Foreground Apps
 
-iOS allows users to show the notification even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM / Android does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`. 
+iOS enables users to show the notification received remotely even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM / Android does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`. 
 
 #### Push Notifications Background Message Handling
 
