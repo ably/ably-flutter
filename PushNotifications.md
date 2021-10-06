@@ -290,7 +290,7 @@ ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
 #### Data Message / Background Notification
 
 - On iOS, if a notification is also present, it will be shown before `onMessage` or the callback passed to `ably.Push.notificationEvents.setOnBackgroundMessage` is called.
-- On Android, if a notification is also present, it will be shown after these methods finish (or it's Future completes).
+- On Android, if a notification is also present, it will be shown after these methods finish (or its Future completes).
 - When the app is in the foreground, you can listen to messages using:
 
 ```dart
