@@ -86,7 +86,7 @@ If you invoke any methods from the `ably_flutter` package before calling `runApp
 - Create a rest or realtime client: e.g. `final realtime = ably.Realtime(options: clientOptions);`
 - Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only
   needs to be done once, and will be used across all future app launches, as long as the app is not deactivated. This method will throw an AblyException if it fails.
-- The future returned by `activate` is not guaranteed to complete quickly. For example, in the cases where there is no internet connection, `activate` will wait until internet connection. Therefore, any code waiting for the future to complete should be not important, e.g. logging code.
+- The `Future` returned by `activate` is not guaranteed to complete quickly. For example, in the cases where there is no internet connection, `activate` will wait until internet connection. Therefore, there is no guarantee any code awaiting the completion of the `Future` will run.
 
 ```dart
 try {
