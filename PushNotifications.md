@@ -79,9 +79,7 @@ Devices need to be [activated](#device-activation) with Ably once. Once activate
 
 ### Ensure `WidgetsBinding` is initialized
 
-If you invoke any methods from the `ably_flutter` package in your `main` function, then ensure that you also call `WidgetsFlutterBinding.ensureInitialized();`. 
-You only need to do this if calling the functions before calling `runApp()`.
-This is done to ensure all platform methods will be successfully received by the native Ably plugin on the host platform.
+If you invoke any methods from the `ably_flutter` package before calling `runApp()`, you must call `WidgetsFlutterBinding.ensureInitialized();`. This is done to ensure all platform methods will be successfully received by the native Ably plugin on the host platform.
 
 ### Device activation
 
