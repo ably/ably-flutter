@@ -2,33 +2,19 @@ import 'dart:async';
 
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
-import '../../common/src/channels.dart';
 import '../../common/src/event_emitter.dart';
 import '../../error/src/error_info.dart';
 import '../../message/src/message.dart';
 import '../../push_notifications/src/push_channel.dart';
-import '../../rest/src/channel_options.dart';
 import '../realtime.dart';
 import 'channel_event.dart';
 import 'channel_state.dart';
 import 'channel_state_event.dart';
 import 'presence.dart';
 import 'realtime.dart';
+import 'realtime_channel_options.dart';
 
-/// options provided when instantiating a realtime channel
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TB1
-class RealtimeChannelOptions extends ChannelOptions {
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
-  final Map<String, String>? params;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
-  final List<ChannelMode>? modes;
-
-  /// create channel options with a cipher, params and modes
-  RealtimeChannelOptions(Object cipher, {this.params, this.modes})
-      : super(cipher);
-}
 
 /// A named channel through with realtime client can interact with ably service.
 ///
@@ -121,14 +107,3 @@ abstract class RealtimeChannelInterface
   Future<void> setOptions(RealtimeChannelOptions options);
 }
 
-/// A collection of realtime channel objects
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTS1
-abstract class RealtimeChannelsInterface<T extends RealtimeChannelInterface>
-    extends Channels<T> {
-  /// instance of ably realtime client
-  RealtimeInterface realtime;
-
-  /// instantiates with the ably [RealtimeInterface] instance
-  RealtimeChannelsInterface(this.realtime);
-}
