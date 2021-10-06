@@ -86,7 +86,7 @@ If you invoke any methods from the `ably_flutter` package before calling `runApp
 - Create a rest or realtime client: e.g. `final realtime = ably.Realtime(options: clientOptions);`
 - Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only
   needs to be done once, and will be used across all future app launches, as long as the app is not deactivated. This method will throw an AblyException if it fails.
-- The `Future` returned by `activate` is not guaranteed to complete quickly. For example, in the cases where there is no internet connection, `activate` will wait until internet connection. Therefore, there is no guarantee any code awaiting the completion of the `Future` will run.
+- The `Future` returned by `activate` is not guaranteed to complete quickly. For example, if there is no internet connection, `activate` will wait until it is available. Therefore, there is no guarantee any code awaiting the completion of the `Future` will run.
 
 ```dart
 try {
@@ -242,9 +242,9 @@ For examples of handling incoming messages and dealing with notifications, see [
 
 #### Notification Message / Alert Push Notification
 
-**Android**: In the case where the app is in the background / terminated, you cannot configure / disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons / actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
+**Android**: If the app is in the background / terminated, you cannot configure / disable notification messages as they are automatically shown to the user by Firebase Messaging Android SDK. To create notifications which launch the application to a certain page (notifications which contain deep links or app links), or notifications which contain buttons / actions, images, and inline replies, you should send a data message and create a notification when the message is received. 
 
-**iOS**: In the case where the app is in the background / terminated, ably-flutter doesn't provide the functionality to configure / extend alert notifications on iOS, and these will automatically be shown to the user.
+**iOS**: If the app is in the background / terminated, ably-flutter doesn't provide the functionality to configure / extend alert notifications on iOS, and these will automatically be shown to the user.
 
 To create richer (more content or more interactive) local notifications once a data message is received on both Android and iOS, take a look at [awesome_notifications](https://pub.dev/packages/awesome_notifications).
   - Advanced usage: 
