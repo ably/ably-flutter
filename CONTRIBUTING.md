@@ -42,11 +42,11 @@ appropriate for programmer's failures on the Dart side of things. But time will 
 
 The platform SDKs ([ably-android](https://github.com/ably/ably-java) and [ably-cocoa](https://github.com/ably/ably-cocoa)) enable you to check if device activation, deactivation, or registration update fails. On Android, these errors are sent in Intents which you should register for at runtime. In Cocoa, your errors are provided through `ARTPushRegistererDelegate` methods. However, in both SDKs, this error does not always return immediately/quickly. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the Intent will be sent / delegate methods will be called.
 
-We do this by passing a reference to the `FlutterResult` we can use to pass back the result to the Dart side, when the activation or deactivation completes. This makes it convenient for users: they can `await push.activate()`. However, they should not rely on this Future completing, in the case of network issues.
+We do this by passing a reference to the `FlutterResult` we can use to pass back the result to the Dart side, when the activation or deactivation completes. This makes it convenient for users: they can `await push.activate()`. However, users should not rely on this Future completing, in the case of network issues.
 
 #### Notification tap handling
 
-Android's firebase-messaging / FCM library enables users to select the Intent action used when the automatically-generated notification is tapped by the user. You can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
+Android's firebase-messaging / FCM library enables users to select the Intent action used when the automatically-generated notification is tapped by the user. Users can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
 
 #### Notifications generation for Foreground Apps
 
