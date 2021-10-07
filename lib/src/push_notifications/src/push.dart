@@ -1,19 +1,29 @@
-import '../../platform/platform.dart';
+import '../../platform/platform_internal.dart';
+import '../push_notifications.dart';
 import 'ios_notification_settings.dart';
-import 'push_events.dart';
+import 'push_activation_events.dart';
 
 /// Class providing push notification functionality
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
 abstract class Push {
-  /// An instance to access events related to push, such as device activation,
-  /// deactivation and notification permissions.
-  static PushEvents pushEvents = PushNative.pushEvents;
+  /// An instance to access activation events related to push, such as device
+  /// activation, deactivation and notification permissions.
+  static PushActivationEvents pushEvents = PushNative.activationEvents;
+
+  /// An instance to access message events related to push
+  static PushNotificationEvents notificationEvents =
+      PushNative.notificationEvents;
 
   /// Activate this device for push notifications by registering
   /// with the push transport such as FCM/APNs.
   ///
-  /// throws: AblyException
+  /// In the case of network issues, this method will not complete until
+  /// network connection is recovered. If the device is
+  /// restarted, the results will still be returned by
+  /// [PushActivationEvents.onActivate]
+  ///
+  /// throws: AblyException when the server returns an error.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   Future<void> activate();
@@ -64,6 +74,11 @@ abstract class Push {
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
+  ///
+  /// In the case or authentication or network issues with Ably, this method
+  /// will not complete until these issues are resolved. In the device is
+  /// restarted, the results will be returned by
+  /// [PushActivationEvents.onDeactivate]
   ///
   /// throws: AblyException
   ///

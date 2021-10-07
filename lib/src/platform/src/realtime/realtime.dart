@@ -9,6 +9,7 @@ import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
 import '../../../stats/stats.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;

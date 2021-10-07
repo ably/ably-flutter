@@ -80,6 +80,25 @@ public class PushNotificationEncoders: NSObject {
         
         return dictionary;
     }
+    
+    @objc
+    public static let encodeRemoteMessage: (RemoteMessage) -> Dictionary<String, Any> = { remoteMessage in
+        var dictionary = Dictionary<String, Any>();
+        
+        dictionary[TxRemoteMessage_data] = remoteMessage.data;
+        dictionary[TxRemoteMessage_notification] = remoteMessage.notification?.toDictionary();
+        
+        return dictionary;
+    }
+}
+
+extension Notification {
+    func toDictionary() -> Dictionary<String, String?> {
+        return [
+            TxNotification_title: title,
+            TxNotification_body: body,
+        ]
+    }
 }
 
 extension UNAuthorizationStatus {

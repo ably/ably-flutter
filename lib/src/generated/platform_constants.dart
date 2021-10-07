@@ -27,9 +27,10 @@ class CodecTypes {
   static const int localDevice = 146;
   static const int pushChannelSubscription = 147;
   static const int unNotificationSettings = 148;
-  static const int errorInfo = 149;
-  static const int connectionStateChange = 150;
-  static const int channelStateChange = 151;
+  static const int remoteMessage = 149;
+  static const int errorInfo = 150;
+  static const int connectionStateChange = 151;
+  static const int channelStateChange = 152;
 }
 
 class PlatformMethod {
@@ -72,9 +73,18 @@ class PlatformMethod {
   static const String pushRequestPermission = 'pushRequestPermission';
   static const String pushGetNotificationSettings =
       'pushGetNotificationSettings';
+  static const String pushOpenSettingsFor = 'pushOpenSettingsFor';
   static const String pushOnActivate = 'pushOnActivate';
   static const String pushOnDeactivate = 'pushOnDeactivate';
   static const String pushOnUpdateFailed = 'pushOnUpdateFailed';
+  static const String pushNotificationTapLaunchedAppFromTerminated =
+      'pushNotificationTapLaunchedAppFromTerminated';
+  static const String pushOnShowNotificationInForeground =
+      'pushOnShowNotificationInForeground';
+  static const String pushOnMessage = 'pushOnMessage';
+  static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
+  static const String pushOnNotificationTap = 'pushOnNotificationTap';
+  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -399,4 +409,14 @@ class TxUNShowPreviewsSettingEnum {
   static const String always = 'always';
   static const String whenAuthenticated = 'whenAuthenticated';
   static const String never = 'never';
+}
+
+class TxRemoteMessage {
+  static const String data = 'data';
+  static const String notification = 'notification';
+}
+
+class TxNotification {
+  static const String title = 'title';
+  static const String body = 'body';
 }

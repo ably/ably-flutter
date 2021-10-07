@@ -14,6 +14,7 @@ import '../../../message/message.dart';
 import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 import 'publish_queue_item.dart';
 
 /// Plugin based implementation of Realtime channel

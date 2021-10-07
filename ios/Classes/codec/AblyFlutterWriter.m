@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_END
         return pushChannelSubscriptionCodecType;
     } else if ([value isKindOfClass:[UNNotificationSettings class]]) {
         return unNotificationSettingsCodecType;
+    } else if ([value isKindOfClass:[RemoteMessage class]]) {
+        return remoteMessageCodecType;
     }
     return 0;
 }
@@ -61,6 +63,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", localDeviceCodecType]: PushNotificationEncoders.encodeLocalDevice,
         [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
         [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
+        [NSString stringWithFormat:@"%d", remoteMessageCodecType]: PushNotificationEncoders.encodeRemoteMessage,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }

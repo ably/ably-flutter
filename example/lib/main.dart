@@ -10,11 +10,13 @@ import 'op_state.dart';
 import 'push_notifications/push_notification_handlers.dart';
 import 'push_notifications/push_notification_service.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
+import 'ui/utilities.dart';
 
-void main() {
+Future<void> main() async {
+  // Before calling any Ably methods, ensure the widget binding is ready.
+  WidgetsFlutterBinding.ensureInitialized();
   PushNotificationHandlers.setUpEventHandlers();
-  // PushNotificationService.setUpMessageHandlers();
-
+  PushNotificationHandlers.setUpMessageHandlers();
   runApp(MyApp());
 }
 
@@ -218,6 +220,9 @@ class _MyAppState extends State<MyApp> {
   void listenRealtimeConnection(ably.Realtime realtime) {
     final alphaSubscription =
         realtime.connection.on().listen((stateChange) async {
+      if (stateChange.current == ably.ConnectionState.failed) {
+        logAndDisplayError(stateChange.reason);
+      }
       print('${DateTime.now()}:'
           ' ConnectionStateChange event: ${stateChange.event}'
           '\nReason: ${stateChange.reason}');
@@ -303,7 +308,7 @@ class _MyAppState extends State<MyApp> {
       'Creating Ably Realtime',
       'Ably Realtime Created');
 
-  Widget createRTCConnectButton() => FlatButton(
+  Widget createRTConnectButton() => FlatButton(
         padding: EdgeInsets.zero,
         onPressed: (_realtime == null) ? null : _realtime!.connect,
         child: const Text('Connect'),
@@ -750,7 +755,7 @@ class _MyAppState extends State<MyApp> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: createRTCConnectButton(),
+                        child: createRTConnectButton(),
                       ),
                       Expanded(
                         child: createRTCloseButton(),

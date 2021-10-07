@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin;
 
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -79,7 +80,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Map<Byte, CodecPair> codecMap;
   private static final Gson gson = new Gson();
 
-  AblyMessageCodec() {
+  public AblyMessageCodec() {
     final AblyMessageCodec self = this;
     codecMap = new HashMap<Byte, CodecPair>() {
       {
@@ -129,6 +130,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeLocalDevice, null));
         put(PlatformConstants.CodecTypes.pushChannelSubscription,
             new CodecPair<>(self::encodePushChannelSubscription, null));
+        put(PlatformConstants.CodecTypes.remoteMessage,
+            new CodecPair<>(self::encodeRemoteMessage, null));
       }
     };
   }
@@ -181,6 +184,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.deviceDetails;
     } else if (value instanceof Push.ChannelSubscription) {
       return PlatformConstants.CodecTypes.pushChannelSubscription;
+    } else if (value instanceof RemoteMessage) {
+      return PlatformConstants.CodecTypes.remoteMessage;
     }
     return null;
   }
@@ -794,6 +799,22 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.encoding, c.encoding);
     // PresenceMessage#extras is not supported in ably-java
     // Track @ https://github.com/ably/ably-flutter/issues/14
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeRemoteMessage(RemoteMessage message) {
+    if (message == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.data, message.getData());
+    writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.notification, encodeNotification(message.getNotification()));
+    return jsonMap;
+  }
+  
+  private Map<String, Object> encodeNotification(RemoteMessage.Notification notification) {
+    if (notification == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxNotification.title, notification.getTitle());
+    writeValueToJson(jsonMap, PlatformConstants.TxNotification.body, notification.getBody());
     return jsonMap;
   }
 
