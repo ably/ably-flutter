@@ -40,9 +40,9 @@ appropriate for programmer's failures on the Dart side of things. But time will 
 
 #### Push Notifications activation and deactivation
 
-The platform SDKs ([ably-android](https://github.com/ably/ably-java) and [ably-cocoa](https://github.com/ably/ably-cocoa)) enable you to check if device activation, deactivation, or registration update fails. On Android, these errors are sent in Intents which you should register for at runtime. In Cocoa, your errors are provided through `ARTPushRegistererDelegate` methods. However, in both SDKs, this error does not always return immediately/quickly. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the Intent will be sent and delegate methods will be called.
+The platform SDKs ([ably-android](https://github.com/ably/ably-java) and [ably-cocoa](https://github.com/ably/ably-cocoa)) enable users to check if device activation, deactivation, or registration update fails. On Android, these errors are sent in Intents which users should register for at runtime. In Cocoa, errors are returned through `ARTPushRegistererDelegate` methods. However, in both SDKs, this error does not always return quickly. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the Intent will be sent and delegate methods will be called.
 
-We do this by passing a reference to the `FlutterResult` we can use to pass back the result to the Dart side, when the activation or deactivation completes. This makes it convenient for users: they can `await push.activate()`. However, users should not rely on this Future completing, in the case of network issues.
+Ably Flutter does this by passing a reference to the `FlutterResult` used to pass back the result to the Dart side, when the activation or deactivation completes. This makes it convenient for users: they can `await push.activate()`. However, users should not rely on this Future completing, in the case of network issues.
 
 #### Notification tap handling
 
