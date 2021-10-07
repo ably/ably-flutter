@@ -14,8 +14,6 @@ import 'presence.dart';
 import 'realtime.dart';
 import 'realtime_channel_options.dart';
 
-
-
 /// A named channel through with realtime client can interact with ably service.
 ///
 /// The same channel can be interacted with relevant APIs via rest channel.
@@ -106,4 +104,3 @@ abstract class RealtimeChannelInterface
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   Future<void> setOptions(RealtimeChannelOptions options);
 }
-

@@ -185,6 +185,13 @@ class TxRealtimeChannelOptions {
   static const String modes = 'modes';
 }
 
+class TxCipherParams {
+  static const String algorithm = 'algorithm';
+  static const String mode = 'mode';
+  static const String key = 'key';
+  static const String keyLength = 'keyLength';
+}
+
 class TxTokenDetails {
   static const String token = 'token';
   static const String expires = 'expires';

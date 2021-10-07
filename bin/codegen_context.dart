@@ -243,6 +243,10 @@ const List<Map<String, dynamic>> _objects = [
     ]
   },
   {
+    'name': 'CipherParams',
+    'properties': <String>['algorithm', 'mode', 'key', 'keyLength']
+  },
+  {
     'name': 'TokenDetails',
     'properties': <String>[
       'token',

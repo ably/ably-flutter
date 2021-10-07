@@ -182,6 +182,13 @@ final public class PlatformConstants {
         public static final String modes = "modes";
     }
 
+    static final public class TxCipherParams {
+        public static final String algorithm = "algorithm";
+        public static final String mode = "mode";
+        public static final String key = "key";
+        public static final String keyLength = "keyLength";
+    }
+
     static final public class TxTokenDetails {
         public static final String token = "token";
         public static final String expires = "expires";

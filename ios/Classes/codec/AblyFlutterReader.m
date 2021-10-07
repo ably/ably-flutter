@@ -195,7 +195,23 @@ static AblyCodecDecoder readRestChannelOptions = ^ARTChannelOptions*(NSDictionar
 };
 
 static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*(NSDictionary *const dictionary) {
-    ARTRealtimeChannelOptions *const o = [ARTRealtimeChannelOptions new];
+    __block ARTRealtimeChannelOptions* o;
+    
+    NSObject *const cipher = dictionary[TxRealtimeChannelOptions_cipher];
+    if (cipher == nil) {
+        o = [[ARTRealtimeChannelOptions alloc] init];
+    } else if ([cipher class] == [NSDictionary class]) {
+        NSDictionary *const cipherDictionary = (NSDictionary *const) cipher;
+        ARTCipherParams *const cipherParams = [[ARTCipherParams alloc] initWithAlgorithm: cipherDictionary[TxCipherParams_algorithm] key:cipherDictionary[TxCipherParams_key]];
+        o = [[ARTRealtimeChannelOptions alloc] initWithCipher:cipherParams];
+    } else if ([cipher class] == [NSString class]) {
+        NSString *const key = (NSString *const) cipher;
+        o = [[ARTRealtimeChannelOptions alloc] initWithCipherKey: (NSString *) key];
+    } else {
+        // todo validate error cases: user wanted to use cipher but we couldn't understand it
+        [NSException raise:NSInvalidArgumentException format:@"Cipher must be CipherParams or key in the form of a String"];
+    }
+
     READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipher);
     READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
     ON_VALUE(^(const id value) {

@@ -169,6 +169,12 @@ extern NSString *const TxRealtimeChannelOptions_cipher;
 extern NSString *const TxRealtimeChannelOptions_params;
 extern NSString *const TxRealtimeChannelOptions_modes;
 
+// key constants for CipherParams
+extern NSString *const TxCipherParams_algorithm;
+extern NSString *const TxCipherParams_mode;
+extern NSString *const TxCipherParams_key;
+extern NSString *const TxCipherParams_keyLength;
+
 // key constants for TokenDetails
 extern NSString *const TxTokenDetails_token;
 extern NSString *const TxTokenDetails_expires;
