@@ -140,12 +140,13 @@ NSString *const TxRestChannelOptions_cipher = @"cipher";
 NSString *const TxRealtimeChannelOptions_cipher = @"cipher";
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
+NSString *const TxRealtimeChannelOptions_cipherParams = @"cipherParams";
 
 // key constants for CipherParams
 NSString *const TxCipherParams_algorithm = @"algorithm";
-NSString *const TxCipherParams_mode = @"mode";
-NSString *const TxCipherParams_key = @"key";
 NSString *const TxCipherParams_keyLength = @"keyLength";
+NSString *const TxCipherParams_key = @"key";
+NSString *const TxCipherParams_mode = @"mode";
 
 // key constants for TokenDetails
 NSString *const TxTokenDetails_token = @"token";

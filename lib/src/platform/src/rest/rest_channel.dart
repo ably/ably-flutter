@@ -156,7 +156,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
   @override
   Future<void> setOptions(ChannelOptions options) =>
-      invoke(PlatformMethod.setRealtimeChannelOptions, {
+      invoke(PlatformMethod.setRestChannelOptions, {
         TxTransportKeys.channelName: name,
         TxTransportKeys.options: options,
       });

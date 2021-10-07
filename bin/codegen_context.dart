@@ -15,6 +15,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'tokenRequest',
     'restChannelOptions',
     'realtimeChannelOptions',
+    'cipherParams',
     'paginatedResult',
     'restHistoryParams',
     'realtimeHistoryParams',
@@ -236,15 +237,11 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>[
-      'cipher',
-      'params',
-      'modes',
-    ]
+    'properties': <String>['cipher', 'params', 'modes', 'cipherParams']
   },
   {
     'name': 'CipherParams',
-    'properties': <String>['algorithm', 'mode', 'key', 'keyLength']
+    'properties': <String>['algorithm', 'keyLength', 'key', 'mode']
   },
   {
     'name': 'TokenDetails',

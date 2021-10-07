@@ -20,20 +20,21 @@ final public class PlatformConstants {
         public static final byte tokenRequest = (byte) 136;
         public static final byte restChannelOptions = (byte) 137;
         public static final byte realtimeChannelOptions = (byte) 138;
-        public static final byte paginatedResult = (byte) 139;
-        public static final byte restHistoryParams = (byte) 140;
-        public static final byte realtimeHistoryParams = (byte) 141;
-        public static final byte restPresenceParams = (byte) 142;
-        public static final byte presenceMessage = (byte) 143;
-        public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte deviceDetails = (byte) 145;
-        public static final byte localDevice = (byte) 146;
-        public static final byte pushChannelSubscription = (byte) 147;
-        public static final byte unNotificationSettings = (byte) 148;
-        public static final byte remoteMessage = (byte) 149;
-        public static final byte errorInfo = (byte) 150;
-        public static final byte connectionStateChange = (byte) 151;
-        public static final byte channelStateChange = (byte) 152;
+        public static final byte cipherParams = (byte) 139;
+        public static final byte paginatedResult = (byte) 140;
+        public static final byte restHistoryParams = (byte) 141;
+        public static final byte realtimeHistoryParams = (byte) 142;
+        public static final byte restPresenceParams = (byte) 143;
+        public static final byte presenceMessage = (byte) 144;
+        public static final byte realtimePresenceParams = (byte) 145;
+        public static final byte deviceDetails = (byte) 146;
+        public static final byte localDevice = (byte) 147;
+        public static final byte pushChannelSubscription = (byte) 148;
+        public static final byte unNotificationSettings = (byte) 149;
+        public static final byte remoteMessage = (byte) 150;
+        public static final byte errorInfo = (byte) 151;
+        public static final byte connectionStateChange = (byte) 152;
+        public static final byte channelStateChange = (byte) 153;
     }
 
     static final public class PlatformMethod {
@@ -180,13 +181,14 @@ final public class PlatformConstants {
         public static final String cipher = "cipher";
         public static final String params = "params";
         public static final String modes = "modes";
+        public static final String cipherParams = "cipherParams";
     }
 
     static final public class TxCipherParams {
         public static final String algorithm = "algorithm";
-        public static final String mode = "mode";
-        public static final String key = "key";
         public static final String keyLength = "keyLength";
+        public static final String key = "key";
+        public static final String mode = "mode";
     }
 
     static final public class TxTokenDetails {

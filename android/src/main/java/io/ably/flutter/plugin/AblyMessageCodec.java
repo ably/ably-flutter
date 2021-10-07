@@ -1,12 +1,15 @@
 package io.ably.flutter.plugin;
 
 import com.google.firebase.messaging.RemoteMessage;
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.rest.DeviceDetails;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
+import io.ably.lib.types.ChannelMode;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.DeltaExtras;
@@ -352,9 +356,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
     try {
-      return ChannelOptions.withCipherKey((String) cipher);
-    } catch (AblyException ae) {
-      System.out.println("Exception while decoding RestChannelOptions : " + ae);
+      return createChannelOptions(cipher);
+    } catch (AblyException e) {
+      System.out.println("Exception while decoding RestChannelOptions: " + e);
       return null;
     }
   }
@@ -362,15 +366,62 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+
+    ChannelOptions options;
     try {
-      final ChannelOptions o = ChannelOptions.withCipherKey((String) cipher);
-      readValueFromJson(jsonMap, PlatformConstants.TxRealtimeChannelOptions.params, v -> o.cipherParams = (Map<String, String>) v);
-      // modes is not supported in ably-java
-      // Track @ https://github.com/ably/ably-flutter/issues/14
-      return o;
-    } catch (AblyException ae) {
-      System.out.println("Exception while decoding RealtimeChannelOptions: " + ae);
+      options = createChannelOptions(cipher);
+    } catch (AblyException e) {
+      System.out.println("Exception while decoding RealtimeChannelOptions: " + e);
       return null;
+    }
+    options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
+    final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
+    if (modes != null && modes.size() > 0) {
+      options.modes = createChannelModesArray(modes);
+    }
+
+    return options;
+  }
+
+  private ChannelOptions createChannelOptions(@Nullable Object cipher) throws AblyException {
+    if (cipher == null) return new ChannelOptions();
+    if (cipher instanceof String) {
+      try {
+        return ChannelOptions.withCipherKey((String) cipher);
+      } catch (AblyException ae) {
+        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as String: " + ae, 400, 40000));
+      }
+    } else if (cipher instanceof byte[]) {
+      try {
+        return ChannelOptions.withCipherKey((byte[]) cipher);
+      } catch (AblyException ae) {
+        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as byte array: " + ae, 400, 40000));
+      }
+    } else {
+      throw AblyException.fromErrorInfo(new ErrorInfo("CipherKey must either be a String or a Byte Array.", 400, 40000));
+    }
+  }
+
+  private ChannelMode[] createChannelModesArray(ArrayList<String> modesString) {
+    ChannelMode[] modes = new ChannelMode[modesString.size()];
+    for (int i = 0; i < modesString.size(); i++) {
+      modes[i] = decodeChannelOptionsMode(modesString.get(i));
+    }
+    return modes;
+  }
+
+  private ChannelMode decodeChannelOptionsMode(String string) {
+    switch (string) {
+      case PlatformConstants.TxEnumConstants.presence:
+        return ChannelMode.presence;
+      case PlatformConstants.TxEnumConstants.publish:
+        return ChannelMode.publish;
+      case PlatformConstants.TxEnumConstants.subscribe:
+        return ChannelMode.subscribe;
+      case PlatformConstants.TxEnumConstants.presenceSubscribe:
+        return ChannelMode.presence_subscribe;
+      default:
+        return null;
     }
   }
 
@@ -730,7 +781,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     return jsonMap;
   }
-  
+
   private Map<String, Object> encodePushChannelSubscription(PushBase.ChannelSubscription c) {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
@@ -809,7 +860,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.notification, encodeNotification(message.getNotification()));
     return jsonMap;
   }
-  
+
   private Map<String, Object> encodeNotification(RemoteMessage.Notification notification) {
     if (notification == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();

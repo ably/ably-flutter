@@ -78,6 +78,8 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimeChannelOptions,
         null,
       ),
+      CodecTypes.cipherParams:
+          _CodecPair<CipherParams>(_encodeCipherParams, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -155,6 +157,10 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
+    } else if (value is RealtimeChannelOptions) {
+      return CodecTypes.realtimeChannelOptions;
+    } else if (value is ChannelOptions) {
+      return CodecTypes.restChannelOptions;
     } else if (value is MessageExtras) {
       return CodecTypes.messageExtras;
     } else if (value is Message) {
@@ -344,6 +350,15 @@ class Codec extends StandardMessageCodec {
       TxRealtimeChannelOptions.modes,
       v.modes?.map(_encodeChannelMode).toList(),
     );
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeCipherParams(final CipherParams params) {
+    final jsonMap = <String, dynamic>{};
+    _writeToJson(jsonMap, TxCipherParams.algorithm, params.algorithm);
+    _writeToJson(jsonMap, TxCipherParams.keyLength, params.keyLength);
+    _writeToJson(jsonMap, TxCipherParams.key, params.key);
+    _writeToJson(jsonMap, TxCipherParams.mode, params.mode);
     return jsonMap;
   }
 

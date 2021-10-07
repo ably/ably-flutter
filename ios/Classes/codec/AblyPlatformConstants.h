@@ -17,20 +17,21 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenRequestCodecType = 136,
     restChannelOptionsCodecType = 137,
     realtimeChannelOptionsCodecType = 138,
-    paginatedResultCodecType = 139,
-    restHistoryParamsCodecType = 140,
-    realtimeHistoryParamsCodecType = 141,
-    restPresenceParamsCodecType = 142,
-    presenceMessageCodecType = 143,
-    realtimePresenceParamsCodecType = 144,
-    deviceDetailsCodecType = 145,
-    localDeviceCodecType = 146,
-    pushChannelSubscriptionCodecType = 147,
-    unNotificationSettingsCodecType = 148,
-    remoteMessageCodecType = 149,
-    errorInfoCodecType = 150,
-    connectionStateChangeCodecType = 151,
-    channelStateChangeCodecType = 152,
+    cipherParamsCodecType = 139,
+    paginatedResultCodecType = 140,
+    restHistoryParamsCodecType = 141,
+    realtimeHistoryParamsCodecType = 142,
+    restPresenceParamsCodecType = 143,
+    presenceMessageCodecType = 144,
+    realtimePresenceParamsCodecType = 145,
+    deviceDetailsCodecType = 146,
+    localDeviceCodecType = 147,
+    pushChannelSubscriptionCodecType = 148,
+    unNotificationSettingsCodecType = 149,
+    remoteMessageCodecType = 150,
+    errorInfoCodecType = 151,
+    connectionStateChangeCodecType = 152,
+    channelStateChangeCodecType = 153,
 };
 
 
@@ -168,12 +169,13 @@ extern NSString *const TxRestChannelOptions_cipher;
 extern NSString *const TxRealtimeChannelOptions_cipher;
 extern NSString *const TxRealtimeChannelOptions_params;
 extern NSString *const TxRealtimeChannelOptions_modes;
+extern NSString *const TxRealtimeChannelOptions_cipherParams;
 
 // key constants for CipherParams
 extern NSString *const TxCipherParams_algorithm;
-extern NSString *const TxCipherParams_mode;
-extern NSString *const TxCipherParams_key;
 extern NSString *const TxCipherParams_keyLength;
+extern NSString *const TxCipherParams_key;
+extern NSString *const TxCipherParams_mode;
 
 // key constants for TokenDetails
 extern NSString *const TxTokenDetails_token;

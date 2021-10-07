@@ -1,7 +1,7 @@
 /// params to configure encryption for a channel
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TZ1
-abstract class CipherParams {
+class CipherParams {
   /// Specifies the algorithm to use for encryption
   ///
   /// Default is AES. Currently only AES is supported.
@@ -23,4 +23,6 @@ abstract class CipherParams {
   /// Default is CBC. Currently only CBC is supported
   /// https://docs.ably.com/client-lib-development-guide/features/#TZ2c
   String? mode;
+
+  CipherParams({this.algorithm, this.key, this.keyLength, this.mode});
 }
