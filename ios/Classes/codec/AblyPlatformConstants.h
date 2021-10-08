@@ -27,9 +27,10 @@ typedef NS_ENUM(UInt8, _Value) {
     localDeviceCodecType = 146,
     pushChannelSubscriptionCodecType = 147,
     unNotificationSettingsCodecType = 148,
-    errorInfoCodecType = 149,
-    connectionStateChangeCodecType = 150,
-    channelStateChangeCodecType = 151,
+    remoteMessageCodecType = 149,
+    errorInfoCodecType = 150,
+    connectionStateChangeCodecType = 151,
+    channelStateChangeCodecType = 152,
 };
 
 
@@ -71,9 +72,16 @@ extern NSString *const AblyPlatformMethod_pushListSubscriptions;
 extern NSString *const AblyPlatformMethod_pushDevice;
 extern NSString *const AblyPlatformMethod_pushRequestPermission;
 extern NSString *const AblyPlatformMethod_pushGetNotificationSettings;
+extern NSString *const AblyPlatformMethod_pushOpenSettingsFor;
 extern NSString *const AblyPlatformMethod_pushOnActivate;
 extern NSString *const AblyPlatformMethod_pushOnDeactivate;
 extern NSString *const AblyPlatformMethod_pushOnUpdateFailed;
+extern NSString *const AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated;
+extern NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground;
+extern NSString *const AblyPlatformMethod_pushOnMessage;
+extern NSString *const AblyPlatformMethod_pushOnBackgroundMessage;
+extern NSString *const AblyPlatformMethod_pushOnNotificationTap;
+extern NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -358,3 +366,11 @@ extern NSString *const TxUNAuthorizationStatusEnum_ephemeral;
 extern NSString *const TxUNShowPreviewsSettingEnum_always;
 extern NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated;
 extern NSString *const TxUNShowPreviewsSettingEnum_never;
+
+// key constants for RemoteMessage
+extern NSString *const TxRemoteMessage_data;
+extern NSString *const TxRemoteMessage_notification;
+
+// key constants for Notification
+extern NSString *const TxNotification_title;
+extern NSString *const TxNotification_body;

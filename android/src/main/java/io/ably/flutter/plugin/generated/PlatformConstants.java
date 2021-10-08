@@ -30,9 +30,10 @@ final public class PlatformConstants {
         public static final byte localDevice = (byte) 146;
         public static final byte pushChannelSubscription = (byte) 147;
         public static final byte unNotificationSettings = (byte) 148;
-        public static final byte errorInfo = (byte) 149;
-        public static final byte connectionStateChange = (byte) 150;
-        public static final byte channelStateChange = (byte) 151;
+        public static final byte remoteMessage = (byte) 149;
+        public static final byte errorInfo = (byte) 150;
+        public static final byte connectionStateChange = (byte) 151;
+        public static final byte channelStateChange = (byte) 152;
     }
 
     static final public class PlatformMethod {
@@ -73,9 +74,16 @@ final public class PlatformConstants {
         public static final String pushDevice = "pushDevice";
         public static final String pushRequestPermission = "pushRequestPermission";
         public static final String pushGetNotificationSettings = "pushGetNotificationSettings";
+        public static final String pushOpenSettingsFor = "pushOpenSettingsFor";
         public static final String pushOnActivate = "pushOnActivate";
         public static final String pushOnDeactivate = "pushOnDeactivate";
         public static final String pushOnUpdateFailed = "pushOnUpdateFailed";
+        public static final String pushNotificationTapLaunchedAppFromTerminated = "pushNotificationTapLaunchedAppFromTerminated";
+        public static final String pushOnShowNotificationInForeground = "pushOnShowNotificationInForeground";
+        public static final String pushOnMessage = "pushOnMessage";
+        public static final String pushOnBackgroundMessage = "pushOnBackgroundMessage";
+        public static final String pushOnNotificationTap = "pushOnNotificationTap";
+        public static final String pushSetOnBackgroundMessage = "pushSetOnBackgroundMessage";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -396,6 +404,16 @@ final public class PlatformConstants {
         public static final String always = "always";
         public static final String whenAuthenticated = "whenAuthenticated";
         public static final String never = "never";
+    }
+
+    static final public class TxRemoteMessage {
+        public static final String data = "data";
+        public static final String notification = "notification";
+    }
+
+    static final public class TxNotification {
+        public static final String title = "title";
+        public static final String body = "body";
     }
 
 }

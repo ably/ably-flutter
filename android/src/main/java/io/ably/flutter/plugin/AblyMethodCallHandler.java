@@ -7,6 +7,8 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.messaging.RemoteMessage;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -35,28 +38,24 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static AblyMethodCallHandler _instance;
+  private Context applicationContext;
 
-  public interface OnHotRestart {
-    // this method will be called on every fresh start and on every hot restart
-    void trigger();
-  }
-
-  static synchronized AblyMethodCallHandler getInstance(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
-    if (null == _instance) {
-      _instance = new AblyMethodCallHandler(channel, listener, applicationContext);
-    }
-    return _instance;
+  public interface HotRestartCallback {
+    // Called on every fresh start and on every hot restart
+    void on();
   }
 
   private final MethodChannel channel;
-  private final OnHotRestart onHotRestartListener;
+  private final HotRestartCallback hotRestartCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
+  @Nullable
+  private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
-  private AblyMethodCallHandler(final MethodChannel channel, final OnHotRestart listener, final Context applicationContext) {
+  public AblyMethodCallHandler(final MethodChannel channel, final HotRestartCallback hotRestartCallback, final Context applicationContext) {
     this.channel = channel;
-    this.onHotRestartListener = listener;
+    this.applicationContext = applicationContext;
+    this.hotRestartCallback = hotRestartCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -97,6 +96,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.pushUnsubscribeClient, this::pushUnsubscribeClient);
     _map.put(PlatformConstants.PlatformMethod.pushListSubscriptions, this::pushListSubscriptions);
     _map.put(PlatformConstants.PlatformMethod.pushDevice, this::pushDevice);
+    _map.put(PlatformConstants.PlatformMethod.pushNotificationTapLaunchedAppFromTerminated, this::pushNotificationTapLaunchedAppFromTerminated);
+    _map.put(PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage, this::pushSetOnBackgroundMessage);
 
     // paginated results
     _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
@@ -170,7 +171,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     System.out.println("Registering library instance to clean up any existing instances");
-    onHotRestartListener.trigger();
+    hotRestartCallback.on();
     _ably.dispose();
     result.success(null);
   }
@@ -719,6 +720,20 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     } catch (AblyException e) {
       handleAblyException(result, e);
     }
+  }
+
+  public void setRemoteMessageFromUserTapLaunchesApp(@Nullable RemoteMessage message) {
+    remoteMessageFromUserTapLaunchesApp = message;
+  }
+
+  private void pushNotificationTapLaunchedAppFromTerminated(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    result.success(remoteMessageFromUserTapLaunchesApp);
+    remoteMessageFromUserTapLaunchesApp = null;
+  }
+
+  private void pushSetOnBackgroundMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    Long backgroundMessageHandlerHandle = (Long) call.arguments;
+    PushBackgroundIsolateRunner.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

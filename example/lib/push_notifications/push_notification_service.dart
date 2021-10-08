@@ -11,8 +11,8 @@ import 'push_notification_message_examples.dart';
 class PushNotificationService {
   final _androidPushNotificationConfiguration =
       AndroidPushNotificationConfiguration();
-  late final ably.Realtime? realtime;
-  late final ably.Rest? rest;
+  ably.Realtime? realtime;
+  ably.Rest? rest;
   ably.RealtimeChannelInterface? _realtimeChannel;
   ably.RealtimeChannelInterface? _pushLogMetachannel;
   ably.RestChannelInterface? _restChannel;
@@ -80,14 +80,18 @@ class PushNotificationService {
   }
 
   /// Only valid on iOS
-  Future<void> requestNotificationPermission({bool provisional = false}) async {
+  Future<void> requestNotificationPermission(
+      {bool provisional = false,
+      bool providesAppNotificationSettings = true}) async {
     if (realtime != null) {
-      final granted =
-          await realtime!.push.requestPermission(provisional: provisional);
+      final granted = await realtime!.push.requestPermission(
+          provisional: provisional,
+          providesAppNotificationSettings: providesAppNotificationSettings);
       _userNotificationPermissionGrantedSubject.add(granted);
     } else if (rest != null) {
-      final granted =
-          await rest!.push.requestPermission(provisional: provisional);
+      final granted = await rest!.push.requestPermission(
+          provisional: provisional,
+          providesAppNotificationSettings: providesAppNotificationSettings);
       _userNotificationPermissionGrantedSubject.add(granted);
     } else {
       throw Exception('No ably client available');

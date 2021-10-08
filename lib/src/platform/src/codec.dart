@@ -1,5 +1,3 @@
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -7,6 +5,8 @@ import '../../authentication/authentication.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../message/message.dart';
+import '../../push_notifications/push_notifications.dart';
+import '../../push_notifications/src/local_device.dart';
 import '../../realtime/realtime.dart';
 import '../../rest/rest.dart';
 import '../platform.dart';
@@ -98,6 +98,8 @@ class Codec extends StandardMessageCodec {
           null, _decodePushChannelSubscription),
       CodecTypes.unNotificationSettings: _CodecPair<UNNotificationSettings>(
           null, _decodeUNNotificationSettings),
+      CodecTypes.remoteMessage:
+          _CodecPair<RemoteMessage>(null, _decodeRemoteMessage),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -851,6 +853,9 @@ class Codec extends StandardMessageCodec {
       'Platform communication error. UNNotificationSetting is invalid: $setting',
     );
   }
+
+  RemoteMessage _decodeRemoteMessage(Map<String, dynamic> jsonMap) =>
+      RemoteMessage.fromMap(jsonMap);
 
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null

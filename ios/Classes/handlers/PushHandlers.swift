@@ -4,6 +4,9 @@ public typealias FlutterHandler = (_ plugin: AblyFlutterPlugin, _ call: FlutterM
 
 public class PushHandlers: NSObject {
     @objc
+    public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;
+    
+    @objc
     public static let activate: FlutterHandler = { plugin, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
@@ -31,7 +34,7 @@ public class PushHandlers: NSObject {
     }
     
     private static func returnMethodAlreadyRunningError(result: FlutterResult, methodName: String) {
-        let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to activate before the previous call completes", details: nil)
+        let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to call \(methodName) before the previous call completes", details: nil)
         result(error)
     }
 
@@ -151,6 +154,13 @@ public class PushHandlers: NSObject {
         if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
             pushChannel.unsubscribeClient()
             result(nil)
+        }
+    }
+    
+    @objc
+    public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { plugin, call, result in
+        if let data = pushNotificationTapLaunchedAppFromTerminatedData {
+            result(pushNotificationTapLaunchedAppFromTerminatedData)
         }
     }
 

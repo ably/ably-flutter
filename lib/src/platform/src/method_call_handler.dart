@@ -1,11 +1,14 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/services.dart';
 
 import '../../authentication/authentication.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../platform.dart';
+import '../platform_internal.dart';
 import 'ably_message.dart';
-import 'push_events_native.dart';
+import 'push_activation_events_native.dart';
+import 'push_notification_events_native.dart';
 
 /// Handles method calls invoked from platform side to dart side
 class AblyMethodCallHandler {
@@ -19,11 +22,22 @@ class AblyMethodCallHandler {
         case PlatformMethod.realtimeAuthCallback:
           return onRealtimeAuthCallback(call.arguments as AblyMessage?);
         case PlatformMethod.pushOnActivate:
-          return onPushOnActivate(call.arguments as ErrorInfo?);
+          return _onPushOnActivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnDeactivate:
-          return onPushOnDeactivate(call.arguments as ErrorInfo?);
+          return _onPushOnDeactivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnUpdateFailed:
-          return onPushOnUpdateFailed(call.arguments as ErrorInfo);
+          return _onPushOnUpdateFailed(call.arguments as ErrorInfo);
+        case PlatformMethod.pushOnMessage:
+          return _onPushOnMessage(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnBackgroundMessage:
+          return _onPushBackgroundMessage(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnShowNotificationInForeground:
+          return _pushNotificationEvents
+              .showNotificationInForeground(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOnNotificationTap:
+          return onNotificationTap(call.arguments as RemoteMessage);
+        case PlatformMethod.pushOpenSettingsFor:
+          return onOpenSettingsFor();
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
@@ -62,18 +76,42 @@ class AblyMethodCallHandler {
     return callbackResponse;
   }
 
-  Future<Object?> onPushOnActivate(ErrorInfo? error) async {
-    PushEventsNative.shared.onActivateStreamController.add(error);
+  final PushActivationEventsNative _pushActivationEvents =
+      PushNative.activationEvents as PushActivationEventsNative;
+  final PushNotificationEventsNative _pushNotificationEvents =
+      PushNative.notificationEvents as PushNotificationEventsNative;
+
+  Future<Object?> _onPushOnActivate(ErrorInfo? error) async {
+    _pushActivationEvents.onActivateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnDeactivate(ErrorInfo? error) async {
-    PushEventsNative.shared.onDeactivateStreamController.add(error);
+  Future<Object?> _onPushOnDeactivate(ErrorInfo? error) async {
+    _pushActivationEvents.onDeactivateStreamController.add(error);
     return null;
   }
 
-  Future<Object?> onPushOnUpdateFailed(ErrorInfo error) async {
-    PushEventsNative.shared.onUpdateFailedStreamController.add(error);
+  Future<Object?> _onPushOnUpdateFailed(ErrorInfo error) async {
+    _pushActivationEvents.onUpdateFailedStreamController.add(error);
     return null;
+  }
+
+  Future<Object?> _onPushOnMessage(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.onMessageStreamController.add(remoteMessage);
+  }
+
+  Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
+  }
+
+  Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
+    _pushNotificationEvents.onNotificationTapStreamController
+        .add(remoteMessage);
+  }
+
+  Future<Object?> onOpenSettingsFor() async {
+    if (_pushNotificationEvents.onOpenSettingsHandler != null) {
+      _pushNotificationEvents.onOpenSettingsHandler!();
+    }
   }
 }

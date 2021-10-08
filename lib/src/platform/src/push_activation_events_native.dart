@@ -3,9 +3,7 @@ import 'dart:async';
 import '../../error/src/error_info.dart';
 import '../../push_notifications/push_notifications.dart';
 
-class PushEventsNative extends PushEvents {
-  static PushEventsNative shared = PushEventsNative();
-
+class PushActivationEventsNative extends PushActivationEvents {
   StreamController<ErrorInfo?> onActivateStreamController = StreamController();
   StreamController<ErrorInfo?> onDeactivateStreamController =
       StreamController();
