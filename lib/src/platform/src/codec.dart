@@ -93,6 +93,8 @@ class Codec extends StandardMessageCodec {
       // Push Notifications
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
+      CodecTypes.devicePushDetails:
+          _CodecPair<DevicePushDetails>(null, _decodeDevicePushDetails),
       CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
       CodecTypes.pushChannelSubscription: _CodecPair<PushChannelSubscription>(
           null, _decodePushChannelSubscription),
@@ -729,6 +731,7 @@ class Codec extends StandardMessageCodec {
   }
 
   DevicePushState? _decodeDevicePushState(String? enumValue) {
+    if (enumValue == null) return null;
     switch (enumValue) {
       case TxDevicePushStateEnum.active:
         return DevicePushState.active;
@@ -736,8 +739,12 @@ class Codec extends StandardMessageCodec {
         return DevicePushState.failing;
       case TxDevicePushStateEnum.failed:
         return DevicePushState.failed;
+      case TxDevicePushStateEnum.unknown:
+        return DevicePushState.unknown;
       default:
-        return null;
+        throw AblyException(
+          'Platform communication error. DevicePushState is invalid: $enumValue',
+        );
     }
   }
 

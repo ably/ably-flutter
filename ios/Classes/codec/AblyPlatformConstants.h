@@ -28,9 +28,11 @@ typedef NS_ENUM(UInt8, _Value) {
     pushChannelSubscriptionCodecType = 147,
     unNotificationSettingsCodecType = 148,
     remoteMessageCodecType = 149,
-    errorInfoCodecType = 150,
-    connectionStateChangeCodecType = 151,
-    channelStateChangeCodecType = 152,
+    devicePushDetailsCodecType = 150,
+    devicePushStateCodecType = 151,
+    errorInfoCodecType = 152,
+    connectionStateChangeCodecType = 153,
+    channelStateChangeCodecType = 154,
 };
 
 
@@ -64,6 +66,7 @@ extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_pushActivate;
 extern NSString *const AblyPlatformMethod_pushDeactivate;
+extern NSString *const AblyPlatformMethod_pushGetDevicePushDetails;
 extern NSString *const AblyPlatformMethod_pushSubscribeDevice;
 extern NSString *const AblyPlatformMethod_pushUnsubscribeDevice;
 extern NSString *const AblyPlatformMethod_pushSubscribeClient;
@@ -234,6 +237,7 @@ extern NSString *const TxDevicePlatformEnum_browser;
 extern NSString *const TxDevicePushStateEnum_active;
 extern NSString *const TxDevicePushStateEnum_failing;
 extern NSString *const TxDevicePushStateEnum_failed;
+extern NSString *const TxDevicePushStateEnum_unknown;
 
 // key constants for ConnectionStateChange
 extern NSString *const TxConnectionStateChange_current;

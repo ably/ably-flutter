@@ -31,9 +31,11 @@ final public class PlatformConstants {
         public static final byte pushChannelSubscription = (byte) 147;
         public static final byte unNotificationSettings = (byte) 148;
         public static final byte remoteMessage = (byte) 149;
-        public static final byte errorInfo = (byte) 150;
-        public static final byte connectionStateChange = (byte) 151;
-        public static final byte channelStateChange = (byte) 152;
+        public static final byte devicePushDetails = (byte) 150;
+        public static final byte devicePushState = (byte) 151;
+        public static final byte errorInfo = (byte) 152;
+        public static final byte connectionStateChange = (byte) 153;
+        public static final byte channelStateChange = (byte) 154;
     }
 
     static final public class PlatformMethod {
@@ -66,6 +68,7 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
+        public static final String pushGetDevicePushDetails = "pushGetDevicePushDetails";
         public static final String pushSubscribeDevice = "pushSubscribeDevice";
         public static final String pushUnsubscribeDevice = "pushUnsubscribeDevice";
         public static final String pushSubscribeClient = "pushSubscribeClient";
@@ -253,6 +256,7 @@ final public class PlatformConstants {
         public static final String active = "active";
         public static final String failing = "failing";
         public static final String failed = "failed";
+        public static final String unknown = "unknown";
     }
 
     static final public class TxConnectionStateChange {

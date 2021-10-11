@@ -56,6 +56,14 @@ class PushNotificationService {
   late final ValueStream<ably.UNNotificationSettings>
       notificationSettingsStream = _notificationSettingsSubject.stream;
 
+  // This makes a network request, whereas _localDeviceSubject uses locally
+  // stored data. Use this to get the latest state from Ably servers, to find
+  // out if a message failed to be delivered.
+  final BehaviorSubject<ably.DevicePushDetails> _devicePushDetailsSubject =
+      BehaviorSubject();
+  late final ValueStream<ably.DevicePushDetails> pushStateStream =
+      _devicePushDetailsSubject.stream;
+
   void setRealtimeClient(ably.Realtime realtime) {
     this.realtime = realtime;
     _getChannels();
@@ -123,6 +131,16 @@ class PushNotificationService {
     } else {
       final localDevice = await rest!.device();
       _localDeviceSubject.add(localDevice);
+    }
+  }
+
+  Future<void> getPushState() async {
+    if (realtime != null) {
+      final pushState = await realtime!.push.getDevicePushDetails();
+      _devicePushDetailsSubject.add(pushState);
+    } else {
+      final pushState = await rest!.push.getDevicePushDetails();
+      _devicePushDetailsSubject.add(pushState);
     }
   }
 

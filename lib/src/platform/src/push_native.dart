@@ -74,6 +74,10 @@ class PushNative extends PlatformObject implements Push {
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   @override
+  Future<DevicePushDetails> getDevicePushDetails() =>
+      invokeRequest<DevicePushDetails>(PlatformMethod.pushGetDevicePushDetails);
+
+  @override
   Future<int?> createPlatformInstance() => (realtime != null)
       ? (realtime as Realtime).handle
       : (rest as Rest).handle;

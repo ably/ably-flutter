@@ -28,6 +28,8 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'pushChannelSubscription',
     'unNotificationSettings',
     'remoteMessage',
+    'devicePushDetails',
+    'devicePushState',
 
     'errorInfo',
 
@@ -94,6 +96,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
   {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
+  {'name': 'pushGetDevicePushDetails', 'value': 'pushGetDevicePushDetails'},
   {'name': 'pushSubscribeDevice', 'value': 'pushSubscribeDevice'},
   {'name': 'pushUnsubscribeDevice', 'value': 'pushUnsubscribeDevice'},
   {'name': 'pushSubscribeClient', 'value': 'pushSubscribeClient'},
@@ -322,7 +325,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'DevicePushStateEnum',
-    'properties': <String>['active', 'failing', 'failed']
+    'properties': <String>['active', 'failing', 'failed', 'unknown']
   },
   {
     'name': 'ConnectionStateChange',

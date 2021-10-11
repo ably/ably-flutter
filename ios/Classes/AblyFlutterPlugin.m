@@ -630,6 +630,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushUnsubscribeClient: PushHandlers.unsubscribeClient,
         AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
         AblyPlatformMethod_pushDevice: PushHandlers.device,
+        AblyPlatformMethod_pushGetDevicePushDetails: PushHandlers.getDevicePushDetails,
         AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
     };
     

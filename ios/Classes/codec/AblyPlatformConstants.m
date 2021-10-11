@@ -36,6 +36,7 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
+NSString *const AblyPlatformMethod_pushGetDevicePushDetails= @"pushGetDevicePushDetails";
 NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
 NSString *const AblyPlatformMethod_pushUnsubscribeDevice= @"pushUnsubscribeDevice";
 NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
@@ -206,6 +207,7 @@ NSString *const TxDevicePlatformEnum_browser = @"browser";
 NSString *const TxDevicePushStateEnum_active = @"active";
 NSString *const TxDevicePushStateEnum_failing = @"failing";
 NSString *const TxDevicePushStateEnum_failed = @"failed";
+NSString *const TxDevicePushStateEnum_unknown = @"unknown";
 
 // key constants for ConnectionStateChange
 NSString *const TxConnectionStateChange_current = @"current";

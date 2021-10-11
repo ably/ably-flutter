@@ -11,4 +11,7 @@ enum DevicePushState {
 
   /// indicates the device push state failed
   failed,
+
+  /// The DevicePushState is not known
+  unknown,
 }

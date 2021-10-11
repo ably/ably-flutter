@@ -46,6 +46,26 @@ class PushNotificationsDeviceInformation extends StatelessWidget {
                         onPressed: _pushNotificationService.getDevice,
                         child: const Text('Refresh local device information'),
                       ),
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: _pushNotificationService.getPushState,
+                            child: const Text('Get push state'),
+                          ),
+                          StreamBuilder(
+                            stream: _pushNotificationService.pushStateStream,
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData || snapshot.data == null) {
+                                return const Text('No push state yet.');
+                              } else {
+                                final devicePushDetails =
+                                    snapshot.data as ably.DevicePushDetails;
+                                return Text(devicePushDetails.state.toString());
+                              }
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   );
                 }

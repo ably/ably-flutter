@@ -20,7 +20,7 @@ public class PushNotificationEncoders: NSObject {
     public static let encodeDevicePushDetails: (ARTDevicePushDetails) -> Dictionary<String, Any> = { devicePushDetails in
         return [
             TxDevicePushDetails_recipient: devicePushDetails.recipient,
-            TxDevicePushDetails_state: devicePushDetails.state as Any,
+            TxDevicePushDetails_state: devicePushDetails.state.toString(),
             TxDevicePushDetails_errorReason: (devicePushDetails.errorReason != nil ? Encoders.encodeErrorInfo(devicePushDetails.errorReason!) : nil) as Any
         ];
     }
@@ -161,6 +161,23 @@ extension UNShowPreviewsSetting {
         case .whenAuthenticated:
             return TxUNShowPreviewsSettingEnum_whenAuthenticated
         @unknown default:
+            fatalError("Unsupported value in \(self).")
+        }
+    }
+}
+
+extension ARTPushState {
+    func toString() -> String {
+        switch (self) {
+        case .active:
+            return TxDevicePushStateEnum_active
+        case .failed:
+            return TxDevicePushStateEnum_failing
+        case .failing:
+            return TxDevicePushStateEnum_failing
+        case .unknown:
+            return TxDevicePushStateEnum_unknown
+        default:
             fatalError("Unsupported value in \(self).")
         }
     }

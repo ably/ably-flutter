@@ -84,4 +84,9 @@ abstract class Push {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   Future<void> deactivate();
+
+  /// Makes a network request to Ably to get the device push details stored
+  /// in Ably servers. This method is also useful to get the state and error
+  /// reason to understand why push messages were not sent to the device.
+  Future<DevicePushDetails> getDevicePushDetails();
 }

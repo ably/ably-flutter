@@ -101,6 +101,30 @@ public class PushHandlers: NSObject {
             result(rest.device)
         }
     }
+    
+    @objc
+    public static let getDevicePushDetails: FlutterHandler = { plugin, call, result in
+        let message = call.arguments as! AblyFlutterMessage
+        let ablyClientHandle = message.message as! NSNumber
+        let realtime = plugin.ably.realtime(withHandle: ablyClientHandle)
+        let rest = plugin.ably.getRest(ablyClientHandle)
+
+        if let realtime = realtime {
+            realtime.push.getState { details, error in
+                if (error != nil) {
+                    result(FlutterError(code: String(error!._code), message: "Error getting push state; err = \(error!.localizedDescription)", details: nil))
+                }
+                result(details)
+            }
+        } else if let rest = rest {
+            rest.push.getState { details, error in
+                if (error != nil) {
+                    result(FlutterError(code: String(error!._code), message: "Error getting push state; err = \(error!.localizedDescription)", details: nil))
+                }
+                result(details)
+            }
+        }
+    }
 
     @objc
     public static let listSubscriptions: FlutterHandler = { plugin, call, result in

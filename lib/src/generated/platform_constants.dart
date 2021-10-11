@@ -28,9 +28,11 @@ class CodecTypes {
   static const int pushChannelSubscription = 147;
   static const int unNotificationSettings = 148;
   static const int remoteMessage = 149;
-  static const int errorInfo = 150;
-  static const int connectionStateChange = 151;
-  static const int channelStateChange = 152;
+  static const int devicePushDetails = 150;
+  static const int devicePushState = 151;
+  static const int errorInfo = 152;
+  static const int connectionStateChange = 153;
+  static const int channelStateChange = 154;
 }
 
 class PlatformMethod {
@@ -64,6 +66,7 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
+  static const String pushGetDevicePushDetails = 'pushGetDevicePushDetails';
   static const String pushSubscribeDevice = 'pushSubscribeDevice';
   static const String pushUnsubscribeDevice = 'pushUnsubscribeDevice';
   static const String pushSubscribeClient = 'pushSubscribeClient';
@@ -256,6 +259,7 @@ class TxDevicePushStateEnum {
   static const String active = 'active';
   static const String failing = 'failing';
   static const String failed = 'failed';
+  static const String unknown = 'unknown';
 }
 
 class TxConnectionStateChange {
