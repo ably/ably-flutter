@@ -32,7 +32,7 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
     
     public func didActivateAblyPush(_ error: ARTErrorInfo?) {
         defer {
-            flutterResultForDeactivate = nil
+            flutterResultForActivate = nil
         }
         
         guard let result = flutterResultForActivate else {
