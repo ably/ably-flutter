@@ -57,10 +57,9 @@
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
-                    NSLog(@"No token data recieved %@", tokenData);
+                    NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure
-                                                  userInfo:nil]); //TODO check if this is okay!
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
@@ -96,8 +95,7 @@
                 if (!tokenData) {
                     NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure
-                                                  userInfo:nil]); //TODO check if this is okay!
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
