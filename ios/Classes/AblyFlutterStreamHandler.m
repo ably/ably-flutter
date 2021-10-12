@@ -13,7 +13,7 @@
 
 - (instancetype)init{
     _ably = [AblyFlutter sharedInstance];
-    listener = [[ARTEventListener alloc] init];
+    listener = [ARTEventListener new];
     return self;
 }
 
