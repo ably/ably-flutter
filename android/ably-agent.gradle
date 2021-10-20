@@ -11,6 +11,6 @@ if (versionMatcher.find()) {
 
 android {
     defaultConfig {
-        buildConfigField 'String', 'VERSION', "\"${libraryVersion}\""
+        buildConfigField 'String', 'LIBRARY_VERSION', "\"${libraryVersion}\""
     }
 }
