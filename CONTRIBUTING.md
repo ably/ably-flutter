@@ -92,14 +92,15 @@ To debug both platform and Dart code simultaneously:
 
 ## Testing changes in dependencies
 
-After making changes to Ably-java or Ably-cocoa, you can test changes without releasing those dependencies to users. To do this, you need a local copy of the repo with the changes you want to test.
+After making changes to `ably-java` or `ably-cocoa`, you can test changes without releasing those dependencies to users. To do this, you need a local copy of the repo with the changes you want to test.
 
-To test Ably-cocoa changes, in `Podfile`, below `target 'Runner' do`, add:
+To test `ably-cocoa` changes, in `Podfile`, below `target 'Runner' do`, add:
+
 ```ruby
     pod 'Ably', :path => 'local/path/to/ably-cocoa'
 ```
 
-To test Ably-java changes, see [Using ably-java / ably-android locally in other projects](https://github.com/ably/ably-java/blob/main/CONTRIBUTING.md#building-an-android-archive-aar-file-locally).
+To test `ably-java` changes, see [Using ably-java / ably-android locally in other projects](https://github.com/ably/ably-java/blob/main/CONTRIBUTING.md#using-ably-java--ably-android-locally-in-other-projects).
 
 ## Writing documentation
 
