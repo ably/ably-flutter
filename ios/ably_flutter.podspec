@@ -5,11 +5,11 @@
 require 'yaml'
 
 pubspec = YAML.load_file(File.join('..', 'pubspec.yaml'))
-library_version = pubspec['version'].gsub('+', '-')
+dart_package_version = pubspec['version'].gsub('+', '-')
 
 Pod::Spec.new do |s|
   s.name             = 'ably_flutter'
-  s.version          = library_version
+  s.version          = dart_package_version
   s.summary          = 'Ably Cocoa platform support for our Flutter plugin.'
   s.homepage         = 'https://www.ably.com/'
   s.license          = 'Apache 2.0'
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
-    'GCC_PREPROCESSOR_DEFINITIONS' => "LIBRARY_VERSION=\\@\\\"#{library_version}\\\""
+    'GCC_PREPROCESSOR_DEFINITIONS' => "DART_PACKAGE_VERSION=\\@\\\"#{dart_package_version}\\\""
   }
   s.swift_version = '5.0'
 end
