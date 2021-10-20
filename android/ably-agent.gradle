@@ -1,15 +1,13 @@
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-String libraryVersion = ""
-File pubspec = new File(project.projectDir.parentFile,  'pubspec.yaml')
-
-if (pubspec.exists()) {
-    String yaml = pubspec.text
-    // Using \s*['|"]?([^\n|'|"]*)['|"]? to extract version number.
-    Matcher versionMatcher = Pattern.compile("^version:\\s*['|\"]?([^\\n|'|\"]*)['|\"]?\$", Pattern.MULTILINE).matcher(yaml)
-    if (versionMatcher.find()) libraryVersion = versionMatcher.group(1).replaceAll("\\+", "-")
+String libraryVersion
+String yaml = new File(project.projectDir.parentFile,  'pubspec.yaml').text
+Matcher versionMatcher = Pattern.compile("^version:\\s*['|\"]?([^\\n|'\"]*)['|\"]?\$", Pattern.MULTILINE).matcher(yaml)
+if (versionMatcher.find()) {
+    libraryVersion = versionMatcher.group(1)
 }
+
 
 android {
     defaultConfig {
