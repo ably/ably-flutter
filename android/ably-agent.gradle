@@ -11,6 +11,6 @@ if (versionMatcher.find()) {
 
 android {
     defaultConfig {
-        buildConfigField 'String', 'DART_PACKAGE_VERSION', "\"${dartPackageVersion}\""
+        buildConfigField 'String', 'FLUTTER_PACKAGE_PLUGIN_VERSION', "\"${dartPackageVersion}\""
     }
 }
