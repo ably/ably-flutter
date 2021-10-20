@@ -18,7 +18,6 @@ PODS:
   - Toast (4.0.0)
 
 DEPENDENCIES:
-  - Ably (from `/Users/zen/repos/ably/ably-cocoa`)
   - ably_flutter (from `.symlinks/plugins/ably_flutter/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
@@ -27,13 +26,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Ably
     - AblyDeltaCodec
     - msgpack
     - Toast
 
 EXTERNAL SOURCES:
-  Ably:
-    :path: "/Users/zen/repos/ably/ably-cocoa"
   ably_flutter:
     :path: ".symlinks/plugins/ably_flutter/ios"
   device_info_plus:
@@ -56,6 +54,6 @@ SPEC CHECKSUMS:
   msgpack: c85f6251873059738472ae136951cec5f30f3251
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 12fc496d05e3edce1edab81c94842b2861090e5a
+PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
 COCOAPODS: 1.10.2
