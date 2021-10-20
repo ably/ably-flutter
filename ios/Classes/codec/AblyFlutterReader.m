@@ -144,6 +144,8 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
     // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
+
+    [o addAgent:@"ably-flutter" version: LIBRARY_VERSION];
     
     AblyFlutterClientOptions *const co = [AblyFlutterClientOptions new];
     ON_VALUE(^(const id value) {
