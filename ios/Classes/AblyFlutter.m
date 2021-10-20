@@ -131,9 +131,8 @@
         [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
     
-    // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
-    // dispatch_assert_queue(dispatch_get_main_queue());
-    
+    dispatch_assert_queue(dispatch_get_main_queue());
+
     // This is contrived for now but the point is that we can introduce a clean,
     // asynchronous close via a background queue here if required.
     dispatch_async(dispatch_get_main_queue(), ^{
