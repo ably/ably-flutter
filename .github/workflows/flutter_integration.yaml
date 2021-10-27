@@ -12,24 +12,16 @@ jobs:
   ios:
     strategy:
       matrix:
-        device:
+        device: # Device names must be shown in `xcrun simctl list devices`
           - 'iPhone 12'  # we are not specifying the iOS version as it tends to change
       fail-fast: false
     runs-on: 'macos-11'
     steps:
       - name: 'List Simulators'
-        run: 'xcrun instruments -s'
+        run: 'xcrun simctl list devices'
 
       - name: 'Start Simulator'
-        run: |
-          # grep, extract trim `[` and `]` and pick first result, in case there are many
-               UUID=$(
-               xcrun instruments -s |
-               grep "${{ matrix.device }}" |   # Grep device(s) - can expect more than one
-               grep -Eo -m1 "\[.*\]" |         # Extract device ID of the first result
-               sed -e 's/^\[//' -e 's/\]$//'   # Trimming the square brackets surrounding UUID
-               )
-               xcrun simctl boot "${UUID:?No Simulator with this name found}"
+        run: xcrun simctl boot "${{ matrix.device }}"
 
       - uses: actions/checkout@v2
 
