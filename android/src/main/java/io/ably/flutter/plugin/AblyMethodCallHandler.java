@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
@@ -34,10 +36,12 @@ import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
+import io.ably.lib.util.Crypto;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
+  private final CipherParamsStorage cipherParamsStorage;
   private Context applicationContext;
 
   public interface HotRestartCallback {
@@ -52,10 +56,14 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
-  public AblyMethodCallHandler(final MethodChannel channel, final HotRestartCallback hotRestartCallback, final Context applicationContext) {
+  public AblyMethodCallHandler(final MethodChannel channel,
+                               final HotRestartCallback hotRestartCallback,
+                               final Context applicationContext,
+                               final CipherParamsStorage cipherParamsStorage) {
     this.channel = channel;
     this.applicationContext = applicationContext;
     this.hotRestartCallback = hotRestartCallback;
+    this.cipherParamsStorage = cipherParamsStorage;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -102,6 +110,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     // paginated results
     _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
     _map.put(PlatformConstants.PlatformMethod.firstPage, this::getFirstPage);
+
+    // Encryption
+    _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
   }
 
   // MethodChannel.Result wrapper that responds on the platform thread.
@@ -240,6 +251,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final Map<String, Object> map = messageData.message;
       final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
       final ChannelOptions options = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
+      final Integer cipherParamsHandle = (Integer) map.get(PlatformConstants.TxRestChannelOptions.cipherParams);
+      if (cipherParamsHandle != null) {
+        options.cipherParams = cipherParamsStorage.from(cipherParamsHandle);
+      }
       try {
         ablyLibrary.getRest(messageData.handle).channels.get(channelName, options);
       } catch (AblyException ae) {
@@ -553,6 +568,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       try {
         final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
         final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
+        final Integer cipherParamsHandle = (Integer) ablyMessage.message.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams);
+        if (cipherParamsHandle != null) {
+          channelOptions.cipherParams = cipherParamsStorage.from(cipherParamsHandle);
+        }
         ablyLibrary
             .getRealtime(ablyMessage.handle)
             .channels
@@ -749,6 +768,29 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<AblyFlutterMessage<Integer>> message = (AblyFlutterMessage<AblyFlutterMessage<Integer>>) call.arguments;
     Integer pageHandle = message.message.message;
     _ably.getPaginatedResult(pageHandle).first(this.paginatedResponseHandler(result, pageHandle));
+  }
+
+  private void cryptoGetParams(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final Map<String, Object> message = (Map<String, Object>) call.arguments;
+    final String algorithm = (String) message.get(PlatformConstants.TxCryptoGetParams.algorithm);
+    final Integer keyLength = (Integer) message.get(PlatformConstants.TxCryptoGetParams.keyLength);
+
+    final byte[] key = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.key);
+    final byte[] initializationVector = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.initializationVector);
+
+    Crypto.CipherParams params;
+    try {
+      if (initializationVector != null) {
+        params = Crypto.getParams(algorithm, key, initializationVector);
+      } else if (key != null) {
+        params = Crypto.getParams(algorithm, key);
+      } else {
+        params = Crypto.getParams(algorithm, keyLength);
+      }
+      result.success(cipherParamsStorage.getHandle(params));
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
   }
 
   // Extracts the message from an AblyFlutterMessage.

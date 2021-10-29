@@ -9,6 +9,7 @@ import 'constants.dart';
 import 'op_state.dart';
 import 'push_notifications/push_notification_handlers.dart';
 import 'push_notifications/push_notification_service.dart';
+import 'ui/message_encryption/message_encryption_sliver.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 import 'ui/utilities.dart';
 
@@ -854,6 +855,7 @@ class _MyAppState extends State<MyApp> {
                       [],
                   releaseRestChannel(),
                   const Divider(),
+                  MessageEncryptionSliver(_realtime),
                   PushNotificationsSliver(
                     _pushNotificationService,
                     isIOSSimulator: isIOSSimulator,

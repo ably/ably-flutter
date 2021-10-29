@@ -11,7 +11,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.ably.flutter.plugin.util.Consumer;
 import io.ably.lib.push.LocalDevice;
 import io.ably.lib.push.Push;
@@ -41,9 +41,9 @@ import io.ably.lib.types.DeltaExtras;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
-import io.ably.lib.types.PaginatedResult;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.util.Crypto.CipherParams;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
@@ -359,7 +359,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams);
     try {
       return createChannelOptions(cipher);
     } catch (AblyException e) {
@@ -370,7 +370,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams);
 
     ChannelOptions options;
     try {

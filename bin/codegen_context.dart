@@ -143,6 +143,9 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Paginated results
   {'name': 'nextPage', 'value': 'nextPage'},
   {'name': 'firstPage', 'value': 'firstPage'},
+
+  // Encryption
+  {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
 ];
 
 const List<Map<String, dynamic>> _objects = [
@@ -233,15 +236,15 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>['cipher']
+    'properties': <String>['cipherParams']
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>['cipher', 'params', 'modes', 'cipherParams']
+    'properties': <String>['params', 'modes', 'cipherParams']
   },
   {
     'name': 'CipherParams',
-    'properties': <String>['algorithm', 'keyLength', 'key', 'mode']
+    'properties': <String>['handle']
   },
   {
     'name': 'TokenDetails',
@@ -485,6 +488,10 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'Notification',
     'properties': ['title', 'body']
+  },
+  {
+    'name': 'CryptoGetParams',
+    'properties': ['algorithm', 'key', 'initializationVector', 'keyLength']
   }
 ];
 

@@ -51,4 +51,27 @@ class Platform {
       }
     }
   }
+
+  /**
+   * Call a platform method which always provides a result.
+   */
+  static Future<T> invokePlatformMethodNonNull<T>(String method,
+      [Object? arguments]) async {
+    await _initialize();
+    try {
+      final result = await methodChannel.invokeMethod<T>(method, arguments);
+      if (result == null) {
+        throw AblyException('invokePlatformMethodNonNull("$method") platform '
+            'method unexpectedly returned a null value.');
+      } else {
+        return result;
+      }
+    } on PlatformException catch (pe) {
+      if (pe.details is ErrorInfo) {
+        throw AblyException.fromPlatformException(pe);
+      } else {
+        rethrow;
+      }
+    }
+  }
 }

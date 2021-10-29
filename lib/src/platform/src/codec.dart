@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../authentication/authentication.dart';
+import '../../crypto/src/cipher_params_native.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../message/message.dart';
@@ -78,8 +79,6 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimeChannelOptions,
         null,
       ),
-      CodecTypes.cipherParams:
-          _CodecPair<CipherParams>(_encodeCipherParams, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -159,7 +158,7 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.messageData;
     } else if (value is RealtimeChannelOptions) {
       return CodecTypes.realtimeChannelOptions;
-    } else if (value is ChannelOptions) {
+    } else if (value is RestChannelOptions) {
       return CodecTypes.restChannelOptions;
     } else if (value is MessageExtras) {
       return CodecTypes.messageExtras;
@@ -320,7 +319,10 @@ class Codec extends StandardMessageCodec {
   /// returns null if [v] is null
   Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
+    if (v.cipher != null) {
+      _writeToJson(jsonMap, TxRestChannelOptions.cipherParams,
+          CipherParamsNative.getHandleFromCipherParams(v.cipher!));
+    }
     return jsonMap;
   }
 
@@ -343,22 +345,16 @@ class Codec extends StandardMessageCodec {
   Map<String, dynamic> _encodeRealtimeChannelOptions(
       final RealtimeChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRealtimeChannelOptions.cipher, v.cipher);
+    if (v.cipher != null) {
+      _writeToJson(jsonMap, TxRealtimeChannelOptions.cipherParams,
+          CipherParamsNative.getHandleFromCipherParams(v.cipher!));
+    }
     _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
     _writeToJson(
       jsonMap,
       TxRealtimeChannelOptions.modes,
       v.modes?.map(_encodeChannelMode).toList(),
     );
-    return jsonMap;
-  }
-
-  Map<String, dynamic> _encodeCipherParams(final CipherParams params) {
-    final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxCipherParams.algorithm, params.algorithm);
-    _writeToJson(jsonMap, TxCipherParams.keyLength, params.keyLength);
-    _writeToJson(jsonMap, TxCipherParams.key, params.key);
-    _writeToJson(jsonMap, TxCipherParams.mode, params.mode);
     return jsonMap;
   }
 

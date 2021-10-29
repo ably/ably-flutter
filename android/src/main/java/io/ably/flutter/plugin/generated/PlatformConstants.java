@@ -90,6 +90,7 @@ final public class PlatformConstants {
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
+        public static final String cryptoGetParams = "cryptoGetParams";
     }
 
     static final public class TxTransportKeys {
@@ -174,21 +175,17 @@ final public class PlatformConstants {
     }
 
     static final public class TxRestChannelOptions {
-        public static final String cipher = "cipher";
+        public static final String cipherParams = "cipherParams";
     }
 
     static final public class TxRealtimeChannelOptions {
-        public static final String cipher = "cipher";
         public static final String params = "params";
         public static final String modes = "modes";
         public static final String cipherParams = "cipherParams";
     }
 
     static final public class TxCipherParams {
-        public static final String algorithm = "algorithm";
-        public static final String keyLength = "keyLength";
-        public static final String key = "key";
-        public static final String mode = "mode";
+        public static final String handle = "handle";
     }
 
     static final public class TxTokenDetails {
@@ -423,6 +420,13 @@ final public class PlatformConstants {
     static final public class TxNotification {
         public static final String title = "title";
         public static final String body = "body";
+    }
+
+    static final public class TxCryptoGetParams {
+        public static final String algorithm = "algorithm";
+        public static final String key = "key";
+        public static final String initializationVector = "initializationVector";
+        public static final String keyLength = "keyLength";
     }
 
 }

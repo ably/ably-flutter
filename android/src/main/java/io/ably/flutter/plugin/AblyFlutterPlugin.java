@@ -10,10 +10,13 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import javax.crypto.Cipher;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.RemoteMessageCallback;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -66,7 +69,8 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
             // Called when `registerAbly` platform method is called: when app restarts or
             // hot restarts, but not hot-reload.
             streamsChannel::reset,
-            applicationContext
+            applicationContext,
+            new CipherParamsStorage()
         );
         BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);

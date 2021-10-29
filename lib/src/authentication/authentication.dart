@@ -1,6 +1,6 @@
+export '../crypto/src/cipher_params.dart';
 export 'src/auth.dart';
 export 'src/auth_options.dart';
-export 'src/cipher_params.dart';
 export 'src/client_options.dart';
 export 'src/http_auth_type.dart';
 export 'src/token_details.dart';
