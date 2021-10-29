@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
