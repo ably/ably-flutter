@@ -642,13 +642,18 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
-  TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) => TokenParams()
-    ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
-    ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
-    ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
-    ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-        _readFromJson<int>(jsonMap, TxTokenParams.timestamp)!)
-    ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+  TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
+    final timestamp = _readFromJson<int>(jsonMap, TxTokenParams.timestamp);
+    final params = TokenParams()
+      ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
+      ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
+      ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
+      ..timestamp = (timestamp != null)
+          ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+          : null
+      ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+    return params;
+  }
 
   /// Decodes value [jsonMap] to [AblyMessage]
   /// returns null if [jsonMap] is null
