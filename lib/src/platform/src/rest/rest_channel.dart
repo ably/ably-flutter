@@ -23,7 +23,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
 
   late RestPresence _presence;
 
-  /// instantiates with [Rest], [name] and [ChannelOptions]
+  /// instantiates with [Rest], [name] and [RestChannelOptions]
   RestChannel(this.rest, this.push, this.name) {
     _presence = RestPresence(this);
   }
@@ -155,7 +155,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
   }
 
   @override
-  Future<void> setOptions(ChannelOptions options) =>
+  Future<void> setOptions(RestChannelOptions options) =>
       invoke(PlatformMethod.setRealtimeChannelOptions, {
         TxTransportKeys.channelName: name,
         TxTransportKeys.options: options,

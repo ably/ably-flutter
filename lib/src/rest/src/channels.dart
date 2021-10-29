@@ -51,7 +51,7 @@ abstract class RestChannelInterface {
   /// stored channel options, then indicates success
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
-  Future<void> setOptions(ChannelOptions options);
+  Future<void> setOptions(RestChannelOptions options);
 }
 
 /// A collection of rest channel objects
