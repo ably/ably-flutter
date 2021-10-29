@@ -197,7 +197,8 @@ static AblyCodecDecoder readRestChannelOptions = ^ARTChannelOptions*(NSDictionar
 };
 
 static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*(NSDictionary *const dictionary) {
-    ARTRealtimeChannelOptions* o = [[ARTRealtimeChannelOptions alloc] init];
+    ARTRealtimeChannelOptions *const o = [ARTRealtimeChannelOptions new];
+    READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipher);
 
     READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
     ON_VALUE(^(const id value) {
