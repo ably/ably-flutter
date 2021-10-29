@@ -1,5 +1,7 @@
 package io.ably.flutter.plugin;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.messaging.RemoteMessage;
 import androidx.annotation.Nullable;
 

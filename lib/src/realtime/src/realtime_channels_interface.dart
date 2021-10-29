@@ -1,6 +1,5 @@
-import '../../common/src/channels.dart';
-import 'realtime.dart';
-import 'realtime_channel_interface.dart';
+import '../../common/common.dart';
+import '../realtime.dart';
 
 /// A collection of realtime channel objects
 ///

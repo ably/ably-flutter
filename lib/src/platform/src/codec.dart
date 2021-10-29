@@ -73,7 +73,7 @@ class Codec extends StandardMessageCodec {
       CodecTypes.tokenRequest:
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
       CodecTypes.restChannelOptions:
-          _CodecPair<ChannelOptions>(_encodeRestChannelOptions, null),
+          _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
         _encodeRealtimeChannelOptions,
         null,
@@ -316,9 +316,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// Encodes [ChannelOptions] to a Map
+  /// Encodes [RestChannelOptions] to a Map
   /// returns null if [v] is null
-  Map<String, dynamic> _encodeRestChannelOptions(final ChannelOptions v) {
+  Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
     return jsonMap;

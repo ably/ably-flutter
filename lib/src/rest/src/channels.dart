@@ -3,7 +3,7 @@ import '../../common/src/channels.dart';
 import '../../message/src/message.dart';
 import '../../push_notifications/push_notifications.dart';
 import '../rest.dart';
-import 'channel_options.dart';
+import 'rest_channel_options.dart';
 import 'rest.dart';
 
 /// A named channel through with rest client can interact with ably service.
@@ -51,7 +51,7 @@ abstract class RestChannelInterface {
   /// stored channel options, then indicates success
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
-  Future<void> setOptions(ChannelOptions options);
+  Future<void> setOptions(RestChannelOptions options);
 }
 
 /// A collection of rest channel objects

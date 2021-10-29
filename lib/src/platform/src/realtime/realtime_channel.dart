@@ -13,6 +13,8 @@ import '../../../generated/platform_constants.dart';
 import '../../../message/message.dart';
 import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
+import '../../../realtime/src/realtime_channel_options.dart';
+import '../../../realtime/src/realtime_channels_interface.dart';
 import '../../platform.dart';
 import '../../platform_internal.dart';
 import 'publish_queue_item.dart';

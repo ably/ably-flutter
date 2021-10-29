@@ -1,10 +1,12 @@
-import '../../rest/src/channel_options.dart';
-import 'channel_mode.dart';
+import '../../authentication/authentication.dart';
+
+import '../../rest/rest.dart';
+import '../realtime.dart';
 
 /// options provided when instantiating a realtime channel
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
-class RealtimeChannelOptions extends ChannelOptions {
+class RealtimeChannelOptions extends RestChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
   final Map<String, String>? params;
 
@@ -12,6 +14,6 @@ class RealtimeChannelOptions extends ChannelOptions {
   final List<ChannelMode>? modes;
 
   /// create channel options with a cipher, params and modes
-  RealtimeChannelOptions({this.params, this.modes, Object? cipher})
+  RealtimeChannelOptions({this.params, this.modes, CipherParams? cipher})
       : super(cipher: cipher);
 }
