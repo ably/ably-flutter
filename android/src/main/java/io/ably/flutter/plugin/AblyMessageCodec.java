@@ -357,11 +357,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    return new ChannelOptions();
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+    try {
+      return new ChannelOptions();
+    } catch (AblyException e) {
+      System.out.println("Exception while decoding RestChannelOptions: " + e);
+      return null;
+    }
   }
 
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
+    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
+
     ChannelOptions options = new ChannelOptions();
     options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
     final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
