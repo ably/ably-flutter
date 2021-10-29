@@ -146,7 +146,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     // track @ https://github.com/ably/ably-flutter/issues/14
 
     [o addAgent:@"ably-flutter" version: FLUTTER_PACKAGE_PLUGIN_VERSION];
-    
+
     AblyFlutterClientOptions *const co = [AblyFlutterClientOptions new];
     ON_VALUE(^(const id value) {
         [co initWithClientOptions: o hasAuthCallback: value];
@@ -197,8 +197,21 @@ static AblyCodecDecoder readRestChannelOptions = ^ARTChannelOptions*(NSDictionar
 };
 
 static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*(NSDictionary *const dictionary) {
-    ARTRealtimeChannelOptions *const o = [ARTRealtimeChannelOptions new];
-    READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipher);
+    __block ARTRealtimeChannelOptions* o;
+
+    NSObject *const cipher = dictionary[TxRealtimeChannelOptions_cipher];
+    if (cipher == nil) {
+        o = [ARTRealtimeChannelOptions new];
+    } else if ([cipher class] == [NSDictionary class]) {
+        NSDictionary *const cipherDictionary = (NSDictionary *const) cipher;
+        ARTCipherParams *const cipherParams = [[ARTCipherParams alloc] initWithAlgorithm: cipherDictionary[TxCipherParams_algorithm] key:cipherDictionary[TxCipherParams_key]];
+        o = [[ARTRealtimeChannelOptions alloc] initWithCipher:cipherParams];
+    } else if ([cipher class] == [NSString class]) {
+        NSString *const key = (NSString *const) cipher;
+        o = [[ARTRealtimeChannelOptions alloc] initWithCipherKey: (NSString *) key];
+    } else {
+        [NSException raise:NSInvalidArgumentException format:@"Cipher must be ARTCipherParams or key in the form of a NSString"];
+    }
 
     READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
     ON_VALUE(^(const id value) {

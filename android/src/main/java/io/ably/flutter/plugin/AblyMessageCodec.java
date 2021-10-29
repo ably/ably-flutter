@@ -359,7 +359,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
     try {
-      return new ChannelOptions();
+      return createChannelOptions(cipher);
     } catch (AblyException e) {
       System.out.println("Exception while decoding RestChannelOptions: " + e);
       return null;
@@ -370,7 +370,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
 
-    ChannelOptions options = new ChannelOptions();
+    ChannelOptions options;
+    try {
+      options = createChannelOptions(cipher);
+    } catch (AblyException e) {
+      System.out.println("Exception while decoding RealtimeChannelOptions: " + e);
+      return null;
+    }
     options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
     final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
     if (modes != null && modes.size() > 0) {
@@ -378,6 +384,25 @@ public class AblyMessageCodec extends StandardMessageCodec {
     }
 
     return options;
+  }
+
+  private ChannelOptions createChannelOptions(@Nullable Object cipher) throws AblyException {
+    if (cipher == null) return new ChannelOptions();
+    if (cipher instanceof String) {
+      try {
+        return ChannelOptions.withCipherKey((String) cipher);
+      } catch (AblyException ae) {
+        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as String: " + ae, 400, 40000));
+      }
+    } else if (cipher instanceof byte[]) {
+      try {
+        return ChannelOptions.withCipherKey((byte[]) cipher);
+      } catch (AblyException ae) {
+        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as byte array: " + ae, 400, 40000));
+      }
+    } else {
+      throw AblyException.fromErrorInfo(new ErrorInfo("CipherKey must either be a String or a Byte Array.", 400, 40000));
+    }
   }
 
   private ChannelMode[] createChannelModesArray(ArrayList<String> modesString) {
