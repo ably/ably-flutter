@@ -1,3 +1,4 @@
+import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
