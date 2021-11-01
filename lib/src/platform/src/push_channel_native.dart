@@ -15,7 +15,7 @@ class PushChannelNative extends PlatformObject implements PushChannel {
   final RestInterface? rest;
 
   /// A realtime client used platform side to invoke push notification methods
-  final RealtimeInterface? realtime;
+  final Realtime? realtime;
 
   /// Pass the channel name and an Ably realtime or rest client.
   PushChannelNative(this._name, {this.rest, this.realtime}) {

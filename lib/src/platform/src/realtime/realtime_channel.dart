@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:ably_flutter/src/common/common.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
@@ -11,7 +12,6 @@ import '../../../message/message.dart';
 import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
 import '../../../realtime/src/realtime_channel_options.dart';
-import '../../../realtime/src/realtime_channels_interface.dart';
 import '../../platform.dart';
 import '../../platform_internal.dart';
 
@@ -19,7 +19,7 @@ import '../../platform_internal.dart';
 class RealtimeChannel extends PlatformObject
     implements RealtimeChannelInterface {
   @override
-  final RealtimeInterface realtime;
+  final Realtime realtime;
 
   @override
   final String name;
@@ -215,18 +215,18 @@ class RealtimeChannel extends PlatformObject
 /// A collection of realtime channel objects
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTS1
-class RealtimeChannels
-    extends RealtimeChannelsInterface<RealtimeChannel> {
+class RealtimeChannels extends Channels<RealtimeChannel> {
+  /// instance of ably realtime client
+  Realtime realtime;
+
   /// instantiates with the ably [Realtime] instance
-  RealtimeChannels(Realtime realtime) : super(realtime);
+  RealtimeChannels(this.realtime);
 
   @override
   @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
-  @override
   void release(String name) {
-    super.release(name);
     (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
   }
 }

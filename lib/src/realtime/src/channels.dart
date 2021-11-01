@@ -5,13 +5,13 @@ import '../../common/common.dart';
 import '../../common/src/event_emitter.dart';
 import '../../error/src/error_info.dart';
 import '../../message/src/message.dart';
+import '../../platform/platform.dart';
 import '../../push_notifications/src/push_channel.dart';
 import '../realtime.dart';
 import 'channel_event.dart';
 import 'channel_state.dart';
 import 'channel_state_event.dart';
 import 'presence.dart';
-import 'realtime.dart';
 import 'realtime_channel_options.dart';
 
 /// A named channel through with realtime client can interact with ably service.
@@ -19,13 +19,13 @@ import 'realtime_channel_options.dart';
 /// The same channel can be interacted with relevant APIs via rest channel.
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
-abstract class RealtimeChannelInterface
+abstract class RealtimeChannelInt-erface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
   RealtimeChannelInterface(this.realtime, this.name, this.push);
 
   /// realtime client instance
-  final RealtimeInterface realtime;
+  final Realtime realtime;
 
   /// name of the channel
   final String name;
