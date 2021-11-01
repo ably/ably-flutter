@@ -21,7 +21,7 @@ Map<int?, Realtime> get realtimeInstances =>
 
 /// Ably's Realtime client
 class Realtime extends PlatformObject
-    implements RealtimeInterface<RealtimePlatformChannels> {
+    implements RealtimeInterface<RealtimeChannels> {
   /// instantiates with [ClientOptions] and a String [key]
   ///
   /// creates client options from key if [key] is provided
@@ -34,7 +34,7 @@ class Realtime extends PlatformObject
         options = options ?? ClientOptions.fromKey(key!),
         super() {
     _connection = Connection(this);
-    _channels = RealtimePlatformChannels(this);
+    _channels = RealtimeChannels(this);
     push = PushNative(realtime: this);
   }
 
@@ -63,10 +63,10 @@ class Realtime extends PlatformObject
   @override
   late Push push;
 
-  late RealtimePlatformChannels _channels;
+  late RealtimeChannels _channels;
 
   @override
-  RealtimePlatformChannels get channels => _channels;
+  RealtimeChannels get channels => _channels;
 
   @override
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
