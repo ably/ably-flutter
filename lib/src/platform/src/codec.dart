@@ -1,4 +1,3 @@
-import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +8,7 @@ import '../../message/message.dart';
 import '../../push_notifications/push_notifications.dart';
 import '../../push_notifications/src/local_device.dart';
 import '../../realtime/realtime.dart';
+import '../../realtime/src/realtime_channel_options.dart';
 import '../../rest/rest.dart';
 import '../platform.dart';
 
