@@ -412,8 +412,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return modes;
   }
 
-  private ChannelMode decodeChannelOptionsMode(String string) {
-    switch (string) {
+  private ChannelMode decodeChannelOptionsMode(String mode) {
+    switch (mode) {
       case PlatformConstants.TxEnumConstants.presence:
         return ChannelMode.presence;
       case PlatformConstants.TxEnumConstants.publish:
