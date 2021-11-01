@@ -9,6 +9,7 @@ import '../../../generated/platform_constants.dart';
 import '../../../message/message.dart';
 import '../../../rest/rest.dart';
 import '../../platform.dart';
+import 'publish_queue_item.dart';
 
 /// Plugin based implementation of Rest channel
 class RestChannel extends PlatformObject implements RestChannelInterface {
@@ -53,7 +54,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     );
   }
 
-  final _publishQueue = Queue<_PublishQueueItem>();
+  final _publishQueue = Queue<PublishQueueItem>();
   Completer<void>? _authCallbackCompleter;
 
   @override
@@ -66,7 +67,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
     unawaited(_publishInternal());
     return queueItem.completer.future;
@@ -160,13 +161,4 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         TxTransportKeys.channelName: name,
         TxTransportKeys.options: options,
       });
-}
-
-/// An item for used to enqueue a message to be published after an ongoing
-/// authCallback is completed
-class _PublishQueueItem {
-  final List<Message> messages;
-  final Completer<void> completer;
-
-  _PublishQueueItem(this.completer, this.messages);
 }
