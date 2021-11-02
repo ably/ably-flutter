@@ -92,7 +92,7 @@ class PresenceMessage {
   ///  RSL6 and RLS6b as mentioned in TP4
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
-    ChannelOptions? channelOptions,
+    RestChannelOptions? channelOptions,
   ])  : id = jsonObject['id'] as String?,
         action = PresenceAction.values.firstWhere((e) =>
             e.toString().split('.')[1] == jsonObject['action'] as String?),
@@ -114,7 +114,7 @@ class PresenceMessage {
   /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-    ChannelOptions? channelOptions,
+    RestChannelOptions? channelOptions,
   ]) =>
       jsonArray
           .map((jsonObject) => PresenceMessage.fromEncoded(
