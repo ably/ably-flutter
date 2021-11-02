@@ -15,15 +15,15 @@ class Crypto {
   /// [RealtimeChannelOptions] to specify encryption.
   ///
   /// params:
-  /// key: String or Uint8List
-  /// algorithm: A encryption specification which specifies a symmetric key algorithm
-  /// initializationVector: Cryptographic primitive used to provide initial state.
+  ///  key: String of a base64 encoded key or a Uint8List containing raw bytes for the key.
+  ///  algorithm: A encryption specification which specifies a symmetric key algorithm
+  ///  initializationVector: Cryptographic primitive used to provide initial state.
   static Future<CipherParams> getParams({
-    required dynamic key,
+    required key,
     String algorithm = DEFAULT_ALGORITHM,
     Uint8List? initializationVector,
   }) async {
-    if (key != null && key! is String && key! is Uint8List) {
+    if (key! is String && key! is Uint8List) {
       throw AblyException('A key must either be a String or a Uint8List.');
     }
 
