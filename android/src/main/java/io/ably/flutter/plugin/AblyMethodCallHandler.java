@@ -22,6 +22,7 @@ import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.flutter.plugin.util.CipherParamsStorage;
+import io.ably.lib.platform.Platform;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
@@ -113,6 +114,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     // Encryption
     _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
+    _map.put(PlatformConstants.PlatformMethod.channelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
   }
 
   // MethodChannel.Result wrapper that responds on the platform thread.
@@ -250,13 +252,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
       final Map<String, Object> map = messageData.message;
       final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
-      final ChannelOptions options = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
-      final Integer cipherParamsHandle = (Integer) map.get(PlatformConstants.TxRestChannelOptions.cipherParams);
-      if (cipherParamsHandle != null) {
-        options.cipherParams = cipherParamsStorage.from(cipherParamsHandle);
-      }
+      final ChannelOptions channelOptions = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
       try {
-        ablyLibrary.getRest(messageData.handle).channels.get(channelName, options);
+        ablyLibrary.getRest(messageData.handle).channels.get(channelName, channelOptions);
       } catch (AblyException ae) {
         handleAblyException(result, ae);
       }
@@ -568,10 +566,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       try {
         final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
         final ChannelOptions channelOptions = (ChannelOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
-        final Integer cipherParamsHandle = (Integer) ablyMessage.message.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams);
-        if (cipherParamsHandle != null) {
-          channelOptions.cipherParams = cipherParamsStorage.from(cipherParamsHandle);
-        }
         ablyLibrary
             .getRealtime(ablyMessage.handle)
             .channels
@@ -790,6 +784,25 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       result.success(cipherParamsStorage.getHandle(params));
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void channelOptionsWithCipherKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final Object cipherKey = call.arguments;
+    if (cipherKey instanceof String) {
+      try {
+        result.success(ChannelOptions.withCipherKey((String) cipherKey));
+      } catch (AblyException ae) {
+        result.error("40000", String.format("Exception while decoding RealtimeChannelOptions as String: %s", ae), ae);
+      }
+    } else if (cipherKey instanceof byte[]) {
+      try {
+        result.success(ChannelOptions.withCipherKey((byte[]) cipherKey));
+      } catch (AblyException ae) {
+        result.error("40000", String.format("Exception while decoding RealtimeChannelOptions as byte array: %s", ae), ae);
+      }
+    } else {
+      result.error("40000", "CipherKey must either be a String or a Byte Array.", null);
     }
   }
 

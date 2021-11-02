@@ -11,24 +11,31 @@ class MessageEncryptionSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Message Encryption'),
-        Text('Realtime client is ${_realtime}'),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 16),
+          child: Text(
+            'Message Encryption',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Text('Realtime client is ${_realtime == null ? "null. Create one. 🚨" : "instantiated. ✅"}'),
         TextButton(
           child: Text('Connect and listen to channel'),
           onPressed: () async {
             final params = await ably.Crypto.getParams();
             final channelOptions =
                 ably.RealtimeChannelOptions(cipher: params);
-            final channel = _realtime!.channels.get("encrypted");
-            channel.setOptions(channelOptions);
-            channel.on().listen((event) {
+            _channel = _realtime!.channels.get("encrypted");
+            _channel!.setOptions(channelOptions);
+            _channel!.on().listen((event) {
               print("on().listen: ${event}");
             });
-            channel.subscribe().listen((event) {
+            _channel!.subscribe().listen((event) {
               print("subscribe().listen: ${event}");
             });
-            channel.attach();
+            _channel!.attach();
           },
         ),
         TextButton(
@@ -39,7 +46,7 @@ class MessageEncryptionSliver extends StatelessWidget {
                     name: "Hello",
                     data: {"payload": "this should be encrypted"}));
           },
-        )
+        ),
       ],
     );
   }

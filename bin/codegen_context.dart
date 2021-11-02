@@ -146,6 +146,7 @@ const List<Map<String, dynamic>> _platformMethods = [
 
   // Encryption
   {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
+  {'name': 'channelOptionsWithCipherKey', 'value': 'channelOptionsWithCipherKey'},
 ];
 
 const List<Map<String, dynamic>> _objects = [
@@ -236,11 +237,11 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>['cipherParams']
+    'properties': <String>['cipherParamsHandle']
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>['params', 'modes', 'cipherParams']
+    'properties': <String>['params', 'modes', 'cipherParamsHandle']
   },
   {
     'name': 'CipherParams',

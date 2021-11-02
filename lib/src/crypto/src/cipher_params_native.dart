@@ -8,4 +8,8 @@ class CipherParamsNative implements CipherParams {
   static getHandleFromCipherParams(CipherParams cipherParams) {
     return (cipherParams as CipherParamsNative).handle;
   }
+
+  /// Explicitly cast the [CipherParamsNative] to [CipherParams] so users do not
+  /// see implementation details (e.g. [handle]).
+  CipherParams toCipherParams() => this;
 }

@@ -29,9 +29,10 @@ class CodecTypes {
   static const int pushChannelSubscription = 148;
   static const int unNotificationSettings = 149;
   static const int remoteMessage = 150;
-  static const int errorInfo = 151;
-  static const int connectionStateChange = 152;
-  static const int channelStateChange = 153;
+  static const int cipherKey = 151;
+  static const int errorInfo = 152;
+  static const int connectionStateChange = 153;
+  static const int channelStateChange = 154;
 }
 
 class PlatformMethod {
@@ -94,6 +95,8 @@ class PlatformMethod {
   static const String nextPage = 'nextPage';
   static const String firstPage = 'firstPage';
   static const String cryptoGetParams = 'cryptoGetParams';
+  static const String channelOptionsWithCipherKey =
+      'channelOptionsWithCipherKey';
 }
 
 class TxTransportKeys {
@@ -178,13 +181,13 @@ class TxClientOptions {
 }
 
 class TxRestChannelOptions {
-  static const String cipherParams = 'cipherParams';
+  static const String cipherParamsHandle = 'cipherParamsHandle';
 }
 
 class TxRealtimeChannelOptions {
   static const String params = 'params';
   static const String modes = 'modes';
-  static const String cipherParams = 'cipherParams';
+  static const String cipherParamsHandle = 'cipherParamsHandle';
 }
 
 class TxCipherParams {

@@ -1,4 +1,9 @@
-import 'package:ably_flutter/src/authentication/authentication.dart';
+import 'dart:typed_data';
+
+import '../../authentication/authentication.dart';
+import '../../error/error.dart';
+import '../../generated/platform_constants.dart';
+import '../../platform/platform.dart';
 
 /// options provided when instantiating a channel
 ///
@@ -7,6 +12,18 @@ class RestChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
   final CipherParams? cipher;
 
-  /// create channel options with a cipher
+  static Future<RestChannelOptions> withCipherKey(cipherKey) async {
+    if (cipherKey! is String && cipherKey! is Uint8List) {
+      throw AblyException('cipherKey must be a String or Uint8List');
+    }
+
+    final options = await Platform.methodChannel
+        .invokeMethod<RestChannelOptions>(
+            PlatformMethod.channelOptionsWithCipherKey, cipherKey);
+    return options!;
+  }
+
+  /// create channel options with a cipher.
+  /// If a [cipher] is set, messages will be encrypted with the cipher.
   RestChannelOptions({this.cipher});
 }

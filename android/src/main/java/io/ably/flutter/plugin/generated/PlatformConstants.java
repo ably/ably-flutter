@@ -32,9 +32,10 @@ final public class PlatformConstants {
         public static final byte pushChannelSubscription = (byte) 148;
         public static final byte unNotificationSettings = (byte) 149;
         public static final byte remoteMessage = (byte) 150;
-        public static final byte errorInfo = (byte) 151;
-        public static final byte connectionStateChange = (byte) 152;
-        public static final byte channelStateChange = (byte) 153;
+        public static final byte cipherKey = (byte) 151;
+        public static final byte errorInfo = (byte) 152;
+        public static final byte connectionStateChange = (byte) 153;
+        public static final byte channelStateChange = (byte) 154;
     }
 
     static final public class PlatformMethod {
@@ -91,6 +92,7 @@ final public class PlatformConstants {
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
         public static final String cryptoGetParams = "cryptoGetParams";
+        public static final String channelOptionsWithCipherKey = "channelOptionsWithCipherKey";
     }
 
     static final public class TxTransportKeys {
@@ -175,13 +177,13 @@ final public class PlatformConstants {
     }
 
     static final public class TxRestChannelOptions {
-        public static final String cipherParams = "cipherParams";
+        public static final String cipherParamsHandle = "cipherParamsHandle";
     }
 
     static final public class TxRealtimeChannelOptions {
         public static final String params = "params";
         public static final String modes = "modes";
-        public static final String cipherParams = "cipherParams";
+        public static final String cipherParamsHandle = "cipherParamsHandle";
     }
 
     static final public class TxCipherParams {

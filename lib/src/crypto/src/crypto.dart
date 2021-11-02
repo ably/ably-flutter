@@ -9,18 +9,17 @@ import '../../authentication/authentication.dart';
 
 class Crypto {
   static const DEFAULT_ALGORITHM = 'aes';
-  static const DEFAULT_KEY_LENGTH_IN_BITS = 128;
+  static const DEFAULT_KEY_LENGTH_IN_BITS = 256;
   static const DEFAULT_BLOCK_LENGTH_IN_BYTES = 16;
 
-  /**
-   * Gets the CipherParams which can be used to pass
-   *
-   * params:
-   * key: null, String or Uint8List. If a key is unspecified (null), a
-   *   locally generated key will be used.
-   * algorithm: A encryption specification which specifies a symmetric key algorithm
-   * initializationVector: Cryptographic primitive used to provide initial state.
-   */
+  /// Gets the CipherParams which can be used to with [RestChannelOptions] or
+  /// [RealtimeChannelOptions] to specify encryption.
+  ///
+  /// params:
+  /// key: null, String or Uint8List. If a key is unspecified (null), a
+  ///   locally generated key will be used.
+  /// algorithm: A encryption specification which specifies a symmetric key algorithm
+  /// initializationVector: Cryptographic primitive used to provide initial state.
   static Future<CipherParams> getParams({
     dynamic key,
     int keyLength = DEFAULT_KEY_LENGTH_IN_BITS,
@@ -39,7 +38,7 @@ class Crypto {
       TxCryptoGetParams.keyLength: keyLength,
       TxCryptoGetParams.initializationVector: initializationVector
     });
-    return CipherParamsNative(handle: cipherParamsHandle) as CipherParams;
+    return CipherParamsNative(handle: cipherParamsHandle).toCipherParams();
   }
 }
 

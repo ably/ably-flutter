@@ -14,6 +14,7 @@ class RealtimeChannelOptions extends RestChannelOptions {
   final List<ChannelMode>? modes;
 
   /// create channel options with a cipher, params and modes
+  /// If a [cipher] is set, messages will be encrypted with the cipher.
   RealtimeChannelOptions({this.params, this.modes, CipherParams? cipher})
       : super(cipher: cipher);
 }
