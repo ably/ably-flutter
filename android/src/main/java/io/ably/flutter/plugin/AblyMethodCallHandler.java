@@ -37,6 +37,7 @@ import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
+import io.ably.lib.util.Base64Coder;
 import io.ably.lib.util.Crypto;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -767,22 +768,40 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void cryptoGetParams(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final Map<String, Object> message = (Map<String, Object>) call.arguments;
     final String algorithm = (String) message.get(PlatformConstants.TxCryptoGetParams.algorithm);
+    final byte[] keyData = getKeyData(message.get(PlatformConstants.TxCryptoGetParams.key));
+    if (keyData == null) {
+      result.error("40000", "A key must be set for encryption, being either a base64 encoded key, or a byte array.", null);
+      return;
+    }
 
-    // TODO it can be a String or a byte[]
-    final Object key = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.key);
     final byte[] initializationVector = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.initializationVector);
-
     try {
-      if (initializationVector != null && key != null) {
-        result.success(cipherParamsStorage.getHandle(Crypto.getParams(algorithm, key, initializationVector)));
-      } else if (key != null) {
-      result.success(cipherParamsStorage.getHandle(Crypto.getParams(algorithm, key)));
+      if (initializationVector != null) {
+        returnChannelOptions(Crypto.getParams(algorithm, keyData, initializationVector), result);
       } else {
-        result.error("40000", "A key must be set for encryption.", null);
+        returnChannelOptions(Crypto.getParams(algorithm, keyData), result);
       }
     } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
+      result.error("40000", "cryptoGetParams: No algorithm found. " + e, e);
     }
+  }
+
+  private byte[] getKeyData(Object key) {
+    if (key == null) {
+      return null;
+    }
+    if (key instanceof String) {
+      return Base64Coder.decode((String) key);
+    } else if (key instanceof byte[]) {
+      return (byte[]) key;
+    } else {
+      return null;
+    }
+  }
+
+  private void returnChannelOptions(@NonNull Crypto.CipherParams cipherParams, @NonNull MethodChannel.Result result) {
+    final Integer handle = cipherParamsStorage.getHandle(cipherParams);
+    result.success(handle);
   }
 
   private void channelOptionsWithCipherKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
