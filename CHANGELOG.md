@@ -1,5 +1,51 @@
 # Changelog
 
+## [1.2.2](https://github.com/ably/ably-flutter/tree/v1.2.2)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.2-preview.1...v1.2.2)
+
+**Implemented enhancements:**
+
+- Update to latest ably-android version [\#147](https://github.com/ably/ably-flutter/issues/147)
+- Implement Push Notifications listener [\#141](https://github.com/ably/ably-flutter/issues/141)
+- Implement RSC7d \(Ably-Agent header\) [\#100](https://github.com/ably/ably-flutter/issues/100)
+- Push Notifications Device Registration \(activation\) and device subscription [\#107](https://github.com/ably/ably-flutter/issues/107)
+
+**Fixed bugs:**
+
+- Remove timeouts for platform method calls [\#171](https://github.com/ably/ably-flutter/issues/171)
+- Token Authentication with authCallback in Android: `java.lang.Exception: Invalid authCallback response` [\#156](https://github.com/ably/ably-flutter/issues/156)
+- AuthCallback error: `java.lang.Exception: Invalid authCallback response` on Flutter Android [\#121](https://github.com/ably/ably-flutter/issues/121)
+
+**Closed issues:**
+
+- Can not set RealTimeChannelOptions params  [\#182](https://github.com/ably/ably-flutter/issues/182)
+- java lang Invalid authCallback response [\#181](https://github.com/ably/ably-flutter/issues/181)
+- Replace `package:pedantic` with `package:flutter_lints` [\#168](https://github.com/ably/ably-flutter/issues/168)
+- Push Registrations cannot be updated on Android: fails with `No authentication information provided` [\#167](https://github.com/ably/ably-flutter/issues/167)
+- Implement activation/ deactivation/ updating lifecycle method [\#154](https://github.com/ably/ably-flutter/issues/154)
+- Connect to Ably Realtime using socket\_io\_client [\#148](https://github.com/ably/ably-flutter/issues/148)
+- Failing Android build: `The plugin ably_flutter could not be built` URGENT [\#129](https://github.com/ably/ably-flutter/issues/129)
+- Add support for symmetric encryption [\#127](https://github.com/ably/ably-flutter/issues/127)
+- Lint rule to enforce strict raw types [\#85](https://github.com/ably/ably-flutter/issues/85)
+- Add linting rules [\#30](https://github.com/ably/ably-flutter/issues/30)
+
+**Merged pull requests:**
+
+- Fix 2 Channel options bugs [\#191](https://github.com/ably/ably-flutter/pull/191) ([ben-xD](https://github.com/ben-xD))
+- Fix RealtimeChannelOptions to avoid forcing cipher argument [\#190](https://github.com/ably/ably-flutter/pull/190) ([ben-xD](https://github.com/ben-xD))
+- Refactoring: Move classes into separate files [\#189](https://github.com/ably/ably-flutter/pull/189) ([ben-xD](https://github.com/ben-xD))
+- Add ably agent header [\#188](https://github.com/ably/ably-flutter/pull/188) ([ben-xD](https://github.com/ben-xD))
+- Update Ably-cocoa dependency to 1.2.6 [\#186](https://github.com/ably/ably-flutter/pull/186) ([ben-xD](https://github.com/ben-xD))
+- Bug fix: Reactivating devices for Push [\#185](https://github.com/ably/ably-flutter/pull/185) ([ben-xD](https://github.com/ben-xD))
+- Push Notifications documentation enhancement [\#177](https://github.com/ably/ably-flutter/pull/177) ([ben-xD](https://github.com/ben-xD))
+- Handle Push Notifications in Dart, including foreground messages, background messages and notification taps [\#166](https://github.com/ably/ably-flutter/pull/166) ([ben-xD](https://github.com/ben-xD))
+- Fix `invalid authCallback response` when using token authentication [\#164](https://github.com/ably/ably-flutter/pull/164) ([ben-xD](https://github.com/ben-xD))
+- Use image URLs instead of relative paths, and add note to `CONTRIBUTING.md` [\#163](https://github.com/ably/ably-flutter/pull/163) ([ben-xD](https://github.com/ben-xD))
+- Clarify documentation about when device uses APNs production/ development device tokens [\#161](https://github.com/ably/ably-flutter/pull/161) ([ben-xD](https://github.com/ben-xD))
+- Add documentation for token authentication [\#155](https://github.com/ably/ably-flutter/pull/155) ([ben-xD](https://github.com/ben-xD))
+- Push notifications \(activation and subscription\) [\#140](https://github.com/ably/ably-flutter/pull/140) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.2-preview.1](https://github.com/ably/ably-flutter/tree/v1.2.2-preview.1)
 
 This is a preview release of v1.2.2, which adds support for push notifications, including device activation with Ably (including device registration with APNs / FCM) and subscribing devices for push notifications. Check out the dedicated documentation (`PushNotifications.md`) and the example app (`push_notification_service.dart`) for more information.
