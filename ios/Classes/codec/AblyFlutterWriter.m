@@ -45,6 +45,10 @@ NS_ASSUME_NONNULL_END
         return unNotificationSettingsCodecType;
     } else if ([value isKindOfClass:[RemoteMessage class]]) {
         return remoteMessageCodecType;
+    } else if ([value isKindOfClass:[ARTRealtimeChannelOptions class]]) {
+        return realtimeChannelOptionsCodecType;
+    } else if ([value isKindOfClass:[ARTChannelOptions class]]) {
+        return restChannelOptionsCodecType;
     }
     return 0;
 }

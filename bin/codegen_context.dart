@@ -15,7 +15,6 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'tokenRequest',
     'restChannelOptions',
     'realtimeChannelOptions',
-    'cipherParams',
     'paginatedResult',
     'restHistoryParams',
     'realtimeHistoryParams',
@@ -492,7 +491,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'CryptoGetParams',
-    'properties': ['algorithm', 'key', 'initializationVector', 'keyLength']
+    'properties': ['algorithm', 'key', 'initializationVector']
   }
 ];
 

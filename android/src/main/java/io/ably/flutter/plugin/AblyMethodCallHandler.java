@@ -767,21 +767,19 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void cryptoGetParams(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final Map<String, Object> message = (Map<String, Object>) call.arguments;
     final String algorithm = (String) message.get(PlatformConstants.TxCryptoGetParams.algorithm);
-    final Integer keyLength = (Integer) message.get(PlatformConstants.TxCryptoGetParams.keyLength);
 
-    final byte[] key = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.key);
+    // TODO it can be a String or a byte[]
+    final Object key = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.key);
     final byte[] initializationVector = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.initializationVector);
 
-    Crypto.CipherParams params;
     try {
-      if (initializationVector != null) {
-        params = Crypto.getParams(algorithm, key, initializationVector);
+      if (initializationVector != null && key != null) {
+        result.success(cipherParamsStorage.getHandle(Crypto.getParams(algorithm, key, initializationVector)));
       } else if (key != null) {
-        params = Crypto.getParams(algorithm, key);
+      result.success(cipherParamsStorage.getHandle(Crypto.getParams(algorithm, key)));
       } else {
-        params = Crypto.getParams(algorithm, keyLength);
+        result.error("40000", "A key must be set for encryption.", null);
       }
-      result.success(cipherParamsStorage.getHandle(params));
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     }

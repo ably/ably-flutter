@@ -17,22 +17,20 @@ class CodecTypes {
   static const int tokenRequest = 136;
   static const int restChannelOptions = 137;
   static const int realtimeChannelOptions = 138;
-  static const int cipherParams = 139;
-  static const int paginatedResult = 140;
-  static const int restHistoryParams = 141;
-  static const int realtimeHistoryParams = 142;
-  static const int restPresenceParams = 143;
-  static const int presenceMessage = 144;
-  static const int realtimePresenceParams = 145;
-  static const int deviceDetails = 146;
-  static const int localDevice = 147;
-  static const int pushChannelSubscription = 148;
-  static const int unNotificationSettings = 149;
-  static const int remoteMessage = 150;
-  static const int cipherKey = 151;
-  static const int errorInfo = 152;
-  static const int connectionStateChange = 153;
-  static const int channelStateChange = 154;
+  static const int paginatedResult = 139;
+  static const int restHistoryParams = 140;
+  static const int realtimeHistoryParams = 141;
+  static const int restPresenceParams = 142;
+  static const int presenceMessage = 143;
+  static const int realtimePresenceParams = 144;
+  static const int deviceDetails = 145;
+  static const int localDevice = 146;
+  static const int pushChannelSubscription = 147;
+  static const int unNotificationSettings = 148;
+  static const int remoteMessage = 149;
+  static const int errorInfo = 150;
+  static const int connectionStateChange = 151;
+  static const int channelStateChange = 152;
 }
 
 class PlatformMethod {
@@ -432,5 +430,4 @@ class TxCryptoGetParams {
   static const String algorithm = 'algorithm';
   static const String key = 'key';
   static const String initializationVector = 'initializationVector';
-  static const String keyLength = 'keyLength';
 }

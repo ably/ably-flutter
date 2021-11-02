@@ -545,6 +545,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
     PushNotificationEventHandlers* _pushNotificationEventHandlers;
+    CipherParamsStorage* _cipherParamsStorage;
 }
 
 @synthesize ably = _ably;
@@ -628,7 +629,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
         AblyPlatformMethod_pushDevice: PushHandlers.device,
         AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
+        // Encryption
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
+        AblyPlatformMethod_channelOptionsWithCipherKey: CryptoHandlers.channelOptionsWithCipherKey,
     };
     
     _nextRegistration = 1;

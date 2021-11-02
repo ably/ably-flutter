@@ -17,21 +17,20 @@ typedef NS_ENUM(UInt8, _Value) {
     tokenRequestCodecType = 136,
     restChannelOptionsCodecType = 137,
     realtimeChannelOptionsCodecType = 138,
-    cipherParamsCodecType = 139,
-    paginatedResultCodecType = 140,
-    restHistoryParamsCodecType = 141,
-    realtimeHistoryParamsCodecType = 142,
-    restPresenceParamsCodecType = 143,
-    presenceMessageCodecType = 144,
-    realtimePresenceParamsCodecType = 145,
-    deviceDetailsCodecType = 146,
-    localDeviceCodecType = 147,
-    pushChannelSubscriptionCodecType = 148,
-    unNotificationSettingsCodecType = 149,
-    remoteMessageCodecType = 150,
-    errorInfoCodecType = 151,
-    connectionStateChangeCodecType = 152,
-    channelStateChangeCodecType = 153,
+    paginatedResultCodecType = 139,
+    restHistoryParamsCodecType = 140,
+    realtimeHistoryParamsCodecType = 141,
+    restPresenceParamsCodecType = 142,
+    presenceMessageCodecType = 143,
+    realtimePresenceParamsCodecType = 144,
+    deviceDetailsCodecType = 145,
+    localDeviceCodecType = 146,
+    pushChannelSubscriptionCodecType = 147,
+    unNotificationSettingsCodecType = 148,
+    remoteMessageCodecType = 149,
+    errorInfoCodecType = 150,
+    connectionStateChangeCodecType = 151,
+    channelStateChangeCodecType = 152,
 };
 
 
@@ -89,6 +88,7 @@ extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
 extern NSString *const AblyPlatformMethod_cryptoGetParams;
+extern NSString *const AblyPlatformMethod_channelOptionsWithCipherKey;
 
 // key constants for TransportKeys
 extern NSString *const TxTransportKeys_channelName;
@@ -164,12 +164,12 @@ extern NSString *const TxClientOptions_channelRetryTimeout;
 extern NSString *const TxClientOptions_transportParams;
 
 // key constants for RestChannelOptions
-extern NSString *const TxRestChannelOptions_cipherParams;
+extern NSString *const TxRestChannelOptions_cipherParamsHandle;
 
 // key constants for RealtimeChannelOptions
 extern NSString *const TxRealtimeChannelOptions_params;
 extern NSString *const TxRealtimeChannelOptions_modes;
-extern NSString *const TxRealtimeChannelOptions_cipherParams;
+extern NSString *const TxRealtimeChannelOptions_cipherParamsHandle;
 
 // key constants for CipherParams
 extern NSString *const TxCipherParams_handle;
@@ -384,4 +384,3 @@ extern NSString *const TxNotification_body;
 extern NSString *const TxCryptoGetParams_algorithm;
 extern NSString *const TxCryptoGetParams_key;
 extern NSString *const TxCryptoGetParams_initializationVector;
-extern NSString *const TxCryptoGetParams_keyLength;

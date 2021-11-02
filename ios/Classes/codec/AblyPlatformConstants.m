@@ -60,6 +60,7 @@ NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannel
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
 NSString *const AblyPlatformMethod_cryptoGetParams= @"cryptoGetParams";
+NSString *const AblyPlatformMethod_channelOptionsWithCipherKey= @"channelOptionsWithCipherKey";
 
 // key constants for TransportKeys
 NSString *const TxTransportKeys_channelName = @"channelName";
@@ -135,12 +136,12 @@ NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
 
 // key constants for RestChannelOptions
-NSString *const TxRestChannelOptions_cipherParams = @"cipherParams";
+NSString *const TxRestChannelOptions_cipherParamsHandle = @"cipherParamsHandle";
 
 // key constants for RealtimeChannelOptions
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
-NSString *const TxRealtimeChannelOptions_cipherParams = @"cipherParams";
+NSString *const TxRealtimeChannelOptions_cipherParamsHandle = @"cipherParamsHandle";
 
 // key constants for CipherParams
 NSString *const TxCipherParams_handle = @"handle";
@@ -355,4 +356,3 @@ NSString *const TxNotification_body = @"body";
 NSString *const TxCryptoGetParams_algorithm = @"algorithm";
 NSString *const TxCryptoGetParams_key = @"key";
 NSString *const TxCryptoGetParams_initializationVector = @"initializationVector";
-NSString *const TxCryptoGetParams_keyLength = @"keyLength";

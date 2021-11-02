@@ -3,6 +3,7 @@
 #import "AblyFlutterClientOptions.h"
 #import "AblyFlutterMessage.h"
 #import "AblyPlatformConstants.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 static ARTLogLevel _logLevel(NSNumber *const number) {
     switch (number.unsignedIntegerValue) {
@@ -22,10 +23,19 @@ typedef id (^AblyCodecDecoder)(NSDictionary * dictionary);
 
 NS_ASSUME_NONNULL_END
 
-@implementation AblyFlutterReader
+@implementation AblyFlutterReader {
+    CryptoCodec* _cryptoCodec;
+}
 
+-init:(CryptoCodec *const) cryptoCodec {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _cryptoCodec = cryptoCodec;
+}
 
-+ (AblyCodecDecoder) getDecoder:(const NSString*)type {
+- (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
         [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
         [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
@@ -34,8 +44,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
         [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: readRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: _cryptoCodec.readRestChannelOptions,
+        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: _cryptoCodec.readRealtimeChannelOptions,
         [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
         [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
         [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
@@ -46,7 +56,7 @@ NS_ASSUME_NONNULL_END
 }
 
 -(id)readValueOfType:(const UInt8)type {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%d", type]];
+    AblyCodecDecoder decoder = [getDecoder: [NSString stringWithFormat:@"%d", type]];
     if(decoder){
         return decoder([self readValue]);
     }else{
@@ -189,50 +199,6 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     }, dictionary, TxTokenParams_timestamp);
     return o;
 }
-
-static AblyCodecDecoder readRestChannelOptions = ^ARTChannelOptions*(NSDictionary *const dictionary) {
-    ARTChannelOptions *const o = [ARTChannelOptions new];
-    READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipher);
-    return o;
-};
-
-static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*(NSDictionary *const dictionary) {
-    __block ARTRealtimeChannelOptions* o;
-
-    NSObject *const cipher = dictionary[TxRealtimeChannelOptions_cipher];
-    if (cipher == nil) {
-        o = [ARTRealtimeChannelOptions new];
-    } else if ([cipher class] == [NSDictionary class]) {
-        NSDictionary *const cipherDictionary = (NSDictionary *const) cipher;
-        ARTCipherParams *const cipherParams = [[ARTCipherParams alloc] initWithAlgorithm: cipherDictionary[TxCipherParams_algorithm] key:cipherDictionary[TxCipherParams_key]];
-        o = [[ARTRealtimeChannelOptions alloc] initWithCipher:cipherParams];
-    } else if ([cipher class] == [NSString class]) {
-        NSString *const key = (NSString *const) cipher;
-        o = [[ARTRealtimeChannelOptions alloc] initWithCipherKey: (NSString *) key];
-    } else {
-        [NSException raise:NSInvalidArgumentException format:@"Cipher must be ARTCipherParams or key in the form of a NSString"];
-    }
-
-    READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
-    ON_VALUE(^(const id value) {
-        NSArray* modes = (NSArray *)value;
-        ARTChannelMode options = 0;
-        if ([modes containsObject:TxEnumConstants_presence]) {
-            options = options | ARTChannelModePresence;
-        }
-        if ([modes containsObject:TxEnumConstants_subscribe]) {
-            options = options | ARTChannelModeSubscribe;
-        }
-        if ([modes containsObject:TxEnumConstants_publish]) {
-            options = options | ARTChannelModePublish;
-        }
-        if ([modes containsObject:TxEnumConstants_presenceSubscribe]) {
-            options = options | ARTChannelModePresenceSubscribe;
-        }
-        o.modes = options;
-    }, dictionary, TxRealtimeChannelOptions_modes);
-    return o;
-};
 
 static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDictionary *const dictionary) {
     return [dictionary objectForKey: TxMessageExtras_extras];
