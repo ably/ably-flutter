@@ -1,3 +1,5 @@
+import '../../authentication/authentication.dart';
+
 import '../../rest/rest.dart';
 import '../realtime.dart';
 
@@ -12,6 +14,6 @@ class RealtimeChannelOptions extends RestChannelOptions {
   final List<ChannelMode>? modes;
 
   /// create channel options with a cipher, params and modes
-  RealtimeChannelOptions(Object cipher, {this.params, this.modes})
-      : super(cipher);
+  RealtimeChannelOptions({this.params, this.modes, CipherParams? cipher})
+      : super(cipher: cipher);
 }
