@@ -77,6 +77,8 @@ To get push notifications setup in your own app, read [Setting up your own app](
 
 Devices need to be [activated](#device-activation) with Ably once. Once activated, you can use their device ID, client ID or push token (APNs device token/ FCM registration token) to push messages to them using the Ably dashboard or a [Push Admin](https://ably.com/documentation/general/push/admin) (SDKs which provide push admin functionality, such as [Ably-java](https://github.com/ably/ably-java), [Ably-js](https://github.com/ably/ably-js), etc.). However, to send push notifications through Ably channels, devices need to [subscribe to a channel for push notifications](#subscribing-to-channels-for-push-notifications). Once subscribed, messages on that channel with a [push payload](#sending-messages) will be sent to devices which are subscribed to that channel.
 
+The example app contains an example of how to use the Push Notification functionality in [`push_notification_service.dart`](./example/lib/push_notifications/push_notification_service.dart).
+
 ### Ensure `WidgetsBinding` is initialized
 
 If you invoke any methods from the `ably_flutter` package before calling `runApp()`, you must call `WidgetsFlutterBinding.ensureInitialized();`. This is done to ensure all platform methods will be successfully received by the native Ably plugin on the host platform.
