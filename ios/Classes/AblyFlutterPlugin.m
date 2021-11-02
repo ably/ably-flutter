@@ -317,21 +317,18 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
     ARTRealtimeChannelOptions *const channelOptions = (ARTRealtimeChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
 
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
-    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    [channel setOptions:channelOptions callback:^(ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Error getting realtime channel history; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error setting realtime channel options; err = %@", [error message]]
                     details:error
                     ]);
         } else {
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
-            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+            result(nil);
         }
-    };
-    [channel setOptions:channelOptions callback:callback];
-    result(nil);
+    }];
 };
 
 static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
