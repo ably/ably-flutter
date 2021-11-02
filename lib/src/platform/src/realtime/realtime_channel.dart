@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../../../error/error.dart';
 import '../../../generated/platform_constants.dart';
