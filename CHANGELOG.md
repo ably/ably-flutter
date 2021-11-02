@@ -4,7 +4,7 @@
 
 This release adds support for push notifications, including device activation with Ably (including device registration with APNs / FCM), subscribing devices for push notifications and handling the push notifications in your Flutter application, without writing iOS or Android code. Check out the dedicated documentation (`PushNotifications.md`) and the example app (`push_notification_service.dart`) for more information. We also fixed some bugs that were either reported in Github issues or found internally.
 
-[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.2-preview.1...v1.2.2)
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.1...v1.2.2)
 
 **Implemented enhancements:**
 
