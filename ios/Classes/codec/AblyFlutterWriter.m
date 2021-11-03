@@ -18,52 +18,52 @@ NS_ASSUME_NONNULL_END
 
 + (UInt8) getType:(id)value{
     if([value isKindOfClass:[AblyFlutterMessage class]]){
-        return ablyMessageCodecType;
+        return CodecTypeAblyMessage;
     }else if([value isKindOfClass:[ARTErrorInfo class]]){
-        return errorInfoCodecType;
+        return CodecTypeErrorInfo;
     }else if([value isKindOfClass:[ARTConnectionStateChange class]]){
-        return connectionStateChangeCodecType;
+        return CodecTypeConnectionStateChange;
     }else if([value isKindOfClass:[ARTChannelStateChange class]]){
-        return channelStateChangeCodecType;
+        return CodecTypeChannelStateChange;
     }else if([value isKindOfClass:[ARTMessage class]]){
-        return messageCodecType;
+        return CodecTypeMessage;
     }else if([value isKindOfClass:[ARTPresenceMessage class]]){
-        return presenceMessageCodecType;
+        return CodecTypePresenceMessage;
     }else if([value isKindOfClass:[ARTTokenParams class]]){
-        return tokenParamsCodecType;
+        return CodecTypeTokenParams;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
-        return paginatedResultCodecType;
+        return CodecTypePaginatedResult;
     } else if ([value isKindOfClass:[ARTLocalDevice class]]) {
         // Check for ARTLocalDevice before ARTLocalDevice, since ARTLocalDevice extends ARTDeviceDetails.
         // If deviceDetailsCodecType was used first, the ARTLocalDevice fields won't be serialized.
-        return localDeviceCodecType;
+        return CodecTypeLocalDevice;
     } else if([value isKindOfClass:[ARTDeviceDetails class]]) {
-        return deviceDetailsCodecType;
+        return CodecTypeDeviceDetails;
     } else if ([value isKindOfClass:[ARTPushChannelSubscription class]]) {
-        return pushChannelSubscriptionCodecType;
+        return CodecTypePushChannelSubscription;
     } else if ([value isKindOfClass:[UNNotificationSettings class]]) {
-        return unNotificationSettingsCodecType;
+        return CodecTypeUnNotificationSettings;
     } else if ([value isKindOfClass:[RemoteMessage class]]) {
-        return remoteMessageCodecType;
+        return CodecTypeRemoteMessage;
     }
     return 0;
 }
 
 + (AblyCodecEncoder) getEncoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecEncoder>* _handlers = @{
-        [NSString stringWithFormat:@"%d", ablyMessageCodecType]: encodeAblyMessage,
-        [NSString stringWithFormat:@"%d", errorInfoCodecType]: encodeErrorInfo,
-        [NSString stringWithFormat:@"%d", connectionStateChangeCodecType]: encodeConnectionStateChange,
-        [NSString stringWithFormat:@"%d", channelStateChangeCodecType]: encodeChannelStateChange,
-        [NSString stringWithFormat:@"%d", messageCodecType]: encodeChannelMessage,
-        [NSString stringWithFormat:@"%d", presenceMessageCodecType]: encodePresenceMessage,
-        [NSString stringWithFormat:@"%d", tokenParamsCodecType]: encodeTokenParams,
-        [NSString stringWithFormat:@"%d", paginatedResultCodecType]: encodePaginatedResult,
-        [NSString stringWithFormat:@"%d", deviceDetailsCodecType]: PushNotificationEncoders.encodeDeviceDetails,
-        [NSString stringWithFormat:@"%d", localDeviceCodecType]: PushNotificationEncoders.encodeLocalDevice,
-        [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
-        [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
-        [NSString stringWithFormat:@"%d", remoteMessageCodecType]: PushNotificationEncoders.encodeRemoteMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyMessage]: encodeAblyMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeErrorInfo]: encodeErrorInfo,
+        [NSString stringWithFormat:@"%d", CodecTypeConnectionStateChange]: encodeConnectionStateChange,
+        [NSString stringWithFormat:@"%d", CodecTypeChannelStateChange]: encodeChannelStateChange,
+        [NSString stringWithFormat:@"%d", CodecTypeMessage]: encodeChannelMessage,
+        [NSString stringWithFormat:@"%d", CodecTypePresenceMessage]: encodePresenceMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenParams]: encodeTokenParams,
+        [NSString stringWithFormat:@"%d", CodecTypePaginatedResult]: encodePaginatedResult,
+        [NSString stringWithFormat:@"%d", CodecTypeDeviceDetails]: PushNotificationEncoders.encodeDeviceDetails,
+        [NSString stringWithFormat:@"%d", CodecTypeLocalDevice]: PushNotificationEncoders.encodeLocalDevice,
+        [NSString stringWithFormat:@"%d", CodecTypePushChannelSubscription]: PushNotificationEncoders.encodePushChannelSubscription,
+        [NSString stringWithFormat:@"%d", CodecTypeUnNotificationSettings]: PushNotificationEncoders.encodeUNNotificationSettings,
+        [NSString stringWithFormat:@"%d", CodecTypeRemoteMessage]: PushNotificationEncoders.encodeRemoteMessage,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
