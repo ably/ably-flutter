@@ -6,7 +6,6 @@ import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 import 'package:ably_flutter/src/realtime/src/realtime_channels_interface.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../../../error/error.dart';
 import '../../../generated/platform_constants.dart';
