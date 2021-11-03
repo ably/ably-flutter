@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
+import '../../../common/src/backwards_compatibility.dart';
 import '../../../error/error.dart';
 import '../../../generated/platform_constants.dart';
 import '../../../message/message.dart';
@@ -75,7 +76,7 @@ class RealtimeChannel extends PlatformObject
     ];
     final queueItem = _PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
-    unawaited(_publishInternal());
+    unawaitedWorkaroundForDartPre214(_publishInternal());
     return queueItem.completer.future;
   }
 

@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import '../../../authentication/authentication.dart';
 import '../../../common/common.dart';
+import '../../../common/src/backwards_compatibility.dart';
 import '../../../error/error.dart';
 import '../../../generated/platform_constants.dart';
 import '../../../push_notifications/push_notifications.dart';
@@ -78,7 +79,7 @@ class Realtime extends PlatformObject
   Future<void> connect() async {
     final queueItem = Completer<void>();
     _connectQueue.add(queueItem);
-    unawaited(_connect());
+    unawaitedWorkaroundForDartPre214(_connect());
     return queueItem.future;
   }
 
