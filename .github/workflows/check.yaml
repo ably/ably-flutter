@@ -6,16 +6,23 @@ on:
 
 jobs:
   check:
+    name: "Check using Flutter version: ${{ matrix.flutter-version }}"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter-version: [null, 2.0.0]
     steps:
 
       - name: Checkout
         uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ matrix.flutter-version }}
 
       - name: 'Install dependencies'
         run: |
+          flutter --version
           flutter pub get
           cd test_integration && flutter pub get && cd ..
           cd example && flutter pub get && cd ..
