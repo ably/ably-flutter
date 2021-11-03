@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        flutter-version: [null, 2.0.0]
+        flutter-version: [null, 2.2.3]
     steps:
 
       - name: Checkout
