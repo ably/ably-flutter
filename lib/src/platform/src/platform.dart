@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../platform.dart';
-import 'background_android_isolate_platform.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for

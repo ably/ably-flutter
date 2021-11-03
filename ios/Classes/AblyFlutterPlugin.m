@@ -632,6 +632,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         // Encryption
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
         AblyPlatformMethod_channelOptionsWithCipherKey: CryptoHandlers.channelOptionsWithCipherKey,
+        AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
     
     _nextRegistration = 1;

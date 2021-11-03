@@ -24,7 +24,8 @@ class MessageEncryptionSliver extends StatelessWidget {
         TextButton(
           child: Text('Connect and listen to channel'),
           onPressed: () async {
-            final params = await ably.Crypto.getParams();
+            final key = await ably.Crypto.generateRandomKey();
+            final params = await ably.Crypto.getParams(key: key);
             final channelOptions =
                 ably.RealtimeChannelOptions(cipher: params);
             _channel = _realtime!.channels.get("encrypted");

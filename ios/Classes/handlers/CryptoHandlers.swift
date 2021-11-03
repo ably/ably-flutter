@@ -37,4 +37,10 @@ public class CryptoHandlers: NSObject {
             result(FlutterError(code: "CryptoHandlers_channelOptionsWithCipherKey", message: "Cipher must be a FlutterStandardTypedData or a String", details: nil))
         }
     }
+    
+    @objc
+    public static let generateRandomKey: FlutterHandler = { plugin, call, result in
+        let keyLength = call.arguments as! Int;
+        result(ARTCrypto.generateRandomKey(UInt(keyLength)));
+    }
 }

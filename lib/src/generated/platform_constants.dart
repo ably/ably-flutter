@@ -95,6 +95,7 @@ class PlatformMethod {
   static const String cryptoGetParams = 'cryptoGetParams';
   static const String channelOptionsWithCipherKey =
       'channelOptionsWithCipherKey';
+  static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
 }
 
 class TxTransportKeys {
@@ -430,4 +431,8 @@ class TxCryptoGetParams {
   static const String algorithm = 'algorithm';
   static const String key = 'key';
   static const String initializationVector = 'initializationVector';
+}
+
+class TxCryptoGenerateRandomKey {
+  static const String keyLength = 'keyLength';
 }

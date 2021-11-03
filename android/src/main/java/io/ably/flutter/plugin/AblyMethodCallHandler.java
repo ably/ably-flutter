@@ -116,6 +116,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     // Encryption
     _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
     _map.put(PlatformConstants.PlatformMethod.channelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
+    _map.put(PlatformConstants.PlatformMethod.cryptoGenerateRandomKey, this::cryptoGenerateRandomKey);
   }
 
   // MethodChannel.Result wrapper that responds on the platform thread.
@@ -799,6 +800,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
   }
 
+  // TODO move cipherParamsStorage usage into Codec (where ChannelOptions is serialized).
   private void returnChannelOptions(@NonNull Crypto.CipherParams cipherParams, @NonNull MethodChannel.Result result) {
     final Integer handle = cipherParamsStorage.getHandle(cipherParams);
     result.success(handle);
@@ -821,6 +823,11 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     } else {
       result.error("40000", "CipherKey must either be a String or a Byte Array.", null);
     }
+  }
+
+  private void cryptoGenerateRandomKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final Integer keyLength = (Integer) call.arguments;
+    result.success(Crypto.generateRandomKey(keyLength));
   }
 
   // Extracts the message from an AblyFlutterMessage.

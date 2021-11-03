@@ -91,6 +91,7 @@ final public class PlatformConstants {
         public static final String firstPage = "firstPage";
         public static final String cryptoGetParams = "cryptoGetParams";
         public static final String channelOptionsWithCipherKey = "channelOptionsWithCipherKey";
+        public static final String cryptoGenerateRandomKey = "cryptoGenerateRandomKey";
     }
 
     static final public class TxTransportKeys {
@@ -426,6 +427,10 @@ final public class PlatformConstants {
         public static final String algorithm = "algorithm";
         public static final String key = "key";
         public static final String initializationVector = "initializationVector";
+    }
+
+    static final public class TxCryptoGenerateRandomKey {
+        public static final String keyLength = "keyLength";
     }
 
 }
