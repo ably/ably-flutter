@@ -23,19 +23,9 @@ typedef id (^AblyCodecDecoder)(NSDictionary * dictionary);
 
 NS_ASSUME_NONNULL_END
 
-@implementation AblyFlutterReader {
-    CryptoCodec* _cryptoCodec;
-}
+@implementation AblyFlutterReader
 
--init:(CryptoCodec *const) cryptoCodec {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    _cryptoCodec = cryptoCodec;
-}
-
-- (AblyCodecDecoder) getDecoder:(const NSString*)type {
++ (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
         [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
         [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
@@ -44,8 +34,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
         [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: _cryptoCodec.readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: _cryptoCodec.readRealtimeChannelOptions,
+//        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: _cryptoCodec.readRestChannelOptions,
+//        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: _cryptoCodec.readRealtimeChannelOptions,
         [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
         [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
         [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
@@ -56,7 +46,7 @@ NS_ASSUME_NONNULL_END
 }
 
 -(id)readValueOfType:(const UInt8)type {
-    AblyCodecDecoder decoder = [getDecoder: [NSString stringWithFormat:@"%d", type]];
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%d", type]];
     if(decoder){
         return decoder([self readValue]);
     }else{
