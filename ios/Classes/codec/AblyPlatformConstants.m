@@ -137,15 +137,17 @@ NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
 
 // key constants for RestChannelOptions
-NSString *const TxRestChannelOptions_cipherParamsHandle = @"cipherParamsHandle";
+NSString *const TxRestChannelOptions_cipherParams = @"cipherParams";
 
 // key constants for RealtimeChannelOptions
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
-NSString *const TxRealtimeChannelOptions_cipherParamsHandle = @"cipherParamsHandle";
+NSString *const TxRealtimeChannelOptions_cipherParams = @"cipherParams";
 
 // key constants for CipherParams
-NSString *const TxCipherParams_handle = @"handle";
+NSString *const TxCipherParams_androidHandle = @"androidHandle";
+NSString *const TxCipherParams_iosAlgorithm = @"iosAlgorithm";
+NSString *const TxCipherParams_iosKey = @"iosKey";
 
 // key constants for TokenDetails
 NSString *const TxTokenDetails_token = @"token";
@@ -356,7 +358,6 @@ NSString *const TxNotification_body = @"body";
 // key constants for CryptoGetParams
 NSString *const TxCryptoGetParams_algorithm = @"algorithm";
 NSString *const TxCryptoGetParams_key = @"key";
-NSString *const TxCryptoGetParams_initializationVector = @"initializationVector";
 
 // key constants for CryptoGenerateRandomKey
 NSString *const TxCryptoGenerateRandomKey_keyLength = @"keyLength";

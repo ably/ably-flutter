@@ -31,6 +31,7 @@ class CodecTypes {
   static const int errorInfo = 150;
   static const int connectionStateChange = 151;
   static const int channelStateChange = 152;
+  static const int cipherParams = 153;
 }
 
 class PlatformMethod {
@@ -180,17 +181,19 @@ class TxClientOptions {
 }
 
 class TxRestChannelOptions {
-  static const String cipherParamsHandle = 'cipherParamsHandle';
+  static const String cipherParams = 'cipherParams';
 }
 
 class TxRealtimeChannelOptions {
   static const String params = 'params';
   static const String modes = 'modes';
-  static const String cipherParamsHandle = 'cipherParamsHandle';
+  static const String cipherParams = 'cipherParams';
 }
 
 class TxCipherParams {
-  static const String handle = 'handle';
+  static const String androidHandle = 'androidHandle';
+  static const String iosAlgorithm = 'iosAlgorithm';
+  static const String iosKey = 'iosKey';
 }
 
 class TxTokenDetails {
@@ -430,7 +433,6 @@ class TxNotification {
 class TxCryptoGetParams {
   static const String algorithm = 'algorithm';
   static const String key = 'key';
-  static const String initializationVector = 'initializationVector';
 }
 
 class TxCryptoGenerateRandomKey {

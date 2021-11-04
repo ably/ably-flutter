@@ -31,6 +31,7 @@ typedef NS_ENUM(UInt8, _Value) {
     errorInfoCodecType = 150,
     connectionStateChangeCodecType = 151,
     channelStateChangeCodecType = 152,
+    cipherParamsCodecType = 153,
 };
 
 
@@ -165,15 +166,17 @@ extern NSString *const TxClientOptions_channelRetryTimeout;
 extern NSString *const TxClientOptions_transportParams;
 
 // key constants for RestChannelOptions
-extern NSString *const TxRestChannelOptions_cipherParamsHandle;
+extern NSString *const TxRestChannelOptions_cipherParams;
 
 // key constants for RealtimeChannelOptions
 extern NSString *const TxRealtimeChannelOptions_params;
 extern NSString *const TxRealtimeChannelOptions_modes;
-extern NSString *const TxRealtimeChannelOptions_cipherParamsHandle;
+extern NSString *const TxRealtimeChannelOptions_cipherParams;
 
 // key constants for CipherParams
-extern NSString *const TxCipherParams_handle;
+extern NSString *const TxCipherParams_androidHandle;
+extern NSString *const TxCipherParams_iosAlgorithm;
+extern NSString *const TxCipherParams_iosKey;
 
 // key constants for TokenDetails
 extern NSString *const TxTokenDetails_token;
@@ -384,7 +387,6 @@ extern NSString *const TxNotification_body;
 // key constants for CryptoGetParams
 extern NSString *const TxCryptoGetParams_algorithm;
 extern NSString *const TxCryptoGetParams_key;
-extern NSString *const TxCryptoGetParams_initializationVector;
 
 // key constants for CryptoGenerateRandomKey
 extern NSString *const TxCryptoGenerateRandomKey_keyLength;

@@ -21,8 +21,6 @@ import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
-import io.ably.flutter.plugin.util.CipherParamsStorage;
-import io.ably.lib.platform.Platform;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
@@ -43,7 +41,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private final CipherParamsStorage cipherParamsStorage;
   private Context applicationContext;
 
   public interface HotRestartCallback {
@@ -60,12 +57,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   public AblyMethodCallHandler(final MethodChannel channel,
                                final HotRestartCallback hotRestartCallback,
-                               final Context applicationContext,
-                               final CipherParamsStorage cipherParamsStorage) {
+                               final Context applicationContext) {
     this.channel = channel;
     this.applicationContext = applicationContext;
     this.hotRestartCallback = hotRestartCallback;
-    this.cipherParamsStorage = cipherParamsStorage;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -775,13 +770,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       return;
     }
 
-    final byte[] initializationVector = (byte[]) message.get(PlatformConstants.TxCryptoGetParams.initializationVector);
     try {
-      if (initializationVector != null) {
-        returnChannelOptions(Crypto.getParams(algorithm, keyData, initializationVector), result);
-      } else {
-        returnChannelOptions(Crypto.getParams(algorithm, keyData), result);
-      }
+      result.success(Crypto.getParams(algorithm, keyData));
     } catch (NoSuchAlgorithmException e) {
       result.error("40000", "cryptoGetParams: No algorithm found. " + e, e);
     }
@@ -798,12 +788,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     } else {
       return null;
     }
-  }
-
-  // TODO move cipherParamsStorage usage into Codec (where ChannelOptions is serialized).
-  private void returnChannelOptions(@NonNull Crypto.CipherParams cipherParams, @NonNull MethodChannel.Result result) {
-    final Integer handle = cipherParamsStorage.getHandle(cipherParams);
-    result.success(handle);
   }
 
   private void channelOptionsWithCipherKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

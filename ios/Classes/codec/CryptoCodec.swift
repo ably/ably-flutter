@@ -2,25 +2,27 @@ import Foundation
 import Ably
 
 public class CryptoCodec: NSObject {
-private let cipherParamsStorage: CipherParamsStorage
     
-    init(cipherParamsStorage: CipherParamsStorage) {
-        self.cipherParamsStorage = cipherParamsStorage
+    @objc
+    public static let readCipherParams: (Dictionary<String, Any>) -> ARTCipherParams = { dictionary in
+        let algorithm = dictionary[TxCipherParams_iosAlgorithm] as! String
+        let key = dictionary[TxCipherParams_iosKey] as! FlutterStandardTypedData
+//        return ARTCipherParams(algorithm: algorithm, key: key.data as NSData, iv: key.data)
+        return ARTCipherParams(algorithm: algorithm, key: key.data as NSData)
     }
     
     @objc
-    public func readRealtimeChannelOptions(dictionary: Dictionary<String, Any>) -> ARTRealtimeChannelOptions {
-        let cipherParamsHandle = dictionary[TxRealtimeChannelOptions_cipherParamsHandle] as? Int
-        var channelOptions: ARTRealtimeChannelOptions
-        if let handle = cipherParamsHandle {
-            let params = self.cipherParamsStorage.from(handle: handle)!
-            channelOptions = ARTRealtimeChannelOptions(cipher: params)
-        } else {
-            channelOptions = ARTRealtimeChannelOptions()
-        }
-        
+    public static let encodeCipherParams: (ARTCipherParams) -> Dictionary<String, Any> = { cipherParams in
+        return [
+            TxCipherParams_iosKey: cipherParams.key,
+            TxCipherParams_iosAlgorithm: cipherParams.algorithm,
+        ];
+    }
+    
+    @objc
+    public static let readRealtimeChannelOptions: (Dictionary<String, Any>) -> ARTRealtimeChannelOptions = { dictionary in
+        let channelOptions = createRealtimeChannelOptions(dictionary: dictionary)
         channelOptions.params = dictionary[TxRealtimeChannelOptions_params] as? Dictionary<String, String>
-        
         let modesStrings = dictionary[TxRealtimeChannelOptions_modes] as! [String]
         channelOptions.modes = []
         modesStrings.forEach { mode in
@@ -31,19 +33,22 @@ private let cipherParamsStorage: CipherParamsStorage
         return channelOptions
     }
     
-    @objc
-    public func readRestChannelOptions(dictionary: Dictionary<String, Any>) -> ARTChannelOptions {
-        let cipherParamsHandle = dictionary[TxRestChannelOptions_cipherParamsHandle] as? Int
-        var channelOptions: ARTChannelOptions
-        if let handle = cipherParamsHandle {
-            let params = self.cipherParamsStorage.from(handle: handle)!
-            channelOptions = ARTChannelOptions(cipher: params)
+    private static func createRealtimeChannelOptions(dictionary: Dictionary<String, Any>) -> ARTRealtimeChannelOptions {
+        if let cipherParamsDictionary = dictionary[TxRealtimeChannelOptions_cipherParams] as? Dictionary<String, Any> {
+            return ARTRealtimeChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
         } else {
-            channelOptions = ARTChannelOptions()
+            return ARTRealtimeChannelOptions()
         }
-        return channelOptions
     }
-
+    
+    @objc
+    public static let readRestChannelOptions: (Dictionary<String, Any>) -> ARTChannelOptions = { dictionary in
+        if let cipherParamsDictionary = dictionary[TxRestChannelOptions_cipherParams] as? Dictionary<String, Any> {
+            return ARTChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
+        } else {
+            return ARTChannelOptions()
+        }
+    }
 }
 
 extension ARTChannelMode {

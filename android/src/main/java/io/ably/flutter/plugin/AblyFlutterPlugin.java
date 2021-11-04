@@ -58,8 +58,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     }
 
     private void setupChannels(BinaryMessenger messenger, Context applicationContext) {
-        final CipherParamsStorage cipherParamsStorage = new CipherParamsStorage();
-        final MethodCodec codec = createCodec(cipherParamsStorage);
+        final MethodCodec codec = createCodec(new CipherParamsStorage());
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
         streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(applicationContext));
@@ -70,8 +69,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
             // Called when `registerAbly` platform method is called: when app restarts or
             // hot restarts, but not hot-reload.
             streamsChannel::reset,
-            applicationContext,
-            cipherParamsStorage
+            applicationContext
         );
         BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);

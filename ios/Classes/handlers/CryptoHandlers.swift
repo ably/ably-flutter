@@ -4,20 +4,16 @@ import Ably
 public class CryptoHandlers: NSObject {
     @objc
     public static let getParams: FlutterHandler = { plugin, call, result in
-        let cipherParamsStorage = plugin.cipherParamsStorage
         let dictionary = call.arguments as! Dictionary<String, Any>
         let algorithm = dictionary[TxCryptoGetParams_algorithm] as! String
         let key = dictionary[TxCryptoGetParams_key]
-        let initializationVector = dictionary[TxCryptoGetParams_initializationVector] as? FlutterStandardTypedData
-        
+
         if let key = key as? NSString {
-            let params = ARTCipherParams(algorithm: algorithm, key: key, iv: initializationVector?.data)
-            let handle = cipherParamsStorage.getHandle(params: params)
-            result(handle)
+            result(ARTCipherParams(algorithm: algorithm, key: key))
+            return
         } else if let key = key as? FlutterStandardTypedData {
-            let params = ARTCipherParams(algorithm: algorithm, key: key.data as NSData, iv: initializationVector?.data)
-            let handle = cipherParamsStorage.getHandle(params: params)
-            result(handle)
+            result(ARTCipherParams(algorithm: algorithm, key: key.data as NSData))
+            return
         } else if let key = key {
             result(FlutterError(code: "CryptoHandlers_getParams", message: "Key must be a String or FlutterStandardTypedData, it is \(type(of: key))", details: nil))
         } else {

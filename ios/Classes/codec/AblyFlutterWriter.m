@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_END
         return realtimeChannelOptionsCodecType;
     } else if ([value isKindOfClass:[ARTChannelOptions class]]) {
         return restChannelOptionsCodecType;
+    } else if ([value isKindOfClass:[ARTCipherParams class]]) {
+        return cipherParamsCodecType;
     }
     return 0;
 }
@@ -68,6 +70,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
         [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
         [NSString stringWithFormat:@"%d", remoteMessageCodecType]: PushNotificationEncoders.encodeRemoteMessage,
+        [NSString stringWithFormat:@"%d", cipherParamsCodecType]: CryptoCodec.encodeCipherParams,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }

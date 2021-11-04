@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.CipherParamsStorage;
@@ -139,6 +141,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodePushChannelSubscription, null));
         put(PlatformConstants.CodecTypes.remoteMessage,
             new CodecPair<>(self::encodeRemoteMessage, null));
+        put(PlatformConstants.CodecTypes.cipherParams,
+            new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
       }
     };
   }
@@ -193,6 +197,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.pushChannelSubscription;
     } else if (value instanceof RemoteMessage) {
       return PlatformConstants.CodecTypes.remoteMessage;
+    } else if (value instanceof Crypto.CipherParams) {
+      return PlatformConstants.CodecTypes.cipherParams;
     }
     return null;
   }
@@ -361,7 +367,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     ChannelOptions options = new ChannelOptions();
-    options.cipherParams = decodeCipherParams(jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParamsHandle));
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRestChannelOptions.cipherParams));
     if (options.cipherParams != null) {
       options.encrypted = true;
     }
@@ -371,7 +377,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     ChannelOptions options = new ChannelOptions();
-    options.cipherParams = decodeCipherParams(jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParamsHandle));
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams));
     if (options.cipherParams != null) {
       options.encrypted = true;
     }
@@ -384,11 +390,21 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return options;
   }
 
-  private Crypto.CipherParams decodeCipherParams(@Nullable Object cipherParamsHandle) {
-    if (cipherParamsHandle instanceof Integer) {
-      return cipherParamsStorage.from((Integer) cipherParamsHandle);
-    }
-    return null;
+  private Map<String, Object> encodeCipherParams(Crypto.CipherParams cipherParams) {
+    if (cipherParams == null) return null;
+    final Integer handle = cipherParamsStorage.getHandle(cipherParams);
+    HashMap<String, Object> jsonMap = new HashMap<>();
+
+    // All other properties in CipherParams are package private, so cannot be exposed to Dart side.
+    jsonMap.put(PlatformConstants.TxCipherParams.androidHandle, handle);
+
+    return jsonMap;
+  }
+
+  private Crypto.CipherParams decodeCipherParams(@Nullable Map<String, Object> cipherParamsDictionary) {
+    if (cipherParamsDictionary == null) return null;
+    final Integer cipherParamsHandle = (Integer) cipherParamsDictionary.get(PlatformConstants.TxCipherParams.androidHandle);
+    return cipherParamsStorage.from(cipherParamsHandle);
   }
 
   private ChannelMode[] createChannelModesArray(ArrayList<String> modesString) {

@@ -34,6 +34,9 @@ Iterable<Map<String, dynamic>> get _types sync* {
     // Events
     'connectionStateChange',
     'channelStateChange',
+
+    // Ecryption
+    'cipherParams',
   ];
 
   // Custom type values must be over 127. At the time of writing
@@ -237,15 +240,15 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>['cipherParamsHandle']
+    'properties': <String>['cipherParams']
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>['params', 'modes', 'cipherParamsHandle']
+    'properties': <String>['params', 'modes', 'cipherParams']
   },
   {
     'name': 'CipherParams',
-    'properties': <String>['handle']
+    'properties': <String>['androidHandle', 'iosAlgorithm', 'iosKey'],
   },
   {
     'name': 'TokenDetails',
@@ -492,7 +495,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'CryptoGetParams',
-    'properties': ['algorithm', 'key', 'initializationVector']
+    'properties': ['algorithm', 'key']
   },
   {
     'name': 'CryptoGenerateRandomKey',
