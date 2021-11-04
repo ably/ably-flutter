@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/encrypted_messaging_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   ably.Realtime? _realtime;
   ably.Rest? _rest;
+  EncryptedMessagingService? encryptedMessagingService;
   ably.ConnectionState? _realtimeConnectionState;
   ably.ChannelState? _realtimeChannelState;
   final _subscriptionsToDispose = <StreamSubscription>[];
@@ -191,6 +193,7 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       final channel = realtime.channels.get(defaultChannel);
       listenRealtimeChannel(channel);
+      encryptedMessagingService = EncryptedMessagingService(realtime);
       _pushNotificationService.setRealtimeClient(realtime);
       setState(() {
         _realtime = realtime;
@@ -797,7 +800,7 @@ class _MyAppState extends State<MyApp> {
                       [],
                   releaseRestChannel(),
                   const Divider(),
-                  MessageEncryptionSliver(_realtime),
+                  MessageEncryptionSliver(encryptedMessagingService),
                   PushNotificationsSliver(
                     _pushNotificationService,
                     isIOSSimulator: isIOSSimulator,
