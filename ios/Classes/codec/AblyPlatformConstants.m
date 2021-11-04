@@ -198,6 +198,14 @@ NSString *const TxFormFactorEnum_car = @"car";
 NSString *const TxFormFactorEnum_embedded = @"embedded";
 NSString *const TxFormFactorEnum_other = @"other";
 
+// key constants for LogLevelEnum
+NSString *const TxLogLevelEnum_none = @"none";
+NSString *const TxLogLevelEnum_verbose = @"verbose";
+NSString *const TxLogLevelEnum_debug = @"debug";
+NSString *const TxLogLevelEnum_info = @"info";
+NSString *const TxLogLevelEnum_warn = @"warn";
+NSString *const TxLogLevelEnum_error = @"error";
+
 // key constants for DevicePlatformEnum
 NSString *const TxDevicePlatformEnum_ios = @"ios";
 NSString *const TxDevicePlatformEnum_android = @"android";
