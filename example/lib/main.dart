@@ -154,6 +154,7 @@ class _MyAppState extends State<MyApp> {
       print('Error creating Ably Rest: $error');
       rethrow;
     }
+    await encryptedMessagingService!.setRest(rest);
     _pushNotificationService.setRestClient(rest);
 
     setState(() {
