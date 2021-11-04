@@ -11,21 +11,20 @@ import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
-import io.ably.lib.types.ErrorInfo;
 
-class AblyLibrary {
+class AblyInstanceManager {
 
-    private static AblyLibrary _instance;
+    private static AblyInstanceManager _instance;
     private long _nextHandle = 1;
     final private Context applicationContext;
 
-    private AblyLibrary(Context applicationContext) {
+    private AblyInstanceManager(Context applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    static synchronized AblyLibrary getInstance(Context applicationContext) {
+    static synchronized AblyInstanceManager getInstance(Context applicationContext) {
         if (null == _instance) {
-            _instance = new AblyLibrary(applicationContext);
+            _instance = new AblyInstanceManager(applicationContext);
         }
         return _instance;
     }
