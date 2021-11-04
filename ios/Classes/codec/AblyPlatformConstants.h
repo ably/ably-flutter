@@ -105,6 +105,7 @@ extern NSString *const TxAblyMessage_message;
 extern NSString *const TxAblyEventMessage_eventName;
 extern NSString *const TxAblyEventMessage_type;
 extern NSString *const TxAblyEventMessage_message;
+extern NSString *const TxAblyEventMessage_registrationHandle;
 
 // key constants for ErrorInfo
 extern NSString *const TxErrorInfo_code;

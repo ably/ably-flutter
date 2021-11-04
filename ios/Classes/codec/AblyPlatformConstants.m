@@ -77,6 +77,7 @@ NSString *const TxAblyMessage_message = @"message";
 NSString *const TxAblyEventMessage_eventName = @"eventName";
 NSString *const TxAblyEventMessage_type = @"type";
 NSString *const TxAblyEventMessage_message = @"message";
+NSString *const TxAblyEventMessage_registrationHandle = @"registrationHandle";
 
 // key constants for ErrorInfo
 NSString *const TxErrorInfo_code = @"code";

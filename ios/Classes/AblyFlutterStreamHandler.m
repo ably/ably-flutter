@@ -4,6 +4,7 @@
 #import "AblyFlutterPlugin.h"
 #import "AblyFlutterMessage.h"
 #import "codec/AblyPlatformConstants.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 @implementation AblyFlutterStreamHandler{
     ARTEventListener *listener;
@@ -26,8 +27,8 @@
     return nil;
 }
 
-- (void) startListening:(AblyFlutterMessage *const)message emitter:(FlutterEventSink)emitter {
-    AblyFlutterEventMessage *const eventMessage = message.message;
+- (void) startListening:(EventMessage *const)message emitter:(FlutterEventSink)emitter {
+    EventMessage *const eventMessage = message.message;
     NSNumber *const handle = message.handle;
     NSString *const eventName = eventMessage.eventName;
     @try {
@@ -77,7 +78,7 @@
 }
 
 - (void) cancelListening:(AblyFlutterMessage *const)message {
-    AblyFlutterEventMessage *const eventMessage = message.message;
+    EventMessage *const eventMessage = message.message;
     NSNumber *const handle = message.handle;
     NSString *const eventName = eventMessage.eventName;
     

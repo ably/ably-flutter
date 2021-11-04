@@ -165,7 +165,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'AblyEventMessage',
-    'properties': <String>['eventName', 'type', 'message']
+    'properties': <String>['eventName', 'type', 'message', 'registrationHandle']
   },
   {
     'name': 'ErrorInfo',

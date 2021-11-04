@@ -420,11 +420,9 @@ class Codec extends StandardMessageCodec {
   /// returns null of [v] is null
   Map<String, dynamic> _encodeAblyEventMessage(final AblyEventMessage v) {
     final codecType = getCodecType(v.message);
-    final message = (v.message == null)
-        ? null
-        : (codecType == null)
-            ? v.message
-            : codecMap[codecType]!.encode(v.message);
+    final message = (v.message == null || codecType == null)
+        ? v.message
+        : codecMap[codecType]!.encode(v.message);
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
     _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);

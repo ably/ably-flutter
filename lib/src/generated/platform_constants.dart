@@ -113,6 +113,7 @@ class TxAblyEventMessage {
   static const String eventName = 'eventName';
   static const String type = 'type';
   static const String message = 'message';
+  static const String registrationHandle = 'registrationHandle';
 }
 
 class TxErrorInfo {

@@ -59,13 +59,13 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
 static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    AblyFlutterMessage *const messageData = message.message;
+    AblyFlutterMessage *const nestedMessage = message.message;
     
-    NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
-    NSString *const channelName = (NSString*)[_dataMap objectForKey:TxTransportKeys_channelName];
-    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[_dataMap objectForKey:TxTransportKeys_options];
+    NSDictionary<NSString *, NSObject *> *const data = nestedMessage.message;
+    NSString *const channelName = (NSString*)[data objectForKey:TxTransportKeys_channelName];
+    ARTChannelOptions *const channelOptions = (ARTChannelOptions*)[data objectForKey:TxTransportKeys_options];
 
-    ARTRest *const client = [ably getRest:messageData.handle];
+    ARTRest *const client = [ably getRest:nestedMessage.handle];
     ARTRestChannel *const channel = [client.channels get:channelName];
     [channel setOptions:channelOptions];
     result(nil);
@@ -308,11 +308,11 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
 static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    AblyFlutterMessage *const data = message.message;
-    NSNumber *const realtimeHandle = data.handle;
+    AblyFlutterMessage *const nestedMessage = message.message;
+    NSNumber *const realtimeHandle = nestedMessage.handle;
     ARTRealtime *const realtimeWithHandle = [ably realtimeWithHandle: realtimeHandle];
     
-    NSDictionary *const realtimePayload = data.message;
+    NSDictionary *const realtimePayload = nestedMessage.message;
     NSString *const channelName = (NSString*)[realtimePayload objectForKey:TxTransportKeys_channelName];
     ARTRealtimeChannelOptions *const channelOptions = (ARTRealtimeChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
 

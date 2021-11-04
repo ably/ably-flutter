@@ -71,10 +71,7 @@ abstract class PlatformObject {
   /// invoke platform method channel with AblyMessage encapsulation
   Future<T?> invoke<T>(final String method, [final Object? argument]) async {
     final _handle = await handle;
-    final message = (null != argument)
-        ? AblyMessage(AblyMessage(argument, handle: _handle))
-        : AblyMessage(_handle);
-    return invokeRaw<T>(method, message);
+    return invokeRaw<T>(method, AblyMessage(argument, handle: _handle));
   }
 
   Future<Stream<T>> _listen<T>(
@@ -82,11 +79,7 @@ abstract class PlatformObject {
     final Object? payload,
   ]) async =>
       eventChannel.receiveBroadcastStream<T>(
-        AblyMessage(
-          AblyEventMessage(eventName, payload),
-          handle: await handle,
-        ),
-      );
+          AblyEventMessage(eventName, message: payload, handle: await handle));
 
   /// Listen for events
   @protected

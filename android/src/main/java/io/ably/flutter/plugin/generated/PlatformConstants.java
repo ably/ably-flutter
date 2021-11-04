@@ -110,6 +110,7 @@ final public class PlatformConstants {
         public static final String eventName = "eventName";
         public static final String type = "type";
         public static final String message = "message";
+        public static final String registrationHandle = "registrationHandle";
     }
 
     static final public class TxErrorInfo {
