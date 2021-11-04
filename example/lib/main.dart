@@ -33,8 +33,6 @@ class _MyAppState extends State<MyApp> {
   String _ablyVersion = 'Unknown';
 
   final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
-  OpState _realtimeCreationState = OpState.notStarted;
-  OpState _restCreationState = OpState.notStarted;
   ably.Realtime? _realtime;
   ably.Rest? _rest;
   ably.ConnectionState? _realtimeConnectionState;
@@ -84,7 +82,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    asyncInitState();
   }
 
   @override
@@ -101,9 +99,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    print('initPlatformState()');
-
+  Future<void> asyncInitState() async {
     String platformVersion;
     String ablyVersion;
 
@@ -137,13 +133,12 @@ class _MyAppState extends State<MyApp> {
       _platformVersion = platformVersion;
       _ablyVersion = ablyVersion;
     });
+
+    createAblyRealtime();
+    await createAblyRest();
   }
 
   Future<void> createAblyRest() async {
-    setState(() {
-      _restCreationState = OpState.inProgress;
-    });
-
     final clientOptions = ably.ClientOptions.fromKey(_apiKey)
       ..logLevel = ably.LogLevel.verbose
       ..logHandler = ({msg, exception}) {
@@ -155,16 +150,12 @@ class _MyAppState extends State<MyApp> {
       rest = ably.Rest(options: clientOptions);
     } on Exception catch (error) {
       print('Error creating Ably Rest: $error');
-      setState(() {
-        _restCreationState = OpState.failed;
-      });
       rethrow;
     }
     _pushNotificationService.setRestClient(rest);
 
     setState(() {
       _rest = rest;
-      _restCreationState = OpState.succeeded;
     });
 
     const name = 'Hello';
@@ -187,10 +178,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void createAblyRealtime() {
-    setState(() {
-      _realtimeCreationState = OpState.inProgress;
-    });
-
     final clientOptions = ably.ClientOptions.fromKey(_apiKey)
       ..clientId = Constants.clientId
       ..logLevel = ably.LogLevel.verbose
@@ -207,13 +194,9 @@ class _MyAppState extends State<MyApp> {
       _pushNotificationService.setRealtimeClient(realtime);
       setState(() {
         _realtime = realtime;
-        _realtimeCreationState = OpState.succeeded;
       });
     } on Exception catch (error) {
       print('Error creating Ably Realtime: $error');
-      setState(() {
-        _realtimeCreationState = OpState.failed;
-      });
       rethrow;
     }
   }
@@ -275,39 +258,6 @@ class _MyAppState extends State<MyApp> {
         return const Color.fromARGB(255, 255, 128, 128);
     }
   }
-
-  static Widget button(
-    final OpState state,
-    void Function() action,
-    String actionDescription,
-    String operatingDescription,
-    String doneDescription,
-  ) =>
-      FlatButton(
-        onPressed: (state == OpState.notStarted || state == OpState.failed)
-            ? action
-            : null,
-        color: opStateColor(state),
-        disabledColor: opStateColor(state),
-        child: Text(
-          opStateDescription(
-            state,
-            actionDescription,
-            operatingDescription,
-            doneDescription,
-          ),
-        ),
-      );
-
-  Widget createRestButton() => button(_restCreationState, createAblyRest,
-      'Create Ably Rest', 'Create Ably Rest', 'Ably Rest Created');
-
-  Widget createRealtimeButton() => button(
-      _realtimeCreationState,
-      createAblyRealtime,
-      'Create Ably Realtime',
-      'Creating Ably Realtime',
-      'Ably Realtime Created');
 
   Widget createRTConnectButton() => FlatButton(
         padding: EdgeInsets.zero,
@@ -746,11 +696,6 @@ class _MyAppState extends State<MyApp> {
                     'Realtime',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  createRealtimeButton(),
-                  Text(
-                    'Realtime:'
-                    ' ${_realtime?.toString() ?? 'Realtime not created yet.'}',
-                  ),
                   Text('Connection State: $_realtimeConnectionState'),
                   Text('Channel State: $_realtimeChannelState'),
                   Row(
@@ -830,9 +775,6 @@ class _MyAppState extends State<MyApp> {
                     'Rest',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  createRestButton(),
-                  Text('Rest: '
-                      '${_rest?.toString() ?? 'Ably Rest not created yet.'}'),
                   sendRestMessage(),
                   Text(
                     'Rest: press this button to publish a new message with'

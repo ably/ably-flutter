@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.3](https://github.com/ably/ably-flutter/tree/v1.2.3)
+
+This release lowers the minimum version of Flutter required to use Ably Flutter to 2.2.3.
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.2...v1.2.3)
+
+**Merged pull requests:**
+
+- Copy unawaited implementation into Ably Flutter to fix build failures for Flutter 2.2.3 [\#198](https://github.com/ably/ably-flutter/pull/198) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.2](https://github.com/ably/ably-flutter/tree/v1.2.2)
 
 This release adds support for push notifications, including device activation with Ably (including device registration with APNs / FCM), subscribing devices for push notifications and handling the push notifications in your Flutter application, without writing iOS or Android code. Check out the [push notifications documentation](PushNotifications.md) for more information. We also fixed some bugs that were either reported in Github issues or found internally.
