@@ -21,11 +21,15 @@ class MessageEncryptionSliver extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
-          Text('Realtime client'),
+          const Text('The "${EncryptedMessagingService.channelName}" channel'
+              ' will be used.'),
+          const Text(
+            'Realtime client',
+            style: TextStyle(fontSize: 16),
+          ),
           TextButton(
-            onPressed: encryptedMessagingService?.subscribeToChannel,
-            child: const Text('Subscribe to channel: '
-                '"${EncryptedMessagingService.channelName}"'),
+            onPressed: encryptedMessagingService?.logChannelMessages,
+            child: const Text('Log channel messages'),
           ),
           TextButton(
             onPressed: () async {
@@ -35,9 +39,12 @@ class MessageEncryptionSliver extends StatelessWidget {
             child: const Text('Publish encrypted message'),
           ),
           TextButton(
-              onPressed: encryptedMessagingService?.detach,
-              child: const Text('Detach from channel')),
-          const Text('Rest client'),
+              onPressed: encryptedMessagingService?.unsubscribeAndDetach,
+              child: const Text('Unsubscribe and detach from channel')),
+          const Text(
+            'Rest client',
+            style: TextStyle(fontSize: 16),
+          ),
           TextButton(
             child: const Text('Publish rest message'),
             onPressed: () {
@@ -52,10 +59,18 @@ class MessageEncryptionSliver extends StatelessWidget {
               if (snapshot.hasData) {
                 final messages = snapshot.data as List<ably.Message>;
                 return Column(
-                  children: messages.map((message) => Row(children: [
-                    Text((message.name != null) ? message.name.toString() : "NO NAME"),
-                    Text((message.data != null) ? message.data.toString() : "NO DATA"),
-                  ],)).toList(),
+                  children: messages
+                      .map((message) => Row(
+                            children: [
+                              Text((message.name != null)
+                                  ? message.name.toString()
+                                  : "NO NAME"),
+                              Text((message.data != null)
+                                  ? message.data.toString()
+                                  : "NO DATA"),
+                            ],
+                          ))
+                      .toList(),
                 );
               } else {
                 return Text("No messages yet");
