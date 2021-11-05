@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../authentication/authentication.dart';
+import '../../crypto/crypto.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../platform/platform.dart';

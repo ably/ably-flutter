@@ -4,17 +4,19 @@ import 'dart:typed_data';
 import '../../error/src/ably_exception.dart';
 import 'cipher_params.dart';
 
+/// The internal (non-public) representation of CipherParams.
+///
 /// On Android, most fields are either private or package-private, and cannot
 /// be accessed. Therefore, Ably Flutter stores the instance of CipherParams
 /// and only gives a references to the dart side. When another method want
 /// to use this instance, we use the reference to get back the instance.
+///
+/// On iOS, ARTCipherParams fields are public. Therefore, Ably Flutter can
+/// instantiate a new one using algorithm and key when needed, without
+/// needing to store instances on the Android side and pass references/handles
+/// to the dart side.
 class CipherParamsNative implements CipherParams {
   int? androidHandle;
-
-  /// On iOS, ARTCipherParams fields are public.
-  /// Therefore, Ably Flutter can instantiate a new one when needed, without
-  /// needing to store instances on the Android side and pass
-  /// references/handles to the dart side.
   Uint8List? key;
 
   String? algorithm;

@@ -1,5 +1,4 @@
-import '../../authentication/authentication.dart';
-
+import '../../crypto/crypto.dart';
 import '../../rest/rest.dart';
 import '../realtime.dart';
 

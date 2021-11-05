@@ -1,9 +1,11 @@
 import 'dart:io' as io show Platform;
 import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../authentication/authentication.dart';
+import '../../crypto/crypto.dart';
 import '../../crypto/src/cipher_params_native.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';

@@ -4,6 +4,7 @@ import '../../authentication/authentication.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../platform/platform.dart';
+import '../crypto.dart';
 
 class Crypto {
   static const DEFAULT_ALGORITHM = 'aes';

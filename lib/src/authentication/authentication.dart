@@ -1,4 +1,3 @@
-export '../crypto/src/cipher_params.dart';
 export 'src/auth.dart';
 export 'src/auth_options.dart';
 export 'src/client_options.dart';
