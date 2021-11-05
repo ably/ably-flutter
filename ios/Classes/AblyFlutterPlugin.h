@@ -3,8 +3,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CipherParamsStorage;
-
 @interface AblyFlutterPlugin : NSObject<FlutterPlugin, UNUserNotificationCenterDelegate>
 
 +(instancetype)new NS_UNAVAILABLE;

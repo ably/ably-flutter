@@ -544,8 +544,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
-    PushNotificationEventHandlers* _pushNotificationEventHandlers;
-    CipherParamsStorage* _cipherParamsStorage;
 }
 
 @synthesize ably = _ably;
