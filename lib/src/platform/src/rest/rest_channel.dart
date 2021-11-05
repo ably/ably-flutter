@@ -10,7 +10,7 @@ import '../../../generated/platform_constants.dart';
 import '../../../message/message.dart';
 import '../../../rest/rest.dart';
 import '../../platform.dart';
-import 'publish_queue_item.dart';
+import '../publish_queue_item.dart';
 
 /// Plugin based implementation of Rest channel
 class RestChannel extends PlatformObject implements RestChannelInterface {
