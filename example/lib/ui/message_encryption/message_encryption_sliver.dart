@@ -22,8 +22,8 @@ class MessageEncryptionSliver extends StatelessWidget {
         ),
         Text('Realtime client'),
         TextButton(
-          onPressed: encryptedMessagingService?.connectRealtime,
-          child: const Text('Connect and listen to channel: '
+          onPressed: encryptedMessagingService?.subscribeToChannel,
+          child: const Text('Subscribe to channel: '
               '"${EncryptedMessagingService.channelName}"'),
         ),
         TextButton(
@@ -31,12 +31,12 @@ class MessageEncryptionSliver extends StatelessWidget {
             await encryptedMessagingService?.publishRealtimeMessage(
                 'Hello', {'payload': 'this should be encrypted'});
           },
-          child: Text('Publish encrypted message'),
+          child: const Text('Publish encrypted message'),
         ),
         TextButton(
-            child: const Text('Detach from channel'),
-            onPressed: encryptedMessagingService?.detach),
-        Text('Rest client'),
+            onPressed: encryptedMessagingService?.detach,
+            child: const Text('Detach from channel')),
+        const Text('Rest client'),
         TextButton(child: const Text('Publish rest message'), onPressed: () {
           encryptedMessagingService?.publishRestMessage('Hello', {'payload': 'this should be encrypted'});
         },),

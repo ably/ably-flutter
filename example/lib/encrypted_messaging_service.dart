@@ -19,7 +19,13 @@ class EncryptedMessagingService {
   }
 
   Future<void> connectRealtime() async {
-    await _realtime!.connect();
+    if (_realtime!.connection.state != ably.ConnectionState.connected) {
+      await _realtime!.connect();
+    }
+  }
+
+  Future<void> subscribeToChannel() async {
+    await connectRealtime();
     final key = await ably.Crypto.generateRandomKey();
     final params = await ably.Crypto.getDefaultParams(key: key);
     final channelOptions = ably.RealtimeChannelOptions(cipher: params);
@@ -35,16 +41,18 @@ class EncryptedMessagingService {
     });
   }
 
-  Future<void> publishRealtimeMessage(String name, Map<String, dynamic> data) async {
-    await _realtimeChannel?.publish(message: ably.Message(name: name, data: data));
+  Future<void> publishRealtimeMessage(
+      String name, Map<String, dynamic> data) async {
+    await _realtimeChannel?.publish(
+        message: ably.Message(name: name, data: data));
   }
 
-  Future<void> publishRestMessage(String name, Map<String, dynamic> data) async {
+  Future<void> publishRestMessage(
+      String name, Map<String, dynamic> data) async {
     await _restChannel?.publish(message: ably.Message(name: name, data: data));
   }
 
   Future<void> detach() async {
     await _realtimeChannel?.detach();
   }
-
 }

@@ -34,8 +34,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
         [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
         [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: readRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: CryptoCodec.readRestChannelOptions,
+        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: CryptoCodec.readRealtimeChannelOptions,
         [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
         [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
         [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
@@ -190,37 +190,6 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     }, dictionary, TxTokenParams_timestamp);
     return o;
 }
-
-static AblyCodecDecoder readRestChannelOptions = ^ARTChannelOptions*(NSDictionary *const dictionary) {
-    ARTChannelOptions *const o = [ARTChannelOptions new];
-    READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipherParams);
-    return o;
-};
-
-static AblyCodecDecoder readRealtimeChannelOptions = ^ARTRealtimeChannelOptions*(NSDictionary *const dictionary) {
-    ARTRealtimeChannelOptions *const o = [ARTRealtimeChannelOptions new];
-    o.cipher = CryptoCodec.readCipherParams(dictionary[TxRealtimeChannelOptions_cipherParams]);
-//    READ_VALUE(o, cipher, dictionary, TxRealtimeChannelOptions_cipherParams);
-    READ_VALUE(o, params, dictionary, TxRealtimeChannelOptions_params);
-    ON_VALUE(^(const id value) {
-        NSArray* modes = (NSArray *)value;
-        ARTChannelMode options = 0;
-        if ([modes containsObject:TxEnumConstants_presence]) {
-            options = options | ARTChannelModePresence;
-        }
-        if ([modes containsObject:TxEnumConstants_subscribe]) {
-            options = options | ARTChannelModeSubscribe;
-        }
-        if ([modes containsObject:TxEnumConstants_publish]) {
-            options = options | ARTChannelModePublish;
-        }
-        if ([modes containsObject:TxEnumConstants_presenceSubscribe]) {
-            options = options | ARTChannelModePresenceSubscribe;
-        }
-        o.modes = options;
-    }, dictionary, TxRealtimeChannelOptions_modes);
-    return o;
-};
 
 static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDictionary *const dictionary) {
     return [dictionary objectForKey: TxMessageExtras_extras];

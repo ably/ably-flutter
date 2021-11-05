@@ -21,24 +21,22 @@ public class CryptoCodec: NSObject {
     
     @objc
     public static let readRealtimeChannelOptions: (Dictionary<String, Any>) -> ARTRealtimeChannelOptions = { dictionary in
-        let channelOptions = createRealtimeChannelOptions(dictionary: dictionary)
+        var channelOptions: ARTRealtimeChannelOptions;
+        if let cipherParamsDictionary = dictionary[TxRealtimeChannelOptions_cipherParams] as? Dictionary<String, Any> {
+            channelOptions = ARTRealtimeChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
+        } else {
+            channelOptions = ARTRealtimeChannelOptions()
+        }
+        
         channelOptions.params = dictionary[TxRealtimeChannelOptions_params] as? Dictionary<String, String>
-        let modesStrings = dictionary[TxRealtimeChannelOptions_modes] as! [String]
+        let modesStrings = dictionary[TxRealtimeChannelOptions_modes] as? [String]
         channelOptions.modes = []
-        modesStrings.forEach { mode in
+        modesStrings?.forEach { mode in
             if let mode = ARTChannelMode.from(mode: mode) {
                 channelOptions.modes.insert(mode)
             }
         }
         return channelOptions
-    }
-    
-    private static func createRealtimeChannelOptions(dictionary: Dictionary<String, Any>) -> ARTRealtimeChannelOptions {
-        if let cipherParamsDictionary = dictionary[TxRealtimeChannelOptions_cipherParams] as? Dictionary<String, Any> {
-            return ARTRealtimeChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
-        } else {
-            return ARTRealtimeChannelOptions()
-        }
     }
     
     @objc
