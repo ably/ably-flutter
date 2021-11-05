@@ -89,7 +89,8 @@ extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
 extern NSString *const AblyPlatformMethod_cryptoGetParams;
-extern NSString *const AblyPlatformMethod_channelOptionsWithCipherKey;
+extern NSString *const AblyPlatformMethod_restChannelOptionsWithCipherKey;
+extern NSString *const AblyPlatformMethod_realtimeChannelOptionsWithCipherKey;
 extern NSString *const AblyPlatformMethod_cryptoGenerateRandomKey;
 
 // key constants for TransportKeys

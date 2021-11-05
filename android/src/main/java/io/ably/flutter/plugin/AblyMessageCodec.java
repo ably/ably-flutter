@@ -108,7 +108,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         put(PlatformConstants.CodecTypes.restChannelOptions,
             new CodecPair<>(null, self::decodeRestChannelOptions));
         put(PlatformConstants.CodecTypes.realtimeChannelOptions,
-            new CodecPair<>(null, self::decodeRealtimeChannelOptions));
+            new CodecPair<>(self::encodeChannelOptions, self::decodeRealtimeChannelOptions));
         put(PlatformConstants.CodecTypes.paginatedResult,
             new CodecPair<>(self::encodePaginatedResult, null));
         put(PlatformConstants.CodecTypes.restHistoryParams,
@@ -199,6 +199,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.remoteMessage;
     } else if (value instanceof Crypto.CipherParams) {
       return PlatformConstants.CodecTypes.cipherParams;
+    } else if (value instanceof ChannelOptions) {
+      // Encoding it into a RealtimeChannelOptions instance, because it is a subtype of RestChannelOptions
+      return PlatformConstants.CodecTypes.realtimeChannelOptions;
     }
     return null;
   }
@@ -372,6 +375,17 @@ public class AblyMessageCodec extends StandardMessageCodec {
       options.encrypted = true;
     }
     return options;
+  }
+
+  /// RealtimeChannelOptions (the inheriting class) is used for both RealtimeChannelOptions and
+  // RestChannelOptions, since Ably Java has only one type: ChannelOptions
+  private Map<String, Object> encodeChannelOptions(final ChannelOptions c) {
+    if (c == null) return null;
+    HashMap<String, Object> jsonMap = new HashMap<>();
+    jsonMap.put(PlatformConstants.TxRealtimeChannelOptions.cipherParams, encodeCipherParams((Crypto.CipherParams) c.cipherParams));
+    jsonMap.put(PlatformConstants.TxRealtimeChannelOptions.params, c.params);
+    jsonMap.put(PlatformConstants.TxRealtimeChannelOptions.modes, c.modes);
+    return jsonMap;
   }
 
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {

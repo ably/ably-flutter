@@ -70,6 +70,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", pushChannelSubscriptionCodecType]: PushNotificationEncoders.encodePushChannelSubscription,
         [NSString stringWithFormat:@"%d", unNotificationSettingsCodecType]: PushNotificationEncoders.encodeUNNotificationSettings,
         [NSString stringWithFormat:@"%d", remoteMessageCodecType]: PushNotificationEncoders.encodeRemoteMessage,
+        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: CryptoCodec.encodeRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: CryptoCodec.encodeRestChannelOptions,
         [NSString stringWithFormat:@"%d", cipherParamsCodecType]: CryptoCodec.encodeCipherParams,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];

@@ -35,7 +35,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'connectionStateChange',
     'channelStateChange',
 
-    // Ecryption
+    // Encryption
     'cipherParams',
   ];
 
@@ -149,8 +149,12 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Encryption
   {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
   {
-    'name': 'channelOptionsWithCipherKey',
-    'value': 'channelOptionsWithCipherKey'
+    'name': 'restChannelOptionsWithCipherKey',
+    'value': 'restChannelOptionsWithCipherKey'
+  },
+  {
+    'name': 'realtimeChannelOptionsWithCipherKey',
+    'value': 'realtimeChannelOptionsWithCipherKey'
   },
   {'name': 'cryptoGenerateRandomKey', 'value': 'cryptoGenerateRandomKey'},
 ];

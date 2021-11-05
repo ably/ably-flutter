@@ -18,6 +18,7 @@ dependencies:
   flutter_local_notifications: ^8.1.1+1
   fluttertoast: ^8.0.8
   device_info_plus: ^2.1.0
+  crypto: ^3.0.1
 
 dev_dependencies:
   ably_flutter:

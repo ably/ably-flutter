@@ -110,7 +110,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     // Encryption
     _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
-    _map.put(PlatformConstants.PlatformMethod.channelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
+    // The following 2 platform methods are duplicates, because in Ably Java there is only 1 type
+    // of ChannelOption, whereas in Ably Cocoa, there is ARTRealtimeChannelOptions and ARTRestChannelOptions
+    _map.put(PlatformConstants.PlatformMethod.restChannelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
+    _map.put(PlatformConstants.PlatformMethod.realtimeChannelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
     _map.put(PlatformConstants.PlatformMethod.cryptoGenerateRandomKey, this::cryptoGenerateRandomKey);
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 import '../../encrypted_messaging_service.dart';
 
@@ -42,6 +43,23 @@ class MessageEncryptionSliver extends StatelessWidget {
             onPressed: () {
               encryptedMessagingService?.publishRestMessage(
                   'Hello', {'payload': 'this should be encrypted'});
+            },
+          ),
+          const Text('Message history:'),
+          StreamBuilder<List<ably.Message>>(
+            stream: encryptedMessagingService?.messageHistoryStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final messages = snapshot.data as List<ably.Message>;
+                return Column(
+                  children: messages.map((message) => Row(children: [
+                    Text((message.name != null) ? message.name.toString() : "NO NAME"),
+                    Text((message.data != null) ? message.data.toString() : "NO DATA"),
+                  ],)).toList(),
+                );
+              } else {
+                return Text("No messages yet");
+              }
             },
           ),
         ],

@@ -39,6 +39,22 @@ public class CryptoCodec: NSObject {
     }
     
     @objc
+    public static let encodeRealtimeChannelOptions: (ARTRealtimeChannelOptions) -> Dictionary<String, Any> = { options in
+        return [
+            TxRealtimeChannelOptions_cipherParams: (options.cipher != nil) ? encodeCipherParams(options.cipher as! ARTCipherParams) : nil,
+            TxRealtimeChannelOptions_modes: options.modes.toString(),
+            TxRealtimeChannelOptions_params: options.params
+        ];
+    }
+    
+    @objc
+    public static let encodeRestChannelOptions: (ARTChannelOptions) -> Dictionary<String, Any> = { options in
+            return [
+                TxRestChannelOptions_cipherParams: (options.cipher != nil) ? encodeCipherParams(options.cipher as! ARTCipherParams) : nil,
+            ];
+    }
+    
+    @objc
     public static let readRestChannelOptions: (Dictionary<String, Any>) -> ARTChannelOptions = { dictionary in
         if let cipherParamsDictionary = dictionary[TxRestChannelOptions_cipherParams] as? Dictionary<String, Any> {
             return ARTChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
@@ -61,6 +77,22 @@ extension ARTChannelMode {
             return ARTChannelMode.presenceSubscribe
         default: return nil
         }
-        
+    }
+    
+    func toString() -> [String] {
+        var modes: [String] = [];
+        if self.contains(ARTChannelMode.presence) {
+            modes.append(TxEnumConstants_presence)
+        }
+        if self.contains(ARTChannelMode.subscribe) {
+            modes.append(TxEnumConstants_subscribe)
+        }
+        if self.contains(ARTChannelMode.publish) {
+            modes.append(TxEnumConstants_publish)
+        }
+        if self.contains(ARTChannelMode.presenceSubscribe) {
+            modes.append(TxEnumConstants_presenceSubscribe)
+        }
+        return modes
     }
 }

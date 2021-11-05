@@ -77,11 +77,11 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
-      CodecTypes.restChannelOptions:
-          _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
+      CodecTypes.restChannelOptions: _CodecPair<RestChannelOptions>(
+          _encodeRestChannelOptions, _decodeRestChannelOptions),
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
         _encodeRealtimeChannelOptions,
-        null,
+        _decodeRealtimeChannelOptions,
       ),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
@@ -329,6 +329,20 @@ class Codec extends StandardMessageCodec {
     final jsonMap = <String, dynamic>{};
     jsonMap[TxRestChannelOptions.cipherParams] = _encodeCipherParams(v.cipher);
     return jsonMap;
+  }
+
+  RestChannelOptions _decodeRestChannelOptions(Map<String, dynamic> jsonMap) {
+    final cipherParams = _decodeCipherParams(toJsonMap(
+        jsonMap[TxRealtimeChannelOptions.cipherParams]
+            as Map<dynamic, dynamic>)!);
+    return RestChannelOptions(cipher: cipherParams);
+  }
+
+  RealtimeChannelOptions _decodeRealtimeChannelOptions(
+      Map<String, dynamic> jsonMap) {
+    final cipherParams = _decodeCipherParams(toJsonMap(
+        jsonMap[TxRestChannelOptions.cipherParams] as Map<dynamic, dynamic>)!);
+    return RealtimeChannelOptions(cipher: cipherParams);
   }
 
   /// Encodes [ChannelMode] to a string constant
