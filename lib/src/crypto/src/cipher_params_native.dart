@@ -49,7 +49,8 @@ class CipherParamsNative implements CipherParams {
     }
   }
 
-  static fromCipherParams(CipherParams cipherParams) => cipherParams as CipherParamsNative;
+  static fromCipherParams(CipherParams cipherParams) =>
+      cipherParams as CipherParamsNative;
 
   /// Explicitly cast the [CipherParamsNative] to [CipherParams] so users do not
   /// see implementation details (e.g. [androidHandle]).
