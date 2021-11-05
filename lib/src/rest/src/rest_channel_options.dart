@@ -14,7 +14,8 @@ class RestChannelOptions {
 
   static Future<RestChannelOptions> withCipherKey(cipherKey) async {
     if (cipherKey! is String && cipherKey! is Uint8List) {
-      throw AblyException('cipherKey must be a base64-encoded String or Uint8List');
+      throw AblyException(
+          'cipherKey must be a base64-encoded String or Uint8List');
     }
 
     final options = await Platform.methodChannel

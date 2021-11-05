@@ -34,7 +34,8 @@ class EncryptedMessagingService {
     _rest = rest;
     _restChannel = _rest!.channels.get(channelName);
     final cipherParams = ably.Crypto.getDefaultParams(key: keyFromPassword);
-    final restChannelOptions = ably.RestChannelOptions(cipher: await cipherParams);
+    final restChannelOptions =
+        ably.RestChannelOptions(cipher: await cipherParams);
     await _restChannel!.setOptions(await restChannelOptions);
   }
 
@@ -49,7 +50,8 @@ class EncryptedMessagingService {
 
   Future<void> logChannelMessages() async {
     await connectRealtime();
-    final cipherParams = await ably.Crypto.getDefaultParams(key: keyFromPassword);
+    final cipherParams =
+        await ably.Crypto.getDefaultParams(key: keyFromPassword);
     final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);
     _realtimeChannel = _realtime!.channels.get(channelName);
     await _realtimeChannel!.setOptions(channelOptions);
@@ -59,12 +61,12 @@ class EncryptedMessagingService {
     });
     await _realtimeChannel!.attach();
     _channelSubscription ??= _realtimeChannel!.subscribe().listen((event) {
-        final newList = List<ably.Message>.from(messageHistoryStream.value)
-          ..add(event);
-        messageHistoryBehaviorSubject.add(newList);
-        print('subscribe().listen name: ${event.name}');
-        print('subscribe().listen data: ${event.data}');
-      });
+      final newList = List<ably.Message>.from(messageHistoryStream.value)
+        ..add(event);
+      messageHistoryBehaviorSubject.add(newList);
+      print('subscribe().listen name: ${event.name}');
+      print('subscribe().listen data: ${event.data}');
+    });
   }
 
   Future<void> publishRealtimeMessage(
