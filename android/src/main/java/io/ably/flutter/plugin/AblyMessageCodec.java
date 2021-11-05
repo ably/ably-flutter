@@ -200,7 +200,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     } else if (value instanceof Crypto.CipherParams) {
       return PlatformConstants.CodecTypes.cipherParams;
     } else if (value instanceof ChannelOptions) {
-      // Encoding it into a RealtimeChannelOptions instance, because it is a subtype of RestChannelOptions
+      // Encoding it into a RealtimeChannelOptions instance, because it extends RestChannelOptions
       return PlatformConstants.CodecTypes.realtimeChannelOptions;
     }
     return null;
