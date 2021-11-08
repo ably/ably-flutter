@@ -43,7 +43,6 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 Features that we do not currently support, but we do plan to add in the future:
 
-- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
 - Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
 - REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
@@ -531,7 +530,7 @@ Ably client libraries support built-in symmetric encryption of message content, 
 - Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);`. The key can be a Base64-encoded `String`, or a `Uint8List`.
 - Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`
   - Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.
-- Set this options on your channel: `_realtimeClient.channels.get(channelName).setOptions(channelOptions);`
+- Set this options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
 - Use your channel as normal, such as by publishing messages or subscribing for messages.
 
 Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messaging_service.dart) for an example of how to implement end-to-end encrypted messages over Ably. There are several options to choose from when you have decided to your encrypt your messages.
