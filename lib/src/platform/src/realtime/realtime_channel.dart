@@ -61,7 +61,7 @@ class RealtimeChannel extends PlatformObject
     );
   }
 
-  final _publishQueue = Queue<_PublishQueueItem>();
+  final _publishQueue = Queue<PublishQueueItem>();
   Completer<void>? _authCallbackCompleter;
 
   @override
@@ -74,7 +74,7 @@ class RealtimeChannel extends PlatformObject
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
     unawaitedWorkaroundForDartPre214(_publishInternal());
     return queueItem.completer.future;
@@ -229,13 +229,4 @@ class RealtimePlatformChannels
     super.release(name);
     (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
   }
-}
-
-/// An item for used to enqueue a message to be published after an ongoing
-/// authCallback is completed
-class _PublishQueueItem {
-  List<Message> messages;
-  final Completer<void> completer;
-
-  _PublishQueueItem(this.completer, this.messages);
 }
