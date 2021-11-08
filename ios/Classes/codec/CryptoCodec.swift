@@ -39,22 +39,6 @@ public class CryptoCodec: NSObject {
     }
     
     @objc
-    public static let encodeRealtimeChannelOptions: (ARTRealtimeChannelOptions) -> Dictionary<String, Any> = { options in
-        return [
-            TxRealtimeChannelOptions_cipherParams: (options.cipher != nil) ? encodeCipherParams(options.cipher as! ARTCipherParams) : nil,
-            TxRealtimeChannelOptions_modes: options.modes.toString(),
-            TxRealtimeChannelOptions_params: options.params
-        ];
-    }
-    
-    @objc
-    public static let encodeRestChannelOptions: (ARTChannelOptions) -> Dictionary<String, Any> = { options in
-            return [
-                TxRestChannelOptions_cipherParams: (options.cipher != nil) ? encodeCipherParams(options.cipher as! ARTCipherParams) : nil,
-            ];
-    }
-    
-    @objc
     public static let readRestChannelOptions: (Dictionary<String, Any>) -> ARTChannelOptions = { dictionary in
         if let cipherParamsDictionary = dictionary[TxRestChannelOptions_cipherParams] as? Dictionary<String, Any> {
             return ARTChannelOptions(cipher: readCipherParams(cipherParamsDictionary))
