@@ -523,10 +523,10 @@ channel
 Ably client libraries support built-in symmetric encryption of message content, making it easier to build apps that encrypt content fully end-to-end. Whilst TLS is enabled by default and ensures that data is securely sent to and received from Ably, messages are not encrypted within the Ably system. Using the encryption feature of our client libraries ensures that message payloads are opaque, can never be decrypted by Ably, and can only be decrypted by other clients that share your secret key.
 
 - Get or create a key, either by
-    - Distributing your key from your server (e.g. using your own APIs), or
-    - Distribute a password from your server and use a key derivation function (KDF), or
+    - Generating keys on your server and distributing them (e.g. using your own APIs), or
+    - Distribute a password and nonce from your server and use a key derivation function (KDF) on clients, or
        - An example of a KDF is [HKDF](https://pub.dev/documentation/cryptography/latest/cryptography/Hkdf-class.html) and [PBKDF2](https://pub.dev/documentation/cryptography/latest/cryptography/Pbkdf2-class.html), available in [`package:cryptography`](https://pub.dev/packages/cryptography)
-    - creating a random one using: `ably.Crypto.generateRandomKey();`. You would have to distribute this specific key to other clients, since calling `generateRandomKey` on another device will generate a different key, which would not allow you to decrypt the messages.
+    - creating a random one using: `ably.Crypto.generateRandomKey();`. You must to distribute this specific key to other clients, since calling `generateRandomKey` on another device will generate a different key.
 - Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);`. The key can be a Base64-encoded `String`, or a `Uint8List`.
 - Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`
   - Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.

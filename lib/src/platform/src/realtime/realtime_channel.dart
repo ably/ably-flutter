@@ -15,7 +15,6 @@ import '../../../realtime/src/realtime_channel_options.dart';
 import '../../../realtime/src/realtime_channels_interface.dart';
 import '../../platform.dart';
 import '../../platform_internal.dart';
-import '../rest/publish_queue_item.dart';
 
 /// Plugin based implementation of Realtime channel
 class RealtimeChannel extends PlatformObject
