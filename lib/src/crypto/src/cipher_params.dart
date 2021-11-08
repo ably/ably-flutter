@@ -8,7 +8,7 @@ import '../../../ably_flutter.dart';
 /// (Android / iOS).
 ///
 /// This class does not expose algorithm, keyLength or mode because these fields
-/// are private in Ably Java's Crypto.CipherParams.
+/// are private in ably-java's Crypto.CipherParams.
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TZ1
 abstract class CipherParams {}

@@ -5,7 +5,7 @@ import '../../generated/platform_constants.dart';
 import '../../platform/platform.dart';
 import '../crypto.dart';
 
-/// Crypto related methods related to creating keys ([generateRandomKey]) and configuration
+/// Utility methods for creating keys ([generateRandomKey]) and configuration
 /// objects ([CipherParams]) for symmetric encryption.
 class Crypto {
   static const DEFAULT_ALGORITHM = 'aes';

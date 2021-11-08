@@ -15,7 +15,7 @@ class RestChannelOptions {
     return RestChannelOptions(cipherParams: cipherParams);
   }
 
-  /// create channel options with a cipher.
+  /// Create channel options with a cipher.
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   RestChannelOptions({this.cipherParams});
 }

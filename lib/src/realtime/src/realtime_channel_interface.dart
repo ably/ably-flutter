@@ -95,7 +95,7 @@ abstract class RealtimeChannelInterface
   /// See [Message.dart] for more information.
   ///
   /// Calling subscribe the first time on a channel will automatically attach
-  /// channel. If a channel is detached, subscribing again will not reattach
+  /// that channel. If a channel is detached, subscribing again will not reattach
   /// the channel. Remember to call [RealtimeChannel.attach]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
