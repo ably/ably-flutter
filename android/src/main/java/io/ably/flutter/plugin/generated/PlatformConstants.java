@@ -91,8 +91,6 @@ final public class PlatformConstants {
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
         public static final String cryptoGetParams = "cryptoGetParams";
-        public static final String restChannelOptionsWithCipherKey = "restChannelOptionsWithCipherKey";
-        public static final String realtimeChannelOptionsWithCipherKey = "realtimeChannelOptionsWithCipherKey";
         public static final String cryptoGenerateRandomKey = "cryptoGenerateRandomKey";
     }
 

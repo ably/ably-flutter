@@ -110,10 +110,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     // Encryption
     _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
-    // The following 2 platform methods are duplicates, because in Ably Java there is only 1 type
-    // of ChannelOption, whereas in Ably Cocoa, there is ARTRealtimeChannelOptions and ARTRestChannelOptions
-    _map.put(PlatformConstants.PlatformMethod.restChannelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
-    _map.put(PlatformConstants.PlatformMethod.realtimeChannelOptionsWithCipherKey, this::channelOptionsWithCipherKey);
     _map.put(PlatformConstants.PlatformMethod.cryptoGenerateRandomKey, this::cryptoGenerateRandomKey);
   }
 
@@ -790,25 +786,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       return (byte[]) key;
     } else {
       return null;
-    }
-  }
-
-  private void channelOptionsWithCipherKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final Object cipherKey = call.arguments;
-    if (cipherKey instanceof String) {
-      try {
-        result.success(ChannelOptions.withCipherKey((String) cipherKey));
-      } catch (AblyException ae) {
-        result.error("40000", String.format("Exception while decoding RealtimeChannelOptions as String: %s", ae), ae);
-      }
-    } else if (cipherKey instanceof byte[]) {
-      try {
-        result.success(ChannelOptions.withCipherKey((byte[]) cipherKey));
-      } catch (AblyException ae) {
-        result.error("40000", String.format("Exception while decoding RealtimeChannelOptions as byte array: %s", ae), ae);
-      }
-    } else {
-      result.error("40000", "CipherKey must either be a String or a Byte Array.", null);
     }
   }
 

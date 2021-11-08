@@ -22,36 +22,6 @@ public class CryptoHandlers: NSObject {
     }
     
     @objc
-    public static let realtimeChannelOptionsWithCipherKey: FlutterHandler = { plugin, call, result in
-        let cipherKey = call.arguments;
-        
-        if let cipherKey = cipherKey as? FlutterStandardTypedData {
-            let options = ARTRealtimeChannelOptions(cipherKey: cipherKey.data as ARTCipherKeyCompatible)
-            result(options);
-        } else if let cipherKey = cipherKey as? String {
-            let options = ARTRealtimeChannelOptions(cipherKey: cipherKey as ARTCipherKeyCompatible)
-            result(options);
-        } else {
-            result(FlutterError(code: "CryptoHandlers_realtimeChannelOptionsWithCipherKey", message: "Cipher must be a FlutterStandardTypedData or a String", details: nil))
-        }
-    }
-    
-    @objc
-    public static let restChannelOptionsWithCipherKey: FlutterHandler = { plugin, call, result in
-        let cipherKey = call.arguments;
-        
-        if let cipherKey = cipherKey as? FlutterStandardTypedData {
-            let options = ARTChannelOptions(cipherKey: cipherKey.data as ARTCipherKeyCompatible)
-            result(options);
-        } else if let cipherKey = cipherKey as? String {
-            let options = ARTChannelOptions(cipherKey: cipherKey as ARTCipherKeyCompatible)
-            result(options);
-        } else {
-            result(FlutterError(code: "CryptoHandlers_restChannelOptionsWithCipherKey", message: "Cipher must be a FlutterStandardTypedData or a String", details: nil))
-        }
-    }
-    
-    @objc
     public static let generateRandomKey: FlutterHandler = { plugin, call, result in
         let keyLength = call.arguments as! Int;
         result(ARTCrypto.generateRandomKey(UInt(keyLength)));

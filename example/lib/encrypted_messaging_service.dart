@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 
 class EncryptedMessagingService {
   static const channelName = 'encrypted-test-channel';
-  ably.Realtime? _realtime;
+  final ably.Realtime? _realtime;
   ably.Rest? _rest;
   ably.RealtimeChannel? _realtimeChannel;
   ably.RestChannel? _restChannel;
@@ -35,8 +35,8 @@ class EncryptedMessagingService {
     _restChannel = _rest!.channels.get(channelName);
     final cipherParams = ably.Crypto.getDefaultParams(key: keyFromPassword);
     final restChannelOptions =
-        ably.RestChannelOptions(cipher: await cipherParams);
-    await _restChannel!.setOptions(await restChannelOptions);
+        ably.RestChannelOptions(cipherParams: await cipherParams);
+    await _restChannel!.setOptions(restChannelOptions);
   }
 
   Future<void> connectRealtime() async {
@@ -52,7 +52,8 @@ class EncryptedMessagingService {
     await connectRealtime();
     final cipherParams =
         await ably.Crypto.getDefaultParams(key: keyFromPassword);
-    final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);
+    final channelOptions =
+        ably.RealtimeChannelOptions(cipherParams: cipherParams);
     _realtimeChannel = _realtime!.channels.get(channelName);
     await _realtimeChannel!.setOptions(channelOptions);
     channelStateChangeSubscription = _realtimeChannel!.on().listen((event) {

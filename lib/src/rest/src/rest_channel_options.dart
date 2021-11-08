@@ -1,30 +1,21 @@
-import 'dart:typed_data';
-
+import '../../../ably_flutter.dart';
 import '../../crypto/crypto.dart';
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../../platform/platform.dart';
 
-/// options provided when instantiating a channel
+/// Configuration options for a [RestChannel]
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
 class RestChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
-  final CipherParams? cipher;
+  final CipherParams? cipherParams;
 
-  static Future<RestChannelOptions> withCipherKey(cipherKey) async {
-    if (cipherKey! is String && cipherKey! is Uint8List) {
-      throw AblyException(
-          'cipherKey must be a base64-encoded String or Uint8List');
-    }
-
-    final options = await Platform.methodChannel
-        .invokeMethod<RestChannelOptions>(
-            PlatformMethod.restChannelOptionsWithCipherKey, cipherKey);
-    return options!;
+  /// Create a [RestChannelOptions] directly from a CipherKey. This is
+  /// equivalent to calling the constructor.
+  static Future<RestChannelOptions> withCipherKey(key) async {
+    final cipherParams = await Crypto.getDefaultParams(key: key);
+    return RestChannelOptions(cipherParams: cipherParams);
   }
 
   /// create channel options with a cipher.
-  /// If a [cipher] is set, messages will be encrypted with the cipher.
-  RestChannelOptions({this.cipher});
+  /// If a [cipherParams] is set, messages will be encrypted with the cipher.
+  RestChannelOptions({this.cipherParams});
 }

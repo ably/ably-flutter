@@ -630,8 +630,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
         // Encryption
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
-        AblyPlatformMethod_realtimeChannelOptionsWithCipherKey: CryptoHandlers.realtimeChannelOptionsWithCipherKey,
-        AblyPlatformMethod_restChannelOptionsWithCipherKey: CryptoHandlers.restChannelOptionsWithCipherKey,
         AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
     

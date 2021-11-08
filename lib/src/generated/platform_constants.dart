@@ -94,10 +94,6 @@ class PlatformMethod {
   static const String nextPage = 'nextPage';
   static const String firstPage = 'firstPage';
   static const String cryptoGetParams = 'cryptoGetParams';
-  static const String restChannelOptionsWithCipherKey =
-      'restChannelOptionsWithCipherKey';
-  static const String realtimeChannelOptionsWithCipherKey =
-      'realtimeChannelOptionsWithCipherKey';
   static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
 }
 

@@ -148,14 +148,6 @@ const List<Map<String, dynamic>> _platformMethods = [
 
   // Encryption
   {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
-  {
-    'name': 'restChannelOptionsWithCipherKey',
-    'value': 'restChannelOptionsWithCipherKey'
-  },
-  {
-    'name': 'realtimeChannelOptionsWithCipherKey',
-    'value': 'realtimeChannelOptionsWithCipherKey'
-  },
   {'name': 'cryptoGenerateRandomKey', 'value': 'cryptoGenerateRandomKey'},
 ];
 

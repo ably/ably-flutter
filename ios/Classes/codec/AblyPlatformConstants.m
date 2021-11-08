@@ -60,8 +60,6 @@ NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannel
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
 NSString *const AblyPlatformMethod_cryptoGetParams= @"cryptoGetParams";
-NSString *const AblyPlatformMethod_restChannelOptionsWithCipherKey= @"restChannelOptionsWithCipherKey";
-NSString *const AblyPlatformMethod_realtimeChannelOptionsWithCipherKey= @"realtimeChannelOptionsWithCipherKey";
 NSString *const AblyPlatformMethod_cryptoGenerateRandomKey= @"cryptoGenerateRandomKey";
 
 // key constants for TransportKeys

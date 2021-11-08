@@ -327,7 +327,8 @@ class Codec extends StandardMessageCodec {
   /// returns null if [v] is null
   Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    jsonMap[TxRestChannelOptions.cipherParams] = _encodeCipherParams(v.cipher);
+    jsonMap[TxRestChannelOptions.cipherParams] =
+        _encodeCipherParams(v.cipherParams);
     return jsonMap;
   }
 
@@ -335,14 +336,14 @@ class Codec extends StandardMessageCodec {
     final cipherParams = _decodeCipherParams(toJsonMap(
         jsonMap[TxRealtimeChannelOptions.cipherParams]
             as Map<dynamic, dynamic>)!);
-    return RestChannelOptions(cipher: cipherParams);
+    return RestChannelOptions(cipherParams: cipherParams);
   }
 
   RealtimeChannelOptions _decodeRealtimeChannelOptions(
       Map<String, dynamic> jsonMap) {
     final cipherParams = _decodeCipherParams(toJsonMap(
         jsonMap[TxRestChannelOptions.cipherParams] as Map<dynamic, dynamic>)!);
-    return RealtimeChannelOptions(cipher: cipherParams);
+    return RealtimeChannelOptions(cipherParams: cipherParams);
   }
 
   /// Encodes [ChannelMode] to a string constant
@@ -365,7 +366,7 @@ class Codec extends StandardMessageCodec {
       final RealtimeChannelOptions v) {
     final jsonMap = <String, dynamic>{};
     jsonMap[TxRealtimeChannelOptions.cipherParams] =
-        _encodeCipherParams(v.cipher);
+        _encodeCipherParams(v.cipherParams);
     _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
     _writeToJson(
       jsonMap,
