@@ -377,7 +377,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return options;
   }
 
-  /// RealtimeChannelOptions (the inheriting class) is used for both RealtimeChannelOptions and
+  // RealtimeChannelOptions (the inheriting class) is used for both RealtimeChannelOptions and
   // RestChannelOptions, since Ably Java has only one type: ChannelOptions
   private Map<String, Object> encodeChannelOptions(final ChannelOptions c) {
     if (c == null) return null;
