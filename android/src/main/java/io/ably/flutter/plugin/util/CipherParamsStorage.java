@@ -5,9 +5,9 @@ import java.util.HashMap;
 import io.ably.lib.util.Crypto;
 
 /**
- * Stores and gets CipherParams by an Integer handle. On Android, Ably-Flutter will use this handle
- * to represent CipherParams on the Dart-side. This is done because CipherParams constructor is
- * private, and only Ably-Java can create them. When a method is calld with CipherParams as an
+ * Stores and gets CipherParams by an Integer handle. On Android, ably-flutter will use this handle
+ * to represent CipherParams on the Dart-side. This is done because the CipherParams constructor is
+ * private, and only ably-java can create them. When a method is called with CipherParams as an
  * argument, this Integer handle will be turned back into the CipherParams using
  * [CipherParamsStorage.from]. This only works when both methods are called on the same instance
  * of CipherParamsStorage, and not between app restarts.
