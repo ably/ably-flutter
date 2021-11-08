@@ -533,6 +533,15 @@ Ably client libraries support built-in symmetric encryption of message content, 
 - Set this options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
 - Use your channel as normal, such as by publishing messages or subscribing for messages.
 
+Overall, it would like this:
+```dart
+final key = ...; // Get a key from your server, create a key from password or create a random key.
+final cipherParams = ably.Crypto.getDefaultParams(key: key);
+final channelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
+final channel = realtime.channels.get("your channel name");
+await channel.setOptions(channelOptions);
+```
+
 Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messaging_service.dart) for an example of how to implement end-to-end encrypted messages over Ably. There are several options to choose from when you have decided to your encrypt your messages.
 
 ### Push Notifications
