@@ -519,7 +519,6 @@ channel
 
 ### Symmetric Encryption
 
-
 Ably client libraries support built-in symmetric encryption of message content, making it easier to build apps that encrypt content fully end-to-end. Whilst TLS is enabled by default and ensures that data is securely sent to and received from Ably, messages are not encrypted within the Ably system. Using the encryption feature of our client libraries ensures that message payloads are opaque, can never be decrypted by Ably, and can only be decrypted by other clients that share your secret key.
 
 - Get or create a key, typically in one of these ways:
