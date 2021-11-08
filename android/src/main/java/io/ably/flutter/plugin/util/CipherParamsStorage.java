@@ -17,7 +17,8 @@ public class CipherParamsStorage {
   HashMap<Integer, Crypto.CipherParams> cipherParamsByHandle = new HashMap();
 
   /**
-   * Store
+   * Store a cipherParams for as long as the CipherParamsStorage instance exists.
+   *
    * @param params Instance of cipherParams to be stored at runtime.
    * @return a handle representing the CipherParams which lasts as long as CipherParamsStorage is
    * instantiated. It doesn't persist across app restarts.
