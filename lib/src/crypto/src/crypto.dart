@@ -44,8 +44,8 @@ class Crypto {
   }
 
   static void ensureSupportedKeyLength(Uint8List key) {
-    if (key.length != DEFAULT_KEY_LENGTH_IN_BITS &&
-        key.length != KEY_LENGTH_128_BITS) {
+    if (key.length != DEFAULT_KEY_LENGTH_IN_BITS / 8 &&
+        key.length != KEY_LENGTH_128_BITS / 8) {
       throw AblyException(KEY_LENGTH_ERROR_MESSAGE);
     }
   }
