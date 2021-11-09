@@ -1,6 +1,6 @@
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 import '../../encrypted_messaging_service.dart';
 
@@ -14,18 +14,18 @@ class MessageEncryptionSliver extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 16),
-            child: Text(
-              'Message Encryption',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+          Text(
+            'Message Encryption',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const Text('The "${EncryptedMessagingService.channelName}" channel'
-              ' will be used.'),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: const Text(
+                'Channel name: "${EncryptedMessagingService.channelName}"'),
+          ),
           const Text(
-            'Realtime client',
-            style: TextStyle(fontSize: 16),
+            'Realtime Client',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           TextButton(
             onPressed: encryptedMessagingService?.logChannelMessages,
@@ -42,8 +42,8 @@ class MessageEncryptionSliver extends StatelessWidget {
               onPressed: encryptedMessagingService?.unsubscribeAndDetach,
               child: const Text('Unsubscribe and detach from channel')),
           const Text(
-            'Rest client',
-            style: TextStyle(fontSize: 16),
+            'Rest Client',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           TextButton(
             child: const Text('Publish rest message'),
@@ -52,28 +52,38 @@ class MessageEncryptionSliver extends StatelessWidget {
                   'Hello', {'payload': 'this should be encrypted'});
             },
           ),
-          const Text('Message history:'),
+          const Text(
+            'Message history:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           StreamBuilder<List<ably.Message>>(
             stream: encryptedMessagingService?.messageHistoryStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final messages = snapshot.data as List<ably.Message>;
+                if (messages.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: const Text('No messages yet'),
+                  );
+                }
+
                 return Column(
                   children: messages
                       .map((message) => Row(
                             children: [
                               Text((message.name != null)
                                   ? message.name.toString()
-                                  : "NO NAME"),
+                                  : 'NO NAME'),
                               Text((message.data != null)
                                   ? message.data.toString()
-                                  : "NO DATA"),
+                                  : 'NO DATA'),
                             ],
                           ))
                       .toList(),
                 );
               } else {
-                return Text("No messages yet");
+                return Text('No messages yet');
               }
             },
           ),

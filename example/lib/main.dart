@@ -802,6 +802,7 @@ class _MyAppState extends State<MyApp> {
                   releaseRestChannel(),
                   const Divider(),
                   MessageEncryptionSliver(encryptedMessagingService),
+                  const Divider(),
                   PushNotificationsSliver(
                     _pushNotificationService,
                     isIOSSimulator: isIOSSimulator,
