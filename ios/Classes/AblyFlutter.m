@@ -59,7 +59,7 @@
                 if (!tokenData) {
                     NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure userInfo:nil]);
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
@@ -95,7 +95,7 @@
                 if (!tokenData) {
                     NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure userInfo:nil]);
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
