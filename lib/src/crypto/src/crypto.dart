@@ -12,10 +12,10 @@ class Crypto {
   static const DEFAULT_ALGORITHM = 'aes';
   static const DEFAULT_BLOCK_LENGTH_IN_BYTES = 16;
   static const DEFAULT_KEY_LENGTH_IN_BITS = 256;
-  static const DEFAULT_MODE = "cbc";
+  static const DEFAULT_MODE = 'cbc';
   static const KEY_TYPE_ERROR_MESSAGE =
       'A key must either be a String or a Uint8List.';
-  static const KEY_LENGTH_ERROR_MESSAGE = "A key must be 256 bits in length.";
+  static const KEY_LENGTH_ERROR_MESSAGE = 'A key must be 256 bits in length.';
 
   /// Gets the CipherParams which can be used to with [RestChannelOptions] or
   /// [RealtimeChannelOptions] to specify encryption.
