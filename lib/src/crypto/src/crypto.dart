@@ -12,27 +12,28 @@ class Crypto {
   static const DEFAULT_ALGORITHM = 'aes';
   static const DEFAULT_BLOCK_LENGTH_IN_BYTES = 16;
   static const DEFAULT_KEY_LENGTH_IN_BITS = 256;
+  static const KEY_LENGTH_128_BITS = 128;
   static const DEFAULT_MODE = 'cbc';
   static const KEY_TYPE_ERROR_MESSAGE =
       'A key must either be a String or a Uint8List.';
-  static const KEY_LENGTH_ERROR_MESSAGE = 'A key must be 256 bits in length.';
+  static const KEY_LENGTH_ERROR_MESSAGE =
+      'A key must be 256 bits or 128 bits in length.';
 
   /// Gets the CipherParams which can be used to with [RestChannelOptions] or
   /// [RealtimeChannelOptions] to specify encryption.
   ///
   ///  Pass a [String] containing a base64 encoded key or a [Uint8List]
-  ///  containing raw bytes for the key. This key must be 256 bits long.
+  ///  containing raw bytes for the key. This key must be 128 or 256 bits long.
   ///  If you have a password, do not use it directly, instead you should
   ///  derive a key from this password, for example by using a key derivation
   ///  function (KDF) such as PBKDF2.
   static Future<CipherParams> getDefaultParams({required key}) async {
-    if (key! is String && key! is Uint8List) {
+    if (key is String) {
+      ensureSupportedKeyLength(base64Decode(key));
+    } else if (key is Uint8List) {
+      ensureSupportedKeyLength(key);
+    } else {
       throw AblyException(KEY_TYPE_ERROR_MESSAGE);
-    } else if (key is Uint8List && key.length != DEFAULT_KEY_LENGTH_IN_BITS) {
-      throw AblyException(KEY_LENGTH_ERROR_MESSAGE);
-    } else if (key is String &&
-        base64Decode(key).length != DEFAULT_KEY_LENGTH_IN_BITS) {
-      throw AblyException(KEY_LENGTH_ERROR_MESSAGE);
     }
 
     return Platform.invokePlatformMethodNonNull<CipherParams>(
@@ -40,6 +41,13 @@ class Crypto {
       TxCryptoGetParams.algorithm: DEFAULT_ALGORITHM,
       TxCryptoGetParams.key: key,
     });
+  }
+
+  static void ensureSupportedKeyLength(Uint8List key) {
+    if (key.length != DEFAULT_KEY_LENGTH_IN_BITS &&
+        key.length != KEY_LENGTH_128_BITS) {
+      throw AblyException(KEY_LENGTH_ERROR_MESSAGE);
+    }
   }
 
   /// Create a random key

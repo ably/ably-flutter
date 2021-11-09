@@ -24,6 +24,8 @@ class EncryptedMessagingService {
   // This is a quick way to create a key from a password. In production,
   // you should either create a random key or use a key derivation
   // function (KDF) or other secure, attack-resistance mechanism instead.
+  // However, in the example app, we use this so that 2 devices running
+  // the example app can decrypt each other's message.
   Uint8List get keyFromPassword {
     final data = utf8.encode(examplePassword);
     final digest = sha256.convert(data);
