@@ -528,7 +528,7 @@ Ably client libraries support built-in symmetric encryption of message content, 
     - creating a random one on your server using an Ably SDK. You must distribute this specific key to all clients.
 2. Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);` - the key can be a Base64-encoded `String`, or a `Uint8List`
 3. Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`. Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.
-4. Set this options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
+4. Set these options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
 5. Use your channel as normal, such as by publishing messages or subscribing for messages.
 
 Overall, it would like this:
