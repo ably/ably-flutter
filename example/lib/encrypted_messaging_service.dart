@@ -21,6 +21,9 @@ class EncryptedMessagingService {
 
   static const examplePassword = 'password-to-encrypt-and-decrypt-text';
 
+  // This is a quick way to create a key from a password. In production,
+  // you should either create a random key or use a key derivation
+  // function (KDF) or other secure, attack-resistance mechanism instead.
   Uint8List get keyFromPassword {
     final data = utf8.encode(examplePassword);
     final digest = sha256.convert(data);
