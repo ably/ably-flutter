@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,8 +15,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.ably.flutter.plugin.util.Consumer;
 import io.ably.lib.push.LocalDevice;
 import io.ably.lib.push.Push;
@@ -38,9 +42,9 @@ import io.ably.lib.types.DeltaExtras;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
-import io.ably.lib.types.PaginatedResult;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.util.Crypto;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
@@ -82,9 +86,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private Map<Byte, CodecPair> codecMap;
   private static final Gson gson = new Gson();
+  private final CipherParamsStorage cipherParamsStorage;
 
-  public AblyMessageCodec() {
+  public AblyMessageCodec(CipherParamsStorage cipherParamsStorage) {
     final AblyMessageCodec self = this;
+    this.cipherParamsStorage = cipherParamsStorage;
     codecMap = new HashMap<Byte, CodecPair>() {
       {
         put(PlatformConstants.CodecTypes.ablyMessage,
@@ -135,6 +141,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodePushChannelSubscription, null));
         put(PlatformConstants.CodecTypes.remoteMessage,
             new CodecPair<>(self::encodeRemoteMessage, null));
+        put(PlatformConstants.CodecTypes.cipherParams,
+            new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
       }
     };
   }
@@ -189,6 +197,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.pushChannelSubscription;
     } else if (value instanceof RemoteMessage) {
       return PlatformConstants.CodecTypes.remoteMessage;
+    } else if (value instanceof Crypto.CipherParams) {
+      return PlatformConstants.CodecTypes.cipherParams;
+    } else if (value instanceof ChannelOptions) {
+      // Encoding it into a RealtimeChannelOptions instance, because it extends RestChannelOptions
+      return PlatformConstants.CodecTypes.realtimeChannelOptions;
     }
     return null;
   }
@@ -356,25 +369,20 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
-    try {
-      return createChannelOptions(cipher);
-    } catch (AblyException e) {
-      System.out.println("Exception while decoding RestChannelOptions: " + e);
-      return null;
+    ChannelOptions options = new ChannelOptions();
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRestChannelOptions.cipherParams));
+    if (options.cipherParams != null) {
+      options.encrypted = true;
     }
+    return options;
   }
 
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
-
-    ChannelOptions options;
-    try {
-      options = createChannelOptions(cipher);
-    } catch (AblyException e) {
-      System.out.println("Exception while decoding RealtimeChannelOptions: " + e);
-      return null;
+    ChannelOptions options = new ChannelOptions();
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams));
+    if (options.cipherParams != null) {
+      options.encrypted = true;
     }
     options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
     final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
@@ -385,23 +393,21 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return options;
   }
 
-  private ChannelOptions createChannelOptions(@Nullable Object cipher) throws AblyException {
-    if (cipher == null) return new ChannelOptions();
-    if (cipher instanceof String) {
-      try {
-        return ChannelOptions.withCipherKey((String) cipher);
-      } catch (AblyException ae) {
-        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as String: " + ae, 400, 40000));
-      }
-    } else if (cipher instanceof byte[]) {
-      try {
-        return ChannelOptions.withCipherKey((byte[]) cipher);
-      } catch (AblyException ae) {
-        throw AblyException.fromErrorInfo(new ErrorInfo("Exception while decoding RealtimeChannelOptions as byte array: " + ae, 400, 40000));
-      }
-    } else {
-      throw AblyException.fromErrorInfo(new ErrorInfo("CipherKey must either be a String or a Byte Array.", 400, 40000));
-    }
+  private Map<String, Object> encodeCipherParams(Crypto.CipherParams cipherParams) {
+    if (cipherParams == null) return null;
+    final Integer handle = cipherParamsStorage.getHandle(cipherParams);
+    HashMap<String, Object> jsonMap = new HashMap<>();
+
+    // All other properties in CipherParams are package private, so cannot be exposed to Dart side.
+    jsonMap.put(PlatformConstants.TxCipherParams.androidHandle, handle);
+
+    return jsonMap;
+  }
+
+  private Crypto.CipherParams decodeCipherParams(@Nullable Map<String, Object> cipherParamsDictionary) {
+    if (cipherParamsDictionary == null) return null;
+    final Integer cipherParamsHandle = (Integer) cipherParamsDictionary.get(PlatformConstants.TxCipherParams.androidHandle);
+    return cipherParamsStorage.from(cipherParamsHandle);
   }
 
   private ChannelMode[] createChannelModesArray(ArrayList<String> modesString) {
@@ -412,8 +418,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return modes;
   }
 
-  private ChannelMode decodeChannelOptionsMode(String string) {
-    switch (string) {
+  private ChannelMode decodeChannelOptionsMode(String mode) {
+    switch (mode) {
       case PlatformConstants.TxEnumConstants.presence:
         return ChannelMode.presence;
       case PlatformConstants.TxEnumConstants.publish:

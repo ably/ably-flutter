@@ -2,7 +2,6 @@ export 'src/channel_event.dart';
 export 'src/channel_mode.dart';
 export 'src/channel_state.dart';
 export 'src/channel_state_event.dart';
-export 'src/channels.dart';
 export 'src/connection.dart';
 export 'src/connection_event.dart';
 export 'src/connection_state.dart';

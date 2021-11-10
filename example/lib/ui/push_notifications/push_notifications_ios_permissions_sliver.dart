@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/bool_stream_button.dart';
+import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import '../bool_stream_button.dart';
-import '../text_with_label.dart';
 
 class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -73,7 +72,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
             if (!snapshot.hasData || snapshot.data == null) {
               return const Text('No iOS permission information to show yet.');
             } else {
-              final unNotificationSettings =
+              final settings =
                   snapshot.data as ably.UNNotificationSettings;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,28 +81,24 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
                     'iOS Notification Settings',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  TextWithLabel('Authorization Status',
-                      '${unNotificationSettings.authorizationStatus}'),
-                  TextWithLabel(
-                      'Sound', '${unNotificationSettings.soundSetting}'),
-                  TextWithLabel(
-                      'Badge', '${unNotificationSettings.badgeSetting}'),
-                  TextWithLabel(
-                      'Alert', '${unNotificationSettings.alertSetting}'),
-                  TextWithLabel('Notification Center',
-                      '${unNotificationSettings.notificationCenterSetting}'),
-                  TextWithLabel('Lock Screen',
-                      '${unNotificationSettings.lockScreenSetting}'),
-                  TextWithLabel(
-                      'Alert Style', '${unNotificationSettings.alertStyle}'),
-                  TextWithLabel('Shows Preview',
-                      '${unNotificationSettings.showPreviewsSetting}'),
-                  TextWithLabel('Critical Alerts',
-                      '${unNotificationSettings.criticalAlertSetting}'),
-                  TextWithLabel('providesAppNotificationSettings',
-                      '${unNotificationSettings.providesAppNotificationSettings}'),
-                  TextWithLabel('Siri announcements',
-                      '${unNotificationSettings.announcementSetting}'),
+                  TextRow('Authorization Status',
+                      '${settings.authorizationStatus}'),
+                  TextRow('Sound', '${settings.soundSetting}'),
+                  TextRow('Badge', '${settings.badgeSetting}'),
+                  TextRow('Alert', '${settings.alertSetting}'),
+                  TextRow('Notification Center',
+                      '${settings.notificationCenterSetting}'),
+                  TextRow('Lock Screen',
+                      '${settings.lockScreenSetting}'),
+                  TextRow('Alert Style', '${settings.alertStyle}'),
+                  TextRow('Shows Preview',
+                      '${settings.showPreviewsSetting}'),
+                  TextRow('Critical Alerts',
+                      '${settings.criticalAlertSetting}'),
+                  TextRow('providesAppNotificationSettings',
+                      '${settings.providesAppNotificationSettings}'),
+                  TextRow('Siri announcements',
+                      '${settings.announcementSetting}'),
                   TextButton(
                     onPressed:
                         _pushNotificationService.updateNotificationSettings,

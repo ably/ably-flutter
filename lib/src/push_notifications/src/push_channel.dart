@@ -1,5 +1,5 @@
-import '../../common/common.dart';
-import 'push_channel_subscription.dart';
+import 'package:ably_flutter/src/common/common.dart';
+import 'package:ably_flutter/src/push_notifications/src/push_channel_subscription.dart';
 
 /// Channel to receive push notifications on
 ///

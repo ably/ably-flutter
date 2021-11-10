@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:collection';
 
-import '../../../authentication/authentication.dart';
-import '../../../common/common.dart';
-import '../../../error/error.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../push_notifications/push_notifications.dart';
-import '../../../realtime/realtime.dart';
-import '../../../stats/stats.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
+import 'package:ably_flutter/src/authentication/authentication.dart';
+import 'package:ably_flutter/src/common/common.dart';
+import 'package:ably_flutter/src/common/src/backwards_compatibility.dart';
+import 'package:ably_flutter/src/error/error.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'package:ably_flutter/src/realtime/realtime.dart';
+import 'package:ably_flutter/src/stats/src/stats.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
@@ -85,7 +86,7 @@ class Realtime extends PlatformObject {
   Future<void> connect() async {
     final queueItem = Completer<void>();
     _connectQueue.add(queueItem);
-    unawaited(_connect());
+    unawaitedWorkaroundForDartPre214(_connect());
     return queueItem.future;
   }
 

@@ -1,10 +1,8 @@
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/rest/src/rest_channels.dart';
 import 'package:meta/meta.dart';
-
-import '../../../generated/platform_constants.dart';
-import '../../../rest/rest.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
-import 'rest_channel.dart';
 
 /// A collection of rest channel objects
 ///

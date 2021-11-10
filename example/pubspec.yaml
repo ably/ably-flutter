@@ -15,9 +15,10 @@ dependencies:
   async: ^2.6.1
   stream_transform: ^2.0.0
   enum_to_string: ^2.0.1
-  flutter_local_notifications: ^8.1.1+1
+  flutter_local_notifications: ^9.0.3
   fluttertoast: ^8.0.8
-  device_info_plus: ^2.1.0
+  device_info_plus: ^3.1.1
+  crypto: ^3.0.1
 
 dev_dependencies:
   ably_flutter:

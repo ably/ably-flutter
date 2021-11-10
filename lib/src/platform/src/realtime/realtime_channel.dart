@@ -4,20 +4,14 @@ import 'dart:collection';
 import 'package:ably_flutter/src/common/common.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-import 'package:pedantic/pedantic.dart';
-
-import '../../../error/error.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../push_notifications/push_notifications.dart';
-import '../../../realtime/realtime.dart';
-import '../../../realtime/src/realtime_channel_options.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/realtime/src/realtime_channels_interface.dart';
+import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 
 /// Plugin based implementation of Realtime channel
-class RealtimeChannel extends PlatformObject
-    implements RealtimeChannelInterface {
+class RealtimeChannel extends PlatformObject {
   @override
   final Realtime realtime;
 
@@ -61,7 +55,7 @@ class RealtimeChannel extends PlatformObject
     );
   }
 
-  final _publishQueue = Queue<_PublishQueueItem>();
+  final _publishQueue = Queue<PublishQueueItem>();
   Completer<void>? _authCallbackCompleter;
 
   @override
@@ -74,9 +68,9 @@ class RealtimeChannel extends PlatformObject
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
-    unawaited(_publishInternal());
+    unawaitedWorkaroundForDartPre214(_publishInternal());
     return queueItem.completer.future;
   }
 
@@ -229,13 +223,4 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   void release(String name) {
     (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
   }
-}
-
-/// An item for used to enqueue a message to be published after an ongoing
-/// authCallback is completed
-class _PublishQueueItem {
-  List<Message> messages;
-  final Completer<void> completer;
-
-  _PublishQueueItem(this.completer, this.messages);
 }

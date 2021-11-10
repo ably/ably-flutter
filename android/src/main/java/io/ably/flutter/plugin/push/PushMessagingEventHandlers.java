@@ -51,7 +51,6 @@ final public class PushMessagingEventHandlers {
     @Override
     public void onReceive(Context context, Intent intent) {
       String action = intent.getAction();
-      Bundle intentExtras = intent.getExtras();
       RemoteMessage message = new RemoteMessage(intent.getExtras());
       switch (action) {
         case PUSH_ON_MESSAGE_RECEIVED:

@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/common/src/backwards_compatibility.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/message/message.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'package:ably_flutter/src/rest/rest.dart';
 import 'package:flutter/services.dart';
-
-import '../../../../ably_flutter.dart';
-import '../../../error/error.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../rest/rest.dart';
-import '../../platform.dart';
 
 /// Plugin based implementation of Rest channel
 class RestChannel extends PlatformObject implements RestChannelInterface {
@@ -53,7 +53,7 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     );
   }
 
-  final _publishQueue = Queue<_PublishQueueItem>();
+  final _publishQueue = Queue<PublishQueueItem>();
   Completer<void>? _authCallbackCompleter;
 
   @override
@@ -66,9 +66,9 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
-    unawaited(_publishInternal());
+    unawaitedWorkaroundForDartPre214(_publishInternal());
     return queueItem.completer.future;
   }
 
@@ -160,13 +160,4 @@ class RestChannel extends PlatformObject implements RestChannelInterface {
         TxTransportKeys.channelName: name,
         TxTransportKeys.options: options,
       });
-}
-
-/// An item for used to enqueue a message to be published after an ongoing
-/// authCallback is completed
-class _PublishQueueItem {
-  final List<Message> messages;
-  final Completer<void> completer;
-
-  _PublishQueueItem(this.completer, this.messages);
 }

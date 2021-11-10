@@ -1,8 +1,4 @@
-import '../../authentication/authentication.dart';
-import '../../platform/platform.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../stats/stats.dart';
-import '../common.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A base class for [Rest] and [Realtime]
 abstract class AblyBase {

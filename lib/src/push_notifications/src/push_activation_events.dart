@@ -1,5 +1,4 @@
-import '../../error/error.dart';
-import '../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Methods that will be called back when events happen related to push
 /// notifications, such as device activation, deactivation, update fails.

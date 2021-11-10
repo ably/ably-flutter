@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import '../../../error/error.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../realtime/realtime.dart';
-import '../../platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/src/realtime/realtime.dart';
 
 /// connects to Ably service
 class Connection extends PlatformObject implements ConnectionInterface {

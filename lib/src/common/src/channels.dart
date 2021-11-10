@@ -1,6 +1,5 @@
+import 'package:ably_flutter/src/platform/platform.dart';
 import 'package:meta/meta.dart';
-
-import '../../platform/platform.dart';
 
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]

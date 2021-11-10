@@ -1,5 +1,4 @@
-import '../../../common/common.dart';
-import '../../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Manage device registrations for push notifications
 ///
