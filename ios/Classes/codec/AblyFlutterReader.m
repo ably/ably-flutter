@@ -27,21 +27,21 @@ NS_ASSUME_NONNULL_END
 
 + (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
-        [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
-        [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readEventMessage,
-        [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
-        [NSString stringWithFormat:@"%d", messageExtrasCodecType]: readChannelMessageExtras,
-        [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
-        [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
-        [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: CryptoCodec.readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: CryptoCodec.readRealtimeChannelOptions,
-        [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
-        [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
-        [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
-        [NSString stringWithFormat:@"%d", realtimePresenceParamsCodecType]: readRealtimePresenceParams,
-        [NSString stringWithFormat:@"%d", messageDataCodecType]: readMessageData,
-        [NSString stringWithFormat:@"%d", cipherParamsCodecType]: CryptoCodec.readCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyMessage]: readAblyFlutterMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyEventMessage ]: readEventMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeClientOptions]: readClientOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageExtras]: readChannelMessageExtras,
+        [NSString stringWithFormat:@"%d", CodecTypeMessage]: readChannelMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenDetails]: readTokenDetails,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenRequest]: readTokenRequest,
+        [NSString stringWithFormat:@"%d", CodecTypeRestChannelOptions]: CryptoCodec.readRestChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeChannelOptions]: CryptoCodec.readRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRestHistoryParams]: readRestHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeHistoryParams]: readRealtimeHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRestPresenceParams]: readRestPresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimePresenceParams]: readRealtimePresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
+        [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }

@@ -2,8 +2,10 @@ import Foundation
 
 
 class Message: NSObject {
-    let message: Any
-    let handle: Int
+    @objc
+    public let message: Any
+    @objc
+    public let handle: Int
     
     @objc
     init(message: Any, handle: Int) {
