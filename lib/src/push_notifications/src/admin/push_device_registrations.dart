@@ -15,7 +15,7 @@ abstract class PushDeviceRegistrations {
   /// List registered devices filtered by optional params.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
-  Future<PaginatedResultInterface<DeviceDetails>> list(
+  Future<PaginatedResult<DeviceDetails>> list(
     DeviceRegistrationParams params,
   );
 

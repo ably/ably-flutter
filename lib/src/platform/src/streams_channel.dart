@@ -20,7 +20,7 @@
 
 import 'dart:async';
 
-import 'package:ably_flutter/src/error/error.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

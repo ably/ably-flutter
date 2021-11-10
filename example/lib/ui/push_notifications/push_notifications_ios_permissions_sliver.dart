@@ -72,8 +72,7 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
             if (!snapshot.hasData || snapshot.data == null) {
               return const Text('No iOS permission information to show yet.');
             } else {
-              final settings =
-                  snapshot.data as ably.UNNotificationSettings;
+              final settings = snapshot.data as ably.UNNotificationSettings;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -88,17 +87,15 @@ class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
                   TextRow('Alert', '${settings.alertSetting}'),
                   TextRow('Notification Center',
                       '${settings.notificationCenterSetting}'),
-                  TextRow('Lock Screen',
-                      '${settings.lockScreenSetting}'),
+                  TextRow('Lock Screen', '${settings.lockScreenSetting}'),
                   TextRow('Alert Style', '${settings.alertStyle}'),
-                  TextRow('Shows Preview',
-                      '${settings.showPreviewsSetting}'),
-                  TextRow('Critical Alerts',
-                      '${settings.criticalAlertSetting}'),
+                  TextRow('Shows Preview', '${settings.showPreviewsSetting}'),
+                  TextRow(
+                      'Critical Alerts', '${settings.criticalAlertSetting}'),
                   TextRow('providesAppNotificationSettings',
                       '${settings.providesAppNotificationSettings}'),
-                  TextRow('Siri announcements',
-                      '${settings.announcementSetting}'),
+                  TextRow(
+                      'Siri announcements', '${settings.announcementSetting}'),
                   TextButton(
                     onPressed:
                         _pushNotificationService.updateNotificationSettings,

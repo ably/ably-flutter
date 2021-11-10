@@ -10,10 +10,10 @@ class PushNative extends PlatformObject implements Push {
       PushNotificationEventsNative();
 
   /// A rest client used platform side to invoke push notification methods
-  final RestInterface? rest;
+  final Rest? rest;
 
   /// A realtime client used platform side to invoke push notification methods
-  final RealtimeInterface? realtime;
+  final Realtime? realtime;
 
   /// Pass an Ably realtime or rest client.
   PushNative({this.rest, this.realtime}) : super() {

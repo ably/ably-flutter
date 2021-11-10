@@ -1,4 +1,4 @@
-import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
 /// A collection of Channel objects accessible

@@ -32,7 +32,7 @@ abstract class AblyBase {
   /// gets stats based on params as a [PaginatedResult]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  Future<PaginatedResultInterface<Stats>> stats([
+  Future<PaginatedResult<Stats>> stats([
     Map<String, dynamic>? params,
   ]);
 

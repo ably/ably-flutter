@@ -12,26 +12,24 @@ class PushNotificationService {
       AndroidPushNotificationConfiguration();
   ably.Realtime? realtime;
   ably.Rest? rest;
-  ably.RealtimeChannelInterface? _realtimeChannel;
-  ably.RealtimeChannelInterface? _pushLogMetachannel;
-  ably.RestChannelInterface? _restChannel;
+  ably.RealtimeChannel? _realtimeChannel;
+  ably.RealtimeChannel? _pushLogMetaChannel;
+  ably.RestChannel? _restChannel;
   late ably.PushChannel? _pushChannel;
 
-  final BehaviorSubject<
-          ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-      _pushChannelDeviceSubscriptionsSubject = BehaviorSubject<
-          ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
+  final BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>
+      _pushChannelDeviceSubscriptionsSubject =
+      BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>();
 
-  ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  ValueStream<ably.PaginatedResult<ably.PushChannelSubscription>>
       get pushChannelDeviceSubscriptionsStream =>
           _pushChannelDeviceSubscriptionsSubject.stream;
 
-  final BehaviorSubject<
-          ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-      _pushChannelClientSubscriptionsSubject = BehaviorSubject<
-          ably.PaginatedResultInterface<ably.PushChannelSubscription>>();
+  final BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>
+      _pushChannelClientSubscriptionsSubject =
+      BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>();
 
-  ValueStream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  ValueStream<ably.PaginatedResult<ably.PushChannelSubscription>>
       get pushChannelClientSubscriptionsStream =>
           _pushChannelClientSubscriptionsSubject.stream;
 
@@ -146,8 +144,8 @@ class PushNotificationService {
     await ensureRealtimeClientConnected();
     final stream = _realtimeChannel!.subscribe();
     _realtimeChannelStreamSubscription = stream.listen((message) {
-      print('Message clientId: ${message?.clientId}');
-      print('Message extras: ${message?.extras}');
+      print('Message clientId: ${message.clientId}');
+      print('Message extras: ${message.extras}');
     });
     return stream;
   }
@@ -156,7 +154,7 @@ class PushNotificationService {
 
   Future<Stream<ably.Message?>> subscribeToPushLogMetachannel() async {
     await ensureRealtimeClientConnected();
-    final stream = _pushLogMetachannel!.subscribe();
+    final stream = _pushLogMetaChannel!.subscribe();
     _pushLogMetaChannelSubscription = stream.listen((message) {
       print('MetaChannel message');
       print(message);
@@ -219,7 +217,7 @@ class PushNotificationService {
       _realtimeChannel =
           realtime!.channels.get(Constants.channelNameForPushNotifications);
       _pushChannel = _realtimeChannel!.push;
-      _pushLogMetachannel =
+      _pushLogMetaChannel =
           realtime!.channels.get(Constants.pushMetaChannelName);
       _hasPushChannelSubject.add(true);
     } else if (rest != null) {
@@ -237,7 +235,7 @@ class PushNotificationService {
   /// Ably-java will list all subscriptions (clientId and deviceId), where as
   /// ably-cocoa will only give the one you specify in params.
   /// This behavior is the same for [listSubscriptionsWithDeviceId]
-  Future<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  Future<ably.PaginatedResult<ably.PushChannelSubscription>>
       listSubscriptionsWithClientId() async {
     await getDevice();
     final subscriptions = await _pushChannel!.listSubscriptions({
@@ -249,7 +247,7 @@ class PushNotificationService {
     return subscriptions;
   }
 
-  Future<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+  Future<ably.PaginatedResult<ably.PushChannelSubscription>>
       listSubscriptionsWithDeviceId() async {
     await getDevice();
     final subscriptions = await _pushChannel!.listSubscriptions({

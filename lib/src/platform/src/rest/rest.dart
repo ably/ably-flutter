@@ -12,7 +12,7 @@ Map<int?, Rest> get restInstances =>
     _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 /// Ably's Rest client
-class Rest extends PlatformObject implements RestInterface<RestChannels> {
+class Rest extends PlatformObject implements AblyBase {
   /// instantiates with [ClientOptions] and a String [key]
   ///
   /// creates client options from key if [key] is provided
@@ -80,7 +80,9 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
   @override
   late Push push;
 
-  @override
+  /// collection of [RestChannel] instances
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
   late RestChannels channels;
 
   @override

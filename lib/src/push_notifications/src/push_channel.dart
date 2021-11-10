@@ -1,5 +1,4 @@
-import 'package:ably_flutter/src/common/common.dart';
-import 'package:ably_flutter/src/push_notifications/src/push_channel_subscription.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Channel to receive push notifications on
 ///
@@ -36,6 +35,6 @@ abstract class PushChannel {
   /// To listSubscriptions on Android, params must include a `deviceId` key.
   /// This is because the package plugin uses ably-java.
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
+  Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params);
 }

@@ -1,16 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter/src/authentication/authentication.dart';
-import 'package:ably_flutter/src/common/common.dart';
-import 'package:ably_flutter/src/common/src/backwards_compatibility.dart';
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
-import 'package:ably_flutter/src/stats/src/stats.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
@@ -21,8 +13,7 @@ Map<int?, Realtime> get realtimeInstances =>
         UnmodifiableMapView(_realtimeInstances);
 
 /// Ably's Realtime client
-class Realtime extends PlatformObject
-    implements RealtimeInterface<RealtimePlatformChannels> {
+class Realtime extends PlatformObject {
   /// instantiates with [ClientOptions] and a String [key]
   ///
   /// creates client options from key if [key] is provided
@@ -35,7 +26,7 @@ class Realtime extends PlatformObject
         options = options ?? ClientOptions.fromKey(key!),
         super() {
     _connection = Connection(this);
-    _channels = RealtimePlatformChannels(this);
+    _channels = RealtimeChannels(this);
     push = PushNative(realtime: this);
   }
 
@@ -52,6 +43,9 @@ class Realtime extends PlatformObject
   // The _connection instance keeps a reference to this platform object.
   late final Connection _connection;
 
+  /// Provides access to the underlying Connection object
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
   @override
   Connection get connection => _connection;
 
@@ -64,17 +58,22 @@ class Realtime extends PlatformObject
   @override
   late Push push;
 
-  late RealtimePlatformChannels _channels;
+  late RealtimeChannels _channels;
 
+  /// collection of [RealtimeChannelInterface] objects
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
   @override
-  RealtimePlatformChannels get channels => _channels;
+  RealtimeChannels get channels => _channels;
 
+  /// closes the [connection]
   @override
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   final _connectQueue = Queue<Completer<void>>();
   Completer<void>? _authCallbackCompleter;
 
+  /// connects to [connection]
   @override
   Future<void> connect() async {
     final queueItem = Completer<void>();
