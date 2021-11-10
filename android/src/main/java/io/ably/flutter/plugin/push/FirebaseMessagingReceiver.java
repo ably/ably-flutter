@@ -80,6 +80,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     // This only shows processes for the current android app.
     final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
+    if (appProcesses == null) {
+      // appProcesses is null if no processes are running.
+      return false;
+    }
+
     for (ActivityManager.RunningAppProcessInfo process : appProcesses) {
       // Importance is IMPORTANCE_SERVICE (not IMPORTANCE_FOREGROUND)
       //  - when app was terminated, or
