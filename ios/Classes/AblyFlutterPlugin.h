@@ -1,5 +1,5 @@
 #import <Flutter/Flutter.h>
-#import "AblyFlutter.h"
+#import "AblyInstanceManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)new NS_UNAVAILABLE;
 +(instancetype)init NS_UNAVAILABLE;
 
-@property(nonatomic) AblyFlutter * ably;
+@property(nonatomic) AblyInstanceManager * ablyInstanceManager;
 @property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
 @property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
 

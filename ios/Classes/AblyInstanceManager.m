@@ -1,13 +1,13 @@
 @import Ably;
 
-#import "AblyFlutter.h"
+#import "AblyInstanceManager.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
 
-@implementation AblyFlutter {
+@implementation AblyInstanceManager {
     FlutterMethodChannel* _channel;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
@@ -16,7 +16,7 @@
 }
 
 + (instancetype)sharedInstance {
-    static AblyFlutter *sharedInstance = nil;
+    static AblyInstanceManager *sharedInstance = nil;
     @synchronized(self) {
         if (sharedInstance == nil) {
             sharedInstance = [[self alloc] init];
