@@ -1,4 +1,4 @@
-import '../message.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Status on a presence message
 ///

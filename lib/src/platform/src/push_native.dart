@@ -1,12 +1,7 @@
 import 'dart:io' as io show Platform;
 
-import '../../generated/platform_constants.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../realtime/realtime.dart';
-import '../../rest/rest.dart';
-import '../platform.dart';
-import 'push_activation_events_native.dart';
-import 'push_notification_events_native.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// The native code implementation of [Push].
 class PushNative extends PlatformObject implements Push {

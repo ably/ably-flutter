@@ -1,10 +1,5 @@
-import '../../common/common.dart';
-import '../../common/src/channels.dart';
-import '../../message/src/message.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../rest.dart';
-import 'rest.dart';
-import 'rest_channel_options.dart';
+
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A named channel through with rest client can interact with ably service.
 ///

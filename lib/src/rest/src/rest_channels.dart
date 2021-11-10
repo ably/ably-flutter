@@ -1,5 +1,4 @@
-import '../../common/common.dart';
-import '../rest.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A collection of REST channel objects
 ///

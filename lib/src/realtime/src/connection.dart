@@ -1,6 +1,4 @@
-import '../../common/common.dart';
-import '../../error/error.dart';
-import '../realtime.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// connects to Ably service using a [web-socket](https://www.ably.com/topic/websockets) connection
 ///

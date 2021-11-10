@@ -1,7 +1,5 @@
-import '../../authentication/authentication.dart';
-import '../../common/common.dart';
-import 'channels.dart';
-import 'rest_channels.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/rest/src/rest_channels.dart';
 
 /// an abstract class for Ably's Rest client
 ///

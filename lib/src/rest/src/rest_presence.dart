@@ -1,8 +1,4 @@
-import '../../common/common.dart';
-import '../../message/message.dart';
-import '../../platform/platform.dart';
-import 'rest_history_params.dart';
-import 'rest_presence_params.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Presence object on a [RestChannel] helps to query Presence members
 /// and presence history

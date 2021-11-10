@@ -1,7 +1,5 @@
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../realtime/realtime.dart';
-import '../../platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Plugin based implementation of [RestPresence]
 class RealtimePresence extends PlatformObject

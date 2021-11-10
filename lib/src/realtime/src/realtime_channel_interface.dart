@@ -1,20 +1,19 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart';
-
-import '../../authentication/authentication.dart';
-import '../../common/common.dart';
-import '../../common/src/event_emitter.dart';
-import '../../error/src/error_info.dart';
-import '../../message/src/message.dart';
-import '../../push_notifications/src/push_channel.dart';
-import '../realtime.dart';
-import 'channel_event.dart';
-import 'channel_state.dart';
-import 'channel_state_event.dart';
-import 'presence.dart';
-import 'realtime.dart';
-import 'realtime_channel_options.dart';
+import 'package:ably_flutter/src/authentication/authentication.dart';
+import 'package:ably_flutter/src/common/common.dart';
+import 'package:ably_flutter/src/common/src/event_emitter.dart';
+import 'package:ably_flutter/src/error/src/error_info.dart';
+import 'package:ably_flutter/src/message/src/message.dart';
+import 'package:ably_flutter/src/push_notifications/src/push_channel.dart';
+import 'package:ably_flutter/src/realtime/realtime.dart';
+import 'package:ably_flutter/src/realtime/src/channel_event.dart';
+import 'package:ably_flutter/src/realtime/src/channel_state.dart';
+import 'package:ably_flutter/src/realtime/src/channel_state_event.dart';
+import 'package:ably_flutter/src/realtime/src/presence.dart';
+import 'package:ably_flutter/src/realtime/src/realtime.dart';
+import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 
 /// A named channel through with realtime client can interact with ably service.
 ///
@@ -95,8 +94,8 @@ abstract class RealtimeChannelInterface
   /// See [Message.dart] for more information.
   ///
   /// Calling subscribe the first time on a channel will automatically attach
-  /// that channel. If a channel is detached, subscribing again will not reattach
-  /// the channel. Remember to call [RealtimeChannel.attach]
+  /// that channel. If a channel is detached, subscribing again will not
+  /// reattach the channel. Remember to call [RealtimeChannel.attach]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message?> subscribe({

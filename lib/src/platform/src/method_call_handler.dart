@@ -1,14 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../authentication/authentication.dart';
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
-import '../platform_internal.dart';
-import 'ably_message.dart';
-import 'push_activation_events_native.dart';
-import 'push_notification_events_native.dart';
 
 /// Handles method calls invoked from platform side to dart side
 class AblyMethodCallHandler {

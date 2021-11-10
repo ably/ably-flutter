@@ -1,4 +1,4 @@
-import '../authentication.dart';
+import 'package:ably_flutter/src/authentication/authentication.dart';
 
 /// [Auth] object provides a way to create [TokenRequest] objects
 /// with [createTokenRequest] method or create Ably Tokens with

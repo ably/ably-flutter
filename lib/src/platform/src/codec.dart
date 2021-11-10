@@ -1,21 +1,12 @@
 import 'dart:io' as io show Platform;
 import 'dart:typed_data';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/crypto/src/cipher_params_native.dart';
+import 'package:ably_flutter/src/error/error.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import '../../authentication/authentication.dart';
-import '../../crypto/crypto.dart';
-import '../../crypto/src/cipher_params_native.dart';
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../../message/message.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../push_notifications/src/local_device.dart';
-import '../../realtime/realtime.dart';
-import '../../realtime/src/realtime_channel_options.dart';
-import '../../rest/rest.dart';
-import '../platform.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
@@ -856,7 +847,8 @@ class Codec extends StandardMessageCodec {
         return UNShowPreviewsSetting.never;
     }
     throw AblyException(
-      'Platform communication error. UNShowPreviewsSetting is invalid: $setting',
+      'Platform communication error. '
+          'UNShowPreviewsSetting is invalid: $setting',
     );
   }
 
@@ -870,7 +862,8 @@ class Codec extends StandardMessageCodec {
         return UNAlertStyle.none;
     }
     throw AblyException(
-      'Platform communication error. UNAlertStyle is invalid: $style',
+      'Platform communication error. '
+          'UNAlertStyle is invalid: $style',
     );
   }
 
@@ -902,7 +895,8 @@ class Codec extends StandardMessageCodec {
         return UNNotificationSetting.notSupported;
     }
     throw AblyException(
-      'Platform communication error. UNNotificationSetting is invalid: $setting',
+      'Platform communication error. '
+          'UNNotificationSetting is invalid: $setting',
     );
   }
 

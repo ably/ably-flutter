@@ -1,9 +1,6 @@
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../generated/platform_constants.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../platform.dart';
-import '../platform_internal.dart';
 
 /// Manages the communication with Android Platform, in the case where
 /// this dart side is an isolate launched by the Android Platform explicitly
@@ -35,7 +32,8 @@ class BackgroundIsolateAndroidPlatform {
   }
 
   /// A method channel used to communicate with the user's app isolate
-  /// we explicitly launched when a RemoteMessage is received. Used only on Android.
+  /// we explicitly launched when a RemoteMessage is received.
+  /// Used only on Android.
   static final MethodChannel methodChannel =
       MethodChannel('io.ably.flutter.plugin.background', Platform.codec);
 

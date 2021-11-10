@@ -1,4 +1,4 @@
-import '../common.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// The response from an HTTP request containing an empty or
 /// JSON-encodable object response

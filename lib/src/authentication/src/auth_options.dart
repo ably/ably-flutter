@@ -1,4 +1,4 @@
-import '../authentication.dart';
+import 'package:ably_flutter/src/authentication/authentication.dart';
 
 /// A class providing configurable authentication options used when
 /// authenticating or issuing tokens explicitly.

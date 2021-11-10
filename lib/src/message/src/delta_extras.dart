@@ -1,7 +1,6 @@
+import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/message/message.dart';
 import 'package:meta/meta.dart';
-
-import '../../generated/platform_constants.dart';
-import '../message.dart';
 
 /// Delta extension configuration for [MessageExtras]
 @immutable

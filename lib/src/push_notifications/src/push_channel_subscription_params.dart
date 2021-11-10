@@ -1,4 +1,4 @@
-import '../push_notifications.dart';
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
 
 /// Params to filter push channel subscriptions.
 ///

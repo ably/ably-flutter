@@ -1,7 +1,5 @@
-import '../../authentication/authentication.dart';
-import '../../common/common.dart';
-import '../realtime.dart';
-import 'realtime_channels_interface.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/realtime/src/realtime_channels_interface.dart';
 
 /// an abstract class for Ably's Realtime client
 ///

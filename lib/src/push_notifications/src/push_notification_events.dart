@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'remote_message.dart';
+import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
 
 typedef BackgroundMessageHandler = void Function(RemoteMessage message);
 
@@ -30,12 +30,15 @@ abstract class PushNotificationEvents {
   /// received by the device.
   void setOnBackgroundMessage(BackgroundMessageHandler handler);
 
-  /// Called when notification is tapped while the app is already in the foreground or in the background
+  /// Called when notification is tapped while the app is already in the
+  /// foreground or in the background
   ///
-  /// Check the [ApplicationState] to know if the app was in foreground or background.
+  /// Check the [ApplicationState] to know if the app was in foreground or
+  /// background.
   Stream<RemoteMessage> get onNotificationTap;
 
-  /// Called when the user visits the "In-app settings", such as when in the iOS Settings > App Name > Notifications > "Customize in App"
+  /// Called when the user visits the "In-app settings", such as when in the
+  /// iOS Settings > App Name > Notifications > "Customize in App"
   ///
   /// iOS only: Specifically when [`userNotificationCenter(_:openSettingsFor:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/2981869-usernotificationcenter)
   /// is called.
