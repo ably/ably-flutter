@@ -50,7 +50,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private final MethodChannel channel;
   private final HotRestartCallback hotRestartCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
-  private final AblyInstanceManager ablyInstanceManager;
+  private final AblyClientStore ablyClientStore;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
@@ -60,7 +60,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.channel = channel;
     this.applicationContext = applicationContext;
     this.hotRestartCallback = hotRestartCallback;
-    this.ablyInstanceManager = AblyInstanceManager.getInstance(applicationContext);
+    this.ablyClientStore = AblyClientStore.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
     _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
@@ -180,7 +180,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     System.out.println("Registering library instance to clean up any existing instances");
     hotRestartCallback.on();
-    ablyInstanceManager.dispose();
+    ablyClientStore.dispose();
     result.success(null);
   }
 
@@ -189,10 +189,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     final PlatformClientOptions clientOptions = message.message;
     try {
-      final long handle = ablyInstanceManager.getCurrentHandle();
+      final long handle = ablyClientStore.getCurrentHandle();
       if (clientOptions.hasAuthCallback) {
         clientOptions.options.authCallback = (Auth.TokenParams params) -> {
-          Object token = ablyInstanceManager.getRestToken(handle);
+          Object token = ablyClientStore.getRestToken(handle);
           if (token != null) return token;
 
           final CountDownLatch latch = new CountDownLatch(1);
@@ -201,7 +201,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             channel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
               @Override
               public void success(@Nullable Object result) {
-                ablyInstanceManager.setRestToken(handle, result);
+                ablyClientStore.setRestToken(handle, result);
                 latch.countDown();
               }
 
@@ -227,10 +227,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
           }
 
-          return ablyInstanceManager.getRestToken(handle);
+          return ablyClientStore.getRestToken(handle);
         };
       }
-      result.success(ablyInstanceManager.createRest(clientOptions.options));
+      result.success(ablyClientStore.createRest(clientOptions.options));
     } catch (final AblyException e) {
       handleAblyException(result, e);
     }
@@ -248,7 +248,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
     final ChannelOptions channelOptions = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
     try {
-      ablyInstanceManager.getRest(message.handle).channels.get(channelName, channelOptions);
+      ablyClientStore.getRest(message.handle).channels.get(channelName, channelOptions);
     } catch (AblyException ae) {
       handleAblyException(result, ae);
     }
@@ -265,13 +265,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     }
     Message[] messages = new Message[channelMessages.size()];
     messages = channelMessages.toArray(messages);
-    ablyInstanceManager.getRest(message.handle).channels.get(channelName).publishAsync(messages, handleCompletionWithListener(result));
+    ablyClientStore.getRest(message.handle).channels.get(channelName).publishAsync(messages, handleCompletionWithListener(result));
   }
 
   private void releaseRestChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     final String channelName = (String) message.message;
-    ablyInstanceManager.getRest(message.handle).channels.release(channelName);
+    ablyClientStore.getRest(message.handle).channels.release(channelName);
     result.success(null);
   }
 
@@ -279,7 +279,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     return new Callback<AsyncPaginatedResult<T>>() {
       @Override
       public void onSuccess(AsyncPaginatedResult<T> paginatedResult) {
-        long paginatedResultHandle = ablyInstanceManager.setPaginatedResult(paginatedResult, handle);
+        long paginatedResultHandle = ablyClientStore.setPaginatedResult(paginatedResult, handle);
         result.success(new AblyFlutterMessage<>(paginatedResult, paginatedResultHandle));
       }
 
@@ -298,7 +298,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     if (params == null) {
       params = new Param[0];
     }
-    ablyInstanceManager
+    ablyClientStore
         .getRest(message.handle)
         .channels.get(channelName)
         .historyAsync(params, this.paginatedResponseHandler(result, null));
@@ -312,7 +312,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     if (params == null) {
       params = new Param[0];
     }
-    ablyInstanceManager
+    ablyClientStore
         .getRest(message.handle)
         .channels.get(channelName)
         .presence.getAsync(params, this.paginatedResponseHandler(result, null));
@@ -326,7 +326,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     if (params == null) {
       params = new Param[0];
     }
-    ablyInstanceManager
+    ablyClientStore
         .getRest(message.handle)
         .channels.get(channelName)
         .presence.historyAsync(params, this.paginatedResponseHandler(result, null));
@@ -343,7 +343,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     try {
       result.success(
           Arrays.asList(
-              ablyInstanceManager
+              ablyClientStore
                   .getRealtime(message.handle)
                   .channels.get(channelName)
                   .presence.get(params)
@@ -362,7 +362,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     if (params == null) {
       params = new Param[0];
     }
-    ablyInstanceManager
+    ablyClientStore
         .getRealtime(message.handle)
         .channels.get(channelName)
         .presence.historyAsync(params, this.paginatedResponseHandler(result, null));
@@ -374,7 +374,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
     final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
     final Object data = map.get(PlatformConstants.TxTransportKeys.data);
-    final Presence presence = ablyInstanceManager
+    final Presence presence = ablyClientStore
         .getRealtime(message.handle)
         .channels
         .get(channelName)
@@ -392,7 +392,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
       final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
       final Object data = map.get(PlatformConstants.TxTransportKeys.data);
-      final Presence presence = ablyInstanceManager
+      final Presence presence = ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName)
@@ -414,7 +414,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final String channelName = (String) map.get(PlatformConstants.TxTransportKeys.channelName);
       final String clientId = (String) map.get(PlatformConstants.TxTransportKeys.clientId);
       final Object data = map.get(PlatformConstants.TxTransportKeys.data);
-      final Presence presence = ablyInstanceManager
+      final Presence presence = ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName)
@@ -434,10 +434,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     final PlatformClientOptions clientOptions = message.message;
     try {
-      final long handle = ablyInstanceManager.getCurrentHandle();
+      final long handle = ablyClientStore.getCurrentHandle();
       if (clientOptions.hasAuthCallback) {
         clientOptions.options.authCallback = (Auth.TokenParams params) -> {
-          Object token = ablyInstanceManager.getRealtimeToken(handle);
+          Object token = ablyClientStore.getRealtimeToken(handle);
           if (token != null) return token;
 
           final CountDownLatch latch = new CountDownLatch(1);
@@ -447,7 +447,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
               @Override
               public void success(@Nullable Object result) {
                 if (result != null) {
-                  ablyInstanceManager.setRealtimeToken(handle, result);
+                  ablyClientStore.setRealtimeToken(handle, result);
                   latch.countDown();
                 }
               }
@@ -474,10 +474,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
           }
 
-          return ablyInstanceManager.getRealtimeToken(handle);
+          return ablyClientStore.getRealtimeToken(handle);
         };
       }
-      result.success(ablyInstanceManager.createRealtime(clientOptions.options));
+      result.success(ablyClientStore.createRealtime(clientOptions.options));
     } catch (final AblyException e) {
       handleAblyException(result, e);
     }
@@ -488,7 +488,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     // Using Number (the superclass of both Long and Integer) because Flutter could send us
     // either depending on how big the value is.
     // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
-    ablyInstanceManager.getRealtime(message.handle.longValue()).connect();
+    ablyClientStore.getRealtime(message.handle.longValue()).connect();
     result.success(null);
   }
 
@@ -497,7 +497,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final Map<String, Object> data = (Map<String, Object>) message.message;
     final String channelName = (String) data.get(PlatformConstants.TxTransportKeys.channelName);
     try {
-      ablyInstanceManager
+      ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName)
@@ -514,7 +514,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final Map<String, Object> data = (Map<String, Object>) message.message;
     try {
       final String channelName = (String) data.get(PlatformConstants.TxTransportKeys.channelName);
-      ablyInstanceManager
+      ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName)
@@ -532,7 +532,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final Map<String, Object> data = (Map<String, Object>) message.message;
       final String channelName = (String) data.get(PlatformConstants.TxTransportKeys.channelName);
       final ChannelOptions channelOptions = (ChannelOptions) data.get(PlatformConstants.TxTransportKeys.options);
-      ablyInstanceManager
+      ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName)
@@ -550,7 +550,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final Map<String, Object> data = (Map<String, Object>) message.message;
     try {
       final String channelName = (String) data.get(PlatformConstants.TxTransportKeys.channelName);
-      final Channel channel = ablyInstanceManager
+      final Channel channel = ablyClientStore
           .getRealtime(message.handle)
           .channels
           .get(channelName);
@@ -571,7 +571,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void releaseRealtimeChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     final String channelName = (String) message.message;
-    ablyInstanceManager.getRealtime(message.handle).channels.release(channelName);
+    ablyClientStore.getRealtime(message.handle).channels.release(channelName);
     result.success(null);
   }
 
@@ -583,7 +583,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     if (params == null) {
       params = new Param[0];
     }
-    ablyInstanceManager
+    ablyClientStore
         .getRealtime(message.handle)
         .channels.get(channelName)
         .historyAsync(params, this.paginatedResponseHandler(result, null));
@@ -591,7 +591,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void closeRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-    ablyInstanceManager.getRealtime(message.handle).close();
+    ablyClientStore.getRealtime(message.handle).close();
     result.success(null);
   }
 
@@ -600,7 +600,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     try {
       Integer handle = (Integer) message.message;
       PushActivationEventHandlers.setResultForActivate(result);
-      ablyInstanceManager.getPush(handle).activate();
+      ablyClientStore.getPush(handle).activate();
     } catch (AblyException e) {
       handleAblyException(result, e);
     }
@@ -611,7 +611,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     try {
       Integer handle = (Integer) message.message;
       PushActivationEventHandlers.setResultForDeactivate(result);
-      ablyInstanceManager.getPush(handle).deactivate();
+      ablyClientStore.getPush(handle).deactivate();
     } catch (AblyException e) {
       handleAblyException(result, e);
     }
@@ -621,7 +621,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<AblyFlutterMessage<Map<String, Object>>> message = (AblyFlutterMessage) call.arguments;
     AblyFlutterMessage<Map<String, Object>> nestedMessage = message.message;
     final String channelName = (String) nestedMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-    ablyInstanceManager.getPushChannel(nestedMessage.handle, channelName)
+    ablyClientStore.getPushChannel(nestedMessage.handle, channelName)
         .subscribeDeviceAsync(handleCompletionWithListener(result));
   }
 
@@ -629,7 +629,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<AblyFlutterMessage<Map<String, Object>>> message = (AblyFlutterMessage) call.arguments;
     AblyFlutterMessage<Map<String, Object>> nestedMessage = message.message;
     final String channelName = (String) nestedMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-    ablyInstanceManager.getPushChannel(nestedMessage.handle, channelName)
+    ablyClientStore.getPushChannel(nestedMessage.handle, channelName)
         .unsubscribeDeviceAsync(handleCompletionWithListener(result));
   }
 
@@ -637,7 +637,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<AblyFlutterMessage<Map<String, Object>>> message = (AblyFlutterMessage) call.arguments;
     AblyFlutterMessage<Map<String, Object>> nestedMessage = message.message;
     final String channelName = (String) nestedMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-    ablyInstanceManager.getPushChannel(nestedMessage.handle, channelName)
+    ablyClientStore.getPushChannel(nestedMessage.handle, channelName)
         .subscribeClientAsync(handleCompletionWithListener(result));
   }
 
@@ -645,7 +645,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<AblyFlutterMessage<Map<String, Object>>> message = (AblyFlutterMessage) call.arguments;
     AblyFlutterMessage<Map<String, Object>> nestedMessage = message.message;
     final String channelName = (String) nestedMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
-    ablyInstanceManager.getPushChannel(nestedMessage.handle, channelName)
+    ablyClientStore.getPushChannel(nestedMessage.handle, channelName)
         .unsubscribeClientAsync(handleCompletionWithListener(result));
   }
 
@@ -654,7 +654,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     AblyFlutterMessage<Map<String, Object>> nestedMessage = message.message;
     final String channelName = (String) nestedMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
     final Map<String, Object> paramsMap = (Map<String, Object>) nestedMessage.message.get(PlatformConstants.TxTransportKeys.params);
-    ablyInstanceManager.getPushChannel(nestedMessage.handle, channelName).listSubscriptionsAsync(createParamsArrayFromMap(paramsMap), this.paginatedResponseHandler(result, null));
+    ablyClientStore.getPushChannel(nestedMessage.handle, channelName).listSubscriptionsAsync(createParamsArrayFromMap(paramsMap), this.paginatedResponseHandler(result, null));
   }
 
   private Param[] createParamsArrayFromMap(@Nullable Map<String, Object> paramsMap) {
@@ -675,13 +675,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<Integer> message = (AblyFlutterMessage<Integer>) call.arguments;
     long handle = message.message;
     try {
-      AblyRealtime realtime = ablyInstanceManager.getRealtime(handle);
+      AblyRealtime realtime = ablyClientStore.getRealtime(handle);
       if (realtime != null) {
         result.success(realtime.device());
         return;
       }
 
-      AblyRest rest = ablyInstanceManager.getRest(handle);
+      AblyRest rest = ablyClientStore.getRest(handle);
       if (rest != null) {
         result.success(rest.device());
         return;
@@ -710,13 +710,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     final Integer pageHandle = (Integer) message.message;
-    ablyInstanceManager.getPaginatedResult(pageHandle).next(this.paginatedResponseHandler(result, pageHandle));
+    ablyClientStore.getPaginatedResult(pageHandle).next(this.paginatedResponseHandler(result, pageHandle));
   }
 
   private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage<AblyFlutterMessage<Integer>> message = (AblyFlutterMessage<AblyFlutterMessage<Integer>>) call.arguments;
     Integer pageHandle = message.message.message;
-    ablyInstanceManager.getPaginatedResult(pageHandle).first(this.paginatedResponseHandler(result, pageHandle));
+    ablyClientStore.getPaginatedResult(pageHandle).first(this.paginatedResponseHandler(result, pageHandle));
   }
 
   private void cryptoGetParams(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

@@ -18,19 +18,19 @@ import io.ably.lib.types.ClientOptions;
  * on a client, the handle is used to get the instance. This allows ably-flutter to call
  * methods on the correct client.
  */
-class AblyInstanceManager {
+class AblyClientStore {
 
-    private static AblyInstanceManager _instance;
+    private static AblyClientStore _instance;
     private long _nextHandle = 1;
     final private Context applicationContext;
 
-    private AblyInstanceManager(Context applicationContext) {
+    private AblyClientStore(Context applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    static synchronized AblyInstanceManager getInstance(Context applicationContext) {
+    static synchronized AblyClientStore getInstance(Context applicationContext) {
         if (null == _instance) {
-            _instance = new AblyInstanceManager(applicationContext);
+            _instance = new AblyClientStore(applicationContext);
         }
         return _instance;
     }

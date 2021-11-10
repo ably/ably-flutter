@@ -8,12 +8,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
-* Manages [Rest] and [Realtime] client instances by numeric handle. This handle is passed
+* Stores [Rest] and [Realtime] client instances by numeric handle. This handle is passed
 * to the Dart side to reference a platform side (Android) instance. When the user calls a method
-* on a client, the handle is used to get the instance. This allows ablyInstanceManager-flutter to call
+* on a client, the handle is used to get the instance. This allows ably-flutter to call
 * methods on the correct client.
 */
-@interface AblyInstanceManager : NSObject
+@interface AblyClientStore : NSObject
 
 @property (nullable) FlutterMethodChannel * channel;
 
