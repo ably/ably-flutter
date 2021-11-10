@@ -326,7 +326,7 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'LogLevelEnum',
-    'properties': [ 'none', 'verbose', 'debug', 'info', 'warn', 'error'],
+    'properties': ['none', 'verbose', 'debug', 'info', 'warn', 'error'],
   },
   {
     'name': 'DevicePlatformEnum',
