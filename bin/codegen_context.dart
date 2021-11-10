@@ -35,6 +35,9 @@ Iterable<Map<String, dynamic>> get _types sync* {
     // Events
     'connectionStateChange',
     'channelStateChange',
+
+    // Encryption
+    'cipherParams',
   ];
 
   // Custom type values must be over 127. At the time of writing
@@ -143,6 +146,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Paginated results
   {'name': 'nextPage', 'value': 'nextPage'},
   {'name': 'firstPage', 'value': 'firstPage'},
+
+  // Encryption
+  {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
+  {'name': 'cryptoGenerateRandomKey', 'value': 'cryptoGenerateRandomKey'},
 ];
 
 const List<Map<String, dynamic>> _objects = [
@@ -233,15 +240,15 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>['cipher']
+    'properties': <String>['cipherParams']
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>[
-      'cipher',
-      'params',
-      'modes',
-    ]
+    'properties': <String>['params', 'modes', 'cipherParams']
+  },
+  {
+    'name': 'CipherParams',
+    'properties': <String>['androidHandle', 'iosAlgorithm', 'iosKey'],
   },
   {
     'name': 'TokenDetails',
@@ -489,6 +496,14 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'Notification',
     'properties': ['title', 'body']
+  },
+  {
+    'name': 'CryptoGetParams',
+    'properties': ['algorithm', 'key']
+  },
+  {
+    'name': 'CryptoGenerateRandomKey',
+    'properties': ['keyLength']
   }
 ];
 

@@ -1,4 +1,4 @@
-import '../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// To indicate the operating system -or- platform of the client using SDK
 /// in [DeviceDetails] while registering

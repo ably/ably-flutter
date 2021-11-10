@@ -1,4 +1,4 @@
-import '../error.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// An [AblyException] encapsulates [ErrorInfo] which carries details
 /// about information related to Ably-specific error [code],

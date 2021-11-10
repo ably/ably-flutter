@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import '../driver_data_handler.dart';
-import '../test_dispatcher.dart';
+import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:ably_flutter_integration_test/test_dispatcher.dart';
 
 class Reporter {
   final TestControlMessage message;

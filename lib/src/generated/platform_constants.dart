@@ -32,6 +32,7 @@ class CodecTypes {
   static const int logLevel = 151;
   static const int connectionStateChange = 152;
   static const int channelStateChange = 153;
+  static const int cipherParams = 154;
 }
 
 class PlatformMethod {
@@ -93,6 +94,8 @@ class PlatformMethod {
   static const String onRealtimeChannelMessage = 'onRealtimeChannelMessage';
   static const String nextPage = 'nextPage';
   static const String firstPage = 'firstPage';
+  static const String cryptoGetParams = 'cryptoGetParams';
+  static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
 }
 
 class TxTransportKeys {
@@ -178,13 +181,19 @@ class TxClientOptions {
 }
 
 class TxRestChannelOptions {
-  static const String cipher = 'cipher';
+  static const String cipherParams = 'cipherParams';
 }
 
 class TxRealtimeChannelOptions {
-  static const String cipher = 'cipher';
   static const String params = 'params';
   static const String modes = 'modes';
+  static const String cipherParams = 'cipherParams';
+}
+
+class TxCipherParams {
+  static const String androidHandle = 'androidHandle';
+  static const String iosAlgorithm = 'iosAlgorithm';
+  static const String iosKey = 'iosKey';
 }
 
 class TxTokenDetails {
@@ -372,8 +381,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -389,8 +397,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';
@@ -430,4 +437,13 @@ class TxRemoteMessage {
 class TxNotification {
   static const String title = 'title';
   static const String body = 'body';
+}
+
+class TxCryptoGetParams {
+  static const String algorithm = 'algorithm';
+  static const String key = 'key';
+}
+
+class TxCryptoGenerateRandomKey {
+  static const String keyLength = 'keyLength';
 }

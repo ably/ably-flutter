@@ -1,11 +1,6 @@
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:ably_flutter/src/platform/src/rest/rest_channel.dart';
-
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../rest/rest.dart';
-import '../../platform.dart';
-import '../paginated_result.dart';
-import 'rest.dart';
 
 /// Plugin based implementation of [RestPresenceInterface]
 class RestPresence extends PlatformObject implements RestPresenceInterface {

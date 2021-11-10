@@ -1,7 +1,5 @@
 import Foundation
 
-public typealias FlutterHandler = (_ plugin: AblyFlutterPlugin, _ call: FlutterMethodCall, _ result: @escaping FlutterResult) -> Void
-
 public class PushHandlers: NSObject {
     @objc
     public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;

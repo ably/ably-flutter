@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../../message/message.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// An item for used to enqueue a message to be published after an ongoing
 /// authCallback is completed

@@ -1,10 +1,9 @@
 import 'package:ably_flutter/ably_flutter.dart';
-
-import '../../config/test_constants.dart';
-import '../../factory/reporter.dart';
-import '../../provisioning.dart';
-import '../../utils/data.dart';
-import '../../utils/rest.dart';
+import 'package:ably_flutter_integration_test/config/test_constants.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'package:ably_flutter_integration_test/provisioning.dart';
+import 'package:ably_flutter_integration_test/utils/data.dart';
+import 'package:ably_flutter_integration_test/utils/rest.dart';
 
 final logMessages = <List<String?>>[];
 

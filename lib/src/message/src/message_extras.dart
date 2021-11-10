@@ -1,10 +1,9 @@
 import 'dart:convert';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-
-import '../../generated/platform_constants.dart';
-import 'delta_extras.dart';
 
 /// Handles supported message extras types, their encoding and decoding
 @immutable
