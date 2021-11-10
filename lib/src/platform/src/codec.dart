@@ -2,9 +2,7 @@ import 'dart:io' as io show Platform;
 import 'dart:typed_data';
 
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/crypto/src/cipher_params_native.dart';
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

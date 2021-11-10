@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 typedef BackgroundMessageHandler = void Function(RemoteMessage message);
 

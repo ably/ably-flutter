@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/platform/platform.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// connects to Ably service using a [web-socket](https://www.ably.com/topic/websockets) connection
 ///

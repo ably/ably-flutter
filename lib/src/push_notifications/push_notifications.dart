@@ -8,6 +8,7 @@ export 'src/device_registration_params.dart';
 export 'src/form_factor.dart';
 export 'src/ios_notification_settings.dart';
 export 'src/local_device.dart';
+export 'src/notification.dart';
 export 'src/push.dart';
 export 'src/push_activation_events.dart';
 export 'src/push_channel.dart';

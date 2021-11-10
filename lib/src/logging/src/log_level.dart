@@ -1,4 +1,4 @@
-import 'package:ably_flutter/src/authentication/authentication.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Log levels - control verbosity of log messages
 ///

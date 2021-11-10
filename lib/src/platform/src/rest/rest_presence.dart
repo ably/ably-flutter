@@ -1,6 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/platform/src/rest/rest_channel.dart';
 
 /// Presence object on a [RestChannel] helps to query Presence members
 /// and presence history

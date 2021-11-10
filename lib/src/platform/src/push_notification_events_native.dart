@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:io' as io show Platform;
 import 'dart:ui';
 
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/platform/platform.dart';
-import 'package:ably_flutter/src/platform/src/background_android_isolate_platform.dart';
-import 'package:ably_flutter/src/push_notifications/src/push_notification_events.dart';
-import 'package:ably_flutter/src/push_notifications/src/remote_message.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 class PushNotificationEventsNative implements PushNotificationEvents {
   VoidCallback? onOpenSettingsHandler;

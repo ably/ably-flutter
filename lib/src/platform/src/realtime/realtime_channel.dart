@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/common/common.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/realtime/src/realtime_channel_options.dart';
 import 'package:flutter/services.dart';
 
 /// A named channel through with realtime client can interact with ably service.

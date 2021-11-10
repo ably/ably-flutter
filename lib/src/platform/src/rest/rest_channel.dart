@@ -2,12 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter/src/common/src/backwards_compatibility.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/message/message.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-import 'package:ably_flutter/src/rest/rest.dart';
 import 'package:flutter/services.dart';
 
 /// A named channel through with rest client can interact with ably service.

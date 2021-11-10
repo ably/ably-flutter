@@ -1,4 +1,4 @@
-import 'package:ably_flutter/src/generated/platform_constants.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// An encapsulating object used to pass data to/from platform for method calls
 class AblyMessage<T> {

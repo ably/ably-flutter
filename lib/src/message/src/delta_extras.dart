@@ -1,5 +1,5 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/message/message.dart';
 import 'package:meta/meta.dart';
 
 /// Delta extension configuration for [MessageExtras]

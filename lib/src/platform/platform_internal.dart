@@ -2,6 +2,7 @@
 // but other library files can import to gain access to internal APIs
 
 export '../generated/platform_constants.dart';
+export 'src/background_android_isolate_platform.dart';
 export 'src/publish_queue_item.dart';
 export 'src/push_activation_events_native.dart';
 export 'src/push_channel_native.dart';

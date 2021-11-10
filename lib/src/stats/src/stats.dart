@@ -1,8 +1,4 @@
-import 'package:ably_flutter/src/stats/src/stats_connection_types.dart';
-import 'package:ably_flutter/src/stats/src/stats_message_traffic.dart';
-import 'package:ably_flutter/src/stats/src/stats_message_types.dart';
-import 'package:ably_flutter/src/stats/src/stats_request_count.dart';
-import 'package:ably_flutter/src/stats/src/stats_resource_count.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A class representing an individual statistic for a specified [intervalId]
 ///
