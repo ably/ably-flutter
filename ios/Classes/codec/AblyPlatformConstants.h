@@ -5,33 +5,33 @@
 
 @import Foundation;
 
-typedef NS_ENUM(UInt8, _Value) {
-    ablyMessageCodecType = 128,
-    ablyEventMessageCodecType = 129,
-    clientOptionsCodecType = 130,
-    messageDataCodecType = 131,
-    messageExtrasCodecType = 132,
-    messageCodecType = 133,
-    tokenParamsCodecType = 134,
-    tokenDetailsCodecType = 135,
-    tokenRequestCodecType = 136,
-    restChannelOptionsCodecType = 137,
-    realtimeChannelOptionsCodecType = 138,
-    paginatedResultCodecType = 139,
-    restHistoryParamsCodecType = 140,
-    realtimeHistoryParamsCodecType = 141,
-    restPresenceParamsCodecType = 142,
-    presenceMessageCodecType = 143,
-    realtimePresenceParamsCodecType = 144,
-    deviceDetailsCodecType = 145,
-    localDeviceCodecType = 146,
-    pushChannelSubscriptionCodecType = 147,
-    unNotificationSettingsCodecType = 148,
-    remoteMessageCodecType = 149,
-    errorInfoCodecType = 150,
-    connectionStateChangeCodecType = 151,
-    channelStateChangeCodecType = 152,
-    cipherParamsCodecType = 153,
+typedef NS_ENUM(UInt8, CodecType) {
+    CodecTypeAblyMessage = 128,
+    CodecTypeAblyEventMessage = 129,
+    CodecTypeClientOptions = 130,
+    CodecTypeMessageData = 131,
+    CodecTypeMessageExtras = 132,
+    CodecTypeMessage = 133,
+    CodecTypeTokenParams = 134,
+    CodecTypeTokenDetails = 135,
+    CodecTypeTokenRequest = 136,
+    CodecTypeRestChannelOptions = 137,
+    CodecTypeRealtimeChannelOptions = 138,
+    CodecTypePaginatedResult = 139,
+    CodecTypeRestHistoryParams = 140,
+    CodecTypeRealtimeHistoryParams = 141,
+    CodecTypeRestPresenceParams = 142,
+    CodecTypePresenceMessage = 143,
+    CodecTypeRealtimePresenceParams = 144,
+    CodecTypeDeviceDetails = 145,
+    CodecTypeLocalDevice = 146,
+    CodecTypePushChannelSubscription = 147,
+    CodecTypeUnNotificationSettings = 148,
+    CodecTypeRemoteMessage = 149,
+    CodecTypeErrorInfo = 150,
+    CodecTypeConnectionStateChange = 151,
+    CodecTypeChannelStateChange = 152,
+    CodecTypeCipherParams = 153,
 };
 
 
@@ -108,6 +108,7 @@ extern NSString *const TxAblyMessage_message;
 extern NSString *const TxAblyEventMessage_eventName;
 extern NSString *const TxAblyEventMessage_type;
 extern NSString *const TxAblyEventMessage_message;
+extern NSString *const TxAblyEventMessage_registrationHandle;
 
 // key constants for ErrorInfo
 extern NSString *const TxErrorInfo_code;
