@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
+
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
 import '../../common/src/event_emitter.dart';
@@ -91,6 +93,10 @@ abstract class RealtimeChannelInterface
   ///
   /// Warning: the name/ names are not channel names, but message names.
   /// See [Message.dart] for more information.
+  ///
+  /// Calling subscribe the first time on a channel will automatically attach
+  /// that channel. If a channel is detached, subscribing again will not reattach
+  /// the channel. Remember to call [RealtimeChannel.attach]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message?> subscribe({

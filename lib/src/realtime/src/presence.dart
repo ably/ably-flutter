@@ -4,7 +4,6 @@ import '../../message/src/presence_action.dart';
 import '../../message/src/presence_message.dart';
 import '../../platform/platform.dart';
 import '../realtime.dart';
-import 'channels.dart';
 
 /// Presence object on a [RealtimeChannelInterface] helps to query
 /// Presence members and presence history

@@ -613,6 +613,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
         AblyPlatformMethod_pushDevice: PushHandlers.device,
         AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
+        // Encryption
+        AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
+        AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
     
     _nextRegistration = 1;

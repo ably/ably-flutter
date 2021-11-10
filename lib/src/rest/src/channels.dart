@@ -53,15 +53,3 @@ abstract class RestChannelInterface {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
   Future<void> setOptions(RestChannelOptions options);
 }
-
-/// A collection of rest channel objects
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSN1
-abstract class RestChannelsInterface<T extends RestChannelInterface>
-    extends Channels<T> {
-  /// instance of a rest client
-  RestInterface rest;
-
-  /// instantiates with the ably [RestInterface] instance
-  RestChannelsInterface(this.rest);
-}

@@ -10,10 +10,13 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import javax.crypto.Cipher;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.RemoteMessageCallback;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
 import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -55,7 +58,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     }
 
     private void setupChannels(BinaryMessenger messenger, Context applicationContext) {
-        final MethodCodec codec = createCodec();
+        final MethodCodec codec = createCodec(new CipherParamsStorage());
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
         streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(applicationContext));
@@ -79,8 +82,8 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         System.out.println("Ably Plugin onDetachedFromEngine");
     }
 
-    private static MethodCodec createCodec() {
-        return new StandardMethodCodec(new AblyMessageCodec());
+    private static MethodCodec createCodec(CipherParamsStorage cipherParamsStorage) {
+        return new StandardMethodCodec(new AblyMessageCodec(cipherParamsStorage));
     }
 
     @Override

@@ -34,6 +34,7 @@ final public class PlatformConstants {
         public static final byte errorInfo = (byte) 150;
         public static final byte connectionStateChange = (byte) 151;
         public static final byte channelStateChange = (byte) 152;
+        public static final byte cipherParams = (byte) 153;
     }
 
     static final public class PlatformMethod {
@@ -89,6 +90,8 @@ final public class PlatformConstants {
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
+        public static final String cryptoGetParams = "cryptoGetParams";
+        public static final String cryptoGenerateRandomKey = "cryptoGenerateRandomKey";
     }
 
     static final public class TxTransportKeys {
@@ -174,13 +177,19 @@ final public class PlatformConstants {
     }
 
     static final public class TxRestChannelOptions {
-        public static final String cipher = "cipher";
+        public static final String cipherParams = "cipherParams";
     }
 
     static final public class TxRealtimeChannelOptions {
-        public static final String cipher = "cipher";
         public static final String params = "params";
         public static final String modes = "modes";
+        public static final String cipherParams = "cipherParams";
+    }
+
+    static final public class TxCipherParams {
+        public static final String androidHandle = "androidHandle";
+        public static final String iosAlgorithm = "iosAlgorithm";
+        public static final String iosKey = "iosKey";
     }
 
     static final public class TxTokenDetails {
@@ -415,6 +424,15 @@ final public class PlatformConstants {
     static final public class TxNotification {
         public static final String title = "title";
         public static final String body = "body";
+    }
+
+    static final public class TxCryptoGetParams {
+        public static final String algorithm = "algorithm";
+        public static final String key = "key";
+    }
+
+    static final public class TxCryptoGenerateRandomKey {
+        public static final String keyLength = "keyLength";
     }
 
 }

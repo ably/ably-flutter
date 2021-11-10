@@ -1,8 +1,7 @@
-import 'package:ably_flutter/src/push_notifications/src/local_device.dart';
-
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
 import 'channels.dart';
+import 'rest_channels.dart';
 
 /// an abstract class for Ably's Rest client
 ///
