@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.4](https://github.com/ably/ably-flutter/tree/v1.2.4)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.3...v1.2.4)
+
+**Implemented enhancements:**
+
+- Upgrade ably cocoa [\#209](https://github.com/ably/ably-flutter/pull/209) ([ben-xD](https://github.com/ben-xD))
+- Symmetric encryption [\#192](https://github.com/ably/ably-flutter/pull/192) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- Fix app crashing when receiving multiple push notifications [\#208](https://github.com/ably/ably-flutter/pull/208) ([ben-xD](https://github.com/ben-xD))
+
+**Merged pull requests:**
+
+- Update `flutter_local_notifications` to avoid bintray dependency resolution error [\#210](https://github.com/ably/ably-flutter/pull/210) ([ben-xD](https://github.com/ben-xD))
+- Simplify state in example app [\#202](https://github.com/ably/ably-flutter/pull/202) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.3](https://github.com/ably/ably-flutter/tree/v1.2.3)
 
 This release lowers the minimum version of Flutter required to use Ably Flutter to 2.2.3.
