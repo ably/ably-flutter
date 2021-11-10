@@ -2,7 +2,6 @@
 @import UserNotifications;
 #import <ably_flutter/ably_flutter-Swift.h>
 #import "AblyFlutterWriter.h"
-#import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
 #import "AblyPlatformConstants.h"
 
@@ -17,7 +16,7 @@ NS_ASSUME_NONNULL_END
 @implementation AblyFlutterWriter
 
 + (UInt8) getType:(id)value{
-    if([value isKindOfClass:[AblyFlutterMessage class]]){
+    if([value isKindOfClass:[Message class]]){
         return CodecTypeAblyMessage;
     }else if([value isKindOfClass:[ARTErrorInfo class]]){
         return CodecTypeErrorInfo;
@@ -92,7 +91,7 @@ if (VALUE) { \
 } \
 }
 
-static AblyCodecEncoder encodeAblyMessage = ^NSMutableDictionary*(AblyFlutterMessage *const message) {
+static AblyCodecEncoder encodeAblyMessage = ^NSMutableDictionary*(Message *const message) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_VALUE(dictionary, TxAblyMessage_registrationHandle, [message handle]);
     id value = [message message];

@@ -1,7 +1,6 @@
 @import Ably;
 
 #import "AblyClientStore.h"
-#import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
@@ -51,8 +50,7 @@
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            Message *const message = [[Message alloc] initWithMessage:tokenParams handle: handle];
             [self->_channel invokeMethod:AblyPlatformMethod_authCallback
                                arguments:message
                                   result:^(id tokenData){
@@ -87,8 +85,7 @@
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            Message *const message = [[Message alloc] initWithMessage:tokenParams handle: handle];
             [self->_channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
                                arguments:message
                                   result:^(id tokenData){
@@ -106,24 +103,24 @@
         };
     }
     ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
-    [_realtimeInstances setObject:instance forKey:handle];
+    _realtimeInstances[handle] = instance;
     return handle;
 }
 
 -(ARTRealtime *)getRealtime:(NSNumber *)handle {
-    return [_realtimeInstances objectForKey:handle];
+    return _realtimeInstances[handle];
 }
 
 -(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(NSNumber *) handle {
     if(!handle){
         handle = @(_nextHandle++);
     }
-    [_paginatedResults setObject:result forKey:handle];
+    _paginatedResults[handle] = result;
     return handle;
 }
 
 -(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle {
-    return [_paginatedResults objectForKey:handle];
+    return _paginatedResults[handle];
 }
 
 -(void)disposeWithCompletionHandler:(const dispatch_block_t)completionHandler {

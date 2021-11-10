@@ -38,8 +38,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let requestPermission: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let messageData = message.message as! AblyFlutterMessage
+        let message = call.arguments as! Message
+        let messageData = message.message as! Message
         let dataMap = messageData.message as! Dictionary<String, Any>
 
         var options: UNAuthorizationOptions = []
@@ -88,7 +88,7 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let device: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
+        let message = call.arguments as! Message
         let ablyClientHandle = message.message as! NSNumber
         let realtime = plugin.clientStore.getRealtime(ablyClientHandle)
         let rest = plugin.clientStore.getRest(ablyClientHandle)
@@ -102,9 +102,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let listSubscriptions: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let nestedMessage = message.message as! AblyFlutterMessage
-        let dataMap = nestedMessage.message as! Dictionary<String, Any>
+        let message = call.arguments as! Message
+        let dataMap = message.message as! Dictionary<String, Any>
         let params = dataMap[TxTransportKeys_params] as! Dictionary<String, String>
 
         if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
@@ -115,7 +114,7 @@ public class PushHandlers: NSObject {
                         return
                     }
                     let handle = plugin.clientStore.setPaginatedResult(paginatedSubscription as! ARTPaginatedResult<AnyObject>, handle: nil)
-                    result(AblyFlutterMessage(message: paginatedSubscription as Any, handle: handle))
+                    result(Message(message: paginatedSubscription as Any, handle: handle))
                 })
             } catch {
                 result(FlutterError(code: "listSubscriptions_error", message: "Error listing subscriptions from push Channel \(pushChannel); err = \(error.localizedDescription)", details: nil))
@@ -164,7 +163,7 @@ public class PushHandlers: NSObject {
 
     /// Gets the client.push property from ARTRealtime or ARTRest when the call contains a handle.
     private static func getPush(ably: AblyClientStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
-        let message = call.arguments as! AblyFlutterMessage
+        let message = call.arguments as! Message
         let ablyClientHandle = message.message as! NSNumber
         let realtime = ably.getRealtime(ablyClientHandle)
         let rest = ably.getRest(ablyClientHandle)
@@ -188,18 +187,18 @@ public class PushHandlers: NSObject {
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(plugin: AblyFlutterPlugin, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ably = plugin.clientStore
-        let message = call.arguments as! AblyFlutterMessage
+        let message = call.arguments as! Message
 
         var clientHandle: NSNumber? = nil;
         var channelName: String? = nil;
 
-        if let ablyFlutterMessage = message.message as? AblyFlutterMessage {
-            if let nestedAblyFlutterMessage = ablyFlutterMessage.message as? AblyFlutterMessage {
-                clientHandle = nestedAblyFlutterMessage.handle
-                let dictionary = nestedAblyFlutterMessage.message as! Dictionary<String, Any>
+        if let message = message.message as? Message {
+            if let nestedMessage = message.message as? Message {
+                clientHandle = nestedMessage.handle
+                let dictionary = nestedMessage.message as! Dictionary<String, Any>
                 channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            } else if let dictionary = ablyFlutterMessage.message as? Dictionary<String, Any> {
-                clientHandle = ablyFlutterMessage.handle
+            } else if let dictionary = message.message as? Dictionary<String, Any> {
+                clientHandle = message.handle
                 channelName = (dictionary[TxTransportKeys_channelName] as! String)
             }
         } else {

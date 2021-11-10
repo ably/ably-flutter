@@ -2,7 +2,6 @@
 
 #import "AblyFlutterStreamHandler.h"
 #import "AblyFlutterPlugin.h"
-#import "AblyFlutterMessage.h"
 #import "codec/AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
@@ -76,7 +75,7 @@
     }
 }
 
-- (void) cancelListening:(AblyFlutterMessage *const)message {
+- (void) cancelListening:(Message *const)message {
     EventMessage *const eventMessage = message.message;
     NSNumber *const handle = message.handle;
     NSString *const eventName = eventMessage.eventName;

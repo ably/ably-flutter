@@ -1,14 +1,13 @@
 import Foundation
 
-
-class Message: NSObject {
+public class Message: NSObject {
     @objc
     public let message: Any
     @objc
-    public let handle: Int
+    public let handle: NSNumber
     
     @objc
-    init(message: Any, handle: Int) {
+    public init(message: Any, handle: NSNumber) {
         self.message = message
         self.handle = handle
     }
