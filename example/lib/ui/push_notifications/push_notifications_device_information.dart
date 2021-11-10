@@ -31,12 +31,9 @@ class PushNotificationsDeviceInformation extends StatelessWidget {
                     children: [
                       TextRow('deviceId', localDevice.id),
                       TextRow('clientId', localDevice.clientId),
-                      TextRow(
-                          'platform', localDevice.platform.toString()),
-                      TextRow(
-                          'formFactor', localDevice.formFactor.toString()),
-                      TextRow(
-                          'metadata', localDevice.metadata.toString()),
+                      TextRow('platform', localDevice.platform.toString()),
+                      TextRow('formFactor', localDevice.formFactor.toString()),
+                      TextRow('metadata', localDevice.metadata.toString()),
                       TextRow('DevicePushDetails state',
                           localDevice.push.state.toString()),
                       TextRow('DevicePushDetails recipient',

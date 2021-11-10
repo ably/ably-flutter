@@ -848,7 +848,7 @@ class Codec extends StandardMessageCodec {
     }
     throw AblyException(
       'Platform communication error. '
-          'UNShowPreviewsSetting is invalid: $setting',
+      'UNShowPreviewsSetting is invalid: $setting',
     );
   }
 
@@ -863,7 +863,7 @@ class Codec extends StandardMessageCodec {
     }
     throw AblyException(
       'Platform communication error. '
-          'UNAlertStyle is invalid: $style',
+      'UNAlertStyle is invalid: $style',
     );
   }
 
@@ -896,7 +896,7 @@ class Codec extends StandardMessageCodec {
     }
     throw AblyException(
       'Platform communication error. '
-          'UNNotificationSetting is invalid: $setting',
+      'UNNotificationSetting is invalid: $setting',
     );
   }
 

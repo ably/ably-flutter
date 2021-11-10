@@ -12,8 +12,7 @@ class RealtimePresence extends PlatformObject {
   RealtimePresence(this._channel);
 
   @override
-  Future<int> createPlatformInstance() =>
-      _channel.realtime.handle;
+  Future<int> createPlatformInstance() => _channel.realtime.handle;
 
   /// Get the presence members for this Channel.
   ///

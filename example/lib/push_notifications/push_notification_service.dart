@@ -17,19 +17,17 @@ class PushNotificationService {
   ably.RestChannel? _restChannel;
   late ably.PushChannel? _pushChannel;
 
-  final BehaviorSubject<
-          ably.PaginatedResult<ably.PushChannelSubscription>>
-      _pushChannelDeviceSubscriptionsSubject = BehaviorSubject<
-          ably.PaginatedResult<ably.PushChannelSubscription>>();
+  final BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>
+      _pushChannelDeviceSubscriptionsSubject =
+      BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>();
 
   ValueStream<ably.PaginatedResult<ably.PushChannelSubscription>>
       get pushChannelDeviceSubscriptionsStream =>
           _pushChannelDeviceSubscriptionsSubject.stream;
 
-  final BehaviorSubject<
-          ably.PaginatedResult<ably.PushChannelSubscription>>
-      _pushChannelClientSubscriptionsSubject = BehaviorSubject<
-          ably.PaginatedResult<ably.PushChannelSubscription>>();
+  final BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>
+      _pushChannelClientSubscriptionsSubject =
+      BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>();
 
   ValueStream<ably.PaginatedResult<ably.PushChannelSubscription>>
       get pushChannelClientSubscriptionsStream =>

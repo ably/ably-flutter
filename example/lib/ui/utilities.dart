@@ -9,9 +9,8 @@ void logAndDisplayError(ably.ErrorInfo? errorInfo,
   }
   print(errorInfo.message);
   Fluttertoast.showToast(
-      msg:
-          'Error: $prefixMessage. '
-              '${errorInfo.message ?? 'No error message provided'}',
+      msg: 'Error: $prefixMessage. '
+          '${errorInfo.message ?? 'No error message provided'}',
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
       backgroundColor: Colors.red,

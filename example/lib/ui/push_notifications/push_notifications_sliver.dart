@@ -39,28 +39,28 @@ class PushNotificationsSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      const Padding(
-        padding: EdgeInsets.only(bottom: 16),
-        child: Text(
-          'Push Notifications',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
-      buildCreateAblyClientText(),
-      buildSummaryText(),
-      PushNotificationsActivationSliver(
-        _pushNotificationService,
-        isIOSSimulator: isIOSSimulator,
-      ),
-      PushNotificationsDeviceInformation(_pushNotificationService),
-      PushNotificationsIOSNotificationSettingsSliver(
-          _pushNotificationService),
-      PushNotificationsSubscriptionsSliver(_pushNotificationService),
-      PushNotificationsPublishingSliver(_pushNotificationService),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16),
+            child: Text(
+              'Push Notifications',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          buildCreateAblyClientText(),
+          buildSummaryText(),
+          PushNotificationsActivationSliver(
+            _pushNotificationService,
+            isIOSSimulator: isIOSSimulator,
+          ),
+          PushNotificationsDeviceInformation(_pushNotificationService),
+          PushNotificationsIOSNotificationSettingsSliver(
+              _pushNotificationService),
+          PushNotificationsSubscriptionsSliver(_pushNotificationService),
+          PushNotificationsPublishingSliver(_pushNotificationService),
+        ],
+      );
 
   Widget buildSummaryText() => Column(
         children: const [
