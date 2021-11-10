@@ -89,9 +89,8 @@ public class PushHandlers: NSObject {
     @objc
     public static let device: FlutterHandler = { plugin, call, result in
         let message = call.arguments as! Message
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = plugin.clientStore.getRealtime(ablyClientHandle)
-        let rest = plugin.clientStore.getRest(ablyClientHandle)
+        let realtime = plugin.clientStore.getRealtime(message.handle)
+        let rest = plugin.clientStore.getRest(message.handle)
 
         if let realtime = realtime {
             result(realtime.device)
@@ -164,9 +163,8 @@ public class PushHandlers: NSObject {
     /// Gets the client.push property from ARTRealtime or ARTRest when the call contains a handle.
     private static func getPush(ably: AblyClientStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
         let message = call.arguments as! Message
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.getRealtime(ablyClientHandle)
-        let rest = ably.getRest(ablyClientHandle)
+        let realtime = ably.getRealtime(message.handle)
+        let rest = ably.getRest(message.handle)
 
         if let realtime = realtime {
             return realtime.push;
@@ -188,39 +186,16 @@ public class PushHandlers: NSObject {
     private static func getPushChannel(plugin: AblyFlutterPlugin, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ably = plugin.clientStore
         let message = call.arguments as! Message
+        let dictionary = message.message as! Dictionary<String, Any>
+        let channelName = (dictionary[TxTransportKeys_channelName] as! String)
 
-        var clientHandle: NSNumber? = nil;
-        var channelName: String? = nil;
-
-        if let message = message.message as? Message {
-            if let nestedMessage = message.message as? Message {
-                clientHandle = nestedMessage.handle
-                let dictionary = nestedMessage.message as! Dictionary<String, Any>
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            } else if let dictionary = message.message as? Dictionary<String, Any> {
-                clientHandle = message.handle
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            }
+        let realtime = ably.getRealtime(message.handle)
+        if let realtime = realtime {
+            return realtime.channels.get(channelName).push
+        } else if let rest = ably.getRest(message.handle) {
+            return rest.channels.get(channelName).push
         } else {
-            clientHandle = (message.message as! NSNumber)
-        }
-
-        guard let unwrappedClientHandle = clientHandle else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
-            return nil
-        }
-        guard let unwrappedChannelName = channelName else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
-            return nil
-        }
-
-        let realtime = ably.getRealtime(unwrappedClientHandle)
-        if let unwrappedRealtime = realtime {
-            return unwrappedRealtime.channels.get(unwrappedChannelName).push
-        } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
-            return unwrappedRest.channels.get(unwrappedChannelName).push
-        } else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
+            result(FlutterError(code: "getAblyPushChannel_error", message: "No rest or realtime client exists for handle: \(message.handle).", details: nil))
             return nil
         }
     }
