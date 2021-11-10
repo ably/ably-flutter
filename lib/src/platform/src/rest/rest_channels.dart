@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../generated/platform_constants.dart';
-import '../../../rest/rest.dart';
+import '../../../rest/src/rest_channels.dart';
 import '../../platform.dart';
 import '../../platform_internal.dart';
 import 'rest_channel.dart';

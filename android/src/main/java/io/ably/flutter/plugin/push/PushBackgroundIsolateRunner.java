@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.AblyMessageCodec;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.plugin.common.MethodCall;
@@ -36,7 +37,7 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
     this.remoteMessage = message;
     flutterEngine = new FlutterEngine(context, null);
     DartExecutor executor = flutterEngine.getDartExecutor();
-    backgroundMethodChannel = new MethodChannel(executor.getBinaryMessenger(), "io.ably.flutter.plugin.background", new StandardMethodCodec(new AblyMessageCodec()));
+    backgroundMethodChannel = new MethodChannel(executor.getBinaryMessenger(), "io.ably.flutter.plugin.background", new StandardMethodCodec(new AblyMessageCodec(new CipherParamsStorage())));
     backgroundMethodChannel.setMethodCallHandler(this);
     // Get and launch the users app isolate manually:
     executor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());

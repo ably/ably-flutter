@@ -78,7 +78,6 @@ class PushNotificationsActivationSliver extends StatelessWidget {
               'Activation',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            // TODO test emulator on Android can receive messages/ activate with Ably
             buildiOSSimulatorWarningText(),
             Row(
               children: [

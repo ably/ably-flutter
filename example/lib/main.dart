@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/encrypted_messaging_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ import 'constants.dart';
 import 'op_state.dart';
 import 'push_notifications/push_notification_handlers.dart';
 import 'push_notifications/push_notification_service.dart';
+import 'ui/message_encryption/message_encryption_sliver.dart';
 import 'ui/push_notifications/push_notifications_sliver.dart';
 import 'ui/utilities.dart';
 
@@ -34,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   ably.Realtime? _realtime;
   ably.Rest? _rest;
+  EncryptedMessagingService? encryptedMessagingService;
   ably.ConnectionState? _realtimeConnectionState;
   ably.ChannelState? _realtimeChannelState;
   final _subscriptionsToDispose = <StreamSubscription>[];
@@ -151,6 +154,7 @@ class _MyAppState extends State<MyApp> {
       print('Error creating Ably Rest: $error');
       rethrow;
     }
+    await encryptedMessagingService!.setRest(rest);
     _pushNotificationService.setRestClient(rest);
 
     setState(() {
@@ -190,6 +194,7 @@ class _MyAppState extends State<MyApp> {
       listenRealtimeConnection(realtime);
       final channel = realtime.channels.get(defaultChannel);
       listenRealtimeChannel(channel);
+      encryptedMessagingService = EncryptedMessagingService(realtime);
       _pushNotificationService.setRealtimeClient(realtime);
       setState(() {
         _realtime = realtime;
@@ -795,6 +800,8 @@ class _MyAppState extends State<MyApp> {
                           .toList() ??
                       [],
                   releaseRestChannel(),
+                  const Divider(),
+                  MessageEncryptionSliver(encryptedMessagingService),
                   const Divider(),
                   PushNotificationsSliver(
                     _pushNotificationService,

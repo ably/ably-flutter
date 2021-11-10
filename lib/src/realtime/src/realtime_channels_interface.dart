@@ -1,5 +1,5 @@
-import 'package:ably_flutter/src/common/common.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
+import '../../common/common.dart';
+import '../realtime.dart';
 
 /// A collection of realtime channel objects
 ///

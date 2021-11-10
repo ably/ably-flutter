@@ -43,7 +43,6 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 Features that we do not currently support, but we do plan to add in the future:
 
-- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
 - Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
 - REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
@@ -517,6 +516,27 @@ channel
   },
 );
 ```
+
+### Symmetric Encryption
+
+When a key is provided to the library, the `data` attribute of all messages is encrypted and decrypted automatically using that key. The secret key is never transmitted to Ably. See https://www.ably.com/documentation/realtime/encryption.
+
+1. Create a key by calling `ably.Crypto.generateRandomKey()` (or retrieve one from your server using your own secure API). The same key needs to be used to encrypt and decrypt the messages.
+2. Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);` - the key can be a Base64-encoded `String`, or a `Uint8List`
+3. Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`. Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.
+4. Set these options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
+5. Use your channel as normal, such as by publishing messages or subscribing for messages.
+
+Overall, it would like this:
+```dart
+final key = ...; // from your server, from password or create random
+final cipherParams = ably.Crypto.getDefaultParams(key: key);
+final channelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
+final channel = realtime.channels.get("your channel name");
+await channel.setOptions(channelOptions);
+```
+
+Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messaging_service.dart) for an example of how to implement end-to-end encrypted messages over Ably. There are several options to choose from when you have decided to your encrypt your messages.
 
 ### Push Notifications
 
