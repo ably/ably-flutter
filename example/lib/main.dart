@@ -142,6 +142,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> createAblyRest() async {
     final clientOptions = ably.ClientOptions.fromKey(_apiKey)
+      ..clientId = Constants.clientId
       ..logLevel = ably.LogLevel.verbose
       ..logHandler = ({msg, exception}) {
         print('Custom logger :: $msg $exception');
