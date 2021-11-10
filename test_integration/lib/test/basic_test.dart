@@ -1,7 +1,6 @@
-import 'package:ably_flutter/ably_flutter.dart' as ably;
-
-import '../factory/reporter.dart';
-import '../provisioning.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'package:ably_flutter_integration_test/provisioning.dart';
 
 Future<Map<String, dynamic>> testAppKeyProvision({
   required Reporter reporter,
@@ -16,11 +15,11 @@ Future<Map<String, dynamic>> testPlatformAndAblyVersion({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final platformVersion = await ably.platformVersion();
-  final ablyVersion = await ably.version();
+  final _platformVersion = await platformVersion();
+  final _ablyVersion = await version();
 
   return {
-    'platformVersion': platformVersion,
-    'ablyVersion': ablyVersion,
+    'platformVersion': _platformVersion,
+    'ablyVersion': _ablyVersion,
   };
 }

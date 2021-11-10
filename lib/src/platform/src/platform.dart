@@ -1,10 +1,8 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
@@ -51,9 +49,7 @@ class Platform {
     }
   }
 
-  /**
-   * Call a platform method which always provides a result.
-   */
+  /// Call a platform method which always provides a result.
   static Future<T> invokePlatformMethodNonNull<T>(String method,
       [Object? arguments]) async {
     await _initialize();

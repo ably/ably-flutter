@@ -1,7 +1,7 @@
-import '../realtime.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
-/// Connection event is same as [ConnectionState] except that it also handles
-/// update operations on a connection
+/// Connection event is same as [ConnectionStateChange] except that it also
+/// handles update operations on a connection
 ///
 /// See Ably Realtime API documentation for more details.
 enum ConnectionEvent {

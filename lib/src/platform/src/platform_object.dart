@@ -1,11 +1,8 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-
-import '../../error/error.dart';
-import '../platform.dart';
-import 'ably_event_message.dart';
 
 /// An object which has a live counterpart in the Platform client library SDK,
 /// where that live counterpart is held as a strong reference by the plugin

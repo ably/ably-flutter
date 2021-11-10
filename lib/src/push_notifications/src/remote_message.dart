@@ -1,5 +1,5 @@
-import '../../generated/platform_constants.dart';
-import 'notification.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 class RemoteMessage {
   late Map<String, dynamic> data;

@@ -1,11 +1,10 @@
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_activation_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_publishing_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_subscriptions_sliver.dart';
 import 'package:flutter/material.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import 'push_notifications_activation_sliver.dart';
-import 'push_notifications_device_information.dart';
-import 'push_notifications_ios_permissions_sliver.dart';
-import 'push_notifications_publishing_sliver.dart';
-import 'push_notifications_subscriptions_sliver.dart';
 
 class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -39,40 +38,38 @@ class PushNotificationsSliver extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: Text(
-                'Push Notifications',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16),
+            child: Text(
+              'Push Notifications',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            buildCreateAblyClientText(),
-            buildSummaryText(),
-            PushNotificationsActivationSliver(
-              _pushNotificationService,
-              isIOSSimulator: isIOSSimulator,
-            ),
-            PushNotificationsDeviceInformation(_pushNotificationService),
-            PushNotificationsIOSNotificationSettingsSliver(
-                _pushNotificationService),
-            PushNotificationsSubscriptionsSliver(_pushNotificationService),
-            PushNotificationsPublishingSliver(_pushNotificationService),
-          ],
-        ),
+          ),
+          buildCreateAblyClientText(),
+          buildSummaryText(),
+          PushNotificationsActivationSliver(
+            _pushNotificationService,
+            isIOSSimulator: isIOSSimulator,
+          ),
+          PushNotificationsDeviceInformation(_pushNotificationService),
+          PushNotificationsIOSNotificationSettingsSliver(
+              _pushNotificationService),
+          PushNotificationsSubscriptionsSliver(_pushNotificationService),
+          PushNotificationsPublishingSliver(_pushNotificationService),
+        ],
       );
 
   Widget buildSummaryText() => Column(
-        children: [
-          const Text(
+        children: const [
+          Text(
               'Activate your device, view your local device information, '
               'subscribe to a push channel with either your device or '
               'client ID, and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       );
 }

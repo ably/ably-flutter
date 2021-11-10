@@ -1,5 +1,4 @@
-import '../push_channel_subscriptions.dart';
-import 'push_device_registrations.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Class providing push notification administrative functionality
 /// for registering devices and attaching to channels etc.

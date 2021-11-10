@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/encrypted_messaging_service.dart';
+import 'package:ably_flutter_example/op_state.dart';
+import 'package:ably_flutter_example/push_notifications/push_notification_handlers.dart';
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/message_encryption/message_encryption_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_sliver.dart';
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-
-import 'constants.dart';
-import 'op_state.dart';
-import 'push_notifications/push_notification_handlers.dart';
-import 'push_notifications/push_notification_service.dart';
-import 'ui/message_encryption/message_encryption_sliver.dart';
-import 'ui/push_notifications/push_notifications_sliver.dart';
-import 'ui/utilities.dart';
 
 Future<void> main() async {
   // Before calling any Ably methods, ensure the widget binding is ready.
@@ -686,12 +685,14 @@ class _MyAppState extends State<MyApp> {
                                     fontWeight: FontWeight.bold)),
                             TextSpan(text: 'API key is not configured, use '),
                             TextSpan(
-                                text:
-                                    '`flutter run --dart-define=ABLY_API_KEY=your_api_key`',
+                                text: '`flutter run --dart-define='
+                                    'ABLY_API_KEY=your_api_key`',
                                 style: TextStyle()),
                             TextSpan(
                                 text:
-                                    "or add this to the 'additional run args' in the run configuration in Android Studio.")
+                                    "or add this to the 'additional run args' "
+                                    'in the run configuration in '
+                                    'Android Studio.')
                           ]),
                     )
                   else
