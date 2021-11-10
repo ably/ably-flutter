@@ -1,13 +1,13 @@
 @import Ably;
 
-#import "AblyFlutter.h"
+#import "AblyClientStore.h"
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
 
-@implementation AblyFlutter {
+@implementation AblyClientStore {
     FlutterMethodChannel* _channel;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
@@ -16,7 +16,7 @@
 }
 
 + (instancetype)sharedInstance {
-    static AblyFlutter *sharedInstance = nil;
+    static AblyClientStore *sharedInstance = nil;
     @synchronized(self) {
         if (sharedInstance == nil) {
             sharedInstance = [[self alloc] init];
@@ -110,7 +110,7 @@
     return handle;
 }
 
--(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
+-(ARTRealtime *)getRealtime:(NSNumber *)handle {
     return [_realtimeInstances objectForKey:handle];
 }
 

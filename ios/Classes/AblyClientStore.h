@@ -7,7 +7,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AblyFlutter : NSObject
+/**
+* Stores [Rest] and [Realtime] client instances by numeric handle. This handle is passed
+* to the Dart side to reference a platform side (Android) instance. When the user calls a method
+* on a client, the handle is used to get the instance. This allows ably-flutter to call
+* methods on the correct client.
+*/
+@interface AblyClientStore : NSObject
 
 @property (nullable) FlutterMethodChannel * channel;
 
@@ -19,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
 
--(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
+-(nullable ARTRealtime *)getRealtime:(NSNumber *)handle;
 
 -(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(nullable NSNumber *)handle;
 

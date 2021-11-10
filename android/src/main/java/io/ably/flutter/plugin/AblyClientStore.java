@@ -12,19 +12,25 @@ import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
 
-class AblyInstanceManager {
+/**
+ * Manages [Rest] and [Realtime] client instances by numeric handle. This handle is passed
+ * to the Dart side to reference a platform side (Android) instance. When the user calls a method
+ * on a client, the handle is used to get the instance. This allows ably-flutter to call
+ * methods on the correct client.
+ */
+class AblyClientStore {
 
-    private static AblyInstanceManager _instance;
+    private static AblyClientStore _instance;
     private long _nextHandle = 1;
     final private Context applicationContext;
 
-    private AblyInstanceManager(Context applicationContext) {
+    private AblyClientStore(Context applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    static synchronized AblyInstanceManager getInstance(Context applicationContext) {
+    static synchronized AblyClientStore getInstance(Context applicationContext) {
         if (null == _instance) {
-            _instance = new AblyInstanceManager(applicationContext);
+            _instance = new AblyClientStore(applicationContext);
         }
         return _instance;
     }

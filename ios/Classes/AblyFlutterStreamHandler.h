@@ -6,7 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutterStreamHandler : NSObject<FlutterStreamHandler>
 
-@property(nonatomic, readonly) AblyFlutter * ably;
+@property(nonatomic, readonly) AblyClientStore * clientStore;
 
 - (nullable FlutterError *)onListenWithArguments:(nullable id)arguments
                                        eventSink:(FlutterEventSink)eventSink;
