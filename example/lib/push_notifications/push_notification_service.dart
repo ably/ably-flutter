@@ -13,8 +13,8 @@ class PushNotificationService {
       AndroidPushNotificationConfiguration();
   ably.Realtime? realtime;
   ably.Rest? rest;
-  ably.RealtimeChannelInterface? _realtimeChannel;
-  ably.RealtimeChannelInterface? _pushLogMetachannel;
+  ably.RealtimeChannel? _realtimeChannel;
+  ably.RealtimeChannel? _pushLogMetachannel;
   ably.RestChannelInterface? _restChannel;
   late ably.PushChannel? _pushChannel;
 
