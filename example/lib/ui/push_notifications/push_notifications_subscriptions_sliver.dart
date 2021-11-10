@@ -14,15 +14,15 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
       : super(key: key);
 
   Widget buildSubscriptionsList(
-          Stream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
+          Stream<ably.PaginatedResult<ably.PushChannelSubscription>>
               stream) =>
       StreamBuilder<
-              ably.PaginatedResultInterface<ably.PushChannelSubscription>>(
+              ably.PaginatedResult<ably.PushChannelSubscription>>(
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final subscriptions = snapshot.data as ably
-                  .PaginatedResultInterface<ably.PushChannelSubscription>;
+                  .PaginatedResult<ably.PushChannelSubscription>;
 
               if (subscriptions.items.isEmpty) {
                 return const Text('No subscriptions');

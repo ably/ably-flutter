@@ -13,10 +13,8 @@ import 'package:flutter/services.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 class RealtimeChannel extends PlatformObject {
-  @override
   final Realtime realtime;
 
-  @override
   final String name;
 
   late RealtimePresence _presence;
@@ -222,7 +220,7 @@ class RealtimeChannel extends PlatformObject {
   /// by calling [StreamSubscription.cancel]
   ///
   /// Warning: the name/ names are not channel names, but message names.
-  /// See [Message.dart] for more information.
+  /// See [Message] for more information.
   ///
   /// Calling subscribe the first time on a channel will automatically attach
   /// that channel. If a channel is detached, subscribing again will not

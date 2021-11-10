@@ -16,6 +16,7 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
+  @override
   void release(String name) {
     realtime.invoke(PlatformMethod.releaseRealtimeChannel, name);
   }

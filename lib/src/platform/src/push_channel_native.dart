@@ -6,7 +6,7 @@ class PushChannelNative extends PlatformObject implements PushChannel {
   final String _name;
 
   /// A rest client used platform side to invoke push notification methods
-  final RestInterface? rest;
+  final Rest? rest;
 
   /// A realtime client used platform side to invoke push notification methods
   final Realtime? realtime;
@@ -47,7 +47,7 @@ class PushChannelNative extends PlatformObject implements PushChannel {
       {TxTransportKeys.channelName: _name});
 
   @override
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
+  Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&
         !params.containsKey('clientId') &&

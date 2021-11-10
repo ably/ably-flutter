@@ -6,7 +6,15 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// [T] can be a [Map] or [List]
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#HP1
-abstract class HttpPaginatedResponse<T> extends PaginatedResultInterface<T> {
+abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
+  /// Instantiates by extracting result from [AblyMessage] returned from
+  /// platform method.
+  ///
+  /// Sets appropriate [_pageHandle] for identifying platform side of this
+  /// result object so that [next] and [first] can be executed
+  HttpPaginatedResponse.fromAblyMessage(AblyMessage<PaginatedResult> message)
+      : super.fromAblyMessage(message);
+
   /// HTTP status code for the response
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP4

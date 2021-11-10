@@ -5,7 +5,6 @@ export 'src/channel_state_event.dart';
 export 'src/connection_event.dart';
 export 'src/connection_state.dart';
 export 'src/connection_state_change.dart';
-export 'src/presence.dart';
 export 'src/realtime_channel_options.dart';
 export 'src/realtime_history_params.dart';
 export 'src/realtime_presence_params.dart';
