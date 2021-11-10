@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
 
--(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
+-(nullable ARTRealtime *)getRealtime:(NSNumber *)handle;
 
 -(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(nullable NSNumber *)handle;
 

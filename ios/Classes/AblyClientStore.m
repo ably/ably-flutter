@@ -110,7 +110,7 @@
     return handle;
 }
 
--(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
+-(ARTRealtime *)getRealtime:(NSNumber *)handle {
     return [_realtimeInstances objectForKey:handle];
 }
 

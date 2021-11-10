@@ -90,7 +90,7 @@ public class PushHandlers: NSObject {
     public static let device: FlutterHandler = { plugin, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = plugin.clientStore.realtime(withHandle: ablyClientHandle)
+        let realtime = plugin.clientStore.getRealtime(ablyClientHandle)
         let rest = plugin.clientStore.getRest(ablyClientHandle)
 
         if let realtime = realtime {
@@ -166,7 +166,7 @@ public class PushHandlers: NSObject {
     private static func getPush(ably: AblyClientStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.realtime(withHandle: ablyClientHandle)
+        let realtime = ably.getRealtime(ablyClientHandle)
         let rest = ably.getRest(ablyClientHandle)
 
         if let realtime = realtime {
@@ -215,7 +215,7 @@ public class PushHandlers: NSObject {
             return nil
         }
 
-        let realtime = ably.realtime(withHandle: unwrappedClientHandle)
+        let realtime = ably.getRealtime(unwrappedClientHandle)
         if let unwrappedRealtime = realtime {
             return unwrappedRealtime.channels.get(unwrappedChannelName).push
         } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
