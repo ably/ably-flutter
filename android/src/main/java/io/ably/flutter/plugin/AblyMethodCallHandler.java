@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.BiConsumer;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
@@ -555,7 +556,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
           .channels
           .get(channelName);
 
-      final ArrayList<Message> channelMessages = (ArrayList<Message>) message.message.get(PlatformConstants.TxTransportKeys.messages);
+      final ArrayList<Message> channelMessages = (ArrayList<Message>) data.get(PlatformConstants.TxTransportKeys.messages);
       if (channelMessages == null) {
         result.error("Messages cannot be null", null, null);
         return;

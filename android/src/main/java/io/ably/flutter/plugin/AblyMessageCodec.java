@@ -277,11 +277,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final String eventName = (String) jsonMap.get(PlatformConstants.TxAblyEventMessage.eventName);
     final Object messageType = jsonMap.get(PlatformConstants.TxAblyEventMessage.type);
     final Integer type = (messageType == null) ? null : Integer.parseInt(messageType.toString());
+    final Integer handle = (Integer) jsonMap.get(PlatformConstants.TxAblyEventMessage.registrationHandle);
     Object message = jsonMap.get(PlatformConstants.TxAblyEventMessage.message);
     if (type != null) {
       message = codecMap.get((byte) (int) type).decode((Map<String, Object>) message);
     }
-    return new AblyEventMessage<>(eventName, message);
+    return new AblyEventMessage<>(eventName, message, handle);
   }
 
   private PlatformClientOptions decodeClientOptions(Map<String, Object> jsonMap) {
