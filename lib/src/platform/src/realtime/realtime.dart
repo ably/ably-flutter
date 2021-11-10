@@ -1,16 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:ably_flutter/src/authentication/authentication.dart';
-import 'package:ably_flutter/src/common/common.dart';
-import 'package:ably_flutter/src/common/src/backwards_compatibility.dart';
-import 'package:ably_flutter/src/error/error.dart';
-import 'package:ably_flutter/src/generated/platform_constants.dart';
-import 'package:ably_flutter/src/platform/platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
-import 'package:ably_flutter/src/realtime/realtime.dart';
-import 'package:ably_flutter/src/stats/src/stats.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;

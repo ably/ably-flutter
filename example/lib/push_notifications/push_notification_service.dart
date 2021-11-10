@@ -146,8 +146,8 @@ class PushNotificationService {
     await ensureRealtimeClientConnected();
     final stream = _realtimeChannel!.subscribe();
     _realtimeChannelStreamSubscription = stream.listen((message) {
-      print('Message clientId: ${message?.clientId}');
-      print('Message extras: ${message?.extras}');
+      print('Message clientId: ${message.clientId}');
+      print('Message extras: ${message.extras}');
     });
     return stream;
   }
