@@ -8,8 +8,8 @@ typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
 class MockMethodCallManager {
   int handleCounter = 0;
   bool isAuthenticated = false;
-  final channels = <int, AblyMessage?>{};
-  final publishedMessages = <AblyMessage>[];
+  final channels = <int, AblyMessage<dynamic>?>{};
+  final publishedMessages = <AblyMessage<dynamic>>[];
 
   MockMethodCallManager() {
     Platform.methodChannel.setMockMethodCallHandler(handler);
@@ -35,8 +35,7 @@ class MockMethodCallManager {
 
       case PlatformMethod.publish:
         final message = methodCall.arguments as AblyMessage;
-        final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle!]!;
+        final ablyChannel = channels[message.handle!]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,
@@ -46,7 +45,7 @@ class MockMethodCallManager {
           await AblyMethodCallHandler(Platform.methodChannel).onAuthCallback(
             AblyMessage(
               TokenParams(timestamp: DateTime.now()),
-              handle: handle,
+              handle: message.handle,
             ),
           );
           isAuthenticated = true;
@@ -60,8 +59,7 @@ class MockMethodCallManager {
 
       case PlatformMethod.publishRealtimeChannelMessage:
         final message = methodCall.arguments as AblyMessage;
-        final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle!]!;
+        final ablyChannel = channels[message.handle!]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,
@@ -70,7 +68,8 @@ class MockMethodCallManager {
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
           await AblyMethodCallHandler(Platform.methodChannel)
               .onRealtimeAuthCallback(
-            AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
+            AblyMessage(TokenParams(timestamp: DateTime.now()),
+                handle: message.handle),
           );
           isAuthenticated = true;
           throw PlatformException(

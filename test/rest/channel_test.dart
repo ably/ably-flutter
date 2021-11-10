@@ -31,8 +31,7 @@ void main() {
 
       // verification
       expect(manager.publishedMessages.length, 1);
-      final firstMessage =
-          manager.publishedMessages.first.message as AblyMessage;
+      final firstMessage = manager.publishedMessages.first;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData[TxTransportKeys.channelName], 'test');
       expect(messageData[TxTransportKeys.messages], isA<List>());
@@ -58,8 +57,7 @@ void main() {
 
       // verification
       expect(manager.publishedMessages.length, 1);
-      final firstMessage =
-          manager.publishedMessages.first.message as AblyMessage;
+      final firstMessage = manager.publishedMessages.first;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData[TxTransportKeys.channelName], 'test');
       expect(messageData[TxTransportKeys.messages], isA<List>());
@@ -144,7 +142,7 @@ void main() {
 
       // verification
       expect(manager.publishedMessages.length, 2);
-      final message0 = manager.publishedMessages[0].message as AblyMessage;
+      final message0 = manager.publishedMessages[0];
       final messageData0 = message0.message as Map<dynamic, dynamic>;
       expect(messageData0[TxTransportKeys.channelName], 'test');
       expect(messageData0[TxTransportKeys.messages], isA<List>());
@@ -153,7 +151,7 @@ void main() {
       expect(messages[0].name, 'name');
       expect(messages[0].data, 'data4');
 
-      final message1 = manager.publishedMessages[1].message as AblyMessage;
+      final message1 = manager.publishedMessages[1];
       final messageData1 = message1.message as Map<dynamic, dynamic>;
       expect(messageData1[TxTransportKeys.channelName], 'test');
       expect(messageData1[TxTransportKeys.messages], isA<List>());
