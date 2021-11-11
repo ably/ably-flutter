@@ -70,7 +70,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
       LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
     } else {
       // No existing Flutter Activity is running, create a FlutterEngine and pass it the RemoteMessage
-      new PushBackgroundIsolateRunner(context, this, message);
+      new PushTerminatedIsolateRunner(context, this, message);
     }
 
   }
@@ -129,6 +129,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   void finish() {
     if (asyncProcessingPendingResult != null) {
       asyncProcessingPendingResult.finish();
+      asyncProcessingPendingResult = null;
     }
   }
 }

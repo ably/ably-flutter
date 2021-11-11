@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
-import io.ably.flutter.plugin.push.PushBackgroundIsolateRunner;
+import io.ably.flutter.plugin.push.PushTerminatedIsolateRunner;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -742,7 +742,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void pushSetOnBackgroundMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     Long backgroundMessageHandlerHandle = (Long) call.arguments;
-    PushBackgroundIsolateRunner.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
+    PushTerminatedIsolateRunner.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
