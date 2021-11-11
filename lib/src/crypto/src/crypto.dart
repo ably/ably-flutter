@@ -12,10 +12,8 @@ class Crypto {
   static const defaultKeyLengthInBits = 256;
   static const keyLength128bits = 128;
   static const defaultMode = 'cbc';
-  static const keyTypeErrorMessage =
-      'A key must either be a String or a Uint8List.';
-  static const keyLengthErrorMessage =
-      'A key must be 256 bits or 128 bits in length.';
+  static const keyTypeErrorMessage = 'key must be a String or Uint8List.';
+  static const keyLengthErrorMessage = 'key must be 256 bits or 128 bits long.';
 
   /// Gets the CipherParams which can be used to with [RestChannelOptions] or
   /// [RealtimeChannelOptions] to specify encryption.
