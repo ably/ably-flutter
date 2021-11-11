@@ -9,7 +9,6 @@ class PushRealtimeClientReceivedSliver extends StatelessWidget {
 
   const PushRealtimeClientReceivedSliver(this._pushNotificationService);
 
-
   @override
   Widget build(BuildContext context) => Column(
         children: [

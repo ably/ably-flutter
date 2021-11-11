@@ -29,17 +29,17 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: messages
                         .map((e) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Column(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWithLabel('Title',
                                       e.notification?.title ?? 'NO TITLE'),
-                                  TextWithLabel(
-                                      'Body', e.notification?.body ?? 'NO BODY'),
+                                  TextWithLabel('Body',
+                                      e.notification?.body ?? 'NO BODY'),
                                 ],
                               ),
-                        ))
+                            ))
                         .toList(),
                   );
                 }
