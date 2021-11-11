@@ -22,15 +22,15 @@ class Platform {
 
   /// Initializing ably on platform side by invoking `register` platform method.
   /// Register will clear any stale instances on platform.
-  static Future? _initializer;
+  static bool _isRegistered = false;
 
   static Future _initialize() async {
-    if (_initializer == null) {
+    if (!_isRegistered) {
       AblyMethodCallHandler(methodChannel);
-      _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
       BackgroundIsolateAndroidPlatform();
+      await methodChannel.invokeMethod(PlatformMethod.registerAbly);
+      _isRegistered = true;
     }
-    return _initializer;
   }
 
   /// invokes a platform [method] with [arguments]
