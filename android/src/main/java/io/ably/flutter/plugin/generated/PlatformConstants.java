@@ -84,7 +84,6 @@ final public class PlatformConstants {
         public static final String pushOnMessage = "pushOnMessage";
         public static final String pushOnBackgroundMessage = "pushOnBackgroundMessage";
         public static final String pushOnNotificationTap = "pushOnNotificationTap";
-        public static final String pushSetOnBackgroundMessage = "pushSetOnBackgroundMessage";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
