@@ -48,25 +48,6 @@ class PushNotificationsPublishingSliver extends StatelessWidget {
                   .publishDataNotificationMessageToChannel,
               child: const Text('Data + Notification Message'),
             ),
-            const Text('To validate messages were sent, you can subscribe to '
-                'the channel and view the device logs. Data messages '
-                'are not currently available through Ably-flutter. '
-                'You should implement the relevant delegate methods on iOS'
-                ' and extend FirebaseMessagingService on Android.'),
-            BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService
-                    .subscribeToChannelWithPushChannelRule,
-                child: const Text('Subscribe to channel: '
-                    '"${Constants.channelNameForPushNotifications}"')),
-            const Text('To debug push notifications, '
-                'subscribe to the meta channel.'),
-            BoolStreamButton(
-                stream: _pushNotificationService.hasPushChannelStream,
-                onPressed:
-                    _pushNotificationService.subscribeToPushLogMetachannel,
-                child: const Text('Subscribe to push metachannel: '
-                    '${Constants.pushMetaChannelName}')),
           ],
         ),
       );
