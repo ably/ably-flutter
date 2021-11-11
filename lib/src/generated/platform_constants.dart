@@ -37,7 +37,7 @@ class CodecTypes {
 class PlatformMethod {
   static const String getPlatformVersion = 'getPlatformVersion';
   static const String getVersion = 'getVersion';
-  static const String registerAbly = 'registerAbly';
+  static const String clearPlatformInstances = 'clearPlatformInstances';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
   static const String createRestWithOptions = 'createRestWithOptions';

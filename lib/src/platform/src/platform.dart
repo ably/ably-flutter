@@ -21,27 +21,29 @@ class Platform {
   static final StreamsChannel streamsChannel =
       StreamsChannel('io.ably.flutter.stream', codec);
 
-  /// Initializing ably on platform side by invoking `register` platform method.
-  /// Register will clear any stale instances on platform.
-  static bool _isRegistered = false;
+  /// This field will reset to true when the state is reset. This allows us to
+  /// if an app has been restarted, or a hot restart (not hot reload) has
+  /// happened.
+  static bool _isStateReset = true;
 
-  static Future _initialize() async {
-    if (!_isRegistered) {
+  /// Clears instances on the Platform side
+  static Future<void> _handleNewState() async {
+    if (_isStateReset) {
       AblyMethodCallHandler(methodChannel);
       BackgroundIsolateAndroidPlatform();
-      await methodChannel.invokeMethod(PlatformMethod.registerAbly);
-      _isRegistered = true;
+      await methodChannel.invokeMethod(PlatformMethod.clearPlatformInstances);
+      _isStateReset = false;
     }
   }
 
   /// invokes a platform [method] with [arguments]
   ///
-  /// calls an [_initialize] method before invoking any method to handle any
+  /// calls[_handleNewState] before invoking any method to handle any
   /// cleanup tasks that are especially required while performing hot-restart
-  /// (as hot-restart is known to not clear any objects on platform side)
+  /// (as hot-restart does not automatically reset platform instances)
   static Future<T?> invokePlatformMethod<T>(String method,
       [Object? arguments]) async {
-    await _initialize();
+    await _handleNewState();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);
     } on PlatformException catch (pe) {
@@ -58,7 +60,7 @@ class Platform {
    */
   static Future<T> invokePlatformMethodNonNull<T>(String method,
       [Object? arguments]) async {
-    await _initialize();
+    await _handleNewState();
     try {
       final result = await methodChannel.invokeMethod<T>(method, arguments);
       if (result == null) {

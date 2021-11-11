@@ -24,7 +24,7 @@ class MockMethodCallManager {
 
   Future<dynamic> handler(MethodCall methodCall) async {
     switch (methodCall.method) {
-      case PlatformMethod.registerAbly:
+      case PlatformMethod.clearPlatformInstances:
         return true;
 
       case PlatformMethod.createRestWithOptions:

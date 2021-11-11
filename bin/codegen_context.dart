@@ -59,7 +59,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
 const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'getPlatformVersion', 'value': 'getPlatformVersion'},
   {'name': 'getVersion', 'value': 'getVersion'},
-  {'name': 'registerAbly', 'value': 'registerAbly'},
+  {'name': 'clearPlatformInstances', 'value': 'clearPlatformInstances'},
 
   // Auth
   {'name': 'authCallback', 'value': 'authCallback'},
