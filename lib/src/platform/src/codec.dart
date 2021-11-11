@@ -459,9 +459,10 @@ class Codec extends StandardMessageCodec {
         ? v.message
         : codecMap[codecType]!.encode(v.message);
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxAblyEventMessage.eventName, v.eventName);
-    _writeToJson(jsonMap, TxAblyEventMessage.type, codecType);
-    _writeToJson(jsonMap, TxAblyEventMessage.message, message);
+    jsonMap[TxAblyEventMessage.eventName] = v.eventName;
+    jsonMap[TxAblyEventMessage.type] = codecType;
+    jsonMap[TxAblyEventMessage.message] = message;
+    jsonMap[TxAblyEventMessage.registrationHandle] = v.handle;
     return jsonMap;
   }
 

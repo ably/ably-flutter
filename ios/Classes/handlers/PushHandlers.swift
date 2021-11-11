@@ -38,9 +38,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let requestPermission: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let messageData = message.message as! AblyFlutterMessage
-        let dataMap = messageData.message as! Dictionary<String, Any>
+        let message = call.arguments as! Message
+        let dataMap = message.message as! Dictionary<String, Any>
 
         var options: UNAuthorizationOptions = []
 
@@ -88,10 +87,9 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let device: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = plugin.clientStore.getRealtime(ablyClientHandle)
-        let rest = plugin.clientStore.getRest(ablyClientHandle)
+        let message = call.arguments as! Message
+        let realtime = plugin.clientStore.getRealtime(message.handle)
+        let rest = plugin.clientStore.getRest(message.handle)
 
         if let realtime = realtime {
             result(realtime.device)
@@ -102,9 +100,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let listSubscriptions: FlutterHandler = { plugin, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let nestedMessage = message.message as! AblyFlutterMessage
-        let dataMap = nestedMessage.message as! Dictionary<String, Any>
+        let message = call.arguments as! Message
+        let dataMap = message.message as! Dictionary<String, Any>
         let params = dataMap[TxTransportKeys_params] as! Dictionary<String, String>
 
         if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
@@ -115,7 +112,7 @@ public class PushHandlers: NSObject {
                         return
                     }
                     let handle = plugin.clientStore.setPaginatedResult(paginatedSubscription as! ARTPaginatedResult<AnyObject>, handle: nil)
-                    result(AblyFlutterMessage(message: paginatedSubscription as Any, handle: handle))
+                    result(Message(message: paginatedSubscription as Any, handle: handle))
                 })
             } catch {
                 result(FlutterError(code: "listSubscriptions_error", message: "Error listing subscriptions from push Channel \(pushChannel); err = \(error.localizedDescription)", details: nil))
@@ -164,10 +161,9 @@ public class PushHandlers: NSObject {
 
     /// Gets the client.push property from ARTRealtime or ARTRest when the call contains a handle.
     private static func getPush(ably: AblyClientStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
-        let message = call.arguments as! AblyFlutterMessage
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.getRealtime(ablyClientHandle)
-        let rest = ably.getRest(ablyClientHandle)
+        let message = call.arguments as! Message
+        let realtime = ably.getRealtime(message.handle)
+        let rest = ably.getRest(message.handle)
 
         if let realtime = realtime {
             return realtime.push;
@@ -188,40 +184,17 @@ public class PushHandlers: NSObject {
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(plugin: AblyFlutterPlugin, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ably = plugin.clientStore
-        let message = call.arguments as! AblyFlutterMessage
+        let message = call.arguments as! Message
+        let dictionary = message.message as! Dictionary<String, Any>
+        let channelName = (dictionary[TxTransportKeys_channelName] as! String)
 
-        var clientHandle: NSNumber? = nil;
-        var channelName: String? = nil;
-
-        if let ablyFlutterMessage = message.message as? AblyFlutterMessage {
-            if let nestedAblyFlutterMessage = ablyFlutterMessage.message as? AblyFlutterMessage {
-                clientHandle = nestedAblyFlutterMessage.handle
-                let dictionary = nestedAblyFlutterMessage.message as! Dictionary<String, Any>
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            } else if let dictionary = ablyFlutterMessage.message as? Dictionary<String, Any> {
-                clientHandle = ablyFlutterMessage.handle
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            }
+        let realtime = ably.getRealtime(message.handle)
+        if let realtime = realtime {
+            return realtime.channels.get(channelName).push
+        } else if let rest = ably.getRest(message.handle) {
+            return rest.channels.get(channelName).push
         } else {
-            clientHandle = (message.message as! NSNumber)
-        }
-
-        guard let unwrappedClientHandle = clientHandle else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
-            return nil
-        }
-        guard let unwrappedChannelName = channelName else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
-            return nil
-        }
-
-        let realtime = ably.getRealtime(unwrappedClientHandle)
-        if let unwrappedRealtime = realtime {
-            return unwrappedRealtime.channels.get(unwrappedChannelName).push
-        } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
-            return unwrappedRest.channels.get(unwrappedChannelName).push
-        } else {
-            result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
+            result(FlutterError(code: "getAblyPushChannel_error", message: "No rest or realtime client exists for handle: \(message.handle).", details: nil))
             return nil
         }
     }

@@ -12,7 +12,7 @@ Map<int?, Realtime> get realtimeInstances =>
     _realtimeInstancesUnmodifiableView ??=
         UnmodifiableMapView(_realtimeInstances);
 
-/// Ably's Realtime client
+///  Realtime client
 class Realtime extends PlatformObject {
   /// instantiates with [ClientOptions] and a String [key]
   ///
@@ -46,16 +46,12 @@ class Realtime extends PlatformObject {
   /// Provides access to the underlying Connection object
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
-  @override
   Connection get connection => _connection;
 
-  @override
   Auth? auth;
 
-  @override
   ClientOptions options;
 
-  @override
   late Push push;
 
   late RealtimeChannels _channels;
@@ -63,18 +59,15 @@ class Realtime extends PlatformObject {
   /// collection of [RealtimeChannelInterface] objects
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
-  @override
   RealtimeChannels get channels => _channels;
 
   /// closes the [connection]
-  @override
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   final _connectQueue = Queue<Completer<void>>();
   Completer<void>? _authCallbackCompleter;
 
   /// connects to [connection]
-  @override
   Future<void> connect() async {
     final queueItem = Completer<void>();
     _connectQueue.add(queueItem);
@@ -156,7 +149,6 @@ class Realtime extends PlatformObject {
     }
   }
 
-  @override
   Future<HttpPaginatedResponse> request({
     required String method,
     required String path,
@@ -167,17 +159,14 @@ class Realtime extends PlatformObject {
     throw UnimplementedError();
   }
 
-  @override
   Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
     throw UnimplementedError();
   }
 
-  @override
   Future<DateTime> time() {
     throw UnimplementedError();
   }
 
-  @override
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

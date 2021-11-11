@@ -1,7 +1,6 @@
 @import Ably;
 #import "AblyFlutterReader.h"
 #import "AblyFlutterClientOptions.h"
-#import "AblyFlutterMessage.h"
 #import "AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
@@ -27,23 +26,23 @@ NS_ASSUME_NONNULL_END
 
 + (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
-        [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
-        [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
-        [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
-        [NSString stringWithFormat:@"%d", messageExtrasCodecType]: readChannelMessageExtras,
-        [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
-        [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
-        [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: CryptoCodec.readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: CryptoCodec.readRealtimeChannelOptions,
-        [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
-        [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
-        [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
-        [NSString stringWithFormat:@"%d", realtimePresenceParamsCodecType]: readRealtimePresenceParams,
-        [NSString stringWithFormat:@"%d", messageDataCodecType]: readMessageData,
-        [NSString stringWithFormat:@"%d", cipherParamsCodecType]: CryptoCodec.readCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyMessage]: readMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyEventMessage ]: readEventMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeClientOptions]: readClientOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageExtras]: readChannelMessageExtras,
+        [NSString stringWithFormat:@"%d", CodecTypeMessage]: readChannelMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenDetails]: readTokenDetails,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenRequest]: readTokenRequest,
+        [NSString stringWithFormat:@"%d", CodecTypeRestChannelOptions]: CryptoCodec.readRestChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeChannelOptions]: CryptoCodec.readRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRestHistoryParams]: readRestHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeHistoryParams]: readRealtimeHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRestPresenceParams]: readRestPresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimePresenceParams]: readRealtimePresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
+        [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
     };
-    return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
+    return _handlers[[NSString stringWithFormat:@"%@", type]];
 }
 
 -(id)readValueOfType:(const UInt8)type {
@@ -55,23 +54,24 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-static AblyCodecDecoder readAblyFlutterMessage = ^AblyFlutterMessage*(NSDictionary *const dictionary) {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [dictionary objectForKey:TxAblyMessage_type]]];
-    id message = [dictionary objectForKey:TxAblyMessage_message];
+static AblyCodecDecoder readMessage = ^Message*(NSDictionary *const dictionary) {
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder:[NSString stringWithFormat:@"%@", dictionary[TxAblyMessage_type]]];
+    id message = dictionary[TxAblyMessage_message];
     if(decoder){
         message = decoder(message);
     }
-    return [[AblyFlutterMessage alloc] initWithMessage:message handle: [dictionary objectForKey:TxAblyMessage_registrationHandle]];
+    return [[Message alloc] initWithMessage:message handle:dictionary[TxAblyMessage_registrationHandle]];
 };
 
-static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(NSDictionary *const dictionary) {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [dictionary objectForKey:TxAblyEventMessage_type]]];
-    NSString* eventName = [dictionary objectForKey:TxAblyEventMessage_eventName];
-    id message = [dictionary objectForKey:TxAblyEventMessage_message];
+static AblyCodecDecoder readEventMessage = ^EventMessage*(NSDictionary *const dictionary) {
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder:[NSString stringWithFormat:@"%@", dictionary[TxAblyEventMessage_type]]];
+    NSString *const eventName = dictionary[TxAblyEventMessage_eventName];
+    NSNumber *const handle = (NSNumber* const) dictionary[TxAblyEventMessage_registrationHandle];
+    id message = dictionary[TxAblyEventMessage_message];
     if(decoder){
         message = decoder(message);
     }
-    return [[AblyFlutterEventMessage alloc] initWithEventName:eventName message:message];
+    return [[EventMessage alloc] initWithEventName:eventName message:message handle:handle];
 };
 
 /**
