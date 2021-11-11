@@ -81,7 +81,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
     if (appProcesses == null) {
-      // appProcesses is null if no processes are running.
+      // If no processes are running, appProcesses are null, not an empty list.
+      // There is definitely not an application in foreground if no processes are running.
       return false;
     }
 
