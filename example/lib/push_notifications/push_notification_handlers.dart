@@ -38,10 +38,11 @@ class PushNotificationHandlers {
       print('The iOS user has asked to see the In-app Notification Settings');
     });
 
-    notificationEvents.onMessage.listen((remoteMessage) {
-      addMessage(remoteMessage);
-      print('Message was delivered to app while the app was in the foreground: '
-          '$remoteMessage');
+    notificationEvents.onMessage.listen((message) {
+      addMessage(message);
+      print('RemoteMessage received while app is in foreground:\n'
+          'RemoteMessage.Notification: ${message.notification}'
+          'RemoteMessage.Data: ${message.data}');
     });
 
     notificationEvents.setOnShowNotificationInForeground((message) async {
@@ -71,7 +72,7 @@ class PushNotificationHandlers {
   static Future<void> _backgroundMessageHandler(
       ably.RemoteMessage message) async {
     addMessage(message);
-    print('Just received a background message, with:\n'
+    print('RemoteMessage received while app is in background:\n'
         'RemoteMessage.Notification: ${message.notification}'
         'RemoteMessage.Data: ${message.data}');
   }
