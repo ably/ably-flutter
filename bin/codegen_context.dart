@@ -128,8 +128,6 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushOnMessage', 'value': 'pushOnMessage'},
   {'name': 'pushOnBackgroundMessage', 'value': 'pushOnBackgroundMessage'},
   {'name': 'pushOnNotificationTap', 'value': 'pushOnNotificationTap'},
-  // Used only on Android
-  {'name': 'pushSetOnBackgroundMessage', 'value': 'pushSetOnBackgroundMessage'},
 
   // Realtime events
   {

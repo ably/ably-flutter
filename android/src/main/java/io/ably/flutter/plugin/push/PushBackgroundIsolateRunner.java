@@ -5,7 +5,6 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -44,16 +43,6 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
     // Even though lifecycle parameter is @NonNull, the implementation `FlutterEngineConnectionRegistry`
     // does not use it, because it is a bug in the API design. See https://github.com/flutter/flutter/issues/90316
     flutterEngine.getBroadcastReceiverControlSurface().attachToBroadcastReceiver(receiver, null);
-  }
-
-  /**
-   * This method is called when the main app is running and the user sets the background handler.
-   *
-   * @param backgroundMessageHandlerHandle
-   */
-  public static void setBackgroundMessageHandler(Context context, Long backgroundMessageHandlerHandle) {
-    SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_KEY, MODE_PRIVATE);
-    preferences.edit().putLong(BACKGROUND_MESSAGE_HANDLE_KEY, backgroundMessageHandlerHandle).apply();
   }
 
   @Override
