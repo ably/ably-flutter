@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ably_flutter/src/platform/src/background_android_isolate_platform.dart';
 import 'package:flutter/services.dart';
 
 import '../../error/error.dart';
