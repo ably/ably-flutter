@@ -39,8 +39,7 @@ public class PushHandlers: NSObject {
     @objc
     public static let requestPermission: FlutterHandler = { plugin, call, result in
         let message = call.arguments as! Message
-        let messageData = message.message as! Message
-        let dataMap = messageData.message as! Dictionary<String, Any>
+        let dataMap = message.message as! Dictionary<String, Any>
 
         var options: UNAuthorizationOptions = []
 

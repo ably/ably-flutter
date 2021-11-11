@@ -210,16 +210,14 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
 static const FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    NSNumber *const handle = message.message;
-    [[ably getRealtime:handle] connect];
+    [[ably getRealtime:message.handle] connect];
     result(nil);
 };
 
 static const FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    NSNumber *const handle = message.message;
-    [[ably getRealtime:handle] close];
+    [[ably getRealtime:message.handle] close];
     result(nil);
 };
 
@@ -249,11 +247,9 @@ static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *co
 static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    Message *const data = message.message;
-    NSNumber *const realtimeHandle = data.handle;
-    ARTRealtime *const realtimeWithHandle = [ably getRealtime:realtimeHandle];
+    ARTRealtime *const realtimeWithHandle = [ably getRealtime:message.handle];
     
-    NSDictionary *const realtimePayload = data.message;
+    NSDictionary *const realtimePayload = message.message;
     NSString  *const channelName = (NSString*) realtimePayload[TxTransportKeys_channelName];
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
     [channel detach:^(ARTErrorInfo *_Nullable error){
@@ -273,11 +269,8 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *co
 static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    Message *const data = message.message;
-    NSNumber *const realtimeHandle = data.handle;
-    ARTRealtime *const realtimeWithHandle = [ably getRealtime:realtimeHandle];
-    
-    NSDictionary *const realtimePayload = data.message;
+    ARTRealtime *const realtimeWithHandle = [ably getRealtime:message.handle];
+    NSDictionary *const realtimePayload = message.message;
     NSString *const channelName = (NSString*) realtimePayload[TxTransportKeys_channelName];
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
     void (^callback)(ARTErrorInfo *_Nullable) = ^(ARTErrorInfo *_Nullable error){
@@ -299,11 +292,9 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPl
 static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    Message *const nestedMessage = message.message;
-    NSNumber *const realtimeHandle = nestedMessage.handle;
-    ARTRealtime *const realtimeWithHandle = [ably getRealtime:realtimeHandle];
+    ARTRealtime *const realtimeWithHandle = [ably getRealtime:message.handle];
     
-    NSDictionary *const realtimePayload = nestedMessage.message;
+    NSDictionary *const realtimePayload = message.message;
     NSString *const channelName = (NSString*) realtimePayload[TxTransportKeys_channelName];
     ARTRealtimeChannelOptions *const channelOptions = (ARTRealtimeChannelOptions*) realtimePayload[TxTransportKeys_options];
 
@@ -486,8 +477,7 @@ static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutterPlugin *c
 static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     Message *const message = call.arguments;
     AblyClientStore *const ably = [plugin clientStore];
-    NSNumber *const handle = message.message;
-    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:handle];
+    ARTPaginatedResult *paginatedResult = [ably getPaginatedResult:message.handle];
     [paginatedResult next:^(ARTPaginatedResult * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
@@ -497,7 +487,7 @@ static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const plugin
                     details:error
                     ]);
         }else{
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:message.handle];
             result([[Message alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
         }
     }];
@@ -626,7 +616,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 
 -(void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     LOG(@"%@(%@)", call.method, call.arguments ? [call.arguments class] : @"");
-    const FlutterHandler handler = [_handlers objectForKey:call.method];
+    const FlutterHandler handler = _handlers[call.method];
     if (!handler) {
         // We don't have a handler for a method with this name so tell the caller.
         result(FlutterMethodNotImplemented);

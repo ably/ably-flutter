@@ -66,7 +66,7 @@ static AblyCodecDecoder readMessage = ^Message*(NSDictionary *const dictionary) 
 static AblyCodecDecoder readEventMessage = ^EventMessage*(NSDictionary *const dictionary) {
     AblyCodecDecoder decoder = [AblyFlutterReader getDecoder:[NSString stringWithFormat:@"%@", dictionary[TxAblyEventMessage_type]]];
     NSString *const eventName = dictionary[TxAblyEventMessage_eventName];
-    NSInteger handle = (NSInteger) dictionary[TxAblyEventMessage_registrationHandle];
+    NSNumber *const handle = (NSNumber* const) dictionary[TxAblyEventMessage_registrationHandle];
     id message = dictionary[TxAblyEventMessage_message];
     if(decoder){
         message = decoder(message);
