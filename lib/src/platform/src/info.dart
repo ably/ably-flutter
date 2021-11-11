@@ -3,8 +3,8 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Get android/iOS platform version
 Future<String> platformVersion() async =>
-    (await Platform.invokePlatformMethod<String>(
-        PlatformMethod.getPlatformVersion))!;
+    Platform.invokePlatformMethodNonNull<String>(
+        PlatformMethod.getPlatformVersion);
 
 /// Get ably library version
 Future<String> version() async =>

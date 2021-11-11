@@ -35,7 +35,6 @@ typedef NS_ENUM(UInt8, CodecType) {
     CodecTypeCipherParams = 154,
 };
 
-
 // flutter platform channel method names
 extern NSString *const AblyPlatformMethod_getPlatformVersion;
 extern NSString *const AblyPlatformMethod_getVersion;
