@@ -16,6 +16,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.flutter.plugin.common.MethodChannel;
 
+/**
+ * This class is used when the application is in the **foreground** or **background**, but not when
+ * **terminated**. See [PushTerminatedIsolateRunner.java] to see where push notifications being
+ * handled whilst the app is terminated.
+ */
 final public class PushMessagingEventHandlers {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
   public static final String PUSH_ON_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_MESSAGE_RECEIVED";
@@ -23,14 +28,25 @@ final public class PushMessagingEventHandlers {
   public static final String PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_COMPLETE";
   static PushMessagingEventHandlers instance;
 
-  public static void instantiate(Context context, MethodChannel methodChannel) {
-    if (instance == null) {
-      instance = new PushMessagingEventHandlers(context, methodChannel);
+  /**
+   * Replaces the existing instance if required. this is because the latest methodChannel is the most important
+   * @param context
+   * @param methodChannel
+   */
+  public static void load(Context context, MethodChannel methodChannel) {
+    if (instance != null) {
+      instance.close(context);
     }
+    instance = new PushMessagingEventHandlers(context, methodChannel);
   }
 
+  private void close(Context context) {
+    this.broadcastReceiver.unregister(context);
+  }
+
+  private final BroadcastReceiver broadcastReceiver;
   private PushMessagingEventHandlers(Context context, MethodChannel methodChannel) {
-    new BroadcastReceiver(context, methodChannel);
+    this.broadcastReceiver = new BroadcastReceiver(context, methodChannel);
   }
 
   private static class BroadcastReceiver extends android.content.BroadcastReceiver {
@@ -46,6 +62,10 @@ final public class PushMessagingEventHandlers {
       filter.addAction(PUSH_ON_MESSAGE_RECEIVED);
       filter.addAction(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
       LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
+    }
+
+    void unregister(Context context) {
+      LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 
     @Override

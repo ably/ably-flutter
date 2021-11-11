@@ -21,8 +21,13 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHandler {
-  private static final String TAG = PushBackgroundIsolateRunner.class.getName();
+/**
+ * This class is used when the application was terminated when the push notification is received.
+ * See [PushMessagingEventHandlers.java] to see where push notifications being handled whilst the
+ * app is in the background or the foreground.
+ */
+public class PushTerminatedIsolateRunner implements MethodChannel.MethodCallHandler {
+  private static final String TAG = PushTerminatedIsolateRunner.class.getName();
   private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
   private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
   private final FirebaseMessagingReceiver broadcastReceiver;
@@ -32,7 +37,7 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
   @NonNull
   private final FlutterEngine flutterEngine;
 
-  public PushBackgroundIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
+  public PushTerminatedIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
     this.broadcastReceiver = receiver;
     this.remoteMessage = message;
     flutterEngine = new FlutterEngine(context, null);
