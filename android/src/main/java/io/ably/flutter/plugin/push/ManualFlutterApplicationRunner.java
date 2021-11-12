@@ -1,12 +1,10 @@
 package io.ably.flutter.plugin.push;
 
-import static android.content.Context.MODE_PRIVATE;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushOnBackgroundMessage;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,8 +28,8 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * This class can generified to launch the app manually for any purpose, but currently it
  * launches the users app and sends it a RemoteMessage.
  */
-public class AppRunner implements MethodChannel.MethodCallHandler {
-  private static final String TAG = AppRunner.class.getName();
+public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
+  private static final String TAG = ManualFlutterApplicationRunner.class.getName();
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
@@ -40,7 +38,7 @@ public class AppRunner implements MethodChannel.MethodCallHandler {
   private final FlutterEngine flutterEngine;
   // Launch the users Flutter app and pass it the RemoteMessage.
   // Use this when noo existing Flutter Activity is running.
-  public AppRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
+  public ManualFlutterApplicationRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
     this.broadcastReceiver = receiver;
     this.remoteMessage = new RemoteMessage(intent.getExtras());
     flutterEngine = new FlutterEngine(context, null);

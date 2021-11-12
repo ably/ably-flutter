@@ -5,7 +5,6 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -29,11 +28,12 @@ final public class PushMessagingEventHandlers {
   static PushMessagingEventHandlers instance;
 
   /**
-   * Replaces the existing instance if required. this is because the latest methodChannel is the most important
+   * Replaces the existing instance if required. this is because the latest methodChannel is the
+   * most important because it is from the latest plugin registration.
    * @param context
    * @param methodChannel
    */
-  public static void load(Context context, MethodChannel methodChannel) {
+  public static void reset(Context context, MethodChannel methodChannel) {
     if (instance != null) {
       instance.close(context);
     }
@@ -41,7 +41,7 @@ final public class PushMessagingEventHandlers {
   }
 
   private void close(Context context) {
-    this.broadcastReceiver.unregister(context);
+    this.broadcastReceiver.close(context);
   }
 
   private final BroadcastReceiver broadcastReceiver;
@@ -50,14 +50,14 @@ final public class PushMessagingEventHandlers {
   }
 
   // Send message to Dart side app already running
-  public static void sendMessageToApp(Context context, Intent intent) {
+  public static void sendMessageToFlutterApp(Context context, Intent intent) {
     final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
     onMessageReceivedIntent.putExtras(intent.getExtras());
     LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
   }
 
   // Flutter is already running, just send a background message to it.
-  public static void sendBackgroundMessage(Context context, Intent intent) {
+  public static void sendBackgroundMessageToFlutterApp(Context context, Intent intent) {
     final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
     onMessageReceivedIntent.putExtras(intent.getExtras());
     LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
@@ -78,8 +78,9 @@ final public class PushMessagingEventHandlers {
       LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
     }
 
-    void unregister(Context context) {
+    void close(Context context) {
       LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+      this.methodChannel = null;
     }
 
     @Override
