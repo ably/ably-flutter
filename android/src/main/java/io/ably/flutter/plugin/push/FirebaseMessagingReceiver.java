@@ -1,8 +1,6 @@
 package io.ably.flutter.plugin.push;
 
 import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE;
-import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_BACKGROUND_MESSAGE_RECEIVED;
-import static io.ably.flutter.plugin.push.PushMessagingEventHandlers.PUSH_ON_MESSAGE_RECEIVED;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -13,8 +11,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
-import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.List;
 
@@ -55,24 +51,15 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   }
 
   private void sendMessageToFlutterApplication(Context context, Intent intent) {
-    final RemoteMessage message = new RemoteMessage(intent.getExtras());
     final Boolean isApplicationInForeground = isApplicationInForeground(context);
 
     if (isApplicationInForeground) {
-      // Send message to Dart side app already running
-      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
-      onMessageReceivedIntent.putExtras(intent.getExtras());
-      LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
+      PushMessagingEventHandlers.sendMessageToApp(context, intent);
     } else if (AblyFlutterPlugin.isMainActivityRunning) {
-      // Flutter is already running, just send a background message to it.
-      final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
-      onMessageReceivedIntent.putExtras(intent.getExtras());
-      LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
+      PushMessagingEventHandlers.sendBackgroundMessage(context, intent);
     } else {
-      // No existing Flutter Activity is running, create a FlutterEngine and pass it the RemoteMessage
-      new PushTerminatedIsolateRunner(context, this, message);
+      new AppRunner(context, this, intent);
     }
-
   }
 
   private Boolean isApplicationInForeground(final Context context) {

@@ -5,6 +5,7 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -25,9 +26,12 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * This class is used when the application was terminated when the push notification is received.
  * See [PushMessagingEventHandlers.java] to see where push notifications being handled whilst the
  * app is in the background or the foreground.
+ *
+ * This class can generified to launch the app manually for any purpose, but currently it
+ * launches the users app and sends it a RemoteMessage.
  */
-public class PushTerminatedIsolateRunner implements MethodChannel.MethodCallHandler {
-  private static final String TAG = PushTerminatedIsolateRunner.class.getName();
+public class AppRunner implements MethodChannel.MethodCallHandler {
+  private static final String TAG = AppRunner.class.getName();
   private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
   private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
   private final FirebaseMessagingReceiver broadcastReceiver;
@@ -36,10 +40,11 @@ public class PushTerminatedIsolateRunner implements MethodChannel.MethodCallHand
 
   @NonNull
   private final FlutterEngine flutterEngine;
-
-  public PushTerminatedIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
+  // Launch the users Flutter app and pass it the RemoteMessage.
+  // Use this when noo existing Flutter Activity is running.
+  public AppRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
     this.broadcastReceiver = receiver;
-    this.remoteMessage = message;
+    this.remoteMessage = new RemoteMessage(intent.getExtras());
     flutterEngine = new FlutterEngine(context, null);
     DartExecutor executor = flutterEngine.getDartExecutor();
     backgroundMethodChannel = new MethodChannel(executor.getBinaryMessenger(), "io.ably.flutter.plugin.background", new StandardMethodCodec(new AblyMessageCodec(new CipherParamsStorage())));
