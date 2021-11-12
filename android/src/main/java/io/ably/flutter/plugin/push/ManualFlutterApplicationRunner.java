@@ -26,7 +26,7 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * app is in the background or the foreground.
  *
  * This class can generified to launch the app manually for any purpose, but currently it
- * launches the users app and sends it a RemoteMessage.
+ * launches the Flutter application and sends it a RemoteMessage.
  */
 public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
   private static final String TAG = ManualFlutterApplicationRunner.class.getName();
