@@ -72,7 +72,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
-        PushMessagingEventHandlers.load(applicationContext, methodChannel);
+        PushMessagingEventHandlers.reset(applicationContext, methodChannel);
     }
 
     @Override
