@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -50,7 +51,7 @@ final public class PushMessagingEventHandlers {
   }
 
   // Send message to Dart side app already running
-  public static void sendMessageToFlutterApp(Context context, Intent intent) {
+  public static void sendMessageToFlutterApp(@NonNull final Context context, @NonNull final Intent intent) {
     final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
     onMessageReceivedIntent.putExtras(intent.getExtras());
     LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
