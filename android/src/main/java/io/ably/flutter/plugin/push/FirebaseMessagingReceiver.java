@@ -69,7 +69,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
     if (appProcesses == null) {
       // If no processes are running, appProcesses are null, not an empty list.
-      // There is definitely not an application in foreground if no processes are running.
+      // The user's app is definitely not in the foreground if no processes are running.
       return false;
     }
 
