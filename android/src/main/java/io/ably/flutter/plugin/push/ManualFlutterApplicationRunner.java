@@ -25,7 +25,7 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * See [PushMessagingEventHandlers.java] to see where push notifications being handled whilst the
  * app is in the background or the foreground.
  *
- * This class can generified to launch the app manually for any purpose, but currently it
+ * This class can generalized to launch the app manually for any purpose, but currently it
  * launches the Flutter application and sends it a RemoteMessage.
  */
 public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
