@@ -28,6 +28,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'pushChannelSubscription',
     'unNotificationSettings',
     'remoteMessage',
+    'onNewToken',
 
     'errorInfo',
 

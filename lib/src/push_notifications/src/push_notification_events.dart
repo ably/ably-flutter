@@ -4,6 +4,8 @@ import 'remote_message.dart';
 
 typedef BackgroundMessageHandler = void Function(RemoteMessage message);
 
+typedef NewTokenHandler = void Function(String token);
+
 /// Push Notification events, such as message arriving or notification tap.
 abstract class PushNotificationEvents {
   /// Configure if notifications are shown when the app is in the foreground.
@@ -29,6 +31,10 @@ abstract class PushNotificationEvents {
   /// This method will be called when a notification or data message is
   /// received by the device.
   void setOnBackgroundMessage(BackgroundMessageHandler handler);
+
+  /// This method will be called when a new FCM or APNs token
+  /// is provided to device.
+  void setOnNewToken(NewTokenHandler handler);
 
   /// Called when notification is tapped while the app is already in the foreground or in the background
   ///

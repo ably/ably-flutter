@@ -54,15 +54,22 @@ class PushNotificationEventsNative implements PushNotificationEvents {
   }
 
   BackgroundMessageHandler? _onBackgroundMessage;
+  NewTokenHandler? _onNewToken;
 
   /// Implementation of setOnBackgroundMessage. For more documentation,
   /// see [PushNotificationEvents.setOnBackgroundMessage]
+  @override
   void setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
       await BackgroundIsolateAndroidPlatform.methodChannel
           .invokeMethod(PlatformMethod.pushSetOnBackgroundMessage);
     }
+  }
+
+  @override
+  Future<void> setOnNewToken(NewTokenHandler handler) async {
+    _onNewToken = handler;
   }
 
   /// Handles a RemoteMessage passed from the platform side.
@@ -75,6 +82,13 @@ class PushNotificationEventsNative implements PushNotificationEvents {
           'RemoteMessage.data: ${remoteMessage.data}. '
           'RemoteMessage.notification: ${remoteMessage.notification}. '
           'Set `ably.Push.notificationEvents.setOnBackgroundMessage()`.');
+    }
+  }
+
+  /// Handles a new token passed from the platform side.
+  void handleNewToken(String token) {
+    if (_onNewToken != null) {
+      _onNewToken!(token);
     }
   }
 
