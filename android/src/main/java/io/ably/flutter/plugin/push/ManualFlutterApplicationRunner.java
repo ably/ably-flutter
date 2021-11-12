@@ -22,11 +22,11 @@ import io.flutter.plugin.common.StandardMethodCodec;
 
 /**
  * This class is used when the application was terminated when the push notification is received.
- * See [PushMessagingEventHandlers.java] to see where push notifications being handled whilst the
- * app is in the background or the foreground.
+ * It launches the Flutter application and sends it a RemoteMessage. See [PushMessagingEventHandlers.java]
+ * to see where push notifications being handled whilst the app is in the background or the foreground.
+ * Use this class when no existing Flutter Activity is running.
  *
- * This class can generalized to launch the app manually for any purpose, but currently it
- * launches the Flutter application and sends it a RemoteMessage.
+ * This class can generalized to launch the app manually for any purpose, but currently it is narrowly scoped for push notifications.
  */
 public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
   private static final String TAG = ManualFlutterApplicationRunner.class.getName();
@@ -36,8 +36,6 @@ public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallH
 
   @NonNull
   private final FlutterEngine flutterEngine;
-  // Launch the users Flutter app and pass it the RemoteMessage.
-  // Use this when noo existing Flutter Activity is running.
   public ManualFlutterApplicationRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
     this.broadcastReceiver = receiver;
     this.remoteMessage = new RemoteMessage(intent.getExtras());
