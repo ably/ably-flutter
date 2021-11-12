@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> {
 
     try {
       _rest = ably.Rest(options: clientOptions);
-      await encryptedMessagingService!.setRest(_rest!);
+      await encryptedMessagingService!.setRestClient(_rest!);
       _pushNotificationService.setRestClient(_rest!);
       setState(() {});
     } on Exception catch (error) {
