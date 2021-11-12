@@ -50,14 +50,14 @@ final public class PushMessagingEventHandlers {
   }
 
   // Send message to Dart side app already running
-  public static void sendMessageToApp(Context context, Intent intent) {
+  public static void sendMessageToFlutterApp(Context context, Intent intent) {
     final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
     onMessageReceivedIntent.putExtras(intent.getExtras());
     LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
   }
 
   // Flutter is already running, just send a background message to it.
-  public static void sendBackgroundMessage(Context context, Intent intent) {
+  public static void sendBackgroundMessageToFlutterApp(Context context, Intent intent) {
     final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
     onMessageReceivedIntent.putExtras(intent.getExtras());
     LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);

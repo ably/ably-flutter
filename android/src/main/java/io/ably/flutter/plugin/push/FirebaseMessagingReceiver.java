@@ -54,11 +54,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     final Boolean isApplicationInForeground = isApplicationInForeground(context);
 
     if (isApplicationInForeground) {
-      PushMessagingEventHandlers.sendMessageToApp(context, intent);
+      PushMessagingEventHandlers.sendMessageToFlutterApp(context, intent);
     } else if (AblyFlutterPlugin.isMainActivityRunning) {
-      PushMessagingEventHandlers.sendBackgroundMessage(context, intent);
+      PushMessagingEventHandlers.sendBackgroundMessageToFlutterApp(context, intent);
     } else {
-      new AppRunner(context, this, intent);
+      new ManualFlutterApplicationRunner(context, this, intent);
     }
   }
 
