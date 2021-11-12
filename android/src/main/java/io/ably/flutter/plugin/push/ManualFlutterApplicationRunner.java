@@ -26,7 +26,8 @@ import io.flutter.plugin.common.StandardMethodCodec;
  * to see where push notifications being handled whilst the app is in the background or the foreground.
  * Use this class when no existing Flutter Activity is running.
  *
- * This class can generalized to launch the app manually for any purpose, but currently it is narrowly scoped for push notifications.
+ * This class can be generalized to launch the app manually for any purpose, but currently it is
+ * narrowly scoped for push notifications.
  */
 public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
   private static final String TAG = ManualFlutterApplicationRunner.class.getName();
