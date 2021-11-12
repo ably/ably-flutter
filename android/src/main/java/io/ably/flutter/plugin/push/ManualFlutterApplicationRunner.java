@@ -33,10 +33,19 @@ public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallH
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
-
-  @NonNull
   private final FlutterEngine flutterEngine;
-  public ManualFlutterApplicationRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
+
+  /**
+   * Creates a Flutter engine, launches the Flutter application inside that Flutter engine, and
+   * creates a MethodChannel to communicate with the Flutter application.
+   *
+   * @param context
+   * @param receiver The FirebaseMessagingReceiver which received the message
+   * @param intent An intent containing a RemoteMessage passed straight from FirebaseMessagingReceiver
+   */
+  public ManualFlutterApplicationRunner(@NonNull final Context context,
+                                        @NonNull final FirebaseMessagingReceiver receiver,
+                                        @NonNull final Intent intent) {
     this.broadcastReceiver = receiver;
     this.remoteMessage = new RemoteMessage(intent.getExtras());
     flutterEngine = new FlutterEngine(context, null);
@@ -51,7 +60,8 @@ public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallH
   }
 
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  public void onMethodCall(@NonNull final MethodCall call,
+                           @NonNull final MethodChannel.Result result) {
     if (call.method.equals(pushSetOnBackgroundMessage)) {
       // This signals that the manually spawned app is ready to receive a message to handle.
       // We ask the user to set the background message handler early on.
