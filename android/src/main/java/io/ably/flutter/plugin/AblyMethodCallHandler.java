@@ -102,7 +102,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.pushListSubscriptions, this::pushListSubscriptions);
     _map.put(PlatformConstants.PlatformMethod.pushDevice, this::pushDevice);
     _map.put(PlatformConstants.PlatformMethod.pushNotificationTapLaunchedAppFromTerminated, this::pushNotificationTapLaunchedAppFromTerminated);
-    _map.put(PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage, this::pushSetOnBackgroundMessage);
 
     // paginated results
     _map.put(PlatformConstants.PlatformMethod.nextPage, this::getNextPage);
@@ -738,11 +737,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void pushNotificationTapLaunchedAppFromTerminated(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     result.success(remoteMessageFromUserTapLaunchesApp);
     remoteMessageFromUserTapLaunchesApp = null;
-  }
-
-  private void pushSetOnBackgroundMessage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    Long backgroundMessageHandlerHandle = (Long) call.arguments;
-    AppRunner.setBackgroundMessageHandler(applicationContext, backgroundMessageHandlerHandle);
   }
 
   private void getNextPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {

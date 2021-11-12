@@ -32,8 +32,6 @@ import io.flutter.plugin.common.StandardMethodCodec;
  */
 public class AppRunner implements MethodChannel.MethodCallHandler {
   private static final String TAG = AppRunner.class.getName();
-  private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
-  private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
@@ -54,16 +52,6 @@ public class AppRunner implements MethodChannel.MethodCallHandler {
     // Even though lifecycle parameter is @NonNull, the implementation `FlutterEngineConnectionRegistry`
     // does not use it, because it is a bug in the API design. See https://github.com/flutter/flutter/issues/90316
     flutterEngine.getBroadcastReceiverControlSurface().attachToBroadcastReceiver(receiver, null);
-  }
-
-  /**
-   * This method is called when the main app is running and the user sets the background handler.
-   *
-   * @param backgroundMessageHandlerHandle
-   */
-  public static void setBackgroundMessageHandler(Context context, Long backgroundMessageHandlerHandle) {
-    SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_KEY, MODE_PRIVATE);
-    preferences.edit().putLong(BACKGROUND_MESSAGE_HANDLE_KEY, backgroundMessageHandlerHandle).apply();
   }
 
   @Override
