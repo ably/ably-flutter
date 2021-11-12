@@ -251,6 +251,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final ChannelOptions channelOptions = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
       try {
         ablyLibrary.getRest(messageData.handle).channels.get(channelName, channelOptions);
+        result.success(null);
       } catch (AblyException ae) {
         handleAblyException(result, ae);
       }
