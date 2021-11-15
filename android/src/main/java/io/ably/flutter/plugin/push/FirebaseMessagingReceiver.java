@@ -24,11 +24,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private PendingResult asyncProcessingPendingResult = null;
 
   @Nullable
-  private BackgroundMessageProcessingCompleteReceiver backgroundMessageProcessingCompleteReceiver = null;
+  private FlutterBackgroundMessageProcessingCompleteReceiver flutterBackgroundMessageProcessingCompleteReceiver = null;
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    setupFlutterApplicationProcessingCompletionReceiver(context);
+    listenForFlutterApplicationToFinishProcessingMessage(context);
     sendMessageToFlutterApplication(context, intent);
   }
 
@@ -39,14 +39,14 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
    * (PushMessagingEventHandlers.BroadcastReceiver) to listen to messages from this receiver
    * (FirebaseMessagingReceiver).
    */
-  private void setupFlutterApplicationProcessingCompletionReceiver(@NonNull final Context context) {
+  private void listenForFlutterApplicationToFinishProcessingMessage(Context context) {
     // Wait for Flutter application to process message
     // At the end of the receiver's execution time (and user's application processing the message)
     // , Firebase messaging library will automatically create a notification.
     // On iOS, the notification may be shown before the  message is processed by the application.
     // goAsync() also increases the execution time from 10s/ 20s (depending on API level) to 30s
-    if (backgroundMessageProcessingCompleteReceiver == null) {
-      backgroundMessageProcessingCompleteReceiver = new BackgroundMessageProcessingCompleteReceiver(context);
+    if (flutterBackgroundMessageProcessingCompleteReceiver == null) {
+      flutterBackgroundMessageProcessingCompleteReceiver = new FlutterBackgroundMessageProcessingCompleteReceiver(context);
       asyncProcessingPendingResult = goAsync();
     }
   }
@@ -92,8 +92,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   /**
    * A dynamic broadcast receiver registered to listen to a `PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE`
    */
-  class BackgroundMessageProcessingCompleteReceiver extends BroadcastReceiver {
-    BackgroundMessageProcessingCompleteReceiver(@NonNull final Context context) {
+  class FlutterBackgroundMessageProcessingCompleteReceiver extends BroadcastReceiver {
+    FlutterBackgroundMessageProcessingCompleteReceiver(final Context context) {
       final IntentFilter filter = new IntentFilter();
       filter.addAction(PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE);
       LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
@@ -101,9 +101,9 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-      if (backgroundMessageProcessingCompleteReceiver != null) {
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(backgroundMessageProcessingCompleteReceiver);
-        backgroundMessageProcessingCompleteReceiver = null;
+      if (flutterBackgroundMessageProcessingCompleteReceiver != null) {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(flutterBackgroundMessageProcessingCompleteReceiver);
+        flutterBackgroundMessageProcessingCompleteReceiver = null;
       }
 
       String action = intent.getAction();
