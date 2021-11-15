@@ -20,9 +20,10 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
     }
     
     // FlutterResults to return result as Future<void> or throws an error. This is the convenient API.
+    // These fields are set in [PushHandlers.swift] when the method call is invoked
     public var flutterResultForActivate: FlutterResult? = nil;
     public var flutterResultForDeactivate: FlutterResult? = nil;
-    // There is no result stored for didAblyPushRegistrationFail, because there is dart side method call to return values to.
+    // There is no result stored for didAblyPushRegistrationFail, because there is no dart side method call to return values to.
     
     // MethodChannel to send result to handlers implemented in dart side. This provides values to the listeners
     // implement on the dart side. We need this for activate and deactivate because the new token can be provided.
@@ -34,43 +35,29 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
         defer {
             flutterResultForActivate = nil
         }
-        
-        guard let result = flutterResultForActivate else {
-            let error = FlutterError(code: "didActivateAblyPush_error", message: "Failed to asynchronously return a value because flutterResultForActivate was nil", details: nil)
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
-            return
-        }
-        if let error = error {
-            result(FlutterError(code: String(error.code), message: error.message, details: error))
-        } else {
-            result(nil)
-        }
+
         methodChannel.invokeMethod(AblyPlatformMethod_pushOnActivate, arguments: error, result: nil)
+        if let result = flutterResultForActivate {
+            result(error)
+        } else {
+            print("Did not return a value asynchronously because flutterResultForActivate was nil. The app might have been restarted since calling activate.")
+        }
     }
     
     public func didDeactivateAblyPush(_ error: ARTErrorInfo?) {
         defer {
             flutterResultForDeactivate = nil
         }
-        
-        guard let result = flutterResultForDeactivate else {
-            let error = FlutterError(code: "didDeactivateAblyPush_error", message: "Failed to asynchronously return a value because flutterResultForDeactivate was nil", details: nil)
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: error, result: nil)
-            return
-        }
-        if let error = error {
-            result(FlutterError(code: String(error.code), message: error.message, details: error))
-        } else {
-            result(nil)
-        }
+
         methodChannel.invokeMethod(AblyPlatformMethod_pushOnDeactivate, arguments: error, result: nil)
+        if let result = flutterResultForDeactivate {
+            result(error)
+        } else {
+            print("Did not return a value asynchronously because flutterResultForDeactivate was nil. The app might have been restarted since calling deactivate.")
+        }
     }
     
     public func didAblyPushRegistrationFail(_ error: ARTErrorInfo?) {
-        if let error = error {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnUpdateFailed, arguments: error, result: nil)
-        } else {
-            methodChannel.invokeMethod(AblyPlatformMethod_pushOnUpdateFailed, arguments: FlutterError(code: "40000", message: "Ably push update failed, but no error was provided", details: nil), result: nil)
-        }
+        methodChannel.invokeMethod(AblyPlatformMethod_pushOnUpdateFailed, arguments: error, result: nil)
     }
 }
