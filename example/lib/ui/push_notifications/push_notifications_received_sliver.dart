@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,8 +18,8 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'Received messages',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
@@ -45,10 +47,12 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextWithLabel('Title',
+                                    TextWithLabel('Notification Title',
                                         e.notification?.title ?? 'NO TITLE'),
-                                    TextWithLabel('Body',
+                                    TextWithLabel('Notification Body',
                                         e.notification?.body ?? 'NO BODY'),
+                                    TextWithLabel('Data',
+                                        e.data.toString()),
                                   ],
                                 ),
                               ))

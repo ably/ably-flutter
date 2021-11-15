@@ -59,9 +59,33 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
         if (application.applicationState == .background || application.applicationState == .inactive) {
             methodName = AblyPlatformMethod_pushOnBackgroundMessage
         }
-        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: nil);
+        
+        let notification: Notification? = createNotification(from: userInfo);
+        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: notification);
         methodChannel.invokeMethod(methodName, arguments: remoteMessage) { flutterResult in
             completionHandler(.newData);
         }
+    }
+    
+    private func createNotification(from userInfo: [AnyHashable : Any]) -> Notification? {
+        let notification = Notification();
+        
+        if let aps = userInfo["aps"] as? NSDictionary {
+            if let alert = aps["alert"] as? NSDictionary {
+                if let title = alert["title"] as? String {
+                    notification.title = title
+                }
+                if let body = alert["body"] as? String {
+                    notification.body = body
+                }
+            }
+        }
+        
+        if (notification.title != nil || notification.body == nil) {
+            // Return an instance of notification only if it has some data.
+            return notification;
+        }
+        
+        return nil;
     }
 }
