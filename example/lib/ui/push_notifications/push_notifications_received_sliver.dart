@@ -10,8 +10,8 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Column(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -21,7 +21,9 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                   'Received messages',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                IconButton(onPressed: PushNotificationHandlers.clearReceivedMessages, icon: Icon(Icons.delete))
+                IconButton(
+                    onPressed: PushNotificationHandlers.clearReceivedMessages,
+                    icon: Icon(Icons.delete))
               ],
             ),
             StreamBuilder<List<ably.RemoteMessage>>(
@@ -38,7 +40,8 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: messages
                           .map((e) => Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -55,5 +58,5 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                 }),
           ],
         ),
-  );
+      );
 }

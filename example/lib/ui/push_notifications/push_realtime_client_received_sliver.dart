@@ -11,8 +11,8 @@ class PushRealtimeClientReceivedSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Column(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
           children: [
             const Text(
               'Debugging messages (via realtime client)',
@@ -33,10 +33,11 @@ class PushRealtimeClientReceivedSliver extends StatelessWidget {
                 'subscribe to the meta channel.'),
             BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
-                onPressed: _pushNotificationService.subscribeToPushLogMetachannel,
+                onPressed:
+                    _pushNotificationService.subscribeToPushLogMetachannel,
                 child: const Text('Subscribe to push metachannel: '
                     '${Constants.pushMetaChannelName}')),
           ],
         ),
-  );
+      );
 }
