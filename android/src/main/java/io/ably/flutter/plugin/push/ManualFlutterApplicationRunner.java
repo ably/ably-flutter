@@ -1,11 +1,10 @@
 package io.ably.flutter.plugin.push;
 
-import static android.content.Context.MODE_PRIVATE;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushOnBackgroundMessage;
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,20 +20,35 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHandler {
-  private static final String TAG = PushBackgroundIsolateRunner.class.getName();
-  private static final String SHARED_PREFERENCES_KEY = "io.ably.flutter.plugin.push.PushBackgroundIsolate.SHARED_PREFERENCES_KEY";
-  private static final String BACKGROUND_MESSAGE_HANDLE_KEY = "BACKGROUND_MESSAGE_HANDLE_KEY";
+/**
+ * This class is used when the application was terminated when the push notification is received.
+ * It launches the Flutter application and sends it a RemoteMessage. See [PushMessagingEventHandlers.java]
+ * to see where push notifications being handled whilst the app is in the background or the foreground.
+ * Use this class when no existing Flutter Activity is running.
+ *
+ * This class can be generalized to launch the app manually for any purpose, but currently it is
+ * narrowly scoped for push notifications.
+ */
+public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
+  private static final String TAG = ManualFlutterApplicationRunner.class.getName();
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
-
-  @NonNull
   private final FlutterEngine flutterEngine;
 
-  public PushBackgroundIsolateRunner(Context context, FirebaseMessagingReceiver receiver, RemoteMessage message) {
+  /**
+   * Creates a Flutter engine, launches the Flutter application inside that Flutter engine, and
+   * creates a MethodChannel to communicate with the Flutter application.
+   *
+   * @param context
+   * @param receiver The FirebaseMessagingReceiver which received the message
+   * @param intent An intent containing a RemoteMessage passed straight from FirebaseMessagingReceiver
+   */
+  public ManualFlutterApplicationRunner(@NonNull final Context context,
+                                        @NonNull final FirebaseMessagingReceiver receiver,
+                                        @NonNull final Intent intent) {
     this.broadcastReceiver = receiver;
-    this.remoteMessage = message;
+    this.remoteMessage = new RemoteMessage(intent.getExtras());
     flutterEngine = new FlutterEngine(context, null);
     DartExecutor executor = flutterEngine.getDartExecutor();
     backgroundMethodChannel = new MethodChannel(executor.getBinaryMessenger(), "io.ably.flutter.plugin.background", new StandardMethodCodec(new AblyMessageCodec(new CipherParamsStorage())));
@@ -46,18 +60,9 @@ public class PushBackgroundIsolateRunner implements MethodChannel.MethodCallHand
     flutterEngine.getBroadcastReceiverControlSurface().attachToBroadcastReceiver(receiver, null);
   }
 
-  /**
-   * This method is called when the main app is running and the user sets the background handler.
-   *
-   * @param backgroundMessageHandlerHandle
-   */
-  public static void setBackgroundMessageHandler(Context context, Long backgroundMessageHandlerHandle) {
-    SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_KEY, MODE_PRIVATE);
-    preferences.edit().putLong(BACKGROUND_MESSAGE_HANDLE_KEY, backgroundMessageHandlerHandle).apply();
-  }
-
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  public void onMethodCall(@NonNull final MethodCall call,
+                           @NonNull final MethodChannel.Result result) {
     if (call.method.equals(pushSetOnBackgroundMessage)) {
       // This signals that the manually spawned app is ready to receive a message to handle.
       // We ask the user to set the background message handler early on.

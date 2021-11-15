@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-import javax.crypto.Cipher;
-
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.RemoteMessageCallback;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
@@ -74,7 +72,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
-        PushMessagingEventHandlers.instantiate(applicationContext, methodChannel);
+        PushMessagingEventHandlers.reset(applicationContext, methodChannel);
     }
 
     @Override

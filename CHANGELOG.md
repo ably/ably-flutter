@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.5](https://github.com/ably/ably-flutter/tree/v1.2.5)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.4...v1.2.5)
+
+**Implemented enhancements:**
+
+- Enhancement/push UI improvement for debugging [\#218](https://github.com/ably/ably-flutter/pull/218) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- Handle error cases on iOS correctly, and simplify code [\#221](https://github.com/ably/ably-flutter/pull/221) ([ben-xD](https://github.com/ben-xD))
+- Fix app crashing when app is not yet started on some devices [\#215](https://github.com/ably/ably-flutter/pull/215) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.4](https://github.com/ably/ably-flutter/tree/v1.2.4)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.3...v1.2.4)

@@ -23,12 +23,17 @@ public class RemoteMessage: NSObject {
 
 class Notification: NSObject {
     @objc
-    let title: String?;
+    var title: String?;
     @objc
-    let body: String?;
+    var body: String?;
     
     init(title: String, body: String) {
         self.title = title;
         self.body = body;
+    }
+    
+    override init() {
+        self.title = nil;
+        self.body = nil;
     }
 }
