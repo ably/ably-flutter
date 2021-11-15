@@ -51,8 +51,7 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                                         e.notification?.title ?? 'NO TITLE'),
                                     TextWithLabel('Notification Body',
                                         e.notification?.body ?? 'NO BODY'),
-                                    TextWithLabel('Data',
-                                        e.data.toString()),
+                                    TextWithLabel('Data', e.data.toString()),
                                   ],
                                 ),
                               ))
