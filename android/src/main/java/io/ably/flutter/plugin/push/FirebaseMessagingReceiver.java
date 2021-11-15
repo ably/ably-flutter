@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -50,7 +51,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     }
   }
 
-  private void sendMessageToFlutterApplication(Context context, Intent intent) {
+  private void sendMessageToFlutterApplication(@NonNull final Context context,
+                                               @NonNull final Intent intent) {
     final Boolean isApplicationInForeground = isApplicationInForeground(context);
 
     if (isApplicationInForeground) {
@@ -62,7 +64,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     }
   }
 
-  private Boolean isApplicationInForeground(final Context context) {
+  private Boolean isApplicationInForeground(@NonNull final Context context) {
     final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     // This only shows processes for the current android app.
     final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();

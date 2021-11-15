@@ -22,23 +22,31 @@ import io.flutter.plugin.common.StandardMethodCodec;
 
 /**
  * This class is used when the application was terminated when the push notification is received.
- * See [PushMessagingEventHandlers.java] to see where push notifications being handled whilst the
- * app is in the background or the foreground.
+ * It launches the Flutter application and sends it a RemoteMessage. See [PushMessagingEventHandlers.java]
+ * to see where push notifications being handled whilst the app is in the background or the foreground.
+ * Use this class when no existing Flutter Activity is running.
  *
- * This class can generified to launch the app manually for any purpose, but currently it
- * launches the users app and sends it a RemoteMessage.
+ * This class can be generalized to launch the app manually for any purpose, but currently it is
+ * narrowly scoped for push notifications.
  */
 public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallHandler {
   private static final String TAG = ManualFlutterApplicationRunner.class.getName();
   private final FirebaseMessagingReceiver broadcastReceiver;
   private final RemoteMessage remoteMessage;
   private final MethodChannel backgroundMethodChannel;
-
-  @NonNull
   private final FlutterEngine flutterEngine;
-  // Launch the users Flutter app and pass it the RemoteMessage.
-  // Use this when noo existing Flutter Activity is running.
-  public ManualFlutterApplicationRunner(Context context, FirebaseMessagingReceiver receiver, Intent intent) {
+
+  /**
+   * Creates a Flutter engine, launches the Flutter application inside that Flutter engine, and
+   * creates a MethodChannel to communicate with the Flutter application.
+   *
+   * @param context
+   * @param receiver The FirebaseMessagingReceiver which received the message
+   * @param intent An intent containing a RemoteMessage passed straight from FirebaseMessagingReceiver
+   */
+  public ManualFlutterApplicationRunner(@NonNull final Context context,
+                                        @NonNull final FirebaseMessagingReceiver receiver,
+                                        @NonNull final Intent intent) {
     this.broadcastReceiver = receiver;
     this.remoteMessage = new RemoteMessage(intent.getExtras());
     flutterEngine = new FlutterEngine(context, null);
@@ -53,7 +61,8 @@ public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallH
   }
 
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  public void onMethodCall(@NonNull final MethodCall call,
+                           @NonNull final MethodChannel.Result result) {
     if (call.method.equals(pushSetOnBackgroundMessage)) {
       // This signals that the manually spawned app is ready to receive a message to handle.
       // We ask the user to set the background message handler early on.

@@ -69,6 +69,10 @@ class PushNotificationHandlers {
     });
   }
 
+  static void clearReceivedMessages() {
+    _receivedMessagesBehaviorSubject.add([]);
+  }
+
   static Future<void> _backgroundMessageHandler(
       ably.RemoteMessage message) async {
     addMessage(message);
