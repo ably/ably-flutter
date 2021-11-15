@@ -19,10 +19,11 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
         return instance!
     }
     
-    // FlutterResult to return result as Future<void> or throws an error. This is the convenient API.
+    // FlutterResults to return result as Future<void> or throws an error. This is the convenient API.
+    // These fields are set in [PushHandlers.swift] when the method call is invoked
     public var flutterResultForActivate: FlutterResult? = nil;
     public var flutterResultForDeactivate: FlutterResult? = nil;
-    // There is no result stored for didAblyPushRegistrationFail, because there is dart side method call to return values to.
+    // There is no result stored for didAblyPushRegistrationFail, because there is no dart side method call to return values to.
     
     // MethodChannel to send result to handlers implemented in dart side. This provides values to the listeners
     // implement on the dart side. We need this for activate and deactivate because the new token can be provided.
