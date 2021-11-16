@@ -43,28 +43,28 @@ import io.flutter.plugin.common.MethodChannel;
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private Context applicationContext;
 
-  public interface OnClearPlatformInstances {
+  public interface ResetAblyClientsCallback {
     void on();
   }
 
   private final MethodChannel channel;
-  private final OnClearPlatformInstances onClearPlatformInstances;
+  private final ResetAblyClientsCallback resetAblyClientsCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
   public AblyMethodCallHandler(final MethodChannel channel,
-                               final OnClearPlatformInstances onClearPlatformInstances,
+                               final ResetAblyClientsCallback resetAblyClientsCallback,
                                final Context applicationContext) {
     this.channel = channel;
     this.applicationContext = applicationContext;
-    this.onClearPlatformInstances = onClearPlatformInstances;
+    this.resetAblyClientsCallback = resetAblyClientsCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
     _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
-    _map.put(PlatformConstants.PlatformMethod.clearPlatformInstances, this::clearPlatformInstances);
+    _map.put(PlatformConstants.PlatformMethod.resetAblyClients, this::resetAblyClients);
 
     // Rest
     _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
@@ -177,9 +177,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     };
   }
 
-  private void clearPlatformInstances(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     _ably.dispose();
-    onClearPlatformInstances.on();
+    resetAblyClientsCallback.on();
     result.success(null);
   }
 

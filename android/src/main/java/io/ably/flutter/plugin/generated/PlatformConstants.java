@@ -40,7 +40,7 @@ final public class PlatformConstants {
     static final public class PlatformMethod {
         public static final String getPlatformVersion = "getPlatformVersion";
         public static final String getVersion = "getVersion";
-        public static final String clearPlatformInstances = "clearPlatformInstances";
+        public static final String resetAblyClients = "resetAblyClients";
         public static final String authCallback = "authCallback";
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
         public static final String createRestWithOptions = "createRestWithOptions";

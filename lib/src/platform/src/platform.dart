@@ -24,26 +24,26 @@ class Platform {
   /// This field will reset to true when the state is reset. This allows us to
   /// if an app has been restarted, or a hot restart (not hot reload) has
   /// happened.
-  static bool _shouldClearPlatformInstances = true;
+  static bool _shouldResetAblyClients = true;
 
   /// Clears instances on the Platform side
-  static Future<void> _ensureFreshState() async {
-    if (_shouldClearPlatformInstances) {
+  static Future<void> _resetOldAblyClients() async {
+    if (_shouldResetAblyClients) {
       AblyMethodCallHandler(methodChannel);
       BackgroundIsolateAndroidPlatform();
-      await methodChannel.invokeMethod(PlatformMethod.clearPlatformInstances);
-      _shouldClearPlatformInstances = false;
+      await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
+      _shouldResetAblyClients = false;
     }
   }
 
   /// invokes a platform [method] with [arguments]
   ///
-  /// calls [_ensureFreshState] before invoking any method to handle any
+  /// calls [_resetOldAblyClients] before invoking any method to handle any
   /// cleanup tasks that are especially required while performing hot-restart
   /// (as hot-restart does not automatically reset platform instances)
   static Future<T?> invokePlatformMethod<T>(String method,
       [Object? arguments]) async {
-    await _ensureFreshState();
+    await _resetOldAblyClients();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);
     } on PlatformException catch (pe) {

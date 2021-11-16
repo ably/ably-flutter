@@ -37,7 +37,7 @@ class CodecTypes {
 class PlatformMethod {
   static const String getPlatformVersion = 'getPlatformVersion';
   static const String getVersion = 'getVersion';
-  static const String clearPlatformInstances = 'clearPlatformInstances';
+  static const String resetAblyClients = 'resetAblyClients';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
   static const String createRestWithOptions = 'createRestWithOptions';
@@ -370,8 +370,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -387,8 +386,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';
