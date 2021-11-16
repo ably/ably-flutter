@@ -131,7 +131,6 @@ class AblyLibrary {
     }
 
     void dispose() {
-        System.out.println("Cleaning up existing instances");
         for (int i = 0; i < _realtimeInstances.size(); i++) {
             long key = _realtimeInstances.keyAt(i);
             AblyRealtime r = _realtimeInstances.get(key);
