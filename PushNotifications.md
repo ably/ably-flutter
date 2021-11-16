@@ -240,7 +240,7 @@ final message = ably.Message(
 
 ### Receiving Messages
 
-For examples of handling incoming messages and dealing with notifications, see [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app.
+For examples of handling incoming messages and dealing with notifications, see [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app. There are 2 types of push notifications, one which shows as a notification to the user (alert push notification on iOS, notification message on Android), and one which notifies your app (background notification on iOS, data message on Android) 
 
 #### Notification Message / Alert Push Notification
 
@@ -253,41 +253,7 @@ To create local notifications with more content or user interaction options once
     - To do this natively on Android instead, you could use [`notificationManager.notify`](https://developer.android.com/reference/android/app/NotificationManager#notify(int,%20android.app.Notification)). 
     - To do this natively on iOS, you can send a background message and follow [Scheduling a Notification Locally from Your App](https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app). However, on iOS, you could also [customize the appearance of an alert notification](https://developer.apple.com/documentation/usernotificationsui/customizing_the_appearance_of_notifications), by registering and implementing a [`UNNotificationContentExtension`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension).
 
-#### Foreground notifications
-
-On iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
-
-```dart
-ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
-  // TODO add logic to show notification based on message contents. 
-  print('Opting to show the notification when the app is in the foreground.');
-  return true;
-});
-```
-
 The SDK does this by implementing [`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter). This feature is not available on Android.
-
-#### Notification taps
-
-- To be informed when a notification tap launches the app:
-
-```dart
-ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
-    .then((remoteMessage) {
-  if (remoteMessage != null) {
-    print('The app was launched by the user by tapping the notification');
-    print(remoteMessage.data);
-  }
-});
-```
-  
-- To be informed when a notification is tapped by the user whilst the app is in the foreground:
-
-```dart
-ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
-  print('Notification was tapped: $remoteMessage');
-});
-```
 
 #### Data Message / Background Notification
 
@@ -313,14 +279,48 @@ Future<void> _backgroundMessageHandler(ably.RemoteMessage message) async {
 }
 ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 ```
-  - This method can be synchronous or `async`.
-  - On Android, when a message is received whilst the app is terminated, Ably Flutter will launch your application to process the message. Ably Flutter listens to the message by registering a broadcast receiver. This means your `MainActivity` will not be launched, and so your native setup code (e.g. creating method channels) you may have written in your `MainActivity`'s `configureFlutterEngine` method will not be run. If you want your `configureFlutterEngine` even when Ably launches your application, refactor this code into a Flutter package plugin, implementing [`FlutterPlugin`](https://api.flutter.dev/javadoc/io/flutter/embedding/engine/plugins/FlutterPlugin.html) and move your logic inside `onAttachedToEngine`.
+- This method can be synchronous or `async`.
+- On Android, when a message is received whilst the app is terminated, Ably Flutter will launch your application to process the message. Ably Flutter listens to the message by registering a broadcast receiver. This means your `MainActivity` will not be launched, and so your native setup code (e.g. creating method channels) you may have written in your `MainActivity`'s `configureFlutterEngine` method will not be run. If you want your `configureFlutterEngine` even when Ably launches your application, refactor this code into a Flutter package plugin, implementing [`FlutterPlugin`](https://api.flutter.dev/javadoc/io/flutter/embedding/engine/plugins/FlutterPlugin.html) and move your logic inside `onAttachedToEngine`.
+
+#### Notification taps
+
+- To be informed when a notification tap launches the app:
+
+```dart
+ably.Push.notificationEvents.notificationTapLaunchedAppFromTerminated
+    .then((remoteMessage) {
+  if (remoteMessage != null) {
+    print('The app was launched by the user by tapping the notification');
+    print(remoteMessage.data);
+  }
+});
+```
+  
+- To be informed when a notification is tapped by the user whilst the app is in the foreground:
+
+```dart
+ably.Push.notificationEvents.onNotificationTap.listen((remoteMessage) {
+  print('Notification was tapped: $remoteMessage');
+});
+```
+
+#### Showing/hiding foreground notifications
+
+On iOS, ably-flutter allows you to configure notification sent directly from Ably to be shown when the app is in foreground. To configure if a notification is shown in the foreground:
+
+```dart
+ably.Push.notificationEvents.setOnShowNotificationInForeground((message) async {
+  // TODO add logic to show notification based on message contents. 
+  print('Opting to show the notification when the app is in the foreground.');
+  return true;
+});
+```
 
 #### Advanced: native message handling
 
-Users can listen to messages in each platform using the native message listeners instead of Dart listeners. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications).
+Users can listen to messages in each platform using the native message listeners instead of Dart listeners. This is not recommended unless you want to **avoid** using other plugins, such as [awesome_notifications](https://pub.dev/packages/awesome_notifications) and [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications). Another reason to use your own native message handling is to avoid conflicts with other dependencies.
 
-**Android**: This requires you to implement [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and override the `onMessageReceived` method. You must also declare the `Service` in your `AndroidManifest.xml`. Once you receive your message, you could [create a notification](https://developer.android.com/training/notify-user/build-notification). As declaring this service would override the service used internally by Ably Flutter, be sure to provide Ably Flutter with your registration token. Implement the following `onNewToken` method in `FirebaseMessagingService`:
+**Android**: This requires you to implement [`FirebaseMessageService`](https://firebase.google.com/docs/cloud-messaging/android/receive) and override the `onMessageReceived` method. You must also declare this service in your `AndroidManifest.xml`. Once you receive your message, you could [create a notification](https://developer.android.com/training/notify-user/build-notification). As declaring this service would override the service used internally by Ably Flutter, be sure to provide Ably Flutter with your registration token. Implement the following `onNewToken` method in `FirebaseMessagingService`:
 ```java
   @Override
   public void onNewToken(@NonNull String registrationToken) {
@@ -329,7 +329,12 @@ Users can listen to messages in each platform using the native message listeners
   }
 ```
 
-Warning: If you declare a service in your `AndroidManifest.xml` listening for the intent action string `"com.google.firebase.MESSAGING_EVENT"`, either from a different library or your own implementation, you will override the one implemented by Ably. Only one service in an application can receive an intent. Merely installing certain Flutter packages may result in services being registered and overriding each other (e.g. firebase_messaging). Be careful to look at the merged manifest in Android Studio to evaluate if the Ably service is still declared in the merged manifest. Ably Flutter declares a service in it's own `AndroidManifest.xml` which gets merged into your application manifest. If your merged manifest does not show Ably Flutter's service, Ably Flutter will not receive FCM registration tokens. Therefore, you need to provide Ably with the fcm registration token by using `ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);`. 
+Then, in your Android Manifest, disable Ably Flutter's broadcast receiver by removing it from your Manifest using `tools:node="remove"`. This will prevent Ably from listening for new push notifications and launching your Flutter application. You can do this by adding the following between `<application>` and `</application>`:
+```xml
+<receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
+    tools:node="remove">
+</receiver>
+```
 
 **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
@@ -340,6 +345,7 @@ Take a look at the example app platform specific code to handle messages. For iO
   - Show a notification to the user as soon as possible without any additional data usage or processing. Perform additional synchronization work asynchronously after that, using [workmanager](https://pub.dev/packages/workmanager). You can also replace the notification with a new one with more content and user interaction options.
   - Avoid background services: As recommended by FCM, Ably Flutter does not instantiate any background services or schedule any jobs on your behalf. Libraries and applications which do this, for example Firebase Messaging may face `IllegalStateException` exceptions and reduced execution time.
 - For more Android tips, read [About FCM messages](https://firebase.google.com/docs/cloud-messaging/concept-options)
+- Warning: If you use other push notification packages alongside Ably or declare a push notification service in your `AndroidManifest.xml`, you may face compatibility issues. If a service is declared listening for the intent action string `"com.google.firebase.MESSAGING_EVENT"`, either from a different library or your own implementation, you will override the one implemented by Ably. Only one service in an application can receive an intent. Merely installing certain Flutter packages may result in services being registered and overriding each other (e.g. firebase_messaging). Be careful to look at the merged manifest in Android Studio to evaluate if the Ably service is still declared in the merged manifest. Ably Flutter declares a service in it's own `AndroidManifest.xml` which gets merged into your application manifest. If your merged manifest does not show Ably Flutter's service, Ably Flutter will not receive FCM registration tokens. Therefore, you need to provide Ably with the fcm registration token by using `ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);`.
 
 ### Deactivating the device
 
