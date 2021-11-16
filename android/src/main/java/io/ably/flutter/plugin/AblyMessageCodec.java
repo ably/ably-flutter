@@ -1,5 +1,7 @@
 package io.ably.flutter.plugin;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
@@ -58,7 +60,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private static class CodecPair<T> {
-
+    private static final String TAG = CodecPair.class.getName();
     final CodecEncoder<T> encoder;
     final CodecDecoder<T> decoder;
 
@@ -69,7 +71,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     Map<String, Object> encode(final Object value) {
       if (this.encoder == null) {
-        System.out.println("Codec encoder not defined");
+        Log.w(TAG, "Encoder is null");
         return null;
       }
       return this.encoder.encode((T) value);
@@ -77,7 +79,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     T decode(Map<String, Object> jsonMap) {
       if (this.decoder == null) {
-        System.out.println("Codec decoder not defined");
+        Log.w(TAG, "Decoder is null");
         return null;
       }
       return this.decoder.decode(jsonMap);
