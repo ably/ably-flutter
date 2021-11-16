@@ -6,6 +6,7 @@ class Constants {
   static String platform = EnumToString.convertToString(defaultTargetPlatform);
   static String clientId = 'ably-flutter-example-app-$platform-client-id';
   static const String channelName = 'test-channel';
+  static const encryptedChannelName = 'encrypted-test-channel';
   static const String channelNameForPushNotifications =
       'push:test-push-channel';
   static const String pushMetaChannelName = '[meta]log:push';

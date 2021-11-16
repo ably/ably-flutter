@@ -1,4 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,8 +26,8 @@ class MessageEncryptionSliver extends HookWidget {
         ),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          child:
-              Text('Channel name: "${EncryptedMessagingService.channelName}"'),
+          child: Text(
+              'Channel name: "${Constants.encryptedChannelName}"'),
         ),
         const Text(
           'Publish encrypted message using:',
@@ -57,7 +58,7 @@ class MessageEncryptionSliver extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Log recent messages',
+              'Subscribe to channel',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Switch(
@@ -85,25 +86,24 @@ class MessageEncryptionSliver extends HookWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: messages
-                      .map((message) =>
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWithLabel(
-                                'Name',
-                                (message.name != null)
-                                    ? message.name.toString()
-                                    : 'NO NAME'),
-                            TextWithLabel(
-                                'Data',
-                                (message.data != null)
-                                    ? message.data.toString()
-                                    : 'NO DATA'),
-                          ],
-                        ),
-                      ))
+                      .map((message) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextWithLabel(
+                                    'Name',
+                                    (message.name != null)
+                                        ? message.name.toString()
+                                        : 'NO NAME'),
+                                TextWithLabel(
+                                    'Data',
+                                    (message.data != null)
+                                        ? message.data.toString()
+                                        : 'NO DATA'),
+                              ],
+                            ),
+                          ))
                       .toList(),
                 );
               } else if (!logMessages.value) {
@@ -114,6 +114,16 @@ class MessageEncryptionSliver extends HookWidget {
             }
             return const Text('No data yet');
           },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: TextWithLabel(
+            'Hint',
+            'You can confirm messages are encrypted by visiting your '
+                'application dashboard on ably.com > "Dev console" tab > '
+                '"Channels", and attach to the '
+                '"${Constants.encryptedChannelName}" channel.',
+          ),
         ),
       ],
     );
