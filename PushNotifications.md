@@ -314,6 +314,7 @@ Future<void> _backgroundMessageHandler(ably.RemoteMessage message) async {
 ably.Push.notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
 ```
   - This method can be synchronous or `async`.
+  - On Android, when a message is received whilst the app is terminated, Ably Flutter will launch your application to process the message. Ably Flutter listens to the message by registering a broadcast receiver. This means your `MainActivity` will not be launched, and so your native setup code (e.g. creating method channels) you may have written in your `MainActivity`'s `configureFlutterEngine` method will not be run. If you want your `configureFlutterEngine` even when Ably launches your application, refactor this code into a Flutter package plugin, implementing [`FlutterPlugin`](https://api.flutter.dev/javadoc/io/flutter/embedding/engine/plugins/FlutterPlugin.html) and move your logic inside `onAttachedToEngine`.
 
 #### Advanced: native message handling
 
@@ -327,6 +328,8 @@ Users can listen to messages in each platform using the native message listeners
     super.onNewToken(registrationToken);
   }
 ```
+
+Warning: If you declare a service in your `AndroidManifest.xml` listening for the intent action string `"com.google.firebase.MESSAGING_EVENT"`, either from a different library or your own implementation, you will override the one implemented by Ably. Only one service in an application can receive an intent. Merely installing certain Flutter packages may result in services being registered and overriding each other (e.g. firebase_messaging). Be careful to look at the merged manifest in Android Studio to evaluate if the Ably service is still declared in the merged manifest. Ably Flutter declares a service in it's own `AndroidManifest.xml` which gets merged into your application manifest. If your merged manifest does not show Ably Flutter's service, Ably Flutter will not receive FCM registration tokens. Therefore, you need to provide Ably with the fcm registration token by using `ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);`. 
 
 **iOS**: Implementing the [`didReceiveRemoteNotification` delegate method](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application) declared in `UIApplicationDelegate`.
 
