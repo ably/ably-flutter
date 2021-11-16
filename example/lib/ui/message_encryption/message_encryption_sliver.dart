@@ -26,8 +26,7 @@ class MessageEncryptionSliver extends HookWidget {
         ),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-              'Channel name: "${Constants.encryptedChannelName}"'),
+          child: Text('Channel name: "${Constants.encryptedChannelName}"'),
         ),
         const Text(
           'Publish encrypted message using:',
