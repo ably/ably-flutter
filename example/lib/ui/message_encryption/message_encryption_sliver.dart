@@ -106,7 +106,8 @@ class MessageEncryptionSliver extends HookWidget {
                       .toList(),
                 );
               } else if (!logMessages.value) {
-                return const Text('Enable logging to receive messages');
+                return const Text(
+                    'Toggle the subscription to show messages here');
               } else {
                 return const Text('No messages yet');
               }
