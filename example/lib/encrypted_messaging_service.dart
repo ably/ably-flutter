@@ -35,6 +35,10 @@ class EncryptedMessagingService {
 
   EncryptedMessagingService(this._realtime);
 
+  void clearMessageHistory() {
+    messageHistoryBehaviorSubject.add([]);
+  }
+
   Future<void> setRest(ably.Rest rest) async {
     _rest = rest;
     _restChannel = _rest!.channels.get(channelName);

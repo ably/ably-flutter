@@ -14,48 +14,57 @@ class MessageEncryptionSliver extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Message Encryption',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: const Text(
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
                 'Channel name: "${EncryptedMessagingService.channelName}"'),
           ),
           const Text(
-            'Realtime Client',
+            'Publish encrypted message using:',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton(
+                child: const Text('Rest client'),
+                onPressed: () {
+                  encryptedMessagingService?.publishRestMessage(
+                      'Hello', {'payload': 'this should be encrypted'});
+                },
+              ),
+              TextButton(
+                onPressed: () async {
+                  await encryptedMessagingService?.publishRealtimeMessage(
+                      'Hello', {'payload': 'this should be encrypted'});
+                },
+                child: const Text('Realtime client'),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Recent messages:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                  onPressed: encryptedMessagingService?.clearMessageHistory,
+                  icon: const Icon(Icons.delete))
+            ],
           ),
           TextButton(
             onPressed: encryptedMessagingService?.logChannelMessages,
             child: const Text('Log channel messages'),
           ),
           TextButton(
-            onPressed: () async {
-              await encryptedMessagingService?.publishRealtimeMessage(
-                  'Hello', {'payload': 'this should be encrypted'});
-            },
-            child: const Text('Publish encrypted message'),
-          ),
-          TextButton(
               onPressed: encryptedMessagingService?.unsubscribeAndDetach,
               child: const Text('Unsubscribe and detach from channel')),
-          const Text(
-            'Rest Client',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          TextButton(
-            child: const Text('Publish rest message'),
-            onPressed: () {
-              encryptedMessagingService?.publishRestMessage(
-                  'Hello', {'payload': 'this should be encrypted'});
-            },
-          ),
-          const Text(
-            'Message history:',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
           StreamBuilder<List<ably.Message>>(
             stream: encryptedMessagingService?.messageHistoryStream,
             builder: (context, snapshot) {
