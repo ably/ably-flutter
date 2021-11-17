@@ -1,16 +1,15 @@
 import 'dart:async';
+import 'dart:io' as io show Platform;
 import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
-Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
 
 /// Returns readonly copy of instances of all [Realtime] clients created.
 Map<int?, Realtime> get realtimeInstances =>
-    _realtimeInstancesUnmodifiableView ??=
-        UnmodifiableMapView(_realtimeInstances);
+    UnmodifiableMapView(_realtimeInstances);
 
 /// Ably's Realtime client
 class Realtime extends PlatformObject {
@@ -37,6 +36,15 @@ class Realtime extends PlatformObject {
       AblyMessage(options),
     );
     _realtimeInstances[handle] = this;
+
+    if (io.Platform.isAndroid && options.autoConnect != false) {
+    // On Android, clientOptions.autoConnect is set to `false` to prevent
+    // the authCallback being called before we get the realtime handle.
+    // If this happens, we won't be able to identify which realtime client
+    // the authCallback belongs to. Instead, on Android, we set autoConnect
+    // to false, and call connect immediately once we get the handle.
+      await connect();
+    }
     return handle;
   }
 
@@ -141,19 +149,6 @@ class Realtime extends PlatformObject {
       _authCallbackCompleter = null;
     }
     await connect();
-  }
-
-  /// @internal
-  /// required due to the complications involved in the way ably-java expects
-  /// authCallback to be performed synchronously, while method channel call from
-  /// platform side to dart side is asynchronous
-  ///
-  /// discussion: https://github.com/ably/ably-flutter/issues/31
-  void authUpdateComplete() {
-    _authCallbackCompleter?.complete();
-    for (final channel in channels) {
-      channel.authUpdateComplete();
-    }
   }
 
   @override

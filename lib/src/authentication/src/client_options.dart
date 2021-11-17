@@ -60,7 +60,7 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k5
   int? tlsPort;
 
-  /// When true will automatically connect to Ably when library is instanced.
+  /// Automatically connect to Ably when client is instantiated.
   ///
   /// This is true by default. If false, will wait for an explicit
   /// [ConnectionInterface]#connect to be called before connecting

@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -40,6 +42,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
+  private static final String TAG = PushMessagingEventHandlers.class.getName();;
   private Context applicationContext;
 
   public interface ResetAblyClientsCallback {
@@ -203,16 +206,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
-                  if (errorMessage != null) {
-                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
-                  }
+                  Log.w(TAG, String.format("\"%s\" platform method received error from Dart side: %s", PlatformConstants.PlatformMethod.authCallback, errorMessage));
                   latch.countDown();
                 }
 
                 @Override
                 public void notImplemented() {
-                  System.out.println("`authCallback` Method not implemented on dart side");
+                  Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.authCallback));
                 }
               });
             });
@@ -474,7 +474,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
                   if (errorMessage != null) {
                     result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
                   }

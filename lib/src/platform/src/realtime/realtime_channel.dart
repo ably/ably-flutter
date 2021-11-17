@@ -146,16 +146,6 @@ class RealtimeChannel extends PlatformObject {
     _publishInternalRunning = false;
   }
 
-  /// @internal
-  /// required due to the complications involved in the way ably-java expects
-  /// authCallback to be performed synchronously, while method channel call from
-  /// platform side to dart side is asynchronous
-  ///
-  /// discussion: https://github.com/ably/ably-flutter/issues/31
-  void authUpdateComplete() {
-    _authCallbackCompleter?.complete();
-  }
-
   /// will hold reason for failure of attaching to channel in such cases
   ErrorInfo? errorReason;
 

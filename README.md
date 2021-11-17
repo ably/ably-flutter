@@ -133,15 +133,16 @@ Authenticating using [token authentication](https://ably.com/documentation/core-
 final clientOptions = ably.ClientOptions()
 // ..clientId = _clientId // Optionally set the clientId
   ..autoConnect = false
-  ..authCallback = (TokenParams tokenParams) async {
+  // If a clientId was set in ClientOptions, it will be available in ably.TokenParams.
+  ..authCallback = (ably.TokenParams tokenParams) async {
     try {
-      // If a clientId was set in ClientOptions, it will be available in Ably.TokenParams.
-      final tokenRequestMap =
-      await createTokenRequest(tokenParams: tokenParams);
+      // Send the tokenParams (Map<String, dynamic>) to your server, using it to create a TokenRequest.
+      final tokenRequestMap = await createTokenRequest(tokenParams.toMap()); 
+      // Deserialize the TokenRequest JSON into a TokenRequest
       return ably.TokenRequest.fromMap(tokenRequestMap);
     } catch (e) {
-      print("Something went wrong in the authCallback:");
-      print(e);
+      print("Something went wrong in the authCallback: ${e}");
+      rethrow;
     }
   };
 this._ablyClient = new ably.Realtime(options: clientOptions);

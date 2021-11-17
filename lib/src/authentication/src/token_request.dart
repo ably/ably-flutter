@@ -66,6 +66,7 @@ class TokenRequest {
     capability = map['capability'] as String?;
     clientId = map['clientId'] as String?;
     timestamp = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
-    ttl = map['ttl'] as int?;
+    final ttl = map['ttl'] as int?;
+    if (ttl != null) this.ttl = ttl;
   }
 }
