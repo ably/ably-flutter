@@ -24,9 +24,14 @@ class CodecTypes {
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
   static const int deviceDetails = 145;
-  static const int errorInfo = 146;
-  static const int connectionStateChange = 147;
-  static const int channelStateChange = 148;
+  static const int localDevice = 146;
+  static const int pushChannelSubscription = 147;
+  static const int unNotificationSettings = 148;
+  static const int remoteMessage = 149;
+  static const int errorInfo = 150;
+  static const int connectionStateChange = 151;
+  static const int channelStateChange = 152;
+  static const int cipherParams = 153;
 }
 
 class PlatformMethod {
@@ -60,8 +65,27 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
-  static const String pushSubscribe = 'pushSubscribe';
-  static const String pushUnsubscribe = 'pushUnsubscribe';
+  static const String pushSubscribeDevice = 'pushSubscribeDevice';
+  static const String pushUnsubscribeDevice = 'pushUnsubscribeDevice';
+  static const String pushSubscribeClient = 'pushSubscribeClient';
+  static const String pushUnsubscribeClient = 'pushUnsubscribeClient';
+  static const String pushListSubscriptions = 'pushListSubscriptions';
+  static const String pushDevice = 'pushDevice';
+  static const String pushRequestPermission = 'pushRequestPermission';
+  static const String pushGetNotificationSettings =
+      'pushGetNotificationSettings';
+  static const String pushOpenSettingsFor = 'pushOpenSettingsFor';
+  static const String pushOnActivate = 'pushOnActivate';
+  static const String pushOnDeactivate = 'pushOnDeactivate';
+  static const String pushOnUpdateFailed = 'pushOnUpdateFailed';
+  static const String pushNotificationTapLaunchedAppFromTerminated =
+      'pushNotificationTapLaunchedAppFromTerminated';
+  static const String pushOnShowNotificationInForeground =
+      'pushOnShowNotificationInForeground';
+  static const String pushOnMessage = 'pushOnMessage';
+  static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
+  static const String pushOnNotificationTap = 'pushOnNotificationTap';
+  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -69,6 +93,8 @@ class PlatformMethod {
   static const String onRealtimeChannelMessage = 'onRealtimeChannelMessage';
   static const String nextPage = 'nextPage';
   static const String firstPage = 'firstPage';
+  static const String cryptoGetParams = 'cryptoGetParams';
+  static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
 }
 
 class TxTransportKeys {
@@ -153,13 +179,19 @@ class TxClientOptions {
 }
 
 class TxRestChannelOptions {
-  static const String cipher = 'cipher';
+  static const String cipherParams = 'cipherParams';
 }
 
 class TxRealtimeChannelOptions {
-  static const String cipher = 'cipher';
   static const String params = 'params';
   static const String modes = 'modes';
+  static const String cipherParams = 'cipherParams';
+}
+
+class TxCipherParams {
+  static const String androidHandle = 'androidHandle';
+  static const String iosAlgorithm = 'iosAlgorithm';
+  static const String iosKey = 'iosKey';
 }
 
 class TxTokenDetails {
@@ -312,7 +344,6 @@ class TxDeviceDetails {
   static const String platform = 'platform';
   static const String formFactor = 'formFactor';
   static const String metadata = 'metadata';
-  static const String deviceSecret = 'deviceSecret';
   static const String devicePushDetails = 'devicePushDetails';
 }
 
@@ -320,4 +351,90 @@ class TxDevicePushDetails {
   static const String recipient = 'recipient';
   static const String state = 'state';
   static const String errorReason = 'errorReason';
+}
+
+class TxLocalDevice {
+  static const String deviceSecret = 'deviceSecret';
+  static const String deviceIdentityToken = 'deviceIdentityToken';
+}
+
+class TxPushChannelSubscription {
+  static const String channel = 'channel';
+  static const String deviceId = 'deviceId';
+  static const String clientId = 'clientId';
+}
+
+class TxPushRequestPermission {
+  static const String badge = 'badge';
+  static const String sound = 'sound';
+  static const String alert = 'alert';
+  static const String carPlay = 'carPlay';
+  static const String criticalAlert = 'criticalAlert';
+  static const String providesAppNotificationSettings =
+      'providesAppNotificationSettings';
+  static const String provisional = 'provisional';
+  static const String announcement = 'announcement';
+}
+
+class TxUNNotificationSettings {
+  static const String authorizationStatus = 'authorizationStatus';
+  static const String soundSetting = 'soundSetting';
+  static const String badgeSetting = 'badgeSetting';
+  static const String alertSetting = 'alertSetting';
+  static const String notificationCenterSetting = 'notificationCenterSetting';
+  static const String lockScreenSetting = 'lockScreenSetting';
+  static const String carPlaySetting = 'carPlaySetting';
+  static const String alertStyle = 'alertStyle';
+  static const String showPreviewsSetting = 'showPreviewsSetting';
+  static const String criticalAlertSetting = 'criticalAlertSetting';
+  static const String providesAppNotificationSettings =
+      'providesAppNotificationSettings';
+  static const String announcementSetting = 'announcementSetting';
+  static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
+  static const String timeSensitiveSetting = 'timeSensitiveSetting';
+}
+
+class TxUNNotificationSettingEnum {
+  static const String notSupported = 'notSupported';
+  static const String disabled = 'disabled';
+  static const String enabled = 'enabled';
+}
+
+class TxUNAlertStyleEnum {
+  static const String none = 'none';
+  static const String banner = 'banner';
+  static const String alert = 'alert';
+}
+
+class TxUNAuthorizationStatusEnum {
+  static const String notDetermined = 'notDetermined';
+  static const String denied = 'denied';
+  static const String authorized = 'authorized';
+  static const String provisional = 'provisional';
+  static const String ephemeral = 'ephemeral';
+}
+
+class TxUNShowPreviewsSettingEnum {
+  static const String always = 'always';
+  static const String whenAuthenticated = 'whenAuthenticated';
+  static const String never = 'never';
+}
+
+class TxRemoteMessage {
+  static const String data = 'data';
+  static const String notification = 'notification';
+}
+
+class TxNotification {
+  static const String title = 'title';
+  static const String body = 'body';
+}
+
+class TxCryptoGetParams {
+  static const String algorithm = 'algorithm';
+  static const String key = 'key';
+}
+
+class TxCryptoGenerateRandomKey {
+  static const String keyLength = 'keyLength';
 }

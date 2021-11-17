@@ -4,23 +4,27 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
-  ably_flutter:
-    path: '..'
-  ably_flutter_example:
-    path: '../example'
-  args: ^2.0.0
   flutter:
     sdk: flutter
+
+  ably_flutter:
+    path: '..'
+
+  args: ^2.0.0
+  enum_to_string: ^2.0.1
+  http: ^0.13.3
+  retry: ^3.1.0
 
 dev_dependencies:
   flutter_driver:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  test: 1.16.7
+  test: ^1.16.7
+  flutter_lints: ^1.0.4
 
 flutter:
   uses-material-design: true

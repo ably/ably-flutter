@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:pedantic/pedantic.dart';
-
 import '../../../authentication/authentication.dart';
 import '../../../common/common.dart';
+import '../../../common/src/backwards_compatibility.dart';
 import '../../../error/error.dart';
 import '../../../generated/platform_constants.dart';
 import '../../../push_notifications/push_notifications.dart';
 import '../../../realtime/realtime.dart';
 import '../../../stats/stats.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
@@ -36,7 +36,7 @@ class Realtime extends PlatformObject
         super() {
     _connection = Connection(this);
     _channels = RealtimePlatformChannels(this);
-    push = PushNative(handle);
+    push = PushNative(realtime: this);
   }
 
   @override
@@ -50,9 +50,7 @@ class Realtime extends PlatformObject
   }
 
   // The _connection instance keeps a reference to this platform object.
-  // Ideally connection would be final, but that would need 'late final'
-  // which is coming. https://stackoverflow.com/questions/59449666/initialize-a-final-variable-with-this-in-dart#comment105082936_59450231
-  late Connection _connection;
+  late final Connection _connection;
 
   @override
   Connection get connection => _connection;
@@ -81,7 +79,7 @@ class Realtime extends PlatformObject
   Future<void> connect() async {
     final queueItem = Completer<void>();
     _connectQueue.add(queueItem);
-    unawaited(_connect());
+    unawaitedWorkaroundForDartPre214(_connect());
     return queueItem.future;
   }
 
@@ -179,4 +177,8 @@ class Realtime extends PlatformObject
   Future<DateTime> time() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<LocalDevice> device() async =>
+      invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

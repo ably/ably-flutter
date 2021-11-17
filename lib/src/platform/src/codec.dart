@@ -1,12 +1,19 @@
-import 'package:ably_flutter/src/push_notifications/push_notifications.dart';
+import 'dart:io' as io show Platform;
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../authentication/authentication.dart';
+import '../../crypto/crypto.dart';
+import '../../crypto/src/cipher_params_native.dart';
 import '../../error/error.dart';
 import '../../generated/platform_constants.dart';
 import '../../message/message.dart';
+import '../../push_notifications/push_notifications.dart';
+import '../../push_notifications/src/local_device.dart';
 import '../../realtime/realtime.dart';
+import '../../realtime/src/realtime_channel_options.dart';
 import '../../rest/rest.dart';
 import '../platform.dart';
 
@@ -71,7 +78,7 @@ class Codec extends StandardMessageCodec {
       CodecTypes.tokenRequest:
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
       CodecTypes.restChannelOptions:
-          _CodecPair<ChannelOptions>(_encodeRestChannelOptions, null),
+          _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
         _encodeRealtimeChannelOptions,
         null,
@@ -92,6 +99,13 @@ class Codec extends StandardMessageCodec {
       // Push Notifications
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
+      CodecTypes.localDevice: _CodecPair<LocalDevice>(null, _decodeLocalDevice),
+      CodecTypes.pushChannelSubscription: _CodecPair<PushChannelSubscription>(
+          null, _decodePushChannelSubscription),
+      CodecTypes.unNotificationSettings: _CodecPair<UNNotificationSettings>(
+          null, _decodeUNNotificationSettings),
+      CodecTypes.remoteMessage:
+          _CodecPair<RemoteMessage>(null, _decodeRemoteMessage),
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
@@ -115,6 +129,10 @@ class Codec extends StandardMessageCodec {
       // Events - Channel
       CodecTypes.channelStateChange:
           _CodecPair<ChannelStateChange>(null, _decodeChannelStateChange),
+
+      // Encryption
+      CodecTypes.cipherParams:
+          _CodecPair<CipherParams>(_encodeCipherParams, _decodeCipherParams),
     };
   }
 
@@ -124,6 +142,14 @@ class Codec extends StandardMessageCodec {
   Map<String, dynamic>? toJsonMap(Map<dynamic, dynamic>? value) {
     if (value == null) return null;
     return Map.castFrom<dynamic, dynamic, String, dynamic>(value);
+  }
+
+  /// Converts a Map with dynamic keys and values to
+  /// a Map with String keys and dynamic values.
+  /// Returns null of [value] is null.
+  Map<String, T> toTypedJsonMap<T>(Map<dynamic, dynamic>? value) {
+    if (value == null) return <String, T>{};
+    return Map.castFrom<dynamic, dynamic, String, T>(value);
   }
 
   /// Returns a value from [CodecTypes] based of the [Type] of [value]
@@ -138,6 +164,10 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
+    } else if (value is RealtimeChannelOptions) {
+      return CodecTypes.realtimeChannelOptions;
+    } else if (value is RestChannelOptions) {
+      return CodecTypes.restChannelOptions;
     } else if (value is MessageExtras) {
       return CodecTypes.messageExtras;
     } else if (value is Message) {
@@ -293,11 +323,12 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// Encodes [ChannelOptions] to a Map
+  /// Encodes [RestChannelOptions] to a Map
   /// returns null if [v] is null
-  Map<String, dynamic> _encodeRestChannelOptions(final ChannelOptions v) {
+  Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
+    jsonMap[TxRestChannelOptions.cipherParams] =
+        _encodeCipherParams(v.cipherParams);
     return jsonMap;
   }
 
@@ -320,7 +351,8 @@ class Codec extends StandardMessageCodec {
   Map<String, dynamic> _encodeRealtimeChannelOptions(
       final RealtimeChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRealtimeChannelOptions.cipher, v.cipher);
+    jsonMap[TxRealtimeChannelOptions.cipherParams] =
+        _encodeCipherParams(v.cipherParams);
     _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
     _writeToJson(
       jsonMap,
@@ -328,6 +360,37 @@ class Codec extends StandardMessageCodec {
       v.modes?.map(_encodeChannelMode).toList(),
     );
     return jsonMap;
+  }
+
+  Map<String, dynamic>? _encodeCipherParams(final CipherParams? params) {
+    if (params == null) {
+      return null;
+    }
+    final jsonMap = <String, dynamic>{};
+    final paramsNative = CipherParamsNative.fromCipherParams(params);
+    jsonMap[TxCipherParams.androidHandle] = paramsNative.androidHandle;
+    jsonMap[TxCipherParams.iosKey] = paramsNative.key;
+    jsonMap[TxCipherParams.iosAlgorithm] = paramsNative.algorithm;
+
+    return jsonMap;
+  }
+
+  CipherParams _decodeCipherParams(final Map<String, dynamic> jsonMap) {
+    if (io.Platform.isAndroid) {
+      final cipherParamsHandle = jsonMap[TxCipherParams.androidHandle] as int;
+      return CipherParamsNative.forAndroid(
+        androidHandle: cipherParamsHandle,
+      );
+    } else if (io.Platform.isIOS) {
+      final algorithm = jsonMap[TxCipherParams.iosAlgorithm] as String;
+      final key = jsonMap[TxCipherParams.iosKey] as Uint8List;
+      return CipherParamsNative.forIOS(
+        algorithm: algorithm,
+        key: key,
+      );
+    } else {
+      throw AblyException("Unsupported platform");
+    }
   }
 
   /// Encodes [RestHistoryParams] to a Map
@@ -625,13 +688,18 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
-  TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) => TokenParams()
-    ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
-    ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
-    ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
-    ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-        _readFromJson<int>(jsonMap, TxTokenParams.timestamp)!)
-    ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+  TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
+    final timestamp = _readFromJson<int>(jsonMap, TxTokenParams.timestamp);
+    final params = TokenParams()
+      ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
+      ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
+      ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
+      ..timestamp = (timestamp != null)
+          ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+          : null
+      ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+    return params;
+  }
 
   /// Decodes value [jsonMap] to [AblyMessage]
   /// returns null if [jsonMap] is null
@@ -655,22 +723,38 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
-        jsonMap[TxDeviceDetails.id] as String,
-        jsonMap[TxDeviceDetails.clientId] as String,
-        _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
-        formFactor,
-        jsonMap[TxDeviceDetails.metadata] as Map<String, String>,
-        jsonMap[TxDeviceDetails.deviceSecret] as String,
-        _decodeDevicePushDetails(jsonMap[TxDeviceDetails.devicePushDetails] as Map<String, dynamic>));
+      jsonMap[TxDeviceDetails.id] as String?,
+      jsonMap[TxDeviceDetails.clientId] as String?,
+      _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+      formFactor,
+      toTypedJsonMap<String>(
+          jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>?),
+      _decodeDevicePushDetails(
+        Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
+            as Map<Object?, Object?>),
+      ),
+    );
   }
 
   DevicePushDetails _decodeDevicePushDetails(Map<String, dynamic> jsonMap) {
+    final jsonMapErrorReason =
+        jsonMap[TxDevicePushDetails.errorReason] as Map<Object?, Object?>?;
+
+    final recipient =
+        jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>?;
+
     return DevicePushDetails(
-        jsonMap[TxDevicePushDetails.recipient] as Map<String, String>,
+        recipient != null ? Map<String, String>.from(recipient) : null,
         _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
-        _decodeErrorInfo(
-            jsonMap[TxDevicePushDetails.errorReason] as Map<String, dynamic>));
+        (jsonMapErrorReason != null)
+            ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
+            : null);
   }
+
+  LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
+      _decodeDeviceDetails(jsonMap),
+      jsonMap[TxLocalDevice.deviceSecret] as String?,
+      jsonMap[TxLocalDevice.deviceIdentityToken] as String?);
 
   FormFactor _decodeFormFactor(String? enumValue) {
     switch (enumValue) {
@@ -696,7 +780,7 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  DevicePushState _decodeDevicePushState(String? enumValue) {
+  DevicePushState? _decodeDevicePushState(String? enumValue) {
     switch (enumValue) {
       case TxDevicePushStateEnum.active:
         return DevicePushState.active;
@@ -704,10 +788,9 @@ class Codec extends StandardMessageCodec {
         return DevicePushState.failing;
       case TxDevicePushStateEnum.failed:
         return DevicePushState.failed;
+      default:
+        return null;
     }
-    throw AblyException(
-      'Platform communication error. DevicePushState is invalid: $enumValue',
-    );
   }
 
   DevicePlatform _decodeDevicePlatform(String? enumValue) {
@@ -723,6 +806,108 @@ class Codec extends StandardMessageCodec {
       'Platform communication error. DevicePlatform is invalid: $enumValue',
     );
   }
+
+  PushChannelSubscription _decodePushChannelSubscription(
+          Map<String, dynamic> jsonMap) =>
+      PushChannelSubscription(
+        channel: jsonMap[TxPushChannelSubscription.channel] as String,
+        clientId: jsonMap[TxPushChannelSubscription.clientId] as String?,
+        deviceId: jsonMap[TxPushChannelSubscription.deviceId] as String?,
+      );
+
+  UNNotificationSettings _decodeUNNotificationSettings(
+          Map<String, dynamic> jsonMap) =>
+      UNNotificationSettings(
+        authorizationStatus: _decodeUNAuthorizationStatus(
+            jsonMap[TxUNNotificationSettings.authorizationStatus] as String),
+        soundSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.soundSetting] as String),
+        badgeSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.badgeSetting] as String),
+        alertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.alertSetting] as String),
+        notificationCenterSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.notificationCenterSetting]
+                as String),
+        lockScreenSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.lockScreenSetting] as String),
+        carPlaySetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.carPlaySetting] as String),
+        alertStyle: _decodeUNAlertStyle(
+            jsonMap[TxUNNotificationSettings.alertStyle] as String),
+        showPreviewsSetting: _decodeUNShowPreviewsSetting(
+            jsonMap[TxUNNotificationSettings.showPreviewsSetting] as String),
+        criticalAlertSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.criticalAlertSetting] as String),
+        providesAppNotificationSettings:
+            jsonMap[TxUNNotificationSettings.providesAppNotificationSettings]
+                as bool,
+        announcementSetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.announcementSetting] as String),
+      );
+
+  UNShowPreviewsSetting _decodeUNShowPreviewsSetting(String setting) {
+    switch (setting) {
+      case TxUNShowPreviewsSettingEnum.always:
+        return UNShowPreviewsSetting.always;
+      case TxUNShowPreviewsSettingEnum.whenAuthenticated:
+        return UNShowPreviewsSetting.whenAuthenticated;
+      case TxUNShowPreviewsSettingEnum.never:
+        return UNShowPreviewsSetting.never;
+    }
+    throw AblyException(
+      'Platform communication error. UNShowPreviewsSetting is invalid: $setting',
+    );
+  }
+
+  UNAlertStyle _decodeUNAlertStyle(String style) {
+    switch (style) {
+      case TxUNAlertStyleEnum.alert:
+        return UNAlertStyle.alert;
+      case TxUNAlertStyleEnum.banner:
+        return UNAlertStyle.banner;
+      case TxUNAlertStyleEnum.none:
+        return UNAlertStyle.none;
+    }
+    throw AblyException(
+      'Platform communication error. UNAlertStyle is invalid: $style',
+    );
+  }
+
+  UNAuthorizationStatus _decodeUNAuthorizationStatus(String status) {
+    switch (status) {
+      case TxUNAuthorizationStatusEnum.notDetermined:
+        return UNAuthorizationStatus.notDetermined;
+      case TxUNAuthorizationStatusEnum.denied:
+        return UNAuthorizationStatus.denied;
+      case TxUNAuthorizationStatusEnum.authorized:
+        return UNAuthorizationStatus.authorized;
+      case TxUNAuthorizationStatusEnum.provisional:
+        return UNAuthorizationStatus.provisional;
+      case TxUNAuthorizationStatusEnum.ephemeral:
+        return UNAuthorizationStatus.ephemeral;
+    }
+    throw AblyException(
+      'Platform communication error. UNAuthorizationStatus is invalid: $status',
+    );
+  }
+
+  UNNotificationSetting _decodeUNNotificationSetting(String setting) {
+    switch (setting) {
+      case TxUNNotificationSettingEnum.disabled:
+        return UNNotificationSetting.disabled;
+      case TxUNNotificationSettingEnum.enabled:
+        return UNNotificationSetting.enabled;
+      case TxUNNotificationSettingEnum.notSupported:
+        return UNNotificationSetting.notSupported;
+    }
+    throw AblyException(
+      'Platform communication error. UNNotificationSetting is invalid: $setting',
+    );
+  }
+
+  RemoteMessage _decodeRemoteMessage(Map<String, dynamic> jsonMap) =>
+      RemoteMessage.fromMap(jsonMap);
 
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null

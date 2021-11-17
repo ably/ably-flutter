@@ -1,6 +1,7 @@
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
 import 'channels.dart';
+import 'rest_channels.dart';
 
 /// an abstract class for Ably's Rest client
 ///

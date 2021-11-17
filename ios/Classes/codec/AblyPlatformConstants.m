@@ -36,13 +36,31 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
-NSString *const AblyPlatformMethod_pushSubscribe= @"pushSubscribe";
-NSString *const AblyPlatformMethod_pushUnsubscribe= @"pushUnsubscribe";
+NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
+NSString *const AblyPlatformMethod_pushUnsubscribeDevice= @"pushUnsubscribeDevice";
+NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
+NSString *const AblyPlatformMethod_pushUnsubscribeClient= @"pushUnsubscribeClient";
+NSString *const AblyPlatformMethod_pushListSubscriptions= @"pushListSubscriptions";
+NSString *const AblyPlatformMethod_pushDevice= @"pushDevice";
+NSString *const AblyPlatformMethod_pushRequestPermission= @"pushRequestPermission";
+NSString *const AblyPlatformMethod_pushGetNotificationSettings= @"pushGetNotificationSettings";
+NSString *const AblyPlatformMethod_pushOpenSettingsFor= @"pushOpenSettingsFor";
+NSString *const AblyPlatformMethod_pushOnActivate= @"pushOnActivate";
+NSString *const AblyPlatformMethod_pushOnDeactivate= @"pushOnDeactivate";
+NSString *const AblyPlatformMethod_pushOnUpdateFailed= @"pushOnUpdateFailed";
+NSString *const AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated= @"pushNotificationTapLaunchedAppFromTerminated";
+NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground= @"pushOnShowNotificationInForeground";
+NSString *const AblyPlatformMethod_pushOnMessage= @"pushOnMessage";
+NSString *const AblyPlatformMethod_pushOnBackgroundMessage= @"pushOnBackgroundMessage";
+NSString *const AblyPlatformMethod_pushOnNotificationTap= @"pushOnNotificationTap";
+NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage= @"pushSetOnBackgroundMessage";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
+NSString *const AblyPlatformMethod_cryptoGetParams= @"cryptoGetParams";
+NSString *const AblyPlatformMethod_cryptoGenerateRandomKey= @"cryptoGenerateRandomKey";
 
 // key constants for TransportKeys
 NSString *const TxTransportKeys_channelName = @"channelName";
@@ -118,12 +136,17 @@ NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
 
 // key constants for RestChannelOptions
-NSString *const TxRestChannelOptions_cipher = @"cipher";
+NSString *const TxRestChannelOptions_cipherParams = @"cipherParams";
 
 // key constants for RealtimeChannelOptions
-NSString *const TxRealtimeChannelOptions_cipher = @"cipher";
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
+NSString *const TxRealtimeChannelOptions_cipherParams = @"cipherParams";
+
+// key constants for CipherParams
+NSString *const TxCipherParams_androidHandle = @"androidHandle";
+NSString *const TxCipherParams_iosAlgorithm = @"iosAlgorithm";
+NSString *const TxCipherParams_iosKey = @"iosKey";
 
 // key constants for TokenDetails
 NSString *const TxTokenDetails_token = @"token";
@@ -259,10 +282,81 @@ NSString *const TxDeviceDetails_clientId = @"clientId";
 NSString *const TxDeviceDetails_platform = @"platform";
 NSString *const TxDeviceDetails_formFactor = @"formFactor";
 NSString *const TxDeviceDetails_metadata = @"metadata";
-NSString *const TxDeviceDetails_deviceSecret = @"deviceSecret";
 NSString *const TxDeviceDetails_devicePushDetails = @"devicePushDetails";
 
 // key constants for DevicePushDetails
 NSString *const TxDevicePushDetails_recipient = @"recipient";
 NSString *const TxDevicePushDetails_state = @"state";
 NSString *const TxDevicePushDetails_errorReason = @"errorReason";
+
+// key constants for LocalDevice
+NSString *const TxLocalDevice_deviceSecret = @"deviceSecret";
+NSString *const TxLocalDevice_deviceIdentityToken = @"deviceIdentityToken";
+
+// key constants for PushChannelSubscription
+NSString *const TxPushChannelSubscription_channel = @"channel";
+NSString *const TxPushChannelSubscription_deviceId = @"deviceId";
+NSString *const TxPushChannelSubscription_clientId = @"clientId";
+
+// key constants for PushRequestPermission
+NSString *const TxPushRequestPermission_badge = @"badge";
+NSString *const TxPushRequestPermission_sound = @"sound";
+NSString *const TxPushRequestPermission_alert = @"alert";
+NSString *const TxPushRequestPermission_carPlay = @"carPlay";
+NSString *const TxPushRequestPermission_criticalAlert = @"criticalAlert";
+NSString *const TxPushRequestPermission_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxPushRequestPermission_provisional = @"provisional";
+NSString *const TxPushRequestPermission_announcement = @"announcement";
+
+// key constants for UNNotificationSettings
+NSString *const TxUNNotificationSettings_authorizationStatus = @"authorizationStatus";
+NSString *const TxUNNotificationSettings_soundSetting = @"soundSetting";
+NSString *const TxUNNotificationSettings_badgeSetting = @"badgeSetting";
+NSString *const TxUNNotificationSettings_alertSetting = @"alertSetting";
+NSString *const TxUNNotificationSettings_notificationCenterSetting = @"notificationCenterSetting";
+NSString *const TxUNNotificationSettings_lockScreenSetting = @"lockScreenSetting";
+NSString *const TxUNNotificationSettings_carPlaySetting = @"carPlaySetting";
+NSString *const TxUNNotificationSettings_alertStyle = @"alertStyle";
+NSString *const TxUNNotificationSettings_showPreviewsSetting = @"showPreviewsSetting";
+NSString *const TxUNNotificationSettings_criticalAlertSetting = @"criticalAlertSetting";
+NSString *const TxUNNotificationSettings_providesAppNotificationSettings = @"providesAppNotificationSettings";
+NSString *const TxUNNotificationSettings_announcementSetting = @"announcementSetting";
+NSString *const TxUNNotificationSettings_scheduledDeliverySetting = @"scheduledDeliverySetting";
+NSString *const TxUNNotificationSettings_timeSensitiveSetting = @"timeSensitiveSetting";
+
+// key constants for UNNotificationSettingEnum
+NSString *const TxUNNotificationSettingEnum_notSupported = @"notSupported";
+NSString *const TxUNNotificationSettingEnum_disabled = @"disabled";
+NSString *const TxUNNotificationSettingEnum_enabled = @"enabled";
+
+// key constants for UNAlertStyleEnum
+NSString *const TxUNAlertStyleEnum_none = @"none";
+NSString *const TxUNAlertStyleEnum_banner = @"banner";
+NSString *const TxUNAlertStyleEnum_alert = @"alert";
+
+// key constants for UNAuthorizationStatusEnum
+NSString *const TxUNAuthorizationStatusEnum_notDetermined = @"notDetermined";
+NSString *const TxUNAuthorizationStatusEnum_denied = @"denied";
+NSString *const TxUNAuthorizationStatusEnum_authorized = @"authorized";
+NSString *const TxUNAuthorizationStatusEnum_provisional = @"provisional";
+NSString *const TxUNAuthorizationStatusEnum_ephemeral = @"ephemeral";
+
+// key constants for UNShowPreviewsSettingEnum
+NSString *const TxUNShowPreviewsSettingEnum_always = @"always";
+NSString *const TxUNShowPreviewsSettingEnum_whenAuthenticated = @"whenAuthenticated";
+NSString *const TxUNShowPreviewsSettingEnum_never = @"never";
+
+// key constants for RemoteMessage
+NSString *const TxRemoteMessage_data = @"data";
+NSString *const TxRemoteMessage_notification = @"notification";
+
+// key constants for Notification
+NSString *const TxNotification_title = @"title";
+NSString *const TxNotification_body = @"body";
+
+// key constants for CryptoGetParams
+NSString *const TxCryptoGetParams_algorithm = @"algorithm";
+NSString *const TxCryptoGetParams_key = @"key";
+
+// key constants for CryptoGenerateRandomKey
+NSString *const TxCryptoGenerateRandomKey_keyLength = @"keyLength";

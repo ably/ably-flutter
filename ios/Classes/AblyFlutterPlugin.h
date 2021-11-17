@@ -3,12 +3,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AblyFlutterPlugin : NSObject<FlutterPlugin>
+@interface AblyFlutterPlugin : NSObject<FlutterPlugin, UNUserNotificationCenterDelegate>
 
 +(instancetype)new NS_UNAVAILABLE;
 +(instancetype)init NS_UNAVAILABLE;
 
-@property(nonatomic, readonly) AblyFlutter * ably;
+@property(nonatomic) AblyFlutter * ably;
+@property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+@property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
 
 @end
 

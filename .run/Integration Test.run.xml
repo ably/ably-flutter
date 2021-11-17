@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Integration Test" type="CompoundRunConfigurationType">
+    <toRun name="Integration Test App" type="FlutterRunConfigurationType" />
+    <toRun name="Integration Test Driver" type="DartCommandLineRunConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

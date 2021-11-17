@@ -4,6 +4,7 @@
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterClientOptions.h"
 #import "codec/AblyPlatformConstants.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 
 @implementation AblyFlutter {
@@ -56,10 +57,9 @@
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
-                    NSLog(@"No token data recieved %@", tokenData);
+                    NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure
-                                                  userInfo:nil]); //TODO check if this is okay!
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
@@ -95,8 +95,7 @@
                 if (!tokenData) {
                     NSLog(@"No token data received %@", tokenData);
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTCodeErrorAuthConfiguredProviderFailure
-                                                  userInfo:nil]); //TODO check if this is okay!
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
                     NSLog(@"Error getting token data %@", tokenData);
                     callback(nil, tokenData);
@@ -132,9 +131,8 @@
         [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
     }
     
-    // TODO upgrade iOS runtime requirement to 10.0 so we can use this:
-    // dispatch_assert_queue(dispatch_get_main_queue());
-    
+    dispatch_assert_queue(dispatch_get_main_queue());
+
     // This is contrived for now but the point is that we can introduce a clean,
     // asynchronous close via a background queue here if required.
     dispatch_async(dispatch_get_main_queue(), ^{

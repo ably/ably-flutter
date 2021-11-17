@@ -1,34 +1,20 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
+
 import '../../authentication/authentication.dart';
 import '../../common/common.dart';
-import '../../common/src/channels.dart';
 import '../../common/src/event_emitter.dart';
 import '../../error/src/error_info.dart';
 import '../../message/src/message.dart';
 import '../../push_notifications/src/push_channel.dart';
-import '../../rest/src/channel_options.dart';
 import '../realtime.dart';
 import 'channel_event.dart';
 import 'channel_state.dart';
 import 'channel_state_event.dart';
 import 'presence.dart';
 import 'realtime.dart';
-
-/// options provided when instantiating a realtime channel
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TB1
-class RealtimeChannelOptions extends ChannelOptions {
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
-  final Map<String, String>? params;
-
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
-  final List<ChannelMode>? modes;
-
-  /// create channel options with a cipher, params and modes
-  RealtimeChannelOptions(Object cipher, {this.params, this.modes})
-      : super(cipher);
-}
+import 'realtime_channel_options.dart';
 
 /// A named channel through with realtime client can interact with ably service.
 ///
@@ -38,7 +24,7 @@ class RealtimeChannelOptions extends ChannelOptions {
 abstract class RealtimeChannelInterface
     extends EventEmitter<ChannelEvent, ChannelStateChange> {
   /// creates a Realtime channel instance
-  RealtimeChannelInterface(this.realtime, this.name);
+  RealtimeChannelInterface(this.realtime, this.name, this.push);
 
   /// realtime client instance
   final RealtimeInterface realtime;
@@ -59,7 +45,7 @@ abstract class RealtimeChannelInterface
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
   /// (see IDL for more details)
-  PushChannel? push;
+  PushChannel push;
 
   /// modes of this channel as returned by Ably server
   ///
@@ -105,6 +91,13 @@ abstract class RealtimeChannelInterface
   /// as subscribe returns a stream which can be cancelled
   /// by calling [StreamSubscription.cancel]
   ///
+  /// Warning: the name/ names are not channel names, but message names.
+  /// See [Message.dart] for more information.
+  ///
+  /// Calling subscribe the first time on a channel will automatically attach
+  /// that channel. If a channel is detached, subscribing again will not reattach
+  /// the channel. Remember to call [RealtimeChannel.attach]
+  ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message?> subscribe({
     String? name,
@@ -116,16 +109,4 @@ abstract class RealtimeChannelInterface
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   Future<void> setOptions(RealtimeChannelOptions options);
-}
-
-/// A collection of realtime channel objects
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTS1
-abstract class RealtimeChannelsInterface<T extends RealtimeChannelInterface>
-    extends Channels<T> {
-  /// instance of ably realtime client
-  RealtimeInterface realtime;
-
-  /// instantiates with the ably [RealtimeInterface] instance
-  RealtimeChannelsInterface(this.realtime);
 }

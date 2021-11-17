@@ -24,12 +24,19 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     // Push Notifications
     'deviceDetails',
+    'localDevice',
+    'pushChannelSubscription',
+    'unNotificationSettings',
+    'remoteMessage',
 
     'errorInfo',
 
     // Events
     'connectionStateChange',
     'channelStateChange',
+
+    // Encryption
+    'cipherParams',
   ];
 
   // Custom type values must be over 127. At the time of writing
@@ -90,8 +97,39 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
   {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
-  {'name': 'pushSubscribe', 'value': 'pushSubscribe'},
-  {'name': 'pushUnsubscribe', 'value': 'pushUnsubscribe'},
+  {'name': 'pushSubscribeDevice', 'value': 'pushSubscribeDevice'},
+  {'name': 'pushUnsubscribeDevice', 'value': 'pushUnsubscribeDevice'},
+  {'name': 'pushSubscribeClient', 'value': 'pushSubscribeClient'},
+  {'name': 'pushUnsubscribeClient', 'value': 'pushUnsubscribeClient'},
+  {'name': 'pushListSubscriptions', 'value': 'pushListSubscriptions'},
+  {'name': 'pushDevice', 'value': 'pushDevice'},
+  // Used only on iOS
+  {'name': 'pushRequestPermission', 'value': 'pushRequestPermission'},
+  // Used only on iOS
+  {
+    'name': 'pushGetNotificationSettings',
+    'value': 'pushGetNotificationSettings'
+  },
+  // Used only on iOS
+  {'name': 'pushOpenSettingsFor', 'value': 'pushOpenSettingsFor'},
+  // Push Activation Events
+  {'name': 'pushOnActivate', 'value': 'pushOnActivate'},
+  {'name': 'pushOnDeactivate', 'value': 'pushOnDeactivate'},
+  {'name': 'pushOnUpdateFailed', 'value': 'pushOnUpdateFailed'},
+  // Push Notification Events
+  {
+    'name': 'pushNotificationTapLaunchedAppFromTerminated',
+    'value': 'pushNotificationTapLaunchedAppFromTerminated'
+  },
+  {
+    'name': 'pushOnShowNotificationInForeground',
+    'value': 'pushOnShowNotificationInForeground'
+  },
+  {'name': 'pushOnMessage', 'value': 'pushOnMessage'},
+  {'name': 'pushOnBackgroundMessage', 'value': 'pushOnBackgroundMessage'},
+  {'name': 'pushOnNotificationTap', 'value': 'pushOnNotificationTap'},
+  // Used only on Android
+  {'name': 'pushSetOnBackgroundMessage', 'value': 'pushSetOnBackgroundMessage'},
 
   // Realtime events
   {
@@ -107,6 +145,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Paginated results
   {'name': 'nextPage', 'value': 'nextPage'},
   {'name': 'firstPage', 'value': 'firstPage'},
+
+  // Encryption
+  {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
+  {'name': 'cryptoGenerateRandomKey', 'value': 'cryptoGenerateRandomKey'},
 ];
 
 const List<Map<String, dynamic>> _objects = [
@@ -197,15 +239,15 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'RestChannelOptions',
-    'properties': <String>['cipher']
+    'properties': <String>['cipherParams']
   },
   {
     'name': 'RealtimeChannelOptions',
-    'properties': <String>[
-      'cipher',
-      'params',
-      'modes',
-    ]
+    'properties': <String>['params', 'modes', 'cipherParams']
+  },
+  {
+    'name': 'CipherParams',
+    'properties': <String>['androidHandle', 'iosAlgorithm', 'iosKey'],
   },
   {
     'name': 'TokenDetails',
@@ -283,19 +325,11 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'DevicePlatformEnum',
-    'properties': <String>[
-      'ios',
-      'android',
-      'browser'
-    ]
+    'properties': <String>['ios', 'android', 'browser']
   },
   {
     'name': 'DevicePushStateEnum',
-    'properties': <String>[
-      'active',
-      'failing',
-      'failed'
-    ]
+    'properties': <String>['active', 'failing', 'failed']
   },
   {
     'name': 'ConnectionStateChange',
@@ -378,18 +412,94 @@ const List<Map<String, dynamic>> _objects = [
       'platform',
       'formFactor',
       'metadata',
-      'deviceSecret',
       'devicePushDetails'
     ]
   },
   {
     'name': 'DevicePushDetails',
+    'properties': <String>['recipient', 'state', 'errorReason']
+  },
+  {
+    'name': 'LocalDevice',
+    'properties': <String>['deviceSecret', 'deviceIdentityToken']
+  },
+  {
+    'name': 'PushChannelSubscription',
+    'properties': <String>['channel', 'deviceId', 'clientId']
+  },
+  {
+    'name': 'PushRequestPermission',
     'properties': <String>[
-      'recipient',
-      'state',
-      'errorReason'
+      'badge',
+      'sound',
+      'alert',
+      'carPlay',
+      'criticalAlert',
+      'providesAppNotificationSettings',
+      'provisional',
+      'announcement',
     ]
   },
+  {
+    'name': 'UNNotificationSettings',
+    'properties': <String>[
+      'authorizationStatus',
+      'soundSetting',
+      'badgeSetting',
+      'alertSetting',
+      'notificationCenterSetting',
+      'lockScreenSetting',
+      'carPlaySetting',
+      'alertStyle',
+      'showPreviewsSetting',
+      'criticalAlertSetting',
+      'providesAppNotificationSettings',
+      'announcementSetting',
+      'scheduledDeliverySetting',
+      'timeSensitiveSetting',
+    ]
+  },
+  {
+    'name': 'UNNotificationSettingEnum',
+    'properties': ['notSupported', 'disabled', 'enabled']
+  },
+  {
+    'name': 'UNAlertStyleEnum',
+    'properties': ['none', 'banner', 'alert']
+  },
+  {
+    'name': 'UNAuthorizationStatusEnum',
+    'properties': [
+      'notDetermined',
+      'denied',
+      'authorized',
+      'provisional',
+      'ephemeral',
+    ]
+  },
+  {
+    'name': 'UNShowPreviewsSettingEnum',
+    'properties': ['always', 'whenAuthenticated', 'never']
+  },
+  {
+    'name': 'RemoteMessage',
+    'properties': [
+      'data',
+      'notification',
+    ]
+  },
+  {
+    'name': 'Notification',
+    'properties': ['title', 'body']
+  },
+  {
+    'name': 'CryptoGetParams',
+    'properties': ['algorithm', 'key']
+  },
+  {
+    'name': 'CryptoGenerateRandomKey',
+    'properties': ['keyLength']
+  }
 ];
 
 // exporting all the constants as a single map

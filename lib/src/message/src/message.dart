@@ -90,7 +90,7 @@ class Message {
   ///  RSL6 and RLS6b as mentioned in TM3
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
-    ChannelOptions? channelOptions,
+    RestChannelOptions? channelOptions,
   ])  : id = jsonObject['id'] as String?,
         name = jsonObject['name'] as String?,
         clientId = jsonObject['clientId'] as String?,
@@ -111,7 +111,7 @@ class Message {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
-    ChannelOptions? channelOptions,
+    RestChannelOptions? channelOptions,
   ]) =>
       jsonArray.map((e) => Message.fromEncoded(e, channelOptions)).toList();
 

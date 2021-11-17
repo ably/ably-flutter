@@ -3,30 +3,25 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Runs on the 39th minute of the 4 & 15th hour of each day. i.e. 4:39 and 15:39.
+    # See more cron syntax documentation at https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+    - cron: '39 4,15 * * *'
 
 jobs:
   ios:
     strategy:
       matrix:
-        device:
-          - 'iPhone 8'  # we are not specifying the iOS version as it tends to change
-          - 'iPhone 11'
+        device: # Device names must be shown in `xcrun simctl list devices`
+          - 'iPhone 12'  # we are not specifying the iOS version as it tends to change
       fail-fast: false
-    runs-on: 'macos-latest'
+    runs-on: 'macos-11'
     steps:
       - name: 'List Simulators'
-        run: 'xcrun instruments -s'
+        run: 'xcrun simctl list devices'
 
       - name: 'Start Simulator'
-        run: |
-          # grep, extract trim `[` and `]` and pick first result, in case there are many
-               UUID=$(
-               xcrun instruments -s |
-               grep "${{ matrix.device }}" |   # Grep device(s) - can expect more than one
-               grep -Eo -m1 "\[.*\]" |         # Extract device ID of the first result
-               sed -e 's/^\[//' -e 's/\]$//'   # Trimming the square brackets surrounding UUID
-               )
-               xcrun simctl boot "${UUID:?No Simulator with this name found}"
+        run: xcrun simctl boot "${{ matrix.device }}"
 
       - uses: actions/checkout@v2
 
@@ -41,7 +36,7 @@ jobs:
   android:
     strategy:
       matrix:
-        api-level: [19, 22, 24, 26, 28]
+        api-level: [21, 29]
       fail-fast: false
 
     # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running

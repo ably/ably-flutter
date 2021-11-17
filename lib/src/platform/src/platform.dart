@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ably_flutter/src/platform/src/background_android_isolate_platform.dart';
 import 'package:flutter/services.dart';
 
 import '../../error/error.dart';
@@ -27,15 +28,8 @@ class Platform {
   static Future _initialize() async {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
-      _initializer = methodChannel
-          .invokeMethod(PlatformMethod.registerAbly)
-          .timeout(Timeouts.initializeTimeout, onTimeout: () {
-        _initializer = null;
-        throw TimeoutException(
-          'Initialization timed out.',
-          Timeouts.initializeTimeout,
-        );
-      });
+      _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
+      BackgroundIsolateAndroidPlatform();
     }
     return _initializer;
   }
@@ -50,6 +44,29 @@ class Platform {
     await _initialize();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);
+    } on PlatformException catch (pe) {
+      if (pe.details is ErrorInfo) {
+        throw AblyException.fromPlatformException(pe);
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /**
+   * Call a platform method which always provides a result.
+   */
+  static Future<T> invokePlatformMethodNonNull<T>(String method,
+      [Object? arguments]) async {
+    await _initialize();
+    try {
+      final result = await methodChannel.invokeMethod<T>(method, arguments);
+      if (result == null) {
+        throw AblyException('invokePlatformMethodNonNull("$method") platform '
+            'method unexpectedly returned a null value.');
+      } else {
+        return result;
+      }
     } on PlatformException catch (pe) {
       if (pe.details is ErrorInfo) {
         throw AblyException.fromPlatformException(pe);

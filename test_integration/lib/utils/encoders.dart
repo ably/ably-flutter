@@ -15,7 +15,7 @@ Map<String, dynamic>? encodeMessageExtras(MessageExtras? extras) =>
 
 Map<String, dynamic> encodeMessage(Message message) => {
       'id': message.id,
-      'timestamp': message.timestamp!.toIso8601String(),
+      'timestamp': message.timestamp?.toIso8601String(),
       'clientId': message.clientId,
       'connectionId': message.connectionId,
       'encoding': message.encoding,
@@ -32,7 +32,7 @@ Map<String, dynamic> encodePresenceMessage(PresenceMessage message) => {
       'data': message.data,
       'encoding': message.encoding,
       'extras': encodeMessageExtras(message.extras),
-      'timestamp': message.timestamp!.toIso8601String(),
+      'timestamp': message.timestamp?.toIso8601String(),
     };
 
 String enumValueToString(Object value) =>

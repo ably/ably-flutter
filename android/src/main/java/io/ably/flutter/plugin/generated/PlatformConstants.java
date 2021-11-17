@@ -27,9 +27,14 @@ final public class PlatformConstants {
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
         public static final byte deviceDetails = (byte) 145;
-        public static final byte errorInfo = (byte) 146;
-        public static final byte connectionStateChange = (byte) 147;
-        public static final byte channelStateChange = (byte) 148;
+        public static final byte localDevice = (byte) 146;
+        public static final byte pushChannelSubscription = (byte) 147;
+        public static final byte unNotificationSettings = (byte) 148;
+        public static final byte remoteMessage = (byte) 149;
+        public static final byte errorInfo = (byte) 150;
+        public static final byte connectionStateChange = (byte) 151;
+        public static final byte channelStateChange = (byte) 152;
+        public static final byte cipherParams = (byte) 153;
     }
 
     static final public class PlatformMethod {
@@ -62,13 +67,31 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
-        public static final String pushSubscribe = "pushSubscribe";
-        public static final String pushUnsubscribe = "pushUnsubscribe";
+        public static final String pushSubscribeDevice = "pushSubscribeDevice";
+        public static final String pushUnsubscribeDevice = "pushUnsubscribeDevice";
+        public static final String pushSubscribeClient = "pushSubscribeClient";
+        public static final String pushUnsubscribeClient = "pushUnsubscribeClient";
+        public static final String pushListSubscriptions = "pushListSubscriptions";
+        public static final String pushDevice = "pushDevice";
+        public static final String pushRequestPermission = "pushRequestPermission";
+        public static final String pushGetNotificationSettings = "pushGetNotificationSettings";
+        public static final String pushOpenSettingsFor = "pushOpenSettingsFor";
+        public static final String pushOnActivate = "pushOnActivate";
+        public static final String pushOnDeactivate = "pushOnDeactivate";
+        public static final String pushOnUpdateFailed = "pushOnUpdateFailed";
+        public static final String pushNotificationTapLaunchedAppFromTerminated = "pushNotificationTapLaunchedAppFromTerminated";
+        public static final String pushOnShowNotificationInForeground = "pushOnShowNotificationInForeground";
+        public static final String pushOnMessage = "pushOnMessage";
+        public static final String pushOnBackgroundMessage = "pushOnBackgroundMessage";
+        public static final String pushOnNotificationTap = "pushOnNotificationTap";
+        public static final String pushSetOnBackgroundMessage = "pushSetOnBackgroundMessage";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
         public static final String nextPage = "nextPage";
         public static final String firstPage = "firstPage";
+        public static final String cryptoGetParams = "cryptoGetParams";
+        public static final String cryptoGenerateRandomKey = "cryptoGenerateRandomKey";
     }
 
     static final public class TxTransportKeys {
@@ -153,13 +176,19 @@ final public class PlatformConstants {
     }
 
     static final public class TxRestChannelOptions {
-        public static final String cipher = "cipher";
+        public static final String cipherParams = "cipherParams";
     }
 
     static final public class TxRealtimeChannelOptions {
-        public static final String cipher = "cipher";
         public static final String params = "params";
         public static final String modes = "modes";
+        public static final String cipherParams = "cipherParams";
+    }
+
+    static final public class TxCipherParams {
+        public static final String androidHandle = "androidHandle";
+        public static final String iosAlgorithm = "iosAlgorithm";
+        public static final String iosKey = "iosKey";
     }
 
     static final public class TxTokenDetails {
@@ -312,7 +341,6 @@ final public class PlatformConstants {
         public static final String platform = "platform";
         public static final String formFactor = "formFactor";
         public static final String metadata = "metadata";
-        public static final String deviceSecret = "deviceSecret";
         public static final String devicePushDetails = "devicePushDetails";
     }
 
@@ -320,6 +348,90 @@ final public class PlatformConstants {
         public static final String recipient = "recipient";
         public static final String state = "state";
         public static final String errorReason = "errorReason";
+    }
+
+    static final public class TxLocalDevice {
+        public static final String deviceSecret = "deviceSecret";
+        public static final String deviceIdentityToken = "deviceIdentityToken";
+    }
+
+    static final public class TxPushChannelSubscription {
+        public static final String channel = "channel";
+        public static final String deviceId = "deviceId";
+        public static final String clientId = "clientId";
+    }
+
+    static final public class TxPushRequestPermission {
+        public static final String badge = "badge";
+        public static final String sound = "sound";
+        public static final String alert = "alert";
+        public static final String carPlay = "carPlay";
+        public static final String criticalAlert = "criticalAlert";
+        public static final String providesAppNotificationSettings = "providesAppNotificationSettings";
+        public static final String provisional = "provisional";
+        public static final String announcement = "announcement";
+    }
+
+    static final public class TxUNNotificationSettings {
+        public static final String authorizationStatus = "authorizationStatus";
+        public static final String soundSetting = "soundSetting";
+        public static final String badgeSetting = "badgeSetting";
+        public static final String alertSetting = "alertSetting";
+        public static final String notificationCenterSetting = "notificationCenterSetting";
+        public static final String lockScreenSetting = "lockScreenSetting";
+        public static final String carPlaySetting = "carPlaySetting";
+        public static final String alertStyle = "alertStyle";
+        public static final String showPreviewsSetting = "showPreviewsSetting";
+        public static final String criticalAlertSetting = "criticalAlertSetting";
+        public static final String providesAppNotificationSettings = "providesAppNotificationSettings";
+        public static final String announcementSetting = "announcementSetting";
+        public static final String scheduledDeliverySetting = "scheduledDeliverySetting";
+        public static final String timeSensitiveSetting = "timeSensitiveSetting";
+    }
+
+    static final public class TxUNNotificationSettingEnum {
+        public static final String notSupported = "notSupported";
+        public static final String disabled = "disabled";
+        public static final String enabled = "enabled";
+    }
+
+    static final public class TxUNAlertStyleEnum {
+        public static final String none = "none";
+        public static final String banner = "banner";
+        public static final String alert = "alert";
+    }
+
+    static final public class TxUNAuthorizationStatusEnum {
+        public static final String notDetermined = "notDetermined";
+        public static final String denied = "denied";
+        public static final String authorized = "authorized";
+        public static final String provisional = "provisional";
+        public static final String ephemeral = "ephemeral";
+    }
+
+    static final public class TxUNShowPreviewsSettingEnum {
+        public static final String always = "always";
+        public static final String whenAuthenticated = "whenAuthenticated";
+        public static final String never = "never";
+    }
+
+    static final public class TxRemoteMessage {
+        public static final String data = "data";
+        public static final String notification = "notification";
+    }
+
+    static final public class TxNotification {
+        public static final String title = "title";
+        public static final String body = "body";
+    }
+
+    static final public class TxCryptoGetParams {
+        public static final String algorithm = "algorithm";
+        public static final String key = "key";
+    }
+
+    static final public class TxCryptoGenerateRandomKey {
+        public static final String keyLength = "keyLength";
     }
 
 }

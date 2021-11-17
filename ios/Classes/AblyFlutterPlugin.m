@@ -1,8 +1,7 @@
-#import "AblyFlutterPlugin.h"
+@import Ably;
 
-// TODO work out why importing Ably as a module does not work like this:
-//   @import Ably;
-#import "Ably.h"
+#import "AblyFlutterPlugin.h"
+#import <ably_flutter/ably_flutter-Swift.h>
 
 #import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
@@ -43,7 +42,18 @@ static const FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, F
 static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    result([ably createRestWithOptions:message.message]);
+    AblyFlutterClientOptions *const options = message.message;
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    NSNumber *const restHandle = [ably createRestWithOptions:options];
+    ARTRest *const rest = [ably getRest:restHandle];
+    
+    if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken rest:rest];
+    } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
+        [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error rest:rest];
+    }
+    
+    result(restHandle);
 };
 
 static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -186,7 +196,23 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const
 static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
-    result([ably createRealtimeWithOptions:message.message]);
+    AblyFlutterClientOptions *const options = message.message;
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    NSNumber *const realtimeHandle = [ably createRealtimeWithOptions:options];
+    ARTRealtime *const realtime = [ably realtimeWithHandle:realtimeHandle];
+    
+    // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
+    // This is not an ideal solution. We save the deviceToken given in didRegisterForRemoteNotificationsWithDeviceToken and the
+    // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
+    // Ideally, the Ably client doesn't need to be created, and we can pass the deviceToken to Ably like in Ably Java.
+    // This is similarly repeated for in _createRestWithOptions
+    if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken realtime:realtime];
+    } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
+        [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error realtime:realtime];
+    }
+    
+    result(realtimeHandle);
 };
 
 static const FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -291,21 +317,18 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin
     ARTRealtimeChannelOptions *const channelOptions = (ARTRealtimeChannelOptions*)[realtimePayload objectForKey:TxTransportKeys_options];
 
     ARTRealtimeChannel *const channel = [realtimeWithHandle.channels get:channelName];
-    const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
+    [channel setOptions:channelOptions callback:^(ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
                     FlutterError
                     errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
-                    message:[NSString stringWithFormat:@"Error getting realtime channel history; err = %@", [error message]]
+                    message:[NSString stringWithFormat:@"Error setting realtime channel options; err = %@", [error message]]
                     details:error
                     ]);
         } else {
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:nil];
-            result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
+            result(nil);
         }
-    };
-    [channel setOptions:channelOptions callback:callback];
-    result(nil);
+    }];
 };
 
 static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -516,12 +539,12 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }];
 };
 
-
 @implementation AblyFlutterPlugin {
     long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
+    PushNotificationEventHandlers* _pushNotificationEventHandlers;
 }
 
 @synthesize ably = _ably;
@@ -541,19 +564,20 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const channel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
-    AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel];
+    AblyFlutterPlugin *const plugin = [[AblyFlutterPlugin alloc] initWithChannel:channel streamsChannel: streamsChannel registrar:registrar];
     
-    // regustering method channel with registrar
+    // registering method channel with registrar
     [registrar addMethodCallDelegate:plugin channel:channel];
     
     // setting up stream handler factory for eventChannel to handle multiple listeners
     [streamsChannel setStreamHandlerFactory:^NSObject<FlutterStreamHandler> *(id arguments) {
         return [AblyFlutterStreamHandler new];
     }];
-    
 }
 
--(instancetype)initWithChannel:(FlutterMethodChannel *const)channel streamsChannel:(AblyStreamsChannel *const)streamsChannel {
+-(instancetype)initWithChannel:(FlutterMethodChannel *const)channel
+                streamsChannel:(AblyStreamsChannel *const)streamsChannel
+                     registrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     self = [super init];
     if (!self) {
         return nil;
@@ -561,6 +585,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     _ably = [AblyFlutter sharedInstance];
     [_ably setChannel: channel];
     self->_streamsChannel = streamsChannel;
+    UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
+    _pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
+    center.delegate = _pushNotificationEventHandlers;
     
     _handlers = @{
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
@@ -589,11 +616,27 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
+        // Push Notifications
+        AblyPlatformMethod_pushActivate: PushHandlers.activate,
+        AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
+        AblyPlatformMethod_pushGetNotificationSettings: PushHandlers.getNotificationSettings,
+        AblyPlatformMethod_pushDeactivate: PushHandlers.deactivate,
+        AblyPlatformMethod_pushSubscribeDevice: PushHandlers.subscribeDevice,
+        AblyPlatformMethod_pushUnsubscribeDevice: PushHandlers.unsubscribeDevice,
+        AblyPlatformMethod_pushSubscribeClient: PushHandlers.subscribeClient,
+        AblyPlatformMethod_pushUnsubscribeClient: PushHandlers.unsubscribeClient,
+        AblyPlatformMethod_pushListSubscriptions: PushHandlers.listSubscriptions,
+        AblyPlatformMethod_pushDevice: PushHandlers.device,
+        AblyPlatformMethod_pushNotificationTapLaunchedAppFromTerminated: PushHandlers.pushNotificationTapLaunchedAppFromTerminated,
+        // Encryption
+        AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
+        AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
     
     _nextRegistration = 1;
     _channel = channel;
     
+    [registrar addApplicationDelegate:self];
     return self;
 }
 
@@ -617,6 +660,37 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         [self->_streamsChannel reset];
         completionHandler(nil);
     }];
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    // Check if application was launched from a notification tap.
+    
+    // https://stackoverflow.com/a/21611009/7365866
+    NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notification) {
+        PushHandlers.pushNotificationTapLaunchedAppFromTerminatedData = notification;
+    }
+    
+    return NO;
+}
+
+#pragma mark - Push Notifications Registration - UIApplicationDelegate
+/// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // This deviceToken will be used when a new Ably client (either realtime or rest) is made.
+    _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
+}
+
+/// Save the error if it occurred during APNs device registration provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    // This error will be used when the first Ably client is made.
+    _didFailToRegisterForRemoteNotificationsWithError_error = error;
+}
+
+- (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [_pushNotificationEventHandlers application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+    return NO;
 }
 
 @end

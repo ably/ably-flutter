@@ -5,9 +5,11 @@ import '../../../authentication/authentication.dart';
 import '../../../common/common.dart';
 import '../../../generated/platform_constants.dart';
 import '../../../push_notifications/push_notifications.dart';
+import '../../../push_notifications/src/local_device.dart';
 import '../../../rest/rest.dart';
 import '../../../stats/stats.dart';
 import '../../platform.dart';
+import '../../platform_internal.dart';
 
 Map<int?, Rest> _restInstances = {};
 Map<int?, Rest>? _restInstancesUnmodifiableView;
@@ -30,7 +32,7 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
         options = options ?? ClientOptions.fromKey(key!),
         super() {
     channels = RestChannels(this);
-    push = PushNative(handle);
+    push = PushNative(rest: this);
   }
 
   @override
@@ -87,4 +89,8 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
 
   @override
   late RestChannels channels;
+
+  @override
+  Future<LocalDevice> device() async =>
+      invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

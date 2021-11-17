@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import 'package:ably_flutter_example/provisioning.dart';
 
 import '../factory/reporter.dart';
+import '../provisioning.dart';
 
 Future<Map<String, dynamic>> testAppKeyProvision({
   required Reporter reporter,

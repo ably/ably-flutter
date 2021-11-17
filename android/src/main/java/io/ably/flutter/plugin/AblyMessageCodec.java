@@ -1,5 +1,9 @@
 package io.ably.flutter.plugin;
 
+import androidx.annotation.Nullable;
+
+import com.google.firebase.messaging.RemoteMessage;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,9 +15,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.ably.flutter.plugin.util.Consumer;
+import io.ably.lib.push.LocalDevice;
+import io.ably.lib.push.Push;
+import io.ably.lib.push.PushBase;
 import io.ably.lib.realtime.ChannelEvent;
 import io.ably.lib.realtime.ChannelState;
 import io.ably.lib.realtime.ChannelStateListener;
@@ -22,8 +32,10 @@ import io.ably.lib.realtime.ConnectionState;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
+import io.ably.lib.rest.DeviceDetails;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
+import io.ably.lib.types.ChannelMode;
 import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.ClientOptions;
 import io.ably.lib.types.DeltaExtras;
@@ -32,6 +44,7 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.util.Crypto;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class AblyMessageCodec extends StandardMessageCodec {
@@ -73,9 +86,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private Map<Byte, CodecPair> codecMap;
   private static final Gson gson = new Gson();
+  private final CipherParamsStorage cipherParamsStorage;
 
-  AblyMessageCodec() {
+  public AblyMessageCodec(CipherParamsStorage cipherParamsStorage) {
     final AblyMessageCodec self = this;
+    this.cipherParamsStorage = cipherParamsStorage;
     codecMap = new HashMap<Byte, CodecPair>() {
       {
         put(PlatformConstants.CodecTypes.ablyMessage,
@@ -118,6 +133,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeConnectionStateChange, null));
         put(PlatformConstants.CodecTypes.channelStateChange,
             new CodecPair<>(self::encodeChannelStateChange, null));
+        put(PlatformConstants.CodecTypes.deviceDetails,
+            new CodecPair<>(self::encodeDeviceDetails, null));
+        put(PlatformConstants.CodecTypes.localDevice,
+            new CodecPair<>(self::encodeLocalDevice, null));
+        put(PlatformConstants.CodecTypes.pushChannelSubscription,
+            new CodecPair<>(self::encodePushChannelSubscription, null));
+        put(PlatformConstants.CodecTypes.remoteMessage,
+            new CodecPair<>(self::encodeRemoteMessage, null));
+        put(PlatformConstants.CodecTypes.cipherParams,
+            new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
       }
     };
   }
@@ -164,6 +189,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
       return PlatformConstants.CodecTypes.messageExtras;
     } else if (value instanceof Message) {
       return PlatformConstants.CodecTypes.message;
+    } else if (value instanceof LocalDevice) {
+      return PlatformConstants.CodecTypes.localDevice;
+    } else if (value instanceof DeviceDetails) {
+      return PlatformConstants.CodecTypes.deviceDetails;
+    } else if (value instanceof Push.ChannelSubscription) {
+      return PlatformConstants.CodecTypes.pushChannelSubscription;
+    } else if (value instanceof RemoteMessage) {
+      return PlatformConstants.CodecTypes.remoteMessage;
+    } else if (value instanceof Crypto.CipherParams) {
+      return PlatformConstants.CodecTypes.cipherParams;
+    } else if (value instanceof ChannelOptions) {
+      // Encoding it into a RealtimeChannelOptions instance, because it extends RestChannelOptions
+      return PlatformConstants.CodecTypes.realtimeChannelOptions;
     }
     return null;
   }
@@ -286,6 +324,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[]) v);
 
+    o.agents = new HashMap<>();
+    o.agents.put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
+
     return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
   }
 
@@ -328,27 +369,67 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
-    try {
-      return ChannelOptions.withCipherKey((String) cipher);
-    } catch (AblyException ae) {
-      System.out.println("Exception while decoding RestChannelOptions : " + ae);
-      return null;
+    ChannelOptions options = new ChannelOptions();
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRestChannelOptions.cipherParams));
+    if (options.cipherParams != null) {
+      options.encrypted = true;
     }
+    return options;
   }
 
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Object cipher = jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipher);
-    try {
-      final ChannelOptions o = ChannelOptions.withCipherKey((String) cipher);
-      readValueFromJson(jsonMap, PlatformConstants.TxRealtimeChannelOptions.params, v -> o.cipherParams = (Map<String, String>) v);
-      // modes is not supported in ably-java
-      // Track @ https://github.com/ably/ably-flutter/issues/14
-      return o;
-    } catch (AblyException ae) {
-      System.out.println("Exception while decoding RealtimeChannelOptions: " + ae);
-      return null;
+    ChannelOptions options = new ChannelOptions();
+    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams));
+    if (options.cipherParams != null) {
+      options.encrypted = true;
+    }
+    options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
+    final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
+    if (modes != null && modes.size() > 0) {
+      options.modes = createChannelModesArray(modes);
+    }
+
+    return options;
+  }
+
+  private Map<String, Object> encodeCipherParams(Crypto.CipherParams cipherParams) {
+    if (cipherParams == null) return null;
+    final Integer handle = cipherParamsStorage.getHandle(cipherParams);
+    HashMap<String, Object> jsonMap = new HashMap<>();
+
+    // All other properties in CipherParams are package private, so cannot be exposed to Dart side.
+    jsonMap.put(PlatformConstants.TxCipherParams.androidHandle, handle);
+
+    return jsonMap;
+  }
+
+  private Crypto.CipherParams decodeCipherParams(@Nullable Map<String, Object> cipherParamsDictionary) {
+    if (cipherParamsDictionary == null) return null;
+    final Integer cipherParamsHandle = (Integer) cipherParamsDictionary.get(PlatformConstants.TxCipherParams.androidHandle);
+    return cipherParamsStorage.from(cipherParamsHandle);
+  }
+
+  private ChannelMode[] createChannelModesArray(ArrayList<String> modesString) {
+    ChannelMode[] modes = new ChannelMode[modesString.size()];
+    for (int i = 0; i < modesString.size(); i++) {
+      modes[i] = decodeChannelOptionsMode(modesString.get(i));
+    }
+    return modes;
+  }
+
+  private ChannelMode decodeChannelOptionsMode(String mode) {
+    switch (mode) {
+      case PlatformConstants.TxEnumConstants.presence:
+        return ChannelMode.presence;
+      case PlatformConstants.TxEnumConstants.publish:
+        return ChannelMode.publish;
+      case PlatformConstants.TxEnumConstants.subscribe:
+        return ChannelMode.subscribe;
+      case PlatformConstants.TxEnumConstants.presenceSubscribe:
+        return ChannelMode.presence_subscribe;
+      default:
+        return null;
     }
   }
 
@@ -652,6 +733,74 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return jsonMap;
   }
 
+  private Map<String, Object> encodeDeviceDetails(DeviceDetails c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.id, c.id);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeDevicePushDetails(DeviceDetails.Push c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.recipient, c.recipient);
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.state, encodeDevicePushDetailsState(c.state));
+    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.errorReason, encodeErrorInfo(c.errorReason));
+
+    return jsonMap;
+  }
+
+  private String encodeDevicePushDetailsState(DeviceDetails.Push.State state) {
+    if (state == null) return null;
+
+    switch (state) {
+      case ACTIVE:
+        return PlatformConstants.TxDevicePushStateEnum.active;
+      case FAILING:
+        return PlatformConstants.TxDevicePushStateEnum.failing;
+      case FAILED:
+        return PlatformConstants.TxDevicePushStateEnum.failed;
+      default:
+        return null;
+    }
+  }
+
+  private Map<String, Object> encodeLocalDevice(LocalDevice c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceSecret, c.deviceSecret);
+    writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceIdentityToken, c.deviceIdentityToken);
+
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.id, c.id);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
+    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodePushChannelSubscription(PushBase.ChannelSubscription c) {
+    if (c == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.channel, c.channel);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.clientId, c.clientId);
+    writeValueToJson(jsonMap, PlatformConstants.TxPushChannelSubscription.deviceId, c.deviceId);
+
+    return jsonMap;
+  }
+
   private Map<String, Object> encodeChannelMessageExtras(MessageExtras c) {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap =
@@ -709,6 +858,22 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.encoding, c.encoding);
     // PresenceMessage#extras is not supported in ably-java
     // Track @ https://github.com/ably/ably-flutter/issues/14
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeRemoteMessage(RemoteMessage message) {
+    if (message == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.data, message.getData());
+    writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.notification, encodeNotification(message.getNotification()));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeNotification(RemoteMessage.Notification notification) {
+    if (notification == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxNotification.title, notification.getTitle());
+    writeValueToJson(jsonMap, PlatformConstants.TxNotification.body, notification.getBody());
     return jsonMap;
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 
 import '../provisioning.dart' as provisioning;
 import 'mock_data.dart';
@@ -11,6 +12,7 @@ class AblyService {
   static String defaultChannel = 'test-channel';
   ably.Rest? rest;
   ably.Realtime? realtime;
+  PushNotificationService pushNotificationService = PushNotificationService();
   String apiKey = const String.fromEnvironment(_ablyApiKey);
   final _subscriptions = <StreamSubscription>[];
 

@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_catching_errors
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:ably_flutter_example/provisioning.dart';
 
 import '../../factory/reporter.dart';
+import '../../provisioning.dart';
 import '../../utils/data.dart';
 
 final logMessages = <List<String?>>[];

@@ -23,6 +23,12 @@ abstract class AblyBase {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
   Auth? auth;
 
+  /// represents the current state of the device in respect of it being a
+  /// target for push notifications.
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH8
+  Future<LocalDevice> device();
+
   /// a push object interacting with Push API
   /// viz., subscribing for push notifications, etc
   late Push push;

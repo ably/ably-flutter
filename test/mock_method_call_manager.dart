@@ -1,6 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test/src/deprecated.dart';
 
 typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
 
@@ -68,9 +69,9 @@ class MockMethodCallManager {
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
           await AblyMethodCallHandler(Platform.methodChannel)
-              .onRealtimeAuthCallback(AblyMessage(
-                  TokenParams(timestamp: DateTime.now()),
-                  handle: handle));
+              .onRealtimeAuthCallback(
+            AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
+          );
           isAuthenticated = true;
           throw PlatformException(
             code: ErrorCodes.authCallbackFailure.toString(),

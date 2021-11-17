@@ -27,7 +27,7 @@ We handle the complexity of realtime messaging so you can focus on your code.
 
 ### iOS
 
-iOS 9 or newer.
+iOS 10 or newer.
 
 ### Android
 
@@ -43,45 +43,58 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 Features that we do not currently support, but we do plan to add in the future:
 
-- Symmetric encryption ([#104](https://github.com/ably/ably-flutter/issues/104))
 - Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
 - REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
-- Push Notifications target ([#107](https://github.com/ably/ably-flutter/issues/107))
 - Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
 - Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 - Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
 
-## Running the example
+## Example app
 
-- Clone the repo
-- cd to `example` folder
-- run `flutter pub get` to install dependencies
-- Android only: Create a firebase project add download a `google-services.json` file. Move this file to `example/android/app`.
-- `flutter run` will start the application on connected android / iOS device
+### Running example app
+
+- To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app.
+- Clone the project
+
+#### Android Studio / IntelliJ Idea
+
+Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
+
+![Drop down menu for Run/Debug Configurations in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-1.png)
+
+![Run/Debug Configurations window in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-2.png)
+
+#### Visual Studio Code
+
+- Under `Run and Debug`,
+  - Select the gear icon to view `launch.json`
+  - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
+  - To choose a specific device when more than one are connected: to launch on a specific device, make sure it is the only device plugged in. To run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`
+    - Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`
+-  select the `example` configuration
+
+#### Command Line using the Flutter Tool
+
+- Change into the example app directory: `cd example`
+- Install dependencies: `flutter pub get`
+- Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
+  - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
 
 ### Push Notifications
-- To get push notifications working in the example app:
-    - For Android 🤖:
-        - **Optional:** Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) the example application in `example/android/app/build.gradle` to your unique application ID.
-        - Create a firebase project, and in the Project settings, add an Android App. Follow the steps provided on the setup process, or the following:
-            - Specify your application ID in this step.
-            - You can leave `Debug signing certificate SHA-1` empty.
-            - Download the generated `google-services.json` file
-            - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it won't work for users, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it if you prefer.
-            - Update your build.gradle files according to the guide.
-    - For iOS 📱:
-        - **Pre-requisite:** You must be on the Apple Developer Program ($99/year) and be running a physical device.
-        - **Required:** In Xcode, update the bundle ID of your application in Xcode to a unique bundle ID. You can open Xcode with `xed example/ios` and clicking `Runner` in the Project Navigator, and clicking the `General` tab. Modify the text field value for `Bundle Identifier` from `io.ably.flutter.PluginExample` to something unique to you. An App ID will be automatically generated on developer.apple.com.
-        - Create a `.p12` (certificate) for that App ID using the Apple Guide, [Communicate with APNs using a TLS certificate](https://help.apple.com/developer-account/#/dev82a71386a). In the guide, this certificate is called a _client TLS identity_.
-        - Upload the `.p12` certificate to Ably, in the Notifications tab of your app dashboard on [Ably.com](https://Ably.com).
-        - You don't need to add your iOS project to Firebase.
-        - Follow the [Registering Your App with APNs article](https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns), or perform the following steps:
-            - In Xcode, add the `Push Notification` capability to your target in your Xcode project.
-            - In your
-- **Done:** Launch the app and press the push notifications button, and a notification should be delivered to yourself.
 
-- TODO investigate if simulator/ emulator running APNs/ FCM
-- TODO add usage of AvdLee/Poes CLI for iOS
+See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
+
+### Troubleshooting
+
+- Running on simulator on M1 macs:
+  - Flutter has added support for running apps on the [iOS simulator](https://github.com/flutter/flutter/pull/85059) running on M1 architecture, but this is not yet available on the stable branch. In the mean time, you can change the iOS target to build for Mac in Xcode.
+- `fatal error: 'ruby/config.h' file not found`: Ruby is required to install cocoapods and other tools which are used in the build process, and your machine may not have a supported version. To install an up-to-date version of Ruby:
+  - Run `brew install rbenv ruby-build`
+  - Install [rbenv](https://github.com/rbenv/rbenv#installation):
+    - Run `rbenv init` (and follow its recommended instructions)
+    - Run `rbenv install 3.0.1`
+  - Run `sudo gem install cocoapods ffi`
+    - Why do we need `ffi`?: https://github.com/CocoaPods/CocoaPods/issues/9907#issuecomment-729980327
 
 ## Usage
 
@@ -101,9 +114,38 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 ### Configure a Client Options object
 
+For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/documentation/core-features/authentication/#selecting-auth).
+
+Authenticating using [basic authentication/ API key](https://ably.com/documentation/core-features/authentication/#basic-authentication) (for running example app/ test apps and not for production)
+
 ```dart
-final clientOptions = ably.ClientOptions.fromKey("<YOUR APP KEY>");
+// Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
+final String ablyApiKey = const String.fromEnvironment("ABLY_API_KEY");
+final clientOptions = ably.ClientOptions.fromKey(ablyApiKey);
 clientOptions.logLevel = ably.LogLevel.verbose;  // optional
+```
+
+Authenticating using [token authentication](https://ably.com/documentation/core-features/authentication/#token-authentication)
+
+```dart
+// Used to create a clientId when a client first doesn't have one. 
+// Note: you should implement `createTokenRequest`, which makes a request to your server that uses your Ably API key directly.
+final clientOptions = ably.ClientOptions()
+// ..clientId = _clientId // Optionally set the clientId
+  ..autoConnect = false
+  ..authCallback = (TokenParams tokenParams) async {
+    try {
+      // If a clientId was set in ClientOptions, it will be available in Ably.TokenParams.
+      final tokenRequestMap =
+      await createTokenRequest(tokenParams: tokenParams);
+      return ably.TokenRequest.fromMap(tokenRequestMap);
+    } catch (e) {
+      print("Something went wrong in the authCallback:");
+      print(e);
+    }
+  };
+this._ablyClient = new ably.Realtime(options: clientOptions);
+await this._ablyClient.connect();
 ```
 
 ### Using the REST API
@@ -475,9 +517,30 @@ channel
 );
 ```
 
-### Enabling Push Notifications
-- TODO add instructions for Android and iOS platform side
-- TODO add example code usage
+### Symmetric Encryption
+
+When a key is provided to the library, the `data` attribute of all messages is encrypted and decrypted automatically using that key. The secret key is never transmitted to Ably. See https://www.ably.com/documentation/realtime/encryption.
+
+1. Create a key by calling `ably.Crypto.generateRandomKey()` (or retrieve one from your server using your own secure API). The same key needs to be used to encrypt and decrypt the messages.
+2. Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);` - the key can be a Base64-encoded `String`, or a `Uint8List`
+3. Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`. Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.
+4. Set these options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
+5. Use your channel as normal, such as by publishing messages or subscribing for messages.
+
+Overall, it would like this:
+```dart
+final key = ...; // from your server, from password or create random
+final cipherParams = ably.Crypto.getDefaultParams(key: key);
+final channelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
+final channel = realtime.channels.get("your channel name");
+await channel.setOptions(channelOptions);
+```
+
+Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messaging_service.dart) for an example of how to implement end-to-end encrypted messages over Ably. There are several options to choose from when you have decided to your encrypt your messages.
+
+### Push Notifications
+
+See [PushNotifications.md](PushNotifications.md) for detailed information on using PN with this plugin.
 
 ## Caveats
 

@@ -15,7 +15,6 @@ Stream<int> emitter(int id, Injector injector) async* {
 
 class MockEmitter {
   MockEmitter(this.streamsCount, this.injectables) {
-    streams = [];
     for (var i = 0; i < streamsCount; i++) {
       streams.add(emitter(i, injector));
       indexes[i] = 0;
@@ -25,7 +24,7 @@ class MockEmitter {
   int streamsCount;
   Map<int, int> indexes = {};
   List<int> injectables;
-  late List<Stream<int>> streams;
+  final streams = <Stream<int>>[];
 
   int emitCount = 0;
 

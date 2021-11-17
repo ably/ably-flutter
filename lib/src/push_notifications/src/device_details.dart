@@ -11,12 +11,12 @@ class DeviceDetails {
   /// Generated locally if not available
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD2
-  String id;
+  String? id;
 
   /// populated for device registrations associated with a clientId (optional)
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD3
-  String clientId;
+  String? clientId;
 
   /// The device platform.
   ///
@@ -34,14 +34,11 @@ class DeviceDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD5
   Map<String, String> metadata;
 
-  /// Device token. Generated locally, if not available.
-  String deviceSecret;
-
   /// Details of the push registration for this device.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD7
   DevicePushDetails push;
 
   DeviceDetails(this.id, this.clientId, this.platform, this.formFactor,
-      this.metadata, this.deviceSecret, this.push);
+      this.metadata, this.push);
 }
