@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../push_notifications/push_notification_handlers.dart';
-import '../text_with_label.dart';
+import '../text_row.dart';
 
 class PushNotificationsReceivedSliver extends StatelessWidget {
   const PushNotificationsReceivedSliver();
@@ -47,11 +47,11 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextWithLabel('Notification Title',
+                                    TextRow('Notification Title',
                                         e.notification?.title ?? 'NO TITLE'),
-                                    TextWithLabel('Notification Body',
+                                    TextRow('Notification Body',
                                         e.notification?.body ?? 'NO BODY'),
-                                    TextWithLabel('Data', e.data.toString()),
+                                    TextRow('Data', e.data.toString()),
                                   ],
                                 ),
                               ))
