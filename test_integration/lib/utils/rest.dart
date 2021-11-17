@@ -1,7 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
-
-import 'data.dart';
-import 'encoders.dart';
+import 'package:ably_flutter_integration_test/utils/data.dart';
+import 'package:ably_flutter_integration_test/utils/encoders.dart';
 
 Future<void> publishMessages(RestChannel channel) async {
   for (final data in messagesToPublish) {

@@ -35,7 +35,7 @@ static const FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin,
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
-static const FlutterHandler _register = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _resetAblyClients = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     [plugin registerWithCompletionHandler:result];
 };
 
@@ -592,7 +592,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     _handlers = @{
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
         AblyPlatformMethod_getVersion: _getVersion,
-        AblyPlatformMethod_registerAbly: _register,
+        AblyPlatformMethod_resetAblyClients: _resetAblyClients,
         AblyPlatformMethod_createRestWithOptions: _createRestWithOptions,
         AblyPlatformMethod_setRestChannelOptions: _setRestChannelOptions,
         AblyPlatformMethod_publish: _publishRestMessage,

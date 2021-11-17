@@ -1,4 +1,4 @@
-import 'stats_message_count.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// MessageTypes contains a breakdown of summary stats data
 /// for different (message vs presence) message types

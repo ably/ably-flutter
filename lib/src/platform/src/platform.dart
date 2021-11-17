@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter/src/platform/src/background_android_isolate_platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
@@ -21,27 +18,29 @@ class Platform {
   static final StreamsChannel streamsChannel =
       StreamsChannel('io.ably.flutter.stream', codec);
 
-  /// Initializing ably on platform side by invoking `register` platform method.
-  /// Register will clear any stale instances on platform.
-  static Future? _initializer;
+  /// This field will reset to true when the state is reset. This allows us to
+  /// if an app has been restarted, or a hot restart (not hot reload) has
+  /// happened.
+  static bool _shouldResetAblyClients = true;
 
-  static Future _initialize() async {
-    if (_initializer == null) {
+  /// Clears instances on the Platform side
+  static Future<void> _resetOldAblyClients() async {
+    if (_shouldResetAblyClients) {
       AblyMethodCallHandler(methodChannel);
-      _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
       BackgroundIsolateAndroidPlatform();
+      await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
+      _shouldResetAblyClients = false;
     }
-    return _initializer;
   }
 
   /// invokes a platform [method] with [arguments]
   ///
-  /// calls an [_initialize] method before invoking any method to handle any
+  /// calls [_resetOldAblyClients] before invoking any method to handle any
   /// cleanup tasks that are especially required while performing hot-restart
-  /// (as hot-restart is known to not clear any objects on platform side)
+  /// (as hot-restart does not automatically reset platform instances)
   static Future<T?> invokePlatformMethod<T>(String method,
       [Object? arguments]) async {
-    await _initialize();
+    await _resetOldAblyClients();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);
     } on PlatformException catch (pe) {
@@ -53,26 +52,15 @@ class Platform {
     }
   }
 
-  /**
-   * Call a platform method which always provides a result.
-   */
+  /// Call a platform method which always provides a result.
   static Future<T> invokePlatformMethodNonNull<T>(String method,
       [Object? arguments]) async {
-    await _initialize();
-    try {
-      final result = await methodChannel.invokeMethod<T>(method, arguments);
-      if (result == null) {
-        throw AblyException('invokePlatformMethodNonNull("$method") platform '
-            'method unexpectedly returned a null value.');
-      } else {
-        return result;
-      }
-    } on PlatformException catch (pe) {
-      if (pe.details is ErrorInfo) {
-        throw AblyException.fromPlatformException(pe);
-      } else {
-        rethrow;
-      }
+    final result = await invokePlatformMethod<T>(method, arguments);
+    if (result == null) {
+      throw AblyException('invokePlatformMethodNonNull("$method") platform '
+          'method unexpectedly returned a null value.');
+    } else {
+      return result;
     }
   }
 }

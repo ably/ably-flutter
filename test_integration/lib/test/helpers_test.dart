@@ -1,4 +1,4 @@
-import '../factory/reporter.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
 
 Future<Map<String, dynamic>> testHelperUnhandledException({
   required Reporter reporter,

@@ -1,19 +1,18 @@
-import '../../common/common.dart';
-import '../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Manage push notification channel subscriptions for devices or clients
 abstract class PushChannelSubscriptions {
   /// List channel subscriptions filtered by optional params.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
-  Future<PaginatedResultInterface<PushChannelSubscription>> list(
+  Future<PaginatedResult<PushChannelSubscription>> list(
     PushChannelSubscriptionParams params,
   );
 
   /// List channels with at least one subscribed device.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
-  Future<PaginatedResultInterface<String>> listChannels(
+  Future<PaginatedResult<String>> listChannels(
     PushChannelsParams params,
   );
 

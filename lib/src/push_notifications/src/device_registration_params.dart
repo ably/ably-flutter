@@ -1,5 +1,4 @@
-import '../push_notifications.dart';
-import 'device_push_state.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Params to filter push device registrations.
 ///

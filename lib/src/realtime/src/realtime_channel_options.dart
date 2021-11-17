@@ -1,13 +1,11 @@
-import '../../../ably_flutter.dart';
-import '../../crypto/crypto.dart';
-import '../../rest/rest.dart';
-import '../realtime.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Configuration options for a [RealtimeChannel]
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
 class RealtimeChannelOptions extends RestChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
+  @override
   final CipherParams? cipherParams;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2c

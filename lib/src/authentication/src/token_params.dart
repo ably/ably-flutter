@@ -1,4 +1,4 @@
-import '../authentication.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A class providing parameters of a token request.
 ///
