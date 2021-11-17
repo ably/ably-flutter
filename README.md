@@ -136,9 +136,9 @@ final clientOptions = ably.ClientOptions()
   // If a clientId was set in ClientOptions, it will be available in ably.TokenParams.
   ..authCallback = (ably.TokenParams tokenParams) async {
     try {
-      // Send the  map (Map<String, dynamic>) to your server, using it to create a TokenRequest.
-      final Map<String, dynamic> tokenParamsMap = tokenParams.toMap();
-      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(tokenParamsMap); 
+      // Send the tokenParamsMap (Map<String, dynamic>) to your server, using it to create a TokenRequest.
+      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(
+              tokenParams.toMap());
       return ably.TokenRequest.fromMap(tokenRequestMap);
     } catch (e) {
       print("Something went wrong in the authCallback: ${e}");
@@ -147,6 +147,31 @@ final clientOptions = ably.ClientOptions()
   };
 this._ablyClient = new ably.Realtime(options: clientOptions);
 await this._ablyClient.connect();
+```
+
+An example of `createTokenRequest`'s implementation making a network request to your server could be:
+```dart
+  Future<Map<String, dynamic>> createTokenRequest(
+      Map<String, dynamic> tokenParamsMap) async {
+    var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
+    // For debugging:
+    bool runningServerLocally = true;
+    if (runningServerLocally) {
+      if (Platform.isAndroid) {
+        // Connect Android device to local server
+        url = Uri.parse(
+            'http://localhost:6001/api/v1/createTokenRequest');
+      } else if (Platform.isIOS) {
+        // Connect iOS device to local server
+        const localDeviceIPAddress = '192.168.1.9';
+        url = Uri.parse(
+            'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
+      }
+    }
+
+    final response = await http.post(url, body: tokenParamsMap);
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
 ```
 
 ### Using the REST API
