@@ -1,9 +1,8 @@
+import 'package:ably_flutter_example/constants.dart';
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/bool_stream_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../constants.dart';
-import '../../push_notifications/push_notification_service.dart';
-import '../bool_stream_button.dart';
 
 class PushNotificationsPublishingSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;

@@ -20,10 +20,9 @@
 
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import '../../error/error.dart';
 
 /// Manages multiple event listeners which would otherwise require verbose code
 /// on platform side

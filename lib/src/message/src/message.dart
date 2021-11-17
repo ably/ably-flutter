@@ -1,7 +1,5 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
-
-import '../../rest/rest.dart';
-import '../message.dart';
 
 /// An individual message to be sent/received by Ably
 ///

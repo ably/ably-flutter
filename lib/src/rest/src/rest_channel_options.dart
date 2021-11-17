@@ -1,5 +1,4 @@
-import '../../../ably_flutter.dart';
-import '../../crypto/crypto.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Configuration options for a [RestChannel]
 ///

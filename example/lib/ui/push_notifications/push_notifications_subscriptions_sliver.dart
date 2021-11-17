@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/bool_stream_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import '../bool_stream_button.dart';
 
 class PushNotificationsSubscriptionsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -15,15 +14,13 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
       : super(key: key);
 
   Widget buildSubscriptionsList(
-          Stream<ably.PaginatedResultInterface<ably.PushChannelSubscription>>
-              stream) =>
-      StreamBuilder<
-              ably.PaginatedResultInterface<ably.PushChannelSubscription>>(
+          Stream<ably.PaginatedResult<ably.PushChannelSubscription>> stream) =>
+      StreamBuilder<ably.PaginatedResult<ably.PushChannelSubscription>>(
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final subscriptions = snapshot.data as ably
-                  .PaginatedResultInterface<ably.PushChannelSubscription>;
+              final subscriptions = snapshot.data
+                  as ably.PaginatedResult<ably.PushChannelSubscription>;
 
               if (subscriptions.items.isEmpty) {
                 return const Text('No subscriptions');

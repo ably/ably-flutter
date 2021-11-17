@@ -13,7 +13,7 @@ class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
   final bool isIOSSimulator;
 
-  PushNotificationsSliver(this._pushNotificationService,
+  const PushNotificationsSliver(this._pushNotificationService,
       {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
@@ -76,7 +76,7 @@ class PushNotificationsSliver extends StatelessWidget {
               'subscribe to a push channel with either your device or '
               'client ID, and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       );
 }

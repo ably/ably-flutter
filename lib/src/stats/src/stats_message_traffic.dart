@@ -1,4 +1,4 @@
-import 'stats_message_types.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// MessageTraffic contains a breakdown of summary stats data
 /// for traffic over various transport types
