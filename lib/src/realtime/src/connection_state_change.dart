@@ -1,7 +1,4 @@
-import '../../error/error.dart';
-import '../../platform/platform.dart';
-import 'connection_event.dart';
-import 'connection_state.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Whenever the connection state changes,
 /// a ConnectionStateChange object is emitted on the [Connection] object

@@ -1,14 +1,11 @@
-import 'package:ably_flutter/src/platform/src/rest/rest_channel.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../rest/rest.dart';
-import '../../platform.dart';
-import '../paginated_result.dart';
-import 'rest.dart';
-
-/// Plugin based implementation of [RestPresenceInterface]
-class RestPresence extends PlatformObject implements RestPresenceInterface {
+/// Presence object on a [RestChannel] helps to query Presence members
+/// and presence history
+///
+/// https://docs.ably.com/client-lib-development-guide/features/#RSP1
+class RestPresence extends PlatformObject {
   final RestChannel _restChannel;
 
   /// instantiates with a channel
@@ -17,7 +14,9 @@ class RestPresence extends PlatformObject implements RestPresenceInterface {
   @override
   Future<int> createPlatformInstance() => (_restChannel.rest as Rest).handle;
 
-  @override
+  /// Obtain the set of members currently present for a channel.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
   ]) async {
@@ -33,7 +32,9 @@ class RestPresence extends PlatformObject implements RestPresenceInterface {
     );
   }
 
-  @override
+  /// Return the presence messages history for the channel.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSP4
   Future<PaginatedResult<PresenceMessage>> history([
     RestHistoryParams? params,
   ]) async {

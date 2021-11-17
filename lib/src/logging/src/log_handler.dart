@@ -1,4 +1,4 @@
-import '../../error/src/ably_exception.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Custom handler to handle SDK log messages
 ///

@@ -8,9 +8,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../encrypted_messaging_service.dart';
 
 class MessageEncryptionSliver extends HookWidget {
-  EncryptedMessagingService? encryptedMessagingService;
+  final EncryptedMessagingService encryptedMessagingService;
 
-  MessageEncryptionSliver(this.encryptedMessagingService, {Key? key})
+  const MessageEncryptionSliver(this.encryptedMessagingService, {Key? key})
       : super(key: key);
 
   @override

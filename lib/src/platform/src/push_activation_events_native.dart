@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import '../../error/src/error_info.dart';
-import '../../push_notifications/push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 class PushActivationEventsNative extends PushActivationEvents {
   StreamController<ErrorInfo?> onActivateStreamController = StreamController();
