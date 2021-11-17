@@ -1,6 +1,4 @@
-import '../push_notifications.dart';
-import 'device_push_details.dart';
-import 'form_factor.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Details of a registered device.
 ///

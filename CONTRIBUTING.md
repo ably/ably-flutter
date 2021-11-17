@@ -19,13 +19,6 @@ If using Android Studio, delete the `.packages` file. It is a deprecated autogen
 
 ## Implementation Notes
 
-### Interfaces
-
-The `Realtime` 'interface' is an [abstract class](https://dart.dev/guides/language/language-tour#abstract-classes)
-which seems to be the correct way to do this in Dart - every class has an
-['implicit interface'](https://dart.dev/guides/language/language-tour#implicit-interfaces) and then you make the
-class abstract to present it as a more traditional interface as understood by the perhaps a Java programmer.
-
 ### Exceptions and Errors
 
 Dart libraries don't _extend_ the [Exception class](https://api.dart.dev/stable/2.4.0/dart-core/Exception-class.html),

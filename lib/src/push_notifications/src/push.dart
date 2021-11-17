@@ -1,7 +1,5 @@
-import '../../platform/platform_internal.dart';
-import '../push_notifications.dart';
-import 'ios_notification_settings.dart';
-import 'push_activation_events.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Class providing push notification functionality
 ///

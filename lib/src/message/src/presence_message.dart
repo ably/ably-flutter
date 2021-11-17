@@ -1,9 +1,5 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
-
-import '../../rest/rest.dart';
-import 'message_data.dart';
-import 'message_extras.dart';
-import 'presence_action.dart';
 
 /// An individual presence message sent or received via realtime
 ///

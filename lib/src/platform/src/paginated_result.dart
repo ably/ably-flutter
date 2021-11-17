@@ -1,14 +1,12 @@
-import '../../common/common.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// PaginatedResult [TG1](https://docs.ably.com/client-lib-development-guide/features/#TG1)
 ///
 /// A type that represents page results from a paginated query.
 /// The response is accompanied by metadata that indicates the
 /// relative queries available.
-class PaginatedResult<T> extends PlatformObject
-    implements PaginatedResultInterface<T> {
+class PaginatedResult<T> extends PlatformObject {
   /// stores page handle created by platform APIs
   ///
   /// handle is updated after creating an instance as they are received
@@ -22,7 +20,9 @@ class PaginatedResult<T> extends PlatformObject
 
   late final List<T> _items;
 
-  /// items return page of results
+  /// items contain page of results
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TG3
   @override
   List<T> get items => _items;
 
@@ -48,7 +48,10 @@ class PaginatedResult<T> extends PlatformObject
   @override
   Future<int?> createPlatformInstance() async => _pageHandle;
 
-  @override
+  /// returns a new PaginatedResult loaded with the next page of results.
+  ///
+  /// If there are no further pages, then null is returned.
+  /// https://docs.ably.com/client-lib-development-guide/features/#TG4
   Future<PaginatedResult<T>> next() async {
     final message = await invokeRequest<AblyMessage>(PlatformMethod.nextPage);
     return PaginatedResult<T>.fromAblyMessage(
@@ -56,7 +59,10 @@ class PaginatedResult<T> extends PlatformObject
     );
   }
 
-  @override
+  /// returns a new PaginatedResult with the first page of results
+  ///
+  /// If there are no further pages, then null is returned.
+  /// https://docs.ably.com/client-lib-development-guide/features/#TG5
   Future<PaginatedResult<T>> first() async {
     final message = await invokeRequest<AblyMessage>(PlatformMethod.firstPage);
     return PaginatedResult<T>.fromAblyMessage(
@@ -64,9 +70,13 @@ class PaginatedResult<T> extends PlatformObject
     );
   }
 
-  @override
+  /// returns true if there are further pages
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TG6
   bool hasNext() => _hasNext;
 
-  @override
+  /// returns true if this page is the last page
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TG7
   bool isLast() => !_hasNext;
 }

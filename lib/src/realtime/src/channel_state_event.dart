@@ -1,7 +1,4 @@
-import '../../error/src/error_info.dart';
-
-import 'channel_event.dart';
-import 'channel_state.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Whenever the channel state changes, a ChannelStateChange object
 /// is emitted on the Channel object

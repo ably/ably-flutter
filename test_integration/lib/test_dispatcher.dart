@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:ably_flutter_integration_test/config/test_factory.dart';
+import 'package:ably_flutter_integration_test/driver_data_handler.dart';
+import 'package:ably_flutter_integration_test/factory/error_handler.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'config/test_factory.dart';
-import 'driver_data_handler.dart';
-import 'factory/error_handler.dart';
-import 'factory/reporter.dart';
 
 enum _TestStatus { success, error, progress }
 

@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter/src/platform/src/background_android_isolate_platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
