@@ -1,14 +1,14 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/constants.dart';
-import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../encrypted_messaging_service.dart';
+import '../text_row.dart';
 
 class MessageEncryptionSliver extends HookWidget {
-  final EncryptedMessagingService encryptedMessagingService;
+  final EncryptedMessagingService? encryptedMessagingService;
 
   const MessageEncryptionSliver(this.encryptedMessagingService, {Key? key})
       : super(key: key);
@@ -90,12 +90,12 @@ class MessageEncryptionSliver extends HookWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextWithLabel(
+                                TextRow(
                                     'Name',
                                     (message.name != null)
                                         ? message.name.toString()
                                         : 'NO NAME'),
-                                TextWithLabel(
+                                TextRow(
                                     'Data',
                                     (message.data != null)
                                         ? message.data.toString()
@@ -117,7 +117,7 @@ class MessageEncryptionSliver extends HookWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: TextWithLabel(
+          child: TextRow(
             'Hint',
             'You can confirm messages are encrypted by visiting your '
                 'application dashboard on ably.com > "Dev console" tab > '
