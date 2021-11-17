@@ -136,9 +136,9 @@ final clientOptions = ably.ClientOptions()
   // If a clientId was set in ClientOptions, it will be available in ably.TokenParams.
   ..authCallback = (ably.TokenParams tokenParams) async {
     try {
-      // Send the tokenParams (Map<String, dynamic>) to your server, using it to create a TokenRequest.
-      final tokenRequestMap = await createTokenRequest(tokenParams.toMap()); 
-      // Deserialize the TokenRequest JSON into a TokenRequest
+      // Send the  map (Map<String, dynamic>) to your server, using it to create a TokenRequest.
+      final Map<String, dynamic> tokenParamsMap = tokenParams.toMap();
+      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(tokenParamsMap); 
       return ably.TokenRequest.fromMap(tokenRequestMap);
     } catch (e) {
       print("Something went wrong in the authCallback: ${e}");
