@@ -75,6 +75,9 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         PushMessagingEventHandlers.reset(applicationContext, methodChannel);
     }
 
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {}
+
     private static MethodCodec createCodec(CipherParamsStorage cipherParamsStorage) {
         return new StandardMethodCodec(new AblyMessageCodec(cipherParamsStorage));
     }
