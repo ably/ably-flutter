@@ -148,37 +148,15 @@ class _MyAppState extends State<MyApp> {
         print('Custom logger :: $msg $exception');
       };
 
-    ably.Rest rest;
     try {
-      rest = ably.Rest(options: clientOptions);
+      _rest = ably.Rest(options: clientOptions);
+      await encryptedMessagingService!.setRestClient(_rest!);
+      _pushNotificationService.setRestClient(_rest!);
+      setState(() {});
     } on Exception catch (error) {
       print('Error creating Ably Rest: $error');
       rethrow;
     }
-    await encryptedMessagingService!.setRest(rest);
-    _pushNotificationService.setRestClient(rest);
-
-    setState(() {
-      _rest = rest;
-    });
-
-    const name = 'Hello';
-    const dynamic data = 'Flutter';
-    print('publishing messages... name "$name", message "$data"');
-    try {
-      await Future.wait([
-        rest.channels.get(defaultChannel).publish(name: name, data: data),
-        rest.channels.get(defaultChannel).publish(name: name)
-      ]);
-      await rest.channels.get(defaultChannel).publish(data: data);
-      await rest.channels.get(defaultChannel).publish();
-      print('Messages published');
-    } on ably.AblyException catch (e) {
-      print(e.errorInfo);
-    }
-    // set state here as handle will have been acquired before calling
-    // publish on channels above...
-    setState(() {});
   }
 
   void createAblyRealtime() {

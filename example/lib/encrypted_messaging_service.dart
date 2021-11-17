@@ -40,7 +40,7 @@ class EncryptedMessagingService {
     messageHistoryBehaviorSubject.add([]);
   }
 
-  Future<void> setRest(ably.Rest rest) async {
+  Future<void> setRestClient(ably.Rest rest) async {
     _rest = rest;
     _restChannel = _rest!.channels.get(Constants.encryptedChannelName);
     final cipherParams = ably.Crypto.getDefaultParams(key: keyFromPassword);
