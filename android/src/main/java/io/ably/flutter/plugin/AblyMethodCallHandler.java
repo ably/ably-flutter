@@ -42,8 +42,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static final String TAG = PushMessagingEventHandlers.class.getName();;
-  private Context applicationContext;
+  private static final String TAG = PushMessagingEventHandlers.class.getName();
 
   public interface ResetAblyClientsCallback {
     void on();
@@ -60,7 +59,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                                final ResetAblyClientsCallback resetAblyClientsCallback,
                                final Context applicationContext) {
     this.channel = channel;
-    this.applicationContext = applicationContext;
     this.resetAblyClientsCallback = resetAblyClientsCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
@@ -504,14 +502,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void connectRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-    // Using Number (the superclass of both Long and Integer) because Flutter could send us
-    // either depending on how big the value is.
-    // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
-    this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
-      ablyLibrary.getRealtime(realtimeHandle.longValue()).connect();
-      result.success(null);
-    });
+    if (call.arguments instanceof Integer) {
+      final Integer realtimeHandle = (Integer) call.arguments;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    } else {
+      // Using Number (the superclass of both Long and Integer) because Flutter could send us
+      // either depending on how big the value is.
+      // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+      final AblyFlutterMessage<Integer> message = (AblyFlutterMessage<Integer>) call.arguments;
+      final Integer realtimeHandle = message.message;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    }
+    result.success(null);
   }
 
   private void attachRealtimeChannel(

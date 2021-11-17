@@ -20,9 +20,6 @@ class Connection extends PlatformObject {
       : _state = ConnectionState.initialized,
         super() {
     on().listen((event) {
-      if (event.reason?.code == ErrorCodes.authCallbackFailure) {
-        realtime.awaitAuthUpdateAndReconnect();
-      }
       _state = event.current;
     });
   }
