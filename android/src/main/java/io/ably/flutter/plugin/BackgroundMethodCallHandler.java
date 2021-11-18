@@ -15,8 +15,7 @@ import io.flutter.plugin.common.MethodCodec;
  * Receives method calls on the background method channel from the Dart side's
  * BackgroundIsolateAndroidPlatform to avoid exceptions being thrown in the case
  * where an Isolate doesn't need to be manually launched (App is already running),
- * so `pushBackgroundFlutterApplicationReadyOnAndroid` platform method call doesn't
- * need to be called.
+ * so `pushBackgroundFlutterApplicationReadyOnAndroid` platform method call doesn't need to be called.
  */
 public class BackgroundMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static final String TAG = AblyFlutterPlugin.class.getName();
