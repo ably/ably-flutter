@@ -166,7 +166,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 10s
   /// https://docs.ably.com/client-lib-development-guide/features/#DF1b
-  int? realtimeRequestTimeout;
+  int realtimeRequestTimeout = 10;
 
   /// After a failed request to the default endpoint,
   /// followed by a successful request to a fallback endpoint,

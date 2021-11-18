@@ -535,7 +535,7 @@ class Codec extends StandardMessageCodec {
       jsonMap,
       TxClientOptions.defaultTokenParams,
     ));
-    return ClientOptions()
+    final clientOptions = ClientOptions()
       // AuthOptions (super class of ClientOptions)
       ..authUrl = _readFromJson<String>(
         jsonMap,
@@ -611,8 +611,6 @@ class Codec extends StandardMessageCodec {
       ..httpOpenTimeout = jsonMap[TxClientOptions.httpOpenTimeout] as int
       ..httpRequestTimeout = jsonMap[TxClientOptions.httpRequestTimeout] as int
       ..httpMaxRetryCount = jsonMap[TxClientOptions.httpMaxRetryCount] as int
-      ..realtimeRequestTimeout =
-          jsonMap[TxClientOptions.realtimeRequestTimeout] as int
       ..fallbackHosts = _readFromJson<List<String>>(
         jsonMap,
         TxClientOptions.fallbackHosts,
@@ -631,6 +629,12 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.transportParams,
       );
+
+    if (jsonMap[TxClientOptions.realtimeRequestTimeout] != null) {
+      clientOptions.realtimeRequestTimeout =
+          jsonMap[TxClientOptions.realtimeRequestTimeout] as int;
+    }
+    return clientOptions;
   }
 
   /// Decodes value [jsonMap] to [TokenDetails]
