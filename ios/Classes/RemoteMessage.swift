@@ -20,20 +20,3 @@ public class RemoteMessage: NSObject {
         return RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: notification);
     }
 }
-
-class Notification: NSObject {
-    @objc
-    var title: String?;
-    @objc
-    var body: String?;
-    
-    init(title: String, body: String) {
-        self.title = title;
-        self.body = body;
-    }
-    
-    override init() {
-        self.title = nil;
-        self.body = nil;
-    }
-}
