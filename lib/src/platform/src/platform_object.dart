@@ -21,7 +21,7 @@ abstract class PlatformObject {
   }
 
   @override
-  String toString() => 'Ably Platform Object $_handleValue';
+  String toString() => 'Ably Flutter PlatformObject with handle: $_handleValue';
 
   /// creates an instance of this object on platform side
   Future<int?> createPlatformInstance();
