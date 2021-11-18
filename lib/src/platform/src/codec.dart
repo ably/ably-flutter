@@ -621,10 +621,12 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.fallbackHostsUseDefault,
       )
-      ..fallbackRetryTimeout = jsonMap[TxClientOptions.fallbackRetryTimeout] as int
+      ..fallbackRetryTimeout =
+          jsonMap[TxClientOptions.fallbackRetryTimeout] as int
       ..defaultTokenParams =
           (tokenParams == null) ? null : _decodeTokenParams(tokenParams)
-      ..channelRetryTimeout = jsonMap[TxClientOptions.channelRetryTimeout] as int
+      ..channelRetryTimeout =
+          jsonMap[TxClientOptions.channelRetryTimeout] as int
       ..transportParams = _readFromJson<Map<String, String>>(
         jsonMap,
         TxClientOptions.transportParams,
