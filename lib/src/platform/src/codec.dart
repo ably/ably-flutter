@@ -573,15 +573,9 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.clientId,
       )
-      ..logLevel = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.logLevel,
-      )
+      ..logLevel = jsonMap[TxClientOptions.logLevel] as int
       //TODO handle logHandler
-      ..tls = _readFromJson<bool>(
-        jsonMap,
-        TxClientOptions.tls,
-      )
+      ..tls = jsonMap[TxClientOptions.tls] as bool
       ..restHost = _readFromJson<String>(
         jsonMap,
         TxClientOptions.restHost,
@@ -598,22 +592,10 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.tlsPort,
       )
-      ..autoConnect = _readFromJson<bool>(
-        jsonMap,
-        TxClientOptions.autoConnect,
-      )
-      ..useBinaryProtocol = _readFromJson<bool>(
-        jsonMap,
-        TxClientOptions.useBinaryProtocol,
-      )
-      ..queueMessages = _readFromJson<bool>(
-        jsonMap,
-        TxClientOptions.queueMessages,
-      )
-      ..echoMessages = _readFromJson<bool>(
-        jsonMap,
-        TxClientOptions.echoMessages,
-      )
+      ..autoConnect = jsonMap[TxClientOptions.autoConnect] as bool
+      ..useBinaryProtocol = jsonMap[TxClientOptions.useBinaryProtocol] as bool
+      ..queueMessages = jsonMap[TxClientOptions.queueMessages] as bool
+      ..echoMessages = jsonMap[TxClientOptions.echoMessages] as bool
       ..recover = _readFromJson<String>(
         jsonMap,
         TxClientOptions.recover,
@@ -626,22 +608,11 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.idempotentRestPublishing,
       )
-      ..httpOpenTimeout = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.httpOpenTimeout,
-      )
-      ..httpRequestTimeout = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.httpRequestTimeout,
-      )
-      ..httpMaxRetryCount = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.httpMaxRetryCount,
-      )
-      ..realtimeRequestTimeout = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.realtimeRequestTimeout,
-      )
+      ..httpOpenTimeout = jsonMap[TxClientOptions.httpOpenTimeout] as int
+      ..httpRequestTimeout = jsonMap[TxClientOptions.httpRequestTimeout] as int
+      ..httpMaxRetryCount = jsonMap[TxClientOptions.httpMaxRetryCount] as int
+      ..realtimeRequestTimeout =
+          jsonMap[TxClientOptions.realtimeRequestTimeout] as int
       ..fallbackHosts = _readFromJson<List<String>>(
         jsonMap,
         TxClientOptions.fallbackHosts,
@@ -650,16 +621,10 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.fallbackHostsUseDefault,
       )
-      ..fallbackRetryTimeout = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.fallbackRetryTimeout,
-      )
+      ..fallbackRetryTimeout = jsonMap[TxClientOptions.fallbackRetryTimeout] as int
       ..defaultTokenParams =
           (tokenParams == null) ? null : _decodeTokenParams(tokenParams)
-      ..channelRetryTimeout = _readFromJson<int>(
-        jsonMap,
-        TxClientOptions.channelRetryTimeout,
-      )
+      ..channelRetryTimeout = jsonMap[TxClientOptions.channelRetryTimeout] as int
       ..transportParams = _readFromJson<Map<String, String>>(
         jsonMap,
         TxClientOptions.transportParams,
