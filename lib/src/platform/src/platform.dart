@@ -33,12 +33,11 @@ class Platform {
   /// instance of method channel to listen to android/ios events
   late final StreamsChannel? _streamsChannel;
 
-  Future<T?> invokePlatformMethod<T>(String method,
-          [Object? arguments]) async {
+  Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
     try {
-    return await _methodChannel!.invokeMethod<T>(method, arguments);
+      return await _methodChannel!.invokeMethod<T>(method, arguments);
     } on PlatformException catch (platformException) {
-    // Convert some PlatformExceptions into AblyException
+      // Convert some PlatformExceptions into AblyException
       if (platformException.details is ErrorInfo) {
         throw AblyException.fromPlatformException(platformException);
       } else {
