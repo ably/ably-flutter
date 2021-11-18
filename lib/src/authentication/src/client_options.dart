@@ -4,7 +4,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 class ClientOptions extends AuthOptions {
-  /// initializes [ClientOptions] with log level set to info
+  /// Set fields on [ClientOptions] to configure it.
   ClientOptions();
 
   /// initializes [ClientOptions] with a key and log level set to info
