@@ -5,18 +5,25 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
 class Platform {
-  Platform._internal() {
-    methodChannel = MethodChannel('io.ably.flutter.plugin', _codec);
+  Platform._internal({MethodChannel? methodChannel,
+    AblyMethodCallHandler? ablyMethodCallHandler}) {
+    _methodChannel = methodChannel;
+    if (methodChannel == null) {
+      _methodChannel = MethodChannel('io.ably.flutter.plugin', _codec);
+    }
     _streamsChannel = StreamsChannel('io.ably.flutter.stream', _codec);
-    AblyMethodCallHandler(methodChannel);
+    if (ablyMethodCallHandler == null) {
+      AblyMethodCallHandler(_methodChannel!);
+    }
     BackgroundIsolateAndroidPlatform().setupCallHandler();
     invokePlatformMethod(PlatformMethod.resetAblyClients);
   }
 
-  static final Platform _platform = Platform._internal();
+  static Platform? _platform;
 
   /// Singleton instance of Platform
-  factory Platform() => _platform;
+  factory Platform({MethodChannel? methodChannel}) =>
+      _platform ??= Platform._internal(methodChannel: methodChannel);
 
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
   /// exchanging Ably types with platform via platform channels
@@ -24,14 +31,14 @@ class Platform {
   final StandardMethodCodec _codec = StandardMethodCodec(Codec());
 
   /// instance of method channel to interact with android/ios code
-  late final MethodChannel methodChannel;
+  MethodChannel? _methodChannel;
 
   /// instance of method channel to listen to android/ios events
-  late final StreamsChannel _streamsChannel;
+  late final StreamsChannel? _streamsChannel;
 
   Future<T?> invokePlatformMethod<T>(String method,
-          [Object? arguments]) async =>
-      methodChannel.invokeMethod<T>(method, arguments);
+      [Object? arguments]) async =>
+      _methodChannel!.invokeMethod<T>(method, arguments);
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
@@ -46,8 +53,8 @@ class Platform {
   }
 
   Stream<T> receiveBroadcastStream<T>(String methodName, int handle,
-          [final Object? payload]) =>
-      _streamsChannel.receiveBroadcastStream<T>(
+      [final Object? payload]) =>
+      _streamsChannel!.receiveBroadcastStream<T>(
         AblyMessage(
           AblyEventMessage(methodName, payload),
           handle: handle,
