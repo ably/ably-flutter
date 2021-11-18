@@ -2,9 +2,9 @@ import Foundation
 
 class Notification: NSObject {
     @objc
-    var title: String?;
+    let title: String?;
     @objc
-    var body: String?;
+    let body: String?;
     
     init(title: String?, body: String?) {
       self.title = title
