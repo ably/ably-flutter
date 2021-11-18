@@ -73,7 +73,8 @@ abstract class PlatformObject {
     // ignore: close_sinks, will be closed by listener
     final controller = StreamController<T>();
     handle
-        .then((handle) => _platform.receiveBroadcastStream<T>(method, handle))
+        .then((handle) =>
+            _platform.receiveBroadcastStream<T>(method, handle, payload))
         .then(controller.addStream);
     return controller.stream;
   }

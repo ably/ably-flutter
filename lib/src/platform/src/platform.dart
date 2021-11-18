@@ -6,8 +6,11 @@ import 'package:flutter/services.dart';
 
 class Platform {
   Platform._internal() {
+    methodChannel = MethodChannel('io.ably.flutter.plugin', _codec);
+    _streamsChannel = StreamsChannel('io.ably.flutter.stream', _codec);
     AblyMethodCallHandler(methodChannel);
     BackgroundIsolateAndroidPlatform().setupCallHandler();
+    invokePlatformMethod(PlatformMethod.resetAblyClients);
   }
 
   static final Platform _platform = Platform._internal();
@@ -21,40 +24,14 @@ class Platform {
   final StandardMethodCodec _codec = StandardMethodCodec(Codec());
 
   /// instance of method channel to interact with android/ios code
-  late final MethodChannel methodChannel =
-      MethodChannel('io.ably.flutter.plugin', _codec);
+  late final MethodChannel methodChannel;
 
   /// instance of method channel to listen to android/ios events
-  late final StreamsChannel _streamsChannel =
-      StreamsChannel('io.ably.flutter.stream', _codec);
+  late final StreamsChannel _streamsChannel;
 
-  /// This field will reset to true when the state is reset. This allows us to
-  /// if an app has been restarted, or a hot restart (not hot reload) has
-  /// happened.
-  bool _shouldResetAblyClients = true;
-
-  /// Clears instances on the Platform side
-  ///
-  /// Resets Ably clients and sets up
-  Future<void> _resetAblyPlatform() async {
-    await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
-    _shouldResetAblyClients = false;
-  }
-
-  ///
-  Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
-    if (_shouldResetAblyClients) {
-      await _resetAblyPlatform();
-      return methodChannel.invokeMethod<T>(method, arguments);
-    }
-    try {} on PlatformException catch (pe) {
-      if (pe.details is ErrorInfo) {
-        throw AblyException.fromPlatformException(pe);
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<T?> invokePlatformMethod<T>(String method,
+          [Object? arguments]) async =>
+      methodChannel.invokeMethod<T>(method, arguments);
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
