@@ -34,8 +34,18 @@ class Platform {
   late final StreamsChannel? _streamsChannel;
 
   Future<T?> invokePlatformMethod<T>(String method,
-          [Object? arguments]) async =>
-      _methodChannel!.invokeMethod<T>(method, arguments);
+          [Object? arguments]) async {
+    try {
+    return await _methodChannel!.invokeMethod<T>(method, arguments);
+    } on PlatformException catch (platformException) {
+    // Convert some PlatformExceptions into AblyException
+      if (platformException.details is ErrorInfo) {
+        throw AblyException.fromPlatformException(platformException);
+      } else {
+        rethrow;
+      }
+    }
+  }
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
