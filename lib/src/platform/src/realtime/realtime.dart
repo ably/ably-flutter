@@ -37,7 +37,7 @@ class Realtime extends PlatformObject {
     );
     _realtimeInstances[handle] = this;
 
-    if (io.Platform.isAndroid && !options.autoConnect) {
+    if (io.Platform.isAndroid && options.autoConnect) {
       // On Android, clientOptions.autoConnect is set to `false` to prevent
       // the authCallback being called before we get the realtime handle.
       // If this happens, we won't be able to identify which realtime client
