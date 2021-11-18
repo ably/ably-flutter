@@ -20,11 +20,9 @@ class Notification: NSObject {
             } else if let title = aps["alert"] as? String {
                 self.init(title: title, body: nil)
             } else {
-                self.init(title: nil, body: nil)
                 return nil;
             }
         } else {
-            self.init(title: nil, body: nil)
             return nil;
         }
     }
