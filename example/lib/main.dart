@@ -9,6 +9,7 @@ import 'package:ably_flutter_example/push_notifications/push_notification_handle
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 import 'package:ably_flutter_example/ui/message_encryption/message_encryption_sliver.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_sliver.dart';
+import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -648,9 +649,9 @@ class _MyAppState extends State<MyApp> {
                     'System Details',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Text('Running on: $_platformVersion\n'),
-                  Text('Ably version: $_ablyVersion\n'),
-                  Text('Ably Client ID: ${Constants.clientId}\n'),
+                  TextRow('Running on', _platformVersion),
+                  TextRow('Ably version', _ablyVersion),
+                  TextRow('Ably Client ID', Constants.clientId),
                   if (_apiKey == '')
                     RichText(
                       text: const TextSpan(
@@ -674,7 +675,7 @@ class _MyAppState extends State<MyApp> {
                           ]),
                     )
                   else
-                    Text('API key: ${hideApiKeySecret(_apiKey)}'),
+                    TextRow('API key', hideApiKeySecret(_apiKey)),
                   const Divider(),
                   const Text(
                     'Realtime',
