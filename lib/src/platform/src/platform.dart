@@ -26,6 +26,7 @@ class Platform {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
       _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
+      BackgroundIsolateAndroidPlatform();
     }
     return _initializer;
   }

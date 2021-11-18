@@ -3,14 +3,16 @@ import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ac
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_publishing_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_received_sliver.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_subscriptions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_realtime_client_received_sliver.dart';
 import 'package:flutter/material.dart';
 
 class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
   final bool isIOSSimulator;
 
-  const PushNotificationsSliver(this._pushNotificationService,
+  PushNotificationsSliver(this._pushNotificationService,
       {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
@@ -38,28 +40,32 @@ class PushNotificationsSliver extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 16),
-            child: Text(
-              'Push Notifications',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  Widget build(BuildContext context) => Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Text(
+                'Push Notifications',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          buildCreateAblyClientText(),
-          buildSummaryText(),
-          PushNotificationsActivationSliver(
-            _pushNotificationService,
-            isIOSSimulator: isIOSSimulator,
-          ),
-          PushNotificationsDeviceInformation(_pushNotificationService),
-          PushNotificationsIOSNotificationSettingsSliver(
-              _pushNotificationService),
-          PushNotificationsSubscriptionsSliver(_pushNotificationService),
-          PushNotificationsPublishingSliver(_pushNotificationService),
-        ],
+            buildCreateAblyClientText(),
+            buildSummaryText(),
+            PushNotificationsActivationSliver(
+              _pushNotificationService,
+              isIOSSimulator: isIOSSimulator,
+            ),
+            PushNotificationsDeviceInformation(_pushNotificationService),
+            PushNotificationsIOSNotificationSettingsSliver(
+                _pushNotificationService),
+            PushNotificationsSubscriptionsSliver(_pushNotificationService),
+            PushNotificationsPublishingSliver(_pushNotificationService),
+            const PushNotificationsReceivedSliver(),
+            PushRealtimeClientReceivedSliver(_pushNotificationService),
+          ],
+        ),
       );
 
   Widget buildSummaryText() => Column(
