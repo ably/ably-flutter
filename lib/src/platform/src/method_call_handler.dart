@@ -43,7 +43,7 @@ class AblyMethodCallHandler {
     final rest = restInstances[message.handle];
     if (rest == null) {
       throw AblyException('AblyMethodCallHandler#onAuthCallback\'s '
-          'realtime handle is ${message.handle}');
+          'rest handle is ${message.handle}, and rest is $rest');
     }
     return rest.options.authCallback!(tokenParams);
   }
@@ -54,7 +54,7 @@ class AblyMethodCallHandler {
     final realtime = realtimeInstances[message.handle];
     if (realtime == null) {
       throw AblyException('AblyMethodCallHandler#onRealtimeAuthCallback\'s '
-          'realtime handle is ${message.handle}');
+          'realtime handle is ${message.handle}, and realtime is ${realtime}');
     }
     return realtime.options.authCallback!(tokenParams);
   }
