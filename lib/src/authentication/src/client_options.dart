@@ -5,16 +5,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 class ClientOptions extends AuthOptions {
   /// initializes [ClientOptions] with log level set to info
-  ClientOptions() {
-    logLevel = LogLevel.info;
-  }
+  ClientOptions();
 
   /// initializes [ClientOptions] with a key and log level set to info
   ///
   /// See [AuthOptions.fromKey] for more details
-  ClientOptions.fromKey(String key) : super.fromKey(key) {
-    logLevel = LogLevel.info;
-  }
+  ClientOptions.fromKey(String key) : super.fromKey(key);
 
   /// Optional clientId that can be used to specify the identity for this client
   ///
@@ -32,7 +28,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// Use constants from [LogLevel] to pass arguments
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3b
-  int logLevel = LogLevel.warn;
+  int logLevel = LogLevel.info;
 
   /// for development environments only
   ///
