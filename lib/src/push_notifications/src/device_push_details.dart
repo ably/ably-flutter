@@ -1,6 +1,4 @@
-import '../../error/src/error_info.dart';
-
-import 'device_push_state.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Details of the push registration for a given device
 ///

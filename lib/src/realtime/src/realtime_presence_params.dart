@@ -1,4 +1,4 @@
-import '../../platform/platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Params used as a filter for querying presence on a channel
 ///

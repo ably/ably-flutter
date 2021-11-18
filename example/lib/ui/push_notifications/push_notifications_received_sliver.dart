@@ -45,9 +45,9 @@ class PushNotificationsReceivedSliver extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextWithLabel('Title',
+                                    TextRow('Title',
                                         e.notification?.title ?? 'NO TITLE'),
-                                    TextWithLabel('Body',
+                                    TextRow('Body',
                                         e.notification?.body ?? 'NO BODY'),
                                   ],
                                 ),

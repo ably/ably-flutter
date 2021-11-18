@@ -1,22 +1,22 @@
-import '../factory/reporter.dart';
-import '../test/basic_test.dart';
-import '../test/helpers_test.dart';
-import '../test/realtime/realtime_events_test.dart';
-import '../test/realtime/realtime_history_test.dart';
-import '../test/realtime/realtime_presence_enter_update_leave.dart';
-import '../test/realtime/realtime_presence_get.dart';
-import '../test/realtime/realtime_presence_history_test.dart';
-import '../test/realtime/realtime_presence_subscribe.dart';
-import '../test/realtime/realtime_publish_test.dart';
-import '../test/realtime/realtime_publish_with_auth_callback_test.dart';
-import '../test/realtime/realtime_subscribe.dart';
-import '../test/rest/rest_capability_test.dart';
-import '../test/rest/rest_history_test.dart';
-import '../test/rest/rest_presence_get_test.dart';
-import '../test/rest/rest_presence_history_test.dart';
-import '../test/rest/rest_publish_test.dart';
-import '../test/rest/rest_publish_with_auth_callback_test.dart';
-import 'test_names.dart';
+import 'package:ably_flutter_integration_test/config/test_names.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'package:ably_flutter_integration_test/test/basic_test.dart';
+import 'package:ably_flutter_integration_test/test/helpers_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_enter_update_leave.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_get.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_history_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_subscribe.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_with_auth_callback_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_subscribe.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_capability_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_history_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_presence_get_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_presence_history_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_publish_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_publish_with_auth_callback_test.dart';
 
 typedef TestFactory = Future<Map<String, dynamic>> Function({
   required Reporter reporter,

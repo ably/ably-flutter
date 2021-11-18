@@ -1,26 +1,25 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/encrypted_messaging_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../encrypted_messaging_service.dart';
-
 class MessageEncryptionSliver extends StatelessWidget {
-  EncryptedMessagingService? encryptedMessagingService;
+  final EncryptedMessagingService? encryptedMessagingService;
 
-  MessageEncryptionSliver(this.encryptedMessagingService, {Key? key})
+  const MessageEncryptionSliver(this.encryptedMessagingService, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Message Encryption',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: const Text(
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Text(
                 'Channel name: "${EncryptedMessagingService.channelName}"'),
           ),
           const Text(
@@ -62,9 +61,9 @@ class MessageEncryptionSliver extends StatelessWidget {
               if (snapshot.hasData) {
                 final messages = snapshot.data as List<ably.Message>;
                 if (messages.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: const Text('No messages yet'),
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Text('No messages yet'),
                   );
                 }
 
@@ -83,7 +82,7 @@ class MessageEncryptionSliver extends StatelessWidget {
                       .toList(),
                 );
               } else {
-                return Text('No messages yet');
+                return const Text('No messages yet');
               }
             },
           ),

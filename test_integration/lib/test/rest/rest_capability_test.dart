@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:ably_flutter/ably_flutter.dart';
-
-import '../../factory/reporter.dart';
-import '../../provisioning.dart';
-import '../../utils/data.dart';
-import '../../utils/encoders.dart';
+import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'package:ably_flutter_integration_test/provisioning.dart';
+import 'package:ably_flutter_integration_test/utils/data.dart';
+import 'package:ably_flutter_integration_test/utils/encoders.dart';
 
 Future<Map<String, dynamic>> testRestCapabilities({
   required Reporter reporter,
