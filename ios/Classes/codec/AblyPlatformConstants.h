@@ -82,7 +82,7 @@ extern NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground;
 extern NSString *const AblyPlatformMethod_pushOnMessage;
 extern NSString *const AblyPlatformMethod_pushOnBackgroundMessage;
 extern NSString *const AblyPlatformMethod_pushOnNotificationTap;
-extern NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage;
+extern NSString *const AblyPlatformMethod_pushBackgroundFlutterApplicationReadyOnAndroid;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;

@@ -1,6 +1,6 @@
 package io.ably.flutter.plugin;
 
-import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
+import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid;
 
 import android.util.Log;
 
@@ -15,7 +15,8 @@ import io.flutter.plugin.common.MethodCodec;
  * Receives method calls on the background method channel from the Dart side's
  * BackgroundIsolateAndroidPlatform to avoid exceptions being thrown in the case
  * where an Isolate doesn't need to be manually launched (App is already running),
- * so `pushSetOnBackgroundMessage` platform method call doesn't need to be called.
+ * so `pushBackgroundFlutterApplicationReadyOnAndroid` platform method call doesn't
+ * need to be called.
  */
 public class BackgroundMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static final String TAG = AblyFlutterPlugin.class.getName();
@@ -27,8 +28,8 @@ public class BackgroundMethodCallHandler implements MethodChannel.MethodCallHand
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    if (call.method.equals(pushSetOnBackgroundMessage)) {
-    Log.v(TAG, "Ignoring pushSetOnBackgroundMessage because it doesn't need to be called, " +
+    if (call.method.equals(pushBackgroundFlutterApplicationReadyOnAndroid)) {
+    Log.v(TAG, "Ignoring pushBackgroundFlutterApplicationReadyOnAndroid because it doesn't need to be called, " +
         "since the user's Flutter app (default DartEntrypoint) is already running.");
     } else {
       result.notImplemented();

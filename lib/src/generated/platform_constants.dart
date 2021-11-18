@@ -85,7 +85,8 @@ class PlatformMethod {
   static const String pushOnMessage = 'pushOnMessage';
   static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
   static const String pushOnNotificationTap = 'pushOnNotificationTap';
-  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
+  static const String pushBackgroundFlutterApplicationReadyOnAndroid =
+      'pushBackgroundFlutterApplicationReadyOnAndroid';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
