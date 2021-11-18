@@ -157,12 +157,10 @@ An example of `createTokenRequest`'s implementation making a network request to 
     // For debugging:
     bool runningServerLocally = true;
     if (runningServerLocally) {
-      if (Platform.isAndroid) {
-        // Connect Android device to local server
+      if (Platform.isAndroid) { // Connect Android device to local server
         url = Uri.parse(
             'http://localhost:6001/api/v1/createTokenRequest');
-      } else if (Platform.isIOS) {
-        // Connect iOS device to local server
+      } else if (Platform.isIOS) { // Connect iOS device to local server
         const localDeviceIPAddress = '192.168.1.9';
         url = Uri.parse(
             'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
@@ -173,6 +171,7 @@ An example of `createTokenRequest`'s implementation making a network request to 
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 ```
+- To connect using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866).
 
 ### Using the REST API
 
