@@ -32,7 +32,8 @@ class AblyMethodCallHandler {
           return onOpenSettingsFor();
         default:
           throw PlatformException(
-              code: 'invalid_method', message: 'No such method ${call.method}');
+              code: 'Received invalid method channel call from Platform side',
+              message: 'No such method ${call.method}');
       }
     });
   }

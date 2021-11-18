@@ -3,7 +3,7 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final channel = Platform.methodChannel;
+  final channel = Platform().methodChannel;
 
   TestWidgetsFlutterBinding.ensureInitialized();
   var counter = 0;

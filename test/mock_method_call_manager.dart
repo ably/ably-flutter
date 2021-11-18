@@ -12,14 +12,14 @@ class MockMethodCallManager {
   final publishedMessages = <AblyMessage>[];
 
   MockMethodCallManager() {
-    Platform.methodChannel.setMockMethodCallHandler(handler);
+    Platform().methodChannel.setMockMethodCallHandler(handler);
   }
 
   void reset() {
     channels.clear();
     publishedMessages.clear();
     handleCounter = 0;
-    Platform.methodChannel.setMockMethodCallHandler(null);
+    Platform().methodChannel.setMockMethodCallHandler(null);
   }
 
   Future<dynamic> handler(MethodCall methodCall) async {
@@ -43,7 +43,7 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel).onAuthCallback(
+          await AblyMethodCallHandler(Platform().methodChannel).onAuthCallback(
             AblyMessage(
               TokenParams(timestamp: DateTime.now()),
               handle: handle,
@@ -64,7 +64,7 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel)
+          await AblyMethodCallHandler(Platform().methodChannel)
               .onRealtimeAuthCallback(
             AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
           );
