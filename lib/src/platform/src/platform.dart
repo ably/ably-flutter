@@ -5,16 +5,13 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
 class Platform {
-  Platform._internal({MethodChannel? methodChannel,
-    AblyMethodCallHandler? ablyMethodCallHandler}) {
+  Platform._internal({MethodChannel? methodChannel}) {
     _methodChannel = methodChannel;
     if (methodChannel == null) {
       _methodChannel = MethodChannel('io.ably.flutter.plugin', _codec);
     }
     _streamsChannel = StreamsChannel('io.ably.flutter.stream', _codec);
-    if (ablyMethodCallHandler == null) {
-      AblyMethodCallHandler(_methodChannel!);
-    }
+    AblyMethodCallHandler(_methodChannel!);
     BackgroundIsolateAndroidPlatform().setupCallHandler();
     invokePlatformMethod(PlatformMethod.resetAblyClients);
   }
@@ -37,7 +34,7 @@ class Platform {
   late final StreamsChannel? _streamsChannel;
 
   Future<T?> invokePlatformMethod<T>(String method,
-      [Object? arguments]) async =>
+          [Object? arguments]) async =>
       _methodChannel!.invokeMethod<T>(method, arguments);
 
   /// Call a platform method which always provides a result.
@@ -53,7 +50,7 @@ class Platform {
   }
 
   Stream<T> receiveBroadcastStream<T>(String methodName, int handle,
-      [final Object? payload]) =>
+          [final Object? payload]) =>
       _streamsChannel!.receiveBroadcastStream<T>(
         AblyMessage(
           AblyEventMessage(methodName, payload),
