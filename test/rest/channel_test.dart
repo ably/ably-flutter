@@ -69,10 +69,8 @@ void main() {
       expect(messages[0].data, 'data2');
     });
 
-    test('publishes message with authCallback timing out', () async {
+    test('publishes message with authCallback', () async {
       // setup
-      final tooMuchDelay =
-          Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
       var authCallbackCounter = 0;
 
       Future<Object> timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
@@ -95,19 +93,13 @@ void main() {
           final future1 = channel.publish(name: 'name', data: 'data3-1');
           final future2 = channel.publish(name: 'name', data: 'data3-2');
 
-          // verification
-          expect(future1, throwsA(isA<AblyException>()));
-          expect(future2, throwsA(isA<AblyException>()));
+          expect(manager.publishedMessages.length, 2);
+          final future3 = channel.publish(name: 'name', data: 'data3-3');
 
-          async.elapse(tooMuchDelay);
-
-          expect(manager.publishedMessages.length, 0);
-
-          // Send another message after timeout with authCallback succeeding
+          expect(manager.publishedMessages.length, 3);
 
           // setup
           // exercise
-          final future3 = channel.publish(name: 'name', data: 'data3-3');
 
           // verification
           async.elapse(Duration.zero);

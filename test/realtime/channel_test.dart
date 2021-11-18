@@ -72,25 +72,12 @@ void main() {
       expect(messages[0].data, 'data2');
     });
 
-    test('publish realtime message with authCallback timing out', () async {
+    test('publish realtime message with authCallback', () async {
       // setup
-      final tooMuchDelay =
-          Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
-      var authCallbackCounter = 0;
-
-      Future<Object> timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
-        if (authCallbackCounter == 0) {
-          authCallbackCounter++;
-          throw TimeoutException('Timed out');
-        }
-        return Future.value('token');
-      }
-
       unawaitedWorkaroundForDartPre214(
         fakeAsync((async) async {
           final options = ClientOptions()
-            ..authCallback = timingOutOnceThenSucceedsAuthCallback
-            ..authUrl = 'hasAuthCallback';
+            ..authCallback = (tokenParams) async => 'token';
           final realtime = Realtime(options: options, key: 'TEST-KEY');
           final channel = realtime.channels.get('test');
 
@@ -98,25 +85,17 @@ void main() {
           final future1 = channel.publish(name: 'name', data: 'data3-1');
           final future2 = channel.publish(name: 'name', data: 'data3-2');
 
+          await Future.wait([future1, future2]);
+
           // verification
-          expect(future1, throwsA(isA<AblyException>()));
-          expect(future2, throwsA(isA<AblyException>()));
+          expect(manager.publishedMessages.length, 2);
 
-          async.elapse(tooMuchDelay);
-
-          expect(manager.publishedMessages.length, 0);
-
-          // Send another message after timeout with authCallback succeeding
-
-          // setup
-          // exercise
           final future3 = channel.publish(name: 'name', data: 'data3-3');
 
           // verification
-          async.elapse(Duration.zero);
           await future3;
 
-          expect(manager.publishedMessages.length, 1);
+          expect(manager.publishedMessages.length, 3);
 
           final firstMessage =
               manager.publishedMessages.first.message as AblyMessage;
@@ -126,7 +105,7 @@ void main() {
           final messages =
               List<Message>.from(messageData[TxTransportKeys.messages] as List);
           expect(messages[0].name, 'name');
-          expect(messages[0].data, 'data3-2');
+          expect(messages[0].data, 'data3-1');
         }),
       );
     });
