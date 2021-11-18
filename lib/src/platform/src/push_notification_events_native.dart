@@ -56,8 +56,8 @@ class PushNotificationEventsNative implements PushNotificationEvents {
   Future<void> setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
-      await BackgroundIsolateAndroidPlatform.methodChannel
-          .invokeMethod(PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid);
+      await BackgroundIsolateAndroidPlatform.methodChannel.invokeMethod(
+          PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid);
     }
   }
 
