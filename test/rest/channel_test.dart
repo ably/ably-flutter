@@ -71,53 +71,38 @@ void main() {
 
     test('publishes message with authCallback', () async {
       // setup
-      var authCallbackCounter = 0;
+      final options = ClientOptions()
+        ..authCallback = ((tokenParams) => Future.value('token'))
+        ..authUrl = 'hasAuthCallback';
+      final rest = Rest(options: options, key: 'TEST-KEY');
+      final channel = rest.channels.get('test');
 
-      Future<Object> timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
-        if (authCallbackCounter == 0) {
-          authCallbackCounter++;
-          throw TimeoutException('Timed out');
-        }
-        return Future.value('token');
-      }
+      // exercise
+      final future1 = channel.publish(name: 'name', data: 'data3-1');
+      final future2 = channel.publish(name: 'name', data: 'data3-2');
 
-      unawaitedWorkaroundForDartPre214(
-        fakeAsync((async) async {
-          final options = ClientOptions()
-            ..authCallback = timingOutOnceThenSucceedsAuthCallback
-            ..authUrl = 'hasAuthCallback';
-          final rest = Rest(options: options, key: 'TEST-KEY');
-          final channel = rest.channels.get('test');
+      await Future.wait([future1, future2]);
 
-          // exercise
-          final future1 = channel.publish(name: 'name', data: 'data3-1');
-          final future2 = channel.publish(name: 'name', data: 'data3-2');
+      expect(manager.publishedMessages.length, 2);
+      final future3 = channel.publish(name: 'name', data: 'data3-3');
+      await future3;
+      expect(manager.publishedMessages.length, 3);
 
-          expect(manager.publishedMessages.length, 2);
-          final future3 = channel.publish(name: 'name', data: 'data3-3');
+      // setup
+      // exercise
 
-          expect(manager.publishedMessages.length, 3);
+      // verification
+      await future3;
 
-          // setup
-          // exercise
-
-          // verification
-          async.elapse(Duration.zero);
-          await future3;
-
-          expect(manager.publishedMessages.length, 1);
-
-          final firstMessage =
-              manager.publishedMessages.first.message as AblyMessage;
-          final messageData = firstMessage.message as Map<dynamic, dynamic>;
-          expect(messageData[TxTransportKeys.channelName], 'test');
-          expect(messageData[TxTransportKeys.messages], isA<List>());
-          final messages =
-              List<Message>.from(messageData[TxTransportKeys.messages] as List);
-          expect(messages[0].name, 'name');
-          expect(messages[0].data, 'data3-2');
-        }),
-      );
+      final firstMessage =
+          manager.publishedMessages.first.message as AblyMessage;
+      final messageData = firstMessage.message as Map<dynamic, dynamic>;
+      expect(messageData[TxTransportKeys.channelName], 'test');
+      expect(messageData[TxTransportKeys.messages], isA<List>());
+      final messages =
+          List<Message>.from(messageData[TxTransportKeys.messages] as List);
+      expect(messages[0].name, 'name');
+      expect(messages[0].data, 'data3-1');
     });
 
     test('publishes another message with authCallback', () async {

@@ -74,40 +74,37 @@ void main() {
 
     test('publish realtime message with authCallback', () async {
       // setup
-      unawaitedWorkaroundForDartPre214(
-        fakeAsync((async) async {
-          final options = ClientOptions()
-            ..authCallback = (tokenParams) async => 'token';
-          final realtime = Realtime(options: options, key: 'TEST-KEY');
-          final channel = realtime.channels.get('test');
+      final options = ClientOptions()
+        ..authCallback = ((tokenParams) async => 'token')
+        ..authUrl = 'hasAuthCallback';
+      final realtime = Realtime(options: options, key: 'TEST-KEY');
+      final channel = realtime.channels.get('test');
 
-          // exercise
-          final future1 = channel.publish(name: 'name', data: 'data3-1');
-          final future2 = channel.publish(name: 'name', data: 'data3-2');
+      // exercise
+      final future1 = channel.publish(name: 'name', data: 'data3-1');
+      final future2 = channel.publish(name: 'name', data: 'data3-2');
 
-          await Future.wait([future1, future2]);
+      await Future.wait([future1, future2]);
 
-          // verification
-          expect(manager.publishedMessages.length, 2);
+      // verification
+      expect(manager.publishedMessages.length, 2);
 
-          final future3 = channel.publish(name: 'name', data: 'data3-3');
+      final future3 = channel.publish(name: 'name', data: 'data3-3');
 
-          // verification
-          await future3;
+      // verification
+      await future3;
 
-          expect(manager.publishedMessages.length, 3);
+      expect(manager.publishedMessages.length, 3);
 
-          final firstMessage =
-              manager.publishedMessages.first.message as AblyMessage;
-          final messageData = firstMessage.message as Map<dynamic, dynamic>;
-          expect(messageData[TxTransportKeys.channelName], 'test');
-          expect(messageData[TxTransportKeys.messages], isA<List>());
-          final messages =
-              List<Message>.from(messageData[TxTransportKeys.messages] as List);
-          expect(messages[0].name, 'name');
-          expect(messages[0].data, 'data3-1');
-        }),
-      );
+      final firstMessage =
+      manager.publishedMessages.first.message as AblyMessage;
+      final messageData = firstMessage.message as Map<dynamic, dynamic>;
+      expect(messageData[TxTransportKeys.channelName], 'test');
+      expect(messageData[TxTransportKeys.messages], isA<List>());
+      final messages =
+      List<Message>.from(messageData[TxTransportKeys.messages] as List);
+      expect(messages[0].name, 'name');
+      expect(messages[0].data, 'data3-1');
     });
 
     test('publish 2 realtime messages with authCallback', () async {
