@@ -97,12 +97,12 @@ void main() {
       expect(manager.publishedMessages.length, 3);
 
       final firstMessage =
-      manager.publishedMessages.first.message as AblyMessage;
+          manager.publishedMessages.first.message as AblyMessage;
       final messageData = firstMessage.message as Map<dynamic, dynamic>;
       expect(messageData[TxTransportKeys.channelName], 'test');
       expect(messageData[TxTransportKeys.messages], isA<List>());
       final messages =
-      List<Message>.from(messageData[TxTransportKeys.messages] as List);
+          List<Message>.from(messageData[TxTransportKeys.messages] as List);
       expect(messages[0].name, 'name');
       expect(messages[0].data, 'data3-1');
     });
