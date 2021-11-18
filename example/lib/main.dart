@@ -674,7 +674,7 @@ class _MyAppState extends State<MyApp> {
                           ]),
                     )
                   else
-                    Text('API key: $_apiKey'),
+                    Text('API key: ${redactApiKey(_apiKey)}'),
                   const Divider(),
                   const Text(
                     'Realtime',
@@ -791,4 +791,12 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
+
+  String redactApiKey(String apiKey) {
+    // What is an API Key?: https://faqs.ably.com/what-is-an-app-api-key
+    final keyComponents = apiKey.split(':');
+    final publicApiKey = keyComponents[0];
+    final apiKeySecret = keyComponents[1];
+    return publicApiKey + ':' + '*' * apiKeySecret.length;
+  }
 }
