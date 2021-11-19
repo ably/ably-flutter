@@ -259,8 +259,12 @@ The SDK does this by implementing [`userNotificationCenter(_:willPresent:withCom
 
 #### Data Message / Background Notification
 
-- On iOS, if a notification is also present, it will be shown before `onMessage` or the callback passed to `ably.Push.notificationEvents.setOnBackgroundMessage` is called.
-- On Android, if a notification is also present, it will be shown after these methods finish (or its Future completes).
+- On iOS, if a notification is also present, it will be shown
+  -  **before** `onMessage` is called, and
+  -  **before** the callback you set using `ably.Push.notificationEvents.setOnBackgroundMessage` is called.
+- On Android, if a notification is also present, it will be shown
+  - **after** `onMessage` is called, and
+  - **after** the callback you set using `ably.Push.notificationEvents.setOnBackgroundMessage` is called.
 - When the app is in the foreground, you can listen to messages using:
 
 ```dart
