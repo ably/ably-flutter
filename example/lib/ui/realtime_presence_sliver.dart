@@ -105,7 +105,6 @@ class RealtimePresenceSliver extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final latestMessage = useState<ably.PresenceMessage?>(null);
-    final channelState = useState<ably.ChannelState?>(channel.state);
     final presenceSubscription =
         useState<StreamSubscription<ably.PresenceMessage>?>(null);
     final presenceMembers = useState<List<ably.PresenceMessage>>([]);
@@ -121,7 +120,7 @@ class RealtimePresenceSliver extends HookWidget {
           children: <Widget>[
             Expanded(
                 child: createChannelPresenceSubscribeButton(
-                    latestMessage, channelState.value, presenceSubscription)),
+                    latestMessage, channel.state, presenceSubscription)),
             Expanded(
                 child: createChannelPresenceUnsubscribeButton(
                     presenceSubscription)),
