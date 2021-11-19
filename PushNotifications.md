@@ -240,7 +240,9 @@ final message = ably.Message(
 
 ### Receiving Messages
 
-For examples of handling incoming messages and dealing with notifications, see [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app. There are 2 types of push notifications, one which shows as a notification to the user (alert push notification on iOS, notification message on Android), and one which notifies your app (background notification on iOS, data message on Android) 
+For examples of handling incoming messages and dealing with notifications, see [push_notification_handlers](example/lib/push_notifications/push_notification_handlers.dart) in the example app. There are 2 types of push notifications:
+- Notifications to your user (alert push notification on iOS, notification message on Android), and 
+- Notifications to your app (background notification on iOS, data message on Android)
 
 #### Notification Message / Alert Push Notification
 
