@@ -63,9 +63,13 @@ class PaginatedResultViewer<T> extends HookWidget {
           ],
         ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: (items.isEmpty)
               ? [const Text('No messages')]
-              : items.map((item) => builder(context, item, null)).toList(),
+              : items.map((item) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: builder(context, item, null),
+              )).toList(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
