@@ -9,7 +9,7 @@ import 'package:ably_flutter_example/push_notifications/push_notification_handle
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 import 'package:ably_flutter_example/ui/message_encryption/message_encryption_sliver.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_sliver.dart';
-import 'package:ably_flutter_example/ui/text_row.dart';
+import 'package:ably_flutter_example/ui/system_details_sliver.dart';
 import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +30,6 @@ class MyApp extends StatefulWidget {
 const defaultChannel = Constants.channelName;
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  String _ablyVersion = 'Unknown';
-
   final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   ably.Realtime? _realtime;
   ably.Rest? _rest;
@@ -112,29 +109,10 @@ class _MyAppState extends State<MyApp> {
       });
     }
 
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await ably.platformVersion();
-    } on ably.AblyException {
-      platformVersion = 'Failed to get platform version.';
-    }
-    try {
-      ablyVersion = await ably.version();
-    } on ably.AblyException {
-      ablyVersion = 'Failed to get Ably version.';
-    }
-
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
-    print('queueing set state');
-    setState(() {
-      print('set state');
-      _platformVersion = platformVersion;
-      _ablyVersion = ablyVersion;
-    });
 
     createAblyRealtime();
     await createAblyRest();
@@ -645,37 +623,7 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
-                  const Text(
-                    'System Details',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  TextRow('Running on', _platformVersion),
-                  TextRow('Ably version', _ablyVersion),
-                  TextRow('Ably Client ID', Constants.clientId),
-                  if (_apiKey == '')
-                    RichText(
-                      text: const TextSpan(
-                          style: TextStyle(color: Colors.black),
-                          children: [
-                            TextSpan(
-                                text: 'Warning: ',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(text: 'API key is not configured, use '),
-                            TextSpan(
-                                text: '`flutter run --dart-define='
-                                    'ABLY_API_KEY=your_api_key`',
-                                style: TextStyle()),
-                            TextSpan(
-                                text:
-                                    "or add this to the 'additional run args' "
-                                    'in the run configuration in '
-                                    'Android Studio.')
-                          ]),
-                    )
-                  else
-                    TextRow('API key', hideApiKeySecret(_apiKey)),
+                  SystemDetailsSliver(_apiKey),
                   const Divider(),
                   const Text(
                     'Realtime',
@@ -792,15 +740,4 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-
-  String hideApiKeySecret(String apiKey) {
-    // What is an API Key?: https://faqs.ably.com/what-is-an-app-api-key
-    final keyComponents = apiKey.split(':');
-    if (keyComponents.length != 2) {
-      return apiKey;
-    }
-    final publicApiKey = keyComponents[0];
-    final apiKeySecret = keyComponents[1];
-    return '$publicApiKey:${'*' * apiKeySecret.length}';
-  }
 }
