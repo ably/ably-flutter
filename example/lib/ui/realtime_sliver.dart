@@ -213,7 +213,8 @@ class RealtimeSliver extends HookWidget {
             TextRow('  Name', 'Message $realtimePubCounter'),
             TextRow(
                 '  Data',
-                _messagesToPublish[realtimePubCounter % _messagesToPublish.length]
+                _messagesToPublish[
+                        realtimePubCounter % _messagesToPublish.length]
                     .toString()),
           ],
         ),

@@ -44,13 +44,14 @@ class EncryptedMessagingService {
   }
 
   Future<void> initialize() async {
-    final cipherParams = await ably.Crypto.getDefaultParams(key: keyFromPassword);
+    final cipherParams =
+        await ably.Crypto.getDefaultParams(key: keyFromPassword);
     final restChannelOptions =
         ably.RestChannelOptions(cipherParams: cipherParams);
     await _restChannel!.setOptions(restChannelOptions);
 
     final channelOptions =
-    ably.RealtimeChannelOptions(cipherParams: cipherParams);
+        ably.RealtimeChannelOptions(cipherParams: cipherParams);
     await _realtimeChannel!.setOptions(channelOptions);
   }
 
