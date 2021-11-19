@@ -16,8 +16,6 @@ class PaginatedResultViewer<T> extends HookWidget {
   PaginatedResultViewer(
       {required this.title, required this.query, required this.builder});
 
-  // : firstPaginatedResult = paginatedResult;
-
   Future<void> getFirstPaginatedResult(
       ValueNotifier<ably.PaginatedResult<T>?> currentPaginatedResult) async {
     final result = await query();

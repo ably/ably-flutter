@@ -302,7 +302,7 @@ class _MyAppState extends State<MyApp> {
                 }
               }
             : null,
-        child: Text(
+        child: const Text(
           'Publish',
         ),
       );
@@ -583,16 +583,27 @@ class _MyAppState extends State<MyApp> {
                             direction: 'forwards',
                             limit: 10,
                           )),
-                      builder: (context, message, _) =>
-                          TextRow('Message name', message.name)),
+                      builder: (context, message, _) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextRow('Name', message.name),
+                              TextRow('Data', message.data.toString()),
+                            ],
+                          )),
                   PaginatedResultViewer<ably.PresenceMessage>(
                       title: 'Presence members',
                       query: () => _rest!.channels
                           .get(defaultChannel)
                           .presence
                           .get(ably.RestPresenceParams(limit: 10)),
-                      builder: (context, message, _) => TextRow('Message name',
-                          '${message.id}:${message.clientId}:${message.data}')),
+                      builder: (context, message, _) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextRow('Message ID', '${message.id}'),
+                          TextRow('Message client ID', '${message.clientId}'),
+                          TextRow('Message data', '${message.data}'),
+                        ],
+                      )),
                   PaginatedResultViewer<ably.PresenceMessage>(
                       title: 'Presence history',
                       query: () => _rest!.channels
