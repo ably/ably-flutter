@@ -18,7 +18,9 @@ class SystemDetailsSliver extends HookWidget {
     final _ablyVersion = useState<String?>(null);
 
     useEffect(() {
-      ably.platformVersion().then((version) => _platformVersion.value = version);
+      ably
+          .platformVersion()
+          .then((version) => _platformVersion.value = version);
       ably.version().then((version) => _ablyVersion.value = version);
     }, []);
 
@@ -40,16 +42,14 @@ class SystemDetailsSliver extends HookWidget {
                   TextSpan(
                       text: 'Warning: ',
                       style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold)),
+                          color: Colors.red, fontWeight: FontWeight.bold)),
                   TextSpan(text: 'API key is not configured, use '),
                   TextSpan(
                       text: '`flutter run --dart-define='
                           'ABLY_API_KEY=your_api_key`',
                       style: TextStyle()),
                   TextSpan(
-                      text:
-                      "or add this to the 'additional run args' "
+                      text: "or add this to the 'additional run args' "
                           'in the run configuration in '
                           'Android Studio.')
                 ]),
