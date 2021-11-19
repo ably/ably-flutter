@@ -16,6 +16,8 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
 
+  /// Detaches the channel and then releases the channel resource
+  /// so it can be garbage collected.
   @override
   void release(String name) {
     realtime.invoke(PlatformMethod.releaseRealtimeChannel, name);
