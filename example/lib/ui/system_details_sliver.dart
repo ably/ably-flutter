@@ -20,7 +20,7 @@ class SystemDetailsSliver extends HookWidget {
     useEffect(() {
       ably.platformVersion().then((version) => _platformVersion.value = version);
       ably.version().then((version) => _ablyVersion.value = version);
-    });
+    }, []);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
