@@ -186,37 +186,6 @@ class _MyAppState extends State<MyApp> {
     _subscriptionsToDispose.add(_channelStateChangeSubscription);
   }
 
-  // https://github.com/dart-lang/sdk/issues/37498
-  // ignore: missing_return
-  static String opStateDescription(
-      OpState state, String action, String operating, String done) {
-    switch (state) {
-      case OpState.notStarted:
-        return action;
-      case OpState.inProgress:
-        return '$operating...';
-      case OpState.succeeded:
-        return done;
-      case OpState.failed:
-        return 'Failed to $action';
-    }
-  }
-
-  // https://github.com/dart-lang/sdk/issues/37498
-  // ignore: missing_return
-  static Color opStateColor(OpState state) {
-    switch (state) {
-      case OpState.notStarted:
-        return const Color.fromARGB(255, 192, 192, 255);
-      case OpState.inProgress:
-        return const Color.fromARGB(255, 192, 192, 192);
-      case OpState.succeeded:
-        return const Color.fromARGB(255, 128, 255, 128);
-      case OpState.failed:
-        return const Color.fromARGB(255, 255, 128, 128);
-    }
-  }
-
   Widget createRTConnectButton() => TextButton(
         onPressed: (_realtime == null) ? null : _realtime!.connect,
         child: const Text('Connect'),
@@ -226,36 +195,37 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtimeConnectionState == ably.ConnectionState.connected)
             ? _realtime!.close
             : null,
-        child: const Text('Close Connection'),
+        child: const Text('Disconnect'),
       );
 
   Widget createChannelAttachButton() => TextButton(
-        onPressed: (_realtimeConnectionState == ably.ConnectionState.connected)
-            ? () async {
-                final channel = _realtime!.channels.get(defaultChannel);
-                print('Attaching to channel ${channel.name}.'
-                    ' Current state ${channel.state}.');
-                try {
-                  await channel.attach();
-                } on ably.AblyException catch (e) {
-                  print('Unable to attach to channel: ${e.errorInfo}');
-                }
-              }
-            : null,
-        child: const Text('Attach to Channel'),
+        onPressed:
+            (_realtimeConnectionState == ably.ConnectionState.connected &&
+                    _realtimeChannelState != ably.ChannelState.attached)
+                ? () async {
+                    final channel = _realtime!.channels.get(defaultChannel);
+                    print('Attaching to channel ${channel.name}.'
+                        ' Current state ${channel.state}.');
+                    setState(() {
+                      _realtimeChannelState = channel.state;
+                    });
+                    try {
+                      await channel.attach();
+                    } on ably.AblyException catch (e) {
+                      print('Unable to attach to channel: ${e.errorInfo}');
+                    }
+                  }
+                : null,
+        child: const Text('Attach'),
       );
 
   Widget createChannelDetachButton() => TextButton(
         onPressed: (_realtimeChannelState == ably.ChannelState.attached)
             ? () {
-                final channel = _realtime!.channels.get(defaultChannel);
-                print('Detaching from channel ${channel.name}.'
-                    ' Current state ${channel.state}.');
-                channel.detach();
-                print('Detached');
+                _realtime!.channels.get(defaultChannel).detach();
               }
             : null,
-        child: const Text('Detach from channel'),
+        child: const Text('Detach'),
       );
 
   Widget createChannelSubscribeButton() => TextButton(
@@ -276,6 +246,7 @@ class _MyAppState extends State<MyApp> {
                   });
                 });
                 print('Channel messages subscribed');
+                setState(() {});
                 _subscriptionsToDispose.add(_channelMessageSubscription!);
               }
             : null,
@@ -301,7 +272,6 @@ class _MyAppState extends State<MyApp> {
   Widget createChannelPublishButton() => TextButton(
         onPressed: (_realtimeChannelState == ably.ChannelState.attached)
             ? () async {
-                print('Sending rest message...');
                 final data = messagesToPublish[
                     (realtimePubCounter++ % messagesToPublish.length)];
                 final m = ably.Message(name: 'Hello', data: data);
@@ -326,7 +296,6 @@ class _MyAppState extends State<MyApp> {
                       realtimePubCounter % messagesToPublish.length == 0) {
                     typeCounter++;
                   }
-                  print('Realtime message sent.');
                   setState(() {});
                 } on ably.AblyException catch (e) {
                   print(e);
@@ -334,8 +303,7 @@ class _MyAppState extends State<MyApp> {
               }
             : null,
         child: Text(
-          'Publish: '
-          '${messagesToPublish[realtimePubCounter % messagesToPublish.length]}',
+          'Publish',
         ),
       );
 
@@ -421,7 +389,7 @@ class _MyAppState extends State<MyApp> {
         onPressed: (_realtime == null)
             ? null
             : () => _realtime!.channels.release(defaultChannel),
-        child: const Text('Release channel'),
+        child: const Text('Release'),
       );
 
   final List _presenceData = [
@@ -507,7 +475,6 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Text('Connection State: $_realtimeConnectionState'),
-                  Text('Channel State: $_realtimeChannelState'),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -518,27 +485,34 @@ class _MyAppState extends State<MyApp> {
                       )
                     ],
                   ),
+                  const Text(
+                    'Realtime channel',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text('Channel State: $_realtimeChannelState'),
                   Row(
                     children: <Widget>[
                       Expanded(child: createChannelAttachButton()),
                       Expanded(child: createChannelDetachButton()),
+                      Expanded(child: releaseRealtimeChannel()),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Expanded(child: createChannelSubscribeButton()),
+                      Expanded(child: createChannelPublishButton()),
                       Expanded(child: createChannelUnSubscribeButton()),
                     ],
                   ),
-                  releaseRealtimeChannel(),
-                  const Text(
-                    'Channel Messages',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text('Message from channel: ${channelMessage?.data ?? '-'}'),
-                  createChannelPublishButton(),
+                  TextRow('Latest message received',
+                      channelMessage?.data.toString()),
+                  TextRow(
+                      'Next message to be published',
+                      messagesToPublish[
+                              realtimePubCounter % messagesToPublish.length]
+                          .toString()),
                   PaginatedResultViewer<ably.Message>(
-                      title: 'Rest History',
+                      title: 'Realtime History',
                       query: () =>
                           _realtime!.channels.get(defaultChannel).history(
                                 ably.RealtimeHistoryParams(
@@ -546,8 +520,13 @@ class _MyAppState extends State<MyApp> {
                                   untilAttach: true,
                                 ),
                               ),
-                      builder: (context, message, _) =>
-                          TextRow('Message name', message.name)),
+                      builder: (context, message, _) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextRow('Name', message.name),
+                              TextRow('Data', message.data.toString()),
+                            ],
+                          )),
                   const Text(
                     'Presence',
                     style: TextStyle(fontSize: 20),
