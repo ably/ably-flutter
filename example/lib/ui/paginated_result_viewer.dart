@@ -17,10 +17,12 @@ class PaginatedResultViewer<T> extends HookWidget {
       {required this.title, required this.query, required this.builder});
 
   Future<void> getFirstPaginatedResult(
-      ValueNotifier<ably.PaginatedResult<T>?> currentPaginatedResult) async {
+      ValueNotifier<ably.PaginatedResult<T>?> currentPaginatedResult,
+      ValueNotifier<int> pageNumber) async {
     final result = await query();
     firstPaginatedResult = result;
     currentPaginatedResult.value = result;
+    pageNumber.value = 1;
   }
 
   @override
@@ -54,8 +56,14 @@ class PaginatedResultViewer<T> extends HookWidget {
               title,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            const Spacer(),
             IconButton(
-              onPressed: () => getFirstPaginatedResult(currentPaginatedResult),
+              onPressed: () => currentPaginatedResult.value = null,
+              icon: const Icon(Icons.delete),
+            ),
+            IconButton(
+              onPressed: () =>
+                  getFirstPaginatedResult(currentPaginatedResult, pageNumber),
               icon: const Icon(Icons.refresh),
             )
           ],
@@ -64,10 +72,12 @@ class PaginatedResultViewer<T> extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: (items.isEmpty)
               ? [const Text('No messages')]
-              : items.map((item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: builder(context, item, null),
-              )).toList(),
+              : items
+                  .map((item) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: builder(context, item, null),
+                      ))
+                  .toList(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

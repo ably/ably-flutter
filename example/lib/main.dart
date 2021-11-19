@@ -274,13 +274,13 @@ class _MyAppState extends State<MyApp> {
             ? () async {
                 final data = messagesToPublish[
                     (realtimePubCounter++ % messagesToPublish.length)];
-                final m = ably.Message(name: 'Hello', data: data);
+                final m = ably.Message(
+                    name: 'Message $realtimePubCounter', data: data);
                 try {
                   switch (typeCounter % 3) {
                     case 0:
-                      await _realtime!.channels
-                          .get(defaultChannel)
-                          .publish(name: 'Hello', data: data);
+                      await _realtime!.channels.get(defaultChannel).publish(
+                          name: 'Message $realtimePubCounter', data: data);
                       break;
                     case 1:
                       await _realtime!.channels
@@ -414,10 +414,6 @@ class _MyAppState extends State<MyApp> {
       _presenceData[_presenceDataIncrementer++ % _presenceData.length]
           .toString();
 
-  Object? get _currentPresenceData => (_presenceDataIncrementer == 0)
-      ? null
-      : _presenceData[(_presenceDataIncrementer - 1) % _presenceData.length];
-
   Widget enterRealtimePresence() => TextButton(
         onPressed: (_realtime == null)
             ? null
@@ -486,7 +482,7 @@ class _MyAppState extends State<MyApp> {
                     ],
                   ),
                   const Text(
-                    'Realtime channel',
+                    'Channel',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text('Channel State: $_realtimeChannelState'),
@@ -506,13 +502,20 @@ class _MyAppState extends State<MyApp> {
                   ),
                   TextRow('Latest message received',
                       channelMessage?.data.toString()),
-                  TextRow(
-                      'Next message to be published',
-                      messagesToPublish[
-                              realtimePubCounter % messagesToPublish.length]
-                          .toString()),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextRow('Next message to be published:', null),
+                      TextRow('  Name', 'Message $realtimePubCounter'),
+                      TextRow(
+                          '  Data',
+                          messagesToPublish[
+                                  realtimePubCounter % messagesToPublish.length]
+                              .toString()),
+                    ],
+                  ),
                   PaginatedResultViewer<ably.Message>(
-                      title: 'Realtime History',
+                      title: 'History',
                       query: () =>
                           _realtime!.channels.get(defaultChannel).history(
                                 ably.RealtimeHistoryParams(
@@ -529,9 +532,9 @@ class _MyAppState extends State<MyApp> {
                           )),
                   const Text(
                     'Presence',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Text('Current Data: $_currentPresenceData'),
                   Row(
                     children: <Widget>[
                       Expanded(child: createChannelPresenceSubscribeButton()),
@@ -597,13 +600,14 @@ class _MyAppState extends State<MyApp> {
                           .presence
                           .get(ably.RestPresenceParams(limit: 10)),
                       builder: (context, message, _) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextRow('Message ID', '${message.id}'),
-                          TextRow('Message client ID', '${message.clientId}'),
-                          TextRow('Message data', '${message.data}'),
-                        ],
-                      )),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextRow('Message ID', '${message.id}'),
+                              TextRow(
+                                  'Message client ID', '${message.clientId}'),
+                              TextRow('Message data', '${message.data}'),
+                            ],
+                          )),
                   PaginatedResultViewer<ably.PresenceMessage>(
                       title: 'Presence history',
                       query: () => _rest!.channels
