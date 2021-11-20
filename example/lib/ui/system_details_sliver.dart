@@ -14,14 +14,14 @@ class SystemDetailsSliver extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _platformVersion = useState<String?>(null);
-    final _ablyVersion = useState<String?>(null);
+    final platformVersion = useState<String?>(null);
+    final ablyVersion = useState<String?>(null);
 
     useEffect(() {
       ably
           .platformVersion()
-          .then((version) => _platformVersion.value = version);
-      ably.version().then((version) => _ablyVersion.value = version);
+          .then((version) => platformVersion.value = version);
+      ably.version().then((version) => ablyVersion.value = version);
     }, []);
 
     return Column(
@@ -31,8 +31,8 @@ class SystemDetailsSliver extends HookWidget {
           'System Details',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        TextRow('Running on', _platformVersion.value),
-        TextRow('Ably version', _ablyVersion.value),
+        TextRow('Running on', platformVersion.value),
+        TextRow('Ably version', ablyVersion.value),
         TextRow('Ably Client ID', Constants.clientId),
         if (apiKey == '')
           RichText(
