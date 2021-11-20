@@ -1,9 +1,11 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final channel = Platform.methodChannel;
+  final channel =
+      MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
 
   TestWidgetsFlutterBinding.ensureInitialized();
   var counter = 0;
@@ -15,7 +17,7 @@ void main() {
   setUp(() {
     channel.setMockMethodCallHandler((methodCall) async {
       switch (methodCall.method) {
-        case PlatformMethod.registerAbly:
+        case PlatformMethod.resetAblyClients:
           return true;
 
         case PlatformMethod.getPlatformVersion:
@@ -33,6 +35,7 @@ void main() {
           return null;
       }
     });
+    Platform(methodChannel: channel);
   });
 
   tearDown(() {

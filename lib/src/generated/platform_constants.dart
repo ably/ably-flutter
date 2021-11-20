@@ -37,7 +37,7 @@ class CodecTypes {
 class PlatformMethod {
   static const String getPlatformVersion = 'getPlatformVersion';
   static const String getVersion = 'getVersion';
-  static const String registerAbly = 'registerAbly';
+  static const String resetAblyClients = 'resetAblyClients';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
   static const String createRestWithOptions = 'createRestWithOptions';
@@ -85,7 +85,8 @@ class PlatformMethod {
   static const String pushOnMessage = 'pushOnMessage';
   static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
   static const String pushOnNotificationTap = 'pushOnNotificationTap';
-  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
+  static const String pushBackgroundFlutterApplicationReadyOnAndroid =
+      'pushBackgroundFlutterApplicationReadyOnAndroid';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =

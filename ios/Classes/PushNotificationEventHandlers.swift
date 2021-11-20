@@ -59,7 +59,8 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
         if (application.applicationState == .background || application.applicationState == .inactive) {
             methodName = AblyPlatformMethod_pushOnBackgroundMessage
         }
-        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: nil);
+        
+        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: Notification(from: userInfo));
         methodChannel.invokeMethod(methodName, arguments: remoteMessage) { flutterResult in
             completionHandler(.newData);
         }

@@ -1,16 +1,15 @@
 import 'dart:async';
+import 'dart:io' as io show Platform;
 import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 Map<int?, Realtime> _realtimeInstances = {};
-Map<int?, Realtime>? _realtimeInstancesUnmodifiableView;
 
 /// Returns readonly copy of instances of all [Realtime] clients created.
 Map<int?, Realtime> get realtimeInstances =>
-    _realtimeInstancesUnmodifiableView ??=
-        UnmodifiableMapView(_realtimeInstances);
+    UnmodifiableMapView(_realtimeInstances);
 
 /// Ably's Realtime client
 class Realtime extends PlatformObject {
@@ -37,6 +36,15 @@ class Realtime extends PlatformObject {
       AblyMessage(options),
     );
     _realtimeInstances[handle] = this;
+
+    if (io.Platform.isAndroid && options.autoConnect) {
+      // On Android, clientOptions.autoConnect is set to `false` to prevent
+      // the authCallback being called before we get the realtime handle.
+      // If this happens, we won't be able to identify which realtime client
+      // the authCallback belongs to. Instead, on Android, we set autoConnect
+      // to false, and call connect immediately once we get the handle.
+      await invokeRaw(PlatformMethod.connectRealtime, handle);
+    }
     return handle;
   }
 
@@ -70,90 +78,10 @@ class Realtime extends PlatformObject {
   @override
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
-  final _connectQueue = Queue<Completer<void>>();
-  Completer<void>? _authCallbackCompleter;
-
   /// connects to [connection]
   @override
   Future<void> connect() async {
-    final queueItem = Completer<void>();
-    _connectQueue.add(queueItem);
-    unawaitedWorkaroundForDartPre214(_connect());
-    return queueItem.future;
-  }
-
-  bool _connecting = false;
-
-  Future<void> _connect() async {
-    if (_connecting) {
-      return;
-    }
-    _connecting = true;
-    while (_connectQueue.isNotEmpty) {
-      final item = _connectQueue.first;
-      // This is the only place where failed items are removed from the queue.
-      // In all other places (timeout exceptions) only the Completer is
-      // completed with an error but left in the queue.  Other attempts became a
-      // bit unwieldy.
-      if (item.isCompleted) {
-        _connectQueue.remove(item);
-        continue;
-      }
-
-      try {
-        await invoke(PlatformMethod.connectRealtime);
-      } finally {
-        _connectQueue.remove(item);
-      }
-
-      // The Completer could have timed out in the meantime and completing a
-      // completed Completer would cause an exception, so we check first.
-      if (!item.isCompleted) {
-        item.complete();
-      }
-    }
-    _connecting = false;
-  }
-
-  /// @internal
-  /// required due to the complications involved in the way ably-java expects
-  /// authCallback to be performed synchronously, while method channel call from
-  /// platform side to dart side is asynchronous
-  ///
-  /// discussion: https://github.com/ably/ably-flutter/issues/31
-  Future<void> awaitAuthUpdateAndReconnect() async {
-    if (_authCallbackCompleter != null) {
-      return;
-    }
-    _authCallbackCompleter = Completer<void>();
-    try {
-      await _authCallbackCompleter!.future.timeout(
-          Timeouts.retryOperationOnAuthFailure,
-          onTimeout: () => _connectQueue
-              .where((e) => !e.isCompleted)
-              .forEach((e) => e.completeError(
-                    TimeoutException(
-                      'Timed out',
-                      Timeouts.retryOperationOnAuthFailure,
-                    ),
-                  )));
-    } finally {
-      _authCallbackCompleter = null;
-    }
-    await connect();
-  }
-
-  /// @internal
-  /// required due to the complications involved in the way ably-java expects
-  /// authCallback to be performed synchronously, while method channel call from
-  /// platform side to dart side is asynchronous
-  ///
-  /// discussion: https://github.com/ably/ably-flutter/issues/31
-  void authUpdateComplete() {
-    _authCallbackCompleter?.complete();
-    for (final channel in channels) {
-      channel.authUpdateComplete();
-    }
+    await invoke(PlatformMethod.connectRealtime);
   }
 
   @override

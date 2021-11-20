@@ -38,7 +38,7 @@ typedef NS_ENUM(UInt8, _Value) {
 // flutter platform channel method names
 extern NSString *const AblyPlatformMethod_getPlatformVersion;
 extern NSString *const AblyPlatformMethod_getVersion;
-extern NSString *const AblyPlatformMethod_registerAbly;
+extern NSString *const AblyPlatformMethod_resetAblyClients;
 extern NSString *const AblyPlatformMethod_authCallback;
 extern NSString *const AblyPlatformMethod_realtimeAuthCallback;
 extern NSString *const AblyPlatformMethod_createRestWithOptions;
@@ -82,7 +82,7 @@ extern NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground;
 extern NSString *const AblyPlatformMethod_pushOnMessage;
 extern NSString *const AblyPlatformMethod_pushOnBackgroundMessage;
 extern NSString *const AblyPlatformMethod_pushOnNotificationTap;
-extern NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage;
+extern NSString *const AblyPlatformMethod_pushBackgroundFlutterApplicationReadyOnAndroid;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;

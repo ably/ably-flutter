@@ -19,10 +19,7 @@ class PushRealtimeClientReceivedSliver extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const Text('To validate messages were sent, you can subscribe to '
-                'the channel and view the device logs. Data messages '
-                'are not currently available through Ably-flutter. '
-                'You should implement the relevant delegate methods on iOS'
-                ' and extend FirebaseMessagingService on Android.'),
+                'the channel and view the device logs.'),
             BoolStreamButton(
                 stream: _pushNotificationService.hasPushChannelStream,
                 onPressed: _pushNotificationService

@@ -59,7 +59,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
 const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'getPlatformVersion', 'value': 'getPlatformVersion'},
   {'name': 'getVersion', 'value': 'getVersion'},
-  {'name': 'registerAbly', 'value': 'registerAbly'},
+  {'name': 'resetAblyClients', 'value': 'resetAblyClients'},
 
   // Auth
   {'name': 'authCallback', 'value': 'authCallback'},
@@ -129,7 +129,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushOnBackgroundMessage', 'value': 'pushOnBackgroundMessage'},
   {'name': 'pushOnNotificationTap', 'value': 'pushOnNotificationTap'},
   // Used only on Android
-  {'name': 'pushSetOnBackgroundMessage', 'value': 'pushSetOnBackgroundMessage'},
+  {
+    'name': 'pushBackgroundFlutterApplicationReadyOnAndroid',
+    'value': 'pushBackgroundFlutterApplicationReadyOnAndroid'
+  },
 
   // Realtime events
   {

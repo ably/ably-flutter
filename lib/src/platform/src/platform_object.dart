@@ -4,11 +4,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
-/// An object which has a live counterpart in the Platform client library SDK,
-/// where that live counterpart is held as a strong reference by the plugin
-/// implementation.
+/// A representation of a Platform side instance (Android, iOS).
 abstract class PlatformObject {
   Future<int>? _handle;
+  final Platform _platform = Platform();
   int? _handleValue; // Only for logging. Otherwise use _handle instead.
 
   /// immediately instantiates an object on platform side by calling
@@ -22,7 +21,7 @@ abstract class PlatformObject {
   }
 
   @override
-  String toString() => 'Ably Platform Object $_handleValue';
+  String toString() => 'Ably Flutter PlatformObject with handle: $_handleValue';
 
   /// creates an instance of this object on platform side
   Future<int?> createPlatformInstance();
@@ -36,19 +35,13 @@ abstract class PlatformObject {
   Future<int> _acquireHandle() =>
       createPlatformInstance().then((value) => (_handleValue = value)!);
 
-  /// [MethodChannel] to make method calls to platform side
-  MethodChannel get methodChannel => Platform.methodChannel;
-
-  /// [EventChannel] to register events on platform side
-  StreamsChannel get eventChannel => Platform.streamsChannel;
-
   /// invoke platform method channel without AblyMessage encapsulation
   @protected
   Future<T?> invokeRaw<T>(
     final String method, [
     final Object? arguments,
   ]) async =>
-      Platform.invokePlatformMethod<T>(method, arguments);
+      _platform.invokePlatformMethod<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
   ///
@@ -74,23 +67,15 @@ abstract class PlatformObject {
     return invokeRaw<T>(method, message);
   }
 
-  Future<Stream<T>> _listen<T>(
-    final String eventName, [
-    final Object? payload,
-  ]) async =>
-      eventChannel.receiveBroadcastStream<T>(
-        AblyMessage(
-          AblyEventMessage(eventName, payload),
-          handle: await handle,
-        ),
-      );
-
   /// Listen for events
   @protected
   Stream<T> listen<T>(final String method, [final Object? payload]) {
     // ignore: close_sinks, will be closed by listener
     final controller = StreamController<T>();
-    _listen<T>(method, payload).then(controller.addStream);
+    handle
+        .then((handle) =>
+            _platform.receiveBroadcastStream<T>(method, handle, payload))
+        .then(controller.addStream);
     return controller.stream;
   }
 }

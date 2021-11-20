@@ -1,7 +1,7 @@
 package io.ably.flutter.plugin.push;
 
 import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushOnBackgroundMessage;
-import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushSetOnBackgroundMessage;
+import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,7 +63,7 @@ public class ManualFlutterApplicationRunner implements MethodChannel.MethodCallH
   @Override
   public void onMethodCall(@NonNull final MethodCall call,
                            @NonNull final MethodChannel.Result result) {
-    if (call.method.equals(pushSetOnBackgroundMessage)) {
+    if (call.method.equals(pushBackgroundFlutterApplicationReadyOnAndroid)) {
       // This signals that the manually spawned app is ready to receive a message to handle.
       // We ask the user to set the background message handler early on.
       backgroundMethodChannel.invokeMethod(pushOnBackgroundMessage, remoteMessage, new MethodChannel.Result() {

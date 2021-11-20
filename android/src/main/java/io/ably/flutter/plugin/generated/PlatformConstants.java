@@ -40,7 +40,7 @@ final public class PlatformConstants {
     static final public class PlatformMethod {
         public static final String getPlatformVersion = "getPlatformVersion";
         public static final String getVersion = "getVersion";
-        public static final String registerAbly = "registerAbly";
+        public static final String resetAblyClients = "resetAblyClients";
         public static final String authCallback = "authCallback";
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
         public static final String createRestWithOptions = "createRestWithOptions";
@@ -84,7 +84,7 @@ final public class PlatformConstants {
         public static final String pushOnMessage = "pushOnMessage";
         public static final String pushOnBackgroundMessage = "pushOnBackgroundMessage";
         public static final String pushOnNotificationTap = "pushOnNotificationTap";
-        public static final String pushSetOnBackgroundMessage = "pushSetOnBackgroundMessage";
+        public static final String pushBackgroundFlutterApplicationReadyOnAndroid = "pushBackgroundFlutterApplicationReadyOnAndroid";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";

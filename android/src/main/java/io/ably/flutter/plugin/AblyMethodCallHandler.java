@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -40,31 +42,29 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private Context applicationContext;
+  private static final String TAG = PushMessagingEventHandlers.class.getName();
 
-  public interface HotRestartCallback {
-    // Called on every fresh start and on every hot restart
+  public interface ResetAblyClientsCallback {
     void on();
   }
 
   private final MethodChannel channel;
-  private final HotRestartCallback hotRestartCallback;
+  private final ResetAblyClientsCallback resetAblyClientsCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
   public AblyMethodCallHandler(final MethodChannel channel,
-                               final HotRestartCallback hotRestartCallback,
+                               final ResetAblyClientsCallback resetAblyClientsCallback,
                                final Context applicationContext) {
     this.channel = channel;
-    this.applicationContext = applicationContext;
-    this.hotRestartCallback = hotRestartCallback;
+    this.resetAblyClientsCallback = resetAblyClientsCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
     _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
-    _map.put(PlatformConstants.PlatformMethod.registerAbly, this::register);
+    _map.put(PlatformConstants.PlatformMethod.resetAblyClients, this::resetAblyClients);
 
     // Rest
     _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
@@ -176,10 +176,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     };
   }
 
-  private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    System.out.println("Registering library instance to clean up any existing instances");
-    hotRestartCallback.on();
+  private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     _ably.dispose();
+    resetAblyClientsCallback.on();
     result.success(null);
   }
 
@@ -205,16 +204,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
-                  if (errorMessage != null) {
-                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
-                  }
+                  Log.w(TAG, String.format("\"%s\" platform method received error from Dart side: %s", PlatformConstants.PlatformMethod.authCallback, errorMessage));
                   latch.countDown();
                 }
 
                 @Override
                 public void notImplemented() {
-                  System.out.println("`authCallback` Method not implemented on dart side");
+                  Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.authCallback));
                 }
               });
             });
@@ -249,6 +245,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       final ChannelOptions channelOptions = (ChannelOptions) map.get(PlatformConstants.TxTransportKeys.options);
       try {
         ablyLibrary.getRest(messageData.handle).channels.get(channelName, channelOptions);
+        result.success(null);
       } catch (AblyException ae) {
         handleAblyException(result, ae);
       }
@@ -475,7 +472,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
                   if (errorMessage != null) {
                     result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
                   }
@@ -506,14 +502,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void connectRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-    // Using Number (the superclass of both Long and Integer) because Flutter could send us
-    // either depending on how big the value is.
-    // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
-    this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
-      ablyLibrary.getRealtime(realtimeHandle.longValue()).connect();
-      result.success(null);
-    });
+    if (call.arguments instanceof Integer) {
+      final Integer realtimeHandle = (Integer) call.arguments;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    } else {
+      // Using Number (the superclass of both Long and Integer) because Flutter could send us
+      // either depending on how big the value is.
+      // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+      final AblyFlutterMessage<Integer> message = (AblyFlutterMessage<Integer>) call.arguments;
+      final Integer realtimeHandle = message.message;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    }
+    result.success(null);
   }
 
   private void attachRealtimeChannel(

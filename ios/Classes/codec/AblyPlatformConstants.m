@@ -9,7 +9,7 @@
 // flutter platform channel method names
 NSString *const AblyPlatformMethod_getPlatformVersion= @"getPlatformVersion";
 NSString *const AblyPlatformMethod_getVersion= @"getVersion";
-NSString *const AblyPlatformMethod_registerAbly= @"registerAbly";
+NSString *const AblyPlatformMethod_resetAblyClients= @"resetAblyClients";
 NSString *const AblyPlatformMethod_authCallback= @"authCallback";
 NSString *const AblyPlatformMethod_realtimeAuthCallback= @"realtimeAuthCallback";
 NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
@@ -53,7 +53,7 @@ NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground= @"pushOnS
 NSString *const AblyPlatformMethod_pushOnMessage= @"pushOnMessage";
 NSString *const AblyPlatformMethod_pushOnBackgroundMessage= @"pushOnBackgroundMessage";
 NSString *const AblyPlatformMethod_pushOnNotificationTap= @"pushOnNotificationTap";
-NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage= @"pushSetOnBackgroundMessage";
+NSString *const AblyPlatformMethod_pushBackgroundFlutterApplicationReadyOnAndroid= @"pushBackgroundFlutterApplicationReadyOnAndroid";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
