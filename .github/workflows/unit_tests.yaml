@@ -11,7 +11,7 @@ jobs:
   # format --set-exit-if-changed .` with older versions of Flutter, including the
   # matrix of flutter versions.
   format:
-    name: 'Formatting checks using latest Flutter SDK'
+    name: 'Formatting'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
   unit_tests:
-    name: "Unit tests (Flutter ${{ matrix.flutter-version }})"
+    name: "Unit tests (Flutter${{ matrix.flutter-version }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
