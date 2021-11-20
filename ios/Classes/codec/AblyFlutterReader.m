@@ -25,21 +25,21 @@ NS_ASSUME_NONNULL_END
 
 + (AblyCodecDecoder) getDecoder:(const NSString*)type {
     NSDictionary<NSString *, AblyCodecDecoder>* _handlers = @{
-        [NSString stringWithFormat:@"%d", ablyMessageCodecType]: readAblyFlutterMessage,
-        [NSString stringWithFormat:@"%d", ablyEventMessageCodecType ]: readAblyFlutterEventMessage,
-        [NSString stringWithFormat:@"%d", clientOptionsCodecType]: readClientOptions,
-        [NSString stringWithFormat:@"%d", messageExtrasCodecType]: readChannelMessageExtras,
-        [NSString stringWithFormat:@"%d", messageCodecType]: readChannelMessage,
-        [NSString stringWithFormat:@"%d", tokenDetailsCodecType]: readTokenDetails,
-        [NSString stringWithFormat:@"%d", tokenRequestCodecType]: readTokenRequest,
-        [NSString stringWithFormat:@"%d", restChannelOptionsCodecType]: CryptoCodec.readRestChannelOptions,
-        [NSString stringWithFormat:@"%d", realtimeChannelOptionsCodecType]: CryptoCodec.readRealtimeChannelOptions,
-        [NSString stringWithFormat:@"%d", restHistoryParamsCodecType]: readRestHistoryParams,
-        [NSString stringWithFormat:@"%d", realtimeHistoryParamsCodecType]: readRealtimeHistoryParams,
-        [NSString stringWithFormat:@"%d", restPresenceParamsCodecType]: readRestPresenceParams,
-        [NSString stringWithFormat:@"%d", realtimePresenceParamsCodecType]: readRealtimePresenceParams,
-        [NSString stringWithFormat:@"%d", messageDataCodecType]: readMessageData,
-        [NSString stringWithFormat:@"%d", cipherParamsCodecType]: CryptoCodec.readCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyMessage]: readAblyFlutterMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeAblyEventMessage ]: readAblyFlutterEventMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeClientOptions]: readClientOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageExtras]: readChannelMessageExtras,
+        [NSString stringWithFormat:@"%d", CodecTypeMessage]: readChannelMessage,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenDetails]: readTokenDetails,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenRequest]: readTokenRequest,
+        [NSString stringWithFormat:@"%d", CodecTypeRestChannelOptions]: CryptoCodec.readRestChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeChannelOptions]: CryptoCodec.readRealtimeChannelOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeRestHistoryParams]: readRestHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimeHistoryParams]: readRealtimeHistoryParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRestPresenceParams]: readRestPresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeRealtimePresenceParams]: readRealtimePresenceParams,
+        [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
+        [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -181,7 +181,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
     ON_VALUE(^(const id value) {
-        o.ttl = [NSNumber numberWithDouble:[value doubleValue]/1000];
+        o.ttl = @([value doubleValue] / 1000);
     }, dictionary, TxTokenParams_ttl);
     ON_VALUE(^(const id value) {
         o.timestamp = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
@@ -190,7 +190,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
 }
 
 static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDictionary *const dictionary) {
-    return [dictionary objectForKey: TxMessageExtras_extras];
+    return dictionary[TxMessageExtras_extras];
 };
 
 static AblyCodecDecoder readChannelMessage = ^ARTMessage*(NSDictionary *const dictionary) {

@@ -1,8 +1,8 @@
 String $(Map<String, dynamic> c) => '''
 @import Foundation;
 
-typedef NS_ENUM(UInt8, _Value) {
-\t${c['types'].map((_) => '${_['name']}CodecType = ${_['value']},').join('\n\t')}
+typedef NS_ENUM(UInt8, CodecType) {
+\t${c['types'].map((_) => 'CodecType${_capitalize(_['name'] as String)} = ${_['value']},').join('\n\t')}
 };
 
 
@@ -13,3 +13,6 @@ ${c['objects'].map((_) => '''
 // key constants for ${_['name']}
 ${_['properties'].map((name) => 'extern NSString *const Tx${_['name']}_$name;').join('\n')}
 ''').join('\n')}''';
+
+String _capitalize(String sentence) =>
+    '${sentence[0].toUpperCase()}${sentence.substring(1)}';
