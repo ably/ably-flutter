@@ -4,7 +4,8 @@ on:
     branches:
       - main
 jobs:
-  build:
+  build_and_upload:
+    name: 'Build and upload documentation'
     runs-on: ubuntu-latest
     permissions:
       deployments: write

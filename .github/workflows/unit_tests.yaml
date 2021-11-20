@@ -5,8 +5,32 @@ on:
       - main
 
 jobs:
-  check:
-    name: "Check using Flutter version: ${{ matrix.flutter-version }}"
+  # A separate job using the latest Flutter SDK is used for formatting.
+  # Formatting with older Flutter versions will format files differently, and 
+  # therefore change files and fail the job. This means we cannot run `flutter 
+  # format --set-exit-if-changed .` with older versions of Flutter, including the
+  # matrix of flutter versions.
+  format:
+    name: 'Formatting checks using latest Flutter SDK'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+
+      - name: 'Install dependencies'
+        run: |
+          flutter --version
+          flutter pub get
+          cd test_integration && flutter pub get && cd ..
+          cd example && flutter pub get && cd ..
+
+      - name: "Dart code formatting"
+        run: flutter format --set-exit-if-changed .
+
+  unit_tests:
+    name: "Unit tests (Flutter ${{ matrix.flutter-version }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,9 +50,6 @@ jobs:
           flutter pub get
           cd test_integration && flutter pub get && cd ..
           cd example && flutter pub get && cd ..
-
-      - name: 'Check formatting issues in the code'
-        run: flutter format --set-exit-if-changed .
 
       - name: 'Flutter analyze help'
         run: 'flutter analyze --help'

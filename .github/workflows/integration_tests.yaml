@@ -10,30 +10,28 @@ on:
 
 jobs:
   ios:
-    strategy:
-      matrix:
-        device: # Device names must be shown in `xcrun simctl list devices`
-          - 'iPhone 12'  # we are not specifying the iOS version as it tends to change
-      fail-fast: false
+    name: 'iOS integration tests'
+    env:
+      DEVICE: 'iPhone 13'
     runs-on: 'macos-11'
     steps:
-      - name: 'List Simulators'
-        run: 'xcrun simctl list devices'
-
       - name: 'Start Simulator'
-        run: xcrun simctl boot "${{ matrix.device }}"
+        run: |
+          xcrun simctl bootstatus "${{ env.DEVICE }}" -b
+          xcrun simctl logverbose "${{ env.DEVICE }}" enable
 
       - uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v1
 
-      - name: 'Run Flutter Driver tests'
+      - name: 'Run integration tests'
         timeout-minutes: 30
         run: |
           flutter pub get
           cd test_integration && ./run_integration_tests.sh
 
   android:
+    name: 'Android ${{ matrix.api-level }} integration tests'
     strategy:
       matrix:
         api-level: [21, 29]
