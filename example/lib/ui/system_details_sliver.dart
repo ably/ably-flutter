@@ -18,9 +18,7 @@ class SystemDetailsSliver extends HookWidget {
     final ablyVersion = useState<String?>(null);
 
     useEffect(() {
-      ably
-          .platformVersion()
-          .then((version) => platformVersion.value = version);
+      ably.platformVersion().then((version) => platformVersion.value = version);
       ably.version().then((version) => ablyVersion.value = version);
     }, []);
 
