@@ -45,8 +45,8 @@ class SystemDetailsSliver extends HookWidget {
                           color: Colors.red, fontWeight: FontWeight.bold)),
                   TextSpan(text: 'Ably API key is not configured, use '),
                   TextSpan(
-                      text: '`flutter run --dart-define='
-                          'ABLY_API_KEY=your_api_key`',
+                      text: '`flutter run '
+                          '--dart-define=ABLY_API_KEY=your_api_key`',
                       style: TextStyle()),
                   TextSpan(
                       text: "or add this to the 'additional run args' "
