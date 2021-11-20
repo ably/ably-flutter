@@ -43,7 +43,7 @@ class SystemDetailsSliver extends HookWidget {
                       text: 'Warning: ',
                       style: TextStyle(
                           color: Colors.red, fontWeight: FontWeight.bold)),
-                  TextSpan(text: 'API key is not configured, use '),
+                  TextSpan(text: 'Ably API key is not configured, use '),
                   TextSpan(
                       text: '`flutter run --dart-define='
                           'ABLY_API_KEY=your_api_key`',
@@ -55,7 +55,7 @@ class SystemDetailsSliver extends HookWidget {
                 ]),
           )
         else
-          TextRow('API key', hideApiKeySecret(apiKey)),
+          TextRow('Ably API key', hideApiKeySecret(apiKey)),
       ],
     );
   }
