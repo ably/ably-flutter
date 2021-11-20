@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_test/src/deprecated.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
 
@@ -13,8 +13,9 @@ class MockMethodCallManager {
 
   MockMethodCallManager() {
     final channel =
-        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()))
-          ..setMockMethodCallHandler(handler);
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, handler);
     Platform(methodChannel: channel);
   }
 
@@ -23,8 +24,9 @@ class MockMethodCallManager {
     publishedMessages.clear();
     handleCounter = 0;
     final channel =
-        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()))
-          ..setMockMethodCallHandler((call) => null);
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, handler);
     Platform(methodChannel: channel);
   }
 
