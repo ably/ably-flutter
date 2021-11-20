@@ -1,16 +1,10 @@
+import 'dart:io' as io show Platform;
+import 'dart:typed_data';
+
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import '../../authentication/authentication.dart';
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../../message/message.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../push_notifications/src/local_device.dart';
-import '../../realtime/realtime.dart';
-import '../../realtime/src/realtime_channel_options.dart';
-import '../../rest/rest.dart';
-import '../platform.dart';
 
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
@@ -124,6 +118,10 @@ class Codec extends StandardMessageCodec {
       // Events - Channel
       CodecTypes.channelStateChange:
           _CodecPair<ChannelStateChange>(null, _decodeChannelStateChange),
+
+      // Encryption
+      CodecTypes.cipherParams:
+          _CodecPair<CipherParams>(_encodeCipherParams, _decodeCipherParams),
     };
   }
 
@@ -155,6 +153,10 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.tokenRequest;
     } else if (value is MessageData) {
       return CodecTypes.messageData;
+    } else if (value is RealtimeChannelOptions) {
+      return CodecTypes.realtimeChannelOptions;
+    } else if (value is RestChannelOptions) {
+      return CodecTypes.restChannelOptions;
     } else if (value is MessageExtras) {
       return CodecTypes.messageExtras;
     } else if (value is Message) {
@@ -314,7 +316,8 @@ class Codec extends StandardMessageCodec {
   /// returns null if [v] is null
   Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRestChannelOptions.cipher, v.cipher);
+    jsonMap[TxRestChannelOptions.cipherParams] =
+        _encodeCipherParams(v.cipherParams);
     return jsonMap;
   }
 
@@ -337,7 +340,8 @@ class Codec extends StandardMessageCodec {
   Map<String, dynamic> _encodeRealtimeChannelOptions(
       final RealtimeChannelOptions v) {
     final jsonMap = <String, dynamic>{};
-    _writeToJson(jsonMap, TxRealtimeChannelOptions.cipher, v.cipher);
+    jsonMap[TxRealtimeChannelOptions.cipherParams] =
+        _encodeCipherParams(v.cipherParams);
     _writeToJson(jsonMap, TxRealtimeChannelOptions.params, v.params);
     _writeToJson(
       jsonMap,
@@ -345,6 +349,37 @@ class Codec extends StandardMessageCodec {
       v.modes?.map(_encodeChannelMode).toList(),
     );
     return jsonMap;
+  }
+
+  Map<String, dynamic>? _encodeCipherParams(final CipherParams? params) {
+    if (params == null) {
+      return null;
+    }
+    final jsonMap = <String, dynamic>{};
+    final paramsNative = CipherParamsNative.fromCipherParams(params);
+    jsonMap[TxCipherParams.androidHandle] = paramsNative.androidHandle;
+    jsonMap[TxCipherParams.iosKey] = paramsNative.key;
+    jsonMap[TxCipherParams.iosAlgorithm] = paramsNative.algorithm;
+
+    return jsonMap;
+  }
+
+  CipherParams _decodeCipherParams(final Map<String, dynamic> jsonMap) {
+    if (io.Platform.isAndroid) {
+      final cipherParamsHandle = jsonMap[TxCipherParams.androidHandle] as int;
+      return CipherParamsNative.forAndroid(
+        androidHandle: cipherParamsHandle,
+      );
+    } else if (io.Platform.isIOS) {
+      final algorithm = jsonMap[TxCipherParams.iosAlgorithm] as String;
+      final key = jsonMap[TxCipherParams.iosKey] as Uint8List;
+      return CipherParamsNative.forIOS(
+        algorithm: algorithm,
+        key: key,
+      );
+    } else {
+      throw AblyException("Unsupported platform");
+    }
   }
 
   /// Encodes [RestHistoryParams] to a Map
@@ -810,7 +845,8 @@ class Codec extends StandardMessageCodec {
         return UNShowPreviewsSetting.never;
     }
     throw AblyException(
-      'Platform communication error. UNShowPreviewsSetting is invalid: $setting',
+      'Platform communication error. '
+      'UNShowPreviewsSetting is invalid: $setting',
     );
   }
 
@@ -824,7 +860,8 @@ class Codec extends StandardMessageCodec {
         return UNAlertStyle.none;
     }
     throw AblyException(
-      'Platform communication error. UNAlertStyle is invalid: $style',
+      'Platform communication error. '
+      'UNAlertStyle is invalid: $style',
     );
   }
 
@@ -856,7 +893,8 @@ class Codec extends StandardMessageCodec {
         return UNNotificationSetting.notSupported;
     }
     throw AblyException(
-      'Platform communication error. UNNotificationSetting is invalid: $setting',
+      'Platform communication error. '
+      'UNNotificationSetting is invalid: $setting',
     );
   }
 

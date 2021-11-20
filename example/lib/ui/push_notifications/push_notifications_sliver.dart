@@ -1,17 +1,18 @@
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_activation_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_publishing_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_received_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_subscriptions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_realtime_client_received_sliver.dart';
 import 'package:flutter/material.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import 'push_notifications_activation_sliver.dart';
-import 'push_notifications_device_information.dart';
-import 'push_notifications_ios_permissions_sliver.dart';
-import 'push_notifications_publishing_sliver.dart';
-import 'push_notifications_subscriptions_sliver.dart';
 
 class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
   final bool isIOSSimulator;
 
-  const PushNotificationsSliver(this._pushNotificationService,
+  PushNotificationsSliver(this._pushNotificationService,
       {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
@@ -61,18 +62,20 @@ class PushNotificationsSliver extends StatelessWidget {
                 _pushNotificationService),
             PushNotificationsSubscriptionsSliver(_pushNotificationService),
             PushNotificationsPublishingSliver(_pushNotificationService),
+            const PushNotificationsReceivedSliver(),
+            PushRealtimeClientReceivedSliver(_pushNotificationService),
           ],
         ),
       );
 
   Widget buildSummaryText() => Column(
-        children: [
-          const Text(
+        children: const [
+          Text(
               'Activate your device, view your local device information, '
               'subscribe to a push channel with either your device or '
               'client ID, and then publish to the channel.',
               style: TextStyle(color: Colors.black)),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       );
 }

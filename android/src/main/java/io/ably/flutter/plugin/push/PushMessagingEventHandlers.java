@@ -5,9 +5,9 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -16,6 +16,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.flutter.plugin.common.MethodChannel;
 
+/**
+ * This class is used when the application is in the **foreground** or **background**, but not when
+ * **terminated**. See [PushTerminatedIsolateRunner.java] to see where push notifications being
+ * handled whilst the app is terminated.
+ */
 final public class PushMessagingEventHandlers {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
   public static final String PUSH_ON_MESSAGE_RECEIVED = "io.ably.ably_flutter.PUSH_ON_MESSAGE_RECEIVED";
@@ -23,14 +28,40 @@ final public class PushMessagingEventHandlers {
   public static final String PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE = "io.ably.ably_flutter.PUSH_ON_BACKGROUND_MESSAGE_COMPLETE";
   static PushMessagingEventHandlers instance;
 
-  public static void instantiate(Context context, MethodChannel methodChannel) {
-    if (instance == null) {
-      instance = new PushMessagingEventHandlers(context, methodChannel);
+  /**
+   * Replaces the existing instance if required. this is because the latest methodChannel is the
+   * most important because it is from the latest plugin registration.
+   * @param context
+   * @param methodChannel
+   */
+  public static void reset(Context context, MethodChannel methodChannel) {
+    if (instance != null) {
+      instance.close(context);
     }
+    instance = new PushMessagingEventHandlers(context, methodChannel);
   }
 
+  private void close(Context context) {
+    this.broadcastReceiver.close(context);
+  }
+
+  private final BroadcastReceiver broadcastReceiver;
   private PushMessagingEventHandlers(Context context, MethodChannel methodChannel) {
-    new BroadcastReceiver(context, methodChannel);
+    this.broadcastReceiver = new BroadcastReceiver(context, methodChannel);
+  }
+
+  // Send message to Dart side app already running
+  public static void sendMessageToFlutterApp(@NonNull final Context context, @NonNull final Intent intent) {
+    final Intent onMessageReceivedIntent = new Intent(PUSH_ON_MESSAGE_RECEIVED);
+    onMessageReceivedIntent.putExtras(intent.getExtras());
+    LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
+  }
+
+  // Flutter is already running, just send a background message to it.
+  public static void sendBackgroundMessageToFlutterApp(Context context, Intent intent) {
+    final Intent onMessageReceivedIntent = new Intent(PUSH_ON_BACKGROUND_MESSAGE_RECEIVED);
+    onMessageReceivedIntent.putExtras(intent.getExtras());
+    LocalBroadcastManager.getInstance(context).sendBroadcast(onMessageReceivedIntent);
   }
 
   private static class BroadcastReceiver extends android.content.BroadcastReceiver {
@@ -48,10 +79,14 @@ final public class PushMessagingEventHandlers {
       LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
     }
 
+    void close(Context context) {
+      LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+      this.methodChannel = null;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
       String action = intent.getAction();
-      Bundle intentExtras = intent.getExtras();
       RemoteMessage message = new RemoteMessage(intent.getExtras());
       switch (action) {
         case PUSH_ON_MESSAGE_RECEIVED:

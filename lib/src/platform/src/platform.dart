@@ -1,11 +1,8 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../platform.dart';
-import 'background_android_isolate_platform.dart';
 
 class Platform {
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
@@ -29,6 +26,7 @@ class Platform {
     if (_initializer == null) {
       AblyMethodCallHandler(methodChannel);
       _initializer = methodChannel.invokeMethod(PlatformMethod.registerAbly);
+      BackgroundIsolateAndroidPlatform();
     }
     return _initializer;
   }
@@ -43,6 +41,27 @@ class Platform {
     await _initialize();
     try {
       return await methodChannel.invokeMethod<T>(method, arguments);
+    } on PlatformException catch (pe) {
+      if (pe.details is ErrorInfo) {
+        throw AblyException.fromPlatformException(pe);
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// Call a platform method which always provides a result.
+  static Future<T> invokePlatformMethodNonNull<T>(String method,
+      [Object? arguments]) async {
+    await _initialize();
+    try {
+      final result = await methodChannel.invokeMethod<T>(method, arguments);
+      if (result == null) {
+        throw AblyException('invokePlatformMethodNonNull("$method") platform '
+            'method unexpectedly returned a null value.');
+      } else {
+        return result;
+      }
     } on PlatformException catch (pe) {
       if (pe.details is ErrorInfo) {
         throw AblyException.fromPlatformException(pe);

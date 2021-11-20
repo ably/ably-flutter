@@ -59,6 +59,8 @@ NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeCh
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_nextPage= @"nextPage";
 NSString *const AblyPlatformMethod_firstPage= @"firstPage";
+NSString *const AblyPlatformMethod_cryptoGetParams= @"cryptoGetParams";
+NSString *const AblyPlatformMethod_cryptoGenerateRandomKey= @"cryptoGenerateRandomKey";
 
 // key constants for TransportKeys
 NSString *const TxTransportKeys_channelName = @"channelName";
@@ -134,12 +136,17 @@ NSString *const TxClientOptions_channelRetryTimeout = @"channelRetryTimeout";
 NSString *const TxClientOptions_transportParams = @"transportParams";
 
 // key constants for RestChannelOptions
-NSString *const TxRestChannelOptions_cipher = @"cipher";
+NSString *const TxRestChannelOptions_cipherParams = @"cipherParams";
 
 // key constants for RealtimeChannelOptions
-NSString *const TxRealtimeChannelOptions_cipher = @"cipher";
 NSString *const TxRealtimeChannelOptions_params = @"params";
 NSString *const TxRealtimeChannelOptions_modes = @"modes";
+NSString *const TxRealtimeChannelOptions_cipherParams = @"cipherParams";
+
+// key constants for CipherParams
+NSString *const TxCipherParams_androidHandle = @"androidHandle";
+NSString *const TxCipherParams_iosAlgorithm = @"iosAlgorithm";
+NSString *const TxCipherParams_iosKey = @"iosKey";
 
 // key constants for TokenDetails
 NSString *const TxTokenDetails_token = @"token";
@@ -346,3 +353,10 @@ NSString *const TxRemoteMessage_notification = @"notification";
 // key constants for Notification
 NSString *const TxNotification_title = @"title";
 NSString *const TxNotification_body = @"body";
+
+// key constants for CryptoGetParams
+NSString *const TxCryptoGetParams_algorithm = @"algorithm";
+NSString *const TxCryptoGetParams_key = @"key";
+
+// key constants for CryptoGenerateRandomKey
+NSString *const TxCryptoGenerateRandomKey_keyLength = @"keyLength";

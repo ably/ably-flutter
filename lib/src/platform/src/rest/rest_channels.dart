@@ -1,26 +1,24 @@
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
-
-import '../../../generated/platform_constants.dart';
-import '../../../rest/rest.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
-import 'rest_channel.dart';
 
 /// A collection of rest channel objects
 ///
 /// https://docs.ably.io/client-lib-development-guide/features/#RSN1
-class RestChannels extends RestChannelsInterface<RestChannel> {
+class RestChannels extends Channels<RestChannel> {
+  final Rest _rest;
+
   /// instantiates with the ably [Rest] instance
-  RestChannels(Rest rest) : super(rest);
+  RestChannels(this._rest);
 
   @override
   @protected
   RestChannel createChannel(String name) =>
-      RestChannel(rest, PushChannelNative(name, rest: rest), name);
+      RestChannel(_rest, PushChannelNative(name, rest: _rest), name);
 
   @override
   void release(String name) {
     super.release(name);
-    (rest as Rest).invoke(PlatformMethod.releaseRestChannel, name);
+    _rest.invoke(PlatformMethod.releaseRestChannel, name);
   }
 }

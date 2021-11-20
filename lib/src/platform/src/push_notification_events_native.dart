@@ -2,13 +2,8 @@ import 'dart:async';
 import 'dart:io' as io show Platform;
 import 'dart:ui';
 
-import 'package:flutter/services.dart';
-
-import '../../generated/platform_constants.dart';
-import '../../push_notifications/src/push_notification_events.dart';
-import '../../push_notifications/src/remote_message.dart';
-import '../platform.dart';
-import 'background_android_isolate_platform.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 class PushNotificationEventsNative implements PushNotificationEvents {
   VoidCallback? onOpenSettingsHandler;
@@ -44,8 +39,8 @@ class PushNotificationEventsNative implements PushNotificationEvents {
     onShowNotificationInForegroundHandler = callback;
   }
 
-  /// An internal method that is called from the Platform side to check if the user
-  /// wants notifications to be shown when the app is in the foreground.
+  /// An internal method that is called from the Platform side to check if the
+  /// user wants notifications to be shown when the app is in the foreground.
   Future<bool> showNotificationInForeground(RemoteMessage message) async {
     if (onShowNotificationInForegroundHandler == null) {
       return false;
@@ -57,7 +52,8 @@ class PushNotificationEventsNative implements PushNotificationEvents {
 
   /// Implementation of setOnBackgroundMessage. For more documentation,
   /// see [PushNotificationEvents.setOnBackgroundMessage]
-  void setOnBackgroundMessage(BackgroundMessageHandler handler) async {
+  @override
+  Future<void> setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
       await BackgroundIsolateAndroidPlatform.methodChannel

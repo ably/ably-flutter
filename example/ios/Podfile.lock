@@ -1,11 +1,11 @@
 PODS:
-  - Ably (1.2.6):
-    - AblyDeltaCodec (= 1.3.1)
+  - Ably (1.2.7):
+    - AblyDeltaCodec (= 1.3.2)
     - msgpack (= 0.4.0)
-  - ably_flutter (1.2.2):
-    - Ably (= 1.2.6)
+  - ably_flutter (1.2.5):
+    - Ably (= 1.2.7)
     - Flutter
-  - AblyDeltaCodec (1.3.1)
+  - AblyDeltaCodec (1.3.2)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -44,9 +44,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
 
 SPEC CHECKSUMS:
-  Ably: 6f58ab63407c71f984ef61112f60525cf9bc634a
-  ably_flutter: 8a15c27fd1067cfc1326738d209c597a82264504
-  AblyDeltaCodec: f66a44f743b2a0703f29a65208321d4ea43362d6
+  Ably: f627c0c2e4489785b74d33d2c1287edeb9c6a7be
+  ably_flutter: 43b5908539837dd5020a07a3ed7a6133a3275fa2
+  AblyDeltaCodec: 783d017270de70bbbc0a84e4235297b225d33636
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743

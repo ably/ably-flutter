@@ -1,31 +1,23 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
-import '../../../error/error.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../message/message.dart';
-import '../../../push_notifications/push_notifications.dart';
-import '../../../realtime/realtime.dart';
-import '../../../realtime/src/realtime_channel_options.dart';
-import '../../../realtime/src/realtime_channels_interface.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
+/// A named channel through with realtime client can interact with ably service.
+///
+/// The same channel can be interacted with relevant APIs via rest channel.
+///
+/// https://docs.ably.com/client-lib-development-guide/features/#RTL1
+class RealtimeChannel extends PlatformObject {
+  final Realtime realtime;
 
-/// Plugin based implementation of Realtime channel
-class RealtimeChannel extends PlatformObject
-    implements RealtimeChannelInterface {
-  @override
-  final RealtimeInterface realtime;
-
-  @override
   final String name;
 
   late RealtimePresence _presence;
 
-  @override
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
   RealtimePresence get presence => _presence;
 
   /// instantiates with [Rest], [name] and [RealtimeChannelOptions]
@@ -44,8 +36,11 @@ class RealtimeChannel extends PlatformObject
   /// as that is what will be required in platforms end to find realtime
   /// instance and send message to channel
   @override
-  Future<int> createPlatformInstance() async => (realtime as Realtime).handle;
+  Future<int> createPlatformInstance() async => realtime.handle;
 
+  /// returns channel history based on filters passed as [params]
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
   @override
   Future<PaginatedResult<Message>> history([
     RealtimeHistoryParams? params,
@@ -60,9 +55,12 @@ class RealtimeChannel extends PlatformObject
     );
   }
 
-  final _publishQueue = Queue<_PublishQueueItem>();
+  final _publishQueue = Queue<PublishQueueItem>();
   Completer<void>? _authCallbackCompleter;
 
+  /// publishes messages onto the channel
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
   @override
   Future<void> publish({
     Message? message,
@@ -73,9 +71,9 @@ class RealtimeChannel extends PlatformObject
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = _PublishQueueItem(Completer<void>(), messages);
+    final queueItem = PublishQueueItem(Completer<void>(), messages);
     _publishQueue.add(queueItem);
-    unawaited(_publishInternal());
+    unawaitedWorkaroundForDartPre214(_publishInternal());
     return queueItem.completer.future;
   }
 
@@ -158,39 +156,52 @@ class RealtimeChannel extends PlatformObject
     _authCallbackCompleter?.complete();
   }
 
-  @override
+  /// will hold reason for failure of attaching to channel in such cases
   ErrorInfo? errorReason;
 
-  @override
+  /// modes of this channel as returned by Ably server
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
   List<ChannelMode>? modes;
 
-  @override
+  /// Subset of the params passed via [ClientOptions]
+  /// that the server has recognised and validated
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
   Map<String, String>? params;
 
-  @override
+  // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
+
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
+  /// (see IDL for more details)
   late PushChannel push;
 
-  @override
   ChannelState state;
 
-  @override
+  /// Attaches the realtime client to this channel.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4
   Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
         TxTransportKeys.channelName: name,
       });
 
-  @override
+  /// Detaches the realtime client from this channel.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL5
   Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
         TxTransportKeys.channelName: name,
       });
 
-  @override
+  /// takes a [RealtimeChannelOptions]] object and sets or updates the
+  /// stored channel options
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   Future<void> setOptions(RealtimeChannelOptions options) =>
       invoke(PlatformMethod.setRealtimeChannelOptions, {
         TxTransportKeys.channelName: name,
         TxTransportKeys.options: options,
       });
 
-  @override
   Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
@@ -200,7 +211,20 @@ class RealtimeChannel extends PlatformObject
             channelEvent == null || stateChange.event == channelEvent,
       );
 
-  @override
+  /// subscribes for messages on this channel
+  ///
+  /// there is no unsubscribe api in flutter like in other Ably client SDK's
+  /// as subscribe returns a stream which can be cancelled
+  /// by calling [StreamSubscription.cancel]
+  ///
+  /// Warning: the name/ names are not channel names, but message names.
+  /// See [Message] for more information.
+  ///
+  /// Calling subscribe the first time on a channel will automatically attach
+  /// that channel. If a channel is detached, subscribing again will not
+  /// reattach the channel. Remember to call [RealtimeChannel.attach]
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
@@ -209,32 +233,4 @@ class RealtimeChannel extends PlatformObject
         subscribedNames.isEmpty ||
         subscribedNames.any((n) => n == message.name));
   }
-}
-
-/// A collection of realtime channel objects
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTS1
-class RealtimePlatformChannels
-    extends RealtimeChannelsInterface<RealtimeChannel> {
-  /// instantiates with the ably [Realtime] instance
-  RealtimePlatformChannels(Realtime realtime) : super(realtime);
-
-  @override
-  @protected
-  RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
-
-  @override
-  void release(String name) {
-    super.release(name);
-    (realtime as Realtime).invoke(PlatformMethod.releaseRealtimeChannel, name);
-  }
-}
-
-/// An item for used to enqueue a message to be published after an ongoing
-/// authCallback is completed
-class _PublishQueueItem {
-  List<Message> messages;
-  final Completer<void> completer;
-
-  _PublishQueueItem(this.completer, this.messages);
 }
