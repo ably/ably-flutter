@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Ably Plugin Example App'),
+            title: const Text('Ably Flutter Example App'),
           ),
           body: Center(
             child: ListView(
