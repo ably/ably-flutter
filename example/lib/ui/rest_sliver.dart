@@ -26,18 +26,22 @@ class RestSliver extends HookWidget {
           print('Rest message sending failed:: $e :: ${e.errorInfo}');
         }
       },
-      child: Text('Publish message: "$messageName"'),
+      child: const Text('Publish'),
     );
   }
 
-  Widget buildReleaseRestChannelButton() => TextButton(
+  Widget buildReleaseChannelButton() => TextButton(
         onPressed: () => rest.channels.release(Constants.channelName),
-        child: const Text('Release Rest channel'),
+        child: const Text('Release channel'),
       );
 
   @override
   Widget build(BuildContext context) {
     final messageCount = useState(1);
+    final messageName = useState('Message ${messageCount.value}');
+    useEffect(() {
+      messageName.value = 'Message ${messageCount.value}';
+    }, [messageCount]);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,8 +50,13 @@ class RestSliver extends HookWidget {
           'Rest',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        buildPublishButton(messageCount),
-        buildReleaseRestChannelButton(),
+        Row(
+          children: [
+            Expanded(child: buildPublishButton(messageCount)),
+            Expanded(child: buildReleaseChannelButton()),
+          ],
+        ),
+        TextRow('Next message', messageName.value),
         PaginatedResultViewer<ably.Message>(
             title: 'History',
             query: () => channel.history(ably.RestHistoryParams(
