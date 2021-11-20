@@ -1,4 +1,3 @@
-import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/push_notifications/push_notification_handlers.dart';
 import 'package:ably_flutter_example/ui/ably_service.dart';
 import 'package:ably_flutter_example/ui/message_encryption/message_encryption_sliver.dart';
@@ -13,19 +12,14 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   PushNotificationHandlers.setUpEventHandlers();
   PushNotificationHandlers.setUpMessageHandlers();
-  runApp(MyApp());
+  final ablyService = AblyService();
+  runApp(AblyFlutterExampleApp(ablyService));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+class AblyFlutterExampleApp extends StatelessWidget {
+  final AblyService ablyService;
 
-const defaultChannel = Constants.channelName;
-
-class _MyAppState extends State<MyApp> {
-  final String _apiKey = const String.fromEnvironment(Constants.ablyApiKey);
-  late final AblyService _ablyService = AblyService(_apiKey);
+  AblyFlutterExampleApp(this.ablyService);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -38,16 +32,16 @@ class _MyAppState extends State<MyApp> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
-                  SystemDetailsSliver(_apiKey),
+                  SystemDetailsSliver(ablyService.apiKey),
                   const Divider(),
-                  RealtimeSliver(_ablyService),
+                  RealtimeSliver(ablyService),
                   const Divider(),
-                  RestSliver(_ablyService.rest),
+                  RestSliver(ablyService.rest),
                   const Divider(),
                   MessageEncryptionSliver(
-                      _ablyService.encryptedMessagingService),
+                      ablyService.encryptedMessagingService),
                   const Divider(),
-                  PushNotificationsSliver(_ablyService.pushNotificationService)
+                  PushNotificationsSliver(ablyService.pushNotificationService)
                 ]),
           ),
         ),

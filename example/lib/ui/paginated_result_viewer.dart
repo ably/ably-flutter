@@ -8,13 +8,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 /// by going to the next page, and going back to the first page.
 class PaginatedResultViewer<T> extends HookWidget {
   final String title;
+  final Widget? subtitle;
 
   ably.PaginatedResult<T>? firstPaginatedResult;
   final ValueWidgetBuilder<T> builder;
   final Future<ably.PaginatedResult<T>> Function() query;
 
   PaginatedResultViewer(
-      {required this.title, required this.query, required this.builder});
+      {required this.title,
+      required this.query,
+      required this.builder,
+      this.subtitle});
 
   Future<void> getFirstPaginatedResult(
       ValueNotifier<ably.PaginatedResult<T>?> currentPaginatedResult,
@@ -68,6 +72,13 @@ class PaginatedResultViewer<T> extends HookWidget {
             )
           ],
         ),
+        if (subtitle != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: subtitle,
+          )
+        else
+          const SizedBox.shrink(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: (items.isEmpty)

@@ -220,6 +220,10 @@ class RealtimeSliver extends HookWidget {
         ),
         PaginatedResultViewer<ably.Message>(
             title: 'History',
+            subtitle: TextRow(
+                'Hint',
+                'You must detach and re-attach to the channel'
+                    ' to get RestChannel history.'),
             query: () => channel.history(
                   ably.RealtimeHistoryParams(
                     limit: 10,

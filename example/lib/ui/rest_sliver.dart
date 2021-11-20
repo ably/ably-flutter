@@ -14,21 +14,20 @@ class RestSliver extends HookWidget {
     channel = rest.channels.get(Constants.channelName);
   }
 
-  Widget buildPublishButton(ValueNotifier<int> messageCount) {
-    final messageName = 'Message $messageCount';
-    return TextButton(
-      onPressed: () async {
-        try {
-          await channel.publish(
-              name: messageName, data: 'Some data for Message $messageCount');
-          messageCount.value += 1;
-        } on ably.AblyException catch (e) {
-          print('Rest message sending failed:: $e :: ${e.errorInfo}');
-        }
-      },
-      child: const Text('Publish'),
-    );
-  }
+  Widget buildPublishButton(
+          ValueNotifier<int> messageCount, String messageName) =>
+      TextButton(
+        onPressed: () async {
+          try {
+            await channel.publish(
+                name: messageName, data: 'Some data for $messageName');
+            messageCount.value += 1;
+          } on ably.AblyException catch (e) {
+            print('Rest message sending failed:: $e :: ${e.errorInfo}');
+          }
+        },
+        child: const Text('Publish'),
+      );
 
   Widget buildReleaseChannelButton() => TextButton(
         onPressed: () => rest.channels.release(Constants.channelName),
@@ -52,7 +51,8 @@ class RestSliver extends HookWidget {
         ),
         Row(
           children: [
-            Expanded(child: buildPublishButton(messageCount)),
+            Expanded(
+                child: buildPublishButton(messageCount, messageName.value)),
             Expanded(child: buildReleaseChannelButton()),
           ],
         ),

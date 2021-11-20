@@ -4,14 +4,15 @@ import 'package:ably_flutter_example/encrypted_messaging_service.dart';
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 
 class AblyService {
+  final String apiKey = const String.fromEnvironment(Constants.ablyApiKey);
   late final ably.Realtime realtime;
   late final ably.Rest rest;
   late final EncryptedMessagingService encryptedMessagingService;
   late final PushNotificationService pushNotificationService;
 
-  AblyService(String _apiKey) {
+  AblyService() {
     realtime = ably.Realtime(
-        options: ably.ClientOptions.fromKey(_apiKey)
+        options: ably.ClientOptions.fromKey(apiKey)
           ..clientId = Constants.clientId
           ..logLevel = ably.LogLevel.verbose
           ..autoConnect = false
@@ -19,15 +20,14 @@ class AblyService {
             print('Custom logger :: $msg $exception');
           });
     rest = ably.Rest(
-        options: ably.ClientOptions.fromKey(_apiKey)
+        options: ably.ClientOptions.fromKey(apiKey)
           ..clientId = Constants.clientId
           ..logLevel = ably.LogLevel.verbose
           ..logHandler = ({msg, exception}) {
             print('Custom logger :: $msg $exception');
           });
     encryptedMessagingService = EncryptedMessagingService(realtime, rest);
-    pushNotificationService =
-        PushNotificationService(realtime, rest);
+    pushNotificationService = PushNotificationService(realtime, rest);
   }
 }
 
