@@ -29,9 +29,10 @@ typedef NS_ENUM(UInt8, _Value) {
     unNotificationSettingsCodecType = 148,
     remoteMessageCodecType = 149,
     errorInfoCodecType = 150,
-    connectionStateChangeCodecType = 151,
-    channelStateChangeCodecType = 152,
-    cipherParamsCodecType = 153,
+    logLevelCodecType = 151,
+    connectionStateChangeCodecType = 152,
+    channelStateChangeCodecType = 153,
+    cipherParamsCodecType = 154,
 };
 
 
@@ -232,6 +233,14 @@ extern NSString *const TxFormFactorEnum_watch;
 extern NSString *const TxFormFactorEnum_car;
 extern NSString *const TxFormFactorEnum_embedded;
 extern NSString *const TxFormFactorEnum_other;
+
+// key constants for LogLevelEnum
+extern NSString *const TxLogLevelEnum_none;
+extern NSString *const TxLogLevelEnum_verbose;
+extern NSString *const TxLogLevelEnum_debug;
+extern NSString *const TxLogLevelEnum_info;
+extern NSString *const TxLogLevelEnum_warn;
+extern NSString *const TxLogLevelEnum_error;
 
 // key constants for DevicePlatformEnum
 extern NSString *const TxDevicePlatformEnum_ios;

@@ -29,9 +29,10 @@ class CodecTypes {
   static const int unNotificationSettings = 148;
   static const int remoteMessage = 149;
   static const int errorInfo = 150;
-  static const int connectionStateChange = 151;
-  static const int channelStateChange = 152;
-  static const int cipherParams = 153;
+  static const int logLevel = 151;
+  static const int connectionStateChange = 152;
+  static const int channelStateChange = 153;
+  static const int cipherParams = 154;
 }
 
 class PlatformMethod {
@@ -256,6 +257,15 @@ class TxFormFactorEnum {
   static const String other = 'other';
 }
 
+class TxLogLevelEnum {
+  static const String none = 'none';
+  static const String verbose = 'verbose';
+  static const String debug = 'debug';
+  static const String info = 'info';
+  static const String warn = 'warn';
+  static const String error = 'error';
+}
+
 class TxDevicePlatformEnum {
   static const String ios = 'ios';
   static const String android = 'android';
@@ -371,8 +381,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -388,8 +397,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

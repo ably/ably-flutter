@@ -5,15 +5,13 @@
 #import "AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
-static ARTLogLevel _logLevel(NSNumber *const number) {
-    switch (number.unsignedIntegerValue) {
-        case 99: return ARTLogLevelNone;
-        case 2: return ARTLogLevelVerbose;
-        case 3: return ARTLogLevelDebug;
-        case 4: return ARTLogLevelInfo;
-        case 5: return ARTLogLevelWarn;
-        case 6: return ARTLogLevelError;
-    }
+static ARTLogLevel _logLevel(NSString *const logLevelString) {
+    if ([logLevelString isEqualToString:TxLogLevelEnum_none]) return ARTLogLevelNone;
+    if ([logLevelString isEqualToString:TxLogLevelEnum_verbose]) return ARTLogLevelVerbose;
+    if ([logLevelString isEqualToString:TxLogLevelEnum_debug]) return ARTLogLevelDebug;
+    if ([logLevelString isEqualToString:TxLogLevelEnum_info]) return ARTLogLevelInfo;
+    if ([logLevelString isEqualToString:TxLogLevelEnum_warn]) return ARTLogLevelWarn;
+    if ([logLevelString isEqualToString:TxLogLevelEnum_error]) return ARTLogLevelError;
     return ARTLogLevelWarn;
 }
 
