@@ -1,23 +1,19 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../../platform/platform.dart';
-import '../crypto.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Utility methods for creating keys ([generateRandomKey]) and configuration
 /// objects ([CipherParams]) for symmetric encryption.
 class Crypto {
-  static const DEFAULT_ALGORITHM = 'aes';
-  static const DEFAULT_BLOCK_LENGTH_IN_BYTES = 16;
-  static const DEFAULT_KEY_LENGTH_IN_BITS = 256;
-  static const KEY_LENGTH_128_BITS = 128;
-  static const DEFAULT_MODE = 'cbc';
-  static const KEY_TYPE_ERROR_MESSAGE =
-      'A key must either be a String or a Uint8List.';
-  static const KEY_LENGTH_ERROR_MESSAGE =
-      'A key must be 256 bits or 128 bits in length.';
+  static const defaultAlgorithm = 'aes';
+  static const defaultBlockLengthInBytes = 16;
+  static const defaultKeyLengthInBits = 256;
+  static const keyLength128bits = 128;
+  static const defaultMode = 'cbc';
+  static const keyTypeErrorMessage = 'key must be a String or Uint8List.';
+  static const keyLengthErrorMessage = 'key must be 256 bits or 128 bits long.';
 
   /// Gets the CipherParams which can be used to with [RestChannelOptions] or
   /// [RealtimeChannelOptions] to specify encryption.
@@ -33,33 +29,32 @@ class Crypto {
     } else if (key is Uint8List) {
       ensureSupportedKeyLength(key);
     } else {
-      throw AblyException(KEY_TYPE_ERROR_MESSAGE);
+      throw AblyException(keyTypeErrorMessage);
     }
 
     return Platform.invokePlatformMethodNonNull<CipherParams>(
         PlatformMethod.cryptoGetParams, {
-      TxCryptoGetParams.algorithm: DEFAULT_ALGORITHM,
+      TxCryptoGetParams.algorithm: defaultAlgorithm,
       TxCryptoGetParams.key: key,
     });
   }
 
   static void ensureSupportedKeyLength(Uint8List key) {
-    if (key.length != DEFAULT_KEY_LENGTH_IN_BITS / 8 &&
-        key.length != KEY_LENGTH_128_BITS / 8) {
-      throw AblyException(KEY_LENGTH_ERROR_MESSAGE);
+    if (key.length != defaultKeyLengthInBits / 8 &&
+        key.length != keyLength128bits / 8) {
+      throw AblyException(keyLengthErrorMessage);
     }
   }
 
   /// Create a random key
   ///
   /// Specify a [keyLength] to choose how long the key is.
-  /// Defaults to [DEFAULT_KEY_LENGTH_IN_BITS].
+  /// Defaults to [defaultKeyLengthInBits].
   ///
   /// Warning: If you create a random key and encrypt messages without sharing
   /// this key with other clients, there is no way to decrypt the messages.
   static Future<Uint8List> generateRandomKey(
-      {keyLength = DEFAULT_KEY_LENGTH_IN_BITS}) {
-    return Platform.invokePlatformMethodNonNull<Uint8List>(
-        PlatformMethod.cryptoGenerateRandomKey, keyLength);
-  }
+          {keyLength = defaultKeyLengthInBits}) =>
+      Platform.invokePlatformMethodNonNull<Uint8List>(
+          PlatformMethod.cryptoGenerateRandomKey, keyLength);
 }

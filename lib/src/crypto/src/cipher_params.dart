@@ -1,4 +1,4 @@
-import '../../../ably_flutter.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// params to configure encryption for a channel
 ///

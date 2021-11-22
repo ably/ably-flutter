@@ -1,21 +1,15 @@
-import '../../common/common.dart';
-import '../../error/error.dart';
-import '../../generated/platform_constants.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../realtime/realtime.dart';
-import '../../rest/rest.dart';
-import '../platform.dart';
-import '../platform_internal.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// The native code implementation of [PushChannel].
 class PushChannelNative extends PlatformObject implements PushChannel {
   final String _name;
 
   /// A rest client used platform side to invoke push notification methods
-  final RestInterface? rest;
+  final Rest? rest;
 
   /// A realtime client used platform side to invoke push notification methods
-  final RealtimeInterface? realtime;
+  final Realtime? realtime;
 
   /// Pass the channel name and an Ably realtime or rest client.
   PushChannelNative(this._name, {this.rest, this.realtime}) {
@@ -53,7 +47,7 @@ class PushChannelNative extends PlatformObject implements PushChannel {
       {TxTransportKeys.channelName: _name});
 
   @override
-  Future<PaginatedResultInterface<PushChannelSubscription>> listSubscriptions(
+  Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&
         !params.containsKey('clientId') &&

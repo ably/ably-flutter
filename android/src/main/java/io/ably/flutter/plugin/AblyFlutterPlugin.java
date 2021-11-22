@@ -91,6 +91,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         Intent intent = mainActivity.getIntent();
         handleRemoteMessageIntent(intent, (message) -> {
             // Only send the RemoteMessage to the dart side if it was actually a RemoteMessage.
+            // Application is not yet running when notification is tapped
             methodCallHandler.setRemoteMessageFromUserTapLaunchesApp(message);
         });
     }
@@ -123,6 +124,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
           mainActivity.setIntent(intent);
         }
         handleRemoteMessageIntent(intent, (message) -> {
+            // Application already running when notification is tapped
             methodChannel.invokeMethod(PlatformConstants.PlatformMethod.pushOnNotificationTap, message);
         });
         return false;

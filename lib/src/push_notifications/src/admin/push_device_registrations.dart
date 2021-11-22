@@ -1,5 +1,4 @@
-import '../../../common/common.dart';
-import '../../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// Manage device registrations for push notifications
 ///
@@ -16,7 +15,7 @@ abstract class PushDeviceRegistrations {
   /// List registered devices filtered by optional params.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
-  Future<PaginatedResultInterface<DeviceDetails>> list(
+  Future<PaginatedResult<DeviceDetails>> list(
     DeviceRegistrationParams params,
   );
 

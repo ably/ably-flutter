@@ -1,9 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/text_with_label.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import '../text_with_label.dart';
 
 class PushNotificationsDeviceInformation extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
@@ -30,17 +29,14 @@ class PushNotificationsDeviceInformation extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      TextWithLabel('deviceId', localDevice.id),
-                      TextWithLabel('clientId', localDevice.clientId),
-                      TextWithLabel(
-                          'platform', localDevice.platform.toString()),
-                      TextWithLabel(
-                          'formFactor', localDevice.formFactor.toString()),
-                      TextWithLabel(
-                          'metadata', localDevice.metadata.toString()),
-                      TextWithLabel('DevicePushDetails state',
+                      TextRow('deviceId', localDevice.id),
+                      TextRow('clientId', localDevice.clientId),
+                      TextRow('platform', localDevice.platform.toString()),
+                      TextRow('formFactor', localDevice.formFactor.toString()),
+                      TextRow('metadata', localDevice.metadata.toString()),
+                      TextRow('DevicePushDetails state',
                           localDevice.push.state.toString()),
-                      TextWithLabel('DevicePushDetails recipient',
+                      TextRow('DevicePushDetails recipient',
                           '${localDevice.push.recipient}'),
                       TextButton(
                         onPressed: _pushNotificationService.getDevice,

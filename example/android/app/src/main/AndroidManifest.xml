@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.ably.flutter.plugin_example">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -30,5 +31,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Uncomment the following code to prevent Ably Flutter from handling push notifications -->
+<!--        <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"-->
+<!--            tools:node="remove">-->
+<!--        </receiver>-->
     </application>
 </manifest>

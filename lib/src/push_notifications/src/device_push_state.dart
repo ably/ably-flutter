@@ -1,4 +1,4 @@
-import '../push_notifications.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// To indicate Push State of a device in [DeviceDetails] via [DevicePushState]
 /// while registering

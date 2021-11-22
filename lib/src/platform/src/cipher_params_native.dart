@@ -1,8 +1,7 @@
-import 'dart:io';
+import 'dart:io' as io show Platform;
 import 'dart:typed_data';
 
-import '../../error/src/ably_exception.dart';
-import 'cipher_params.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// The internal (non-public) representation of CipherParams.
 ///
@@ -21,14 +20,14 @@ class CipherParamsNative implements CipherParams {
 
   String? algorithm;
 
-  String? mode = "cbc";
+  String? mode = 'cbc';
 
   /// Create a Dart side representation of CipherParams
   CipherParamsNative.forIOS({
     required this.algorithm,
     required this.key,
   }) {
-    if (!Platform.isIOS) {
+    if (!io.Platform.isIOS) {
       throw AblyException('This method is for iOS platforms only');
     }
     if (key == null) {
@@ -41,7 +40,7 @@ class CipherParamsNative implements CipherParams {
   CipherParamsNative.forAndroid({
     required this.androidHandle,
   }) {
-    if (!Platform.isAndroid) {
+    if (!io.Platform.isAndroid) {
       throw AblyException('This method is for Android platforms only');
     }
     if (androidHandle == null) {
@@ -51,7 +50,7 @@ class CipherParamsNative implements CipherParams {
     }
   }
 
-  static fromCipherParams(CipherParams cipherParams) =>
+  static CipherParamsNative fromCipherParams(CipherParams cipherParams) =>
       cipherParams as CipherParamsNative;
 
   /// Explicitly cast the [CipherParamsNative] to [CipherParams] so users do not
