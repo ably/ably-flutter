@@ -40,8 +40,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private Context applicationContext;
-
   public interface ResetAblyClientsCallback {
     void on();
   }
@@ -57,7 +55,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                                final ResetAblyClientsCallback resetAblyClientsCallback,
                                final Context applicationContext) {
     this.channel = channel;
-    this.applicationContext = applicationContext;
     this.resetAblyClientsCallback = resetAblyClientsCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
