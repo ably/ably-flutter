@@ -151,7 +151,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
     final MethodChannel.Result result = new MethodResultWrapper(rawResult);
-    System.out.println("Ably Plugin handle: " + call.method);
     final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
     if (null == handler) {
       // We don't have a handler for a method with this name so tell the caller.
@@ -177,7 +176,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    System.out.println("Registering library instance to clean up any existing instances");
     hotRestartCallback.on();
     _ably.dispose();
     result.success(null);
@@ -205,10 +203,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
-                  if (errorMessage != null) {
-                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
-                  }
+                  result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
                   latch.countDown();
                 }
 

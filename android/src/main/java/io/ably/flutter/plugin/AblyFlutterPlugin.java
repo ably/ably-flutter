@@ -76,9 +76,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     }
 
     @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        System.out.println("Ably Plugin onDetachedFromEngine");
-    }
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {}
 
     private static MethodCodec createCodec(CipherParamsStorage cipherParamsStorage) {
         return new StandardMethodCodec(new AblyMessageCodec(cipherParamsStorage));
