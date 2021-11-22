@@ -35,7 +35,7 @@ class EncryptedMessagingService {
 
   EncryptedMessagingService(this._realtime);
 
-  Future<void> setRest(ably.Rest rest) async {
+  Future<void> setRestClient(ably.Rest rest) async {
     _rest = rest;
     _restChannel = _rest!.channels.get(channelName);
     final cipherParams = ably.Crypto.getDefaultParams(key: keyFromPassword);
