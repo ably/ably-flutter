@@ -40,31 +40,27 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private Context applicationContext;
-
-  public interface HotRestartCallback {
-    // Called on every fresh start and on every hot restart
-    void on();
+  public interface ResetAblyClientsCallback {
+    void run();
   }
 
   private final MethodChannel channel;
-  private final HotRestartCallback hotRestartCallback;
+  private final ResetAblyClientsCallback resetAblyClientsCallback;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyLibrary _ably;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
   public AblyMethodCallHandler(final MethodChannel channel,
-                               final HotRestartCallback hotRestartCallback,
+                               final ResetAblyClientsCallback resetAblyClientsCallback,
                                final Context applicationContext) {
     this.channel = channel;
-    this.applicationContext = applicationContext;
-    this.hotRestartCallback = hotRestartCallback;
+    this.resetAblyClientsCallback = resetAblyClientsCallback;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
     _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
-    _map.put(PlatformConstants.PlatformMethod.registerAbly, this::register);
+    _map.put(PlatformConstants.PlatformMethod.resetAblyClients, this::resetAblyClients);
 
     // Rest
     _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
@@ -175,9 +171,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     };
   }
 
-  private void register(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    hotRestartCallback.on();
+  private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     _ably.dispose();
+    resetAblyClientsCallback.run();
     result.success(null);
   }
 

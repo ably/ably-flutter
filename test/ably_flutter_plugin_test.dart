@@ -15,7 +15,7 @@ void main() {
   setUp(() {
     channel.setMockMethodCallHandler((methodCall) async {
       switch (methodCall.method) {
-        case PlatformMethod.registerAbly:
+        case PlatformMethod.resetAblyClients:
           return true;
 
         case PlatformMethod.getPlatformVersion:
