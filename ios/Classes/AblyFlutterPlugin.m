@@ -36,7 +36,8 @@ static const FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin,
 };
 
 static const FlutterHandler _resetAblyClients = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    [plugin reset:result];
+    [plugin reset];
+    result(nil);
 };
 
 static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -652,10 +653,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }
 }
 
--(void)reset:(const FlutterResult)result {
+-(void)reset {
     [_ably dispose];
     [self->_streamsChannel reset];
-    result(nil);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
