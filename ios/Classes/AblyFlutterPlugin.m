@@ -652,14 +652,10 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }
 }
 
--(void)registerWithCompletionHandler:(const FlutterResult)completionHandler {
-    if (!completionHandler) {
-        [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
-    }
-    [_ably disposeWithCompletionHandler:^{
-        [self->_streamsChannel reset];
-        completionHandler(nil);
-    }];
+-(void)registerWithCompletionHandler:(const FlutterResult)result {
+    [_ably dispose];
+    [self->_streamsChannel reset];
+    result(nil);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

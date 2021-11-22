@@ -126,11 +126,7 @@
     return [_paginatedResults objectForKey:handle];
 }
 
--(void)disposeWithCompletionHandler:(const dispatch_block_t)completionHandler {
-    if (!completionHandler) {
-        [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
-    }
-    
+-(void)dispose {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];
     }
