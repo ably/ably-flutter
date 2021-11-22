@@ -1,4 +1,4 @@
-import 'stats_resource_count.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// ConnectionTypes contains a breakdown of summary stats data
 /// for different (TLS vs non-TLS) connection types

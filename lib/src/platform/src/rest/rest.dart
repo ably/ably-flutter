@@ -1,15 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
-import '../../../authentication/authentication.dart';
-import '../../../common/common.dart';
-import '../../../generated/platform_constants.dart';
-import '../../../push_notifications/push_notifications.dart';
-import '../../../push_notifications/src/local_device.dart';
-import '../../../rest/rest.dart';
-import '../../../stats/stats.dart';
-import '../../platform.dart';
-import '../../platform_internal.dart';
+import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 Map<int?, Rest> _restInstances = {};
 Map<int?, Rest>? _restInstancesUnmodifiableView;
@@ -19,7 +12,7 @@ Map<int?, Rest> get restInstances =>
     _restInstancesUnmodifiableView ??= UnmodifiableMapView(_restInstances);
 
 /// Ably's Rest client
-class Rest extends PlatformObject implements RestInterface<RestChannels> {
+class Rest extends PlatformObject implements AblyBase {
   /// instantiates with [ClientOptions] and a String [key]
   ///
   /// creates client options from key if [key] is provided
@@ -87,7 +80,9 @@ class Rest extends PlatformObject implements RestInterface<RestChannels> {
   @override
   late Push push;
 
-  @override
+  /// collection of [RestChannel] instances
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
   late RestChannels channels;
 
   @override

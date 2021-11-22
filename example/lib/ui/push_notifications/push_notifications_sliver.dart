@@ -1,13 +1,12 @@
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_activation_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_device_information.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_ios_permissions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_publishing_sliver.dart';
 import 'package:ably_flutter_example/ui/push_notifications/push_notifications_received_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_notifications_subscriptions_sliver.dart';
+import 'package:ably_flutter_example/ui/push_notifications/push_realtime_client_received_sliver.dart';
 import 'package:flutter/material.dart';
-
-import '../../push_notifications/push_notification_service.dart';
-import 'push_notifications_activation_sliver.dart';
-import 'push_notifications_device_information.dart';
-import 'push_notifications_ios_permissions_sliver.dart';
-import 'push_notifications_publishing_sliver.dart';
-import 'push_notifications_subscriptions_sliver.dart';
-import 'push_realtime_client_received_sliver.dart';
 
 class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;

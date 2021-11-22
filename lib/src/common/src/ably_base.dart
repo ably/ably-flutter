@@ -1,8 +1,4 @@
-import '../../authentication/authentication.dart';
-import '../../platform/platform.dart';
-import '../../push_notifications/push_notifications.dart';
-import '../../stats/stats.dart';
-import '../common.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// A base class for [Rest] and [Realtime]
 abstract class AblyBase {
@@ -36,7 +32,7 @@ abstract class AblyBase {
   /// gets stats based on params as a [PaginatedResult]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  Future<PaginatedResultInterface<Stats>> stats([
+  Future<PaginatedResult<Stats>> stats([
     Map<String, dynamic>? params,
   ]);
 

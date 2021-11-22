@@ -1,4 +1,4 @@
-import 'push.dart';
+import 'package:ably_flutter/ably_flutter.dart';
 
 /// This file contains push notification types specific to iOS. All types begin
 /// with "UN", since these types belong to the User Notifications framework

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 /// A Text which has a bold label, followed by a colon:
 /// For example, in Markdown it will look like `**label:** text`
-class TextWithLabel extends StatelessWidget {
+class TextRow extends StatelessWidget {
   final String label;
   final String? text;
 
-  TextWithLabel(this.label, this.text);
+  TextRow(this.label, this.text);
 
   @override
   Widget build(BuildContext context) => RichText(
