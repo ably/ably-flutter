@@ -41,7 +41,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   public interface ResetAblyClientsCallback {
-    void on();
+    void run();
   }
 
   private final MethodChannel channel;
@@ -173,7 +173,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     _ably.dispose();
-    resetAblyClientsCallback.on();
+    resetAblyClientsCallback.run();
     result.success(null);
   }
 
