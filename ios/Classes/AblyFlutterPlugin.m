@@ -22,7 +22,7 @@ typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * c
  static FlutterHandle declarations.
  */
 @interface AblyFlutterPlugin ()
--(void)reset:(FlutterResult)completionHandler;
+-(void)reset;
 @end
 
 NS_ASSUME_NONNULL_END
