@@ -12,7 +12,7 @@ class PushNotificationsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
   final bool isIOSSimulator;
 
-  PushNotificationsSliver(this._pushNotificationService,
+  const PushNotificationsSliver(this._pushNotificationService,
       {required this.isIOSSimulator, Key? key})
       : super(key: key);
 
