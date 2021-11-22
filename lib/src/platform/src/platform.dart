@@ -18,9 +18,9 @@ class Platform {
   static final StreamsChannel streamsChannel =
       StreamsChannel('io.ably.flutter.stream', codec);
 
-  /// This field will reset to true when the state is reset. This allows us to
-  /// if an app has been restarted, or a hot restart (not hot reload) has
-  /// happened.
+  /// This field will be set to true when the app is restarted or
+  /// launched. This allows us to detect if an app has been restarted,
+  /// or a hot restart (not hot reload) has happened.
   static bool _shouldResetAblyClients = true;
 
   /// Clears instances on the Platform side
