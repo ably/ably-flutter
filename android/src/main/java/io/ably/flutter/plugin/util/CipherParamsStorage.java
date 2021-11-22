@@ -1,4 +1,4 @@
-package io.ably.flutter.plugin;
+package io.ably.flutter.plugin.util;
 
 import java.util.HashMap;
 

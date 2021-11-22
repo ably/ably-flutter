@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,10 +14,13 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
+
+import javax.crypto.Cipher;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
+import io.ably.flutter.plugin.util.CipherParamsStorage;
+import io.ably.flutter.plugin.util.Consumer;
 import io.ably.lib.push.LocalDevice;
 import io.ably.lib.push.Push;
 import io.ably.lib.push.PushBase;
@@ -29,6 +33,7 @@ import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.rest.DeviceDetails;
+import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ChannelMode;
 import io.ably.lib.types.ChannelOptions;
