@@ -8,7 +8,7 @@ public class PushHandlers: NSObject {
     public static let activate: FlutterHandler = { ably, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
-        } else if let push = getPush(ably: ably.instanceStore, call: call, result: result) {
+        } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
             push.activate()
         }
@@ -18,7 +18,7 @@ public class PushHandlers: NSObject {
     public static let deactivate: FlutterHandler = { ably, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
-        } else if let push = getPush(ably: ably.instanceStore, call: call, result: result) {
+        } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
             push.deactivate()
         }
