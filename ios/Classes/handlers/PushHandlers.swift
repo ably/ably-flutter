@@ -3,7 +3,7 @@ import Foundation
 public class PushHandlers: NSObject {
     @objc
     public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;
-    
+
     @objc
     public static let activate: FlutterHandler = { ably, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
@@ -30,7 +30,7 @@ public class PushHandlers: NSObject {
             result(settings)
         }
     }
-    
+
     private static func returnMethodAlreadyRunningError(result: FlutterResult, methodName: String) {
         let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to call \(methodName) before the previous call completes", details: nil)
         result(error)
@@ -154,7 +154,7 @@ public class PushHandlers: NSObject {
             result(nil)
         }
     }
-    
+
     @objc
     public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { ably, call, result in
         if let data = pushNotificationTapLaunchedAppFromTerminatedData {
@@ -206,20 +206,20 @@ public class PushHandlers: NSObject {
             clientHandle = (message.message as! NSNumber)
         }
 
-        guard let unwrappedClientHandle = clientHandle else {
+        guard let clientHandle = clientHandle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
-        guard let unwrappedChannelName = channelName else {
+        guard let channelName = channelName else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
             return nil
         }
 
-        let realtime = instanceStore.realtime(from: unwrappedClientHandle)
-        if let unwrappedRealtime = realtime {
-            return unwrappedRealtime.channels.get(unwrappedChannelName).push
-        } else if let unwrappedRest = instanceStore.rest(from: unwrappedClientHandle) {
-            return unwrappedRest.channels.get(unwrappedChannelName).push
+        let realtime = instanceStore.realtime(from: clientHandle)
+        if let realtime = realtime {
+            return realtime.channels.get(channelName).push
+        } else if let rest = instanceStore.rest(from: clientHandle) {
+            return rest.channels.get(channelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
             return nil

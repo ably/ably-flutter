@@ -75,7 +75,7 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
     } else if (ably.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
         [ARTPush didFailToRegisterForRemoteNotificationsWithError: ably.didFailToRegisterForRemoteNotificationsWithError_error rest:rest];
     }
-    
+
     result(handle);
 };
 
@@ -88,8 +88,8 @@ static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutter *const pl
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTChannelOptions *const channelOptions = (ARTChannelOptions*) _dataMap[TxTransportKeys_options];
 
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
-    ARTRestChannel *const channel = [client.channels get:channelName];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
+    ARTRestChannel *const channel = [rest.channels get:channelName];
     [channel setOptions:channelOptions];
     result(nil);
 };
@@ -102,8 +102,8 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutter *const ably,
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     NSArray<ARTMessage *> *const messages = (NSArray<ARTMessage *>*) _dataMap[TxTransportKeys_messages];
 
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
-    ARTRestChannel *const channel = [client.channels get:channelName];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
+    ARTRestChannel *const channel = [rest.channels get:channelName];
 
     [channel publish:messages callback:^(ARTErrorInfo *_Nullable error){
         if(error){
@@ -126,8 +126,8 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutter *const ably, Flu
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTDataQuery *const dataQuery = (ARTDataQuery*) _dataMap[TxTransportKeys_params];
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
-    ARTRestChannel *const channel = [client.channels get:channelName];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
+    ARTRestChannel *const channel = [rest.channels get:channelName];
     const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
@@ -155,8 +155,8 @@ static const FlutterHandler _getRestPresence = ^void(AblyFlutter *const ably, Fl
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTPresenceQuery *const dataQuery = (ARTPresenceQuery*) _dataMap[TxTransportKeys_params];
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
-    ARTRestChannel *const channel = [client.channels get:channelName];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
+    ARTRestChannel *const channel = [rest.channels get:channelName];
     const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
@@ -184,8 +184,8 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutter *const a
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTPresenceQuery *const dataQuery = (ARTPresenceQuery*) _dataMap[TxTransportKeys_params];
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
-    ARTRestChannel *const channel = [client.channels get:channelName];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
+    ARTRestChannel *const channel = [rest.channels get:channelName];
     const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if(error){
             result([
@@ -210,9 +210,9 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably,
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
-    ARTRest *const client = [instanceStore restFrom:messageData.handle];
+    ARTRest *const rest = [instanceStore restFrom:messageData.handle];
     NSString *const channelName = (NSString*)messageData.message;
-    [client.channels release:channelName];
+    [rest.channels release:channelName];
     result(nil);
 };
 
@@ -384,8 +384,8 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutter *const ably,
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*) _dataMap[TxTransportKeys_params];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -413,8 +413,8 @@ static const FlutterHandler _getRealtimePresence = ^void(AblyFlutter *const ably
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTRealtimePresenceQuery *const dataQuery = (ARTRealtimePresenceQuery*) _dataMap[TxTransportKeys_params];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     const id callback = ^(NSArray<ARTPresenceMessage *> * _Nullable presenceMembers, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -441,8 +441,8 @@ static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutter *con
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     ARTRealtimeHistoryQuery *const dataQuery = (ARTRealtimeHistoryQuery*) _dataMap[TxTransportKeys_params];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     const id callback = ^(ARTPaginatedResult<ARTMessage *> * _Nullable paginatedResult, ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -471,8 +471,8 @@ static const FlutterHandler _enterRealtimePresence = ^void(AblyFlutter *const ab
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     NSString *const clientId = (NSString*) _dataMap[TxTransportKeys_clientId];
     const id data = _dataMap[TxTransportKeys_data];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     [[channel presence] enterClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -495,8 +495,8 @@ static const FlutterHandler _updateRealtimePresence = ^void(AblyFlutter *const a
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     NSString *const clientId = (NSString*) _dataMap[TxTransportKeys_clientId];
     const id data = _dataMap[TxTransportKeys_data];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     [[channel presence] updateClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -519,8 +519,8 @@ static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutter *const ab
     NSString *const channelName = (NSString*) _dataMap[TxTransportKeys_channelName];
     NSString *const clientId = (NSString*) _dataMap[TxTransportKeys_clientId];
     const id data = _dataMap[TxTransportKeys_data];
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
-    ARTRealtimeChannel *const channel = [client.channels get:channelName];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtimeChannel *const channel = [realtime.channels get:channelName];
     [[channel presence] leaveClient:clientId data:data callback:^(ARTErrorInfo * _Nullable error) {
         if (error) {
             result([
@@ -539,9 +539,9 @@ static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const a
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
-    ARTRealtime *const client = [instanceStore realtimeFrom:messageData.handle];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:messageData.handle];
     NSString *const channelName = (NSString*)messageData.message;
-    [client.channels release:channelName];
+    [realtime.channels release:channelName];
     result(nil);
 };
 
@@ -677,7 +677,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
         AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
-    
+
     [registrar addApplicationDelegate:self];
     return self;
 }
