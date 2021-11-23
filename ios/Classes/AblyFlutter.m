@@ -579,7 +579,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
                     details:error
                     ]);
         }else{
-            NSNumber *const paginatedResultHandle = [ably setPaginatedResult:paginatedResult handle:handle];
+            NSNumber *const paginatedResultHandle = [instanceStore setPaginatedResult:paginatedResult handle:handle];
             result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
         }
     }];
