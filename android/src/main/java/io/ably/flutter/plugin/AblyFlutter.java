@@ -25,7 +25,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
+public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
     private static final String TAG = AblyFlutterPlugin.class.getName();
     private Context applicationContext;
     private AblyMethodCallHandler methodCallHandler;

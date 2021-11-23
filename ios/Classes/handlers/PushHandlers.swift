@@ -8,7 +8,7 @@ public class PushHandlers: NSObject {
     public static let activate: FlutterHandler = { ably, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
-        } else if let push = getPush(ably: ably.ably, call: call, result: result) {
+        } else if let push = getPush(ably: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
             push.activate()
         }
@@ -18,14 +18,14 @@ public class PushHandlers: NSObject {
     public static let deactivate: FlutterHandler = { ably, call, result in
         if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
-        } else if let push = getPush(ably: ably.ably, call: call, result: result) {
+        } else if let push = getPush(ably: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
             push.deactivate()
         }
     }
 
     @objc
-    public static let getNotificationSettings: (_ plugin: AblyFlutterPlugin, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { plugin, call, result in
+    public static let getNotificationSettings: (_ ably: AblyFlutter, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { ably, call, result in
         UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
             result(settings)
         }
@@ -37,7 +37,7 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let requestPermission: FlutterHandler = { plugin, call, result in
+    public static let requestPermission: FlutterHandler = { ably, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let messageData = message.message as! AblyFlutterMessage
         let dataMap = messageData.message as! Dictionary<String, Any>
@@ -87,11 +87,11 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let device: FlutterHandler = { plugin, call, result in
+    public static let device: FlutterHandler = { ably, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = plugin.ably.realtime(withHandle: ablyClientHandle)
-        let rest = plugin.ably.getRest(ablyClientHandle)
+        let realtime = ably.instanceStore.realtime(from: ablyClientHandle)
+        let rest = ably.instanceStore.rest(from: ablyClientHandle)
 
         if let realtime = realtime {
             result(realtime.device)
@@ -101,20 +101,20 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let listSubscriptions: FlutterHandler = { plugin, call, result in
+    public static let listSubscriptions: FlutterHandler = { ably, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let nestedMessage = message.message as! AblyFlutterMessage
         let dataMap = nestedMessage.message as! Dictionary<String, Any>
         let params = dataMap[TxTransportKeys_params] as! Dictionary<String, String>
 
-        if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
+        if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             do {
                 try pushChannel.listSubscriptions(params, callback: { paginatedSubscription, errorInfo in
                     if let errorInfo = errorInfo {
                         result(FlutterError(code: String(errorInfo.code), message: "Error listing subscriptions from push Channel \(pushChannel); err = \(errorInfo.message)", details: nil))
                         return
                     }
-                    let handle = plugin.ably.setPaginatedResult(paginatedSubscription as! ARTPaginatedResult<AnyObject>, handle: nil)
+                    let handle = ably.instanceStore.setPaginatedResult(paginatedSubscription as! ARTPaginatedResult<AnyObject>, handle: nil)
                     result(AblyFlutterMessage(message: paginatedSubscription as Any, handle: handle))
                 })
             } catch {
@@ -124,50 +124,50 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let subscribeDevice: FlutterHandler = { plugin, call, result in
-        if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
+    public static let subscribeDevice: FlutterHandler = { ably, call, result in
+        if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             pushChannel.subscribeDevice()
             result(nil)
         }
     }
 
     @objc
-    public static let unsubscribeDevice: FlutterHandler = { plugin, call, result in
-        if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
+    public static let unsubscribeDevice: FlutterHandler = { ably, call, result in
+        if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             pushChannel.unsubscribeDevice()
             result(nil)
         }
     }
 
     @objc
-    public static let subscribeClient: FlutterHandler = { plugin, call, result in
-        if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
+    public static let subscribeClient: FlutterHandler = { ably, call, result in
+        if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             pushChannel.subscribeClient()
             result(nil)
         }
     }
 
     @objc
-    public static let unsubscribeClient: FlutterHandler = { plugin, call, result in
-        if let pushChannel = getPushChannel(plugin: plugin, call: call, result: result) {
+    public static let unsubscribeClient: FlutterHandler = { ably, call, result in
+        if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             pushChannel.unsubscribeClient()
             result(nil)
         }
     }
     
     @objc
-    public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { plugin, call, result in
+    public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { ably, call, result in
         if let data = pushNotificationTapLaunchedAppFromTerminatedData {
             result(pushNotificationTapLaunchedAppFromTerminatedData)
         }
     }
 
     /// Gets the client.push property from ARTRealtime or ARTRest when the call contains a handle.
-    private static func getPush(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
+    private static func getPush(instanceStore: AblyInstanceStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.realtime(withHandle: ablyClientHandle)
-        let rest = ably.getRest(ablyClientHandle)
+        let realtime = instanceStore.realtime(from: ablyClientHandle)
+        let rest = instanceStore.rest(from: ablyClientHandle)
 
         if let realtime = realtime {
             return realtime.push;
@@ -186,8 +186,8 @@ public class PushHandlers: NSObject {
     ///
     /// The dart side can provide a handle (Int) which gets a ARTRealtime or ARTRest Ably client.
     /// This function will callback the with the push channel for the channelName and client handle you provide.
-    private static func getPushChannel(plugin: AblyFlutterPlugin, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
-        let ably = plugin.ably
+    private static func getPushChannel(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
+        let instanceStore = ably.instanceStore
         let message = call.arguments as! AblyFlutterMessage
 
         var clientHandle: NSNumber? = nil;
@@ -215,10 +215,10 @@ public class PushHandlers: NSObject {
             return nil
         }
 
-        let realtime = ably.realtime(withHandle: unwrappedClientHandle)
+        let realtime = instanceStore.realtime(from: unwrappedClientHandle)
         if let unwrappedRealtime = realtime {
             return unwrappedRealtime.channels.get(unwrappedChannelName).push
-        } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
+        } else if let unwrappedRest = instanceStore.rest(from: unwrappedClientHandle) {
             return unwrappedRest.channels.get(unwrappedChannelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
