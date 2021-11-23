@@ -609,6 +609,8 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.idempotentRestPublishing,
       )
+      ..realtimeRequestTimeout =
+          jsonMap[TxClientOptions.realtimeRequestTimeout] as int?
       ..httpOpenTimeout = jsonMap[TxClientOptions.httpOpenTimeout] as int
       ..httpRequestTimeout = jsonMap[TxClientOptions.httpRequestTimeout] as int
       ..httpMaxRetryCount = jsonMap[TxClientOptions.httpMaxRetryCount] as int
@@ -630,11 +632,6 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.transportParams,
       );
-
-    if (jsonMap[TxClientOptions.realtimeRequestTimeout] != null) {
-      clientOptions.realtimeRequestTimeout =
-          jsonMap[TxClientOptions.realtimeRequestTimeout] as int;
-    }
     return clientOptions;
   }
 
