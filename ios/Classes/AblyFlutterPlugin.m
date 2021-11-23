@@ -1,6 +1,6 @@
 @import Ably;
 
-#import "AblyFlutter.h"
+#import "AblyFlutterPlugin.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
 #import "codec/AblyFlutterReaderWriter.h"
@@ -14,33 +14,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^FlutterHandler)(AblyFlutter * plugin, FlutterMethodCall * call, FlutterResult result);
+typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * call, FlutterResult result);
 
 /**
  Anonymous category providing forward declarations of the methods implemented
  by this class for use within this implementation file, specifically from the
  static FlutterHandle declarations.
  */
-@interface AblyFlutter ()
+@interface AblyFlutterPlugin ()
 -(void)reset;
 @end
 
 NS_ASSUME_NONNULL_END
 
-static const FlutterHandler _getPlatformVersion = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getPlatformVersion = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"iOS (UIKit) " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
 };
 
-static const FlutterHandler _getVersion = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     result([@"CocoaPod " stringByAppendingString:[ARTDefault libraryVersion]]);
 };
 
-static const FlutterHandler _resetAblyClients = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _resetAblyClients = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     [ably reset];
     result(nil);
 };
 
-static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRest = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterClientOptions *const options = message.message;
@@ -79,7 +79,7 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
     result(handle);
 };
 
-static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutter *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [plugin instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -94,7 +94,7 @@ static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutter *const pl
     result(nil);
 };
 
-static const FlutterHandler _publishRestMessage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _publishRestMessage = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -119,7 +119,7 @@ static const FlutterHandler _publishRestMessage = ^void(AblyFlutter *const ably,
     }];
 };
 
-static const FlutterHandler _getRestHistory = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRestHistory = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -148,7 +148,7 @@ static const FlutterHandler _getRestHistory = ^void(AblyFlutter *const ably, Flu
     }
 };
 
-static const FlutterHandler _getRestPresence = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRestPresence = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -177,7 +177,7 @@ static const FlutterHandler _getRestPresence = ^void(AblyFlutter *const ably, Fl
     }
 };
 
-static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -206,7 +206,7 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutter *const a
     }
 };
 
-static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -216,7 +216,7 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably,
     result(nil);
 };
 
-static const FlutterHandler _createRealtime = ^void(AblyFlutter *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [plugin instanceStore];
     AblyFlutterClientOptions *const options = message.message;
@@ -261,7 +261,7 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const plugin, F
     result(handle);
 };
 
-static const FlutterHandler _connectRealtime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = message.message;
@@ -269,7 +269,7 @@ static const FlutterHandler _connectRealtime = ^void(AblyFlutter *const ably, Fl
     result(nil);
 };
 
-static const FlutterHandler _closeRealtime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _closeRealtime = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = message.message;
@@ -277,7 +277,7 @@ static const FlutterHandler _closeRealtime = ^void(AblyFlutter *const ably, Flut
     result(nil);
 };
 
-static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const data = message.message;
@@ -301,7 +301,7 @@ static const FlutterHandler _attachRealtimeChannel = ^void(AblyFlutter *const ab
     }];
 };
 
-static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const data = message.message;
@@ -325,7 +325,7 @@ static const FlutterHandler _detachRealtimeChannel = ^void(AblyFlutter *const ab
     }];
 };
 
-static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const data = message.message;
@@ -351,7 +351,7 @@ static const FlutterHandler _publishRealtimeChannelMessage = ^void(AblyFlutter *
     [channel publish:messages callback:callback];
 };
 
-static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const data = message.message;
@@ -377,7 +377,7 @@ static const FlutterHandler _setRealtimeChannelOptions = ^void(AblyFlutter *cons
     }];
 };
 
-static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -406,7 +406,7 @@ static const FlutterHandler _getRealtimeHistory = ^void(AblyFlutter *const ably,
     }
 };
 
-static const FlutterHandler _getRealtimePresence = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRealtimePresence = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -434,7 +434,7 @@ static const FlutterHandler _getRealtimePresence = ^void(AblyFlutter *const ably
     }
 };
 
-static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -463,7 +463,7 @@ static const FlutterHandler _getRealtimePresenceHistory = ^void(AblyFlutter *con
     }
 };
 
-static const FlutterHandler _enterRealtimePresence = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _enterRealtimePresence = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -487,7 +487,7 @@ static const FlutterHandler _enterRealtimePresence = ^void(AblyFlutter *const ab
     }];
 };
 
-static const FlutterHandler _updateRealtimePresence = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _updateRealtimePresence = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -511,7 +511,7 @@ static const FlutterHandler _updateRealtimePresence = ^void(AblyFlutter *const a
     }];
 };
 
-static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -535,7 +535,7 @@ static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutter *const ab
     }];
 };
 
-static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
@@ -545,7 +545,7 @@ static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const a
     result(nil);
 };
 
-static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getNextPage = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = message.message;
@@ -565,7 +565,7 @@ static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, Flutte
     }];
 };
 
-static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = message.message;
@@ -585,7 +585,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
     }];
 };
 
-@implementation AblyFlutter {
+@implementation AblyFlutterPlugin {
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
@@ -609,7 +609,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
     
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const methodChannel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
-    AblyFlutter *const ably = [[AblyFlutter alloc] initWithChannel:methodChannel streamsChannel: streamsChannel registrar:registrar];
+    AblyFlutterPlugin *const ably = [[AblyFlutterPlugin alloc] initWithChannel:methodChannel streamsChannel: streamsChannel registrar:registrar];
     
     // registering method channel with registrar
     [registrar addMethodCallDelegate:ably channel:methodChannel];
