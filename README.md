@@ -148,6 +148,7 @@ final realtime = ably.Realtime(options: clientOptions);
 ```
 
 An example of `createTokenRequest`'s implementation making a network request to your server could be:
+
 ```dart
 Future<Map<String, dynamic>> createTokenRequest(
     Map<String, dynamic> tokenParamsMap) async {
@@ -169,6 +170,7 @@ Future<Map<String, dynamic>> createTokenRequest(
   return jsonDecode(response.body) as Map<String, dynamic>;
 }
 ```
+
 - **Android:** To connect to a local server running on a computer from an Android device, you can redirect the port on your device to the port the application is hosted on on your computer. For example, if you want to connect to a local server running at `localhost:3000` but connect from Android from `localhost:80` Run `adb reverse tcp:80 tcp:3000`.
 - **iOS:** To connect to a local server running on a computer using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866). To allow devices to connect from the IP address of your device, you need your server to listen on `0.0.0.0` instead of `127.0.0.1`.
 
