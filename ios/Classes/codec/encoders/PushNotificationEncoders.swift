@@ -6,19 +6,19 @@ public class PushNotificationEncoders: NSObject {
 
     @objc
     public static let encodeDeviceDetails: (ARTDeviceDetails) -> Dictionary<String, Any> = { device in
-        return [
+        [
             TxDeviceDetails_id: device.id,
             TxDeviceDetails_clientId: device.clientId as Any,
             TxDeviceDetails_platform: device.platform,
             TxDeviceDetails_formFactor: device.formFactor,
             TxDeviceDetails_metadata: device.metadata,
             TxDeviceDetails_devicePushDetails: encodeDevicePushDetails(device.push)
-            ];
+        ];
     }
     
     @objc
     public static let encodeDevicePushDetails: (ARTDevicePushDetails) -> Dictionary<String, Any> = { devicePushDetails in
-        return [
+        [
             TxDevicePushDetails_recipient: devicePushDetails.recipient,
             TxDevicePushDetails_state: devicePushDetails.state as Any,
             TxDevicePushDetails_errorReason: (devicePushDetails.errorReason != nil ? Encoders.encodeErrorInfo(devicePushDetails.errorReason!) : nil) as Any
@@ -27,7 +27,7 @@ public class PushNotificationEncoders: NSObject {
     
     @objc
     public static let encodeLocalDevice: (ARTLocalDevice) -> Dictionary<String, Any> = { device in
-        return [
+        [
             TxLocalDevice_deviceSecret: device.secret as Any,
             TxLocalDevice_deviceIdentityToken: device.identityTokenDetails?.token as Any,
             // Fields inherited from DeviceDetails:
@@ -37,16 +37,16 @@ public class PushNotificationEncoders: NSObject {
             TxDeviceDetails_formFactor: device.formFactor,
             TxDeviceDetails_metadata: device.metadata,
             TxDeviceDetails_devicePushDetails: encodeDevicePushDetails(device.push)
-            ];
+        ];
     }
     
     @objc
     public static let encodePushChannelSubscription: (ARTPushChannelSubscription) -> Dictionary<String, Any> = { subscription in
-        return [
+        [
             TxPushChannelSubscription_channel: subscription.channel,
             TxPushChannelSubscription_clientId: subscription.clientId as Any,
             TxPushChannelSubscription_deviceId: subscription.deviceId as Any
-            ];
+        ];
     }
     
     @objc
