@@ -18,7 +18,7 @@ import io.flutter.plugin.common.MethodCodec;
  * so `pushBackgroundFlutterApplicationReadyOnAndroid` platform method call doesn't need to be called.
  */
 public class BackgroundMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static final String TAG = AblyFlutterPlugin.class.getName();
+  private static final String TAG = AblyFlutter.class.getName();
   private static final String CHANNEL_NAME = "io.ably.flutter.plugin.background";
   public BackgroundMethodCallHandler(BinaryMessenger messenger, MethodCodec codec) {
     MethodChannel methodChannel = new MethodChannel(messenger, CHANNEL_NAME, codec);
