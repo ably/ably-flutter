@@ -235,7 +235,8 @@ class Codec extends StandardMessageCodec {
 
     // ClientOptions
     _writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
-    _writeToJson(jsonMap, TxClientOptions.logLevel, v.logLevel);
+    _writeToJson(
+        jsonMap, TxClientOptions.logLevel, _encodeLogLevel(v.logLevel));
     //TODO handle logHandler
     _writeToJson(jsonMap, TxClientOptions.tls, v.tls);
     _writeToJson(jsonMap, TxClientOptions.restHost, v.restHost);
@@ -573,7 +574,7 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.clientId,
       )
-      ..logLevel = jsonMap[TxClientOptions.logLevel] as int
+      ..logLevel = _decodeLogLevel(jsonMap[TxClientOptions.logLevel] as String?)
       //TODO handle logHandler
       ..tls = jsonMap[TxClientOptions.tls] as bool
       ..restHost = _readFromJson<String>(
@@ -608,6 +609,8 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.idempotentRestPublishing,
       )
+      ..realtimeRequestTimeout =
+          jsonMap[TxClientOptions.realtimeRequestTimeout] as int?
       ..httpOpenTimeout = jsonMap[TxClientOptions.httpOpenTimeout] as int
       ..httpRequestTimeout = jsonMap[TxClientOptions.httpRequestTimeout] as int
       ..httpMaxRetryCount = jsonMap[TxClientOptions.httpMaxRetryCount] as int
@@ -629,11 +632,6 @@ class Codec extends StandardMessageCodec {
         jsonMap,
         TxClientOptions.transportParams,
       );
-
-    if (jsonMap[TxClientOptions.realtimeRequestTimeout] != null) {
-      clientOptions.realtimeRequestTimeout =
-          jsonMap[TxClientOptions.realtimeRequestTimeout] as int;
-    }
     return clientOptions;
   }
 
@@ -1114,5 +1112,43 @@ class Codec extends StandardMessageCodec {
       );
     }
     return PaginatedResult(items, hasNext: hasNext);
+  }
+
+  String? _encodeLogLevel(final LogLevel? level) {
+    if (level == null) return null;
+    switch (level) {
+      case LogLevel.none:
+        return TxLogLevelEnum.none;
+      case LogLevel.verbose:
+        return TxLogLevelEnum.verbose;
+      case LogLevel.debug:
+        return TxLogLevelEnum.debug;
+      case LogLevel.info:
+        return TxLogLevelEnum.info;
+      case LogLevel.warn:
+        return TxLogLevelEnum.warn;
+      case LogLevel.error:
+        return TxLogLevelEnum.error;
+    }
+  }
+
+  LogLevel _decodeLogLevel(String? logLevelString) {
+    switch (logLevelString) {
+      case TxLogLevelEnum.none:
+        return LogLevel.none;
+      case TxLogLevelEnum.verbose:
+        return LogLevel.verbose;
+      case TxLogLevelEnum.debug:
+        return LogLevel.debug;
+      case TxLogLevelEnum.info:
+        return LogLevel.info;
+      case TxLogLevelEnum.warn:
+        return LogLevel.warn;
+      case TxLogLevelEnum.error:
+        return LogLevel.error;
+    }
+    throw AblyException(
+      'Error decoding LogLevel from platform string: $logLevelString',
+    );
   }
 }
