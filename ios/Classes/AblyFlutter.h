@@ -13,11 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
--(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *)options;
+-(NSNumber *)setRest:(ARTRest *const)rest with:(int)handle;
 
 -(nullable ARTRest *)getRest:(NSNumber *)handle;
 
--(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
+-(NSNumber *)setRealtime:(ARTRealtime *const)realtime with:(int)handle;
 
 -(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
 

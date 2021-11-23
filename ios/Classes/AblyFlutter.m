@@ -29,6 +29,10 @@
     _channel = channel;
 }
 
+-(void) getNextHandle {
+    return @(_nextHandle++);
+}
+
 -(instancetype)init {
     self = [super init];
     if (!self) {
@@ -43,34 +47,8 @@
     return self;
 }
 
--(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *const)options {
-    if (!options) {
-        [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
-    }
-    NSNumber *const handle = @(_nextHandle++);
-    if(options.hasAuthCallback){
-        options.clientOptions.authCallback =
-        ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
-            [self->_channel invokeMethod:AblyPlatformMethod_authCallback
-                               arguments:message
-                                  result:^(id tokenData){
-                if (!tokenData) {
-                    NSLog(@"No token data received %@", tokenData);
-                    callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
-                } if ([tokenData isKindOfClass:[FlutterError class]]) {
-                    NSLog(@"Error getting token data %@", tokenData);
-                    callback(nil, tokenData);
-                } else {
-                    callback(tokenData, nil);
-                }
-            }];
-        };
-    }
-    ARTRest *const instance = [[ARTRest alloc] initWithOptions:options.clientOptions];
-    [_restInstances setObject:instance forKey:handle];
+-(NSNumber *)setRest:(ARTRest *const)rest with:(int)handle {
+    [_restInstances setObject:rest forKey:handle];
     return handle;
 }
 
@@ -78,35 +56,8 @@
     return [_restInstances objectForKey:handle];
 }
 
--(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *const)options {
-    if (!options) {
-        [NSException raise:NSInvalidArgumentException format:@"options cannot be nil."];
-    }
-
-    NSNumber *const handle = @(_nextHandle++);
-    if(options.hasAuthCallback){
-        options.clientOptions.authCallback =
-        ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
-            [self->_channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
-                               arguments:message
-                                  result:^(id tokenData){
-                if (!tokenData) {
-                    NSLog(@"No token data received %@", tokenData);
-                    callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
-                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
-                } if ([tokenData isKindOfClass:[FlutterError class]]) {
-                    NSLog(@"Error getting token data %@", tokenData);
-                    callback(nil, tokenData);
-                } else {
-                    callback(tokenData, nil);
-                }
-            }];
-        };
-    }
-    ARTRealtime *const instance = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
-    [_realtimeInstances setObject:instance forKey:handle];
+-(NSNumber *)setRealtime:(ARTRealtime *const)realtime with(int)handle {
+    [_realtimeInstances setObject:realtime forKey:handle];
     return handle;
 }
 

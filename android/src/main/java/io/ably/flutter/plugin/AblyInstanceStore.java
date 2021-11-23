@@ -13,7 +13,7 @@ import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
 
 /**
- * Stores instances created by Ably Java by a handle. This handle is passed to the Dart side
+ * Stores instances created by Ably Java, by handle. This handle is passed to the Dart side
  * and keeps track of the instance on the Java side. When a platform method is called on the
  * Dart side, a string representing the method, and the handle representing the instance the method
  * is being called on is passed.

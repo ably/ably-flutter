@@ -44,9 +44,32 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
     options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
-    NSNumber *const restHandle = [ably createRestWithOptions:options];
-    ARTRest *const rest = [ably getRest:restHandle];
-    
+
+    NSNumber *const handle = [ably getNextHandle];
+    if(options.hasAuthCallback){
+        options.clientOptions.authCallback =
+        ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
+            AblyFlutterMessage *const message
+            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            [self->_channel invokeMethod:AblyPlatformMethod_authCallback
+                               arguments:message
+                                  result:^(id tokenData){
+                if (!tokenData) {
+                    NSLog(@"No token data received %@", tokenData);
+                    callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
+                } if ([tokenData isKindOfClass:[FlutterError class]]) {
+                    NSLog(@"Error getting token data %@", tokenData);
+                    callback(nil, tokenData);
+                } else {
+                    callback(tokenData, nil);
+                }
+            }];
+        };
+    }
+    ARTRest *const rest = [[ARTRest alloc] initWithOptions:options.clientOptions];
+    [ably setRest:options with: handle];
+
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken rest:rest];
     } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
@@ -198,9 +221,32 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
     options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
-    NSNumber *const realtimeHandle = [ably createRealtimeWithOptions:options];
-    ARTRealtime *const realtime = [ably realtimeWithHandle:realtimeHandle];
-    
+
+    NSNumber *const handle = [ably getNextHandle];
+    if(options.hasAuthCallback){
+        options.clientOptions.authCallback =
+        ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
+            AblyFlutterMessage *const message
+            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            [self->_channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
+                               arguments:message
+                                  result:^(id tokenData){
+                if (!tokenData) {
+                    NSLog(@"No token data received %@", tokenData);
+                    callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
+                                                      code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
+                } if ([tokenData isKindOfClass:[FlutterError class]]) {
+                    NSLog(@"Error getting token data %@", tokenData);
+                    callback(nil, tokenData);
+                } else {
+                    callback(tokenData, nil);
+                }
+            }];
+        };
+    }
+    ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
+    [ably setRealtime:realtime with:handle];
+
     // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
     // This is not an ideal solution. We save the deviceToken given in didRegisterForRemoteNotificationsWithDeviceToken and the
     // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
@@ -212,7 +258,7 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
         [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error realtime:realtime];
     }
     
-    result(realtimeHandle);
+    result(handle);
 };
 
 static const FlutterHandler _connectRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
