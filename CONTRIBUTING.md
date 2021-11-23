@@ -19,6 +19,17 @@ If using Android Studio, delete the `.packages` file. It is a deprecated autogen
 
 ## Implementation Notes
 
+### Hot reload, hot restart and app restart
+
+There are 3 types of "refreshes" you might see in a Flutter app:
+- **[Hot reload](https://docs.flutter.dev/development/tools/hot-reload):** Both Flutter and iOS apps are **not** restarted. The application state remains the same. Updated source files are injected into the running Dart VM.
+- **Hot restart:** The Flutter application is restarted, but the host application (Android and iOS apps which host the Flutter application) does not.
+  - State of the flutter application is reset. This means fields are all reset to their default values (or null).
+  - This also means we must remember to clear the state in the host application when the app hot restarts. We do this by calling `await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);`.
+  - From Flutter documentation:
+> With a hot restart, the program starts from the beginning, executes the new version of main(), and builds a widget tree that displays the text Hello.
+- **App restart:** The entire application is restarted, clearing the state of both the Flutter application and the host application (Android and iOS apps).
+
 ### Exceptions and Errors
 
 Dart libraries don't _extend_ the [Exception class](https://api.dart.dev/stable/2.4.0/dart-core/Exception-class.html),
