@@ -5,21 +5,21 @@ public class PushHandlers: NSObject {
     public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;
     
     @objc
-    public static let activate: FlutterHandler = { plugin, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate != nil) {
+    public static let activate: FlutterHandler = { ably, call, result in
+        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
-        } else if let push = getPush(ably: plugin.ably, call: call, result: result) {
-            PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForActivate = result
+        } else if let push = getPush(ably: ably.ably, call: call, result: result) {
+            PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
             push.activate()
         }
     }
 
     @objc
-    public static let deactivate: FlutterHandler = { plugin, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate != nil) {
+    public static let deactivate: FlutterHandler = { ably, call, result in
+        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
-        } else if let push = getPush(ably: plugin.ably, call: call, result: result) {
-            PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate = result
+        } else if let push = getPush(ably: ably.ably, call: call, result: result) {
+            PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
             push.deactivate()
         }
     }

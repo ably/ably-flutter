@@ -9,6 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)init NS_UNAVAILABLE;
 
 @property(nonatomic) AblyFlutter * ably;
+@property(nonatomic) FlutterMethodChannel *channel;
 @property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
 @property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
 

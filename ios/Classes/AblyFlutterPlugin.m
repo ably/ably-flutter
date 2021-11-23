@@ -44,15 +44,14 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
-    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: plugin.channel];
 
     NSNumber *const handle = [ably getNextHandle];
     if(options.hasAuthCallback){
         options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
-            [self->_channel invokeMethod:AblyPlatformMethod_authCallback
+            AblyFlutterMessage *const message = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
+            [plugin.channel invokeMethod:AblyPlatformMethod_authCallback
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
@@ -69,7 +68,7 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
         };
     }
     ARTRest *const rest = [[ARTRest alloc] initWithOptions:options.clientOptions];
-    [ably setRest:options with: handle];
+    [ably setRest:rest with: handle];
 
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken rest:rest];
@@ -77,7 +76,7 @@ static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *co
         [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error rest:rest];
     }
     
-    result(restHandle);
+    result(handle);
 };
 
 static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -221,7 +220,7 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
-    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: plugin.channel];
 
     NSNumber *const handle = [ably getNextHandle];
     if(options.hasAuthCallback){
@@ -229,7 +228,7 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
             = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
-            [self->_channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
+            [plugin.channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
@@ -587,7 +586,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 };
 
 @implementation AblyFlutterPlugin {
-    long long _nextRegistration;
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
     FlutterMethodChannel* _channel;
@@ -630,8 +628,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         return nil;
     }
     _ably = [AblyFlutter sharedInstance];
-    [_ably setChannel: channel];
-    self->_streamsChannel = streamsChannel;
+    _channel = channel;
+    _streamsChannel = streamsChannel;
     UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
     _pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
     center.delegate = _pushNotificationEventHandlers;
@@ -680,9 +678,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
     };
     
-    _nextRegistration = 1;
-    _channel = channel;
-    
     [registrar addApplicationDelegate:self];
     return self;
 }
@@ -700,7 +695,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
 }
 
 -(void)reset {
-    [_ably dispose];
+    [_ably reset];
     [self->_streamsChannel reset];
 }
 

@@ -8,7 +8,6 @@
 
 
 @implementation AblyFlutter {
-    FlutterMethodChannel* _channel;
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
     NSMutableDictionary<NSNumber *, ARTPaginatedResult *>* _paginatedResults;
@@ -25,11 +24,7 @@
     return sharedInstance;
 }
 
--(void) setChannel:(FlutterMethodChannel *const)channel  {
-    _channel = channel;
-}
-
--(void) getNextHandle {
+-(NSNumber *) getNextHandle {
     return @(_nextHandle++);
 }
 
@@ -47,18 +42,16 @@
     return self;
 }
 
--(NSNumber *)setRest:(ARTRest *const)rest with:(int)handle {
+-(void)setRest:(ARTRest *const)rest with:(NSNumber *const)handle {
     [_restInstances setObject:rest forKey:handle];
-    return handle;
 }
 
 -(ARTRest *)getRest:(NSNumber *const)handle {
     return [_restInstances objectForKey:handle];
 }
 
--(NSNumber *)setRealtime:(ARTRealtime *const)realtime with(int)handle {
+-(void)setRealtime:(ARTRealtime *const)realtime with:(NSNumber *const)handle {
     [_realtimeInstances setObject:realtime forKey:handle];
-    return handle;
 }
 
 -(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
@@ -77,7 +70,7 @@
     return [_paginatedResults objectForKey:handle];
 }
 
--(void)dispose {
+-(void)reset {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];
     }

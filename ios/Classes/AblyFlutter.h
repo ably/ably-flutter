@@ -9,15 +9,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutter : NSObject
 
-@property (nullable) FlutterMethodChannel * channel;
-
 + (instancetype)sharedInstance;
 
--(NSNumber *)setRest:(ARTRest *const)rest with:(int)handle;
+-(NSNumber *) getNextHandle;
+
+-(void)setRest:(ARTRest *const)rest with:(NSNumber *const)handle;
 
 -(nullable ARTRest *)getRest:(NSNumber *)handle;
 
--(NSNumber *)setRealtime:(ARTRealtime *const)realtime with:(int)handle;
+-(void)setRealtime:(ARTRealtime *const)realtime with:(NSNumber *const)handle;
 
 -(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle;
 
--(void)dispose;
+-(void)reset;
 
 @end
 
