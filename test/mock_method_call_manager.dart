@@ -35,8 +35,8 @@ class MockMethodCallManager {
       case PlatformMethod.resetAblyClients:
         return true;
 
-      case PlatformMethod.createRestWithOptions:
-      case PlatformMethod.createRealtimeWithOptions:
+      case PlatformMethod.createRest:
+      case PlatformMethod.createRealtime:
         final handle = ++handleCounter;
         channels[handle] = methodCall.arguments as AblyMessage?;
         return handle;

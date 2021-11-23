@@ -90,7 +90,7 @@ As an example, when I was debugging Android, I was seeing the following unhelpfu
 where I had launched with `flutter run`:
 
     I/flutter (15216): createRealtime with registered handle 2
-    I/flutter (15216): Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtimeWithOptions on channel ably_test_flutter_oldskool_plugin)
+    I/flutter (15216): Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtime on channel ably_test_flutter_oldskool_plugin)
     I/flutter (15216): widget build
 
 What was confusing was that I had definitely implemented a handler for this method and was sure that
@@ -114,7 +114,7 @@ it could not be my Java code that was calling `result.notImplemented()`. It was 
     02-05 10:13:42.992 15216 15216 E DartMessenger: 	at java.lang.reflect.Method.invoke(Native Method)
     02-05 10:13:42.992 15216 15216 E DartMessenger: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
     02-05 10:13:42.992 15216 15216 E DartMessenger: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
-    02-05 10:13:43.006 15216 15254 I flutter : Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtimeWithOptions on channel ably_test_flutter_oldskool_plugin)
+    02-05 10:13:43.006 15216 15254 I flutter : Error creating Ably Realtime: MissingPluginException(No implementation found for method createRealtime on channel ably_test_flutter_oldskool_plugin)
     02-05 10:13:43.011 15216 15254 I flutter : widget build
 
 The message codec gets invoked before my method call handler ever gets called. And it seems that the Flutter

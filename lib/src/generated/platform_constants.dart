@@ -41,14 +41,14 @@ class PlatformMethod {
   static const String resetAblyClients = 'resetAblyClients';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
-  static const String createRestWithOptions = 'createRestWithOptions';
+  static const String createRest = 'createRest';
   static const String setRestChannelOptions = 'setRestChannelOptions';
   static const String publish = 'publish';
   static const String restHistory = 'restHistory';
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
   static const String releaseRestChannel = 'releaseRestChannel';
-  static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
+  static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
   static const String attachRealtimeChannel = 'attachRealtimeChannel';
@@ -381,8 +381,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -398,8 +397,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

@@ -64,7 +64,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.resetAblyClients, this::resetAblyClients);
 
     // Rest
-    _map.put(PlatformConstants.PlatformMethod.createRestWithOptions, this::createRestWithOptions);
+    _map.put(PlatformConstants.PlatformMethod.createRest, this::createRest);
     _map.put(PlatformConstants.PlatformMethod.setRestChannelOptions, this::setRestChannelOptions);
     _map.put(PlatformConstants.PlatformMethod.publish, this::publishRestMessage);
     _map.put(PlatformConstants.PlatformMethod.restHistory, this::getRestHistory);
@@ -73,7 +73,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.releaseRestChannel, this::releaseRestChannel);
 
     //Realtime
-    _map.put(PlatformConstants.PlatformMethod.createRealtimeWithOptions, this::createRealtimeWithOptions);
+    _map.put(PlatformConstants.PlatformMethod.createRealtime, this::createRealtime);
     _map.put(PlatformConstants.PlatformMethod.connectRealtime, this::connectRealtime);
     _map.put(PlatformConstants.PlatformMethod.closeRealtime, this::closeRealtime);
     _map.put(PlatformConstants.PlatformMethod.attachRealtimeChannel, this::attachRealtimeChannel);
@@ -179,7 +179,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     result.success(null);
   }
 
-  private void createRestWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  private void createRest(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
@@ -444,7 +444,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     });
   }
 
-  private void createRealtimeWithOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  private void createRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {

@@ -25,8 +25,8 @@ void main() {
         case PlatformMethod.getVersion:
           return _nativeLibraryVersion;
 
-        case PlatformMethod.createRestWithOptions:
-        case PlatformMethod.createRealtimeWithOptions:
+        case PlatformMethod.createRest:
+        case PlatformMethod.createRealtime:
           return ++counter;
 
         case PlatformMethod.publish:
@@ -50,7 +50,7 @@ void main() {
     expect(await version(), _nativeLibraryVersion);
   });
 
-  test(PlatformMethod.createRestWithOptions, () async {
+  test(PlatformMethod.createRest, () async {
     final o = ClientOptions();
     const host = 'http://rest.ably.io/';
     o.restHost = host;

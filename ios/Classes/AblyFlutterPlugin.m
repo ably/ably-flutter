@@ -40,7 +40,7 @@ static const FlutterHandler _resetAblyClients = ^void(AblyFlutterPlugin *const p
     result(nil);
 };
 
-static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRest = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
@@ -216,7 +216,7 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutterPlugin *const
     result(nil);
 };
 
-static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRealtime = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyFlutter *const ably = [plugin ably];
     AblyFlutterClientOptions *const options = message.message;
@@ -251,7 +251,7 @@ static const FlutterHandler _createRealtimeWithOptions = ^void(AblyFlutterPlugin
     // This is not an ideal solution. We save the deviceToken given in didRegisterForRemoteNotificationsWithDeviceToken and the
     // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
     // Ideally, the Ably client doesn't need to be created, and we can pass the deviceToken to Ably like in Ably Java.
-    // This is similarly repeated for in _createRestWithOptions
+    // This is similarly repeated for in _createRest
     if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken realtime:realtime];
     } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
@@ -638,14 +638,14 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
         AblyPlatformMethod_getVersion: _getVersion,
         AblyPlatformMethod_resetAblyClients: _resetAblyClients,
-        AblyPlatformMethod_createRestWithOptions: _createRestWithOptions,
+        AblyPlatformMethod_createRest: _createRest,
         AblyPlatformMethod_setRestChannelOptions: _setRestChannelOptions,
         AblyPlatformMethod_publish: _publishRestMessage,
         AblyPlatformMethod_restHistory: _getRestHistory,
         AblyPlatformMethod_restPresenceGet: _getRestPresence,
         AblyPlatformMethod_restPresenceHistory: _getRestPresenceHistory,
         AblyPlatformMethod_releaseRestChannel: _releaseRestChannel,
-        AblyPlatformMethod_createRealtimeWithOptions: _createRealtimeWithOptions,
+        AblyPlatformMethod_createRealtime: _createRealtime,
         AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
         AblyPlatformMethod_connectRealtime: _connectRealtime,
         AblyPlatformMethod_closeRealtime: _closeRealtime,
