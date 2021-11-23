@@ -1,10 +1,3 @@
-//
-//  AblyFlutterClientOptions.m
-//  Ably
-//
-//  Created by Rohit R. Abbadi on 11/09/20.
-//
-
 #import "AblyFlutterClientOptions.h"
 
 
@@ -14,7 +7,7 @@
 @synthesize hasAuthCallback = _hasAuthCallback;
 
 -(instancetype)initWithClientOptions:(ARTClientOptions *)clientOptions
-                     hasAuthCallback:(id)hasAuthCallback {
+                     hasAuthCallback:(id _Nullable)hasAuthCallback {
 
     self = [super init];
     if (!self) {

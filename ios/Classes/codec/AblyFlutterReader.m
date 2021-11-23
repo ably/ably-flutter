@@ -146,12 +146,10 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
 
     [o addAgent:@"ably-flutter" version: FLUTTER_PACKAGE_PLUGIN_VERSION];
 
-    AblyFlutterClientOptions *const co = [AblyFlutterClientOptions new];
-    ON_VALUE(^(const id value) {
-        [co initWithClientOptions: o hasAuthCallback: value];
-    }, dictionary, TxClientOptions_hasAuthCallback);
-
-    return co;
+    
+    return  [[AblyFlutterClientOptions alloc]
+             initWithClientOptions:o
+             hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
 };
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary {
