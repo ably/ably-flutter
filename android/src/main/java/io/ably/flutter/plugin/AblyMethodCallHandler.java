@@ -45,7 +45,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
 
   public interface ResetAblyClientsCallback {
-    void on();
+    void run();
   }
 
   private final MethodChannel channel;
@@ -151,7 +151,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
     final MethodChannel.Result result = new MethodResultWrapper(rawResult);
-    System.out.println("Ably Plugin handle: " + call.method);
+    System.out.println("Ably Flutter platform method called: " + call.method);
     final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
     if (null == handler) {
       // We don't have a handler for a method with this name so tell the caller.
@@ -178,7 +178,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     _ably.dispose();
-    resetAblyClientsCallback.on();
+    resetAblyClientsCallback.run();
     result.success(null);
   }
 
@@ -472,15 +472,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  if (errorMessage != null) {
-                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
-                  }
+                  Log.w(TAG, String.format("\"%s\" platform method received error from Dart side: %s", PlatformConstants.PlatformMethod.realtimeAuthCallback, errorMessage));
                   latch.countDown();
                 }
 
                 @Override
                 public void notImplemented() {
-                  System.out.println("`authCallback` Method not implemented on dart side");
+                  Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.realtimeAuthCallback));
                 }
               });
             });
