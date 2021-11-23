@@ -6,7 +6,6 @@
 #import "codec/AblyPlatformConstants.h"
 #import <ably_flutter/ably_flutter-Swift.h>
 
-
 @implementation AblyFlutter {
     NSMutableDictionary<NSNumber *, ARTRealtime *>* _realtimeInstances;
     NSMutableDictionary<NSNumber *, ARTRest *>* _restInstances;
