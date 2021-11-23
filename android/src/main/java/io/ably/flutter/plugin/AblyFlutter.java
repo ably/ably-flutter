@@ -26,7 +26,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
 public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
-    private static final String TAG = AblyFlutterPlugin.class.getName();
+    private static final String TAG = AblyFlutter.class.getName();
     private Context applicationContext;
     private AblyMethodCallHandler methodCallHandler;
     private Activity mainActivity;
@@ -50,7 +50,7 @@ public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry
     // in the same class.
     public static void registerWith(Registrar registrar) {
         Context applicationContext = registrar.context().getApplicationContext();
-        final AblyFlutterPlugin ably = new AblyFlutterPlugin();
+        final AblyFlutter ably = new AblyFlutter();
         registrar.addNewIntentListener(ably);
         ably.setupChannels(registrar.messenger(), applicationContext);
     }
