@@ -3,6 +3,7 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import io.flutter.plugin.common.EventChannel;
  */
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
+  private static final String TAG = AblyEventStreamHandler.class.getName();
   /**
    * Creating an ablyLibrary instance.
    * As ablyLibrary is a singleton,
@@ -197,7 +199,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
   @Override
   public void onCancel(Object object) {
     if (object == null) {
-      System.out.println("Cannot process null input on cancel");
+      Log.w(TAG, "onCancel cannot decode null");
       return;
     }
     final AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
