@@ -7,7 +7,7 @@
 @synthesize hasAuthCallback = _hasAuthCallback;
 
 -(instancetype)initWithClientOptions:(ARTClientOptions *)clientOptions
-                     hasAuthCallback:(id _Nullable)hasAuthCallback {
+                     hasAuthCallback:(id)hasAuthCallback {
 
     self = [super init];
     if (!self) {
