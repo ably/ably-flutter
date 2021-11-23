@@ -26,7 +26,7 @@ import io.flutter.plugin.common.EventChannel;
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
   private static final String TAG = AblyEventStreamHandler.class.getName();
-  private final AblyLibrary ablyLibrary = AblyLibrary.getInstance();
+  private final AblyInstanceStore instanceStore = AblyInstanceStore.getInstance();
 
   /**
    * Refer to the comments on AblyMethodCallHandler.MethodResultWrapper
@@ -133,12 +133,12 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
       switch (eventName) {
         case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
           connectionStateListener = new PluginConnectionStateListener(eventSink);
-          ablyLibrary.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
+          instanceStore.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
           break;
         case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
           assert eventPayload != null : "onRealtimeChannelStateChanged: event message is missing";
           channelStateListener = new PluginChannelStateListener(eventSink);
-          ablyLibrary
+          instanceStore
               .getRealtime(ablyMessage.handle)
               .channels
               .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
@@ -148,7 +148,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
           assert eventPayload != null : "onRealtimeChannelMessage: event message is missing";
           try {
             channelMessageListener = new PluginChannelMessageListener(eventSink);
-            ablyLibrary
+            instanceStore
                 .getRealtime(ablyMessage.handle)
                 .channels
                 .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
@@ -161,7 +161,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
           assert eventPayload != null : "onRealtimePresenceMessage: event message is missing";
           try {
             channelPresenceMessageListener = new PluginChannelPresenceMessageListener(eventSink);
-            ablyLibrary
+            instanceStore
                 .getRealtime(ablyMessage.handle)
                 .channels
                 .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
@@ -190,13 +190,13 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     final Map<String, Object> eventPayload = (eventMessage.message == null) ? null : (Map<String, Object>) eventMessage.message;
     switch (eventName) {
       case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-        ablyLibrary.getRealtime(ablyMessage.handle).connection.off(connectionStateListener);
+        instanceStore.getRealtime(ablyMessage.handle).connection.off(connectionStateListener);
         break;
       case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
         // Note: this and all other assert statements in this onCancel method are
         // left as is as there is no way of propagating this error to flutter side
         assert eventPayload != null : "onRealtimeChannelStateChanged: event message is missing";
-        ablyLibrary
+        instanceStore
             .getRealtime(ablyMessage.handle)
             .channels
             .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
@@ -204,7 +204,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         break;
       case PlatformConstants.PlatformMethod.onRealtimeChannelMessage:
         assert eventPayload != null : "onRealtimeChannelMessage: event message is missing";
-        ablyLibrary
+        instanceStore
             .getRealtime(ablyMessage.handle)
             .channels
             .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))
@@ -212,7 +212,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
         break;
       case PlatformConstants.PlatformMethod.onRealtimePresenceMessage:
         assert eventPayload != null : "onRealtimePresenceMessage: event message is missing";
-        ablyLibrary
+        instanceStore
             .getRealtime(ablyMessage.handle)
             .channels
             .get((String) eventPayload.get(PlatformConstants.TxTransportKeys.channelName))

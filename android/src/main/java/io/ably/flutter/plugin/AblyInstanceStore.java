@@ -11,11 +11,20 @@ import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
-import io.ably.lib.types.ErrorInfo;
 
-class AblyLibrary {
+/**
+ * Stores instances created by Ably Java by a handle. This handle is passed to the Dart side
+ * and keeps track of the instance on the Java side. When a platform method is called on the
+ * Dart side, a string representing the method, and the handle representing the instance the method
+ * is being called on is passed.
+ *
+ * For example, when @{Realtime#connect} is called on the dart side, we need to know which Realtime
+ * client this method is being called on, as there might be more than one. We can get the realtime
+ * client by calling @{AblyInstanceStore#getRealtime(final long handle)}.
+ */
+class AblyInstanceStore {
 
-    private static final AblyLibrary _instance = new AblyLibrary();
+    private static final AblyInstanceStore _instance = new AblyInstanceStore();
     private long _nextHandle = 1;
 
     // Android Studio warns against using HashMap with integer keys, and
@@ -26,7 +35,7 @@ class AblyLibrary {
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
     private final LongSparseArray<AsyncPaginatedResult<Object>> _paginatedResults = new LongSparseArray<>();
 
-    static synchronized AblyLibrary getInstance() {
+    static synchronized AblyInstanceStore getInstance() {
         return _instance;
     }
 
@@ -101,7 +110,7 @@ class AblyLibrary {
         return _paginatedResults.get(handle);
     }
 
-    void dispose() {
+    void resetClients() {
         for (int i = 0; i < _realtimeInstances.size(); i++) {
             long key = _realtimeInstances.keyAt(i);
             AblyRealtime r = _realtimeInstances.get(key);

@@ -62,12 +62,8 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler());
 
         methodChannel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
-        methodCallHandler = new AblyMethodCallHandler(
-            methodChannel,
-            streamsChannel::reset,
-            applicationContext
-        );
-        BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
+        methodCallHandler = new AblyMethodCallHandler(methodChannel, streamsChannel, applicationContext);
+        new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
         PushMessagingEventHandlers.reset(applicationContext, methodChannel);
