@@ -15,38 +15,30 @@ import io.ably.lib.types.ErrorInfo;
 
 class AblyLibrary {
 
-    private static AblyLibrary _instance;
+    private static final AblyLibrary _instance = new AblyLibrary();
     private long _nextHandle = 1;
-    final private Context applicationContext;
-
-    private AblyLibrary(Context applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    static synchronized AblyLibrary getInstance(Context applicationContext) {
-        if (null == _instance) {
-            _instance = new AblyLibrary(applicationContext);
-        }
-        return _instance;
-    }
 
     // Android Studio warns against using HashMap with integer keys, and
     // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
     // It may be simpler to go back to HashMap because this is an unmeasured memory optimisation.
     // > the Hashmap and the SparseArray are very similar for data structure sizes under 1,000
     private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _restTokenData = new LongSparseArray<>();
-
     private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _realtimeTokenData = new LongSparseArray<>();
-
     private final LongSparseArray<AsyncPaginatedResult<Object>> _paginatedResults = new LongSparseArray<>();
 
-    long getCurrentHandle() {
+    static synchronized AblyLibrary getInstance() {
+        return _instance;
+    }
+
+    /**
+     * Returns a handle representing the next client that will be created. This handle can be used
+     * to get the client **after** it is instantiated using [createRest] or [createRealtime].
+     */
+    long getHandleForNextClient() {
         return _nextHandle;
     }
 
-    long createRest(final ClientOptions clientOptions) throws AblyException {
+    long createRest(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
         rest.setAndroidContext(applicationContext);
         _restInstances.put(_nextHandle, rest);
@@ -57,18 +49,7 @@ class AblyLibrary {
         return _restInstances.get(handle);
     }
 
-    void setRestToken(long handle, Object tokenDetails) {
-        _restTokenData.put(handle, tokenDetails);
-    }
-
-    Object getRestToken(long handle) {
-        Object token = _restTokenData.get(handle);
-        _restTokenData.remove(handle);
-        return token;
-    }
-
-
-    long createRealtime(final ClientOptions clientOptions) throws AblyException {
+    long createRealtime(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
         realtime.setAndroidContext(applicationContext);
         _realtimeInstances.put(_nextHandle, realtime);
@@ -103,16 +84,6 @@ class AblyLibrary {
         return getAblyClient(handle)
                 .channels
                 .get(channelName).push;
-    }
-
-    void setRealtimeToken(long handle, Object tokenDetails) {
-        _realtimeTokenData.put(handle, tokenDetails);
-    }
-
-    Object getRealtimeToken(long handle) {
-        Object token = _realtimeTokenData.get(handle);
-        _realtimeTokenData.remove(handle);
-        return token;
     }
 
     long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {

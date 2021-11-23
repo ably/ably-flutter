@@ -153,7 +153,7 @@ class RealtimeSliver extends HookWidget {
         connectionState.value = connectionStateChange.current;
         print('${DateTime.now()}:'
             ' ConnectionStateChange event: ${connectionStateChange.event}'
-            '\nReason: ${connectionStateChange.reason}');
+            ' with reason: ${connectionStateChange.reason}');
       });
       _subscriptions.add(connectionSubscription);
       final channelSubscription = channel.on().listen((stateChange) {

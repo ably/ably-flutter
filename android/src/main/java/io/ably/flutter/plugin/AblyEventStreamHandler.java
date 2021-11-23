@@ -1,6 +1,5 @@
 package io.ably.flutter.plugin;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -13,7 +12,6 @@ import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.realtime.Presence;
 import io.ably.lib.types.AblyException;
-import io.ably.lib.types.ChannelOptions;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.PresenceMessage;
 import io.flutter.plugin.common.EventChannel;
@@ -28,24 +26,15 @@ import io.flutter.plugin.common.EventChannel;
 public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
   private static final String TAG = AblyEventStreamHandler.class.getName();
-  /**
-   * Creating an ablyLibrary instance.
-   * As ablyLibrary is a singleton,
-   * all ably object instance will be accessible
-   */
-  private final AblyLibrary ablyLibrary;
-
-  public AblyEventStreamHandler(Context applicationContext) {
-    ablyLibrary = AblyLibrary.getInstance(applicationContext);
-  }
+  private final AblyLibrary ablyLibrary = AblyLibrary.getInstance();
 
   /**
    * Refer to the comments on AblyMethodCallHandler.MethodResultWrapper
    * on why this customized EventSink is required
    */
   private static class MainThreadEventSink implements EventChannel.EventSink {
-    private EventChannel.EventSink eventSink;
-    private Handler handler;
+    private final EventChannel.EventSink eventSink;
+    private final Handler handler;
 
     MainThreadEventSink(EventChannel.EventSink eventSink) {
       this.eventSink = eventSink;
@@ -69,10 +58,8 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
   // Listeners
   private PluginConnectionStateListener connectionStateListener;
-
   private PluginChannelStateListener channelStateListener;
   private PluginChannelMessageListener channelMessageListener;
-
   private PluginChannelPresenceMessageListener channelPresenceMessageListener;
 
   void handleAblyException(EventChannel.EventSink eventSink, AblyException ablyException) {
@@ -135,15 +122,10 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
   }
 
-  // Casting stream creation arguments from `Object` into `AblyFlutterMessage<AblyEventMessage>`
-  private AblyFlutterMessage<AblyEventMessage<Object>> getMessage(Object message) {
-    return (AblyFlutterMessage<AblyEventMessage<Object>>) message;
-  }
-
   @Override
   public void onListen(Object object, EventChannel.EventSink uiThreadEventSink) {
     MainThreadEventSink eventSink = new MainThreadEventSink(uiThreadEventSink);
-    final AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
+    final AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = (AblyFlutterMessage<AblyEventMessage<Object>>) object;
     final AblyEventMessage<Object> eventMessage = ablyMessage.message;
     final String eventName = eventMessage.eventName;
     final Map<String, Object> eventPayload = (eventMessage.message == null) ? null : (Map<String, Object>) eventMessage.message;
@@ -202,7 +184,7 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
       Log.w(TAG, "onCancel cannot decode null");
       return;
     }
-    final AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = getMessage(object);
+    final AblyFlutterMessage<AblyEventMessage<Object>> ablyMessage = (AblyFlutterMessage<AblyEventMessage<Object>>) object;
     final AblyEventMessage<Object> eventMessage = ablyMessage.message;
     final String eventName = eventMessage.eventName;
     final Map<String, Object> eventPayload = (eventMessage.message == null) ? null : (Map<String, Object>) eventMessage.message;

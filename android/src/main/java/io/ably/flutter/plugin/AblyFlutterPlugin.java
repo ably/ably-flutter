@@ -59,7 +59,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         final MethodCodec codec = createCodec(new CipherParamsStorage());
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
-        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(applicationContext));
+        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler());
 
         methodChannel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
         methodCallHandler = new AblyMethodCallHandler(

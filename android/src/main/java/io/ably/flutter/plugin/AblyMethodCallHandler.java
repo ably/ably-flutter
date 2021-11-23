@@ -43,6 +43,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private static final String TAG = PushMessagingEventHandlers.class.getName();
+  private final Context applicationContext;
 
   public interface ResetAblyClientsCallback {
     void run();
@@ -60,6 +61,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                                final Context applicationContext) {
     this.channel = channel;
     this.resetAblyClientsCallback = resetAblyClientsCallback;
+    this.applicationContext = applicationContext;
     this._ably = AblyLibrary.getInstance(applicationContext);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
@@ -186,19 +188,17 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
-        final long handle = ablyLibrary.getCurrentHandle();
+        final long handle = ablyLibrary.getHandleForNextClient();
         if (clientOptions.hasAuthCallback) {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
-            Object token = ablyLibrary.getRestToken(handle);
-            if (token != null) return token;
-
+            final Object[] token = {null};
             final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
               AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
               channel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
                 @Override
                 public void success(@Nullable Object result) {
-                  ablyLibrary.setRestToken(handle, result);
+                  token[0] = result;
                   latch.countDown();
                 }
 
@@ -211,6 +211,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 @Override
                 public void notImplemented() {
                   Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.authCallback));
+                  latch.countDown();
                 }
               });
             });
@@ -221,10 +222,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
               throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
             }
 
-            return ablyLibrary.getRestToken(handle);
+            return token[0];
           };
         }
-        result.success(ablyLibrary.createRest(clientOptions.options));
+        result.success(ablyLibrary.createRest(clientOptions.options, applicationContext));
       } catch (final AblyException e) {
         handleAblyException(result, e);
       }
@@ -452,12 +453,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
-        final long handle = ablyLibrary.getCurrentHandle();
+        final long handle = ablyLibrary.getHandleForNextClient();
         if (clientOptions.hasAuthCallback) {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
-            Object token = ablyLibrary.getRealtimeToken(handle);
-            if (token != null) return token;
-
+            final Object[] token = {null};
             final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
               AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
@@ -465,7 +464,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 @Override
                 public void success(@Nullable Object result) {
                   if (result != null) {
-                    ablyLibrary.setRealtimeToken(handle, result);
+                    token[0] = result;
                     latch.countDown();
                   }
                 }
@@ -479,6 +478,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 @Override
                 public void notImplemented() {
                   Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.realtimeAuthCallback));
+                  latch.countDown();
                 }
               });
             });
@@ -489,10 +489,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
               throw AblyException.fromErrorInfo(e, new ErrorInfo("Exception while waiting for authCallback to return", 400, 40000));
             }
 
-            return ablyLibrary.getRealtimeToken(handle);
+            return token[0];
           };
         }
-        result.success(ablyLibrary.createRealtime(clientOptions.options));
+        result.success(ablyLibrary.createRealtime(clientOptions.options, applicationContext));
       } catch (final AblyException e) {
         handleAblyException(result, e);
       }
