@@ -31,9 +31,9 @@ class AblyInstanceStore {
     // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
     // It may be simpler to go back to HashMap because this is an unmeasured memory optimisation.
     // > the Hashmap and the SparseArray are very similar for data structure sizes under 1,000
-    private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
-    private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
-    private final LongSparseArray<AsyncPaginatedResult<Object>> _paginatedResults = new LongSparseArray<>();
+    private final LongSparseArray<AblyRest> restInstances = new LongSparseArray<>();
+    private final LongSparseArray<AblyRealtime> realtimeInstances = new LongSparseArray<>();
+    private final LongSparseArray<AsyncPaginatedResult<Object>> paginatedResults = new LongSparseArray<>();
 
     static synchronized AblyInstanceStore getInstance() {
         return _instance;
@@ -50,23 +50,23 @@ class AblyInstanceStore {
     long createRest(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
         rest.setAndroidContext(applicationContext);
-        _restInstances.put(_nextHandle, rest);
+        restInstances.put(_nextHandle, rest);
         return _nextHandle++;
     }
 
     AblyRest getRest(final long handle) {
-        return _restInstances.get(handle);
+        return restInstances.get(handle);
     }
 
     long createRealtime(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
         realtime.setAndroidContext(applicationContext);
-        _realtimeInstances.put(_nextHandle, realtime);
+        realtimeInstances.put(_nextHandle, realtime);
         return _nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
-        return _realtimeInstances.get(handle);
+        return realtimeInstances.get(handle);
     }
 
     /**
@@ -102,25 +102,26 @@ class AblyInstanceStore {
         } else {
             longHandle = handle.longValue();
         }
-        _paginatedResults.put(longHandle, result);
+        paginatedResults.put(longHandle, result);
         return longHandle;
     }
 
     AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
-        return _paginatedResults.get(handle);
+        return paginatedResults.get(handle);
     }
 
-    void resetClients() {
-        for (int i = 0; i < _realtimeInstances.size(); i++) {
-            long key = _realtimeInstances.keyAt(i);
-            AblyRealtime r = _realtimeInstances.get(key);
+    void reset() {
+        for (int i = 0; i < realtimeInstances.size(); i++) {
+            long key = realtimeInstances.keyAt(i);
+            AblyRealtime r = realtimeInstances.get(key);
             try {
                 r.close();
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
-        _realtimeInstances.clear();
-        _restInstances.clear();
+        realtimeInstances.clear();
+        restInstances.clear();
+        paginatedResults.clear();
     }
 }

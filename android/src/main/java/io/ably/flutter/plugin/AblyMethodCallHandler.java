@@ -175,7 +175,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   private void resetAblyClients(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     streamsChannel.reset();
-    instanceStore.resetClients();
+    instanceStore.reset();
     result.success(null);
   }
 
