@@ -6,8 +6,9 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:crypto/crypto.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'constants.dart';
+
 class EncryptedMessagingService {
-  static const channelName = 'encrypted-test-channel';
   final ably.Realtime? _realtime;
   ably.Rest? _rest;
   ably.RealtimeChannel? _realtimeChannel;
@@ -35,9 +36,13 @@ class EncryptedMessagingService {
 
   EncryptedMessagingService(this._realtime);
 
+  void clearMessageHistory() {
+    messageHistoryBehaviorSubject.add([]);
+  }
+
   Future<void> setRestClient(ably.Rest rest) async {
     _rest = rest;
-    _restChannel = _rest!.channels.get(channelName);
+    _restChannel = _rest!.channels.get(Constants.encryptedChannelName);
     final cipherParams = ably.Crypto.getDefaultParams(key: keyFromPassword);
     final restChannelOptions =
         ably.RestChannelOptions(cipherParams: await cipherParams);
@@ -59,7 +64,7 @@ class EncryptedMessagingService {
         await ably.Crypto.getDefaultParams(key: keyFromPassword);
     final channelOptions =
         ably.RealtimeChannelOptions(cipherParams: cipherParams);
-    _realtimeChannel = _realtime!.channels.get(channelName);
+    _realtimeChannel = _realtime!.channels.get(Constants.encryptedChannelName);
     await _realtimeChannel!.setOptions(channelOptions);
     channelStateChangeSubscription = _realtimeChannel!.on().listen((event) {
       print('on().listen ChannelState: ${event.current}');
