@@ -1,6 +1,6 @@
 @import Foundation;
 @import Flutter;
-#import "AblyFlutterPlugin.h"
+#import "AblyFlutter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

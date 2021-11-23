@@ -1,7 +1,7 @@
 @import Ably.ARTRealtime;
 
 #import "AblyFlutterStreamHandler.h"
-#import "AblyFlutterPlugin.h"
+#import "AblyFlutter.h"
 #import "AblyFlutterMessage.h"
 #import "codec/AblyPlatformConstants.h"
 
