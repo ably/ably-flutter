@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
     };
-    return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
+    return _handlers[[NSString stringWithFormat:@"%@", type]];
 }
 
 -(id)readValueOfType:(const UInt8)type {
@@ -54,18 +54,18 @@ NS_ASSUME_NONNULL_END
 }
 
 static AblyCodecDecoder readAblyFlutterMessage = ^AblyFlutterMessage*(NSDictionary *const dictionary) {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [dictionary objectForKey:TxAblyMessage_type]]];
-    id message = [dictionary objectForKey:TxAblyMessage_message];
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder:[NSString stringWithFormat:@"%@", dictionary[TxAblyMessage_type]]];
+    id message = dictionary[TxAblyMessage_message];
     if(decoder){
         message = decoder(message);
     }
-    return [[AblyFlutterMessage alloc] initWithMessage:message handle: [dictionary objectForKey:TxAblyMessage_registrationHandle]];
+    return [[AblyFlutterMessage alloc] initWithMessage:message handle:dictionary[TxAblyMessage_registrationHandle]];
 };
 
 static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(NSDictionary *const dictionary) {
-    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder: [NSString stringWithFormat:@"%@", [dictionary objectForKey:TxAblyEventMessage_type]]];
-    NSString* eventName = [dictionary objectForKey:TxAblyEventMessage_eventName];
-    id message = [dictionary objectForKey:TxAblyEventMessage_message];
+    AblyCodecDecoder decoder = [AblyFlutterReader getDecoder:[NSString stringWithFormat:@"%@", dictionary[TxAblyEventMessage_type]]];
+    NSString* eventName = dictionary[TxAblyEventMessage_eventName];
+    id message = dictionary[TxAblyEventMessage_message];
     if(decoder){
         message = decoder(message);
     }
@@ -108,35 +108,35 @@ ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONAR
 }
 
 static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDictionary *const dictionary) {
-    ARTClientOptions *const o = [ARTClientOptions new];
+    ARTClientOptions *const clientOptions = [ARTClientOptions new];
 
     // AuthOptions (super class of ClientOptions)
-    READ_VALUE(o, authUrl, dictionary, TxClientOptions_authUrl);
-    READ_VALUE(o, authMethod, dictionary, TxClientOptions_authMethod);
-    READ_VALUE(o, key, dictionary, TxClientOptions_key);
-    ON_VALUE(^(const id value) { o.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxClientOptions_tokenDetails);
-    READ_VALUE(o, authHeaders, dictionary, TxClientOptions_authHeaders);
-    READ_VALUE(o, authParams, dictionary, TxClientOptions_authParams);
-    READ_VALUE(o, queryTime, dictionary, TxClientOptions_queryTime);
+    READ_VALUE(clientOptions, authUrl, dictionary, TxClientOptions_authUrl);
+    READ_VALUE(clientOptions, authMethod, dictionary, TxClientOptions_authMethod);
+    READ_VALUE(clientOptions, key, dictionary, TxClientOptions_key);
+    ON_VALUE(^(const id value) { clientOptions.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxClientOptions_tokenDetails);
+    READ_VALUE(clientOptions, authHeaders, dictionary, TxClientOptions_authHeaders);
+    READ_VALUE(clientOptions, authParams, dictionary, TxClientOptions_authParams);
+    READ_VALUE(clientOptions, queryTime, dictionary, TxClientOptions_queryTime);
 
     // ClientOptions
-    READ_VALUE(o, clientId, dictionary, TxClientOptions_clientId);
-    ON_VALUE(^(const id value) { o.logLevel = _logLevel(value); }, dictionary, TxClientOptions_logLevel);
+    READ_VALUE(clientOptions, clientId, dictionary, TxClientOptions_clientId);
+    ON_VALUE(^(const id value) { clientOptions.logLevel = _logLevel(value); }, dictionary, TxClientOptions_logLevel);
     // TODO log handler
-    READ_VALUE(o, tls, dictionary, TxClientOptions_tls);
-    READ_VALUE(o, restHost, dictionary, TxClientOptions_restHost);
-    READ_VALUE(o, realtimeHost, dictionary, TxClientOptions_realtimeHost);
-    READ_BOOL(o, autoConnect, dictionary, TxClientOptions_autoConnect);
-    READ_VALUE(o, useBinaryProtocol, dictionary, TxClientOptions_useBinaryProtocol);
-    READ_VALUE(o, queueMessages, dictionary, TxClientOptions_queueMessages);
-    READ_VALUE(o, echoMessages, dictionary, TxClientOptions_echoMessages);
-    READ_VALUE(o, recover, dictionary, TxClientOptions_recover);
-    READ_VALUE(o, environment, dictionary, TxClientOptions_environment);
-    READ_VALUE(o, idempotentRestPublishing, dictionary, TxClientOptions_idempotentRestPublishing);
-    READ_VALUE(o, fallbackHosts, dictionary, TxClientOptions_fallbackHosts);
-    READ_VALUE(o, fallbackHostsUseDefault, dictionary, TxClientOptions_fallbackHostsUseDefault);
+    READ_VALUE(clientOptions, tls, dictionary, TxClientOptions_tls);
+    READ_VALUE(clientOptions, restHost, dictionary, TxClientOptions_restHost);
+    READ_VALUE(clientOptions, realtimeHost, dictionary, TxClientOptions_realtimeHost);
+    READ_BOOL(clientOptions, autoConnect, dictionary, TxClientOptions_autoConnect);
+    READ_VALUE(clientOptions, useBinaryProtocol, dictionary, TxClientOptions_useBinaryProtocol);
+    READ_VALUE(clientOptions, queueMessages, dictionary, TxClientOptions_queueMessages);
+    READ_VALUE(clientOptions, echoMessages, dictionary, TxClientOptions_echoMessages);
+    READ_VALUE(clientOptions, recover, dictionary, TxClientOptions_recover);
+    READ_VALUE(clientOptions, environment, dictionary, TxClientOptions_environment);
+    READ_VALUE(clientOptions, idempotentRestPublishing, dictionary, TxClientOptions_idempotentRestPublishing);
+    READ_VALUE(clientOptions, fallbackHosts, dictionary, TxClientOptions_fallbackHosts);
+    READ_VALUE(clientOptions, fallbackHostsUseDefault, dictionary, TxClientOptions_fallbackHostsUseDefault);
     ON_VALUE(^(const id value) {
-        o.defaultTokenParams = [AblyFlutterReader tokenParamsFromDictionary: value];
+        clientOptions.defaultTokenParams = [AblyFlutterReader tokenParamsFromDictionary: value];
     }, dictionary, TxClientOptions_defaultTokenParams);
     // Following properties not supported by Objective C library
     // useAuthToken, port, tlsPort, httpOpenTimeout, httpRequestTimeout,
@@ -144,11 +144,11 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
 
-    [o addAgent:@"ably-flutter" version: FLUTTER_PACKAGE_PLUGIN_VERSION];
+    [clientOptions addAgent:@"ably-flutter" version:FLUTTER_PACKAGE_PLUGIN_VERSION];
 
     
     return  [[AblyFlutterClientOptions alloc]
-             initWithClientOptions:o
+             initWithClientOptions:clientOptions
              hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
 };
 
@@ -191,16 +191,16 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenParams_clientId);
     ON_VALUE(^(const id value) { nonce = value; }, dictionary, TxTokenParams_nonce);
     
-    ARTTokenParams *const o = [[ARTTokenParams alloc] initWithClientId: clientId nonce: nonce];
-    READ_VALUE(o, capability, dictionary, TxTokenParams_capability);
-    READ_VALUE(o, timestamp, dictionary, TxTokenParams_timestamp);
+    ARTTokenParams *const tokenParams = [[ARTTokenParams alloc] initWithClientId: clientId nonce: nonce];
+    READ_VALUE(tokenParams, capability, dictionary, TxTokenParams_capability);
+    READ_VALUE(tokenParams, timestamp, dictionary, TxTokenParams_timestamp);
     ON_VALUE(^(const id value) {
-        o.ttl = @([value doubleValue] / 1000);
+        tokenParams.ttl = @([value doubleValue] / 1000);
     }, dictionary, TxTokenParams_ttl);
     ON_VALUE(^(const id value) {
-        o.timestamp = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+        tokenParams.timestamp = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxTokenParams_timestamp);
-    return o;
+    return tokenParams;
 }
 
 static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDictionary *const dictionary) {
@@ -208,14 +208,14 @@ static AblyCodecDecoder readChannelMessageExtras = ^id<ARTJsonCompatible>(NSDict
 };
 
 static AblyCodecDecoder readChannelMessage = ^ARTMessage*(NSDictionary *const dictionary) {
-    ARTMessage *const o = [ARTMessage new];
-    READ_VALUE(o, id, dictionary, TxMessage_id);
-    READ_VALUE(o, name, dictionary, TxMessage_name);
-    READ_VALUE(o, clientId, dictionary, TxMessage_clientId);
-    READ_VALUE(o, encoding, dictionary, TxMessage_encoding);
-    READ_VALUE(o, extras, dictionary, TxMessage_extras);
-    READ_VALUE(o, data, dictionary, TxMessage_data);
-    return o;
+    ARTMessage *const message = [ARTMessage new];
+    READ_VALUE(message, id, dictionary, TxMessage_id);
+    READ_VALUE(message, name, dictionary, TxMessage_name);
+    READ_VALUE(message, clientId, dictionary, TxMessage_clientId);
+    READ_VALUE(message, encoding, dictionary, TxMessage_encoding);
+    READ_VALUE(message, extras, dictionary, TxMessage_extras);
+    READ_VALUE(message, data, dictionary, TxMessage_data);
+    return message;
 };
 
 static AblyCodecDecoder readTokenDetails = ^ARTTokenDetails*(NSDictionary *const dictionary) {
@@ -239,69 +239,69 @@ static AblyCodecDecoder readTokenRequest = ^ARTTokenRequest*(NSDictionary *const
 };
 
 static AblyCodecDecoder readRestHistoryParams = ^ARTDataQuery*(NSDictionary *const dictionary) {
-    ARTDataQuery *const o = [ARTDataQuery new];
+    ARTDataQuery *const query = [ARTDataQuery new];
     ON_VALUE(^(const id value) {
-        o.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+        query.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxRestHistoryParams_start);
     ON_VALUE(^(const id value) {
-        o.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+        query.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxRestHistoryParams_end);
     ON_VALUE(^(NSString const *value) {
-        o.limit = [value integerValue];
+        query.limit = [value integerValue];
     }, dictionary, TxRestHistoryParams_limit);
     ON_VALUE(^(NSString const *value) {
         if([@"forwards" isEqual: value]){
-            o.direction = ARTQueryDirectionForwards;
+            query.direction = ARTQueryDirectionForwards;
         } else {
-            o.direction = ARTQueryDirectionBackwards;
+            query.direction = ARTQueryDirectionBackwards;
         }
     }, dictionary, TxRestHistoryParams_direction);
-    return o;
+    return query;
 };
 
 static AblyCodecDecoder readRealtimeHistoryParams = ^ARTRealtimeHistoryQuery*(NSDictionary *const dictionary) {
-    ARTRealtimeHistoryQuery *const o = [ARTRealtimeHistoryQuery new];
+    ARTRealtimeHistoryQuery *const query = [ARTRealtimeHistoryQuery new];
     ON_VALUE(^(const id value) {
-        o.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+        query.start = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxRealtimeHistoryParams_start);
     ON_VALUE(^(const id value) {
-        o.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
+        query.end = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000];
     }, dictionary, TxRealtimeHistoryParams_end);
     ON_VALUE(^(NSString const *value) {
-        o.limit = [value integerValue];
+        query.limit = [value integerValue];
     }, dictionary, TxRealtimeHistoryParams_limit);
     ON_VALUE(^(NSString const *value) {
         if([@"forwards" isEqual: value]){
-            o.direction = ARTQueryDirectionForwards;
+            query.direction = ARTQueryDirectionForwards;
         } else {
-            o.direction = ARTQueryDirectionBackwards;
+            query.direction = ARTQueryDirectionBackwards;
         }
     }, dictionary, TxRealtimeHistoryParams_direction);
-    READ_VALUE(o, untilAttach, dictionary, TxRealtimeHistoryParams_untilAttach);
-    return o;
+    READ_VALUE(query, untilAttach, dictionary, TxRealtimeHistoryParams_untilAttach);
+    return query;
 };
 
 static AblyCodecDecoder readRestPresenceParams = ^ARTPresenceQuery*(NSDictionary *const dictionary) {
-    ARTPresenceQuery *const o = [ARTPresenceQuery new];
+    ARTPresenceQuery *const query = [ARTPresenceQuery new];
     ON_VALUE(^(NSString const *value) {
-        o.limit = [value integerValue];
+        query.limit = [value integerValue];
     }, dictionary, TxRestPresenceParams_limit);
-    READ_VALUE(o, clientId, dictionary, TxRestPresenceParams_clientId);
-    READ_VALUE(o, connectionId, dictionary, TxRestPresenceParams_connectionId);
+    READ_VALUE(query, clientId, dictionary, TxRestPresenceParams_clientId);
+    READ_VALUE(query, connectionId, dictionary, TxRestPresenceParams_connectionId);
 
-    return o;
+    return query;
 };
 
 static AblyCodecDecoder readRealtimePresenceParams = ^ARTRealtimePresenceQuery*(NSDictionary *const dictionary) {
-    ARTRealtimePresenceQuery *const o = [ARTRealtimePresenceQuery new];
-    READ_VALUE(o, clientId, dictionary, TxRealtimePresenceParams_clientId);
-    READ_VALUE(o, connectionId, dictionary, TxRealtimePresenceParams_connectionId);
-    READ_VALUE(o, waitForSync, dictionary, TxRealtimePresenceParams_waitForSync);
-    return o;
+    ARTRealtimePresenceQuery *const query = [ARTRealtimePresenceQuery new];
+    READ_VALUE(query, clientId, dictionary, TxRealtimePresenceParams_clientId);
+    READ_VALUE(query, connectionId, dictionary, TxRealtimePresenceParams_connectionId);
+    READ_VALUE(query, waitForSync, dictionary, TxRealtimePresenceParams_waitForSync);
+    return query;
 };
 
 static AblyCodecDecoder readMessageData = ^id (NSDictionary *const dictionary) {
-    return [dictionary objectForKey: TxMessage_data];
+    return dictionary[TxMessage_data];
 };
 
 @end
