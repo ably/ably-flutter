@@ -6,13 +6,10 @@
 
 **Implemented enhancements:**
 
-- Remove `prefer_relative_imports` and use absolute package imports [\#169](https://github.com/ably/ably-flutter/issues/169)
-- Simplify authCallback code [\#231](https://github.com/ably/ably-flutter/pull/231) ([ben-xD](https://github.com/ben-xD))
 - Make the symmetric encryption UI more usable [\#229](https://github.com/ably/ably-flutter/pull/229) ([ben-xD](https://github.com/ben-xD))
 - Improve android logging: Remove unnecessary print statements, and use Log.w where necessary [\#228](https://github.com/ably/ably-flutter/pull/228) ([ben-xD](https://github.com/ben-xD))
 - iOS: add `notification` in RemoteMessage [\#224](https://github.com/ably/ably-flutter/pull/224) ([ben-xD](https://github.com/ben-xD))
 - Fix `setOptions` to complete the Future \(previously did not call `result.success`\) and remove side effects in example app [\#222](https://github.com/ably/ably-flutter/pull/222) ([ben-xD](https://github.com/ben-xD))
-- Stop saving a reference to a Future as a way to check for the method being called [\#219](https://github.com/ably/ably-flutter/pull/219) ([ben-xD](https://github.com/ben-xD))
 
 **Fixed bugs:**
 
