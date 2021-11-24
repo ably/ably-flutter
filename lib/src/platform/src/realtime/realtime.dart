@@ -32,19 +32,18 @@ class Realtime extends PlatformObject {
   @override
   Future<int?> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
-      PlatformMethod.createRealtimeWithOptions,
+      PlatformMethod.createRealtime,
       AblyMessage(options),
     );
     _realtimeInstances[handle] = this;
 
-    if (io.Platform.isAndroid && options.autoConnect != false) {
+    if (io.Platform.isAndroid && options.autoConnect) {
       // On Android, clientOptions.autoConnect is set to `false` to prevent
       // the authCallback being called before we get the realtime handle.
       // If this happens, we won't be able to identify which realtime client
       // the authCallback belongs to. Instead, on Android, we set autoConnect
       // to false, and call connect immediately once we get the handle.
-      await Platform.invokePlatformMethod(
-          PlatformMethod.connectRealtime, handle);
+      await invokeRaw(PlatformMethod.connectRealtime, handle);
     }
     return handle;
   }

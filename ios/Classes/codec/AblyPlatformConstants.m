@@ -12,14 +12,14 @@ NSString *const AblyPlatformMethod_getVersion= @"getVersion";
 NSString *const AblyPlatformMethod_resetAblyClients= @"resetAblyClients";
 NSString *const AblyPlatformMethod_authCallback= @"authCallback";
 NSString *const AblyPlatformMethod_realtimeAuthCallback= @"realtimeAuthCallback";
-NSString *const AblyPlatformMethod_createRestWithOptions= @"createRestWithOptions";
+NSString *const AblyPlatformMethod_createRest= @"createRest";
 NSString *const AblyPlatformMethod_setRestChannelOptions= @"setRestChannelOptions";
 NSString *const AblyPlatformMethod_publish= @"publish";
 NSString *const AblyPlatformMethod_restHistory= @"restHistory";
 NSString *const AblyPlatformMethod_restPresenceGet= @"restPresenceGet";
 NSString *const AblyPlatformMethod_restPresenceHistory= @"restPresenceHistory";
 NSString *const AblyPlatformMethod_releaseRestChannel= @"releaseRestChannel";
-NSString *const AblyPlatformMethod_createRealtimeWithOptions= @"createRealtimeWithOptions";
+NSString *const AblyPlatformMethod_createRealtime= @"createRealtime";
 NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
 NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
 NSString *const AblyPlatformMethod_attachRealtimeChannel= @"attachRealtimeChannel";
@@ -53,7 +53,7 @@ NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground= @"pushOnS
 NSString *const AblyPlatformMethod_pushOnMessage= @"pushOnMessage";
 NSString *const AblyPlatformMethod_pushOnBackgroundMessage= @"pushOnBackgroundMessage";
 NSString *const AblyPlatformMethod_pushOnNotificationTap= @"pushOnNotificationTap";
-NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage= @"pushSetOnBackgroundMessage";
+NSString *const AblyPlatformMethod_pushBackgroundFlutterApplicationReadyOnAndroid= @"pushBackgroundFlutterApplicationReadyOnAndroid";
 NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged= @"onRealtimeConnectionStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged= @"onRealtimeChannelStateChanged";
 NSString *const AblyPlatformMethod_onRealtimeChannelMessage= @"onRealtimeChannelMessage";
@@ -203,6 +203,14 @@ NSString *const TxFormFactorEnum_watch = @"watch";
 NSString *const TxFormFactorEnum_car = @"car";
 NSString *const TxFormFactorEnum_embedded = @"embedded";
 NSString *const TxFormFactorEnum_other = @"other";
+
+// key constants for LogLevelEnum
+NSString *const TxLogLevelEnum_none = @"none";
+NSString *const TxLogLevelEnum_verbose = @"verbose";
+NSString *const TxLogLevelEnum_debug = @"debug";
+NSString *const TxLogLevelEnum_info = @"info";
+NSString *const TxLogLevelEnum_warn = @"warn";
+NSString *const TxLogLevelEnum_error = @"error";
 
 // key constants for DevicePlatformEnum
 NSString *const TxDevicePlatformEnum_ios = @"ios";

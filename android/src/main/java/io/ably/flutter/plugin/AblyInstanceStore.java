@@ -11,72 +11,62 @@ import io.ably.lib.rest.AblyRest;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.AsyncPaginatedResult;
 import io.ably.lib.types.ClientOptions;
-import io.ably.lib.types.ErrorInfo;
 
-class AblyLibrary {
+/**
+ * Stores instances created by Ably Java, by handle. This handle is passed to the Dart side
+ * and keeps track of the instance on the Java side. When a platform method is called on the
+ * Dart side, a string representing the method, and the handle representing the instance the method
+ * is being called on is passed.
+ *
+ * For example, when @{Realtime#connect} is called on the dart side, we need to know which Realtime
+ * client this method is being called on, as there might be more than one. We can get the realtime
+ * client by calling @{AblyInstanceStore#getRealtime(final long handle)}.
+ */
+class AblyInstanceStore {
 
-    private static AblyLibrary _instance;
+    private static final AblyInstanceStore _instance = new AblyInstanceStore();
     private long _nextHandle = 1;
-    final private Context applicationContext;
-
-    private AblyLibrary(Context applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    static synchronized AblyLibrary getInstance(Context applicationContext) {
-        if (null == _instance) {
-            _instance = new AblyLibrary(applicationContext);
-        }
-        return _instance;
-    }
 
     // Android Studio warns against using HashMap with integer keys, and
     // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
     // It may be simpler to go back to HashMap because this is an unmeasured memory optimisation.
     // > the Hashmap and the SparseArray are very similar for data structure sizes under 1,000
-    private final LongSparseArray<AblyRest> _restInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _restTokenData = new LongSparseArray<>();
+    private final LongSparseArray<AblyRest> restInstances = new LongSparseArray<>();
+    private final LongSparseArray<AblyRealtime> realtimeInstances = new LongSparseArray<>();
+    private final LongSparseArray<AsyncPaginatedResult<Object>> paginatedResults = new LongSparseArray<>();
 
-    private final LongSparseArray<AblyRealtime> _realtimeInstances = new LongSparseArray<>();
-    private final LongSparseArray<Object> _realtimeTokenData = new LongSparseArray<>();
+    static synchronized AblyInstanceStore getInstance() {
+        return _instance;
+    }
 
-    private final LongSparseArray<AsyncPaginatedResult<Object>> _paginatedResults = new LongSparseArray<>();
-
-    long getCurrentHandle() {
+    /**
+     * Returns a handle representing the next client that will be created. This handle can be used
+     * to get the client **after** it is instantiated using [createRest] or [createRealtime].
+     */
+    long getHandleForNextClient() {
         return _nextHandle;
     }
 
-    long createRest(final ClientOptions clientOptions) throws AblyException {
+    long createRest(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
         rest.setAndroidContext(applicationContext);
-        _restInstances.put(_nextHandle, rest);
+        restInstances.put(_nextHandle, rest);
         return _nextHandle++;
     }
 
     AblyRest getRest(final long handle) {
-        return _restInstances.get(handle);
+        return restInstances.get(handle);
     }
 
-    void setRestToken(long handle, Object tokenDetails) {
-        _restTokenData.put(handle, tokenDetails);
-    }
-
-    Object getRestToken(long handle) {
-        Object token = _restTokenData.get(handle);
-        _restTokenData.remove(handle);
-        return token;
-    }
-
-
-    long createRealtime(final ClientOptions clientOptions) throws AblyException {
+    long createRealtime(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
         realtime.setAndroidContext(applicationContext);
-        _realtimeInstances.put(_nextHandle, realtime);
+        realtimeInstances.put(_nextHandle, realtime);
         return _nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
-        return _realtimeInstances.get(handle);
+        return realtimeInstances.get(handle);
     }
 
     /**
@@ -105,16 +95,6 @@ class AblyLibrary {
                 .get(channelName).push;
     }
 
-    void setRealtimeToken(long handle, Object tokenDetails) {
-        _realtimeTokenData.put(handle, tokenDetails);
-    }
-
-    Object getRealtimeToken(long handle) {
-        Object token = _realtimeTokenData.get(handle);
-        _realtimeTokenData.remove(handle);
-        return token;
-    }
-
     long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
         if (handle == null) {
@@ -122,25 +102,26 @@ class AblyLibrary {
         } else {
             longHandle = handle.longValue();
         }
-        _paginatedResults.put(longHandle, result);
+        paginatedResults.put(longHandle, result);
         return longHandle;
     }
 
     AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
-        return _paginatedResults.get(handle);
+        return paginatedResults.get(handle);
     }
 
-    void dispose() {
-        for (int i = 0; i < _realtimeInstances.size(); i++) {
-            long key = _realtimeInstances.keyAt(i);
-            AblyRealtime r = _realtimeInstances.get(key);
+    void reset() {
+        for (int i = 0; i < realtimeInstances.size(); i++) {
+            long key = realtimeInstances.keyAt(i);
+            AblyRealtime r = realtimeInstances.get(key);
             try {
                 r.close();
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
-        _realtimeInstances.clear();
-        _restInstances.clear();
+        realtimeInstances.clear();
+        restInstances.clear();
+        paginatedResults.clear();
     }
 }

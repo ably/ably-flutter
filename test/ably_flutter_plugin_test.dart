@@ -1,9 +1,11 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final channel = Platform.methodChannel;
+  final channel =
+      MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
 
   TestWidgetsFlutterBinding.ensureInitialized();
   var counter = 0;
@@ -23,8 +25,8 @@ void main() {
         case PlatformMethod.getVersion:
           return _nativeLibraryVersion;
 
-        case PlatformMethod.createRestWithOptions:
-        case PlatformMethod.createRealtimeWithOptions:
+        case PlatformMethod.createRest:
+        case PlatformMethod.createRealtime:
           return ++counter;
 
         case PlatformMethod.publish:
@@ -33,6 +35,7 @@ void main() {
           return null;
       }
     });
+    Platform(methodChannel: channel);
   });
 
   tearDown(() {
@@ -47,7 +50,7 @@ void main() {
     expect(await version(), _nativeLibraryVersion);
   });
 
-  test(PlatformMethod.createRestWithOptions, () async {
+  test(PlatformMethod.createRest, () async {
     final o = ClientOptions();
     const host = 'http://rest.ably.io/';
     o.restHost = host;

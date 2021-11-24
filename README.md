@@ -131,47 +131,48 @@ Authenticating using [token authentication](https://ably.com/documentation/core-
 // Used to create a clientId when a client first doesn't have one. 
 // Note: you should implement `createTokenRequest`, which makes a request to your server that uses your Ably API key directly.
 final clientOptions = ably.ClientOptions()
-// ..clientId = _clientId // Optionally set the clientId
-  ..autoConnect = false
-  // If a clientId was set in ClientOptions, it will be available in ably.TokenParams.
+  // If a clientId was set in ClientOptions, it will be available in the authCallback's first parameter (ably.TokenParams).
+  ..clientId = _clientId
   ..authCallback = (ably.TokenParams tokenParams) async {
     try {
       // Send the tokenParamsMap (Map<String, dynamic>) to your server, using it to create a TokenRequest.
       final Map<String, dynamic> tokenRequestMap = await createTokenRequest(
               tokenParams.toMap());
       return ably.TokenRequest.fromMap(tokenRequestMap);
-    } catch (e) {
-      print("Something went wrong in the authCallback: ${e}");
+    } on http.ClientException catch (e) {
+      print('Failed to createTokenRequest: $e');
       rethrow;
     }
   };
-this._ablyClient = new ably.Realtime(options: clientOptions);
-await this._ablyClient.connect();
+final realtime = ably.Realtime(options: clientOptions);
 ```
 
 An example of `createTokenRequest`'s implementation making a network request to your server could be:
-```dart
-  Future<Map<String, dynamic>> createTokenRequest(
-      Map<String, dynamic> tokenParamsMap) async {
-    var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
-    // For debugging:
-    bool runningServerLocally = true;
-    if (runningServerLocally) {
-      if (Platform.isAndroid) { // Connect Android device to local server
-        url = Uri.parse(
-            'http://localhost:6001/api/v1/createTokenRequest');
-      } else if (Platform.isIOS) { // Connect iOS device to local server
-        const localDeviceIPAddress = '192.168.1.9';
-        url = Uri.parse(
-            'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
-      }
-    }
 
-    final response = await http.post(url, body: tokenParamsMap);
-    return jsonDecode(response.body) as Map<String, dynamic>;
+```dart
+Future<Map<String, dynamic>> createTokenRequest(
+    Map<String, dynamic> tokenParamsMap) async {
+  var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
+  // For debugging:
+  bool runningServerLocally = true;
+  if (runningServerLocally) {
+    if (Platform.isAndroid) { // Connect Android device to local server
+      url = Uri.parse(
+          'http://localhost:6001/api/v1/createTokenRequest');
+    } else if (Platform.isIOS) { // Connect iOS device to local server
+      const localDeviceIPAddress = '192.168.1.9';
+      url = Uri.parse(
+          'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
+    }
   }
+
+  final response = await http.post(url, body: tokenParamsMap);
+  return jsonDecode(response.body) as Map<String, dynamic>;
+}
 ```
-- To connect using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866).
+
+- **Android:** To connect to a local server running on a computer from an Android device, you can redirect the port on your device to the port the application is hosted on on your computer. For example, if you want to connect to a local server running at `localhost:3000` but connect from Android from `localhost:80` Run `adb reverse tcp:80 tcp:3000`.
+- **iOS:** To connect to a local server running on a computer using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866). To allow devices to connect from the IP address of your device, you need your server to listen on `0.0.0.0` instead of `127.0.0.1`.
 
 ### Using the REST API
 

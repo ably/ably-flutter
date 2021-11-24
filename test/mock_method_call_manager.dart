@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_test/src/deprecated.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 typedef MethodCallHandler = Future<dynamic> Function(MethodCall);
 
@@ -12,14 +12,22 @@ class MockMethodCallManager {
   final publishedMessages = <AblyMessage>[];
 
   MockMethodCallManager() {
-    Platform.methodChannel.setMockMethodCallHandler(handler);
+    final channel =
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, handler);
+    Platform(methodChannel: channel);
   }
 
   void reset() {
     channels.clear();
     publishedMessages.clear();
     handleCounter = 0;
-    Platform.methodChannel.setMockMethodCallHandler(null);
+    final channel =
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, handler);
+    Platform(methodChannel: channel);
   }
 
   Future<dynamic> handler(MethodCall methodCall) async {
@@ -27,8 +35,8 @@ class MockMethodCallManager {
       case PlatformMethod.resetAblyClients:
         return true;
 
-      case PlatformMethod.createRestWithOptions:
-      case PlatformMethod.createRealtimeWithOptions:
+      case PlatformMethod.createRest:
+      case PlatformMethod.createRealtime:
         final handle = ++handleCounter;
         channels[handle] = methodCall.arguments as AblyMessage?;
         return handle;
@@ -43,7 +51,9 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel).onAuthCallback(
+          final channel = MethodChannel(
+              'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+          await AblyMethodCallHandler(channel).onAuthCallback(
             AblyMessage(
               TokenParams(timestamp: DateTime.now()),
               handle: handle,
@@ -64,8 +74,9 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel)
-              .onRealtimeAuthCallback(
+          final channel = MethodChannel(
+              'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+          await AblyMethodCallHandler(channel).onRealtimeAuthCallback(
             AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
           );
           isAuthenticated = true;

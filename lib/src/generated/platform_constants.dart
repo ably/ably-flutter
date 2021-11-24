@@ -29,9 +29,10 @@ class CodecTypes {
   static const int unNotificationSettings = 148;
   static const int remoteMessage = 149;
   static const int errorInfo = 150;
-  static const int connectionStateChange = 151;
-  static const int channelStateChange = 152;
-  static const int cipherParams = 153;
+  static const int logLevel = 151;
+  static const int connectionStateChange = 152;
+  static const int channelStateChange = 153;
+  static const int cipherParams = 154;
 }
 
 class PlatformMethod {
@@ -40,14 +41,14 @@ class PlatformMethod {
   static const String resetAblyClients = 'resetAblyClients';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
-  static const String createRestWithOptions = 'createRestWithOptions';
+  static const String createRest = 'createRest';
   static const String setRestChannelOptions = 'setRestChannelOptions';
   static const String publish = 'publish';
   static const String restHistory = 'restHistory';
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
   static const String releaseRestChannel = 'releaseRestChannel';
-  static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
+  static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
   static const String attachRealtimeChannel = 'attachRealtimeChannel';
@@ -85,7 +86,8 @@ class PlatformMethod {
   static const String pushOnMessage = 'pushOnMessage';
   static const String pushOnBackgroundMessage = 'pushOnBackgroundMessage';
   static const String pushOnNotificationTap = 'pushOnNotificationTap';
-  static const String pushSetOnBackgroundMessage = 'pushSetOnBackgroundMessage';
+  static const String pushBackgroundFlutterApplicationReadyOnAndroid =
+      'pushBackgroundFlutterApplicationReadyOnAndroid';
   static const String onRealtimeConnectionStateChanged =
       'onRealtimeConnectionStateChanged';
   static const String onRealtimeChannelStateChanged =
@@ -253,6 +255,15 @@ class TxFormFactorEnum {
   static const String car = 'car';
   static const String embedded = 'embedded';
   static const String other = 'other';
+}
+
+class TxLogLevelEnum {
+  static const String none = 'none';
+  static const String verbose = 'verbose';
+  static const String debug = 'debug';
+  static const String info = 'info';
+  static const String warn = 'warn';
+  static const String error = 'error';
 }
 
 class TxDevicePlatformEnum {

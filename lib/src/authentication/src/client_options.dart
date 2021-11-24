@@ -4,17 +4,13 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 class ClientOptions extends AuthOptions {
-  /// initializes [ClientOptions] with log level set to info
-  ClientOptions() {
-    logLevel = LogLevel.info;
-  }
+  /// Set fields on [ClientOptions] to configure it.
+  ClientOptions();
 
   /// initializes [ClientOptions] with a key and log level set to info
   ///
   /// See [AuthOptions.fromKey] for more details
-  ClientOptions.fromKey(String key) : super.fromKey(key) {
-    logLevel = LogLevel.info;
-  }
+  ClientOptions.fromKey(String key) : super.fromKey(key);
 
   /// Optional clientId that can be used to specify the identity for this client
   ///
@@ -32,7 +28,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// Use constants from [LogLevel] to pass arguments
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3b
-  int? logLevel;
+  LogLevel logLevel = LogLevel.info;
 
   /// for development environments only
   ///
@@ -53,7 +49,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// By default, a TLS connection is used to connect to Ably
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3d
-  bool? tls;
+  bool tls = true;
 
   /// for development environments only
   ///
@@ -63,29 +59,29 @@ class ClientOptions extends AuthOptions {
   /// Automatically connect to Ably when client is instantiated.
   ///
   /// This is true by default. If false, will wait for an explicit
-  /// [ConnectionInterface]#connect to be called before connecting
+  /// [Connection.connect] to be called before connecting
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1b
-  bool? autoConnect;
+  bool autoConnect = true;
 
   /// Decides whether to use MsgPack binary encoding or JSON encoding.
   ///
   /// Defaults to true. If false, JSON encoding is used for REST and Realtime
   /// operations, instead of the default binary msgpack encoding.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3f
-  bool? useBinaryProtocol;
+  bool useBinaryProtocol = true;
 
   /// When true, messages will be queued whilst the connection is disconnected.
   ///
   /// True by default.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3g
-  bool? queueMessages;
+  bool queueMessages = true;
 
   /// When true, messages published on channels by this client will be
   /// echoed back to this client.
   ///
   /// This is true by default.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3h
-  bool? echoMessages;
+  bool echoMessages = true;
 
   /// Can be used to explicitly recover a connection.
   ///
@@ -122,7 +118,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 15,000 (15 seconds)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l1
-  int? disconnectedRetryTimeout;
+  int disconnectedRetryTimeout = 15000;
 
   /// When the connection enters the [ConnectionState.suspended] state,
   /// after this delay in milliseconds, if the state is still
@@ -131,7 +127,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 30,000 (30 seconds)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l2
-  int? suspendedRetryTimeout;
+  int suspendedRetryTimeout = 30000;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3n
   bool? idempotentRestPublishing;
@@ -147,20 +143,20 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 4,000 (4s)
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1f
-  int? httpOpenTimeout;
+  int httpOpenTimeout = 4000;
 
   /// Timeout for any single HTTP request and response
   ///
   /// default 10,000 (10s)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l4
-  int? httpRequestTimeout;
+  int httpRequestTimeout = 10000;
 
   /// Max number of fallback hosts to use as a fallback when an HTTP request
   /// to the primary host is unreachable or indicates that it is unserviceable
   ///
   /// default 3
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l5
-  int? httpMaxRetryCount;
+  int httpMaxRetryCount = 3;
 
   /// When a realtime client library is establishing a connection with Ably,
   /// or sending a HEARTBEAT, CONNECT, ATTACH, DETACH or CLOSE ProtocolMessage
@@ -179,7 +175,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 600000 (10 minutes)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l10
-  int? fallbackRetryTimeout;
+  int fallbackRetryTimeout = 600000;
 
   /// When a channel becomes [ChannelState.suspended] following a server
   /// initiated [ChannelState.detached], after this delay in milliseconds,
@@ -189,7 +185,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// default 15,000 (15s)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l7
-  int? channelRetryTimeout;
+  int channelRetryTimeout = 15000;
 
 // TODO(tiholic) unimplemented:
 //

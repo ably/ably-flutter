@@ -5,33 +5,34 @@
 
 @import Foundation;
 
-typedef NS_ENUM(UInt8, _Value) {
-    ablyMessageCodecType = 128,
-    ablyEventMessageCodecType = 129,
-    clientOptionsCodecType = 130,
-    messageDataCodecType = 131,
-    messageExtrasCodecType = 132,
-    messageCodecType = 133,
-    tokenParamsCodecType = 134,
-    tokenDetailsCodecType = 135,
-    tokenRequestCodecType = 136,
-    restChannelOptionsCodecType = 137,
-    realtimeChannelOptionsCodecType = 138,
-    paginatedResultCodecType = 139,
-    restHistoryParamsCodecType = 140,
-    realtimeHistoryParamsCodecType = 141,
-    restPresenceParamsCodecType = 142,
-    presenceMessageCodecType = 143,
-    realtimePresenceParamsCodecType = 144,
-    deviceDetailsCodecType = 145,
-    localDeviceCodecType = 146,
-    pushChannelSubscriptionCodecType = 147,
-    unNotificationSettingsCodecType = 148,
-    remoteMessageCodecType = 149,
-    errorInfoCodecType = 150,
-    connectionStateChangeCodecType = 151,
-    channelStateChangeCodecType = 152,
-    cipherParamsCodecType = 153,
+typedef NS_ENUM(UInt8, CodecType) {
+    CodecTypeAblyMessage = 128,
+    CodecTypeAblyEventMessage = 129,
+    CodecTypeClientOptions = 130,
+    CodecTypeMessageData = 131,
+    CodecTypeMessageExtras = 132,
+    CodecTypeMessage = 133,
+    CodecTypeTokenParams = 134,
+    CodecTypeTokenDetails = 135,
+    CodecTypeTokenRequest = 136,
+    CodecTypeRestChannelOptions = 137,
+    CodecTypeRealtimeChannelOptions = 138,
+    CodecTypePaginatedResult = 139,
+    CodecTypeRestHistoryParams = 140,
+    CodecTypeRealtimeHistoryParams = 141,
+    CodecTypeRestPresenceParams = 142,
+    CodecTypePresenceMessage = 143,
+    CodecTypeRealtimePresenceParams = 144,
+    CodecTypeDeviceDetails = 145,
+    CodecTypeLocalDevice = 146,
+    CodecTypePushChannelSubscription = 147,
+    CodecTypeUnNotificationSettings = 148,
+    CodecTypeRemoteMessage = 149,
+    CodecTypeErrorInfo = 150,
+    CodecTypeLogLevel = 151,
+    CodecTypeConnectionStateChange = 152,
+    CodecTypeChannelStateChange = 153,
+    CodecTypeCipherParams = 154,
 };
 
 
@@ -41,14 +42,14 @@ extern NSString *const AblyPlatformMethod_getVersion;
 extern NSString *const AblyPlatformMethod_resetAblyClients;
 extern NSString *const AblyPlatformMethod_authCallback;
 extern NSString *const AblyPlatformMethod_realtimeAuthCallback;
-extern NSString *const AblyPlatformMethod_createRestWithOptions;
+extern NSString *const AblyPlatformMethod_createRest;
 extern NSString *const AblyPlatformMethod_setRestChannelOptions;
 extern NSString *const AblyPlatformMethod_publish;
 extern NSString *const AblyPlatformMethod_restHistory;
 extern NSString *const AblyPlatformMethod_restPresenceGet;
 extern NSString *const AblyPlatformMethod_restPresenceHistory;
 extern NSString *const AblyPlatformMethod_releaseRestChannel;
-extern NSString *const AblyPlatformMethod_createRealtimeWithOptions;
+extern NSString *const AblyPlatformMethod_createRealtime;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
 extern NSString *const AblyPlatformMethod_attachRealtimeChannel;
@@ -82,7 +83,7 @@ extern NSString *const AblyPlatformMethod_pushOnShowNotificationInForeground;
 extern NSString *const AblyPlatformMethod_pushOnMessage;
 extern NSString *const AblyPlatformMethod_pushOnBackgroundMessage;
 extern NSString *const AblyPlatformMethod_pushOnNotificationTap;
-extern NSString *const AblyPlatformMethod_pushSetOnBackgroundMessage;
+extern NSString *const AblyPlatformMethod_pushBackgroundFlutterApplicationReadyOnAndroid;
 extern NSString *const AblyPlatformMethod_onRealtimeConnectionStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelStateChanged;
 extern NSString *const AblyPlatformMethod_onRealtimeChannelMessage;
@@ -232,6 +233,14 @@ extern NSString *const TxFormFactorEnum_watch;
 extern NSString *const TxFormFactorEnum_car;
 extern NSString *const TxFormFactorEnum_embedded;
 extern NSString *const TxFormFactorEnum_other;
+
+// key constants for LogLevelEnum
+extern NSString *const TxLogLevelEnum_none;
+extern NSString *const TxLogLevelEnum_verbose;
+extern NSString *const TxLogLevelEnum_debug;
+extern NSString *const TxLogLevelEnum_info;
+extern NSString *const TxLogLevelEnum_warn;
+extern NSString *const TxLogLevelEnum_error;
 
 // key constants for DevicePlatformEnum
 extern NSString *const TxDevicePlatformEnum_ios;

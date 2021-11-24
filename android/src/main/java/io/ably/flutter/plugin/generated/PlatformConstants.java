@@ -32,9 +32,10 @@ final public class PlatformConstants {
         public static final byte unNotificationSettings = (byte) 148;
         public static final byte remoteMessage = (byte) 149;
         public static final byte errorInfo = (byte) 150;
-        public static final byte connectionStateChange = (byte) 151;
-        public static final byte channelStateChange = (byte) 152;
-        public static final byte cipherParams = (byte) 153;
+        public static final byte logLevel = (byte) 151;
+        public static final byte connectionStateChange = (byte) 152;
+        public static final byte channelStateChange = (byte) 153;
+        public static final byte cipherParams = (byte) 154;
     }
 
     static final public class PlatformMethod {
@@ -43,14 +44,14 @@ final public class PlatformConstants {
         public static final String resetAblyClients = "resetAblyClients";
         public static final String authCallback = "authCallback";
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
-        public static final String createRestWithOptions = "createRestWithOptions";
+        public static final String createRest = "createRest";
         public static final String setRestChannelOptions = "setRestChannelOptions";
         public static final String publish = "publish";
         public static final String restHistory = "restHistory";
         public static final String restPresenceGet = "restPresenceGet";
         public static final String restPresenceHistory = "restPresenceHistory";
         public static final String releaseRestChannel = "releaseRestChannel";
-        public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
+        public static final String createRealtime = "createRealtime";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
         public static final String attachRealtimeChannel = "attachRealtimeChannel";
@@ -84,7 +85,7 @@ final public class PlatformConstants {
         public static final String pushOnMessage = "pushOnMessage";
         public static final String pushOnBackgroundMessage = "pushOnBackgroundMessage";
         public static final String pushOnNotificationTap = "pushOnNotificationTap";
-        public static final String pushSetOnBackgroundMessage = "pushSetOnBackgroundMessage";
+        public static final String pushBackgroundFlutterApplicationReadyOnAndroid = "pushBackgroundFlutterApplicationReadyOnAndroid";
         public static final String onRealtimeConnectionStateChanged = "onRealtimeConnectionStateChanged";
         public static final String onRealtimeChannelStateChanged = "onRealtimeChannelStateChanged";
         public static final String onRealtimeChannelMessage = "onRealtimeChannelMessage";
@@ -250,6 +251,15 @@ final public class PlatformConstants {
         public static final String car = "car";
         public static final String embedded = "embedded";
         public static final String other = "other";
+    }
+
+    static final public class TxLogLevelEnum {
+        public static final String none = "none";
+        public static final String verbose = "verbose";
+        public static final String debug = "debug";
+        public static final String info = "info";
+        public static final String warn = "warn";
+        public static final String error = "error";
     }
 
     static final public class TxDevicePlatformEnum {

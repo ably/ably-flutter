@@ -30,6 +30,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'remoteMessage',
 
     'errorInfo',
+    'logLevel',
 
     // Events
     'connectionStateChange',
@@ -66,7 +67,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimeAuthCallback', 'value': 'realtimeAuthCallback'},
 
   // Rest
-  {'name': 'createRestWithOptions', 'value': 'createRestWithOptions'},
+  {'name': 'createRest', 'value': 'createRest'},
   {'name': 'setRestChannelOptions', 'value': 'setRestChannelOptions'},
   {'name': 'publish', 'value': 'publish'},
   {'name': 'restHistory', 'value': 'restHistory'},
@@ -75,7 +76,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'releaseRestChannel', 'value': 'releaseRestChannel'},
 
   // Realtime
-  {'name': 'createRealtimeWithOptions', 'value': 'createRealtimeWithOptions'},
+  {'name': 'createRealtime', 'value': 'createRealtime'},
   {'name': 'connectRealtime', 'value': 'connectRealtime'},
   {'name': 'closeRealtime', 'value': 'closeRealtime'},
   {'name': 'attachRealtimeChannel', 'value': 'attachRealtimeChannel'},
@@ -129,7 +130,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'pushOnBackgroundMessage', 'value': 'pushOnBackgroundMessage'},
   {'name': 'pushOnNotificationTap', 'value': 'pushOnNotificationTap'},
   // Used only on Android
-  {'name': 'pushSetOnBackgroundMessage', 'value': 'pushSetOnBackgroundMessage'},
+  {
+    'name': 'pushBackgroundFlutterApplicationReadyOnAndroid',
+    'value': 'pushBackgroundFlutterApplicationReadyOnAndroid'
+  },
 
   // Realtime events
   {
@@ -322,6 +326,10 @@ const List<Map<String, dynamic>> _objects = [
       'embedded',
       'other'
     ]
+  },
+  {
+    'name': 'LogLevelEnum',
+    'properties': ['none', 'verbose', 'debug', 'info', 'warn', 'error'],
   },
   {
     'name': 'DevicePlatformEnum',

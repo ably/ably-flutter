@@ -11,16 +11,11 @@ import 'package:flutter/services.dart';
 /// called when a separate isolate is launched by the app, not for apps
 /// launched with Activity.
 class BackgroundIsolateAndroidPlatform {
-  /// Instantiates if required.
-  factory BackgroundIsolateAndroidPlatform() {
-    _platform ??= BackgroundIsolateAndroidPlatform._internal();
-    return _platform!;
-  }
+  BackgroundIsolateAndroidPlatform._internal();
 
-  static BackgroundIsolateAndroidPlatform? _platform;
-
-  BackgroundIsolateAndroidPlatform._internal() {
-    methodChannel.setMethodCallHandler((call) async {
+  /// Start listening to messages from Java side.
+  void setupCallHandler() {
+    _methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
         case PlatformMethod.pushOnBackgroundMessage:
           return _onPushBackgroundMessage(call.arguments as RemoteMessage);
@@ -31,11 +26,17 @@ class BackgroundIsolateAndroidPlatform {
     });
   }
 
+  static final BackgroundIsolateAndroidPlatform _platform =
+      BackgroundIsolateAndroidPlatform._internal();
+
+  /// Singleton instance of BackgroundIsolateAndroidPlatform
+  factory BackgroundIsolateAndroidPlatform() => _platform;
+
   /// A method channel used to communicate with the user's app isolate
   /// we explicitly launched when a RemoteMessage is received.
   /// Used only on Android.
-  static final MethodChannel methodChannel =
-      MethodChannel('io.ably.flutter.plugin.background', Platform.codec);
+  final MethodChannel _methodChannel = MethodChannel(
+      'io.ably.flutter.plugin.background', StandardMethodCodec(Codec()));
 
   final PushNotificationEventsNative _pushNotificationEvents =
       PushNative.notificationEvents as PushNotificationEventsNative;
@@ -43,4 +44,7 @@ class BackgroundIsolateAndroidPlatform {
   Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
   }
+
+  Future<T?> invokeMethod<T>(String method, [arguments]) async =>
+      _methodChannel.invokeMethod<T>(method, arguments);
 }

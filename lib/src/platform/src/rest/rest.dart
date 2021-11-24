@@ -29,7 +29,7 @@ class Rest extends PlatformObject implements AblyBase {
   @override
   Future<int?> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
-      PlatformMethod.createRestWithOptions,
+      PlatformMethod.createRest,
       AblyMessage(options),
     );
     _restInstances[handle] = this;

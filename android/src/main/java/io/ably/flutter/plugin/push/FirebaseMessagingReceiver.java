@@ -15,7 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
 
-import io.ably.flutter.plugin.AblyFlutterPlugin;
+import io.ably.flutter.plugin.AblyFlutter;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
@@ -57,7 +57,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
     if (isApplicationInForeground) {
       PushMessagingEventHandlers.sendMessageToFlutterApp(context, intent);
-    } else if (AblyFlutterPlugin.isMainActivityRunning) {
+    } else if (AblyFlutter.isMainActivityRunning) {
       PushMessagingEventHandlers.sendBackgroundMessageToFlutterApp(context, intent);
     } else {
       new ManualFlutterApplicationRunner(context, this, intent);

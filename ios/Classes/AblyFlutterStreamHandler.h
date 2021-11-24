@@ -1,12 +1,13 @@
 @import Foundation;
 @import Flutter;
-#import "AblyFlutterPlugin.h"
+#import "AblyFlutter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AblyFlutterStreamHandler : NSObject<FlutterStreamHandler>
 
-@property(nonatomic, readonly) AblyFlutter * ably;
+@property(nonatomic, readonly) AblyInstanceStore * instanceStore
+;
 
 - (nullable FlutterError *)onListenWithArguments:(nullable id)arguments
                                        eventSink:(FlutterEventSink)eventSink;
