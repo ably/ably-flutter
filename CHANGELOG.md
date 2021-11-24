@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.2.6](https://github.com/ably/ably-flutter/tree/v1.2.6)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.5...v1.2.6)
+
+**Implemented enhancements:**
+
+- Remove `prefer_relative_imports` and use absolute package imports [\#169](https://github.com/ably/ably-flutter/issues/169)
+- Simplify authCallback code [\#231](https://github.com/ably/ably-flutter/pull/231) ([ben-xD](https://github.com/ben-xD))
+- Make the symmetric encryption UI more usable [\#229](https://github.com/ably/ably-flutter/pull/229) ([ben-xD](https://github.com/ben-xD))
+- Improve android logging: Remove unnecessary print statements, and use Log.w where necessary [\#228](https://github.com/ably/ably-flutter/pull/228) ([ben-xD](https://github.com/ben-xD))
+- iOS: add `notification` in RemoteMessage [\#224](https://github.com/ably/ably-flutter/pull/224) ([ben-xD](https://github.com/ben-xD))
+- Fix `setOptions` to complete the Future \(previously did not call `result.success`\) and remove side effects in example app [\#222](https://github.com/ably/ably-flutter/pull/222) ([ben-xD](https://github.com/ben-xD))
+- Stop saving a reference to a Future as a way to check for the method being called [\#219](https://github.com/ably/ably-flutter/pull/219) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- iOS push notifications error handling: Stop sending `FlutterError` through MethodChannel. It is not supported and crashes the app. [\#214](https://github.com/ably/ably-flutter/issues/214)
+- Explicitly check types of tokenDetails, instead of using macro which … [\#256](https://github.com/ably/ably-flutter/pull/256) ([ben-xD](https://github.com/ben-xD))
+
+**Merged pull requests:**
+
+- Docs improvement for Android push notifications [\#227](https://github.com/ably/ably-flutter/pull/227) ([ben-xD](https://github.com/ben-xD))
+- Reduce dart analysis warnings and hints and remove "Interface" classes \(e.g. `RealtimeInterface`\) [\#213](https://github.com/ably/ably-flutter/pull/213) ([ben-xD](https://github.com/ben-xD))
+- Remove unnecessary abstract classes [\#193](https://github.com/ably/ably-flutter/pull/193) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.5](https://github.com/ably/ably-flutter/tree/v1.2.5)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.4...v1.2.5)
