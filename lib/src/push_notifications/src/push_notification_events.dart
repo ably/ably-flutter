@@ -21,8 +21,6 @@ abstract class PushNotificationEvents {
   void setOnShowNotificationInForeground(
       Future<bool> Function(RemoteMessage message) callback);
 
-  /// Called with [ApplicationState] available in [RemoteMessage]
-  ///
   /// The notification has not yet been tapped.
   Stream<RemoteMessage> get onMessage;
 
