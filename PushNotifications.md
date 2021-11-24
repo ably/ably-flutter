@@ -23,7 +23,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 
 ### Android
 
-- Update the application ID (`applicationId "io.ably.flutter.plugin_example"`) in the example application in `example/android/app/build.gradle` to a unique application ID.
+- Update the application ID (`applicationId "io.ably.flutter.example"`) in the example application in `example/android/app/build.gradle` to a unique application ID.
 - Create a Firebase project, and in the Project settings, add an android app with your unique application ID. Follow the steps provided on the setup process, or the following:
     - You can leave `Debug signing certificate SHA-1` empty.
     - Download the generated `google-services.json` file
@@ -52,7 +52,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - In your `app/build.gradle`, ensure that your `minSdkVersion` is set to 19 or above.
 - Add your android app to the firebase project
 - Provide ably with the FCM server key: In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
-- Handle messages received on your device by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService). An example is shown in the example app, [`PushMessagingService`](./example/android/app/src/main/java/io/ably/flutter/plugin_example/PushMessagingService.java). This is the service class you specify in the `AndroidManifest.xml`. For more information, have a look at the [receiving messages](#receiving-messages) section.
+- Handle messages received on your device by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService). An example is shown in the example app, [`PushMessagingService`](./example/android/app/src/main/java/io/ably/flutter/example/PushMessagingService.java). This is the service class you specify in the `AndroidManifest.xml`. For more information, have a look at the [receiving messages](#receiving-messages) section.
 
 ### iOS
 
