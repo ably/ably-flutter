@@ -42,7 +42,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static final String TAG = AblyMethodCallHandler.class.getName()
+  private static final String TAG = AblyMethodCallHandler.class.getName();
   private final Context applicationContext;
   private final MethodChannel methodChannel;
   private final StreamsChannel streamsChannel;
