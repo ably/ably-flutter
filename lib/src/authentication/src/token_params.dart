@@ -60,4 +60,16 @@ class TokenParams {
     this.timestamp,
     this.ttl,
   });
+
+  Map<String, dynamic> toMap() {
+    final jsonMap = <String, dynamic>{};
+    if (capability != null) jsonMap['capability'] = capability;
+    if (clientId != null) jsonMap['clientId'] = clientId;
+    if (nonce != null) jsonMap['nonce'] = nonce;
+    if (timestamp != null) {
+      jsonMap['timestamp'] = timestamp?.millisecondsSinceEpoch.toString();
+    }
+    if (ttl != null) jsonMap['ttl'] = ttl.toString();
+    return jsonMap;
+  }
 }

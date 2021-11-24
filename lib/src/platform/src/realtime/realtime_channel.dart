@@ -55,9 +55,6 @@ class RealtimeChannel extends PlatformObject {
     );
   }
 
-  final _publishQueue = Queue<PublishQueueItem>();
-  Completer<void>? _authCallbackCompleter;
-
   /// publishes messages onto the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
@@ -71,89 +68,10 @@ class RealtimeChannel extends PlatformObject {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    final queueItem = PublishQueueItem(Completer<void>(), messages);
-    _publishQueue.add(queueItem);
-    unawaitedWorkaroundForDartPre214(_publishInternal());
-    return queueItem.completer.future;
-  }
-
-  bool _publishInternalRunning = false;
-
-  Future<void> _publishInternal() async {
-    if (_publishInternalRunning) {
-      return;
-    }
-    _publishInternalRunning = true;
-
-    while (_publishQueue.isNotEmpty) {
-      final item = _publishQueue.first;
-      // This is the only place where failed items are removed from the queue.
-      // In all other places (timeout exceptions) only the Completer is
-      // completed with an error but left in the queue.  Other attempts became a
-      // bit unwieldy.
-      if (item.completer.isCompleted) {
-        _publishQueue.remove(item);
-        continue;
-      }
-
-      try {
-        await invoke(PlatformMethod.publishRealtimeChannelMessage, {
-          TxTransportKeys.channelName: name,
-          TxTransportKeys.messages: item.messages,
-        });
-
-        _publishQueue.remove(item);
-
-        // The Completer could have timed out in the meantime and completing a
-        // completed Completer would cause an exception, so we check first.
-        if (!item.completer.isCompleted) {
-          item.completer.complete();
-        }
-      } on AblyException catch (ae) {
-        if (ae.code == ErrorCodes.authCallbackFailure.toString()) {
-          if (_authCallbackCompleter != null) {
-            return;
-          }
-          _authCallbackCompleter = Completer<void>();
-          try {
-            await _authCallbackCompleter!.future.timeout(
-                Timeouts.retryOperationOnAuthFailure,
-                onTimeout: () => _publishQueue
-                    .where((e) => !e.completer.isCompleted)
-                    .forEach((e) => e.completer.completeError(
-                          TimeoutException(
-                            'Timed out',
-                            Timeouts.retryOperationOnAuthFailure,
-                          ),
-                        )));
-          } finally {
-            _authCallbackCompleter = null;
-          }
-        } else {
-          _publishQueue
-              .where((e) => !e.completer.isCompleted)
-              .forEach((e) => e.completer.completeError(ae));
-        }
-      } on PlatformException catch (pe) {
-        _publishQueue.where((e) => !e.completer.isCompleted).forEach((e) =>
-            e.completer.completeError(AblyException.fromPlatformException(pe)));
-      } on Exception {
-        // removing item from queue and rethrowing exception
-        _publishQueue.remove(item);
-        rethrow;
-      }
-    }
-    _publishInternalRunning = false;
-  }
-
-  /// @internal
-  /// required due to the complications involved in the way ably-java expects
-  /// authCallback to be performed synchronously, while method channel call from
-  /// platform side to dart side is asynchronous
-  ///
-  /// discussion: https://github.com/ably/ably-flutter/issues/31
-  void authUpdateComplete() {
-    _authCallbackCompleter?.complete();
+    await invoke(PlatformMethod.publishRealtimeChannelMessage, {
+      TxTransportKeys.channelName: this.name,
+      TxTransportKeys.messages: messages,
+    });
   }
 
   /// will hold reason for failure of attaching to channel in such cases

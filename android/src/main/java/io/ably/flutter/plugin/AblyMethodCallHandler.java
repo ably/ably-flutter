@@ -18,6 +18,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
+import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -36,10 +37,13 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
 import io.ably.lib.util.Base64Coder;
 import io.ably.lib.util.Crypto;
+import io.ably.lib.util.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
+  private static final String TAG = AblyMethodCallHandler.class.getName();
+
   public interface ResetAblyClientsCallback {
     void run();
   }
@@ -147,6 +151,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
     final MethodChannel.Result result = new MethodResultWrapper(rawResult);
+    Log.v(TAG, String.format("onMethodCall: Ably Flutter platform method \"%s\" invoked.", call.method));
     final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
     if (null == handler) {
       // We don't have a handler for a method with this name so tell the caller.
@@ -199,13 +204,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
+                  Log.w(TAG, String.format("\"%s\" platform method received error from Dart side: %s", PlatformConstants.PlatformMethod.authCallback, errorMessage));
                   latch.countDown();
                 }
 
                 @Override
                 public void notImplemented() {
-                  System.out.println("`authCallback` Method not implemented on dart side");
+                  Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.authCallback));
                 }
               });
             });
@@ -467,16 +472,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                  System.out.println(errorDetails);
-                  if (errorMessage != null) {
-                    result.error("40000", String.format("Error from authCallback: %s", errorMessage), errorDetails);
-                  }
+                  Log.w(TAG, String.format("\"%s\" platform method received error from Dart side: %s", PlatformConstants.PlatformMethod.realtimeAuthCallback, errorMessage));
                   latch.countDown();
                 }
 
                 @Override
                 public void notImplemented() {
-                  System.out.println("`authCallback` Method not implemented on dart side");
+                  Log.w(TAG, String.format("\"%s\" platform method not implemented on Dart side: %s", PlatformConstants.PlatformMethod.realtimeAuthCallback));
                 }
               });
             });
@@ -498,14 +500,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void connectRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-    // Using Number (the superclass of both Long and Integer) because Flutter could send us
-    // either depending on how big the value is.
-    // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
-    this.<Number>ablyDo(message, (ablyLibrary, realtimeHandle) -> {
-      ablyLibrary.getRealtime(realtimeHandle.longValue()).connect();
-      result.success(null);
-    });
+    if (call.arguments instanceof Integer) {
+      final Integer realtimeHandle = (Integer) call.arguments;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    } else {
+      // Using Number (the superclass of both Long and Integer) because Flutter could send us
+      // either depending on how big the value is.
+      // See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+      final AblyFlutterMessage<Integer> message = (AblyFlutterMessage<Integer>) call.arguments;
+      final Integer realtimeHandle = message.message;
+      _ably.getRealtime(realtimeHandle.longValue()).connect();
+    }
+    result.success(null);
   }
 
   private void attachRealtimeChannel(

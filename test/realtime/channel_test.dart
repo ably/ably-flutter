@@ -72,63 +72,39 @@ void main() {
       expect(messages[0].data, 'data2');
     });
 
-    test('publish realtime message with authCallback timing out', () async {
+    test('publish realtime message with authCallback', () async {
       // setup
-      final tooMuchDelay =
-          Timeouts.retryOperationOnAuthFailure + const Duration(seconds: 2);
-      var authCallbackCounter = 0;
+      final options = ClientOptions()
+        ..authCallback = ((tokenParams) async => 'token')
+        ..authUrl = 'hasAuthCallback';
+      final realtime = Realtime(options: options, key: 'TEST-KEY');
+      final channel = realtime.channels.get('test');
 
-      Future<Object> timingOutOnceThenSucceedsAuthCallback(TokenParams token) {
-        if (authCallbackCounter == 0) {
-          authCallbackCounter++;
-          throw TimeoutException('Timed out');
-        }
-        return Future.value('token');
-      }
+      // exercise
+      final future1 = channel.publish(name: 'name', data: 'data3-1');
+      final future2 = channel.publish(name: 'name', data: 'data3-2');
 
-      unawaitedWorkaroundForDartPre214(
-        fakeAsync((async) async {
-          final options = ClientOptions()
-            ..authCallback = timingOutOnceThenSucceedsAuthCallback
-            ..authUrl = 'hasAuthCallback';
-          final realtime = Realtime(options: options, key: 'TEST-KEY');
-          final channel = realtime.channels.get('test');
+      await Future.wait([future1, future2]);
 
-          // exercise
-          final future1 = channel.publish(name: 'name', data: 'data3-1');
-          final future2 = channel.publish(name: 'name', data: 'data3-2');
+      // verification
+      expect(manager.publishedMessages.length, 2);
 
-          // verification
-          expect(future1, throwsA(isA<AblyException>()));
-          expect(future2, throwsA(isA<AblyException>()));
+      final future3 = channel.publish(name: 'name', data: 'data3-3');
 
-          async.elapse(tooMuchDelay);
+      // verification
+      await future3;
 
-          expect(manager.publishedMessages.length, 0);
+      expect(manager.publishedMessages.length, 3);
 
-          // Send another message after timeout with authCallback succeeding
-
-          // setup
-          // exercise
-          final future3 = channel.publish(name: 'name', data: 'data3-3');
-
-          // verification
-          async.elapse(Duration.zero);
-          await future3;
-
-          expect(manager.publishedMessages.length, 1);
-
-          final firstMessage =
-              manager.publishedMessages.first.message as AblyMessage;
-          final messageData = firstMessage.message as Map<dynamic, dynamic>;
-          expect(messageData[TxTransportKeys.channelName], 'test');
-          expect(messageData[TxTransportKeys.messages], isA<List>());
-          final messages =
-              List<Message>.from(messageData[TxTransportKeys.messages] as List);
-          expect(messages[0].name, 'name');
-          expect(messages[0].data, 'data3-2');
-        }),
-      );
+      final firstMessage =
+          manager.publishedMessages.first.message as AblyMessage;
+      final messageData = firstMessage.message as Map<dynamic, dynamic>;
+      expect(messageData[TxTransportKeys.channelName], 'test');
+      expect(messageData[TxTransportKeys.messages], isA<List>());
+      final messages =
+          List<Message>.from(messageData[TxTransportKeys.messages] as List);
+      expect(messages[0].name, 'name');
+      expect(messages[0].data, 'data3-1');
     });
 
     test('publish 2 realtime messages with authCallback', () async {

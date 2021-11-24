@@ -133,20 +133,45 @@ Authenticating using [token authentication](https://ably.com/documentation/core-
 final clientOptions = ably.ClientOptions()
 // ..clientId = _clientId // Optionally set the clientId
   ..autoConnect = false
-  ..authCallback = (TokenParams tokenParams) async {
+  // If a clientId was set in ClientOptions, it will be available in ably.TokenParams.
+  ..authCallback = (ably.TokenParams tokenParams) async {
     try {
-      // If a clientId was set in ClientOptions, it will be available in Ably.TokenParams.
-      final tokenRequestMap =
-      await createTokenRequest(tokenParams: tokenParams);
+      // Send the tokenParamsMap (Map<String, dynamic>) to your server, using it to create a TokenRequest.
+      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(
+              tokenParams.toMap());
       return ably.TokenRequest.fromMap(tokenRequestMap);
     } catch (e) {
-      print("Something went wrong in the authCallback:");
-      print(e);
+      print("Something went wrong in the authCallback: ${e}");
+      rethrow;
     }
   };
 this._ablyClient = new ably.Realtime(options: clientOptions);
 await this._ablyClient.connect();
 ```
+
+An example of `createTokenRequest`'s implementation making a network request to your server could be:
+```dart
+  Future<Map<String, dynamic>> createTokenRequest(
+      Map<String, dynamic> tokenParamsMap) async {
+    var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
+    // For debugging:
+    bool runningServerLocally = true;
+    if (runningServerLocally) {
+      if (Platform.isAndroid) { // Connect Android device to local server
+        url = Uri.parse(
+            'http://localhost:6001/api/v1/createTokenRequest');
+      } else if (Platform.isIOS) { // Connect iOS device to local server
+        const localDeviceIPAddress = '192.168.1.9';
+        url = Uri.parse(
+            'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
+      }
+    }
+
+    final response = await http.post(url, body: tokenParamsMap);
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+```
+- To connect using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866).
 
 ### Using the REST API
 

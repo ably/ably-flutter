@@ -42,30 +42,21 @@ class AblyMethodCallHandler {
     final tokenParams = message.message as TokenParams;
     final rest = restInstances[message.handle];
     if (rest == null) {
-      throw AblyException('invalid message handle ${message.handle}');
+      throw AblyException('AblyMethodCallHandler#onAuthCallback\'s '
+          'rest handle is ${message.handle}, and rest is $rest');
     }
-    final callbackResponse = await rest.options.authCallback!(tokenParams);
-    Future.delayed(Duration.zero, rest.authUpdateComplete);
-    return callbackResponse;
+    return rest.options.authCallback!(tokenParams);
   }
-
-  bool _realtimeAuthInProgress = false;
 
   /// handles auth callback for realtime instances
   Future<Object?> onRealtimeAuthCallback(AblyMessage? message) async {
-    if (_realtimeAuthInProgress) {
-      return null;
-    }
-    _realtimeAuthInProgress = true;
     final tokenParams = message!.message as TokenParams;
     final realtime = realtimeInstances[message.handle];
     if (realtime == null) {
-      throw AblyException('invalid message handle ${message.handle}');
+      throw AblyException('AblyMethodCallHandler#onRealtimeAuthCallback\'s '
+          'realtime handle is ${message.handle}, and realtime is ${realtime}');
     }
-    final callbackResponse = await realtime.options.authCallback!(tokenParams);
-    Future.delayed(Duration.zero, realtime.authUpdateComplete);
-    _realtimeAuthInProgress = false;
-    return callbackResponse;
+    return realtime.options.authCallback!(tokenParams);
   }
 
   final PushActivationEventsNative _pushActivationEvents =

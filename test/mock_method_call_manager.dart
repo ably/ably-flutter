@@ -50,10 +50,6 @@ class MockMethodCallManager {
             ),
           );
           isAuthenticated = true;
-          throw PlatformException(
-            code: ErrorCodes.authCallbackFailure.toString(),
-            details: ErrorInfo(),
-          );
         }
         publishedMessages.add(message);
         return null;
@@ -73,10 +69,6 @@ class MockMethodCallManager {
             AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
           );
           isAuthenticated = true;
-          throw PlatformException(
-            code: ErrorCodes.authCallbackFailure.toString(),
-            details: ErrorInfo(),
-          );
         }
 
         publishedMessages.add(message);
