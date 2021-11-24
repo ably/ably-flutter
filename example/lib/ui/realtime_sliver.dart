@@ -218,14 +218,24 @@ class RealtimeSliver extends HookWidget {
                     .toString()),
           ],
         ),
+        RealtimePresenceSliver(realtime, channel),
         PaginatedResultViewer<ably.Message>(
             title: 'History',
-            subtitle: TextRow(
-                'Hint',
-                'You must detach and re-attach to the channel to get '
-                    'RealtimeChannel history. To get history whilst '
-                    'connected to a realtime channel, use '
-                    'RestChannel\'s history.'),
+            subtitle: Column(
+              children: [
+                TextRow(
+                    'Hint',
+                    'Use realtime history as a way to get messages that were'
+                        ' published before you are attached to the channel.'),
+                TextRow(
+                    'Warning',
+                    'If you are already attached to the channel, you must'
+                        ' detach and re-attach to get the latest messages '
+                        'published on the channel to get history whilst '
+                        'connected to a realtime channel, use '
+                        'RestChannel.history instead.'),
+              ],
+            ),
             query: () => channel.history(
                   ably.RealtimeHistoryParams(
                     limit: 10,
@@ -239,7 +249,6 @@ class RealtimeSliver extends HookWidget {
                     TextRow('Data', message.data.toString()),
                   ],
                 )),
-        RealtimePresenceSliver(realtime, channel),
       ],
     );
   }
