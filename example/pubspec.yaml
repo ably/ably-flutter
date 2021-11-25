@@ -1,5 +1,5 @@
 name: ably_flutter_example
-description: Demonstrates how to use the Ably Flutter plugin.
+description: Demonstrates how to use Ably Flutter.
 publish_to: 'none'
 
 environment:
