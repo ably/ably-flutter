@@ -17,10 +17,4 @@ class PushActivationEventsInternal extends PushActivationEvents {
 
   @override
   Stream<ErrorInfo> get onUpdateFailed => onUpdateFailedStreamController.stream;
-
-  void _close() {
-    onActivateStreamController.close();
-    onDeactivateStreamController.close();
-    onUpdateFailedStreamController.close();
-  }
 }

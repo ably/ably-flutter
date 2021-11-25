@@ -3,6 +3,6 @@
 
 export '../generated/platform_constants.dart';
 export 'src/background_android_isolate_platform.dart';
-export 'src/cipher_params_native.dart';
-export 'src/push_activation_events_native.dart';
-export 'src/push_notification_events_native.dart';
+export 'src/cipher_params_internal.dart';
+export 'src/push_activation_events_internal.dart';
+export 'src/push_notification_events_internal.dart';
