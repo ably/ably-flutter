@@ -5,13 +5,11 @@ import 'dart:collection';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-Map<int?, Realtime> _realtimeInstances = {};
-
-/// Returns readonly copy of instances of all [Realtime] clients created.
-Map<int?, Realtime> get realtimeInstances =>
-    UnmodifiableMapView(_realtimeInstances);
-
-/// Realtime client
+/// The Ably Realtime client library establishes and maintains a persistent
+/// connection to Ably enabling low latency broadcasting and receiving of
+/// messages and presence state.
+///
+/// Learn more at the [Realtime Client Library API documentation](https://ably.com/documentation/realtime).
 class Realtime extends PlatformObject {
   /// instantiates with [ClientOptions] and a String [key]
   ///
@@ -124,3 +122,9 @@ class Realtime extends PlatformObject {
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
+
+Map<int?, Realtime> _realtimeInstances = {};
+
+/// Returns readonly copy of instances of all [Realtime] clients created.
+Map<int?, Realtime> get realtimeInstances =>
+    UnmodifiableMapView(_realtimeInstances);
