@@ -1,20 +1,13 @@
-# Ably Flutter Plugin
+# Ably Flutter
 
 [![.github/workflows/check.yaml](https://github.com/ably/ably-flutter/actions/workflows/check.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/check.yaml)
 [![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
 [![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
 
-A
-[Flutter](https://flutter.dev/)
-plugin wrapping the
-[ably-cocoa](https://github.com/ably/ably-cocoa) (iOS)
-and
-[ably-java](https://github.com/ably/ably-java) (Android)
-client library SDKs for [Ably](https://www.ably.com),
-the platform that powers synchronized digital experiences in realtime.
-
+A flutter plugin for [Ably](https://www.ably.com), a realtime messaging service that powers synchronized digital experiences in realtime.
 Ably provides the best infrastructure and APIs to power realtime experiences at scale, delivering billions of realtime messages everyday to millions of end users.
 We handle the complexity of realtime messaging so you can focus on your code.
+Built on top of Ably [iOS](https://github.com/ably/ably-cocoa) and [Android](https://github.com/ably/ably-java) SDKs.
 
 ## Resources
 
