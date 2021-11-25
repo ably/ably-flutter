@@ -61,20 +61,20 @@ void main() {
 
   test('createRestWithToken', () async {
     const key = 'TEST-KEY';
-    final rest = Rest(key: key);
+    final rest = Rest.fromKey(key);
     expect(await rest.handle, counter);
     expect(rest.options.tokenDetails!.token, key);
   });
 
   test('createRestWithKey', () async {
     const key = 'TEST:KEY';
-    final rest = Rest(key: key);
+    final rest = Rest.fromKey(key);
     expect(await rest.handle, counter);
     expect(rest.options.key, key);
   });
 
   test('publishMessage', () async {
-    final rest = Rest(key: 'TEST-KEY');
+    final rest = Rest.fromKey('TEST-KEY');
     await rest.channels.get('test').publish(name: 'name', data: 'data');
     expect(1, 1);
   });

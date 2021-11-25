@@ -11,7 +11,7 @@ Map<int?, Realtime> _realtimeInstances = {};
 Map<int?, Realtime> get realtimeInstances =>
     UnmodifiableMapView(_realtimeInstances);
 
-/// Ably's Realtime client
+/// Realtime client
 class Realtime extends PlatformObject {
   /// instantiates with [ClientOptions] and a String [key]
   ///
@@ -26,7 +26,12 @@ class Realtime extends PlatformObject {
         super() {
     _connection = Connection(this);
     _channels = RealtimeChannels(this);
-    push = PushNative(realtime: this);
+    push = Push(realtime: this);
+  }
+
+  /// Create a rest client from an API key without configuring other parameters
+  Realtime.fromKey(String key) {
+    options = ClientOptions.fromKey(key);
   }
 
   @override
@@ -54,58 +59,68 @@ class Realtime extends PlatformObject {
   /// Provides access to the underlying Connection object
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
-  @override
   Connection get connection => _connection;
 
-  @override
-  Auth? auth;
+  /// a custom auth object to perform authentication related operations
+  /// based on the [options]
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
+  // Auth? auth;
 
-  @override
-  ClientOptions options;
+  /// [ClientOptions] indicating authentication and other settings for this
+  /// instance to interact with ably service
+  late ClientOptions options;
 
-  @override
+  /// a push object interacting with Push API
+  /// viz., subscribing for push notifications, etc
   late Push push;
 
   late RealtimeChannels _channels;
 
-  /// collection of [RealtimeChannelInterface] objects
+  /// Provides access to the underlying [RealtimeChannels]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
-  @override
   RealtimeChannels get channels => _channels;
 
   /// closes the [connection]
-  @override
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   /// connects to [connection]
-  @override
   Future<void> connect() async {
     await invoke(PlatformMethod.connectRealtime);
   }
 
-  @override
-  Future<HttpPaginatedResponse> request({
-    required String method,
-    required String path,
-    Map<String, dynamic>? params,
-    Object? body,
-    Map<String, String>? headers,
-  }) {
-    throw UnimplementedError();
-  }
+  /// creates and sends a raw request to ably service
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
+  // Future<HttpPaginatedResponse> request({
+  //   required String method,
+  //   required String path,
+  //   Map<String, dynamic>? params,
+  //   Object? body,
+  //   Map<String, String>? headers,
+  // }) {
+  //   throw UnimplementedError();
+  // }
 
-  @override
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
-    throw UnimplementedError();
-  }
+  /// gets stats based on params as a [PaginatedResult]
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
+  // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
+  //   throw UnimplementedError();
+  // }
 
-  @override
-  Future<DateTime> time() {
-    throw UnimplementedError();
-  }
+  /// returns server time
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
+  // Future<DateTime> time() {
+  //   throw UnimplementedError();
+  // }
 
-  @override
+  /// represents the current state of the device in respect of it being a
+  /// target for push notifications.
+  ///
+  /// https://docs.ably.io/client-lib-development-guide/features/#RSH8
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

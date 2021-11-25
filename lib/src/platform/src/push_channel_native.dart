@@ -17,7 +17,7 @@ class PushChannelNative extends PlatformObject implements PushChannel {
     final moreThanOneAblyClientPresent = rest != null && realtime != null;
     if (ablyClientNotPresent || moreThanOneAblyClientPresent) {
       throw Exception(
-          'Specify one Ably client when creating ${(PushNative).toString()}.');
+          'Specify one Ably client when creating ${(Push).toString()}.');
     }
   }
 

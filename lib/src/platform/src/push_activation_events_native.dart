@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart';
 
-class PushActivationEventsNative extends PushActivationEvents {
+class PushActivationEventsInternal extends PushActivationEvents {
   StreamController<ErrorInfo?> onActivateStreamController = StreamController();
   StreamController<ErrorInfo?> onDeactivateStreamController =
       StreamController();

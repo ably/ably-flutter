@@ -1,17 +1,35 @@
+import 'dart:io' as io show Platform;
+
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Class providing push notification functionality
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
-abstract class Push {
+class Push extends PlatformObject {
   /// An instance to access activation events related to push, such as device
   /// activation, deactivation and notification permissions.
-  static PushActivationEvents pushEvents = PushNative.activationEvents;
+  static PushActivationEvents activationEvents = PushActivationEventsInternal();
 
   /// An instance to access message events related to push
   static PushNotificationEvents notificationEvents =
-      PushNative.notificationEvents;
+      PushNotificationEventsInternal();
+
+  /// A rest client used platform side to invoke push notification methods
+  final Rest? rest;
+
+  /// A realtime client used platform side to invoke push notification methods
+  final Realtime? realtime;
+
+  /// Pass an Ably realtime or rest client.
+  Push({this.rest, this.realtime}) : super() {
+    final ablyClientNotPresent = rest == null && realtime == null;
+    final moreThanOneAblyClientPresent = rest != null && realtime != null;
+    if (ablyClientNotPresent || moreThanOneAblyClientPresent) {
+      throw Exception(
+          'Specify one Ably client when creating ${(Push).toString()}.');
+    }
+  }
 
   /// Activate this device for push notifications by registering
   /// with the push transport such as FCM/APNs.
@@ -24,7 +42,7 @@ abstract class Push {
   /// throws: AblyException when the server returns an error.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
-  Future<void> activate();
+  Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
   /// Request permission from the user to show them notifications. This is
   /// required to show user notifications. Otherwise, notifications may
@@ -62,13 +80,36 @@ abstract class Push {
       bool criticalAlert = false,
       bool provisional = false,
       bool providesAppNotificationSettings = false,
-      bool announcement = true});
+      bool announcement = true}) async {
+    if (io.Platform.isIOS) {
+      return invokeRequest<bool>(PlatformMethod.pushRequestPermission, {
+        TxPushRequestPermission.badge: badge,
+        TxPushRequestPermission.sound: sound,
+        TxPushRequestPermission.alert: alert,
+        TxPushRequestPermission.carPlay: carPlay,
+        TxPushRequestPermission.criticalAlert: criticalAlert,
+        TxPushRequestPermission.provisional: provisional,
+        TxPushRequestPermission.providesAppNotificationSettings:
+            providesAppNotificationSettings,
+        TxPushRequestPermission.announcement: announcement,
+      });
+    } else {
+      return true;
+    }
+  }
 
   /// Gets the iOS notification settings ([UNNotificationSettings]) for
   /// the application.
   ///
   /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649524-getnotificationsettings)
-  Future<UNNotificationSettings> getNotificationSettings();
+  Future<UNNotificationSettings> getNotificationSettings() async {
+    if (io.Platform.isIOS) {
+      return invokeRequest<UNNotificationSettings>(
+          PlatformMethod.pushGetNotificationSettings);
+    } else {
+      throw UnsupportedError('getNotificationSettings is only valid on iOS.');
+    }
+  }
 
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
@@ -81,5 +122,10 @@ abstract class Push {
   /// throws: AblyException
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
-  Future<void> deactivate();
+  Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
+
+  @override
+  Future<int?> createPlatformInstance() => (realtime != null)
+      ? (realtime as Realtime).handle
+      : (rest as Rest).handle;
 }
