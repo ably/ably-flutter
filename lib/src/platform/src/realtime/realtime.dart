@@ -27,10 +27,9 @@ class Realtime extends PlatformObject {
     push = Push(realtime: this);
   }
 
-  /// Create a rest client from an API key without configuring other parameters
-  Realtime.fromKey(String key) {
-    options = ClientOptions.fromKey(key);
-  }
+  /// Create a realtime client from an API key without configuring other parameters
+  factory Realtime.fromKey(String key) =>
+      Realtime(options: ClientOptions.fromKey(key));
 
   @override
   Future<int?> createPlatformInstance() async {

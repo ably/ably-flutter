@@ -20,9 +20,7 @@ class Rest extends PlatformObject {
   }
 
   /// Create a rest client from an API key without configuring other parameters
-  Rest.fromKey(String key) {
-    options = ClientOptions.fromKey(key);
-  }
+  factory Rest.fromKey(String key) => Rest(options: ClientOptions.fromKey(key));
 
   @override
   Future<int?> createPlatformInstance() async {
