@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:flutter/services.dart';
 
 /// A named channel through with realtime client can interact with ably service.
 ///
@@ -28,7 +26,7 @@ class RealtimeChannel extends PlatformObject {
       : state = ChannelState.initialized,
         super() {
     _presence = RealtimePresence(this);
-    push = PushChannelNative(name, realtime: realtime);
+    push = PushChannel(name, realtime: realtime);
     on().listen((event) => state = event.current);
   }
 

@@ -5,5 +5,4 @@ export '../generated/platform_constants.dart';
 export 'src/background_android_isolate_platform.dart';
 export 'src/cipher_params_native.dart';
 export 'src/push_activation_events_native.dart';
-export 'src/push_channel_native.dart';
 export 'src/push_notification_events_native.dart';
