@@ -356,7 +356,7 @@ class Codec extends StandardMessageCodec {
       return null;
     }
     final jsonMap = <String, dynamic>{};
-    final paramsNative = CipherParamsNative.fromCipherParams(params);
+    final paramsNative = CipherParamsInternal.fromCipherParams(params);
     jsonMap[TxCipherParams.androidHandle] = paramsNative.androidHandle;
     jsonMap[TxCipherParams.iosKey] = paramsNative.key;
     jsonMap[TxCipherParams.iosAlgorithm] = paramsNative.algorithm;
@@ -367,13 +367,13 @@ class Codec extends StandardMessageCodec {
   CipherParams _decodeCipherParams(final Map<String, dynamic> jsonMap) {
     if (io.Platform.isAndroid) {
       final cipherParamsHandle = jsonMap[TxCipherParams.androidHandle] as int;
-      return CipherParamsNative.forAndroid(
+      return CipherParamsInternal.forAndroid(
         androidHandle: cipherParamsHandle,
       );
     } else if (io.Platform.isIOS) {
       final algorithm = jsonMap[TxCipherParams.iosAlgorithm] as String;
       final key = jsonMap[TxCipherParams.iosKey] as Uint8List;
-      return CipherParamsNative.forIOS(
+      return CipherParamsInternal.forIOS(
         algorithm: algorithm,
         key: key,
       );

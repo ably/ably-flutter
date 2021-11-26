@@ -38,8 +38,8 @@ class BackgroundIsolateAndroidPlatform {
   final MethodChannel _methodChannel = MethodChannel(
       'io.ably.flutter.plugin.background', StandardMethodCodec(Codec()));
 
-  final PushNotificationEventsNative _pushNotificationEvents =
-      PushNative.notificationEvents as PushNotificationEventsNative;
+  final PushNotificationEventsInternal _pushNotificationEvents =
+      Push.notificationEvents as PushNotificationEventsInternal;
 
   Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.handleBackgroundMessage(remoteMessage);

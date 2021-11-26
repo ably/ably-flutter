@@ -14,7 +14,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// instantiate a new one using algorithm and key when needed, without
 /// needing to store instances on the Android side and pass references/handles
 /// to the dart side.
-class CipherParamsNative implements CipherParams {
+class CipherParamsInternal implements CipherParams {
   int? androidHandle;
   Uint8List? key;
 
@@ -23,7 +23,7 @@ class CipherParamsNative implements CipherParams {
   String? mode = 'cbc';
 
   /// Create a Dart side representation of CipherParams
-  CipherParamsNative.forIOS({
+  CipherParamsInternal.forIOS({
     required this.algorithm,
     required this.key,
   }) {
@@ -37,7 +37,7 @@ class CipherParamsNative implements CipherParams {
     }
   }
 
-  CipherParamsNative.forAndroid({
+  CipherParamsInternal.forAndroid({
     required this.androidHandle,
   }) {
     if (!io.Platform.isAndroid) {
@@ -50,10 +50,10 @@ class CipherParamsNative implements CipherParams {
     }
   }
 
-  static CipherParamsNative fromCipherParams(CipherParams cipherParams) =>
-      cipherParams as CipherParamsNative;
+  static CipherParamsInternal fromCipherParams(CipherParams cipherParams) =>
+      cipherParams as CipherParamsInternal;
 
-  /// Explicitly cast the [CipherParamsNative] to [CipherParams] so users do not
+  /// Explicitly cast the [CipherParamsInternal] to [CipherParams] so users do not
   /// see implementation details (e.g. [androidHandle]).
   CipherParams toCipherParams() => this;
 }

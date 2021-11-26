@@ -11,7 +11,7 @@ void main() {
 
   setUp(() {
     manager = MockMethodCallManager();
-    final rest = Rest(key: 'TEST-KEY');
+    final rest = Rest.fromKey('TEST-KEY');
     channels = rest.channels;
   });
 

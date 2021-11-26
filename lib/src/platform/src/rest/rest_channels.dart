@@ -14,7 +14,7 @@ class RestChannels extends Channels<RestChannel> {
   @override
   @protected
   RestChannel createChannel(String name) =>
-      RestChannel(_rest, PushChannelNative(name, rest: _rest), name);
+      RestChannel(_rest, PushChannel(name, rest: _rest), name);
 
   @override
   void release(String name) {

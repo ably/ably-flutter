@@ -60,10 +60,10 @@ class AblyMethodCallHandler {
     return realtime.options.authCallback!(tokenParams);
   }
 
-  final PushActivationEventsNative _pushActivationEvents =
-      PushNative.activationEvents as PushActivationEventsNative;
-  final PushNotificationEventsNative _pushNotificationEvents =
-      PushNative.notificationEvents as PushNotificationEventsNative;
+  final PushActivationEventsInternal _pushActivationEvents =
+      Push.activationEvents as PushActivationEventsInternal;
+  final PushNotificationEventsInternal _pushNotificationEvents =
+      Push.notificationEvents as PushNotificationEventsInternal;
 
   Future<Object?> _onPushOnActivate(ErrorInfo? error) async {
     _pushActivationEvents.onActivateStreamController.add(error);

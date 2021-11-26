@@ -23,7 +23,7 @@ void main() {
   group('rest#channels#channel', () {
     test('publishes message without authCallback', () async {
       // setup
-      final rest = Rest(key: 'TEST-KEY');
+      final rest = Rest.fromKey('TEST-KEY');
       final channel = rest.channels.get('test');
 
       // exercise
@@ -49,7 +49,7 @@ void main() {
       final options = ClientOptions()
         ..authCallback = authCallback
         ..authUrl = 'hasAuthCallback';
-      final rest = Rest(options: options, key: 'TEST-KEY');
+      final rest = Rest(options: options);
 
       final channel = rest.channels.get('test');
 
@@ -74,7 +74,7 @@ void main() {
       final options = ClientOptions()
         ..authCallback = ((tokenParams) => Future.value('token'))
         ..authUrl = 'hasAuthCallback';
-      final rest = Rest(options: options, key: 'TEST-KEY');
+      final rest = Rest(options: options);
       final channel = rest.channels.get('test');
 
       // exercise
@@ -112,7 +112,7 @@ void main() {
       final options = ClientOptions()
         ..authCallback = authCallback
         ..authUrl = 'hasAuthCallback';
-      final rest = Rest(options: options, key: 'TEST-KEY');
+      final rest = Rest(options: options);
       final channel = rest.channels.get('test');
 
       // exercise
