@@ -43,8 +43,7 @@ class Realtime extends PlatformObject {
       // If this happens, we won't be able to identify which realtime client
       // the authCallback belongs to. Instead, on Android, we set autoConnect
       // to false, and call connect immediately once we get the handle.
-      await Platform.invokePlatformMethod(
-          PlatformMethod.connectRealtime, handle);
+      await invokeRaw(PlatformMethod.connectRealtime, handle);
     }
     return handle;
   }

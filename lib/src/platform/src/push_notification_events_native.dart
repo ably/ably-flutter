@@ -18,7 +18,7 @@ class PushNotificationEventsNative implements PushNotificationEvents {
 
   @override
   Future<RemoteMessage?> get notificationTapLaunchedAppFromTerminated =>
-      Platform.methodChannel.invokeMethod(
+      Platform().invokePlatformMethod<RemoteMessage>(
           PlatformMethod.pushNotificationTapLaunchedAppFromTerminated);
 
   @override
@@ -56,7 +56,9 @@ class PushNotificationEventsNative implements PushNotificationEvents {
   Future<void> setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
     if (io.Platform.isAndroid) {
-      await BackgroundIsolateAndroidPlatform.methodChannel.invokeMethod(
+      // Inform Android side that the Flutter application
+      // is ready to receive push messages.
+      await BackgroundIsolateAndroidPlatform().invokeMethod(
           PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid);
     }
   }

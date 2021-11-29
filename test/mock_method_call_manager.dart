@@ -12,14 +12,20 @@ class MockMethodCallManager {
   final publishedMessages = <AblyMessage>[];
 
   MockMethodCallManager() {
-    Platform.methodChannel.setMockMethodCallHandler(handler);
+    final channel =
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()))
+          ..setMockMethodCallHandler(handler);
+    Platform(methodChannel: channel);
   }
 
   void reset() {
     channels.clear();
     publishedMessages.clear();
     handleCounter = 0;
-    Platform.methodChannel.setMockMethodCallHandler(null);
+    final channel =
+        MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()))
+          ..setMockMethodCallHandler((call) => null);
+    Platform(methodChannel: channel);
   }
 
   Future<dynamic> handler(MethodCall methodCall) async {
@@ -43,7 +49,9 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel).onAuthCallback(
+          final channel = MethodChannel(
+              'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+          await AblyMethodCallHandler(channel).onAuthCallback(
             AblyMessage(
               TokenParams(timestamp: DateTime.now()),
               handle: handle,
@@ -64,8 +72,9 @@ class MockMethodCallManager {
         // because function references (in `authCallback`) get dropped by the
         // PlatformChannel.
         if (!isAuthenticated && clientOptions.authUrl == 'hasAuthCallback') {
-          await AblyMethodCallHandler(Platform.methodChannel)
-              .onRealtimeAuthCallback(
+          final channel = MethodChannel(
+              'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
+          await AblyMethodCallHandler(channel).onRealtimeAuthCallback(
             AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
           );
           isAuthenticated = true;

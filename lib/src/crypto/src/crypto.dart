@@ -32,7 +32,7 @@ class Crypto {
       throw AblyException(keyTypeErrorMessage);
     }
 
-    return Platform.invokePlatformMethodNonNull<CipherParams>(
+    return Platform().invokePlatformMethodNonNull<CipherParams>(
         PlatformMethod.cryptoGetParams, {
       TxCryptoGetParams.algorithm: defaultAlgorithm,
       TxCryptoGetParams.key: key,
@@ -55,6 +55,6 @@ class Crypto {
   /// this key with other clients, there is no way to decrypt the messages.
   static Future<Uint8List> generateRandomKey(
           {keyLength = defaultKeyLengthInBits}) =>
-      Platform.invokePlatformMethodNonNull<Uint8List>(
+      Platform().invokePlatformMethodNonNull<Uint8List>(
           PlatformMethod.cryptoGenerateRandomKey, keyLength);
 }
