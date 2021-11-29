@@ -3,7 +3,6 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,11 +37,12 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.Param;
 import io.ably.lib.util.Base64Coder;
 import io.ably.lib.util.Crypto;
+import io.ably.lib.util.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static final String TAG = PushMessagingEventHandlers.class.getName();
+  private static final String TAG = AblyMethodCallHandler.class.getName();
 
   public interface ResetAblyClientsCallback {
     void run();
@@ -151,7 +151,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
     final MethodChannel.Result result = new MethodResultWrapper(rawResult);
-    System.out.println("Ably Flutter platform method called: " + call.method);
+    Log.v(TAG, String.format("onMethodCall: Ably Flutter platform method \"%s\" invoked.", call.method));
     final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
     if (null == handler) {
       // We don't have a handler for a method with this name so tell the caller.
