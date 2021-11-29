@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *)options;
 
--(nullable ARTRest *)getRest:(NSNumber *)handle;
+-(nullable ARTRest *)restFrom:(NSNumber *)handle;
 
 -(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
 
--(nullable ARTRealtime *)realtimeWithHandle:(NSNumber *)handle;
+-(nullable ARTRealtime *)realtimeFrom:(NSNumber *)handle;
 
 -(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(nullable NSNumber *)handle;
 

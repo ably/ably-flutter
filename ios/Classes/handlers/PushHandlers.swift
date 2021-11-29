@@ -90,8 +90,8 @@ public class PushHandlers: NSObject {
     public static let device: FlutterHandler = { plugin, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = plugin.ably.realtime(withHandle: ablyClientHandle)
-        let rest = plugin.ably.getRest(ablyClientHandle)
+        let realtime = plugin.ably.realtime(from: ablyClientHandle)
+        let rest = plugin.ably.rest(from: ablyClientHandle)
 
         if let realtime = realtime {
             result(realtime.device)
@@ -166,8 +166,8 @@ public class PushHandlers: NSObject {
     private static func getPush(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
         let message = call.arguments as! AblyFlutterMessage
         let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.realtime(withHandle: ablyClientHandle)
-        let rest = ably.getRest(ablyClientHandle)
+        let realtime = ably.realtime(from: ablyClientHandle)
+        let rest = ably.rest(from: ablyClientHandle)
 
         if let realtime = realtime {
             return realtime.push;
@@ -206,20 +206,20 @@ public class PushHandlers: NSObject {
             clientHandle = (message.message as! NSNumber)
         }
 
-        guard let unwrappedClientHandle = clientHandle else {
+        guard let clientHandle = clientHandle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
-        guard let unwrappedChannelName = channelName else {
+        guard let channelName = channelName else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
             return nil
         }
 
-        let realtime = ably.realtime(withHandle: unwrappedClientHandle)
-        if let unwrappedRealtime = realtime {
-            return unwrappedRealtime.channels.get(unwrappedChannelName).push
-        } else if let unwrappedRest = ably.getRest(unwrappedClientHandle) {
-            return unwrappedRest.channels.get(unwrappedChannelName).push
+        let realtime = ably.realtime(from: clientHandle)
+        if let realtime = realtime {
+            return realtime.channels.get(channelName).push
+        } else if let rest = ably.rest(from: clientHandle) {
+            return rest.channels.get(channelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
             return nil

@@ -70,12 +70,12 @@
         };
     }
     ARTRest *const instance = [[ARTRest alloc] initWithOptions:options.clientOptions];
-    [_restInstances setObject:instance forKey:handle];
+    _restInstances[handle] = instance;
     return handle;
 }
 
--(ARTRest *)getRest:(NSNumber *const)handle {
-    return [_restInstances objectForKey:handle];
+-(ARTRest *)restFrom:(NSNumber *)handle {
+    return _restInstances[handle];
 }
 
 -(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *const)options {
@@ -110,7 +110,7 @@
     return handle;
 }
 
--(ARTRealtime *)realtimeWithHandle:(NSNumber *const)handle {
+-(ARTRealtime *)realtimeFrom:(NSNumber *)handle {
     return [_realtimeInstances objectForKey:handle];
 }
 
