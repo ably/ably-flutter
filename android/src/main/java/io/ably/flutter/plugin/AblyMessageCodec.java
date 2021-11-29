@@ -416,7 +416,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     return new PlatformClientOptions(
         o,
-        
         jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback)
             ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback))
             : false);
