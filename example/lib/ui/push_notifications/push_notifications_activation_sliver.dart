@@ -3,17 +3,18 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 import 'package:ably_flutter_example/ui/bool_stream_button.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class PushNotificationsActivationSliver extends StatelessWidget {
+class PushNotificationsActivationSliver extends HookWidget {
   final PushNotificationService _pushNotificationService;
-  final bool isIOSSimulator;
 
   const PushNotificationsActivationSliver(this._pushNotificationService,
-      {required this.isIOSSimulator, Key? key})
+      {Key? key})
       : super(key: key);
 
   Future<void> showErrorDialog(
@@ -46,7 +47,7 @@ class PushNotificationsActivationSliver extends StatelessWidget {
     await _pushNotificationService.getDevice();
   }
 
-  Widget buildiOSSimulatorWarningText() {
+  Widget buildiOSSimulatorWarningText(bool isIOSSimulator) {
     if (isIOSSimulator) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -68,40 +69,51 @@ class PushNotificationsActivationSliver extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Activation',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            buildiOSSimulatorWarningText(),
-            Row(
-              children: [
-                Expanded(
-                  child: BoolStreamButton(
-                      stream: _pushNotificationService.hasPushChannelStream,
-                      onPressed: () => handleActivateDeviceButton(context),
-                      child: const Text('Activate device')),
-                ),
-                Expanded(
-                  child: BoolStreamButton(
-                      stream: _pushNotificationService.hasPushChannelStream,
-                      onPressed: () => handleDeactivateDeviceButton(context),
-                      child: const Text('Deactivate device')),
-                ),
-              ],
-            ),
-            const Text('Once devices are activated, a Push Admin can '
-                "send push messages to devices by it's device ID, client ID or "
-                'FCM/ APNs token. To send push messages between users, the '
-                'device must push-subscribe to the channel and a push payload '
-                'is added to the channel message.'),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final isIOSSimulator = useState(false);
+    useEffect(() {
+      if (Platform.isIOS) {
+        DeviceInfoPlugin()
+            .iosInfo
+            .then((info) => isIOSSimulator.value = !info.isPhysicalDevice);
+      }
+    });
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'Activation',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          buildiOSSimulatorWarningText(isIOSSimulator.value),
+          Row(
+            children: [
+              Expanded(
+                child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
+                    onPressed: () => handleActivateDeviceButton(context),
+                    child: const Text('Activate device')),
+              ),
+              Expanded(
+                child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
+                    onPressed: () => handleDeactivateDeviceButton(context),
+                    child: const Text('Deactivate device')),
+              ),
+            ],
+          ),
+          const Text('Once devices are activated, a Push Admin can '
+              "send push messages to devices by it's device ID, client ID or "
+              'FCM/ APNs token. To send push messages between users, the '
+              'device must push-subscribe to the channel and a push payload '
+              'is added to the channel message.'),
+        ],
+      ),
+    );
+  }
 
   Future<void> showPermissionReminder(BuildContext context) async {
     if (Platform.isIOS) {
