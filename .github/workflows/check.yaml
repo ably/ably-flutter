@@ -7,19 +7,13 @@ on:
 jobs:
   swift:
     name: "Swift formatting checks"
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - name: 'Build and install Mint'
-        run: |
-          git clone https://github.com/yonaskolb/Mint.git
-          cd Mint
-          make
-
       - name: 'Install SwiftFormat'
-        run: 'mint install nicklockwood/SwiftFormat'
+        run: 'brew install swiftformat'
         
       - name: Run SwiftFormat
-        run: mint run swiftformat --lint --swiftversion 5.5 .
+        run: swiftformat --lint --swiftversion 5.5 .
   java:
     name: "Java formatting checks"
     runs-on: ubuntu-latest
