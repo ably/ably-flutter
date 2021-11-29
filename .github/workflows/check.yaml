@@ -23,7 +23,7 @@ jobs:
         with:
           args: "--set-exit-if-changed"
   dart:
-    name: "Dart formatting checks"
+    name: "Dart formatting and analyzer checks"
     runs-on: ubuntu-latest
     steps:
 
