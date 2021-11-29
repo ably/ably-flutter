@@ -177,6 +177,23 @@ Generate platform constants and continue
 
 1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 
+Generate platform constants and use wherever required
+
+## Static plugin code analyzer
+
+The new flutter analyzer does a great job at analyzing complete flutter package.
+
+Running `flutter analyze` in project root will analyze dart files in complete project,
+i.e., plugin code and example code
+
+
+Or, use the good old dart analyzer
+
+```bash
+dartanalyzer --fatal-warnings lib/**/*.dart
+dartanalyzer --fatal-warnings example/lib/**/*.dart
+```
+
 ## dartdoc
 
 ### Tool Installation
