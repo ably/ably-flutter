@@ -136,7 +136,8 @@ class RealtimeSliver extends HookWidget {
           ValueNotifier<ably.ConnectionState> connectionState,
           ValueNotifier<ably.ChannelState> channelState) =>
       TextButton(
-        onPressed: () {
+        onPressed: () async {
+          await channel.detach();
           realtime.channels.release(Constants.channelName);
           channel = realtime.channels.get(Constants.channelName);
           setupListeners(connectionState, channelState);
