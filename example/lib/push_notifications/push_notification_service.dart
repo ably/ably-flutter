@@ -8,14 +8,26 @@ import 'package:ably_flutter_example/push_notifications/push_notification_messag
 import 'package:rxdart/rxdart.dart';
 
 class PushNotificationService {
-  final _androidPushNotificationConfiguration =
-      AndroidPushNotificationConfiguration();
-  ably.Realtime? realtime;
-  ably.Rest? rest;
+  final bool useRealtimeClient;
+  ably.Realtime _realtime;
+  ably.Rest _rest;
   ably.RealtimeChannel? _realtimeChannel;
   ably.RealtimeChannel? _pushLogMetaChannel;
   ably.RestChannel? _restChannel;
   late ably.PushChannel? _pushChannel;
+
+  PushNotificationService(
+    this._realtime,
+    this._rest, {
+    this.useRealtimeClient = true,
+  }) {
+    _getChannels();
+    getDevice();
+    if (Platform.isIOS) {
+      updateNotificationSettings();
+    }
+    AndroidPushNotificationConfiguration();
+  }
 
   final BehaviorSubject<ably.PaginatedResult<ably.PushChannelSubscription>>
       _pushChannelDeviceSubscriptionsSubject =
@@ -53,26 +65,9 @@ class PushNotificationService {
   late final ValueStream<ably.UNNotificationSettings>
       notificationSettingsStream = _notificationSettingsSubject.stream;
 
-  void setRealtimeClient(ably.Realtime realtime) {
-    this.realtime = realtime;
-    _getChannels();
-    getDevice();
-    if (Platform.isIOS) {
-      updateNotificationSettings();
-    }
-  }
-
   Future<void> ensureRealtimeClientConnected() async {
-    if (realtime?.connection.state != ably.ConnectionState.connected) {
-      await realtime!.connect();
-    }
-  }
-
-  void setRestClient(ably.Rest rest) {
-    this.rest = rest;
-    _getChannels();
-    if (Platform.isIOS) {
-      updateNotificationSettings();
+    if (_realtime.connection.state != ably.ConnectionState.connected) {
+      await _realtime.connect();
     }
   }
 
@@ -80,32 +75,28 @@ class PushNotificationService {
   Future<void> requestNotificationPermission(
       {bool provisional = false,
       bool providesAppNotificationSettings = true}) async {
-    if (realtime != null) {
-      final granted = await realtime!.push.requestPermission(
-          provisional: provisional,
-          providesAppNotificationSettings: providesAppNotificationSettings);
-      _userNotificationPermissionGrantedSubject.add(granted);
-    } else if (rest != null) {
-      final granted = await rest!.push.requestPermission(
+    if (useRealtimeClient) {
+      final granted = await _realtime.push.requestPermission(
           provisional: provisional,
           providesAppNotificationSettings: providesAppNotificationSettings);
       _userNotificationPermissionGrantedSubject.add(granted);
     } else {
-      throw Exception('No ably client available');
+      final granted = await _rest.push.requestPermission(
+          provisional: provisional,
+          providesAppNotificationSettings: providesAppNotificationSettings);
+      _userNotificationPermissionGrantedSubject.add(granted);
     }
     await updateNotificationSettings();
   }
 
   /// Only valid on iOS
   Future<void> updateNotificationSettings() async {
-    if (realtime != null) {
-      final settings = await realtime!.push.getNotificationSettings();
+    if (useRealtimeClient) {
+      final settings = await _realtime.push.getNotificationSettings();
       _notificationSettingsSubject.add(settings);
-    } else if (rest != null) {
-      _notificationSettingsSubject
-          .add(await rest!.push.getNotificationSettings());
     } else {
-      throw Exception('No ably client available');
+      _notificationSettingsSubject
+          .add(await _rest.push.getNotificationSettings());
     }
   }
 
@@ -114,22 +105,20 @@ class PushNotificationService {
   Future<void> deactivateDevice() => getPushFromAblyClient().deactivate();
 
   Future<void> getDevice() async {
-    if (realtime != null) {
-      final localDevice = await realtime!.device();
+    if (useRealtimeClient) {
+      final localDevice = await _realtime.device();
       _localDeviceSubject.add(localDevice);
     } else {
-      final localDevice = await rest!.device();
+      final localDevice = await _rest.device();
       _localDeviceSubject.add(localDevice);
     }
   }
 
   ably.Push getPushFromAblyClient() {
-    if (realtime != null) {
-      return realtime!.push;
-    } else if (rest != null) {
-      return rest!.push;
+    if (useRealtimeClient) {
+      return _realtime.push;
     } else {
-      throw Exception('No ably client available');
+      return _rest.push;
     }
   }
 
@@ -170,10 +159,10 @@ class PushNotificationService {
 
   Future<void> publishNotificationMessageToChannel() async {
     await ensureRealtimeClientConnected();
-    if (_realtimeChannel != null) {
+    if (useRealtimeClient) {
       await _realtimeChannel!.publish(
           message: PushNotificationMessageExamples.pushNotificationMessage);
-    } else if (_restChannel != null) {
+    } else {
       await _restChannel!.publish(
           message: PushNotificationMessageExamples.pushNotificationMessage);
     }
@@ -181,10 +170,10 @@ class PushNotificationService {
 
   Future<void> publishDataMessageToChannel() async {
     await ensureRealtimeClientConnected();
-    if (_realtimeChannel != null) {
+    if (useRealtimeClient) {
       await _realtimeChannel!
           .publish(message: PushNotificationMessageExamples.pushDataMessage);
-    } else if (_restChannel != null) {
+    } else {
       await _restChannel!
           .publish(message: PushNotificationMessageExamples.pushDataMessage);
     }
@@ -192,10 +181,10 @@ class PushNotificationService {
 
   Future<void> publishDataNotificationMessageToChannel() async {
     await ensureRealtimeClientConnected();
-    if (_realtimeChannel != null) {
+    if (useRealtimeClient) {
       await _realtimeChannel!.publish(
           message: PushNotificationMessageExamples.pushDataNotificationMessage);
-    } else if (_restChannel != null) {
+    } else {
       await _restChannel!.publish(
           message: PushNotificationMessageExamples.pushDataNotificationMessage);
     }
@@ -213,21 +202,18 @@ class PushNotificationService {
 
   void _getChannels() {
     _hasPushChannelSubject.add(false);
-    if (realtime != null) {
+    if (useRealtimeClient) {
       _realtimeChannel =
-          realtime!.channels.get(Constants.channelNameForPushNotifications);
+          _realtime.channels.get(Constants.channelNameForPushNotifications);
       _pushChannel = _realtimeChannel!.push;
       _pushLogMetaChannel =
-          realtime!.channels.get(Constants.pushMetaChannelName);
-      _hasPushChannelSubject.add(true);
-    } else if (rest != null) {
-      _restChannel =
-          rest!.channels.get(Constants.channelNameForPushNotifications);
-      _pushChannel = _restChannel!.push;
+          _realtime.channels.get(Constants.pushMetaChannelName);
       _hasPushChannelSubject.add(true);
     } else {
-      throw Exception(
-          'No Ably client exists, cannot get rest/ realtime channels or push channels.');
+      _restChannel =
+          _rest.channels.get(Constants.channelNameForPushNotifications);
+      _pushChannel = _restChannel!.push;
+      _hasPushChannelSubject.add(true);
     }
   }
 
