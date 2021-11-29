@@ -126,21 +126,6 @@
     return [_paginatedResults objectForKey:handle];
 }
 
--(void)disposeWithCompletionHandler:(const dispatch_block_t)completionHandler {
-    if (!completionHandler) {
-        [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
-    }
-    
-    dispatch_assert_queue(dispatch_get_main_queue());
-
-    // This is contrived for now but the point is that we can introduce a clean,
-    // asynchronous close via a background queue here if required.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self dispose];
-        completionHandler();
-    });
-}
-
 -(void)dispose {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];

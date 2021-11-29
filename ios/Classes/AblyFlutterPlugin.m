@@ -22,7 +22,7 @@ typedef void (^FlutterHandler)(AblyFlutterPlugin * plugin, FlutterMethodCall * c
  static FlutterHandle declarations.
  */
 @interface AblyFlutterPlugin ()
--(void)registerWithCompletionHandler:(FlutterResult)completionHandler;
+-(void)reset;
 @end
 
 NS_ASSUME_NONNULL_END
@@ -36,7 +36,8 @@ static const FlutterHandler _getVersion = ^void(AblyFlutterPlugin *const plugin,
 };
 
 static const FlutterHandler _resetAblyClients = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
-    [plugin registerWithCompletionHandler:result];
+    [plugin reset];
+    result(nil);
 };
 
 static const FlutterHandler _createRestWithOptions = ^void(AblyFlutterPlugin *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
@@ -652,14 +653,9 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutterPlugin *const plugi
     }
 }
 
--(void)registerWithCompletionHandler:(const FlutterResult)completionHandler {
-    if (!completionHandler) {
-        [NSException raise:NSInvalidArgumentException format:@"completionHandler cannot be nil."];
-    }
-    [_ably disposeWithCompletionHandler:^{
-        [self->_streamsChannel reset];
-        completionHandler(nil);
-    }];
+-(void)reset {
+    [_ably dispose];
+    [self->_streamsChannel reset];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
