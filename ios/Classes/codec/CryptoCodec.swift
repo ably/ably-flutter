@@ -4,7 +4,7 @@ import Foundation
 public class CryptoCodec: NSObject {
     @objc
     public static let readCipherParams: ([String: Any]) -> ARTCipherParams = { dictionary in
-          let algorithm = dictionary[TxCipherParams_iosAlgorithm] as! String
+        let algorithm = dictionary[TxCipherParams_iosAlgorithm] as! String
         let key = dictionary[TxCipherParams_iosKey] as! FlutterStandardTypedData
         return ARTCipherParams(algorithm: algorithm, key: key.data as NSData)
     }
