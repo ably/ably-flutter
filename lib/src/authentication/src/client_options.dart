@@ -28,7 +28,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// Use constants from [LogLevel] to pass arguments
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3b
-  int logLevel = LogLevel.info;
+  LogLevel logLevel = LogLevel.info;
 
   /// for development environments only
   ///

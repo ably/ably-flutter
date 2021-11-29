@@ -30,6 +30,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'remoteMessage',
 
     'errorInfo',
+    'logLevel',
 
     // Events
     'connectionStateChange',
@@ -325,6 +326,10 @@ const List<Map<String, dynamic>> _objects = [
       'embedded',
       'other'
     ]
+  },
+  {
+    'name': 'LogLevelEnum',
+    'properties': ['none', 'verbose', 'debug', 'info', 'warn', 'error'],
   },
   {
     'name': 'DevicePlatformEnum',
