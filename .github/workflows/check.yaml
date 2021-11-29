@@ -9,6 +9,9 @@ jobs:
     name: "Swift formatting checks"
     runs-on: macos-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: 'Install SwiftFormat'
         run: 'brew install swiftformat'
         
