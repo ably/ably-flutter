@@ -68,6 +68,7 @@ class Codec extends StandardMessageCodec {
           _CodecPair<TokenRequest>(_encodeTokenRequest, null),
       CodecTypes.restChannelOptions:
           _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
+
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
         _encodeRealtimeChannelOptions,
         null,
