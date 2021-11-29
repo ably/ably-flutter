@@ -2,11 +2,11 @@ import Foundation
 
 public class PushHandlers: NSObject {
     @objc
-    public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;
+    public static var pushNotificationTapLaunchedAppFromTerminatedData: [AnyHashable: Any]?
 
     @objc
     public static let activate: FlutterHandler = { ably, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
+        if PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
@@ -16,7 +16,7 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let deactivate: FlutterHandler = { ably, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil) {
+        if PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
@@ -25,7 +25,7 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let getNotificationSettings: (_ ably: AblyFlutter, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { ably, call, result in
+    public static let getNotificationSettings: (_ ably: AblyFlutter, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { _, _, result in
         UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
             result(settings)
         }
@@ -37,41 +37,41 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let requestPermission: FlutterHandler = { ably, call, result in
+    public static let requestPermission: FlutterHandler = { _, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let messageData = message.message as! AblyFlutterMessage
-        let dataMap = messageData.message as! Dictionary<String, Any>
+        let dataMap = messageData.message as! [String: Any]
 
         var options: UNAuthorizationOptions = []
 
-        if (dataMap[TxPushRequestPermission_badge] as! Bool) {
+        if dataMap[TxPushRequestPermission_badge] as! Bool {
             options.insert(.badge)
         }
-        if (dataMap[TxPushRequestPermission_sound] as! Bool) {
+        if dataMap[TxPushRequestPermission_sound] as! Bool {
             options.insert(.sound)
         }
-        if (dataMap[TxPushRequestPermission_alert] as! Bool) {
+        if dataMap[TxPushRequestPermission_alert] as! Bool {
             options.insert(.alert)
         }
-        if (dataMap[TxPushRequestPermission_carPlay] as! Bool) {
+        if dataMap[TxPushRequestPermission_carPlay] as! Bool {
             options.insert(.carPlay)
         }
-        if (dataMap[TxPushRequestPermission_criticalAlert] as! Bool) {
+        if dataMap[TxPushRequestPermission_criticalAlert] as! Bool {
             if #available(iOS 12.0, *) {
                 options.insert(.criticalAlert)
             }
         }
-        if (dataMap[TxPushRequestPermission_provisional] as! Bool) {
+        if dataMap[TxPushRequestPermission_provisional] as! Bool {
             if #available(iOS 12.0, *) {
                 options.insert(.provisional)
             }
         }
-        if (dataMap[TxPushRequestPermission_providesAppNotificationSettings] as! Bool) {
+        if dataMap[TxPushRequestPermission_providesAppNotificationSettings] as! Bool {
             if #available(iOS 12.0, *) {
                 options.insert(.providesAppNotificationSettings)
             }
         }
-        if (dataMap[TxPushRequestPermission_announcement] as! Bool) {
+        if dataMap[TxPushRequestPermission_announcement] as! Bool {
             if #available(iOS 13.0, *) {
                 options.insert(.announcement)
             }
@@ -104,8 +104,8 @@ public class PushHandlers: NSObject {
     public static let listSubscriptions: FlutterHandler = { ably, call, result in
         let message = call.arguments as! AblyFlutterMessage
         let nestedMessage = message.message as! AblyFlutterMessage
-        let dataMap = nestedMessage.message as! Dictionary<String, Any>
-        let params = dataMap[TxTransportKeys_params] as! Dictionary<String, String>
+        let dataMap = nestedMessage.message as! [String: Any]
+        let params = dataMap[TxTransportKeys_params] as! [String: String]
 
         if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
             do {
@@ -156,7 +156,7 @@ public class PushHandlers: NSObject {
     }
 
     @objc
-    public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { ably, call, result in
+    public static let pushNotificationTapLaunchedAppFromTerminated: FlutterHandler = { _, _, result in
         if let data = pushNotificationTapLaunchedAppFromTerminatedData {
             result(pushNotificationTapLaunchedAppFromTerminatedData)
         }
@@ -170,15 +170,15 @@ public class PushHandlers: NSObject {
         let rest = instanceStore.rest(from: ablyClientHandle)
 
         if let realtime = realtime {
-            return realtime.push;
+            return realtime.push
         }
 
         if let rest = rest {
-            return rest.push;
+            return rest.push
         }
 
         result(FlutterError(code: String(40000), message: "No ably client exists (rest or realtime)", details: nil))
-        return nil;
+        return nil
     }
 
     /// Gets the client.channels.get(channelName).push property from ARTRealtime or ARTRest
@@ -190,15 +190,15 @@ public class PushHandlers: NSObject {
         let instanceStore = ably.instanceStore
         let message = call.arguments as! AblyFlutterMessage
 
-        var clientHandle: NSNumber? = nil;
-        var channelName: String? = nil;
+        var clientHandle: NSNumber?
+        var channelName: String?
 
         if let ablyFlutterMessage = message.message as? AblyFlutterMessage {
             if let nestedAblyFlutterMessage = ablyFlutterMessage.message as? AblyFlutterMessage {
                 clientHandle = nestedAblyFlutterMessage.handle
-                let dictionary = nestedAblyFlutterMessage.message as! Dictionary<String, Any>
+                let dictionary = nestedAblyFlutterMessage.message as! [String: Any]
                 channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            } else if let dictionary = ablyFlutterMessage.message as? Dictionary<String, Any> {
+            } else if let dictionary = ablyFlutterMessage.message as? [String: Any] {
                 clientHandle = ablyFlutterMessage.handle
                 channelName = (dictionary[TxTransportKeys_channelName] as! String)
             }

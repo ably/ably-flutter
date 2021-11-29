@@ -1,21 +1,21 @@
-import Foundation
 import Flutter
+import Foundation
 
 // This class is used to replace the UNUserNotificationCenterDelegate set by the user.
 //
 // It makes sure to also call the same delegate methods implemented on the original
 // UNUserNotificationCenter.delegate, if it exists
 public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDelegate {
-    var delegate: UNUserNotificationCenterDelegate? = nil;
+    var delegate: UNUserNotificationCenterDelegate?
     let methodChannel: FlutterMethodChannel
-    
+
     @objc(initWithDelegate:andMethodChannel:) public init(_ delegate: UNUserNotificationCenterDelegate, _ methodChannel: FlutterMethodChannel) {
-        self.delegate = delegate;
-        self.methodChannel = methodChannel;
+        self.delegate = delegate
+        self.methodChannel = methodChannel
     }
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let message = RemoteMessage.fromNotificationContent(content:notification.request.content);
+
+    public func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let message = RemoteMessage.fromNotificationContent(content: notification.request.content)
         methodChannel.invokeMethod(AblyPlatformMethod_pushOnShowNotificationInForeground, arguments: message) { result in
             if let result = result as? NSNumber, result == NSNumber(value: true) {
                 if #available(iOS 14.0, *) {
@@ -28,11 +28,11 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
             }
         }
     }
-    
+
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let remoteMessage = RemoteMessage.fromNotificationContent(content: response.notification.request.content)
         methodChannel.invokeMethod(AblyPlatformMethod_pushOnNotificationTap, arguments: remoteMessage, result: nil)
-        
+
         // `as` is used because userNotificationCenter on its own is ambiguous (userNotificationCenter corresponds to 3 methods).
         // See https://stackoverflow.com/questions/35658334/how-do-i-resolve-ambiguous-use-of-compile-error-with-swift-selector-syntax
         let didReceiveDelegateMethodSelector = #selector(userNotificationCenter as (UNUserNotificationCenter, UNNotificationResponse, @escaping () -> Void) -> Void)
@@ -43,7 +43,7 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
             completionHandler()
         }
     }
-    
+
     @available(iOS 12.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
         methodChannel.invokeMethod(AblyPlatformMethod_pushOpenSettingsFor, arguments: nil, result: nil)
@@ -52,17 +52,17 @@ public class PushNotificationEventHandlers: NSObject, UNUserNotificationCenterDe
             delegate.userNotificationCenter?(center, openSettingsFor: notification)
         }
     }
-    
+
     @objc
-    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        var methodName = AblyPlatformMethod_pushOnMessage;
-        if (application.applicationState == .background || application.applicationState == .inactive) {
+    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        var methodName = AblyPlatformMethod_pushOnMessage
+        if application.applicationState == .background || application.applicationState == .inactive {
             methodName = AblyPlatformMethod_pushOnBackgroundMessage
         }
-        
-        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: Notification(from: userInfo));
-        methodChannel.invokeMethod(methodName, arguments: remoteMessage) { flutterResult in
-            completionHandler(.newData);
+
+        let remoteMessage = RemoteMessage(data: userInfo._bridgeToObjectiveC(), notification: Notification(from: userInfo))
+        methodChannel.invokeMethod(methodName, arguments: remoteMessage) { _ in
+            completionHandler(.newData)
         }
     }
 }

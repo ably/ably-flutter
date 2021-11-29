@@ -1,10 +1,10 @@
-import Foundation
 import Ably
+import Foundation
 
 public class CryptoHandlers: NSObject {
     @objc
-    public static let getParams: FlutterHandler = { plugin, call, result in
-        let dictionary = call.arguments as! Dictionary<String, Any>
+    public static let getParams: FlutterHandler = { _, call, result in
+        let dictionary = call.arguments as! [String: Any]
         let algorithm = dictionary[TxCryptoGetParams_algorithm] as! String
         let key = dictionary[TxCryptoGetParams_key]
 
@@ -20,10 +20,10 @@ public class CryptoHandlers: NSObject {
             result(FlutterError(code: "CryptoHandlers_getParams", message: "A key must be set for encryption", details: nil))
         }
     }
-    
+
     @objc
-    public static let generateRandomKey: FlutterHandler = { plugin, call, result in
-        let keyLength = call.arguments as! Int;
-        result(ARTCrypto.generateRandomKey(UInt(keyLength)));
+    public static let generateRandomKey: FlutterHandler = { _, call, result in
+        let keyLength = call.arguments as! Int
+        result(ARTCrypto.generateRandomKey(UInt(keyLength)))
     }
 }
