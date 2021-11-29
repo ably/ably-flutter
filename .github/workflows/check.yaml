@@ -5,7 +5,31 @@ on:
       - main
 
 jobs:
-  check:
+  swift:
+    name: "Swift formatting checks"
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Build and install Mint'
+        run: |
+          git clone https://github.com/yonaskolb/Mint.git
+          cd Mint
+          make
+
+      - name: 'Install SwiftFormat'
+        run: 'mint install nicklockwood/SwiftFormat'
+        
+      - name: Run SwiftFormat
+        run: mint run swiftformat --lint --swiftversion 5.5 .
+  java:
+    name: "Java formatting checks"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--set-exit-if-changed"
+  dart:
+    name: "Dart formatting checks"
     runs-on: ubuntu-latest
     steps:
 
@@ -20,7 +44,7 @@ jobs:
           cd test_integration && flutter pub get && cd ..
           cd example && flutter pub get && cd ..
 
-      - name: 'Check formatting issues in the code'
+      - name: 'Check Dart formatting issues in the code'
         run: flutter format --set-exit-if-changed .
 
       - name: 'Flutter analyze help'
