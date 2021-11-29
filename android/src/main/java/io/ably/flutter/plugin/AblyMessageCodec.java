@@ -1,19 +1,11 @@
 package io.ably.flutter.plugin;
 
 import androidx.annotation.Nullable;
-
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.CipherParamsStorage;
@@ -43,6 +35,11 @@ import io.ably.lib.types.PresenceMessage;
 import io.ably.lib.util.Crypto;
 import io.ably.lib.util.Log;
 import io.flutter.plugin.common.StandardMessageCodec;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AblyMessageCodec extends StandardMessageCodec {
 
@@ -88,60 +85,87 @@ public class AblyMessageCodec extends StandardMessageCodec {
   public AblyMessageCodec(CipherParamsStorage cipherParamsStorage) {
     final AblyMessageCodec self = this;
     this.cipherParamsStorage = cipherParamsStorage;
-    codecMap = new HashMap<Byte, CodecPair>() {
-      {
-        put(PlatformConstants.CodecTypes.ablyMessage,
-            new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
-        put(PlatformConstants.CodecTypes.ablyEventMessage,
-            new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
-        put(PlatformConstants.CodecTypes.clientOptions,
-            new CodecPair<>(null, self::decodeClientOptions));
-        put(PlatformConstants.CodecTypes.tokenParams,
-            new CodecPair<>(self::encodeTokenParams, null));
-        put(PlatformConstants.CodecTypes.tokenDetails,
-            new CodecPair<>(null, self::decodeTokenDetails));
-        put(PlatformConstants.CodecTypes.tokenRequest,
-            new CodecPair<>(null, self::decodeTokenRequest));
-        put(PlatformConstants.CodecTypes.restChannelOptions,
-            new CodecPair<>(null, self::decodeRestChannelOptions));
-        put(PlatformConstants.CodecTypes.realtimeChannelOptions,
-            new CodecPair<>(null, self::decodeRealtimeChannelOptions));
-        put(PlatformConstants.CodecTypes.paginatedResult,
-            new CodecPair<>(self::encodePaginatedResult, null));
-        put(PlatformConstants.CodecTypes.restHistoryParams,
-            new CodecPair<>(null, self::decodeRestHistoryParams));
-        put(PlatformConstants.CodecTypes.realtimeHistoryParams,
-            new CodecPair<>(null, self::decodeRealtimeHistoryParams));
-        put(PlatformConstants.CodecTypes.restPresenceParams,
-            new CodecPair<>(null, self::decodeRestPresenceParams));
-        put(PlatformConstants.CodecTypes.realtimePresenceParams,
-            new CodecPair<>(null, self::decodeRealtimePresenceParams));
-        put(PlatformConstants.CodecTypes.errorInfo,
-            new CodecPair<>(self::encodeErrorInfo, null));
-        put(PlatformConstants.CodecTypes.messageData,
-            new CodecPair<>(null, self::decodeChannelMessageData));
-        put(PlatformConstants.CodecTypes.messageExtras,
-            new CodecPair<>(self::encodeChannelMessageExtras, self::decodeChannelMessageExtras));
-        put(PlatformConstants.CodecTypes.message,
-            new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
-        put(PlatformConstants.CodecTypes.presenceMessage,
-            new CodecPair<>(self::encodePresenceMessage, null));
-        put(PlatformConstants.CodecTypes.connectionStateChange,
-            new CodecPair<>(self::encodeConnectionStateChange, null));
-        put(PlatformConstants.CodecTypes.channelStateChange,
-            new CodecPair<>(self::encodeChannelStateChange, null));
-        put(PlatformConstants.CodecTypes.deviceDetails,
-            new CodecPair<>(self::encodeDeviceDetails, null));
-        put(PlatformConstants.CodecTypes.localDevice,
-            new CodecPair<>(self::encodeLocalDevice, null));
-        put(PlatformConstants.CodecTypes.pushChannelSubscription,
-            new CodecPair<>(self::encodePushChannelSubscription, null));
-        put(PlatformConstants.CodecTypes.remoteMessage,
-            new CodecPair<>(self::encodeRemoteMessage, null));
-        put(PlatformConstants.CodecTypes.cipherParams,
-            new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
-      }
-    };
+    codecMap =
+        new HashMap<Byte, CodecPair>() {
+          {
+            put(
+                PlatformConstants.CodecTypes.ablyMessage,
+                new CodecPair<>(self::encodeAblyFlutterMessage, self::decodeAblyFlutterMessage));
+            put(
+                PlatformConstants.CodecTypes.ablyEventMessage,
+                new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
+            put(
+                PlatformConstants.CodecTypes.clientOptions,
+                new CodecPair<>(null, self::decodeClientOptions));
+            put(
+                PlatformConstants.CodecTypes.tokenParams,
+                new CodecPair<>(self::encodeTokenParams, null));
+            put(
+                PlatformConstants.CodecTypes.tokenDetails,
+                new CodecPair<>(null, self::decodeTokenDetails));
+            put(
+                PlatformConstants.CodecTypes.tokenRequest,
+                new CodecPair<>(null, self::decodeTokenRequest));
+            put(
+                PlatformConstants.CodecTypes.restChannelOptions,
+                new CodecPair<>(null, self::decodeRestChannelOptions));
+            put(
+                PlatformConstants.CodecTypes.realtimeChannelOptions,
+                new CodecPair<>(null, self::decodeRealtimeChannelOptions));
+            put(
+                PlatformConstants.CodecTypes.paginatedResult,
+                new CodecPair<>(self::encodePaginatedResult, null));
+            put(
+                PlatformConstants.CodecTypes.restHistoryParams,
+                new CodecPair<>(null, self::decodeRestHistoryParams));
+            put(
+                PlatformConstants.CodecTypes.realtimeHistoryParams,
+                new CodecPair<>(null, self::decodeRealtimeHistoryParams));
+            put(
+                PlatformConstants.CodecTypes.restPresenceParams,
+                new CodecPair<>(null, self::decodeRestPresenceParams));
+            put(
+                PlatformConstants.CodecTypes.realtimePresenceParams,
+                new CodecPair<>(null, self::decodeRealtimePresenceParams));
+            put(
+                PlatformConstants.CodecTypes.errorInfo,
+                new CodecPair<>(self::encodeErrorInfo, null));
+            put(
+                PlatformConstants.CodecTypes.messageData,
+                new CodecPair<>(null, self::decodeChannelMessageData));
+            put(
+                PlatformConstants.CodecTypes.messageExtras,
+                new CodecPair<>(
+                    self::encodeChannelMessageExtras, self::decodeChannelMessageExtras));
+            put(
+                PlatformConstants.CodecTypes.message,
+                new CodecPair<>(self::encodeChannelMessage, self::decodeChannelMessage));
+            put(
+                PlatformConstants.CodecTypes.presenceMessage,
+                new CodecPair<>(self::encodePresenceMessage, null));
+            put(
+                PlatformConstants.CodecTypes.connectionStateChange,
+                new CodecPair<>(self::encodeConnectionStateChange, null));
+            put(
+                PlatformConstants.CodecTypes.channelStateChange,
+                new CodecPair<>(self::encodeChannelStateChange, null));
+            put(
+                PlatformConstants.CodecTypes.deviceDetails,
+                new CodecPair<>(self::encodeDeviceDetails, null));
+            put(
+                PlatformConstants.CodecTypes.localDevice,
+                new CodecPair<>(self::encodeLocalDevice, null));
+            put(
+                PlatformConstants.CodecTypes.pushChannelSubscription,
+                new CodecPair<>(self::encodePushChannelSubscription, null));
+            put(
+                PlatformConstants.CodecTypes.remoteMessage,
+                new CodecPair<>(self::encodeRemoteMessage, null));
+            put(
+                PlatformConstants.CodecTypes.cipherParams,
+                new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
+          }
+        };
   }
 
   @Override
@@ -154,7 +178,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return super.readValueOfType(type, buffer);
   }
 
-  private void readValueFromJson(Map<String, Object> jsonMap, String key, final Consumer<Object> consumer) {
+  private void readValueFromJson(
+      Map<String, Object> jsonMap, String key, final Consumer<Object> consumer) {
     final Object object = jsonMap.get(key);
     if (null != object) {
       consumer.accept(object);
@@ -230,8 +255,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   /**
-   * Converts Map to JsonObject, ArrayList to JsonArray and
-   * returns null if these 2 types are a no-match
+   * Converts Map to JsonObject, ArrayList to JsonArray and returns null if these 2 types are a
+   * no-match
    */
   static JsonElement readValueAsJsonElement(final Object object) {
     if (object instanceof Map) {
@@ -243,9 +268,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   /**
-   * Dart int types get delivered to Java as Integer, unless '32 bits not enough' in which case
-   * they are delivered as Long.
-   * See: https://flutter.dev/docs/development/platform-integration/platform-channels#codec
+   * Dart int types get delivered to Java as Integer, unless '32 bits not enough' in which case they
+   * are delivered as Long. See:
+   * https://flutter.dev/docs/development/platform-integration/platform-channels#codec
    */
   private Long readValueAsLong(final Object object) {
     if (null == object) {
@@ -259,7 +284,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private AblyFlutterMessage decodeAblyFlutterMessage(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final Long handle = readValueAsLong(jsonMap.get(PlatformConstants.TxAblyMessage.registrationHandle));
+    final Long handle =
+        readValueAsLong(jsonMap.get(PlatformConstants.TxAblyMessage.registrationHandle));
     final Object messageType = jsonMap.get(PlatformConstants.TxAblyMessage.type);
     final Integer type = (messageType == null) ? null : Integer.parseInt(messageType.toString());
     Object message = jsonMap.get(PlatformConstants.TxAblyMessage.message);
@@ -286,47 +312,113 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final ClientOptions o = new ClientOptions();
 
     // AuthOptions (super class of ClientOptions)
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, v -> o.authUrl = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> o.authMethod = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.authUrl, v -> o.authUrl = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> o.authMethod = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.key, v -> o.key = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tokenDetails, v -> o.tokenDetails = decodeTokenDetails((Map<String, Object>) v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, v -> o.authHeaders = (Param[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> o.useTokenAuth = (Boolean) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.tokenDetails,
+        v -> o.tokenDetails = decodeTokenDetails((Map<String, Object>) v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.authHeaders, v -> o.authHeaders = (Param[]) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[]) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> o.useTokenAuth = (Boolean) v);
 
     // ClientOptions
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.logLevel, v -> o.logLevel = decodeLogLevel((String) v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.logLevel,
+        v -> o.logLevel = decodeLogLevel((String) v));
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tls, v -> o.tls = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.restHost, v -> o.restHost = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> o.realtimeHost = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.restHost, v -> o.restHost = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> o.realtimeHost = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.port, v -> o.port = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> o.tlsPort = (Integer) v);
-    o.autoConnect = false; // Always avoid auto-connect, to allow handle to be returned back to Dart side before authCallback is called.
-    // If the user specifies autoConnect, we call connect once we get the handle back to the dart side
-    // In other words, Ably Flutter internally manually connects, but to the SDK user this looks like autoConnect.
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useBinaryProtocol, v -> o.useBinaryProtocol = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queueMessages, v -> o.queueMessages = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> o.echoMessages = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.recover, v -> o.recover = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.environment, v -> o.environment = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.idempotentRestPublishing, v -> o.idempotentRestPublishing = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpOpenTimeout, v -> o.httpOpenTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> o.httpRequestTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> o.httpMaxRetryCount = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> o.realtimeRequestTimeout = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> o.fallbackHosts = (String[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> o.fallbackHostsUseDefault = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[]) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> o.tlsPort = (Integer) v);
+    o.autoConnect =
+        false; // Always avoid auto-connect, to allow handle to be returned back to Dart side before
+    // authCallback is called.
+    // If the user specifies autoConnect, we call connect once we get the handle back to the dart
+    // side
+    // In other words, Ably Flutter internally manually connects, but to the SDK user this looks
+    // like autoConnect.
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.useBinaryProtocol,
+        v -> o.useBinaryProtocol = (Boolean) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.queueMessages,
+        v -> o.queueMessages = (Boolean) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> o.echoMessages = (Boolean) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.recover, v -> o.recover = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxClientOptions.environment, v -> o.environment = (String) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.idempotentRestPublishing,
+        v -> o.idempotentRestPublishing = (Boolean) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.httpOpenTimeout,
+        v -> o.httpOpenTimeout = (Integer) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.httpRequestTimeout,
+        v -> o.httpRequestTimeout = (Integer) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.httpMaxRetryCount,
+        v -> o.httpMaxRetryCount = (Integer) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.realtimeRequestTimeout,
+        v -> o.realtimeRequestTimeout = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.fallbackHosts,
+        v -> o.fallbackHosts = (String[]) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.fallbackHostsUseDefault,
+        v -> o.fallbackHostsUseDefault = (Boolean) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.fallbackRetryTimeout,
+        v -> o.fallbackRetryTimeout = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.defaultTokenParams,
+        v -> o.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.channelRetryTimeout,
+        v -> o.channelRetryTimeout = (Integer) v);
+    readValueFromJson(
+        jsonMap,
+        PlatformConstants.TxClientOptions.transportParams,
+        v -> o.transportParams = (Param[]) v);
 
     o.agents = new HashMap<>();
     o.agents.put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
 
-    return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
+    return new PlatformClientOptions(
+        o,
+        jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback)
+            ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback))
+            : false);
   }
 
   private int decodeLogLevel(String logLevelString) {
@@ -353,8 +445,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.token, v -> o.token = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.expires, v -> o.expires = (int) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.issued, v -> o.issued = (int) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.capability, v -> o.capability = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.clientId, v -> o.clientId = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenDetails.capability, v -> o.capability = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenDetails.clientId, v -> o.clientId = (String) v);
 
     return o;
   }
@@ -362,10 +456,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Auth.TokenParams decodeTokenParams(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     final Auth.TokenParams o = new Auth.TokenParams();
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.capability, v -> o.capability = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.clientId, v -> o.clientId = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.timestamp, v -> o.timestamp = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenParams.capability, v -> o.capability = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenParams.clientId, v -> o.clientId = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenParams.timestamp, v -> o.timestamp = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenParams.ttl, v -> o.ttl = readValueAsLong(v));
     // nonce is not supported in ably-java
     // Track @ https://github.com/ably/ably-flutter/issues/14
     return o;
@@ -374,20 +472,27 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Auth.TokenRequest decodeTokenRequest(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     final Auth.TokenRequest o = new Auth.TokenRequest();
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.keyName, v -> o.keyName = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenRequest.keyName, v -> o.keyName = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.nonce, v -> o.nonce = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.mac, v -> o.mac = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.capability, v -> o.capability = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.clientId, v -> o.clientId = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.timestamp, v -> o.timestamp = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenRequest.ttl, v -> o.ttl = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenRequest.capability, v -> o.capability = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenRequest.clientId, v -> o.clientId = (String) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenRequest.timestamp, v -> o.timestamp = readValueAsLong(v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxTokenRequest.ttl, v -> o.ttl = readValueAsLong(v));
     return o;
   }
 
   private ChannelOptions decodeRestChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     ChannelOptions options = new ChannelOptions();
-    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRestChannelOptions.cipherParams));
+    options.cipherParams =
+        decodeCipherParams(
+            (Map<String, Object>) jsonMap.get(PlatformConstants.TxRestChannelOptions.cipherParams));
     if (options.cipherParams != null) {
       options.encrypted = true;
     }
@@ -397,12 +502,17 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private ChannelOptions decodeRealtimeChannelOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
     ChannelOptions options = new ChannelOptions();
-    options.cipherParams = decodeCipherParams((Map<String, Object>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams));
+    options.cipherParams =
+        decodeCipherParams(
+            (Map<String, Object>)
+                jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.cipherParams));
     if (options.cipherParams != null) {
       options.encrypted = true;
     }
-    options.params = (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
-    final ArrayList<String> modes = (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
+    options.params =
+        (Map<String, String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.params);
+    final ArrayList<String> modes =
+        (ArrayList<String>) jsonMap.get(PlatformConstants.TxRealtimeChannelOptions.modes);
     if (modes != null && modes.size() > 0) {
       options.modes = createChannelModesArray(modes);
     }
@@ -421,9 +531,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  private Crypto.CipherParams decodeCipherParams(@Nullable Map<String, Object> cipherParamsDictionary) {
+  private Crypto.CipherParams decodeCipherParams(
+      @Nullable Map<String, Object> cipherParamsDictionary) {
     if (cipherParamsDictionary == null) return null;
-    final Integer cipherParamsHandle = (Integer) cipherParamsDictionary.get(PlatformConstants.TxCipherParams.androidHandle);
+    final Integer cipherParamsHandle =
+        (Integer) cipherParamsDictionary.get(PlatformConstants.TxCipherParams.androidHandle);
     return cipherParamsStorage.from(cipherParamsHandle);
   }
 
@@ -459,7 +571,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final Object limit = jsonMap.get(PlatformConstants.TxRestHistoryParams.limit);
     final Object direction = jsonMap.get(PlatformConstants.TxRestHistoryParams.direction);
     if (start != null) {
-      params[index++] = new Param(PlatformConstants.TxRestHistoryParams.start, readValueAsLong(start));
+      params[index++] =
+          new Param(PlatformConstants.TxRestHistoryParams.start, readValueAsLong(start));
     }
     if (end != null) {
       params[index++] = new Param(PlatformConstants.TxRestHistoryParams.end, readValueAsLong(end));
@@ -468,7 +581,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
       params[index++] = new Param(PlatformConstants.TxRestHistoryParams.limit, (Integer) limit);
     }
     if (direction != null) {
-      params[index] = new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction);
+      params[index] =
+          new Param(PlatformConstants.TxRestHistoryParams.direction, (String) direction);
     }
     return params;
   }
@@ -483,19 +597,23 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final Object direction = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.direction);
     final Object untilAttach = jsonMap.get(PlatformConstants.TxRealtimeHistoryParams.untilAttach);
     if (start != null) {
-      params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.start, readValueAsLong(start));
+      params[index++] =
+          new Param(PlatformConstants.TxRealtimeHistoryParams.start, readValueAsLong(start));
     }
     if (end != null) {
-      params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.end, readValueAsLong(end));
+      params[index++] =
+          new Param(PlatformConstants.TxRealtimeHistoryParams.end, readValueAsLong(end));
     }
     if (limit != null) {
       params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.limit, (Integer) limit);
     }
     if (direction != null) {
-      params[index++] = new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
+      params[index++] =
+          new Param(PlatformConstants.TxRealtimeHistoryParams.direction, (String) direction);
     }
     if (untilAttach != null) {
-      params[index] = new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) untilAttach);
+      params[index] =
+          new Param(PlatformConstants.TxRealtimeHistoryParams.untilAttach, (boolean) untilAttach);
     }
     return params;
   }
@@ -511,10 +629,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
       params[index++] = new Param(PlatformConstants.TxRestPresenceParams.limit, (Integer) limit);
     }
     if (clientId != null) {
-      params[index++] = new Param(PlatformConstants.TxRestPresenceParams.clientId, (String) clientId);
+      params[index++] =
+          new Param(PlatformConstants.TxRestPresenceParams.clientId, (String) clientId);
     }
     if (connectionId != null) {
-      params[index] = new Param(PlatformConstants.TxRestPresenceParams.connectionId, (String) connectionId);
+      params[index] =
+          new Param(PlatformConstants.TxRestPresenceParams.connectionId, (String) connectionId);
     }
     return params;
   }
@@ -525,15 +645,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
     int index = 0;
     final Object waitForSync = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.waitForSync);
     final Object clientId = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.clientId);
-    final Object connectionId = jsonMap.get(PlatformConstants.TxRealtimePresenceParams.connectionId);
+    final Object connectionId =
+        jsonMap.get(PlatformConstants.TxRealtimePresenceParams.connectionId);
     if (waitForSync != null) {
-      params[index++] = new Param(PlatformConstants.TxRealtimePresenceParams.waitForSync, (Boolean) waitForSync);
+      params[index++] =
+          new Param(PlatformConstants.TxRealtimePresenceParams.waitForSync, (Boolean) waitForSync);
     }
     if (clientId != null) {
-      params[index++] = new Param(PlatformConstants.TxRealtimePresenceParams.clientId, (String) clientId);
+      params[index++] =
+          new Param(PlatformConstants.TxRealtimePresenceParams.clientId, (String) clientId);
     }
     if (connectionId != null) {
-      params[index] = new Param(PlatformConstants.TxRealtimePresenceParams.connectionId, (String) connectionId);
+      params[index] =
+          new Param(PlatformConstants.TxRealtimePresenceParams.connectionId, (String) connectionId);
     }
     return params;
   }
@@ -563,15 +687,17 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.id, v -> o.id = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.clientId, v -> o.clientId = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.name, v -> o.name = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxMessage.data, v -> o.data = decodeMessageData(v));
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxMessage.data, v -> o.data = decodeMessageData(v));
     readValueFromJson(jsonMap, PlatformConstants.TxMessage.encoding, v -> o.encoding = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxMessage.extras, v -> o.extras = (MessageExtras) v);
+    readValueFromJson(
+        jsonMap, PlatformConstants.TxMessage.extras, v -> o.extras = (MessageExtras) v);
     return o;
   }
 
-//===============================================================
-//=====================HANDLING WRITE============================
-//===============================================================
+  // ===============================================================
+  // =====================HANDLING WRITE============================
+  // ===============================================================
 
   private Map<String, Object> encodeAblyFlutterMessage(AblyFlutterMessage c) {
     if (c == null) return null;
@@ -714,11 +840,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         for (Object item : items) {
           list.add((Map<String, Object>) pair.encode(item));
         }
-        writeValueToJson(
-            jsonMap,
-            PlatformConstants.TxPaginatedResult.items,
-            list
-        );
+        writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.items, list);
         writeValueToJson(jsonMap, PlatformConstants.TxPaginatedResult.type, type & 0xff);
       }
     } else {
@@ -728,25 +850,38 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c) {
+  private Map<String, Object> encodeConnectionStateChange(
+      ConnectionStateListener.ConnectionStateChange c) {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
-    writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, encodeConnectionState(c.current));
-    writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, encodeConnectionState(c.previous));
-    writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, encodeConnectionEvent(c.event));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxConnectionStateChange.current,
+        encodeConnectionState(c.current));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxConnectionStateChange.previous,
+        encodeConnectionState(c.previous));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxConnectionStateChange.event, encodeConnectionEvent(c.event));
     writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.retryIn, c.retryIn);
-    writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.reason));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.reason));
     return jsonMap;
   }
 
   private Map<String, Object> encodeChannelStateChange(ChannelStateListener.ChannelStateChange c) {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
-    writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.current, encodeChannelState(c.current));
-    writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.previous, encodeChannelState(c.previous));
-    writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxChannelStateChange.current, encodeChannelState(c.current));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxChannelStateChange.previous, encodeChannelState(c.previous));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
     writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
-    writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
     return jsonMap;
   }
 
@@ -759,7 +894,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
-    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxDeviceDetails.devicePushDetails,
+        encodeDevicePushDetails(c.push));
 
     return jsonMap;
   }
@@ -769,8 +907,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final HashMap<String, Object> jsonMap = new HashMap<>();
 
     writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.recipient, c.recipient);
-    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.state, encodeDevicePushDetailsState(c.state));
-    writeValueToJson(jsonMap, PlatformConstants.TxDevicePushDetails.errorReason, encodeErrorInfo(c.errorReason));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxDevicePushDetails.state,
+        encodeDevicePushDetailsState(c.state));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxDevicePushDetails.errorReason, encodeErrorInfo(c.errorReason));
 
     return jsonMap;
   }
@@ -795,14 +937,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
     final HashMap<String, Object> jsonMap = new HashMap<>();
 
     writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceSecret, c.deviceSecret);
-    writeValueToJson(jsonMap, PlatformConstants.TxLocalDevice.deviceIdentityToken, c.deviceIdentityToken);
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxLocalDevice.deviceIdentityToken, c.deviceIdentityToken);
 
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.id, c.id);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.clientId, c.clientId);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.platform, c.platform);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.formFactor, c.formFactor);
     writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.metadata, c.metadata);
-    writeValueToJson(jsonMap, PlatformConstants.TxDeviceDetails.devicePushDetails, encodeDevicePushDetails(c.push));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxDeviceDetails.devicePushDetails,
+        encodeDevicePushDetails(c.push));
 
     return jsonMap;
   }
@@ -867,7 +1013,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (c == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.id, c.id);
-    writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.action, encodePresenceAction(c.action));
+    writeValueToJson(
+        jsonMap, PlatformConstants.TxPresenceMessage.action, encodePresenceAction(c.action));
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.clientId, c.clientId);
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.connectionId, c.connectionId);
     writeValueToJson(jsonMap, PlatformConstants.TxPresenceMessage.timestamp, c.timestamp);
@@ -882,7 +1029,10 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (message == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
     writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.data, message.getData());
-    writeValueToJson(jsonMap, PlatformConstants.TxRemoteMessage.notification, encodeNotification(message.getNotification()));
+    writeValueToJson(
+        jsonMap,
+        PlatformConstants.TxRemoteMessage.notification,
+        encodeNotification(message.getNotification()));
     return jsonMap;
   }
 
@@ -893,5 +1043,4 @@ public class AblyMessageCodec extends StandardMessageCodec {
     writeValueToJson(jsonMap, PlatformConstants.TxNotification.body, notification.getBody());
     return jsonMap;
   }
-
 }

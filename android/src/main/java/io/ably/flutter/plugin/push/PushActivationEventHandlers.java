@@ -3,11 +3,9 @@ package io.ably.flutter.plugin.push;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.lib.types.ErrorInfo;
 import io.ably.lib.util.IntentUtils;
@@ -20,8 +18,8 @@ public class PushActivationEventHandlers {
   private static final String PUSH_UPDATE_FAILED_ACTION = "io.ably.broadcast.PUSH_UPDATE_FAILED";
 
   static PushActivationEventHandlers instance;
-  final private BroadcastReceiver broadcastReceiver;
-  final private MethodChannel methodChannel;
+  private final BroadcastReceiver broadcastReceiver;
+  private final MethodChannel methodChannel;
   private MethodChannel.Result resultForActivate;
   private MethodChannel.Result resultForDeactivate;
 
@@ -81,7 +79,8 @@ public class PushActivationEventHandlers {
       }
     }
 
-    private void returnMethodCallResult(MethodChannel.Result result, @Nullable ErrorInfo errorInfo) {
+    private void returnMethodCallResult(
+        MethodChannel.Result result, @Nullable ErrorInfo errorInfo) {
       if (errorInfo != null) {
         result.error(String.valueOf(errorInfo.code), errorInfo.message, errorInfo);
       } else {

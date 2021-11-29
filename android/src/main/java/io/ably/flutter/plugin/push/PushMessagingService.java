@@ -1,10 +1,8 @@
 package io.ably.flutter.plugin.push;
 
 import androidx.annotation.NonNull;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import io.ably.lib.push.ActivationContext;
 import io.ably.lib.types.RegistrationToken;
 
@@ -16,11 +14,13 @@ import io.ably.lib.types.RegistrationToken;
 // in response to an intent filter, but only 1 activity/ service can be called. This means
 // we won't conflict with other packages/ plugins and will be more reliable.
 // See `android:permission` on `<receiver>`
-// [docs](https://developer.android.com/guide/topics/manifest/receiver-element#prmsn) for more information.
+// [docs](https://developer.android.com/guide/topics/manifest/receiver-element#prmsn) for more
+// information.
 public class PushMessagingService extends FirebaseMessagingService {
   @Override
   public void onNewToken(@NonNull String registrationToken) {
-    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+    ActivationContext.getActivationContext(this)
+        .onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
     super.onNewToken(registrationToken);
   }
 

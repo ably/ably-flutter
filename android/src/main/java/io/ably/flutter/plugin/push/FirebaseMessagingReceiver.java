@@ -8,23 +8,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
-import java.util.List;
-
 import io.ably.flutter.plugin.AblyFlutter;
+import java.util.List;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
 
-  @Nullable
-  private PendingResult asyncProcessingPendingResult = null;
+  @Nullable private PendingResult asyncProcessingPendingResult = null;
 
   @Nullable
-  private FlutterBackgroundMessageProcessingCompleteReceiver flutterBackgroundMessageProcessingCompleteReceiver = null;
+  private FlutterBackgroundMessageProcessingCompleteReceiver
+      flutterBackgroundMessageProcessingCompleteReceiver = null;
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -34,8 +31,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
   /**
    * Launches a broadcast receiver ([BackgroundMessageProcessingCompleteReceiver]) so that the
-   * enclosing receiver (FirebaseMessagingReceiver), can be informed when the Flutter
-   * application completes. The Flutter application also has a receiver
+   * enclosing receiver (FirebaseMessagingReceiver), can be informed when the Flutter application
+   * completes. The Flutter application also has a receiver
    * (PushMessagingEventHandlers.BroadcastReceiver) to listen to messages from this receiver
    * (FirebaseMessagingReceiver).
    */
@@ -46,13 +43,14 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     // On iOS, the notification may be shown before the  message is processed by the application.
     // goAsync() also increases the execution time from 10s/ 20s (depending on API level) to 30s
     if (flutterBackgroundMessageProcessingCompleteReceiver == null) {
-      flutterBackgroundMessageProcessingCompleteReceiver = new FlutterBackgroundMessageProcessingCompleteReceiver(context);
+      flutterBackgroundMessageProcessingCompleteReceiver =
+          new FlutterBackgroundMessageProcessingCompleteReceiver(context);
       asyncProcessingPendingResult = goAsync();
     }
   }
 
-  private void sendMessageToFlutterApplication(@NonNull final Context context,
-                                               @NonNull final Intent intent) {
+  private void sendMessageToFlutterApplication(
+      @NonNull final Context context, @NonNull final Intent intent) {
     final Boolean isApplicationInForeground = isApplicationInForeground(context);
 
     if (isApplicationInForeground) {
@@ -65,9 +63,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   }
 
   private Boolean isApplicationInForeground(@NonNull final Context context) {
-    final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    final ActivityManager activityManager =
+        (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     // This only shows processes for the current android app.
-    final List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+    final List<ActivityManager.RunningAppProcessInfo> appProcesses =
+        activityManager.getRunningAppProcesses();
 
     if (appProcesses == null) {
       // If no processes are running, appProcesses are null, not an empty list.
@@ -90,7 +90,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   }
 
   /**
-   * A dynamic broadcast receiver registered to listen to a `PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE`
+   * A dynamic broadcast receiver registered to listen to a
+   * `PUSH_ON_BACKGROUND_MESSAGE_PROCESSING_COMPLETE`
    */
   class FlutterBackgroundMessageProcessingCompleteReceiver extends BroadcastReceiver {
     FlutterBackgroundMessageProcessingCompleteReceiver(final Context context) {
@@ -102,7 +103,8 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
       if (flutterBackgroundMessageProcessingCompleteReceiver != null) {
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(flutterBackgroundMessageProcessingCompleteReceiver);
+        LocalBroadcastManager.getInstance(context)
+            .unregisterReceiver(flutterBackgroundMessageProcessingCompleteReceiver);
         flutterBackgroundMessageProcessingCompleteReceiver = null;
       }
 
