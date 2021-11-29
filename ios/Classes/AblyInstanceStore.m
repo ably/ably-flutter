@@ -10,13 +10,12 @@
     long long _nextHandle;
 }
 
-+ (instancetype)sharedInstance {
++ (AblyInstanceStore *)sharedInstance {
     static AblyInstanceStore *sharedInstance = nil;
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [[self alloc] init];
-        }
-    }
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
     return sharedInstance;
 }
 
