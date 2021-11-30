@@ -879,7 +879,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         jsonMap, PlatformConstants.TxChannelStateChange.previous, encodeChannelState(c.previous));
     writeValueToJson(
         jsonMap, PlatformConstants.TxChannelStateChange.event, encodeChannelEvent(c.event));
-    writeValueToJson(jsonMap, PlatformConstants.TxChannelStateChange.resumed, c.resumed);
+    jsonMap.put(PlatformConstants.TxChannelStateChange.resumed, c.resumed);
     writeValueToJson(
         jsonMap, PlatformConstants.TxChannelStateChange.reason, encodeErrorInfo(c.reason));
     return jsonMap;

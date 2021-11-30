@@ -228,7 +228,7 @@ static AblyCodecEncoder encodeChannelStateChange = ^NSMutableDictionary*(ARTChan
                 TxChannelStateChange_event,
                 [AblyFlutterWriter encodeChannelEvent: [stateChange event]]);
 
-    WRITE_VALUE(dictionary, TxChannelStateChange_resumed, [stateChange resumed]?@([stateChange resumed]):nil);
+    dictionary[TxChannelStateChange_resumed] = [NSNumber numberWithBool: [stateChange resumed]];
     WRITE_VALUE(dictionary, TxChannelStateChange_reason, encodeErrorInfo([stateChange reason]));
     return dictionary;
 };
