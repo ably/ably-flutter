@@ -33,7 +33,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   Iterator<ChannelType> get iterator =>
       _ChannelIterator<ChannelType>(_channels.values.toList());
 
-  /// Deletes the channel resource so it can be garbage collected
+  /// Releases the channel resource so it can be garbage collected
   void release(String name) {
     _channels.remove(name);
   }
