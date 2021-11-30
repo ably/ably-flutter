@@ -27,7 +27,7 @@ jobs:
 
       - uses: subosito/flutter-action@v1
 
-      - name: 'Run Flutter Driver tests'
+      - name: 'Run integration tests on iOS'
         timeout-minutes: 30
         run: |
           flutter pub get
@@ -36,7 +36,7 @@ jobs:
   android:
     strategy:
       matrix:
-        api-level: [21, 29]
+        api-level: [21, 29, 31]
       fail-fast: false
 
     # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
@@ -52,12 +52,12 @@ jobs:
 
       - uses: subosito/flutter-action@v1
 
-      - name: 'Run Flutter Driver tests'
+      - name: 'Run integration tests on Android ${{ matrix.device }}'
         timeout-minutes: 30
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           script: |
-            /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
+            /Users/runner/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager list
             flutter pub get
             cd test_integration && ./run_integration_tests.sh
