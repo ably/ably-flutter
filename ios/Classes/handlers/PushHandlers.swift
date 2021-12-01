@@ -9,18 +9,28 @@ public class PushHandlers: NSObject {
         if PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
-            PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
-            push.activate()
+            #if targetEnvironment(simulator)
+            print("Device activated for push immediately because you application is running in simulator. APNs does not work on a simulator.")
+                result(nil)
+            #else
+                PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
+                push.activate()
+            #endif
         }
     }
 
     @objc
     public static let deactivate: FlutterHandler = { ably, call, result in
-        if PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil {
+        if (PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate != nil) {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
-            PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
-            push.deactivate()
+            #if targetEnvironment(simulator)
+            print("Device deactivated for push immediately because you application is running in simulator. APNs does not work on a simulator.")
+                result(nil)
+            #else
+                PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
+                push.deactivate()
+            #endif
         }
     }
 
