@@ -5,9 +5,8 @@ set -o pipefail
 
 MY_PATH=$(pwd)
 
-echo "Checking formatting of Dart, Swift and Java. This won't format the files."
-echo "❓ To format files, run '. format-files.sh'\n"
-# Objective-C files are not checked.
+echo "Checking formatting of Dart, Swift and Java files, without modifying them."
+echo "❓ To format files, run '. format-files.sh'\n" # Objective-C files are not checked.
 
 # Redirect output to stderr.
 exec 1>&2
