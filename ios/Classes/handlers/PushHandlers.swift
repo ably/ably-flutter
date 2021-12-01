@@ -10,11 +10,12 @@ public class PushHandlers: NSObject {
             returnMethodAlreadyRunningError(result: result, methodName: "activate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             #if targetEnvironment(simulator)
-            print("Device activated for push immediately because you application is running in simulator. APNs does not work on a simulator.")
-                result(nil)
+                result(FlutterError(code: "PushHandlers_activate", message: "Device activation for push notifications does not work on iOS simulator because APNs is not supported.", details: nil))
+                return
             #else
                 PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
                 push.activate()
+                return
             #endif
         }
     }
@@ -25,8 +26,8 @@ public class PushHandlers: NSObject {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             #if targetEnvironment(simulator)
-            print("Device deactivated for push immediately because you application is running in simulator. APNs does not work on a simulator.")
-                result(nil)
+                result(FlutterError(code: "PushHandlers_deactivate", message: "Device deactivation for push notifications does not work on iOS simulator because APNs is not supported.", details: nil))
+                return
             #else
                 PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
                 push.deactivate()
