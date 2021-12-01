@@ -20,7 +20,7 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let deactivate: FlutterHandler = { ably, call, result in
-        if PushActivationEventHandlers.getInstance(methodChannel: plugin.ably.channel!).flutterResultForDeactivate != nil {
+        if PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil {
             returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
         } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             #if targetEnvironment(simulator)
