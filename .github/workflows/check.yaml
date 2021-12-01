@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--set-exit-if-changed --replace" # We use --replace so that the files are not printed to stdout.
+          args: "--set-exit-if-changed --dry-run"
   dart:
     name: "Dart formatting and analyzer checks"
     runs-on: ubuntu-latest
