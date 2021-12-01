@@ -59,7 +59,8 @@ class PushNotificationsActivationSliver extends HookWidget {
           TextSpan(
               text: 'APNs is not available on iOS simulators, so you cannot '
                   'activate the device Ably, since this step requires the'
-                  ' APNs device token.',
+                  ' APNs device token. Calling activate/deactivate will '
+                  'throw an exception.',
               style: TextStyle(color: Colors.black))
         ])),
       );
