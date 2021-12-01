@@ -3,7 +3,6 @@
 set -e
 set -o pipefail
 
-# This file is saved in $project_directory/.git/hooks/
 MY_PATH=$(pwd)
 
 echo "Checking formatting of Dart, Swift and Java. This won't format the files."
