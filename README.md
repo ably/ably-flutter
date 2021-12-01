@@ -126,28 +126,35 @@ Authenticating using [token authentication](https://ably.com/documentation/core-
 final clientOptions = ably.ClientOptions()
   // If a clientId was set in ClientOptions, it will be available in the authCallback's first parameter (ably.TokenParams).
   ..clientId = _clientId
-  ..authCallback = (ably.TokenParams tokenParams) async {
-    try {
-      // Send the tokenParamsMap (Map<String, dynamic>) to your server, using it to create a TokenRequest.
-      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(
-              tokenParams.toMap());
-      return ably.TokenRequest.fromMap(tokenRequestMap);
-    } on http.ClientException catch (e) {
-      print('Failed to createTokenRequest: $e');
-      rethrow;
-    }
-  };
+  ..authCallback = authCallback;
 final realtime = ably.Realtime(options: clientOptions);
 ```
 
-An example of `createTokenRequest`'s implementation making a network request to your server could be:
+An example of `authCallback` and `createTokenRequest`'s implementation making a network request to your server could be:
 
 ```dart
+  Future<ably.TokenRequest> authCallback(ably.TokenParams tokenParams) async {
+    try {
+      final tokenRequestMap = await createTokenRequest(tokenParams.toMap());
+      return ably.TokenRequest.fromMap(tokenRequestMap);
+    } catch (e) {
+      // Log something here for yourself.
+      rethrow;
+    }
+  }
+```
+
+```dart
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+
 Future<Map<String, dynamic>> createTokenRequest(
     Map<String, dynamic> tokenParamsMap) async {
   var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
   // For debugging:
-  bool runningServerLocally = true;
+  const runningServerLocally = true;
   if (runningServerLocally) {
     if (Platform.isAndroid) { // Connect Android device to local server
       url = Uri.parse(
@@ -160,7 +167,10 @@ Future<Map<String, dynamic>> createTokenRequest(
   }
 
   final response = await http.post(url, body: tokenParamsMap);
-  return jsonDecode(response.body) as Map<String, dynamic>;
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+  throw Exception('Failed request with status code: ${response.statusCode}');
 }
 ```
 
