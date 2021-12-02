@@ -223,7 +223,7 @@ class RealtimeSliver extends HookWidget {
             subtitle: TextRow(
                 'Hint',
                 'You must detach and re-attach to the channel'
-                    ' to get RestChannel history.'),
+                    ' to get Realtime history.'),
             query: () => channel.history(
                   ably.RealtimeHistoryParams(
                     limit: 10,
