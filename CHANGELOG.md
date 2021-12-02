@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.2.7](https://github.com/ably/ably-flutter/tree/v1.2.7)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.6...v1.2.7)
+
+**Implemented enhancements:**
+
+- Replace optional fields with default values [\#230](https://github.com/ably/ably-flutter/issues/230)
+- Refactor example app to be more readable [\#212](https://github.com/ably/ably-flutter/issues/212)
+- AuthCallback and InstanceStore Refactoring and documentation [\#250](https://github.com/ably/ably-flutter/pull/250) ([ben-xD](https://github.com/ben-xD))
+- Serialize LogLevel using constants [\#244](https://github.com/ably/ably-flutter/pull/244) ([ben-xD](https://github.com/ben-xD))
+- Replace deprecated method calls in tests [\#243](https://github.com/ably/ably-flutter/pull/243) ([ben-xD](https://github.com/ben-xD))
+- Example app: Paginated results viewer widget [\#242](https://github.com/ably/ably-flutter/pull/242) ([ben-xD](https://github.com/ben-xD))
+- Example app: Move out Realtime and Rest UI to separate widget and service [\#240](https://github.com/ably/ably-flutter/pull/240) ([ben-xD](https://github.com/ben-xD))
+- Example app: Extract System Details sliver into new widget [\#239](https://github.com/ably/ably-flutter/pull/239) ([ben-xD](https://github.com/ben-xD))
+- Hide API key secret inside API key UI [\#237](https://github.com/ably/ably-flutter/pull/237) ([ben-xD](https://github.com/ben-xD))
+- Rename `pushSetOnBackgroundMessage` to `pushBackgroundFlutterApplicationReadyOnAndroid` [\#236](https://github.com/ably/ably-flutter/pull/236) ([ben-xD](https://github.com/ben-xD))
+- Enhancement/run unit tests in ide [\#234](https://github.com/ably/ably-flutter/pull/234) ([ben-xD](https://github.com/ben-xD))
+- Add default values to ClientOptions [\#233](https://github.com/ably/ably-flutter/pull/233) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- Clear iOS platform instances synchronously [\#249](https://github.com/ably/ably-flutter/pull/249) ([ben-xD](https://github.com/ben-xD))
+
+**Closed issues:**
+
+- 1.2.6 java.lang.NullPointerException when stream fails to close [\#274](https://github.com/ably/ably-flutter/issues/274)
+- 1.2.6 java.lang.NullPointerException when using token auth  [\#272](https://github.com/ably/ably-flutter/issues/272)
+- `setMockMethodCallHandler` is deprecated. Use `tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler` instead [\#173](https://github.com/ably/ably-flutter/issues/173)
+
+**Merged pull requests:**
+
+- Rename inconsistent methods to be more consistent [\#248](https://github.com/ably/ably-flutter/pull/248) ([ben-xD](https://github.com/ben-xD))
+- Use Objective-C standard style for LogLevel enum [\#246](https://github.com/ably/ably-flutter/pull/246) ([ben-xD](https://github.com/ben-xD))
+- Platform encapsulation [\#235](https://github.com/ably/ably-flutter/pull/235) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.6](https://github.com/ably/ably-flutter/tree/v1.2.6)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.5...v1.2.6)
