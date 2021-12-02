@@ -1,31 +1,17 @@
-@import Foundation;
-@import Flutter;
-
-@class ARTRest;
-@class ARTRealtime;
-#import "AblyFlutterClientOptions.h"
+#import <Flutter/Flutter.h>
+#import "AblyInstanceStore.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AblyFlutter : NSObject
+@interface AblyFlutter : NSObject<FlutterPlugin, UNUserNotificationCenterDelegate>
 
-@property (nullable) FlutterMethodChannel * channel;
++(instancetype)new NS_UNAVAILABLE;
++(instancetype)init NS_UNAVAILABLE;
 
-+ (instancetype)sharedInstance;
-
--(NSNumber *)createRestWithOptions:(AblyFlutterClientOptions *)options;
-
--(nullable ARTRest *)restFrom:(NSNumber *)handle;
-
--(NSNumber *)createRealtimeWithOptions:(AblyFlutterClientOptions *)options;
-
--(nullable ARTRealtime *)realtimeFrom:(NSNumber *)handle;
-
--(NSNumber *)setPaginatedResult:(ARTPaginatedResult *const)result handle:(nullable NSNumber *)handle;
-
--(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle;
-
--(void)dispose;
+@property(nonatomic) AblyInstanceStore * instanceStore;
+@property(nonatomic) FlutterMethodChannel *channel;
+@property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+@property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
 
 @end
 

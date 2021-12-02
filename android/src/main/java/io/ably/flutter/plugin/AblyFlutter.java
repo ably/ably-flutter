@@ -25,8 +25,8 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMethodCodec;
 
-public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
-    private static final String TAG = AblyFlutterPlugin.class.getName();
+public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry.NewIntentListener {
+    private static final String TAG = AblyFlutter.class.getName();
     private Context applicationContext;
     private AblyMethodCallHandler methodCallHandler;
     private Activity mainActivity;
@@ -50,7 +50,7 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
     // in the same class.
     public static void registerWith(Registrar registrar) {
         Context applicationContext = registrar.context().getApplicationContext();
-        final AblyFlutterPlugin ably = new AblyFlutterPlugin();
+        final AblyFlutter ably = new AblyFlutter();
         registrar.addNewIntentListener(ably);
         ably.setupChannels(registrar.messenger(), applicationContext);
     }
@@ -59,15 +59,11 @@ public class AblyFlutterPlugin implements FlutterPlugin, ActivityAware, PluginRe
         final MethodCodec codec = createCodec(new CipherParamsStorage());
 
         final StreamsChannel streamsChannel = new StreamsChannel(messenger, "io.ably.flutter.stream", codec);
-        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler(applicationContext));
+        streamsChannel.setStreamHandlerFactory(arguments -> new AblyEventStreamHandler());
 
         methodChannel = new MethodChannel(messenger, "io.ably.flutter.plugin", codec);
-        methodCallHandler = new AblyMethodCallHandler(
-            methodChannel,
-            streamsChannel::reset,
-            applicationContext
-        );
-        BackgroundMethodCallHandler backgroundMethodCallHandler = new BackgroundMethodCallHandler(messenger, codec);
+        methodCallHandler = new AblyMethodCallHandler(methodChannel, streamsChannel, applicationContext);
+        new BackgroundMethodCallHandler(messenger, codec);
         methodChannel.setMethodCallHandler(methodCallHandler);
         PushActivationEventHandlers.instantiate(applicationContext, methodChannel);
         PushMessagingEventHandlers.reset(applicationContext, methodChannel);

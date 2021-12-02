@@ -44,14 +44,14 @@ final public class PlatformConstants {
         public static final String resetAblyClients = "resetAblyClients";
         public static final String authCallback = "authCallback";
         public static final String realtimeAuthCallback = "realtimeAuthCallback";
-        public static final String createRestWithOptions = "createRestWithOptions";
+        public static final String createRest = "createRest";
         public static final String setRestChannelOptions = "setRestChannelOptions";
         public static final String publish = "publish";
         public static final String restHistory = "restHistory";
         public static final String restPresenceGet = "restPresenceGet";
         public static final String restPresenceHistory = "restPresenceHistory";
         public static final String releaseRestChannel = "releaseRestChannel";
-        public static final String createRealtimeWithOptions = "createRealtimeWithOptions";
+        public static final String createRealtime = "createRealtime";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
         public static final String attachRealtimeChannel = "attachRealtimeChannel";

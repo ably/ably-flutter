@@ -29,6 +29,6 @@ flutter:
     platforms:
       android:
         package: io.ably.flutter.plugin
-        pluginClass: AblyFlutterPlugin
+        pluginClass: AblyFlutter
       ios:
-        pluginClass: AblyFlutterPlugin
+        pluginClass: AblyFlutter

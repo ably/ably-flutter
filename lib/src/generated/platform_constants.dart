@@ -41,14 +41,14 @@ class PlatformMethod {
   static const String resetAblyClients = 'resetAblyClients';
   static const String authCallback = 'authCallback';
   static const String realtimeAuthCallback = 'realtimeAuthCallback';
-  static const String createRestWithOptions = 'createRestWithOptions';
+  static const String createRest = 'createRest';
   static const String setRestChannelOptions = 'setRestChannelOptions';
   static const String publish = 'publish';
   static const String restHistory = 'restHistory';
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
   static const String releaseRestChannel = 'releaseRestChannel';
-  static const String createRealtimeWithOptions = 'createRealtimeWithOptions';
+  static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
   static const String attachRealtimeChannel = 'attachRealtimeChannel';
