@@ -16,7 +16,6 @@
 - Example app: Extract System Details sliver into new widget [\#239](https://github.com/ably/ably-flutter/pull/239) ([ben-xD](https://github.com/ben-xD))
 - Hide API key secret inside API key UI [\#237](https://github.com/ably/ably-flutter/pull/237) ([ben-xD](https://github.com/ben-xD))
 - Rename `pushSetOnBackgroundMessage` to `pushBackgroundFlutterApplicationReadyOnAndroid` [\#236](https://github.com/ably/ably-flutter/pull/236) ([ben-xD](https://github.com/ben-xD))
-- Enhancement/run unit tests in ide [\#234](https://github.com/ably/ably-flutter/pull/234) ([ben-xD](https://github.com/ben-xD))
 - Add default values to ClientOptions [\#233](https://github.com/ably/ably-flutter/pull/233) ([ben-xD](https://github.com/ben-xD))
 
 **Fixed bugs:**
