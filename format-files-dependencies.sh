@@ -19,4 +19,4 @@ if ! [ -x "$(command -v swiftformat)" ]; then
   exit 1
 fi
 
-echo "  ✅ File formatting dependencies available.\n"
+echo "✅ File formatting dependencies exist.\n"
