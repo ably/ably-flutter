@@ -11,7 +11,7 @@ echo "❓ To format files, run '. format-files.sh'\n" # Objective-C files are no
 # Redirect output to stderr.
 exec 1>&2
 
-. format-files-dependencies.sh
+bash $MY_PATH/format-files-dependencies.sh
 
 echo "❓ Dart file formatting being checked..."
 /opt/flutter/bin/flutter format --set-exit-if-changed $MY_PATH
