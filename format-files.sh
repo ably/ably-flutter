@@ -4,7 +4,7 @@ set -e
 
 MY_PATH=$(dirname "$0")
 
-bash $MY_PATH/format-files-dependencies.sh
+source $MY_PATH/format-files-dependencies.sh
 
 echo "Formatting Dart files..."
 flutter format $MY_PATH

@@ -1,5 +1,5 @@
 
-echo "Checking file formatting dependencies are installed..."
+echo "❓ Checking file formatting dependencies are installed..."
 
 # 1. You should have Flutter installed (e.g. in `/opt/flutter`) and on your PATH. This provides the Dart formatting tool, `flutter format`.
 if ! [ -x "$(command -v flutter)" ]; then

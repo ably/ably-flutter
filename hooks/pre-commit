@@ -6,12 +6,12 @@ set -o pipefail
 MY_PATH=$(pwd)
 
 echo "Checking formatting of Dart, Swift and Java files, without modifying them."
-echo "❓ To format files, run '. format-files.sh'\n" # Objective-C files are not checked.
+echo "To format files, run '. format-files.sh'\n" # Objective-C files are not checked.
 
 # Redirect output to stderr.
 exec 1>&2
 
-bash $MY_PATH/format-files-dependencies.sh
+source $MY_PATH/format-files-dependencies.sh
 
 echo "❓ Dart file formatting being checked..."
 /opt/flutter/bin/flutter format --set-exit-if-changed $MY_PATH
