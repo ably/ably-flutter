@@ -28,7 +28,7 @@ flutter format $MY_PATH
 echo "Formatted Dart 🐥 files.\n"
 
 echo "Formatting Java 🌰 files..."
-JAVA_FILES=$(find $MY_PATH -name "*java" -type f -exec ls {} \;)
+JAVA_FILES=$(find $MY_PATH/android -name "*java" -type f -exec ls {} \;)
 echo $JAVA_FILES | xargs java \
   --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
