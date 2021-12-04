@@ -20,7 +20,7 @@ We use Github actions to check code is formatted correctly. You should format yo
 - To format files, run `./format-files.sh`. See the files to see formatting commands for each language, e.g. `flutter format .` for Dart code.
 - To run this command successfully, you need to setup your environment. Read `format-files.sh` for more information.
 - To automatically check formatting before committing, you can use the git hook shared in this repo. 
-  - Run `git config  core.hooksPath .githooks`
+  - Run `git config core.hooksPath hooks`
   - Git hooks don't work well in SourceTree, as per [SourceTree : Hook failing because paths don't seem to be set correctly](https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792). You will need to open SourceTree using `open /Applications/SourceTree.app/Contents/MacOS/SourceTree`.
 ## High level architecture
 
