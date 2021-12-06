@@ -715,8 +715,10 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
 /// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // This deviceToken will be used when a new Ably client (either realtime or rest) is made.
+    // Set deviceToken on future Ably clients (either realtime or rest) are made.
     _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
+    // Set deviceToken on all existing Ably clients.
+    [_instanceStore didRegisterForRemoteNotificationsWithDeviceToken: deviceToken];
 }
 
 /// Save the error if it occurred during APNs device registration provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.

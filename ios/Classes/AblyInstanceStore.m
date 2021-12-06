@@ -65,6 +65,18 @@
     return _paginatedResults[handle];
 }
 
+// Set device token on all existing clients
+-(void) didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const) deviceToken {
+    for (id restHandle in _restInstances) {
+        ARTRest *const rest = _restInstances[restHandle];
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken rest:rest];
+    }
+    for (id realtimeHandle in _realtimeInstances) {
+        ARTRealtime *const realtime = _realtimeInstances[realtimeHandle];
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken realtime:realtime];
+    }
+}
+
 -(void)reset {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];
