@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const) deviceToken;
 
+@property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+
+@property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
+
 -(void)reset;
 
 @end

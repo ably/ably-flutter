@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 #import "GeneratedPluginRegistrant.h"
+#import "AblyFlutter.h"
 
 @implementation AppDelegate
 
@@ -15,8 +16,13 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [AblyInstanceStore.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError was called with error: %@", error.localizedDescription);
+    AblyInstanceStore.sharedInstance.didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
 
 @end

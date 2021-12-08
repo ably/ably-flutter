@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^FlutterHandler)(AblyFlutter * plugin, FlutterMethodCall * call, FlutterResult result);
+typedef void (^FlutterHandler)(AblyFlutter * ably, FlutterMethodCall * call, FlutterResult result);
 
 /**
  Anonymous category providing forward declarations of the methods implemented
@@ -70,18 +70,20 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
     ARTRest *const rest = [[ARTRest alloc] initWithOptions:options.clientOptions];
     [instanceStore setRest:rest with: handle];
 
-    if (ably.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
-        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:ably.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken rest:rest];
-    } else if (ably.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
-        [ARTPush didFailToRegisterForRemoteNotificationsWithError: ably.didFailToRegisterForRemoteNotificationsWithError_error rest:rest];
+    NSData *const apnsDeviceToken = ably.instanceStore.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+    NSError *const error = ably.instanceStore.didFailToRegisterForRemoteNotificationsWithError_error;
+    if (apnsDeviceToken != nil) {
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:apnsDeviceToken rest:rest];
+    } else if (error != nil) {
+        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error rest:rest];
     }
 
     result(handle);
 };
 
-static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutter *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _setRestChannelOptions = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    AblyInstanceStore *const instanceStore = [plugin instanceStore];
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterMessage *const messageData = message.message;
     
     NSMutableDictionary<NSString *, NSObject *> *const _dataMap = messageData.message;
@@ -216,11 +218,11 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably,
     result(nil);
 };
 
-static const FlutterHandler _createRealtime = ^void(AblyFlutter *const plugin, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
-    AblyInstanceStore *const instanceStore = [plugin instanceStore];
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterClientOptions *const options = message.message;
-    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: plugin.channel];
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
 
     NSNumber *const handle = [instanceStore getNextHandle];
     if(options.hasAuthCallback){
@@ -228,7 +230,7 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const plugin, F
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
             = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
-            [plugin.channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
+            [ably.channel invokeMethod:AblyPlatformMethod_realtimeAuthCallback
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
@@ -252,10 +254,12 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const plugin, F
     // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
     // Ideally, the Ably client doesn't need to be created, and we can pass the deviceToken to Ably like in Ably Java.
     // This is similarly repeated for in _createRest
-    if (plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken != nil) {
-        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:plugin.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken realtime:realtime];
-    } else if (plugin.didFailToRegisterForRemoteNotificationsWithError_error != nil) {
-        [ARTPush didFailToRegisterForRemoteNotificationsWithError: plugin.didFailToRegisterForRemoteNotificationsWithError_error realtime:realtime];
+    NSData *const apnsDeviceToken = ably.instanceStore.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+    NSError *const error = ably.instanceStore.didFailToRegisterForRemoteNotificationsWithError_error;
+    if (apnsDeviceToken != nil) {
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:apnsDeviceToken realtime:realtime];
+    } else if (error != nil) {
+        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error realtime:realtime];
     }
     
     result(handle);
@@ -715,16 +719,14 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
 /// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Set deviceToken on future Ably clients (either realtime or rest) are made.
-    _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
-    // Set deviceToken on all existing Ably clients.
+    // Set deviceToken on all existing Ably clients, and a property which used for all future Ably clients.
     [_instanceStore didRegisterForRemoteNotificationsWithDeviceToken: deviceToken];
 }
 
 /// Save the error if it occurred during APNs device registration provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     // This error will be used when the first Ably client is made.
-    _didFailToRegisterForRemoteNotificationsWithError_error = error;
+    _instanceStore.didFailToRegisterForRemoteNotificationsWithError_error = error;
 }
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {

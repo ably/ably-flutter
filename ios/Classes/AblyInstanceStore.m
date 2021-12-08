@@ -67,6 +67,8 @@
 
 // Set device token on all existing clients
 -(void) didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const) deviceToken {
+    _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
+    
     for (id restHandle in _restInstances) {
         ARTRest *const rest = _restInstances[restHandle];
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken rest:rest];
