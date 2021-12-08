@@ -578,7 +578,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
                     message:[NSString stringWithFormat:@"Error getting first page; err = %@", [error message]]
                     details:error
                     ]);
-        }else{
+        } else {
             NSNumber *const paginatedResultHandle = [instanceStore setPaginatedResult:paginatedResult handle:handle];
             result([[AblyFlutterMessage alloc] initWithMessage:paginatedResult handle: paginatedResultHandle]);
         }

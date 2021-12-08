@@ -146,26 +146,40 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
 
     [o addAgent:@"ably-flutter" version: FLUTTER_PACKAGE_PLUGIN_VERSION];
 
-    AblyFlutterClientOptions *const co = [AblyFlutterClientOptions new];
-    ON_VALUE(^(const id value) {
-        [co initWithClientOptions: o hasAuthCallback: value];
-    }, dictionary, TxClientOptions_hasAuthCallback);
-
-    return co;
+    
+    return  [[AblyFlutterClientOptions alloc]
+             initWithClientOptions:o
+             hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
 };
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary {
-    __block NSString *token = nil;
-    __block NSDate *expires = nil;
-    __block NSDate *issued = nil;
-    __block NSString *capability = nil;
-    __block NSString *clientId = nil;
+    NSString *token = nil;
+    NSDate *expires = nil;
+    NSDate *issued = nil;
+    NSString *capability = nil;
+    NSString *clientId = nil;
     
-    ON_VALUE(^(const id value) { token = value; }, dictionary, TxTokenDetails_token);
-    ON_VALUE(^(const id value) { expires = value; }, dictionary, TxTokenDetails_expires);
-    ON_VALUE(^(const id value) { issued = value; }, dictionary, TxTokenDetails_issued);
-    ON_VALUE(^(const id value) { capability = value; }, dictionary, TxTokenDetails_capability);
-    ON_VALUE(^(const id value) { clientId = value; }, dictionary, TxTokenDetails_clientId);
+    if ([dictionary[TxTokenDetails_token] isKindOfClass: [NSString class]]) {
+        token = dictionary[TxTokenDetails_token];
+    }
+    
+    if ([dictionary[TxTokenDetails_expires] isKindOfClass: [NSNumber class]]) {
+        NSNumber *const timeInMilliseconds = dictionary[TxTokenDetails_issued];
+        expires = [NSDate dateWithTimeIntervalSince1970:timeInMilliseconds.doubleValue];
+    }
+    
+    if ([dictionary[TxTokenDetails_issued] isKindOfClass: [NSNumber class]]) {
+        NSNumber *const timeInMilliseconds = dictionary[TxTokenDetails_issued];
+        issued = [NSDate dateWithTimeIntervalSince1970:timeInMilliseconds.doubleValue];
+    }
+    
+    if ([dictionary[TxTokenDetails_capability] isKindOfClass: [NSString class]]) {
+        capability = dictionary[TxTokenDetails_capability];
+    }
+    
+    if ([dictionary[TxTokenDetails_clientId] isKindOfClass: [NSString class]]) {
+        clientId = dictionary[TxTokenDetails_clientId];
+    }
     
     return [[ARTTokenDetails alloc] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
 }
