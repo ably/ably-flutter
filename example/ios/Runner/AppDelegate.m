@@ -1,6 +1,5 @@
 #import "AppDelegate.h"
 #import "GeneratedPluginRegistrant.h"
-#import "AblyFlutter.h"
 
 @implementation AppDelegate
 
@@ -14,6 +13,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GeneratedPluginRegistrant registerWithRegistry:self];
     // Override point for customization after application launch.
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError was called with error: %@", error.localizedDescription);
 }
 
 @end
