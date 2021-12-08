@@ -142,7 +142,6 @@ import ably_flutter
     override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         NSLog("application:didFailToRegisterForRemoteNotificationsWithError was called with error: %@", error.localizedDescription)
         AblyInstanceStore.sharedInstance().didFailToRegisterForRemoteNotificationsWithError_error = error;
-
     }
 }
 
