@@ -98,6 +98,45 @@ try {
 }
 ```
 
+- On iOS, conflicts with other dependencies or your native code might cause Ably to never receive the APNs device token. 
+  This will cause calls to `activate` to never complete (The future never completes with a success or error). 
+  In this case, you should provide Ably Flutter with the device token manually in your `didRegisterForRemoteNotificationsWithDeviceToken` and `didFailToRegisterForRemoteNotificationsWithError` in your AppDelegate.
+  - In `AppDelegate.m` (Objective-C),  
+```objective-c
+#import "AblyFlutter.h"
+
+@implementation AppDelegate
+
+...
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [AblyInstanceStore.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    AblyInstanceStore.sharedInstance.didFailToRegisterForRemoteNotificationsWithError_error = error;
+}
+
+@end
+```
+  - In `AppDelegate.swift` (Swift),
+```swift
+import ably_flutter
+
+class AppDelegate : FlutterAppDelegate {
+    ...
+
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        AblyInstanceStore.sharedInstance().didRegisterForRemoteNotificationsWithDeviceToken_deviceToken(deviceToken)
+    }
+    
+    override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        AblyInstanceStore.sharedInstance().didFailToRegisterForRemoteNotificationsWithError_error = error;
+    }
+}
+
+```
+
 - Listen to push events: You should listen to the `Push.pushEvents.onUpdateFailed` stream to be informed when a new token update (FCM registration token / APNs device token) fails to be updated with Ably. If this update process fails, Ably servers will attempt to use the old tokens to send messages to devices and potentially fail.
     - Optional: listen to `Push.pushEvents.onActivate` and `Push.pushEvents.onDeactivate`. This is optional because `Push.activate` and `Push.deactivate` will return when it succeeds, and throw when it fails.
 
