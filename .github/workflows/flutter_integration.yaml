@@ -36,7 +36,7 @@ jobs:
   android:
     strategy:
       matrix:
-        api-level: [21, 24, 30]
+        api-level: [21, 24, 31]
       fail-fast: false
 
     # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
