@@ -57,6 +57,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          # Specifying google_apis because default does not work. See https://github.com/ReactiveCircus/android-emulator-runner/issues/202
+          target: google_apis 
+          arch: x86_64
           script: |
             /Users/runner/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager list
             flutter pub get
