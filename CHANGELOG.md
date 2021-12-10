@@ -3,7 +3,7 @@
 ## [1.2.8](https://github.com/ably/ably-flutter/tree/v1.2.8)
 
 **Bug Fix:**
-push activation not completing on iOS when running in release configuration [\#276](https://github.com/ably/ably-flutter/issues/276),
+Push activation not completing on iOS when running in release configuration [\#276](https://github.com/ably/ably-flutter/issues/276),
 fixed in [\#277](https://github.com/ably/ably-flutter/pull/277) ([ben-xD](https://github.com/ben-xD))
 
 ## [1.2.7](https://github.com/ably/ably-flutter/tree/v1.2.7)
