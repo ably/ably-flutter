@@ -89,6 +89,9 @@ If you invoke any methods from the `ably_flutter` package before calling `runApp
 - Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only
   needs to be done once, and will be used across all future app launches, as long as the app is not deactivated. This method will throw an AblyException if it fails.
 - The `Future` returned by `activate` is not guaranteed to complete quickly. For example, if there is no internet connection, `activate` will wait until it is available. Therefore, there is no guarantee any code awaiting the completion of the `Future` will run.
+- When moving between different environments (e.g. development vs. production), you should clear the push device information stored by Ably Flutter to avoid using the wrong push device information on a different environment, by either:
+  - Reinstalling your app, or
+  - Deactivating the device in the same environment the device was activated on.
 
 ```dart
 try {
