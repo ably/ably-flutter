@@ -87,7 +87,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceUpdate, this::updateRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
-    _map.put(PlatformConstants.PlatformMethod.time, this::realtimeTime);
+    _map.put(PlatformConstants.PlatformMethod.time, this::time);
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -714,7 +714,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
   }
 
-  private void realtimeTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+  private void time(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
       final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
       Callback<Long> callback = new Callback<Long>() {
             @Override
