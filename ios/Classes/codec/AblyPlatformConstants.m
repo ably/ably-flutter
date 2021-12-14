@@ -34,6 +34,7 @@ NSString *const AblyPlatformMethod_onRealtimePresenceMessage= @"onRealtimePresen
 NSString *const AblyPlatformMethod_publishRealtimeChannelMessage= @"publishRealtimeChannelMessage";
 NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChannel";
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
+NSString *const AblyPlatformMethod_realtimeTime= @"realtimeTime";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
 NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
