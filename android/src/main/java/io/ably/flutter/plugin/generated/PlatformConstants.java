@@ -66,6 +66,7 @@ final public class PlatformConstants {
         public static final String publishRealtimeChannelMessage = "publishRealtimeChannelMessage";
         public static final String releaseRealtimeChannel = "releaseRealtimeChannel";
         public static final String realtimeHistory = "realtimeHistory";
+        public static final String realtimeTime = "realtimeTime";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
         public static final String pushSubscribeDevice = "pushSubscribeDevice";

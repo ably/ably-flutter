@@ -101,8 +101,10 @@ class Realtime extends PlatformObject {
   }
 
   @override
-  Future<DateTime> time() {
-    throw UnimplementedError();
+  Future<DateTime> time() async{
+    final time = await invokeRequest<int>(PlatformMethod
+        .realtimeTime);
+    return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
   @override
