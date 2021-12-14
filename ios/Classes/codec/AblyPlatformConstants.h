@@ -64,6 +64,7 @@ extern NSString *const AblyPlatformMethod_onRealtimePresenceMessage;
 extern NSString *const AblyPlatformMethod_publishRealtimeChannelMessage;
 extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
+extern NSString *const AblyPlatformMethod_realtimeTime;
 extern NSString *const AblyPlatformMethod_pushActivate;
 extern NSString *const AblyPlatformMethod_pushDeactivate;
 extern NSString *const AblyPlatformMethod_pushSubscribeDevice;
