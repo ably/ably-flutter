@@ -553,12 +553,12 @@ static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, Flutt
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
 
-    ARTRealtime *const realtime = [instanceStore realtimeFrom:message.handle];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:message.message];
     [realtime time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
         if(error){
             result(error);
         }else{
-            result(@(dateTimeResult.timeIntervalSince1970 * 1000));
+            result(@([@(dateTimeResult.timeIntervalSince1970 *1000) longValue]));
         }
     }];
 };
