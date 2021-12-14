@@ -614,7 +614,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
                 result.error("40000", reason.message, reason);
             }
       };
-      instanceStore.getRealtime((int) message.message).timeAsync(callback);
+      instanceStore.getAblyClient((int) message.message).timeAsync(callback);
     }
 
 
