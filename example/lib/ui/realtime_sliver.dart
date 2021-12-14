@@ -153,8 +153,10 @@ class RealtimeSliver extends HookWidget {
     final latestMessage = useState<ably.Message?>(null);
     final channelSubscription =
         useState<StreamSubscription<ably.Message>?>(null);
+    final realtimeTime = useState<DateTime?>(null);
 
     useEffect(() {
+      realtime.time().then((value) => realtimeTime.value = value);
       setupListeners(connectionState, channelState);
       return dispose;
     }, []);
@@ -166,6 +168,7 @@ class RealtimeSliver extends HookWidget {
           'Realtime',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        Text('Realtime time: ${realtimeTime.value}'),
         Text('Connection State: ${connectionState.value}'),
         Row(
           children: <Widget>[
