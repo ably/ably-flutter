@@ -679,7 +679,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
-        AblyPlatformMethod_realtimeTime:_realtimeTime,
+        AblyPlatformMethod_time:_realtimeTime,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
