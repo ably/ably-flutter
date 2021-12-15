@@ -9,7 +9,7 @@ fi
 
 # 2. Download the release from https://github.com/google/google-java-format/releases, and update your environment variable. This provides the Java formatting tool.
 if [ "$GOOGLE_JAVA_FORMAT_PATH" = "" ]; then
-  echo "🚨 FAILURE: You must download https://github.com/google/google-java-format/releases and set GOOGLE_JAVA_FORMAT_PATH to the jar you downloaded.";
+  echo "🚨 FAILURE: You must download the latest 'all-deps.jar' from https://github.com/google/google-java-format/releases and set GOOGLE_JAVA_FORMAT_PATH to the jar you downloaded, e.g. add the following to ~/.zshrc: 'export GOOGLE_JAVA_FORMAT_PATH=path/to/google_java_format_path.jar'";
   exit 1;
 fi
 
