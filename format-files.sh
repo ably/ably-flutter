@@ -23,5 +23,6 @@ echo "✅ Formatted Java files.\n"
 
 echo "❓ Formatting Swift files..."
 SWIFT_VERSION=5.5
-swiftformat --swiftversion $SWIFT_VERSION $MY_PATH
+swiftformat --swiftversion $SWIFT_VERSION $MY_PATH/ios
+swiftformat --swiftversion $SWIFT_VERSION $MY_PATH/example/ios/Runner
 echo "✅ Formatted Swift files.\n"

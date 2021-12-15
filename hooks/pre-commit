@@ -29,5 +29,7 @@ echo $JAVA_FILES | xargs java \
 echo "✅ Java file formatting checked. \n"
 
 echo "❓ Swift file formatting being checked..."
-swiftformat --lint --swiftversion 5.5 $MY_PATH
+SWIFT_VERSION=5.5
+swiftformat --lint --swiftversion $SWIFT_VERSION $MY_PATH/ios
+swiftformat --lint --swiftversion $SWIFT_VERSION $MY_PATH/example/ios/Runner
 echo "✅ Swift file formatting checked. \n"
