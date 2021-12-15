@@ -23,7 +23,7 @@
 ## Making changes
 
 We use Github actions to check code is formatted correctly. You should format your code using the same style to avoid Github CI job failures, since we do not automatically commit and format code.
-- To format files, run `./format-files.sh`. It requires a few tools to be installed. Try to run `./format-files.sh` or read `format-files.sh` to detemrine the dependencies, e.g. `flutter format .` for Dart code.
+- To format files, run `./format-files.sh`. It requires a few tools to be installed (e.g. `flutter`, `swiftformat` and `google-java-format`). Try to run `./format-files.sh` or read `format-files.sh` to discover and install the dependencies.
 - To run this command successfully, you need to setup your environment. Read `format-files.sh` for more information.
 - To automatically check formatting before committing, you can use the git hook shared in this repo. 
   - Run `git config core.hooksPath hooks`
