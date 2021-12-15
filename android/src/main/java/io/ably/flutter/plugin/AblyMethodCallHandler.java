@@ -715,23 +715,23 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void time(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
-      final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
-      Callback<Long> callback = new Callback<Long>() {
-            @Override
-            public void onSuccess(Long timeResult) {
-                result.success(timeResult);
-            }
+    final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+    Callback<Long> callback =
+        new Callback<Long>() {
+          @Override
+          public void onSuccess(Long timeResult) {
+            result.success(timeResult);
+          }
 
-            @Override
-            public void onError(ErrorInfo reason) {
-                result.error("40000", reason.message, reason);
-            }
-      };
-      instanceStore.getAblyClient((int) message.message).timeAsync(callback);
-    }
+          @Override
+          public void onError(ErrorInfo reason) {
+            result.error("40000", reason.message, reason);
+          }
+        };
+    instanceStore.getAblyClient((int) message.message).timeAsync(callback);
+  }
 
-
-    private void getRealtimeHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+  private void getRealtimeHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(
         message,
