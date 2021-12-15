@@ -48,7 +48,7 @@ There are 3 types of "refreshes" you might see in a Flutter app:
 - **Hot restart:** The Flutter application is restarted, but the host application (Android and iOS apps which host the Flutter application) does not.
   - State of the flutter application is reset. This means fields are all reset to their default values (or null).
   - This also means we must remember to clear the state in the host application when the app hot restarts. We do this by calling `await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);`.
-  - From Flutter documentation:
+  - From [Flutter documentation](https://docs.flutter.dev/development/tools/hot-reload):
 > With a hot restart, the program starts from the beginning, executes the new version of main(), and builds a widget tree that displays the text Hello.
 - **App restart:** The entire application is restarted, clearing the state of both the Flutter application and the host application (Android and iOS apps).
 
