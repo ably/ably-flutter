@@ -33,6 +33,7 @@ We use Github actions to check code is formatted correctly. You should format yo
 - To automatically check formatting before committing, you can use the git hook shared in this repo. 
   - Run `git config core.hooksPath hooks`
   - Git hooks don't work well in SourceTree, as per [SourceTree : Hook failing because paths don't seem to be set correctly](https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792). You will need to open SourceTree using `open /Applications/SourceTree.app/Contents/MacOS/SourceTree`.
+- To autoformat Java code in Android Studio, follow the documentation: [IntelliJ, Android Studio, and other JetBrains IDEs](https://github.com/google/google-java-format#intellij-android-studio-and-other-jetbrains-ides).
 ## High level architecture
 
 The code in this repository has been constructed to be
