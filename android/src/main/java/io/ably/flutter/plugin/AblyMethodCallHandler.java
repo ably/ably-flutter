@@ -87,7 +87,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceUpdate, this::updateRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
-    _map.put(PlatformConstants.PlatformMethod.time, this::time);
+    _map.put(PlatformConstants.PlatformMethod.realtimeTime, this::realtimeTime);
+    _map.put(PlatformConstants.PlatformMethod.restTime, this::restTime);
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -601,9 +602,19 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     });
   }
 
-  private void time(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
-      final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
-      Callback<Long> callback = new Callback<Long>() {
+    private void realtimeTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+        time(methodCall, result, instanceStore.getRealtime((int) message.message));
+    }
+
+    private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+        time(methodCall, result, instanceStore.getRest((int) message.message));
+    }
+
+    private void time(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result, AblyBase client) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+        Callback<Long> callback = new Callback<Long>() {
             @Override
             public void onSuccess(Long timeResult) {
                 result.success(timeResult);
@@ -613,8 +624,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             public void onError(ErrorInfo reason) {
                 result.error("40000", reason.message, reason);
             }
-      };
-      instanceStore.getAblyClient((int) message.message).timeAsync(callback);
+        };
+        client.timeAsync(callback);
     }
 
 
