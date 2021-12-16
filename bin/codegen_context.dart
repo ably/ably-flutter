@@ -94,7 +94,8 @@ const List<Map<String, dynamic>> _platformMethods = [
   },
   {'name': 'releaseRealtimeChannel', 'value': 'releaseRealtimeChannel'},
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
-  {'name': 'time', 'value': 'time'},
+  {'name': 'realtimeTime', 'value': 'realtimeTime'},
+  {'name': 'restTime', 'value': 'restTime'},
 
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},

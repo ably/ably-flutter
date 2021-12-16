@@ -111,7 +111,7 @@ class Realtime extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
   Future<DateTime> time() async {
-    final time = await invokeRequest<int>(PlatformMethod.time);
+    final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
