@@ -549,25 +549,32 @@ static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const a
     result(nil);
 };
 
-static const FlutterHandler _time = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     
-    ARTDateTimeCallback callback = ^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:message.message];
+    [realtime time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
         if(error){
             result(error);
         }else{
             result(@([@(dateTimeResult.timeIntervalSince1970 *1000) longValue]));
         }
-    };
-    ARTRealtime *const realtime = [instanceStore realtimeFrom:message.message];
-    if(realtime){
-        [realtime time:callback];
-    }else{
-        ARTRest *const rest = [instanceStore restFrom:message.message];
-        [rest time:callback];
-    }
-   
+    }];
+};
+
+static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+    
+    ARTRest *const rest = [instanceStore restFrom:message.message];
+    [rest time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
+        if(error){
+            result(error);
+        }else{
+            result(@([@(dateTimeResult.timeIntervalSince1970 *1000) longValue]));
+        }
+    }];
 };
 
 static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
@@ -686,7 +693,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
-        AblyPlatformMethod_time:_time,
+        AblyPlatformMethod_realtimeTime:_realtimeTime,
+        AblyPlatformMethod_realtimeTime:_restTime,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
