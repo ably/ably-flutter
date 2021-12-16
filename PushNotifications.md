@@ -358,9 +358,11 @@ Take a look at the example app platform specific code to handle messages. For iO
 
 **iOS:** Some iOS dependencies perform techniques such as [method swizzling](https://nshipster.com/method-swizzling/) which break other iOS dependencies and Flutter Plugin packages.
 
-### Deactivating the device
+## Device deactivation
 
-Do this only if you do not want the device to receive push notifications at all. You usually do not need to run this at all. 
+Do this only if you do not want the device to receive push notifications at all. You usually do not need to run this at all, and especially don't need to deactivate and re-activate on every launch.
+
+Like device activation, the `Future` returned by `activate` is not guaranteed to complete quickly.
 
 ```dart
     try {

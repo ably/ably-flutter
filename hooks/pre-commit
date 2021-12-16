@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -e
+set -o pipefail
+
+MY_PATH=$(pwd)
+
+echo "Checking formatting of Dart, Swift and Java files, without modifying them."
+echo "To format files, run '. format-files.sh'\n" # Objective-C files are not checked.
+
+# Redirect output to stderr.
+exec 1>&2
+
+source $MY_PATH/format-files-dependencies.sh
+
+echo "❓ Dart file formatting being checked..."
+/opt/flutter/bin/flutter format --set-exit-if-changed $MY_PATH
+echo "✅ Dart file formatting checked. \n"
+
+echo "❓ Java file formatting being checked..."
+JAVA_FILES=$(find $MY_PATH/android -name "*java" -type f -exec ls {} \;)
+echo $JAVA_FILES | xargs java \
+  --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+  -jar $GOOGLE_JAVA_FORMAT_PATH --set-exit-if-changed --dry-run
+echo "✅ Java file formatting checked. \n"
+
+echo "❓ Swift file formatting being checked..."
+SWIFT_VERSION=5.5
+swiftformat --lint --swiftversion $SWIFT_VERSION $MY_PATH/ios
+swiftformat --lint --swiftversion $SWIFT_VERSION $MY_PATH/example/ios/Runner
+echo "✅ Swift file formatting checked. \n"
