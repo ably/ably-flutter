@@ -38,6 +38,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     // Encryption
     'cipherParams',
+    'stats',
   ];
 
   // Custom type values must be over 127. At the time of writing
@@ -510,6 +511,70 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'CryptoGenerateRandomKey',
     'properties': ['keyLength']
+  },
+  {
+    'name': 'Stats',
+    'properties': <String>[
+      'all',
+      'apiRequests',
+      'channels',
+      'connections',
+      'inbound',
+      'intervalId',
+      'outbound',
+      'persisted',
+      'tokenRequests'
+    ]
+  },
+  {
+    'name': 'StatsMessageTypes',
+    'properties': <String>[
+      'all',
+      'messages',
+      'presence'
+    ]
+  },
+  {
+    'name': 'StatsMessageCount',
+    'properties': <String>[
+      'count',
+      'data'
+    ]
+  },
+  {
+    'name': 'StatsRequestCount',
+    'properties': <String>[
+      'failed',
+      'refused',
+      'succeeded'
+    ]
+  },
+  {
+    'name': 'StatsResourceCount',
+    'properties': <String>[
+      'mean',
+      'min',
+      'opened',
+      'peak',
+      'refused'
+    ]
+  },
+  {
+    'name': 'StatsConnectionTypes',
+    'properties': <String>[
+      'all',
+      'plain',
+      'tls'
+    ]
+  },
+  {
+    'name': 'StatsMessageTraffic',
+    'properties': <String>[
+      'all',
+      'realtime',
+      'rest',
+      'webhook'
+    ]
   }
 ];
 
