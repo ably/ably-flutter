@@ -32,6 +32,7 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.types.Stats;
 import io.ably.lib.util.Crypto;
 import io.ably.lib.util.Log;
 import io.flutter.plugin.common.StandardMessageCodec;
@@ -122,6 +123,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 PlatformConstants.CodecTypes.realtimeHistoryParams,
                 new CodecPair<>(null, self::decodeRealtimeHistoryParams));
             put(
+                    PlatformConstants.CodecTypes.stats,
+                    new CodecPair<>(self::encodeStats,null));
+            put(
                 PlatformConstants.CodecTypes.restPresenceParams,
                 new CodecPair<>(null, self::decodeRestPresenceParams));
             put(
@@ -166,6 +170,87 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
           }
         };
+  }
+
+  private Map<String, Object> encodeStats(Stats stats) {
+    if (stats == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.all,encodeStatsMessageTypes(stats.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.apiRequests, encodeStatsRequestCount(stats.apiRequests));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.channels, encodeStatsResourceCount(stats.channels));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.connections, encodeStatsConnectionTypes(stats.connections));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.inbound, encodeStatsMessageTraffic(stats.inbound));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.intervalId, stats.intervalId);
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.outbound, encodeStatsMessageTraffic(stats.outbound));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.persisted, encodeStatsMessageTypes(stats.persisted));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.tokenRequests, encodeStatsRequestCount(stats.tokenRequests));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsMessageTraffic(Stats.MessageTraffic messageTraffic) {
+    if (messageTraffic == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.all,encodeStatsMessageTypes(messageTraffic.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.realtime,
+            encodeStatsMessageTypes(messageTraffic.realtime));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.rest,
+            encodeStatsMessageTypes(messageTraffic.rest));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.webhook,
+            encodeStatsMessageTypes(messageTraffic.webhook));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsConnectionTypes(Stats.ConnectionTypes connectionTypes) {
+    if (connectionTypes == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.all,
+            encodeStatsResourceCount(connectionTypes.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.plain,
+            encodeStatsResourceCount(connectionTypes.plain));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.tls,
+            encodeStatsResourceCount(connectionTypes.tls));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsResourceCount(Stats.ResourceCount resourceCount) {
+    if (resourceCount == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsResourceCount.mean,resourceCount.mean);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsResourceCount.min,resourceCount.min);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsResourceCount.opened,resourceCount.opened);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsResourceCount.peak,resourceCount.peak);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsResourceCount.refused,resourceCount.refused);
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsRequestCount(Stats.RequestCount apiRequests) {
+    if (apiRequests == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsRequestCount.succeeded,apiRequests.succeeded);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsRequestCount.failed,apiRequests.failed);
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsRequestCount.refused,apiRequests.refused);
+    return jsonMap;
+  }
+
+  private Map<String,Object> encodeStatsMessageTypes(Stats.MessageTypes messageTypes){
+    if (messageTypes == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsMessageTypes.all,encodeMessageCategory(messageTypes.all));
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsMessageTypes.messages,encodeMessageCategory(messageTypes.messages));
+    writeValueToJson(jsonMap,PlatformConstants.TxStatsMessageTypes.presence,encodeMessageCategory(messageTypes.presence));
+    return jsonMap;
+  }
+  //that's StatsMessageCount in Flutter's side
+  private Map<String, Object> encodeMessageCategory(Stats.MessageCategory category) {
+    if (category == null) return null;
+    if (category.category == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    //There is a mapping consistencey issue between two, so just assume there is a single message for now
+    for (String key : category.category.keySet()){
+      writeValueToJson(jsonMap,PlatformConstants.TxStatsMessageCount.count, category.category.get(key).count);
+      writeValueToJson(jsonMap,PlatformConstants.TxStatsMessageCount.data, category.category.get(key).data);
+    }
+    return jsonMap;
   }
 
   @Override

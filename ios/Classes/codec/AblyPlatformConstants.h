@@ -33,6 +33,7 @@ typedef NS_ENUM(UInt8, CodecType) {
     CodecTypeConnectionStateChange = 152,
     CodecTypeChannelStateChange = 153,
     CodecTypeCipherParams = 154,
+    CodecTypeStats = 155,
 };
 
 
@@ -401,3 +402,46 @@ extern NSString *const TxCryptoGetParams_key;
 
 // key constants for CryptoGenerateRandomKey
 extern NSString *const TxCryptoGenerateRandomKey_keyLength;
+
+// key constants for Stats
+extern NSString *const TxStats_all;
+extern NSString *const TxStats_apiRequests;
+extern NSString *const TxStats_channels;
+extern NSString *const TxStats_connections;
+extern NSString *const TxStats_inbound;
+extern NSString *const TxStats_intervalId;
+extern NSString *const TxStats_outbound;
+extern NSString *const TxStats_persisted;
+extern NSString *const TxStats_tokenRequests;
+
+// key constants for StatsMessageTypes
+extern NSString *const TxStatsMessageTypes_all;
+extern NSString *const TxStatsMessageTypes_messages;
+extern NSString *const TxStatsMessageTypes_presence;
+
+// key constants for StatsMessageCount
+extern NSString *const TxStatsMessageCount_count;
+extern NSString *const TxStatsMessageCount_data;
+
+// key constants for StatsRequestCount
+extern NSString *const TxStatsRequestCount_failed;
+extern NSString *const TxStatsRequestCount_refused;
+extern NSString *const TxStatsRequestCount_succeeded;
+
+// key constants for StatsResourceCount
+extern NSString *const TxStatsResourceCount_mean;
+extern NSString *const TxStatsResourceCount_min;
+extern NSString *const TxStatsResourceCount_opened;
+extern NSString *const TxStatsResourceCount_peak;
+extern NSString *const TxStatsResourceCount_refused;
+
+// key constants for StatsConnectionTypes
+extern NSString *const TxStatsConnectionTypes_all;
+extern NSString *const TxStatsConnectionTypes_plain;
+extern NSString *const TxStatsConnectionTypes_tls;
+
+// key constants for StatsMessageTraffic
+extern NSString *const TxStatsMessageTraffic_all;
+extern NSString *const TxStatsMessageTraffic_realtime;
+extern NSString *const TxStatsMessageTraffic_rest;
+extern NSString *const TxStatsMessageTraffic_webhook;

@@ -238,6 +238,18 @@ class RealtimeSliver extends HookWidget {
                     TextRow('Data', message.data.toString()),
                   ],
                 )),
+        PaginatedResultViewer<ably.Stats>(
+            title: 'Stats',
+            subtitle: TextRow(
+                'What is it?',
+                'Realtime stats'),
+            query: () => realtime.stats(),
+            builder: (context, stat, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextRow('Statistics ', stat.toString()),
+              ],
+            )),
         RealtimePresenceSliver(realtime, channel),
       ],
     );

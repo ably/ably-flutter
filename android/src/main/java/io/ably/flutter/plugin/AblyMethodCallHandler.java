@@ -90,6 +90,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
     _map.put(PlatformConstants.PlatformMethod.realtimeTime, this::realtimeTime);
     _map.put(PlatformConstants.PlatformMethod.restTime, this::restTime);
+    _map.put(PlatformConstants.PlatformMethod.realtimeStats, this::realtimeStats);
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -356,6 +357,21 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
               .historyAsync(params, this.paginatedResponseHandler(result, null));
         });
   }
+
+    private void realtimeStats(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+        final AblyFlutterMessage<Map<String, Object>> paramsMessage = (AblyFlutterMessage<Map<String, Object>>) message.message;
+        final Map<String, Object> map = paramsMessage.message;
+        final String channelName =
+                (String) map.get(PlatformConstants.TxTransportKeys.channelName);
+        Param[] params = (Param[]) map.get(PlatformConstants.TxTransportKeys.params);
+        if (params == null) {
+            params = new Param[0];
+        }
+        instanceStore
+                .getRealtime(paramsMessage.handle)
+                .statsAsync(params, this.paginatedResponseHandler(result, null));
+    }
 
   private void getRestPresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
