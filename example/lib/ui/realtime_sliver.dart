@@ -260,7 +260,6 @@ class RealtimeSliver extends HookWidget {
                     TextRow('Statistics ', stat.toString()),
                   ],
                 )),
-        RealtimePresenceSliver(realtime, channel),
       ],
     );
   }
