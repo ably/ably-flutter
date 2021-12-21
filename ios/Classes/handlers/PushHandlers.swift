@@ -6,21 +6,21 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let activate: FlutterHandler = { ably, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate != nil) {
-            returnMethodAlreadyRunningError(result: result, methodName: "activate")
-        } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
+        if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
             push.activate()
+        } else {
+            result(FlutterError(code: "PushHandlers#activate", message: "Cannot get push from client", details: nil))
         }
     }
 
     @objc
     public static let deactivate: FlutterHandler = { ably, call, result in
-        if (PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate != nil) {
-            returnMethodAlreadyRunningError(result: result, methodName: "deactivate")
-        } else if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
+        if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
             push.deactivate()
+        } else {
+            result(FlutterError(code: "PushHandlers#deactivate", message: "Cannot get push from client", details: nil))
         }
     }
 
@@ -29,11 +29,6 @@ public class PushHandlers: NSObject {
         UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
             result(settings)
         }
-    }
-
-    private static func returnMethodAlreadyRunningError(result: FlutterResult, methodName: String) {
-        let error = FlutterError(code: "methodAlreadyRunning", message: "\(methodName) already running. Do not attempt to call \(methodName) before the previous call completes", details: nil)
-        result(error)
     }
 
     @objc

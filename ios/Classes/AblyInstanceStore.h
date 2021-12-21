@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ARTPaginatedResult *) getPaginatedResult:(NSNumber *const) handle;
 
+-(void) didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const) deviceToken;
+
+@property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
+
+@property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
+
 -(void)reset;
 
 @end
