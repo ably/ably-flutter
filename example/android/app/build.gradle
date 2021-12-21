@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "io.ably.flutter.plugin_example"
+        applicationId "io.ably.flutter.example"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()

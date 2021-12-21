@@ -1,4 +1,4 @@
-package io.ably.flutter.plugin_example;
+package io.ably.flutter.example;
 
 import androidx.annotation.NonNull;
 
