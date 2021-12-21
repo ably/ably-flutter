@@ -100,19 +100,6 @@ class Realtime extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// gets stats based on params as a [PaginatedResult]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  Future<PaginatedResult<Stats>> stats([Map<String, dynamic> params = const {}]) async{
-    final message =
-        await invokeRequest<AblyMessage>(PlatformMethod.realtimeStats,{
-            TxTransportKeys.params: params
-        });
-    return PaginatedResult<Stats>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
-    );
-  }
-
   /// returns server time
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
