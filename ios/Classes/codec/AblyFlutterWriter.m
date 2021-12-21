@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_END
         return CodecTypeRestChannelOptions;
     } else if ([value isKindOfClass:[ARTCipherParams class]]) {
         return CodecTypeCipherParams;
+    } else if([value isKindOfClass:[ARTStats class]]){
+        return CodecTypeStats;
     }
     return 0;
 }
@@ -71,6 +73,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeUnNotificationSettings]: PushNotificationEncoders.encodeUNNotificationSettings,
         [NSString stringWithFormat:@"%d", CodecTypeRemoteMessage]: PushNotificationEncoders.encodeRemoteMessage,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.encodeCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeStats]: StatsEncoders.encodeStats,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -316,5 +319,6 @@ static AblyCodecEncoder encodePaginatedResult = ^NSMutableDictionary*(ARTPaginat
     
     return dictionary;
 };
+
 
 @end
