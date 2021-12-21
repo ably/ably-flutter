@@ -93,18 +93,15 @@ class RestSliver extends HookWidget {
                 '${message.id}:${message.clientId}:${message.data}')),
         PaginatedResultViewer<ably.Stats>(
             title: 'Stats',
-            subtitle: TextRow(
-                'What is it?',
-                'Realtime stats'),
+            subtitle: TextRow('What is it?', 'Realtime stats'),
             query: () => rest.stats(),
             builder: (context, stat, _) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextRow('Statistics ', stat.toString()),
-              ],
-            )),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRow('Statistics ', stat.toString()),
+                  ],
+                )),
       ],
     );
-
   }
 }

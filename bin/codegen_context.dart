@@ -528,53 +528,27 @@ const List<Map<String, dynamic>> _objects = [
   },
   {
     'name': 'StatsMessageTypes',
-    'properties': <String>[
-      'all',
-      'messages',
-      'presence'
-    ]
+    'properties': <String>['all', 'messages', 'presence']
   },
   {
     'name': 'StatsMessageCount',
-    'properties': <String>[
-      'count',
-      'data'
-    ]
+    'properties': <String>['count', 'data']
   },
   {
     'name': 'StatsRequestCount',
-    'properties': <String>[
-      'failed',
-      'refused',
-      'succeeded'
-    ]
+    'properties': <String>['failed', 'refused', 'succeeded']
   },
   {
     'name': 'StatsResourceCount',
-    'properties': <String>[
-      'mean',
-      'min',
-      'opened',
-      'peak',
-      'refused'
-    ]
+    'properties': <String>['mean', 'min', 'opened', 'peak', 'refused']
   },
   {
     'name': 'StatsConnectionTypes',
-    'properties': <String>[
-      'all',
-      'plain',
-      'tls'
-    ]
+    'properties': <String>['all', 'plain', 'tls']
   },
   {
     'name': 'StatsMessageTraffic',
-    'properties': <String>[
-      'all',
-      'realtime',
-      'rest',
-      'webhook'
-    ]
+    'properties': <String>['all', 'realtime', 'rest', 'webhook']
   }
 ];
 

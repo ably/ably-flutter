@@ -358,24 +358,25 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         });
   }
 
-    private void stats(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
-        final AblyFlutterMessage<Map<String, Object>> paramsMessage = (AblyFlutterMessage<Map<String, Object>>) message.message;
-        final Map<String, Object> map = paramsMessage.message;
-        final HashMap<String,Object> paramsMap =
-                (HashMap<String,Object>) map.get(PlatformConstants.TxTransportKeys.params);
-        Param[] params = new Param[paramsMap != null ? paramsMap.size():0];
-        if (paramsMap != null) {
-            int i = 0;
-           for (String paramKey: paramsMap.keySet()){
-               final Param param = new Param(paramKey,paramsMap.get(paramKey));
-               params[i++] =  param;
-           }
-        }
-        instanceStore
-                .getRest(paramsMessage.handle)
-                .statsAsync(params, this.paginatedResponseHandler(result, null));
+  private void stats(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+    final AblyFlutterMessage<Map<String, Object>> paramsMessage =
+        (AblyFlutterMessage<Map<String, Object>>) message.message;
+    final Map<String, Object> map = paramsMessage.message;
+    final HashMap<String, Object> paramsMap =
+        (HashMap<String, Object>) map.get(PlatformConstants.TxTransportKeys.params);
+    Param[] params = new Param[paramsMap != null ? paramsMap.size() : 0];
+    if (paramsMap != null) {
+      int i = 0;
+      for (String paramKey : paramsMap.keySet()) {
+        final Param param = new Param(paramKey, paramsMap.get(paramKey));
+        params[i++] = param;
+      }
     }
+    instanceStore
+        .getRest(paramsMessage.handle)
+        .statsAsync(params, this.paginatedResponseHandler(result, null));
+  }
 
   private void getRestPresence(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
