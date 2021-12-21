@@ -75,7 +75,7 @@ class PushNotificationsActivationSliver extends HookWidget {
       if (Platform.isIOS) {
         DeviceInfoPlugin()
             .iosInfo
-            .then((info) => isIOSSimulator.value = info.isPhysicalDevice);
+            .then((info) => isIOSSimulator.value = !info.isPhysicalDevice);
       }
     });
 
