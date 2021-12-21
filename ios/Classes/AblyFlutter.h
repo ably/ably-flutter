@@ -10,8 +10,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic) AblyInstanceStore * instanceStore;
 @property(nonatomic) FlutterMethodChannel *channel;
-@property(nonatomic, nullable) NSData * didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
-@property(nonatomic, nullable) NSError * didFailToRegisterForRemoteNotificationsWithError_error;
 
 @end
 
