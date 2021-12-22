@@ -8,8 +8,8 @@ public class StatsEncoders: NSObject {
     @objc
     public static let encodeStats: (ARTStats) -> [String: Any] = { stats in
         [
-            TxStats_all: encodeStatMessageTypes(stats.all),
-            TxStats_apiRequests: encodeStatsMessageTypes(stats.apiRequests),
+            TxStats_all: encodeStatsMessageTypes(stats.all),
+            TxStats_apiRequests: encodeStatsRequestCount(stats.apiRequests),
             TxStats_channels:encodeStatsResourceCount(stats.channels),
             TxStats_connections:encodeStatsConnectionTypes(stats.connections),
             TxStats_inbound:encodeStatsMessageTraffic(stats.inbound),
@@ -63,10 +63,10 @@ public class StatsEncoders: NSObject {
 
     static let encodeStatsMessageTraffic: (ARTStatsMessageTraffic) -> [String: Any] = { types in
         [
-            TxStatsMessageTraffic_all: encodeStatMessageTypes(types.all),
-            TxStatsMessageTraffic_realtime: encodeStatMessageTypes(types.realtime),
-            TxStatsMessageTraffic_rest: encodeStatMessageTypes(types.rest),
-            TxStatsMessageTraffic_webhook: encodeStatMessageTypes(types.webhook)
+            TxStatsMessageTraffic_all: encodeStatsMessageTypes(types.all),
+            TxStatsMessageTraffic_realtime: encodeStatsMessageTypes(types.realtime),
+            TxStatsMessageTraffic_rest: encodeStatsMessageTypes(types.rest),
+            TxStatsMessageTraffic_webhook: encodeStatsMessageTypes(types.webhook)
         ]
     }
 }
