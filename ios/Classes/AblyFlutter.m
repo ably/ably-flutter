@@ -577,6 +577,21 @@ static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMe
     }];
 };
 
+static const FlutterHandler _stats = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+
+    ARTRest *const rest = [instanceStore restFrom:message.message];
+    [rest stats:^(ARTPaginatedResult<ARTStats *> *statsResult, ARTErrorInfo *error) {
+        if(error){
+            result(error);
+        }else{
+            result(statsResult);
+        }
+    }];
+
+};
+
 static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
@@ -695,6 +710,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         AblyPlatformMethod_realtimeTime:_realtimeTime,
         AblyPlatformMethod_restTime:_restTime,
+        AblyPlatformMethod_stats:_stats,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
