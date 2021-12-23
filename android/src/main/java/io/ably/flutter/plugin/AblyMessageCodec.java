@@ -275,19 +275,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
         encodeMessageCategory(messageTypes.presence));
     return jsonMap;
   }
-  // that's StatsMessageCount in Flutter's side
+
+  // This is different in other platform and will correspond to StatsMessageCount for other libraries
   private Map<String, Object> encodeMessageCategory(Stats.MessageCategory category) {
     if (category == null) return null;
     if (category.category == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
-    // There is a mapping consistencey issue between two, so just assume there is a single message
-    // for now
-    for (String key : category.category.keySet()) {
-      writeValueToJson(
-          jsonMap, PlatformConstants.TxStatsMessageCount.count, category.category.get(key).count);
-      writeValueToJson(
-          jsonMap, PlatformConstants.TxStatsMessageCount.data, category.category.get(key).data);
-    }
+
+    writeValueToJson(
+          jsonMap, PlatformConstants.TxStatsMessageCount.count, category.count);
+    writeValueToJson(
+          jsonMap, PlatformConstants.TxStatsMessageCount.data, category.data);
+
     return jsonMap;
   }
 
