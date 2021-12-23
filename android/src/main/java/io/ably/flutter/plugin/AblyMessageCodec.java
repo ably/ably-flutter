@@ -276,16 +276,15 @@ public class AblyMessageCodec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  // This is different in other platform and will correspond to StatsMessageCount for other libraries
+  // This is different in other platform and will correspond to StatsMessageCount for other
+  // libraries
   private Map<String, Object> encodeMessageCategory(Stats.MessageCategory category) {
     if (category == null) return null;
     if (category.category == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
 
-    writeValueToJson(
-          jsonMap, PlatformConstants.TxStatsMessageCount.count, category.count);
-    writeValueToJson(
-          jsonMap, PlatformConstants.TxStatsMessageCount.data, category.data);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageCount.count, category.count);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageCount.data, category.data);
 
     return jsonMap;
   }
