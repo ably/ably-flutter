@@ -2,6 +2,7 @@
 
 #import "AblyFlutter.h"
 #import <ably_flutter/ably_flutter-Swift.h>
+#import <Ably/Ably.h>
 
 #import "codec/AblyFlutterReaderWriter.h"
 #import "AblyFlutterMessage.h"
@@ -9,6 +10,7 @@
 #import "AblyFlutterStreamHandler.h"
 #import "AblyStreamsChannel.h"
 #import "codec/AblyPlatformConstants.h"
+#import "ARTStatsQuery+ParamBuilder.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -578,17 +580,25 @@ static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMe
 };
 
 static const FlutterHandler _stats = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const message = call.arguments;
+    AblyFlutterMessage *const arguments = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
+    ARTRest *const rest = [instanceStore restFrom:arguments.message];
+    AblyFlutterMessage *message = arguments.message;
+    NSDictionary *paramsDict =  message.message;
+    ARTStatsQuery *query;
+    if(paramsDict[@"params"]){
+        NSDictionary *statsParams = paramsDict[@"params"];
+        query = [ARTStatsQuery fromParams:statsParams];
+    }
 
-    ARTRest *const rest = [instanceStore restFrom:message.message];
-    [rest stats:^(ARTPaginatedResult<ARTStats *> *statsResult, ARTErrorInfo *error) {
+    NSError *statsError;
+    [rest stats:query callback:^(ARTPaginatedResult<ARTStats *> *statsResult, ARTErrorInfo *error) {
         if(error){
             result(error);
         }else{
             result(statsResult);
         }
-    }];
+    } error:&statsError];
 
 };
 
