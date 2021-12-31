@@ -1,5 +1,67 @@
 # Changelog
 
+## [1.2.8](https://github.com/ably/ably-flutter/tree/v1.2.8)
+
+**Bug Fix:**
+Push activation not completing on iOS when running in release configuration [\#276](https://github.com/ably/ably-flutter/issues/276),
+fixed in [\#277](https://github.com/ably/ably-flutter/pull/277) ([ben-xD](https://github.com/ben-xD))
+
+## [1.2.7](https://github.com/ably/ably-flutter/tree/v1.2.7)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.6...v1.2.7)
+
+**Implemented enhancements:**
+
+- Replace optional fields with default values [\#230](https://github.com/ably/ably-flutter/issues/230)
+- Refactor example app to be more readable [\#212](https://github.com/ably/ably-flutter/issues/212)
+- AuthCallback and InstanceStore Refactoring and documentation [\#250](https://github.com/ably/ably-flutter/pull/250) ([ben-xD](https://github.com/ben-xD))
+- Serialize LogLevel using constants [\#244](https://github.com/ably/ably-flutter/pull/244) ([ben-xD](https://github.com/ben-xD))
+- Replace deprecated method calls in tests [\#243](https://github.com/ably/ably-flutter/pull/243) ([ben-xD](https://github.com/ben-xD))
+- Example app: Paginated results viewer widget [\#242](https://github.com/ably/ably-flutter/pull/242) ([ben-xD](https://github.com/ben-xD))
+- Example app: Move out Realtime and Rest UI to separate widget and service [\#240](https://github.com/ably/ably-flutter/pull/240) ([ben-xD](https://github.com/ben-xD))
+- Example app: Extract System Details sliver into new widget [\#239](https://github.com/ably/ably-flutter/pull/239) ([ben-xD](https://github.com/ben-xD))
+- Hide API key secret inside API key UI [\#237](https://github.com/ably/ably-flutter/pull/237) ([ben-xD](https://github.com/ben-xD))
+- Rename `pushSetOnBackgroundMessage` to `pushBackgroundFlutterApplicationReadyOnAndroid` [\#236](https://github.com/ably/ably-flutter/pull/236) ([ben-xD](https://github.com/ben-xD))
+- Add default values to ClientOptions [\#233](https://github.com/ably/ably-flutter/pull/233) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- Clear iOS platform instances synchronously [\#249](https://github.com/ably/ably-flutter/pull/249) ([ben-xD](https://github.com/ben-xD))
+
+**Closed issues:**
+
+- 1.2.6 java.lang.NullPointerException when stream fails to close [\#274](https://github.com/ably/ably-flutter/issues/274)
+- 1.2.6 java.lang.NullPointerException when using token auth  [\#272](https://github.com/ably/ably-flutter/issues/272)
+- `setMockMethodCallHandler` is deprecated. Use `tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler` instead [\#173](https://github.com/ably/ably-flutter/issues/173)
+
+**Merged pull requests:**
+
+- Rename inconsistent methods to be more consistent [\#248](https://github.com/ably/ably-flutter/pull/248) ([ben-xD](https://github.com/ben-xD))
+- Use Objective-C standard style for LogLevel enum [\#246](https://github.com/ably/ably-flutter/pull/246) ([ben-xD](https://github.com/ben-xD))
+- Platform encapsulation [\#235](https://github.com/ably/ably-flutter/pull/235) ([ben-xD](https://github.com/ben-xD))
+
+## [1.2.6](https://github.com/ably/ably-flutter/tree/v1.2.6)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.5...v1.2.6)
+
+**Implemented enhancements:**
+
+- Make the symmetric encryption UI more usable [\#229](https://github.com/ably/ably-flutter/pull/229) ([ben-xD](https://github.com/ben-xD))
+- Improve android logging: Remove unnecessary print statements, and use Log.w where necessary [\#228](https://github.com/ably/ably-flutter/pull/228) ([ben-xD](https://github.com/ben-xD))
+- iOS: add `notification` in RemoteMessage [\#224](https://github.com/ably/ably-flutter/pull/224) ([ben-xD](https://github.com/ben-xD))
+- Fix `setOptions` to complete the Future \(previously did not call `result.success`\) and remove side effects in example app [\#222](https://github.com/ably/ably-flutter/pull/222) ([ben-xD](https://github.com/ben-xD))
+
+**Fixed bugs:**
+
+- iOS push notifications error handling: Stop sending `FlutterError` through MethodChannel. It is not supported and crashes the app. [\#214](https://github.com/ably/ably-flutter/issues/214)
+- Explicitly check types of tokenDetails, instead of using macro which … [\#256](https://github.com/ably/ably-flutter/pull/256) ([ben-xD](https://github.com/ben-xD))
+
+**Merged pull requests:**
+
+- Docs improvement for Android push notifications [\#227](https://github.com/ably/ably-flutter/pull/227) ([ben-xD](https://github.com/ben-xD))
+- Reduce dart analysis warnings and hints and remove "Interface" classes \(e.g. `RealtimeInterface`\) [\#213](https://github.com/ably/ably-flutter/pull/213) ([ben-xD](https://github.com/ben-xD))
+- Remove unnecessary abstract classes [\#193](https://github.com/ably/ably-flutter/pull/193) ([ben-xD](https://github.com/ben-xD))
+
 ## [1.2.5](https://github.com/ably/ably-flutter/tree/v1.2.5)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.4...v1.2.5)
