@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-class PushNotificationEventsNative implements PushNotificationEvents {
+class PushNotificationEventsInternal implements PushNotificationEvents {
   VoidCallback? onOpenSettingsHandler;
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;

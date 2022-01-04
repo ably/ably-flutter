@@ -1,4 +1,3 @@
-export 'src/ably_base.dart';
 export 'src/channels.dart';
 export 'src/event_emitter.dart';
 export 'src/event_listener.dart';

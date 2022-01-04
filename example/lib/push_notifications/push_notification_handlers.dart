@@ -7,7 +7,7 @@ import '../ui/utilities.dart';
 
 class PushNotificationHandlers {
   static BuildContext? context;
-  static final activationEvents = ably.Push.pushEvents;
+  static final activationEvents = ably.Push.activationEvents;
   static final notificationEvents = ably.Push.notificationEvents;
 
   static BehaviorSubject<List<ably.RemoteMessage>>
