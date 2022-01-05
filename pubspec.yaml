@@ -1,6 +1,6 @@
 name: ably_flutter
-description: Flutter plugin for Ably, a realtime messaging service that powers synchronized digital experiences in realtime.
-version: 1.2.6
+description: A wrapper around Ably's Cocoa and Java client library SDKs, providing iOS and Android support.
+version: 1.2.8
 repository: https://github.com/ably/ably-flutter
 
 environment:

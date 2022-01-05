@@ -32,6 +32,10 @@ to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
 If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
 You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
 
+## Updating to a newer version
+
+When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
+
 ## Known Limitations
 
 Features that we do not currently support, but we do plan to add in the future:

@@ -10,13 +10,12 @@
     long long _nextHandle;
 }
 
-+ (instancetype)sharedInstance {
++ (AblyInstanceStore *)sharedInstance {
     static AblyInstanceStore *sharedInstance = nil;
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [[self alloc] init];
-        }
-    }
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
     return sharedInstance;
 }
 
@@ -66,6 +65,20 @@
     return _paginatedResults[handle];
 }
 
+// Set device token on all existing clients
+-(void) didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const) deviceToken {
+    _didRegisterForRemoteNotificationsWithDeviceToken_deviceToken = deviceToken;
+    
+    for (id restHandle in _restInstances) {
+        ARTRest *const rest = _restInstances[restHandle];
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken rest:rest];
+    }
+    for (id realtimeHandle in _realtimeInstances) {
+        ARTRealtime *const realtime = _realtimeInstances[realtimeHandle];
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken realtime:realtime];
+    }
+}
+
 -(void)reset {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];
@@ -75,3 +88,4 @@
 }
 
 @end
+

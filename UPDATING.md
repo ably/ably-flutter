@@ -1,6 +1,6 @@
-# Migration Guide
+# Updating / Migration Guide
 
-This guide lists the changes needed to upgrade from one version of Ably to a newer one.
+This guide lists the changes needed to upgrade from one version of Ably to a newer one when there are breaking changes.
 
 ## [Upgrading from v1.2.6]
 

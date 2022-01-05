@@ -256,7 +256,7 @@ The release process must include the following steps:
 3. Add a commit to bump the version number
    - Update the version in `pubspec.yaml`
    - Update the version of ably-flutter used in the example app and test integration app `podfile.lock` files:
-   - Run `pod install` in `example/ios` and `test_integration/ios`, or run `pod install --project-directory=example/ios` and `pod install --project-directory=test_integration/ios
+   - Run `pod install` in `example/ios` and `test_integration/ios`, or run `pod install --project-directory=example/ios` and `pod install --project-directory=test_integration/ios`
    - Commit this
 4. Add a commit to update the change log. 
   - Autogenerate the changelog contents by running `github_changelog_generator -u ably -p ably-flutter --since-tag 1.2.0 --output delta.md` and manually copying the relevant contents from `delta.md` into `CHANGELOG.md`
