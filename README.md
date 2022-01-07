@@ -96,8 +96,6 @@ If you are using [official Firebase messaging library package](https://pub.dev/p
         tools:node="remove">
 </receiver>
 
-https://pub.dev/packages/firebase_messaging
-
 ### Troubleshooting
 
 - Running on simulator on M1 macs:
