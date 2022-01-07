@@ -88,6 +88,16 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
+Warning
+
+If you are using [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, you must add following block to your Android application's manifest file under application tag. This is a workaround that prevents a conflict risen from two libraries installed together. 
+
+<receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
+        tools:node="remove">
+</receiver>
+
+https://pub.dev/packages/firebase_messaging
+
 ### Troubleshooting
 
 - Running on simulator on M1 macs:
