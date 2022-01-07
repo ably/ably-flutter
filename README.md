@@ -90,7 +90,7 @@ See [PushNotifications.md](PushNotifications.md) for detailed information on get
 
 #### Important Note regarding Firebase and Push Notifications
 
-If you are using [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, you must add following block to your Android application's manifest file under application tag. This is a workaround that prevents a conflict risen from two libraries installed together. 
+If you are using the [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, then you must add the following block to your Android application's manifest file within the `application` element. This is a workaround that prevents a conflict rising from the two libraries installed together. 
 
 ```xml
 <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
