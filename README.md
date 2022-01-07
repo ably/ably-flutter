@@ -92,9 +92,11 @@ Warning
 
 If you are using [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, you must add following block to your Android application's manifest file under application tag. This is a workaround that prevents a conflict risen from two libraries installed together. 
 
+```xml
 <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
         tools:node="remove">
 </receiver>
+```
 
 ### Troubleshooting
 
