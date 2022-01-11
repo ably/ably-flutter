@@ -38,13 +38,6 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
     Executors.newSingleThreadExecutor().execute(() -> {
       sendMessageToFlutterApplication(context, intent);
     });
-
-    listenForFlutterApplicationToFinishProcessingMessage(context);
-
-    Executors.newSingleThreadExecutor().execute(() -> {
-      sendMessageToFlutterApplication(context, intent);
-    });
-
   }
 
   /**
