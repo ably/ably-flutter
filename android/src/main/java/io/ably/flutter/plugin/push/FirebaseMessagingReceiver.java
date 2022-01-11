@@ -29,6 +29,16 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    if (intent.getExtras() == null){
+      return;
+    }
+
+    listenForFlutterApplicationToFinishProcessingMessage(context);
+
+    Executors.newSingleThreadExecutor().execute(() -> {
+      sendMessageToFlutterApplication(context, intent);
+    });
+
     listenForFlutterApplicationToFinishProcessingMessage(context);
 
     Executors.newSingleThreadExecutor().execute(() -> {
