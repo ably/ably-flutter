@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import io.ably.flutter.plugin.AblyFlutter;
 
@@ -29,7 +30,11 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     listenForFlutterApplicationToFinishProcessingMessage(context);
-    sendMessageToFlutterApplication(context, intent);
+
+    Executors.newSingleThreadExecutor().execute(() -> {
+      sendMessageToFlutterApplication(context, intent);
+    });
+
   }
 
   /**
