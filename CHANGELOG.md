@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.9](https://github.com/ably/ably-flutter/tree/v1.2.9)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.8...v1.2.9)
+
+**Bug Fixes:**
+
+- Push device registration does not clear/reset device details on iOS [\#287](https://github.com/ably/ably-flutter/issues/287), fixed in [\#293](https://github.com/ably/ably-flutter/pull/293) ([QuintinWillison](https://github.com/QuintinWillison))
+- Our PN broadcast receiver issue causes ANR on Android [\#290](https://github.com/ably/ably-flutter/issues/290), fixed in [\#291](https://github.com/ably/ably-flutter/pull/291) ([ikbalkaya](https://github.com/ikbalkaya))
+
 ## [1.2.8](https://github.com/ably/ably-flutter/tree/v1.2.8)
 
 **Bug Fix:**
