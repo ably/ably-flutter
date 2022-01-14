@@ -88,16 +88,6 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
-#### [Important Note regarding Firebase and Push Notifications](https://github.com/ably/ably-flutter/issues/226)
-
-If you are using the [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, then you must add the following block to your Android application's manifest file within the `application` element. This is a workaround that prevents a conflict rising from the two libraries installed together. 
-
-```xml
-<receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
-        tools:node="remove">
-</receiver>
-```
-
 ### Troubleshooting
 
 - Running on simulator on M1 macs:
