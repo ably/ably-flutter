@@ -3,8 +3,7 @@
 
 #### [Important Note regarding Firebase and Push Notifications](https://github.com/ably/ably-flutter/issues/226)
 
-If you are using the [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, then you must add the following block to your Android application's manifest file within the `application` element. This is a workaround that prevents a conflict rising from the two libraries installed together.
-
+If you are using the [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, then you must add the following block to your Android application's manifest file within the `application` element. This is a workaround that prevents a conflict that happens when the two libraries are installed together.
 ```xml
 <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
         tools:node="remove">
