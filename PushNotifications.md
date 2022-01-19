@@ -120,6 +120,47 @@ void setUpPushEventHandlers() {
 }
 ```
 
+#### Known Issue with iOS Native Dependency Conflicts
+
+On iOS, conflicts with other dependencies or your native code might cause the Ably plugin to never receive the APNs device token. 
+This will cause calls to `activate` to never complete (The future never completes with a success or error). 
+In this case, you should provide us with the device token manually in your `didRegisterForRemoteNotificationsWithDeviceToken` and `didFailToRegisterForRemoteNotificationsWithError` in your application delegate.
+
+If you're working in Objective-C then this will look something like this in `AppDelegate.m`:
+
+```objective-c
+#import "AblyFlutter.h"
+
+@implementation AppDelegate
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [AblyInstanceStore.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    AblyInstanceStore.sharedInstance.didFailToRegisterForRemoteNotificationsWithError_error = error;
+}
+
+@end
+```
+
+If you're working in Swift then this will look something like this in `AppDelegate.swift`:
+
+```swift
+import ably_flutter
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        AblyInstanceStore.sharedInstance().didRegisterForRemoteNotifications(withDeviceToken: deviceToken)
+    }
+    
+    override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        AblyInstanceStore.sharedInstance().didFailToRegisterForRemoteNotificationsWithError_error = error;
+    }
+}
+```
+
 ### Subscribing to channels for push notifications
 
 - Get the Realtime/ Rest channel: `final channel = realtime!.channels.get(Constants.channelNameForPushNotifications)`

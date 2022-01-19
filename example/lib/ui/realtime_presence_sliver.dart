@@ -109,51 +109,54 @@ class RealtimePresenceSliver extends HookWidget {
         useState<StreamSubscription<ably.PresenceMessage>?>(null);
     final presenceMembers = useState<List<ably.PresenceMessage>>([]);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Presence',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Row(
-          children: <Widget>[
-            Expanded(
-                child: createChannelPresenceSubscribeButton(
-                    latestMessage, channel.state, presenceSubscription)),
-            Expanded(
-                child: createChannelPresenceUnsubscribeButton(
-                    presenceSubscription)),
-          ],
-        ),
-        Text(
-          'Presence Message from channel:'
-          ' ${latestMessage.value?.data}',
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: enterRealtimePresence(),
-            ),
-            Expanded(
-              child: updateRealtimePresence(),
-            ),
-            Expanded(
-              child: leaveRealtimePresence(),
-            ),
-          ],
-        ),
-        getRealtimeChannelPresence(presenceMembers),
-        ...presenceMembers.value
-            .map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
-            .toList(),
-        PaginatedResultViewer<ably.PresenceMessage>(
-            title: 'Presence history',
-            query: () =>
-                channel.presence.history(ably.RealtimeHistoryParams(limit: 10)),
-            builder: (context, message, _) => TextRow('clientId',
-                '${message.id}:${message.clientId}:${message.data}')),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Presence',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                  child: createChannelPresenceSubscribeButton(
+                      latestMessage, channel.state, presenceSubscription)),
+              Expanded(
+                  child: createChannelPresenceUnsubscribeButton(
+                      presenceSubscription)),
+            ],
+          ),
+          Text(
+            'Presence Message from channel:'
+            ' ${latestMessage.value?.data}',
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: enterRealtimePresence(),
+              ),
+              Expanded(
+                child: updateRealtimePresence(),
+              ),
+              Expanded(
+                child: leaveRealtimePresence(),
+              ),
+            ],
+          ),
+          getRealtimeChannelPresence(presenceMembers),
+          ...presenceMembers.value
+              .map((m) => Text('${m.id}:${m.clientId}:${m.data}'))
+              .toList(),
+          PaginatedResultViewer<ably.PresenceMessage>(
+              title: 'Presence history',
+              query: () => channel.presence
+                  .history(ably.RealtimeHistoryParams(limit: 10)),
+              builder: (context, message, _) => TextRow('clientId',
+                  '${message.id}:${message.clientId}:${message.data}')),
+        ],
+      ),
     );
   }
 }

@@ -146,7 +146,6 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
 
     [clientOptions addAgent:@"ably-flutter" version:FLUTTER_PACKAGE_PLUGIN_VERSION];
 
-    
     return  [[AblyFlutterClientOptions alloc]
              initWithClientOptions:clientOptions
              hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
@@ -158,29 +157,29 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     NSDate *issued = nil;
     NSString *capability = nil;
     NSString *clientId = nil;
-    
+
     if ([dictionary[TxTokenDetails_token] isKindOfClass: [NSString class]]) {
         token = dictionary[TxTokenDetails_token];
     }
-    
+
     if ([dictionary[TxTokenDetails_expires] isKindOfClass: [NSNumber class]]) {
         NSNumber *const timeInMilliseconds = dictionary[TxTokenDetails_issued];
         expires = [NSDate dateWithTimeIntervalSince1970:timeInMilliseconds.doubleValue];
     }
-    
+
     if ([dictionary[TxTokenDetails_issued] isKindOfClass: [NSNumber class]]) {
         NSNumber *const timeInMilliseconds = dictionary[TxTokenDetails_issued];
         issued = [NSDate dateWithTimeIntervalSince1970:timeInMilliseconds.doubleValue];
     }
-    
+
     if ([dictionary[TxTokenDetails_capability] isKindOfClass: [NSString class]]) {
         capability = dictionary[TxTokenDetails_capability];
     }
-    
+
     if ([dictionary[TxTokenDetails_clientId] isKindOfClass: [NSString class]]) {
         clientId = dictionary[TxTokenDetails_clientId];
     }
-    
+
     return [[ARTTokenDetails alloc] initWithToken:token expires:expires issued:issued capability:capability clientId:clientId];
 }
 

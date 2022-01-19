@@ -741,8 +741,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void getFirstPage(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage<AblyFlutterMessage<Integer>> message = (AblyFlutterMessage<AblyFlutterMessage<Integer>>) call.arguments;
-    Integer pageHandle = message.message.message;
+    final AblyFlutterMessage<Integer> message = (AblyFlutterMessage<Integer>) call.arguments;
+    Integer pageHandle = message.message;
     instanceStore.getPaginatedResult(pageHandle).first(this.paginatedResponseHandler(result, pageHandle));
   }
 
