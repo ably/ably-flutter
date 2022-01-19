@@ -24,8 +24,8 @@ import io.ably.lib.types.ClientOptions;
  */
 class AblyInstanceStore {
 
-    private static final AblyInstanceStore _instance = new AblyInstanceStore();
-    private long _nextHandle = 1;
+    private static final AblyInstanceStore instance = new AblyInstanceStore();
+    private long nextHandle = 1;
 
     // Android Studio warns against using HashMap with integer keys, and
     // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
@@ -36,7 +36,7 @@ class AblyInstanceStore {
     private final LongSparseArray<AsyncPaginatedResult<Object>> paginatedResults = new LongSparseArray<>();
 
     static synchronized AblyInstanceStore getInstance() {
-        return _instance;
+        return instance;
     }
 
     /**
@@ -44,14 +44,14 @@ class AblyInstanceStore {
      * to get the client **after** it is instantiated using [createRest] or [createRealtime].
      */
     long getHandleForNextClient() {
-        return _nextHandle;
+        return nextHandle;
     }
 
     long createRest(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRest rest = new AblyRest(clientOptions);
         rest.setAndroidContext(applicationContext);
-        restInstances.put(_nextHandle, rest);
-        return _nextHandle++;
+        restInstances.put(nextHandle, rest);
+        return nextHandle++;
     }
 
     AblyRest getRest(final long handle) {
@@ -61,8 +61,8 @@ class AblyInstanceStore {
     long createRealtime(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
         final AblyRealtime realtime = new AblyRealtime(clientOptions);
         realtime.setAndroidContext(applicationContext);
-        realtimeInstances.put(_nextHandle, realtime);
-        return _nextHandle++;
+        realtimeInstances.put(nextHandle, realtime);
+        return nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
@@ -98,7 +98,7 @@ class AblyInstanceStore {
     long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
         if (handle == null) {
-            longHandle = _nextHandle++;
+            longHandle = nextHandle++;
         } else {
             longHandle = handle.longValue();
         }

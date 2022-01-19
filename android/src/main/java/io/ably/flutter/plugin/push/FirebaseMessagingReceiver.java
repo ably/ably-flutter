@@ -14,12 +14,14 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.ably.flutter.plugin.AblyFlutter;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
-
+  private static final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
   @Nullable
   private PendingResult asyncProcessingPendingResult = null;
 
@@ -29,7 +31,10 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     listenForFlutterApplicationToFinishProcessingMessage(context);
-    sendMessageToFlutterApplication(context, intent);
+
+    backgroundThreadExecutor.execute(() -> {
+      sendMessageToFlutterApplication(context, intent);
+    });
   }
 
   /**

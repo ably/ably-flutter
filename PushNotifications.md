@@ -89,6 +89,9 @@ If you invoke any methods from the `ably_flutter` package before calling `runApp
 - Activate the device for push notifications with Ably: `ablyClient.push.activate();`. This only
   needs to be done once, and will be used across all future app launches, as long as the app is not deactivated. This method will throw an AblyException if it fails.
 - The `Future` returned by `activate` is not guaranteed to complete quickly. For example, if there is no internet connection, `activate` will wait until it is available. Therefore, there is no guarantee any code awaiting the completion of the `Future` will run.
+- When moving between different environments (e.g. development vs. production), you should clear the push device information stored by Ably Flutter to avoid using the wrong push device information on a different environment, by either:
+  - Reinstalling your app, or
+  - Deactivating the device in the same environment the device was activated on.
 
 ```dart
 try {
@@ -117,6 +120,47 @@ void setUpPushEventHandlers() {
   ably.Push.pushEvents.onDeactivate.listen((error) async {
     print(error);
   });
+}
+```
+
+#### Known Issue with iOS Native Dependency Conflicts
+
+On iOS, conflicts with other dependencies or your native code might cause the Ably plugin to never receive the APNs device token. 
+This will cause calls to `activate` to never complete (The future never completes with a success or error). 
+In this case, you should provide us with the device token manually in your `didRegisterForRemoteNotificationsWithDeviceToken` and `didFailToRegisterForRemoteNotificationsWithError` in your application delegate.
+
+If you're working in Objective-C then this will look something like this in `AppDelegate.m`:
+
+```objective-c
+#import "AblyFlutter.h"
+
+@implementation AppDelegate
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [AblyInstanceStore.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    AblyInstanceStore.sharedInstance.didFailToRegisterForRemoteNotificationsWithError_error = error;
+}
+
+@end
+```
+
+If you're working in Swift then this will look something like this in `AppDelegate.swift`:
+
+```swift
+import ably_flutter
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        AblyInstanceStore.sharedInstance().didRegisterForRemoteNotifications(withDeviceToken: deviceToken)
+    }
+    
+    override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        AblyInstanceStore.sharedInstance().didFailToRegisterForRemoteNotificationsWithError_error = error;
+    }
 }
 ```
 
