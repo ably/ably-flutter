@@ -21,5 +21,6 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   @override
   void release(String name) {
     realtime.invoke(PlatformMethod.releaseRealtimeChannel, name);
+    super.release(name);
   }
 }
