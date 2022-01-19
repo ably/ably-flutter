@@ -230,8 +230,7 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxClientOptions.authParams, v.authParams);
     _writeToJson(jsonMap, TxClientOptions.queryTime, v.queryTime);
     _writeToJson(jsonMap, TxClientOptions.useTokenAuth, v.useTokenAuth);
-    _writeToJson(
-        jsonMap, TxClientOptions.hasAuthCallback, v.authCallback != null);
+    jsonMap[TxClientOptions.hasAuthCallback] = v.authCallback != null;
 
     // ClientOptions
     _writeToJson(jsonMap, TxClientOptions.clientId, v.clientId);
