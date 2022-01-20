@@ -4,35 +4,19 @@
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.9...v1.2.10)
 
-**Implemented enhancements:**
+**Bug Fix:**
 
-- Create job in CI to build and run example app with older versions of Flutter, e.g. 2.2.3 \(to test for build errors using older Flutter versions\) [\#258](https://github.com/ably/ably-flutter/issues/258)
-- Improve integration test setup [\#220](https://github.com/ably/ably-flutter/issues/220)
-- Format iOS and Android code \(automate it, and add checks to CI\) [\#216](https://github.com/ably/ably-flutter/issues/216)
-- Conform approach for passing native SDK generated errors on [\#10](https://github.com/ably/ably-flutter/issues/10)
-- Rename variables to be more meaningful [\#262](https://github.com/ably/ably-flutter/pull/262) ([ben-xD](https://github.com/ben-xD))
-- Emphasize Ably product in descriptions \(pubspec, readme\) [\#261](https://github.com/ably/ably-flutter/pull/261) ([ben-xD](https://github.com/ben-xD))
-- Remove ON\_VALUE usage because `hasAuthCallback` is always set [\#252](https://github.com/ably/ably-flutter/pull/252) ([ben-xD](https://github.com/ben-xD))
+This bug affects customers using
+[message content encryption](https://ably.com/documentation/realtime/encryption)
+alongisde
+[channel history](https://ably.com/documentation/rest/history)
+for a single Ably client instance.
+It only affects the iOS runtime (not an issue on Android).
+History REST requests, on iOS only, were incorrectly returning encrypted payloads,
+despite encryption having been enabled via the Realtime channel `setOptions` API.
 
-**Fixed bugs:**
-
-- Issue with parsing channel history on iOS platform [\#296](https://github.com/ably/ably-flutter/issues/296)
-- Example app: "release" channel button [\#265](https://github.com/ably/ably-flutter/pull/265) ([ben-xD](https://github.com/ben-xD))
-
-**Closed issues:**
-
-- Add guidance on precommit hook to contributing guide [\#271](https://github.com/ably/ably-flutter/issues/271)
-- Describe the code generation and serialization process between Dart and Android/ios [\#263](https://github.com/ably/ably-flutter/issues/263)
-- Remove nesting of AblyMessages [\#245](https://github.com/ably/ably-flutter/issues/245)
-- Simplify and refactor `AblyMethodCallHandler.java` and `AblyMessageCodec.java` [\#180](https://github.com/ably/ably-flutter/issues/180)
-- Use consistent indentation across all files in Java [\#165](https://github.com/ably/ably-flutter/issues/165)
-- ably-java authCallback flow expects synchronous response [\#31](https://github.com/ably/ably-flutter/issues/31)
-- Should we implement EventEmitter? [\#16](https://github.com/ably/ably-flutter/issues/16)
-
-**Merged pull requests:**
-
-- Update to `ably-cocoa` v.1.2.9 [\#299](https://github.com/ably/ably-flutter/pull/299) ([QuintinWillison](https://github.com/QuintinWillison))
-- Add documentation about actions required to make Ably Flutter push work across multiple environments [\#280](https://github.com/ably/ably-flutter/pull/280) ([ben-xD](https://github.com/ben-xD))
+- **Bug**: Updating Realtime channel options doesn’t update the options of its REST counterpart [\#296](https://github.com/ably/ably-flutter/issues/296), caused by [ably/ably-cocoa\#1265](https://github.com/ably/ably-cocoa/issues/1265)
+- **Fix**: Update to `ably-cocoa` v.1.2.9 [\#299](https://github.com/ably/ably-flutter/pull/299) ([QuintinWillison](https://github.com/QuintinWillison)), using [ably/ably-cocoa\#1266](https://github.com/ably/ably-cocoa/pull/1266) ([lawrence-forooghian](https://github.com/lawrence-forooghian))
 
 ## [1.2.9](https://github.com/ably/ably-flutter/tree/v1.2.9)
 
