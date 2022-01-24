@@ -76,7 +76,7 @@ public class PushActivationEventHandlers {
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnDeactivate, errorInfo);
           if (resultForDeactivate != null){
             Log.d(TAG, "resultForDeactivate is null on PUSH_DEACTIVATE_ACTION.");
-            returnMethodCallResult(resultForActivate, errorInfo);
+            returnMethodCallResult(resultForDeactivate, errorInfo);
             resultForDeactivate = null;
           }else{
             Log.e(TAG, "resultForDeactivate is null on PUSH_DEACTIVATE_ACTION.");
