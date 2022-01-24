@@ -65,7 +65,7 @@ public class PushActivationEventHandlers {
         case PUSH_ACTIVATE_ACTION:
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnActivate, errorInfo);
           if (resultForActivate != null){
-            Log.d(TAG, "resultForActivate is null on PUSH_ACTIVATE_ACTION.");
+            Log.d(TAG, "resultForActivate received on PUSH_ACTIVATE_ACTION.");
             returnMethodCallResult(resultForActivate, errorInfo);
             resultForActivate = null;
           }else{
