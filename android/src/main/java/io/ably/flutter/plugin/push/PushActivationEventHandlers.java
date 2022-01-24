@@ -41,15 +41,21 @@ public class PushActivationEventHandlers {
         return instance;
     }
 
+    public void registerReceiver(){
+        pushActivationReceiver.register(context,this::activationResultReceived);
+    }
+    public void unregisterReceiver(){
+        pushActivationReceiver.unregister(context);
+    }
+
     public void setResultForActivate(MethodChannel.Result result) {
         resultForActivate = result;
-        pushActivationReceiver.register(context,this::activationResultReceived);
     }
 
     public void setResultForDeactivate(MethodChannel.Result result) {
         resultForDeactivate = result;
-        pushActivationReceiver.register(context,this::activationResultReceived);
     }
+
     private void activationResultReceived(String action, ErrorInfo errorInfo) {
         switch (action) {
             case PUSH_ACTIVATE_ACTION:
@@ -57,7 +63,6 @@ public class PushActivationEventHandlers {
                 if (resultForActivate != null) {
                     Log.d(TAG, "resultForActivate received on PUSH_ACTIVATE_ACTION.");
                     returnMethodCallResult(resultForActivate, errorInfo);
-                    pushActivationReceiver.unregister(context);
                 } else {
                     Log.e(TAG, "resultForActivate is null on PUSH_ACTIVATE_ACTION.");
                 }
@@ -67,7 +72,6 @@ public class PushActivationEventHandlers {
                 if (resultForDeactivate != null) {
                     Log.d(TAG, "resultForDeactivate received on PUSH_DEACTIVATE_ACTION.");
                     returnMethodCallResult(resultForDeactivate, errorInfo);
-                    pushActivationReceiver.unregister(context);
                 } else {
                     Log.e(TAG, "resultForDeactivate is null on PUSH_DEACTIVATE_ACTION.");
                 }
