@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.10](https://github.com/ably/ably-flutter/tree/v1.2.10)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.9...v1.2.10)
+
+**Bug Fix:**
+
+This bug affects customers using
+[message content encryption](https://ably.com/documentation/realtime/encryption)
+alongisde
+[channel history](https://ably.com/documentation/rest/history)
+for a single Ably client instance.
+It only affects the iOS runtime (not an issue on Android).
+History REST requests, on iOS only, were incorrectly returning encrypted payloads,
+despite encryption having been enabled via the Realtime channel `setOptions` API.
+
+- **Bug**: Updating Realtime channel options doesn’t update the options of its REST counterpart [\#296](https://github.com/ably/ably-flutter/issues/296), caused by [ably/ably-cocoa\#1265](https://github.com/ably/ably-cocoa/issues/1265)
+- **Fix**: Update to `ably-cocoa` v.1.2.9 [\#299](https://github.com/ably/ably-flutter/pull/299) ([QuintinWillison](https://github.com/QuintinWillison)), using [ably/ably-cocoa\#1266](https://github.com/ably/ably-cocoa/pull/1266) ([lawrence-forooghian](https://github.com/lawrence-forooghian))
+
 ## [1.2.9](https://github.com/ably/ably-flutter/tree/v1.2.9)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.8...v1.2.9)

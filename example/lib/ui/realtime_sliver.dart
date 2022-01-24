@@ -13,12 +13,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RealtimeSliver extends HookWidget {
   final AblyService ablyService;
-  late final ably.Realtime realtime;
-  late final ably.RealtimeChannel channel;
-  final List<StreamSubscription> _subscriptions = [];
+  final ably.Realtime realtime;
+  late ably.RealtimeChannel channel;
+  List<StreamSubscription> _subscriptions = [];
 
-  RealtimeSliver(this.ablyService, {Key? key}) : super(key: key) {
-    realtime = ablyService.realtime;
+  RealtimeSliver(this.ablyService, {Key? key})
+      : realtime = ablyService.realtime,
+        super(key: key) {
     channel = realtime.channels.get(Constants.channelName);
   }
 
@@ -26,6 +27,7 @@ class RealtimeSliver extends HookWidget {
     for (final subscription in _subscriptions) {
       subscription.cancel();
     }
+    _subscriptions = [];
   }
 
   Widget buildConnectButton() => TextButton(
@@ -130,8 +132,16 @@ class RealtimeSliver extends HookWidget {
         ),
       );
 
-  Widget buildReleaseRealtimeChannelButton() => TextButton(
-        onPressed: () => realtime.channels.release(Constants.channelName),
+  Widget buildReleaseRealtimeChannelButton(
+          ValueNotifier<ably.ConnectionState> connectionState,
+          ValueNotifier<ably.ChannelState> channelState) =>
+      TextButton(
+        onPressed: () async {
+          await channel.detach();
+          realtime.channels.release(Constants.channelName);
+          channel = realtime.channels.get(Constants.channelName);
+          setupListeners(connectionState, channelState);
+        },
         child: const Text('Release'),
       );
 
@@ -145,21 +155,7 @@ class RealtimeSliver extends HookWidget {
         useState<StreamSubscription<ably.Message>?>(null);
 
     useEffect(() {
-      final connectionSubscription =
-          realtime.connection.on().listen((connectionStateChange) {
-        if (connectionStateChange.current == ably.ConnectionState.failed) {
-          logAndDisplayError(connectionStateChange.reason);
-        }
-        connectionState.value = connectionStateChange.current;
-        print('${DateTime.now()}:'
-            ' ConnectionStateChange event: ${connectionStateChange.event}'
-            ' with reason: ${connectionStateChange.reason}');
-      });
-      _subscriptions.add(connectionSubscription);
-      final channelSubscription = channel.on().listen((stateChange) {
-        channelState.value = channel.state;
-      });
-      _subscriptions.add(channelSubscription);
+      setupListeners(connectionState, channelState);
       return dispose;
     }, []);
 
@@ -192,7 +188,9 @@ class RealtimeSliver extends HookWidget {
                 child: buildChannelAttachButton(
                     connectionState.value, channelState.value)),
             Expanded(child: buildChannelDetachButton(channelState.value)),
-            Expanded(child: buildReleaseRealtimeChannelButton()),
+            Expanded(
+                child: buildReleaseRealtimeChannelButton(
+                    connectionState, channelState)),
           ],
         ),
         Row(
@@ -251,6 +249,26 @@ class RealtimeSliver extends HookWidget {
                 )),
       ],
     );
+  }
+
+  void setupListeners(ValueNotifier<ably.ConnectionState> connectionState,
+      ValueNotifier<ably.ChannelState> channelState) {
+    dispose();
+    final connectionSubscription =
+        realtime.connection.on().listen((connectionStateChange) {
+      if (connectionStateChange.current == ably.ConnectionState.failed) {
+        logAndDisplayError(connectionStateChange.reason);
+      }
+      connectionState.value = connectionStateChange.current;
+      print('${DateTime.now()}:'
+          ' ConnectionStateChange event: ${connectionStateChange.event}'
+          '\nReason: ${connectionStateChange.reason}');
+    });
+    _subscriptions.add(connectionSubscription);
+    final channelSubscription = channel.on().listen((stateChange) {
+      channelState.value = channel.state;
+    });
+    _subscriptions.add(channelSubscription);
   }
 }
 
