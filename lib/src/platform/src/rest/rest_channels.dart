@@ -18,7 +18,7 @@ class RestChannels extends Channels<RestChannel> {
 
   @override
   void release(String name) {
-    super.release(name);
     _rest.invoke(PlatformMethod.releaseRestChannel, name);
+    super.release(name);
   }
 }

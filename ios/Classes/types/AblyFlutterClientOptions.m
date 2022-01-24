@@ -1,10 +1,3 @@
-//
-//  AblyFlutterClientOptions.m
-//  Ably
-//
-//  Created by Rohit R. Abbadi on 11/09/20.
-//
-
 #import "AblyFlutterClientOptions.h"
 
 
