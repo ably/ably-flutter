@@ -31,12 +31,16 @@ public class PushActivationEventHandlers {
     }
   }
 
-  public static void setResultForActivate(MethodChannel.Result result) {
-    instance.resultForActivate = result;
+  public static PushActivationEventHandlers getInstance() {
+    return instance;
   }
 
-  public static void setResultForDeactivate(MethodChannel.Result result) {
-    instance.resultForDeactivate = result;
+  public  void setResultForActivate(MethodChannel.Result result) {
+    resultForActivate = result;
+  }
+
+  public void setResultForDeactivate(MethodChannel.Result result) {
+    resultForDeactivate = result;
   }
 
   public PushActivationEventHandlers(Context context, MethodChannel methodChannel) {
