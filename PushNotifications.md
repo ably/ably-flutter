@@ -2,6 +2,18 @@
 
 Push Notifications allow you to reach users who have your application in the foreground, background and terminated, including when your application is not connected to Ably. Push notifications allow you to run code and show alerts to the user. On iOS, Ably connects to [APNs](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html) to send messages to devices. On Android, Ably connects to [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) to send messages to devices. As both services do not guarantee message delivery and may even throttle messages to specific devices based on battery level, message frequency, and other criteria, messages may arrive much later than sent or ignored.
 
+## Important Note regarding Firebase Messaging Plugin
+
+If you are using the [official Firebase messaging library package](https://pub.dev/packages/firebase_messaging) along with this library, then you must add the following block to your Android application's manifest file, within the `application` element. This is a workaround that prevents a conflict that happens when the two libraries are installed together.
+
+```xml
+<receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"
+        tools:node="remove">
+</receiver>
+```
+
+See [issue #226](https://github.com/ably/ably-flutter/issues/226).
+
 ## Known Limitations
  
 - [Activating devices from your server](https://ably.com/documentation/general/push/activate-subscribe#activation-from-server): Device activation is automatic in ably-flutter, just call `Push#activate`. However, Ably-java and ably-cocoa allow you to implement delegate methods to activate devices manually on your server instead of automatically.
