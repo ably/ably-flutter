@@ -65,21 +65,21 @@ public class PushActivationEventHandlers {
         case PUSH_ACTIVATE_ACTION:
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnActivate, errorInfo);
           if (resultForActivate != null){
-            Log.d(TAG, "resultForActivate is not null");
+            Log.d(TAG, "resultForActivate is null on PUSH_ACTIVATE_ACTION.");
             returnMethodCallResult(resultForActivate, errorInfo);
             resultForActivate = null;
           }else{
-            Log.e(TAG, "resultForActivate is null: ", new NullPointerException());
+            Log.e(TAG, "resultForActivate is null on PUSH_ACTIVATE_ACTION.");
           }
           break;
         case PUSH_DEACTIVATE_ACTION:
           callCallbackOnDartSide(PlatformConstants.PlatformMethod.pushOnDeactivate, errorInfo);
           if (resultForDeactivate != null){
-            Log.d(TAG, "resultForDeactivate is not null");
+            Log.d(TAG, "resultForDeactivate is null on PUSH_DEACTIVATE_ACTION.");
             returnMethodCallResult(resultForActivate, errorInfo);
             resultForDeactivate = null;
           }else{
-            Log.e(TAG, "resultForDeactivate is null: ", new NullPointerException());
+            Log.e(TAG, "resultForDeactivate is null on PUSH_DEACTIVATE_ACTION.");
           }
           break;
         case PUSH_UPDATE_FAILED_ACTION:
