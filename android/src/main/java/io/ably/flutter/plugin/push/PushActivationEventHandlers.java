@@ -31,7 +31,7 @@ public class PushActivationEventHandlers {
         pushActivationReceiver = new PushActivationReceiver();
     }
 
-    public static void instantiate(Context context, MethodChannel methodChannel) {
+    public static synchronized void instantiate(Context context, MethodChannel methodChannel) {
         if (instance == null) {
             instance = new PushActivationEventHandlers(context, methodChannel);
         }
