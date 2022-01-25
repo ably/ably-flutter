@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.11](https://github.com/ably/ably-flutter/tree/v1.2.11)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.10...v1.2.11)
+
+**Reverted Bug Fix:**
+
+We made a change, released in [version 1.2.9](https://github.com/ably/ably-flutter/releases/tag/1.2.9), which we suspect has been causing issues for some customers.
+This release reverts that change.
+
+- Update to `ably-cocoa` v.1.2.10 [\#305](https://github.com/ably/ably-flutter/pull/305) ([QuintinWillison](https://github.com/QuintinWillison))
+
+**Fixed bugs:**
+
+- Customer reporting issue with NPE on Android push notifications [\#298](https://github.com/ably/ably-flutter/issues/298)
+
+**Merged pull requests:**
+
+- Checked for nullity of activation / deactivation results [\#303](https://github.com/ably/ably-flutter/pull/303) ([ikbalkaya](https://github.com/ikbalkaya))
+- Correct the migration guide [\#301](https://github.com/ably/ably-flutter/pull/301) ([QuintinWillison](https://github.com/QuintinWillison))
+- Add workaround for firebase messaging [\#289](https://github.com/ably/ably-flutter/pull/289) ([ikbalkaya](https://github.com/ikbalkaya))
+
 ## [1.2.10](https://github.com/ably/ably-flutter/tree/v1.2.10)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.9...v1.2.10)
