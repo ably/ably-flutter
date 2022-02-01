@@ -54,6 +54,10 @@ Features that we do not currently support, but we do plan to add in the future:
 
 - To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app.
 - Clone the project
+- For Android, a Firebase instance configuration is required to build the app. In order run the application on Android device:
+  - Create a Firebase project following [official Firebase guide](https://firebase.google.com/docs/android/setup#create-firebase-project) (you can also use an existing one)
+  - Register the sample app with your Firebase project using `io.ably.flutter.example` as package name
+  - Download `google_services.json` file from Firebase and put it into [example/android/app](example/android/app) directory
 
 #### Android Studio / IntelliJ Idea
 
