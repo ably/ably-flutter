@@ -25,6 +25,7 @@ import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.realtime.Presence;
+import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
@@ -604,16 +605,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private void realtimeTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
-        time(methodCall, result, instanceStore.getRealtime((int) message.message));
+        time(result, instanceStore.getRealtime((int) message.message));
     }
 
     private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
-        time(methodCall, result, instanceStore.getRest((int) message.message));
+        time(result, instanceStore.getRest((int) message.message));
     }
 
-    private void time(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result, AblyBase client) {
-        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+    private void time(@NonNull MethodChannel.Result result, AblyBase client) {
         Callback<Long> callback = new Callback<Long>() {
             @Override
             public void onSuccess(Long timeResult) {
