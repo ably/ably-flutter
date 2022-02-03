@@ -84,7 +84,7 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimePresenceParams,
         null,
       ),
-
+      CodecTypes.stats: _CodecPair<Stats>(null, _decodeStats),
       // Push Notifications
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
@@ -1055,6 +1055,32 @@ class Codec extends StandardMessageCodec {
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
     );
   }
+
+  /// Decodes value [jsonMap] to [Stats]
+  /// returns null if [jsonMap] is null
+  /// FIXME: For now only decodes interval and channels
+  Stats _decodeStats(Map<String, dynamic> jsonMap) {
+    final channelsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.channels,
+    ));
+    return Stats(
+        channels: (channelsJson != null)
+            ? _decodeStatsResourceCount(channelsJson)
+            : null,
+        intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId));
+  }
+
+  StatsResourceCount _decodeStatsResourceCount(Map<String, dynamic> jsonMap) =>
+      StatsResourceCount(
+          mean: _readFromJson(jsonMap, TxStatsResourceCount.mean),
+          min: _readFromJson(jsonMap, TxStatsResourceCount.min),
+          opened: _readFromJson(jsonMap, TxStatsResourceCount.opened),
+          peak: _readFromJson(jsonMap, TxStatsResourceCount.peak),
+          refused: _readFromJson(
+            jsonMap,
+            TxStatsRequestCount.refused,
+          ));
 
   /// Decodes [action] to [PresenceAction] enum if not null
   PresenceAction? _decodePresenceAction(String? action) {

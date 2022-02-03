@@ -4,6 +4,18 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS1
 class Stats {
+  /// Creates a stats instance
+  Stats(
+      {this.all,
+      this.apiRequests,
+      this.channels,
+      this.connections,
+      this.inbound,
+      this.intervalId,
+      this.outbound,
+      this.persisted,
+      this.tokenRequests});
+
   /// Aggregates inbound and outbound messages.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
