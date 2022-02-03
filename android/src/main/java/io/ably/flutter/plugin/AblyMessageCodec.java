@@ -345,6 +345,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     } else if (value instanceof ChannelOptions) {
       // Encoding it into a RealtimeChannelOptions instance, because it extends RestChannelOptions
       return PlatformConstants.CodecTypes.realtimeChannelOptions;
+    } else if (value instanceof Stats) {
+      return PlatformConstants.CodecTypes.stats;
     }
     return null;
   }
