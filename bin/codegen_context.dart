@@ -21,6 +21,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'restPresenceParams',
     'presenceMessage',
     'realtimePresenceParams',
+    'stats',
 
     // Push Notifications
     'deviceDetails',
@@ -38,7 +39,6 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     // Encryption
     'cipherParams',
-    'stats',
   ];
 
   // Custom type values must be over 127. At the time of writing
