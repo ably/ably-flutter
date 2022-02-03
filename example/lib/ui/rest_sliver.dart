@@ -94,7 +94,7 @@ class RestSliver extends HookWidget {
         PaginatedResultViewer<ably.Stats>(
             title: 'Stats',
             subtitle: TextRow('What is it?', 'Realtime stats'),
-            query: () => rest.stats({"limit": 100, "end": "now"}),
+            query: () => rest.stats({"limit": 10, "end": "now"}),
             builder: (context, stat, _) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
