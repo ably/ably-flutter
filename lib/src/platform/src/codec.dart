@@ -1060,15 +1060,30 @@ class Codec extends StandardMessageCodec {
   /// returns null if [jsonMap] is null
   /// FIXME: For now only decodes interval and channels
   Stats _decodeStats(Map<String, dynamic> jsonMap) {
+    final apiRequestsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.apiRequests,
+    ));
     final channelsJson = toJsonMap(_readFromJson<Map>(
       jsonMap,
       TxStats.channels,
     ));
+    final tokenRequestsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.tokenRequests,
+    ));
     return Stats(
-        channels: (channelsJson != null)
-            ? _decodeStatsResourceCount(channelsJson)
-            : null,
-        intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId));
+      apiRequests: (apiRequestsJson != null)
+          ? _decodeStatsRequestCount(apiRequestsJson)
+          : null,
+      channels: (channelsJson != null)
+          ? _decodeStatsResourceCount(channelsJson)
+          : null,
+      intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId),
+      tokenRequests: (tokenRequestsJson != null)
+          ? _decodeStatsRequestCount(jsonMap)
+          : null,
+    );
   }
 
   StatsResourceCount _decodeStatsResourceCount(Map<String, dynamic> jsonMap) =>
@@ -1078,6 +1093,16 @@ class Codec extends StandardMessageCodec {
           opened: _readFromJson(jsonMap, TxStatsResourceCount.opened),
           peak: _readFromJson(jsonMap, TxStatsResourceCount.peak),
           refused: _readFromJson(
+            jsonMap,
+            TxStatsResourceCount.refused,
+          ));
+
+  StatsRequestCount _decodeStatsRequestCount(Map<String, dynamic> jsonMap) =>
+      StatsRequestCount(
+          failed: _readFromJson<double>(jsonMap, TxStatsRequestCount.failed),
+          succeeded:
+              _readFromJson<double>(jsonMap, TxStatsRequestCount.succeeded),
+          refused: _readFromJson<double>(
             jsonMap,
             TxStatsRequestCount.refused,
           ));
