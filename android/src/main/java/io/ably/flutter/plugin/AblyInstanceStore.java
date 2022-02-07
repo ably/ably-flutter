@@ -23,9 +23,7 @@ import io.ably.lib.types.ClientOptions;
  * client by calling @{AblyInstanceStore#getRealtime(final long handle)}.
  */
 class AblyInstanceStore {
-
     private static final AblyInstanceStore instance = new AblyInstanceStore();
-    private long nextHandle = 1;
 
     // Android Studio warns against using HashMap with integer keys, and
     // suggests using LongSparseArray. More information at https://stackoverflow.com/a/31413003
@@ -34,35 +32,104 @@ class AblyInstanceStore {
     private final LongSparseArray<AblyRest> restInstances = new LongSparseArray<>();
     private final LongSparseArray<AblyRealtime> realtimeInstances = new LongSparseArray<>();
     private final LongSparseArray<AsyncPaginatedResult<Object>> paginatedResults = new LongSparseArray<>();
+    private final HandleSequence handleSequence = new HandleSequence();
 
     static synchronized AblyInstanceStore getInstance() {
         return instance;
     }
 
     /**
-     * Returns a handle representing the next client that will be created. This handle can be used
-     * to get the client **after** it is instantiated using [createRest] or [createRealtime].
+     * A reserved client handle. Safe to be used from any thread.
+     *
+     * Instances support the creation of a single Rest or Realtime instance, where only one of the
+     * create methods may be called and it may only be called once.
      */
-    long getHandleForNextClient() {
-        return nextHandle;
+    interface ClientHandle {
+        /**
+         * Get the handle that will be used to store this client when it is created, or the handle
+         * that was used to store it when it was created.
+         * This property may be read at any time, from any thread.
+         */
+        long getHandle();
+
+        /**
+         * Create an {@link AblyRest} instance and store it using this handle.
+         * @param clientOptions The Ably client options for the new Rest instance.
+         * @param applicationContext The Android application context to supply to the new Rest
+         * instance using its {@link AblyRest#setAndroidContext(Context)} method.
+         * @return The handle used to store the instance. Same as {@link #getHandle()}.
+         * @throws IllegalStateException If this handle has already been used to create a Rest or
+         * Realtime instance.
+         * @throws AblyException If the {@link AblyRest} instance creation failed.
+         */
+        long createRest(ClientOptions clientOptions, Context applicationContext) throws AblyException;
+
+        /**
+         * Create an {@link AblyRealtime} instance and store it using this handle.
+         * @param clientOptions The Ably client options for the new Realtime instance.
+         * @param applicationContext The Android application context to supply to the new Realtime
+         * instance using its {@link AblyRealtime#setAndroidContext(Context)} method.
+         * @return The handle used to store the instance. Same as {@link #getHandle()}.
+         * @throws IllegalStateException If this handle has already been used to create a Rest or
+         * Realtime instance.
+         * @throws AblyException If the {@link AblyRealtime} instance creation failed.
+         */
+        long createRealtime(ClientOptions clientOptions, Context applicationContext) throws AblyException;
     }
 
-    long createRest(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
-        final AblyRest rest = new AblyRest(clientOptions);
-        rest.setAndroidContext(applicationContext);
-        restInstances.put(nextHandle, rest);
-        return nextHandle++;
+    private class ReservedClientHandle implements ClientHandle {
+        private final long handle;
+        private volatile boolean used = false;
+
+        ReservedClientHandle(final long handle) {
+            this.handle = handle;
+        }
+
+        @Override
+        public long getHandle() {
+            return handle;
+        }
+
+        @Override
+        public synchronized long createRest(final ClientOptions clientOptions, final Context applicationContext) throws AblyException {
+            final long handle = use();
+            final AblyRest rest = new AblyRest(clientOptions);
+            rest.setAndroidContext(applicationContext);
+            restInstances.put(handle, rest);
+            return handle;
+        }
+
+        @Override
+        public synchronized long createRealtime(final ClientOptions clientOptions, final Context applicationContext) throws AblyException {
+            final long handle = use();
+            final AblyRealtime realtime = new AblyRealtime(clientOptions);
+            realtime.setAndroidContext(applicationContext);
+            realtimeInstances.put(handle, realtime);
+            return handle;
+        }
+
+        synchronized long use() {
+            if (used) {
+                throw new IllegalStateException("Reserved handle has already been used to create a client instance (handle=" + handle + ").");
+            }
+            return handle;
+        }
+    }
+
+    private static class HandleSequence {
+        private volatile long nextHandle = 1;
+
+        synchronized long next() {
+            return nextHandle++;
+        }
+    }
+
+    ClientHandle reserveClientHandle() {
+        return new ReservedClientHandle(handleSequence.next());
     }
 
     AblyRest getRest(final long handle) {
         return restInstances.get(handle);
-    }
-
-    long createRealtime(final ClientOptions clientOptions, Context applicationContext) throws AblyException {
-        final AblyRealtime realtime = new AblyRealtime(clientOptions);
-        realtime.setAndroidContext(applicationContext);
-        realtimeInstances.put(nextHandle, realtime);
-        return nextHandle++;
     }
 
     AblyRealtime getRealtime(final long handle) {
@@ -98,7 +165,7 @@ class AblyInstanceStore {
     long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
         if (handle == null) {
-            longHandle = nextHandle++;
+            longHandle = handleSequence.next();
         } else {
             longHandle = handle.longValue();
         }

@@ -183,13 +183,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
-        final long handle = ablyLibrary.getHandleForNextClient();
+        final AblyInstanceStore.ClientHandle clientHandle = ablyLibrary.reserveClientHandle();
         if (clientOptions.hasAuthCallback) {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
             final Object[] token = {null};
             final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
-              AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
+              AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, clientHandle.getHandle());
               methodChannel.invokeMethod(PlatformConstants.PlatformMethod.authCallback, channelMessage, new MethodChannel.Result() {
                 @Override
                 public void success(@Nullable Object result) {
@@ -220,7 +220,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             return token[0];
           };
         }
-        result.success(ablyLibrary.createRest(clientOptions.options, applicationContext));
+        result.success(clientHandle.createRest(clientOptions.options, applicationContext));
       } catch (final AblyException e) {
         handleAblyException(result, e);
       }
@@ -448,13 +448,13 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage<PlatformClientOptions> message = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
     this.<PlatformClientOptions>ablyDo(message, (ablyLibrary, clientOptions) -> {
       try {
-        final long handle = ablyLibrary.getHandleForNextClient();
+        final AblyInstanceStore.ClientHandle clientHandle = ablyLibrary.reserveClientHandle();
         if (clientOptions.hasAuthCallback) {
           clientOptions.options.authCallback = (Auth.TokenParams params) -> {
             final Object[] token = {null};
             final CountDownLatch latch = new CountDownLatch(1);
             new Handler(Looper.getMainLooper()).post(() -> {
-              AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, handle);
+              AblyFlutterMessage<Auth.TokenParams> channelMessage = new AblyFlutterMessage<>(params, clientHandle.getHandle());
               methodChannel.invokeMethod(PlatformConstants.PlatformMethod.realtimeAuthCallback, channelMessage, new MethodChannel.Result() {
                 @Override
                 public void success(@Nullable Object result) {
@@ -487,7 +487,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
             return token[0];
           };
         }
-        result.success(ablyLibrary.createRealtime(clientOptions.options, applicationContext));
+        result.success(clientHandle.createRealtime(clientOptions.options, applicationContext));
       } catch (final AblyException e) {
         handleAblyException(result, e);
       }
