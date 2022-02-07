@@ -1072,6 +1072,10 @@ class Codec extends StandardMessageCodec {
       jsonMap,
       TxStats.channels,
     ));
+    final connectionsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.connections,
+    ));
     final tokenRequestsJson = toJsonMap(_readFromJson<Map>(
       jsonMap,
       TxStats.tokenRequests,
@@ -1083,6 +1087,9 @@ class Codec extends StandardMessageCodec {
           : null,
       channels: (channelsJson != null)
           ? _decodeStatsResourceCount(channelsJson)
+          : null,
+      connections: (connectionsJson != null)
+          ? _decodeStatsConnectionTypes(connectionsJson)
           : null,
       intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId),
       tokenRequests: (tokenRequestsJson != null)
@@ -1131,6 +1138,28 @@ class Codec extends StandardMessageCodec {
             jsonMap,
             TxStatsResourceCount.refused,
           ));
+
+  StatsConnectionTypes _decodeStatsConnectionTypes(
+      Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.all,
+    ));
+    final plainJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.plain,
+    ));
+    final tlsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.tls,
+    ));
+
+    return StatsConnectionTypes(
+      all: (allJson != null) ? _decodeStatsResourceCount(allJson) : null,
+      plain: (plainJson != null) ? _decodeStatsResourceCount(plainJson) : null,
+      tls: (tlsJson != null) ? _decodeStatsResourceCount(tlsJson) : null,
+    );
+  }
 
   StatsRequestCount _decodeStatsRequestCount(Map<String, dynamic> jsonMap) =>
       StatsRequestCount(

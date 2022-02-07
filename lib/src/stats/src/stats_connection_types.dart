@@ -4,7 +4,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// for different (TLS vs non-TLS) connection types
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS4
-abstract class StatsConnectionTypes {
+class StatsConnectionTypes {
+  /// Creates instance of [StatsConnectionTypes]
+  StatsConnectionTypes({this.all, this.plain, this.tls});
+
   /// All connection count (includes both TLS & non-TLS connections).
   StatsResourceCount? all;
 
