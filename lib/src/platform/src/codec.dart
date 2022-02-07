@@ -1084,6 +1084,10 @@ class Codec extends StandardMessageCodec {
       jsonMap,
       TxStats.outbound,
     ));
+    final persistedJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.persisted,
+    ));
     final tokenRequestsJson = toJsonMap(_readFromJson<Map>(
       jsonMap,
       TxStats.tokenRequests,
@@ -1105,6 +1109,9 @@ class Codec extends StandardMessageCodec {
       intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId),
       outbound: (outboundJson != null)
           ? _decodeStatsMessageTraffic(outboundJson)
+          : null,
+      persisted: (persistedJson != null)
+          ? _decodeStatsMessageTypes(persistedJson)
           : null,
       tokenRequests: (tokenRequestsJson != null)
           ? _decodeStatsRequestCount(tokenRequestsJson)
