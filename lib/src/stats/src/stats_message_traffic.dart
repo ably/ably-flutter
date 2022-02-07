@@ -4,7 +4,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// for traffic over various transport types
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS7
-abstract class StatsMessageTraffic {
+class StatsMessageTraffic {
+  /// Creates instance of [StatsMessageTraffic]
+  StatsMessageTraffic({this.all, this.realtime, this.rest, this.webhook});
+
   /// All messages count (includes realtime, rest and webhook messages).
   StatsMessageTypes? all;
 

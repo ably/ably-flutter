@@ -1076,6 +1076,14 @@ class Codec extends StandardMessageCodec {
       jsonMap,
       TxStats.connections,
     ));
+    final inboundJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.inbound,
+    ));
+    final outboundJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.outbound,
+    ));
     final tokenRequestsJson = toJsonMap(_readFromJson<Map>(
       jsonMap,
       TxStats.tokenRequests,
@@ -1091,7 +1099,13 @@ class Codec extends StandardMessageCodec {
       connections: (connectionsJson != null)
           ? _decodeStatsConnectionTypes(connectionsJson)
           : null,
+      inbound: (inboundJson != null)
+          ? _decodeStatsMessageTraffic(inboundJson)
+          : null,
       intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId),
+      outbound: (outboundJson != null)
+          ? _decodeStatsMessageTraffic(outboundJson)
+          : null,
       tokenRequests: (tokenRequestsJson != null)
           ? _decodeStatsRequestCount(jsonMap)
           : null,
@@ -1159,6 +1173,35 @@ class Codec extends StandardMessageCodec {
       plain: (plainJson != null) ? _decodeStatsResourceCount(plainJson) : null,
       tls: (tlsJson != null) ? _decodeStatsResourceCount(tlsJson) : null,
     );
+  }
+
+  StatsMessageTraffic _decodeStatsMessageTraffic(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.all,
+    ));
+    final realtimeJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.realtime,
+    ));
+    final restJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.rest,
+    ));
+    final webhookJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.webhook,
+    ));
+
+    return StatsMessageTraffic(
+        all: (allJson != null) ? _decodeStatsMessageTypes(allJson) : null,
+        realtime: (realtimeJson != null)
+            ? _decodeStatsMessageTypes(realtimeJson)
+            : null,
+        rest: (restJson != null) ? _decodeStatsMessageTypes(restJson) : null,
+        webhook: (webhookJson != null)
+            ? _decodeStatsMessageTypes(webhookJson)
+            : null);
   }
 
   StatsRequestCount _decodeStatsRequestCount(Map<String, dynamic> jsonMap) =>
