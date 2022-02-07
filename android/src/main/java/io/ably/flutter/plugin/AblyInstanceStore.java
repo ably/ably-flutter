@@ -124,15 +124,15 @@ class AblyInstanceStore {
         }
     }
 
-    ClientHandle reserveClientHandle() {
+    synchronized ClientHandle reserveClientHandle() {
         return new ReservedClientHandle(handleSequence.next());
     }
 
-    AblyRest getRest(final long handle) {
+    synchronized AblyRest getRest(final long handle) {
         return restInstances.get(handle);
     }
 
-    AblyRealtime getRealtime(final long handle) {
+    synchronized AblyRealtime getRealtime(final long handle) {
         return realtimeInstances.get(handle);
     }
 
@@ -146,23 +146,23 @@ class AblyInstanceStore {
      * @param handle integer handle to either AblyRealtime or AblyRest
      * @return AblyBase
      */
-    AblyBase getAblyClient(final long handle) {
+    synchronized AblyBase getAblyClient(final long handle) {
         AblyRealtime realtime = getRealtime(handle);
         return (realtime != null) ? realtime : getRest(handle);
     }
     
-    Push getPush(final long handle) {
+    synchronized Push getPush(final long handle) {
         AblyRealtime realtime = getRealtime(handle);
         return (realtime != null) ? realtime.push : getRest(handle).push;
     }
     
-    PushChannel getPushChannel(final long handle, final String channelName) {
+    synchronized PushChannel getPushChannel(final long handle, final String channelName) {
         return getAblyClient(handle)
                 .channels
                 .get(channelName).push;
     }
 
-    long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
+    synchronized long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
         if (handle == null) {
             longHandle = handleSequence.next();
@@ -173,11 +173,11 @@ class AblyInstanceStore {
         return longHandle;
     }
 
-    AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
+    synchronized AsyncPaginatedResult<Object> getPaginatedResult(long handle) {
         return paginatedResults.get(handle);
     }
 
-    void reset() {
+    synchronized void reset() {
         for (int i = 0; i < realtimeInstances.size(); i++) {
             long key = realtimeInstances.keyAt(i);
             AblyRealtime r = realtimeInstances.get(key);
