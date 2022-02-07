@@ -1107,7 +1107,7 @@ class Codec extends StandardMessageCodec {
           ? _decodeStatsMessageTraffic(outboundJson)
           : null,
       tokenRequests: (tokenRequestsJson != null)
-          ? _decodeStatsRequestCount(jsonMap)
+          ? _decodeStatsRequestCount(tokenRequestsJson)
           : null,
     );
   }
