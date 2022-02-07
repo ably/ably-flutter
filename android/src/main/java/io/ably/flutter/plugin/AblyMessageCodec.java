@@ -204,17 +204,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private Map<String, Object> encodeStatsMessageTypes(Stats.MessageTypes messageTypes) {
     if (messageTypes == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
-    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.all, encodeMessageCategory(messageTypes.all));
-    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.messages, encodeMessageCategory(messageTypes.messages));
-    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.presence, encodeMessageCategory(messageTypes.presence));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.all, encodeStatsMessageCategory(messageTypes.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.messages, encodeStatsMessageCategory(messageTypes.messages));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.presence, encodeStatsMessageCategory(messageTypes.presence));
     return jsonMap;
   }
 
   // This is different in other platform and will correspond to StatsMessageCount for other
   // libraries
-  private Map<String, Object> encodeMessageCategory(Stats.MessageCategory category) {
+  private Map<String, Object> encodeStatsMessageCategory(Stats.MessageCategory category) {
     if (category == null) return null;
-    if (category.category == null) return null;
     final HashMap<String, Object> jsonMap = new HashMap<>();
 
     writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageCount.count, category.count);

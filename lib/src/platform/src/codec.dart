@@ -1058,8 +1058,12 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [Stats]
   /// returns null if [jsonMap] is null
-  /// FIXME: For now only decodes interval and channels
+  /// FIXME: Does not decode everything
   Stats _decodeStats(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.all,
+    ));
     final apiRequestsJson = toJsonMap(_readFromJson<Map>(
       jsonMap,
       TxStats.apiRequests,
@@ -1073,6 +1077,7 @@ class Codec extends StandardMessageCodec {
       TxStats.tokenRequests,
     ));
     return Stats(
+      all: (allJson != null) ? _decodeStatsMessageTypes(allJson) : null,
       apiRequests: (apiRequestsJson != null)
           ? _decodeStatsRequestCount(apiRequestsJson)
           : null,
@@ -1085,6 +1090,36 @@ class Codec extends StandardMessageCodec {
           : null,
     );
   }
+
+  StatsMessageTypes _decodeStatsMessageTypes(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.all,
+    ));
+    final messagesJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.messages,
+    ));
+    final presenceJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.presence,
+    ));
+
+    return StatsMessageTypes(
+      all: (allJson != null) ? _decodeStatsMessageCount(allJson) : null,
+      messages: (messagesJson != null)
+          ? _decodeStatsMessageCount(messagesJson)
+          : null,
+      presence: (presenceJson != null)
+          ? _decodeStatsMessageCount(presenceJson)
+          : null,
+    );
+  }
+
+  StatsMessageCount _decodeStatsMessageCount(Map<String, dynamic> jsonMap) =>
+      StatsMessageCount(
+          count: _readFromJson<double>(jsonMap, TxStatsMessageCount.count),
+          data: _readFromJson<double>(jsonMap, TxStatsMessageCount.data));
 
   StatsResourceCount _decodeStatsResourceCount(Map<String, dynamic> jsonMap) =>
       StatsResourceCount(
