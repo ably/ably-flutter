@@ -1,5 +1,21 @@
 # Changelog
 
+
+## [1.2.12](https://github.com/ably/ably-flutter/tree/v1.2.12)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.11...v1.2.12)
+
+**Fixed bugs:**
+
+- Android: `IllegalStateException` in `Crypto` `CBCCipher`'s `decrypt` method [\#314](https://github.com/ably/ably-flutter/issues/314), fixed by updating to `ably-android` version 1.2.11 [\#319](https://github.com/ably/ably-flutter/pull/319) ([QuintinWillison](https://github.com/QuintinWillison))
+- Android: `java.lang.ArrayIndexOutOfBoundsException` thrown by `AblyInstanceStore`'s `setPaginatedResult` method [\#308](https://github.com/ably/ably-flutter/issues/308), fixed in [\#321](https://github.com/ably/ably-flutter/pull/321) ([QuintinWillison](https://github.com/QuintinWillison))
+- `ChannelStateChange` property `resumed` should not be nullable [\#297](https://github.com/ably/ably-flutter/issues/297), fixed in [\#313](https://github.com/ably/ably-flutter/pull/313) ([ikurek](https://github.com/ikurek))
+- Deprecated Android embedding version [\#311](https://github.com/ably/ably-flutter/issues/311), fixed in [\#312](https://github.com/ably/ably-flutter/pull/312) ([ikurek](https://github.com/ikurek))
+
+**Merged pull requests:**
+
+- Readme enchancements for example app [\#309](https://github.com/ably/ably-flutter/pull/309) ([ikurek](https://github.com/ikurek))
+
 ## [1.2.11](https://github.com/ably/ably-flutter/tree/v1.2.11)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.10...v1.2.11)
