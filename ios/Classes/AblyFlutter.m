@@ -566,8 +566,8 @@ static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, Flutt
 static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
-    
-    ARTRest *const rest = [instanceStore restFrom:message.message];
+    NSNumber *const handle = message.message;
+    ARTRest *const rest = [instanceStore restFrom:handle];
     [rest time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
         if(error){
             result(error);
@@ -694,7 +694,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         AblyPlatformMethod_realtimeTime:_realtimeTime,
-        AblyPlatformMethod_realtimeTime:_restTime,
+        AblyPlatformMethod_restTime:_restTime,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
