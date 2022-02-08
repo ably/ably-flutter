@@ -1058,7 +1058,8 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [Stats]
   /// returns null if [jsonMap] is null
-  /// FIXME: Does not decode everything
+  /// FIXME: Decoding crashes on iOS because of different implementations of SDK
+  /// See: https://github.com/ably/ably-cocoa/issues/1284
   Stats _decodeStats(Map<String, dynamic> jsonMap) {
     final allJson = toJsonMap(_readFromJson<Map>(
       jsonMap,

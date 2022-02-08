@@ -582,8 +582,8 @@ static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMe
 static const FlutterHandler _stats = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const arguments = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
-    ARTRest *const rest = [instanceStore restFrom:arguments.message];
     AblyFlutterMessage *message = arguments.message;
+    ARTRest *const rest = [instanceStore restFrom:message.handle];
     NSDictionary *paramsDict =  message.message;
     ARTStatsQuery *query;
     if(paramsDict[@"params"]){
