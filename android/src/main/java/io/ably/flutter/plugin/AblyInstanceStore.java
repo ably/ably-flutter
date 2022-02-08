@@ -114,6 +114,7 @@ class AblyInstanceStore {
             if (used) {
                 throw new IllegalStateException("Reserved handle has already been used to create a client instance (handle=" + handle + ").");
             }
+            used = true;
             return handle;
         }
     }
