@@ -3,6 +3,8 @@ package io.ably.flutter.plugin;
 import android.content.Context;
 import android.util.LongSparseArray;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import io.ably.lib.push.Push;
 import io.ably.lib.push.PushChannel;
 import io.ably.lib.realtime.AblyRealtime;
@@ -32,7 +34,7 @@ class AblyInstanceStore {
     private final LongSparseArray<AblyRest> restInstances = new LongSparseArray<>();
     private final LongSparseArray<AblyRealtime> realtimeInstances = new LongSparseArray<>();
     private final LongSparseArray<AsyncPaginatedResult<Object>> paginatedResults = new LongSparseArray<>();
-    private final HandleSequence handleSequence = new HandleSequence();
+    private final AtomicLong nextHandle = new AtomicLong(1);
 
     static synchronized AblyInstanceStore getInstance() {
         return instance;
@@ -116,16 +118,8 @@ class AblyInstanceStore {
         }
     }
 
-    private static class HandleSequence {
-        private volatile long nextHandle = 1;
-
-        synchronized long next() {
-            return nextHandle++;
-        }
-    }
-
     synchronized ClientHandle reserveClientHandle() {
-        return new ReservedClientHandle(handleSequence.next());
+        return new ReservedClientHandle(nextHandle.getAndIncrement());
     }
 
     synchronized AblyRest getRest(final long handle) {
@@ -165,7 +159,7 @@ class AblyInstanceStore {
     synchronized long setPaginatedResult(AsyncPaginatedResult result, Integer handle) {
         long longHandle;
         if (handle == null) {
-            longHandle = handleSequence.next();
+            longHandle = nextHandle.getAndIncrement();
         } else {
             longHandle = handle.longValue();
         }
