@@ -23,17 +23,17 @@ class CodecTypes {
   static const int restPresenceParams = 142;
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
-  static const int deviceDetails = 145;
-  static const int localDevice = 146;
-  static const int pushChannelSubscription = 147;
-  static const int unNotificationSettings = 148;
-  static const int remoteMessage = 149;
-  static const int errorInfo = 150;
-  static const int logLevel = 151;
-  static const int connectionStateChange = 152;
-  static const int channelStateChange = 153;
-  static const int cipherParams = 154;
-  static const int stats = 155;
+  static const int stats = 145;
+  static const int deviceDetails = 146;
+  static const int localDevice = 147;
+  static const int pushChannelSubscription = 148;
+  static const int unNotificationSettings = 149;
+  static const int remoteMessage = 150;
+  static const int errorInfo = 151;
+  static const int logLevel = 152;
+  static const int connectionStateChange = 153;
+  static const int channelStateChange = 154;
+  static const int cipherParams = 155;
 }
 
 class PlatformMethod {
@@ -385,7 +385,8 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings =
+      'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -401,7 +402,8 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings =
+      'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

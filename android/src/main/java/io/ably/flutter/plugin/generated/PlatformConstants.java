@@ -26,17 +26,17 @@ final public class PlatformConstants {
         public static final byte restPresenceParams = (byte) 142;
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte deviceDetails = (byte) 145;
-        public static final byte localDevice = (byte) 146;
-        public static final byte pushChannelSubscription = (byte) 147;
-        public static final byte unNotificationSettings = (byte) 148;
-        public static final byte remoteMessage = (byte) 149;
-        public static final byte errorInfo = (byte) 150;
-        public static final byte logLevel = (byte) 151;
-        public static final byte connectionStateChange = (byte) 152;
-        public static final byte channelStateChange = (byte) 153;
-        public static final byte cipherParams = (byte) 154;
-        public static final byte stats = (byte) 155;
+        public static final byte stats = (byte) 145;
+        public static final byte deviceDetails = (byte) 146;
+        public static final byte localDevice = (byte) 147;
+        public static final byte pushChannelSubscription = (byte) 148;
+        public static final byte unNotificationSettings = (byte) 149;
+        public static final byte remoteMessage = (byte) 150;
+        public static final byte errorInfo = (byte) 151;
+        public static final byte logLevel = (byte) 152;
+        public static final byte connectionStateChange = (byte) 153;
+        public static final byte channelStateChange = (byte) 154;
+        public static final byte cipherParams = (byte) 155;
     }
 
     static final public class PlatformMethod {
