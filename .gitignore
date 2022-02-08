@@ -18,10 +18,6 @@ doc/
 .settings
 .factorypath
 
-# And VS Code will create this folder if you tell it to
-.vscode
-!.vscode/launch.json
-
 **/.idea/dictionaries/
 **/.idea/workspace.xml
 **/.idea/tasks.xml
