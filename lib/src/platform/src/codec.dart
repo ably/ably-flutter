@@ -1014,7 +1014,7 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxChannelStateChange.previous));
     final event = _decodeChannelEvent(
         _readFromJson<String>(jsonMap, TxChannelStateChange.event));
-    final resumed = _readFromJson<bool>(jsonMap, TxChannelStateChange.resumed);
+    final resumed = _readFromJson<bool>(jsonMap, TxChannelStateChange.resumed)!;
     final errorInfo =
         toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
