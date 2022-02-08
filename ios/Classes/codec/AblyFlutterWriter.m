@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_END
 }
 
 #define WRITE_VALUE(DICTIONARY, JSON_KEY, VALUE) { \
-if (VALUE) { \
+if ( (VALUE) != nil ) { \
 [DICTIONARY setObject:VALUE forKey:JSON_KEY]; \
 } \
 }
@@ -228,7 +228,7 @@ static AblyCodecEncoder encodeChannelStateChange = ^NSMutableDictionary*(ARTChan
                 TxChannelStateChange_event,
                 [AblyFlutterWriter encodeChannelEvent: [stateChange event]]);
 
-    WRITE_VALUE(dictionary, TxChannelStateChange_resumed, [stateChange resumed]?@([stateChange resumed]):nil);
+    WRITE_VALUE(dictionary, TxChannelStateChange_resumed, [NSNumber numberWithBool: [stateChange resumed]]);
     WRITE_VALUE(dictionary, TxChannelStateChange_reason, encodeErrorInfo([stateChange reason]));
     return dictionary;
 };

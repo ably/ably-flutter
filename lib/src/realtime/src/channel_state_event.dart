@@ -30,7 +30,7 @@ class ChannelStateChange {
   ErrorInfo? reason;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TH4
-  final bool? resumed;
+  final bool resumed;
 
   /// initializes with [resumed] set to false
   ChannelStateChange(
