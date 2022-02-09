@@ -5,11 +5,15 @@ class RestHistoryParams {
   /// [start] must be equal to or less than end and is unaffected
   /// by the request direction
   ///
+  /// if omitted defaults to 1970-01-01T00:00:00Z in local timezone
+  ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
   final DateTime start;
 
   /// [end] must be equal to or greater than start and is unaffected
   /// by the request direction
+  ///
+  /// if omitted defaults to current datetime in local timezone
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
   final DateTime end;
@@ -17,6 +21,7 @@ class RestHistoryParams {
   /// Sorting history backwards or forwards
   ///
   /// if omitted the direction defaults to the REST API default (backwards)
+  ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b2
   final String direction;
 
