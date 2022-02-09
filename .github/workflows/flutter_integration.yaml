@@ -24,6 +24,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
 
       - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
@@ -51,6 +52,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
 
       - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
