@@ -23,7 +23,6 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
           cache: true
 
       # test_integration package depends on ably_flutter, so before we run integration 
@@ -57,7 +56,6 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
           cache: true
 
       - name: 'Run Flutter Driver tests'
