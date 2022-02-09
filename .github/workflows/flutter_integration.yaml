@@ -33,9 +33,7 @@ jobs:
         timeout-minutes: 30
         run: |
           flutter pub get
-          cd test_integration
-          flutter pub get
-          ./run_integration_tests.sh
+          cd test_integration && ./run_integration_tests.sh
 
   android:
     strategy:
@@ -66,6 +64,4 @@ jobs:
           script: |
             /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
             flutter pub get
-            cd test_integration
-            flutter pub get
-            ./run_integration_tests.sh
+            cd test_integration && ./run_integration_tests.sh
