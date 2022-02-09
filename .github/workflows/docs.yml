@@ -20,8 +20,7 @@ jobs:
         run: flutter pub get
 
       - name: Install dartdoc global package via pub tool in the Flutter context
-        run: |
-          flutter pub global activate dartdoc
+        run: flutter pub global activate dartdoc
 
       - name: Build Documentation
         run: |

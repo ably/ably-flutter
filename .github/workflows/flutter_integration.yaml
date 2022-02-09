@@ -26,11 +26,17 @@ jobs:
           channel: 'stable'
           cache: true
 
+      # test_integration package depends on ably_flutter, so before we run integration 
+      # tests it's best to perform dependency update in both packages, to make sure that
+      # integration tests are run with exactly the same dependencies as specified in 
+      # current version of ably_flutter package
       - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
         run: |
           flutter pub get
-          cd test_integration && ./run_integration_tests.sh
+          cd test_integration
+          flutter pub get
+          ./run_integration_tests.sh
 
   android:
     strategy:
@@ -62,4 +68,6 @@ jobs:
           script: |
             /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
             flutter pub get
-            cd test_integration && ./run_integration_tests.sh
+            cd test_integration
+            flutter pub get
+            ./run_integration_tests.sh
