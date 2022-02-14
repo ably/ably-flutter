@@ -29,6 +29,7 @@ class TestName {
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeHistory = 'realtimeHistory';
+  static const String realtimeTime = 'realtimeTime';
   static const String realtimePublishWithAuthCallback =
       'realtimePublishWithAuthCallback';
   static const String realtimePresenceGet = 'realtimePresenceGet';

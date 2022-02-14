@@ -34,6 +34,7 @@ final _tests =
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,
+    'should retrieve time': testRealtimeTime,
     'realtime#channels#channel#presence#get': testRealtimePresenceGet,
     'realtime#channels#channel#presence#history': testRealtimePresenceHistory,
     'should enter, update and leave Presence': testRealtimeEnterUpdateLeave,
