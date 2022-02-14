@@ -19,6 +19,7 @@ final _tests =
   TestModules.rest: {
     'should publish': testRestPublish,
     'should retrieve history': testRestHistory,
+    'should retrieve time': testRestTime,
     'conforms to publish spec': testRestPublishSpec,
     'should publish with AuthCallback': testRestPublishWithAuthCallback,
     'should get Presence Members': testRestPresenceGet,

@@ -17,6 +17,7 @@ import 'package:ably_flutter_integration_test/test/rest/rest_presence_get_test.d
 import 'package:ably_flutter_integration_test/test/rest/rest_presence_history_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_publish_with_auth_callback_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_time_test.dart';
 
 typedef TestFactory = Future<Map<String, dynamic>> Function({
   required Reporter reporter,
@@ -32,6 +33,7 @@ final testFactory = <String, TestFactory>{
   TestName.restPublishSpec: testRestPublishSpec,
   TestName.restCapabilities: testRestCapabilities,
   TestName.restHistory: testRestHistory,
+  TestName.restTime: testRestTime,
   TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
   TestName.restPresenceGet: testRestPresenceGet,
   TestName.restPresenceHistory: testRestPresenceHistory,
