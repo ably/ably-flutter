@@ -12,7 +12,7 @@ This project has only one integration test target, `main.dart`.
 To run all tests: 
  - run `flutter drive --target lib/main.dart`, or 
  - run `flutter drive` which runs them all (one and only, `main.dart`).
- - Android Studio: Run the `Integration Test` run configuration. It is a compound run configuration which runs both `Integration Test Driver` and `Integration Test App`.
+ - Android Studio / VS Code: Run the `Integration Test` run configuration. It is a compound run configuration which runs both `Integration Test Driver` and `Integration Test App`.
 
 ### Test Module
 
