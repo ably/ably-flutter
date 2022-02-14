@@ -319,6 +319,23 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRestTime(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restTime);
+  late TestControlResponseMessage response;
+  late DateTime restTime;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    restTime = DateTime.parse(response.payload['time'] as String);
+  });
+
+  group('rest#time', () {
+    test('returns non-zero date and time', () {
+      expect(restTime.millisecondsSinceEpoch, isNot(0));
+    });
+  });
+}
+
 void testRestPresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceGet);
   late TestControlResponseMessage response;
