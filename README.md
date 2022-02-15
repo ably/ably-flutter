@@ -71,10 +71,12 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
 
 - Under `Run and Debug`,
   - Select the gear icon to view [launch.json](.vscode/launch.json)
+  - Find `Example App` launch configuration
   - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
-  - To choose a specific device when more than one are connected: to launch on a specific device, make sure it is the only device plugged in. To run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`
-    - Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`
--  select the `example` configuration
+  - Choose a specific device to launch the app:
+    - to launch on a specific device, make sure it is the only device plugged in.
+    - to run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`. Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`.
+- From `Run and Debug` select the `Example App` configuration and run it
 
 #### Command Line using the Flutter Tool
 
