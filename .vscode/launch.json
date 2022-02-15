@@ -1,0 +1,53 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Example App",
+            "cwd": "example",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+                "--observatory-port=8888",
+                "--dart-define=ABLY_API_KEY=replace_with_your_api_key",
+            ],
+        },
+        {
+            "name": "Unit Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "test/",
+        },
+        {
+            "name": "Integration Tests: Launch App",
+            "cwd": "test_integration",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart",
+            "args": [
+                "--observatory-port=8888",
+                "--disable-service-auth-codes"
+            ],
+        },
+        {
+            "name": "Integration Tests: Launch Driver",
+            "cwd": "test_integration",
+            "request": "launch",
+            "type": "dart",
+            "program": "test_driver/main_test.dart",
+            "env": {
+                "VM_SERVICE_URL": "http://127.0.0.1:8888/"
+            },
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Integration Tests",
+            "configurations": [
+                "Integration Tests: Launch App",
+                "Integration Tests: Launch Driver"
+            ],
+        }
+    ]
+}
