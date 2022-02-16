@@ -28,7 +28,8 @@ final _tests =
     'conforms to capabilitySpec': testCapabilityMatrix,
   },
   TestModules.realtime: {
-    'realtime#channels#channel#publish': testRealtimePublish,
+    'should publish': testRealtimePublish,
+    'should publish encrypted': testRealtimeEncryptedPublish,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,

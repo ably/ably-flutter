@@ -2,6 +2,7 @@ import 'package:ably_flutter_integration_test/config/test_names.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/test/basic_test.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_enter_update_leave.dart';
@@ -40,6 +41,7 @@ final testFactory = <String, TestFactory>{
   TestName.restPresenceHistory: testRestPresenceHistory,
   // realtime tests
   TestName.realtimePublish: testRealtimePublish,
+  TestName.realtimeEncryptedPublish: testRealtimeEncryptedPublish,
   TestName.realtimeEvents: testRealtimeEvents,
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimePublishWithAuthCallback: testRealtimePublishWithAuthCallback,
