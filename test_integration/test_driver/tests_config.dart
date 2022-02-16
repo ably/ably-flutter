@@ -18,8 +18,10 @@ final _tests =
   },
   TestModules.rest: {
     'should publish': testRestPublish,
+    'should publish encrypted': testRestEncryptedPublish,
     'should retrieve history': testRestHistory,
     'conforms to publish spec': testRestPublishSpec,
+    'conforms to publish spec when encrypted': testRestEncryptedPublishSpec,
     'should publish with AuthCallback': testRestPublishWithAuthCallback,
     'should get Presence Members': testRestPresenceGet,
     'should get Presence History': testRestPresenceHistory,

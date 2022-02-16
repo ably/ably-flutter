@@ -12,6 +12,7 @@ import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_tes
 import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_with_auth_callback_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_subscribe.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_capability_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_history_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_presence_get_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_presence_history_test.dart';
@@ -29,7 +30,9 @@ final testFactory = <String, TestFactory>{
   TestName.appKeyProvisioning: testAppKeyProvision,
   // rest tests
   TestName.restPublish: testRestPublish,
+  TestName.restEncryptedPublish: testRestEncryptedPublish,
   TestName.restPublishSpec: testRestPublishSpec,
+  TestName.restEncryptedPublishSpec: testRestEncryptedPublishSpec,
   TestName.restCapabilities: testRestCapabilities,
   TestName.restHistory: testRestHistory,
   TestName.restPublishWithAuthCallback: testRestPublishWithAuthCallback,
