@@ -628,7 +628,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
       Integer handle = (Integer) message.message;
-      PushActivationEventHandlers.setResultForActivate(result);
+      PushActivationEventHandlers.getInstance().setResultForActivate(result);
       instanceStore.getPush(handle).activate();
     } catch (AblyException e) {
       handleAblyException(result, e);
@@ -639,7 +639,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
       Integer handle = (Integer) message.message;
-      PushActivationEventHandlers.setResultForDeactivate(result);
+      PushActivationEventHandlers.getInstance().setResultForDeactivate(result);
       instanceStore.getPush(handle).deactivate();
     } catch (AblyException e) {
       handleAblyException(result, e);
