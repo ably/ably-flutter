@@ -34,6 +34,9 @@ class TestName {
   static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
 // TODO(tiholic) handle realtimeHistoryWithAuthCallback
 
+  static const String pushNotificationActivationTest =
+      'pushNotificationActivationTest';
+
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases
   static const String getFlutterErrors = 'getFlutterErrors';

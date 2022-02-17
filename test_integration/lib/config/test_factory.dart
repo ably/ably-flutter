@@ -2,6 +2,7 @@ import 'package:ably_flutter_integration_test/config/test_names.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/test/basic_test.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
+import 'package:ably_flutter_integration_test/test/push_notification/push_activation_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_enter_update_leave.dart';
@@ -46,6 +47,8 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePresenceEnterUpdateLeave:
       testRealtimePresenceEnterUpdateLeave,
   TestName.realtimePresenceSubscribe: testRealtimePresenceSubscribe,
+  // push tests
+  TestName.pushNotificationActivationTest: testPushNotificationActivation,
   // helper tests
   TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
 };
