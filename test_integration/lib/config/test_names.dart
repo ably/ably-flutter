@@ -36,6 +36,8 @@ class TestName {
 
   static const String pushNotificationActivationTest =
       'pushNotificationActivationTest';
+  static const String pushNotificationDeactivationTest =
+      'pushNotificationDeactivationTest';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases

@@ -38,6 +38,7 @@ final _tests =
   },
   TestModules.pushNotifications: {
     'testPushNotificationActivation': testPushNotificationActivation,
+    'testPushNotificationDeactivation': testPushNotificationActivation,
   }
 };
 
