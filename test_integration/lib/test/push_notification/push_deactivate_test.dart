@@ -2,7 +2,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/provisioning.dart';
 
-Future<Map<String, dynamic>> testPushNotificationActivation({
+Future<Map<String, dynamic>> testPushNotificationDeactivate({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
@@ -23,10 +23,10 @@ Future<Map<String, dynamic>> testPushNotificationActivation({
   );
 
   final restPush = Push(rest: rest);
-  await restPush.activate();
+  await restPush.deactivate();
 
   final realtimePush = Push(realtime: realtime);
-  await realtimePush.activate();
+  await realtimePush.deactivate();
 
   return {
     'restPushHandle': await restPush.handle,

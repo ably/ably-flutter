@@ -34,10 +34,10 @@ class TestName {
   static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
 // TODO(tiholic) handle realtimeHistoryWithAuthCallback
 
-  static const String pushNotificationActivationTest =
-      'pushNotificationActivationTest';
-  static const String pushNotificationDeactivationTest =
-      'pushNotificationDeactivationTest';
+  static const String pushNotificationActivate = 'pushNotificationActivate';
+  static const String pushNotificationDeactivate = 'pushNotificationDeactivate';
+  static const String pushNotificationChannelSubscribe =
+      'pushNotificationChannelSubscribe';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases

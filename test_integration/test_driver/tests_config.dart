@@ -37,8 +37,10 @@ final _tests =
     'should subscribe to channel presence': testRealtimePresenceSubscription,
   },
   TestModules.pushNotifications: {
-    'testPushNotificationActivation': testPushNotificationActivation,
-    'testPushNotificationDeactivation': testPushNotificationActivation,
+    'should activate push notifications': testPushNotificationActivate,
+    'should deactivate push notifications': testPushNotificationDeactivate,
+    'should subscribe to push notification channel':
+        testPushNotificationChannelSubscribe,
   }
 };
 
