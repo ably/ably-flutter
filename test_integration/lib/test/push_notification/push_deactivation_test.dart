@@ -29,7 +29,7 @@ Future<Map<String, dynamic>> testPushNotificationDeactivation({
   await realtimePush.deactivate();
 
   return {
-    'restHandle': await rest.handle,
-    'realtimeHandle': await realtime.handle,
+    'restPushHandle': await restPush.handle,
+    'realtimePushHandle': await realtimePush.handle,
   };
 }

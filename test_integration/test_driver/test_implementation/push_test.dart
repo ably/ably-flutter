@@ -10,13 +10,13 @@ void testPushNotificationActivation(FlutterDriver Function() getDriver) {
       () async => response = await requestDataForTest(getDriver(), message));
 
   test('rest instance has a valid handle on activation', () {
-    expect(response.payload['restHandle'], isA<int>());
-    expect(response.payload['restHandle'], greaterThan(0));
+    expect(response.payload['restPushHandle'], isA<int>());
+    expect(response.payload['restPushHandle'], greaterThan(0));
   });
 
   test('realtime instance has a valid handle on activation', () {
-    expect(response.payload['realtimeHandle'], isA<int>());
-    expect(response.payload['realtimeHandle'], greaterThan(0));
+    expect(response.payload['realtimePushHandle'], isA<int>());
+    expect(response.payload['realtimePushHandle'], greaterThan(0));
   });
 }
 
@@ -28,12 +28,12 @@ void testPushNotificationDeactivation(FlutterDriver Function() getDriver) {
       () async => response = await requestDataForTest(getDriver(), message));
 
   test('rest instance has a valid handle on deactivation', () {
-    expect(response.payload['restHandle'], isA<int>());
-    expect(response.payload['restHandle'], greaterThan(0));
+    expect(response.payload['restPushHandle'], isA<int>());
+    expect(response.payload['restPushHandle'], greaterThan(0));
   });
 
   test('realtime instance has a valid handle on deactivation', () {
-    expect(response.payload['realtimeHandle'], isA<int>());
-    expect(response.payload['realtimeHandle'], greaterThan(0));
+    expect(response.payload['realtimePushHandle'], isA<int>());
+    expect(response.payload['realtimePushHandle'], greaterThan(0));
   });
 }
