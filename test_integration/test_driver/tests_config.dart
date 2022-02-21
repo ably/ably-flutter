@@ -41,6 +41,8 @@ final _tests =
     'should deactivate push notifications': testPushNotificationDeactivate,
     'should subscribe to push notification channel':
         testPushNotificationChannelSubscribe,
+    'should retrieve push notification subscription list':
+        testPushNotificationChannelSubscriptionList
   }
 };
 

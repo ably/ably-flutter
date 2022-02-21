@@ -55,3 +55,16 @@ void testPushNotificationChannelSubscribe(FlutterDriver Function() getDriver) {
     expect(response.payload['realtimePushChannelHandle'], greaterThan(0));
   });
 }
+
+void testPushNotificationChannelSubscriptionList(
+    FlutterDriver Function() getDriver) {
+  const message =
+      TestControlMessage(TestName.testPushNotificationChannelSubscriptionList);
+  late TestControlResponseMessage response;
+
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
+
+  // TODO(ikurek): Tests here will always fail on Android
+  // Because there's no Firebase App inscance created
+}

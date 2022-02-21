@@ -2,9 +2,10 @@ import 'package:ably_flutter_integration_test/config/test_names.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/test/basic_test.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
-import 'package:ably_flutter_integration_test/test/push_notification/push_activation_test.dart';
-import 'package:ably_flutter_integration_test/test/push_notification/push_channel_test.dart';
-import 'package:ably_flutter_integration_test/test/push_notification/push_deactivation_test.dart';
+import 'package:ably_flutter_integration_test/test/push_notification/push_activate_test.dart';
+import 'package:ably_flutter_integration_test/test/push_notification/push_channel_subscription_list_test.dart';
+import 'package:ably_flutter_integration_test/test/push_notification/push_channel_subscribe_test.dart';
+import 'package:ably_flutter_integration_test/test/push_notification/push_deactivate_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_enter_update_leave.dart';
@@ -54,6 +55,8 @@ final testFactory = <String, TestFactory>{
   TestName.pushNotificationDeactivate: testPushNotificationDeactivate,
   TestName.pushNotificationChannelSubscribe:
       testPushNotificationChannelSubscribe,
+  TestName.testPushNotificationChannelSubscriptionList:
+      testPushNotificationChannelSubscriptionList,
   // helper tests
   TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
 };

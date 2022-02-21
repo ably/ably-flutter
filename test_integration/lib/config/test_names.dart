@@ -38,6 +38,8 @@ class TestName {
   static const String pushNotificationDeactivate = 'pushNotificationDeactivate';
   static const String pushNotificationChannelSubscribe =
       'pushNotificationChannelSubscribe';
+  static const String testPushNotificationChannelSubscriptionList =
+      'testPushNotificationChannelSubscriptionList';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases
