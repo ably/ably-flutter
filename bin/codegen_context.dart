@@ -21,6 +21,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
     'restPresenceParams',
     'presenceMessage',
     'realtimePresenceParams',
+    'stats',
 
     // Push Notifications
     'deviceDetails',
@@ -96,6 +97,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
   {'name': 'realtimeTime', 'value': 'realtimeTime'},
   {'name': 'restTime', 'value': 'restTime'},
+  {'name': 'stats', 'value': 'stats'},
 
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
@@ -509,6 +511,44 @@ const List<Map<String, dynamic>> _objects = [
   {
     'name': 'CryptoGenerateRandomKey',
     'properties': ['keyLength']
+  },
+  {
+    'name': 'Stats',
+    'properties': <String>[
+      'all',
+      'apiRequests',
+      'channels',
+      'connections',
+      'inbound',
+      'intervalId',
+      'outbound',
+      'persisted',
+      'tokenRequests'
+    ]
+  },
+  {
+    'name': 'StatsMessageTypes',
+    'properties': <String>['all', 'messages', 'presence']
+  },
+  {
+    'name': 'StatsMessageCount',
+    'properties': <String>['count', 'data']
+  },
+  {
+    'name': 'StatsRequestCount',
+    'properties': <String>['failed', 'refused', 'succeeded']
+  },
+  {
+    'name': 'StatsResourceCount',
+    'properties': <String>['mean', 'min', 'opened', 'peak', 'refused']
+  },
+  {
+    'name': 'StatsConnectionTypes',
+    'properties': <String>['all', 'plain', 'tls']
+  },
+  {
+    'name': 'StatsMessageTraffic',
+    'properties': <String>['all', 'realtime', 'rest', 'webhook']
   }
 ];
 

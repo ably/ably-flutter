@@ -91,6 +91,16 @@ class RestSliver extends HookWidget {
                 channel.presence.history(ably.RestHistoryParams(limit: 10)),
             builder: (context, message, _) => TextRow('Message name',
                 '${message.id}:${message.clientId}:${message.data}')),
+        PaginatedResultViewer<ably.Stats>(
+            title: 'Stats',
+            subtitle: TextRow('What is it?', 'Realtime stats'),
+            query: () => rest.stats({"limit": 10, "end": "now"}),
+            builder: (context, stat, _) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRow('Statistics ', stat.toString()),
+                  ],
+                )),
       ],
     );
   }

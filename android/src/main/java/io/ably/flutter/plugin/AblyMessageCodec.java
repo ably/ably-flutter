@@ -40,6 +40,7 @@ import io.ably.lib.types.Message;
 import io.ably.lib.types.MessageExtras;
 import io.ably.lib.types.Param;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.types.Stats;
 import io.ably.lib.util.Crypto;
 import io.ably.lib.util.Log;
 import io.flutter.plugin.common.StandardMessageCodec;
@@ -112,6 +113,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(null, self::decodeRestHistoryParams));
         put(PlatformConstants.CodecTypes.realtimeHistoryParams,
             new CodecPair<>(null, self::decodeRealtimeHistoryParams));
+        put(PlatformConstants.CodecTypes.stats,
+            new CodecPair<>(self::encodeStats, null));
         put(PlatformConstants.CodecTypes.restPresenceParams,
             new CodecPair<>(null, self::decodeRestPresenceParams));
         put(PlatformConstants.CodecTypes.realtimePresenceParams,
@@ -142,6 +145,81 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(self::encodeCipherParams, self::decodeCipherParams));
       }
     };
+  }
+
+  private Map<String, Object> encodeStats(Stats stats) {
+    if (stats == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.all, encodeStatsMessageTypes(stats.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.apiRequests, encodeStatsRequestCount(stats.apiRequests));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.channels, encodeStatsResourceCount(stats.channels));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.connections, encodeStatsConnectionTypes(stats.connections));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.inbound, encodeStatsMessageTraffic(stats.inbound));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.intervalId, stats.intervalId);
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.outbound, encodeStatsMessageTraffic(stats.outbound));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.persisted, encodeStatsMessageTypes(stats.persisted));
+    writeValueToJson(jsonMap, PlatformConstants.TxStats.tokenRequests, encodeStatsRequestCount(stats.tokenRequests));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsMessageTraffic(Stats.MessageTraffic messageTraffic) {
+    if (messageTraffic == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.all, encodeStatsMessageTypes(messageTraffic.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.realtime, encodeStatsMessageTypes(messageTraffic.realtime));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.rest, encodeStatsMessageTypes(messageTraffic.rest));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTraffic.webhook, encodeStatsMessageTypes(messageTraffic.webhook));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsConnectionTypes(Stats.ConnectionTypes connectionTypes) {
+    if (connectionTypes == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.all, encodeStatsResourceCount(connectionTypes.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.plain, encodeStatsResourceCount(connectionTypes.plain));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsConnectionTypes.tls, encodeStatsResourceCount(connectionTypes.tls));
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsResourceCount(Stats.ResourceCount resourceCount) {
+    if (resourceCount == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsResourceCount.mean, resourceCount.mean);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsResourceCount.min, resourceCount.min);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsResourceCount.opened, resourceCount.opened);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsResourceCount.peak, resourceCount.peak);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsResourceCount.refused, resourceCount.refused);
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsRequestCount(Stats.RequestCount apiRequests) {
+    if (apiRequests == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsRequestCount.succeeded, apiRequests.succeeded);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsRequestCount.failed, apiRequests.failed);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsRequestCount.refused, apiRequests.refused);
+    return jsonMap;
+  }
+
+  private Map<String, Object> encodeStatsMessageTypes(Stats.MessageTypes messageTypes) {
+    if (messageTypes == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.all, encodeStatsMessageCategory(messageTypes.all));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.messages, encodeStatsMessageCategory(messageTypes.messages));
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageTypes.presence, encodeStatsMessageCategory(messageTypes.presence));
+    return jsonMap;
+  }
+
+  // This is different in other platform and will correspond to StatsMessageCount for other
+  // libraries
+  private Map<String, Object> encodeStatsMessageCategory(Stats.MessageCategory category) {
+    if (category == null) return null;
+    final HashMap<String, Object> jsonMap = new HashMap<>();
+
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageCount.count, category.count);
+    writeValueToJson(jsonMap, PlatformConstants.TxStatsMessageCount.data, category.data);
+
+    return jsonMap;
   }
 
   @Override
@@ -199,6 +277,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     } else if (value instanceof ChannelOptions) {
       // Encoding it into a RealtimeChannelOptions instance, because it extends RestChannelOptions
       return PlatformConstants.CodecTypes.realtimeChannelOptions;
+    } else if (value instanceof Stats) {
+      return PlatformConstants.CodecTypes.stats;
     }
     return null;
   }
@@ -303,9 +383,13 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> o.realtimeHost = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.port, v -> o.port = (Integer) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> o.tlsPort = (Integer) v);
-    o.autoConnect = false; // Always avoid auto-connect, to allow handle to be returned back to Dart side before authCallback is called.
-    // If the user specifies autoConnect, we call connect once we get the handle back to the dart side
-    // In other words, Ably Flutter internally manually connects, but to the SDK user this looks like autoConnect.
+    /* Always avoid auto-connect, to allow handle to be returned back to Dart side before
+     * authCallback is called.
+     * If the user specifies autoConnect, we call connect once we get the handle back to the dart side
+     * In other words, Ably Flutter internally manually connects, but to the SDK user this looks
+     * like autoConnect.
+     */
+    o.autoConnect = false;
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useBinaryProtocol, v -> o.useBinaryProtocol = (Boolean) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queueMessages, v -> o.queueMessages = (Boolean) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> o.echoMessages = (Boolean) v);

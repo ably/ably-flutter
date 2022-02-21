@@ -84,7 +84,7 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimePresenceParams,
         null,
       ),
-
+      CodecTypes.stats: _CodecPair<Stats>(null, _decodeStats),
       // Push Notifications
       CodecTypes.deviceDetails:
           _CodecPair<DeviceDetails>(null, _decodeDeviceDetails),
@@ -1055,6 +1055,172 @@ class Codec extends StandardMessageCodec {
           : DateTime.fromMillisecondsSinceEpoch(timestamp),
     );
   }
+
+  /// Decodes value [jsonMap] to [Stats]
+  /// returns null if [jsonMap] is null
+  /// FIXME: Decoding crashes on iOS because of different implementations of SDK
+  /// See: https://github.com/ably/ably-cocoa/issues/1284
+  Stats _decodeStats(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.all,
+    ));
+    final apiRequestsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.apiRequests,
+    ));
+    final channelsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.channels,
+    ));
+    final connectionsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.connections,
+    ));
+    final inboundJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.inbound,
+    ));
+    final outboundJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.outbound,
+    ));
+    final persistedJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.persisted,
+    ));
+    final tokenRequestsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStats.tokenRequests,
+    ));
+    return Stats(
+      all: (allJson != null) ? _decodeStatsMessageTypes(allJson) : null,
+      apiRequests: (apiRequestsJson != null)
+          ? _decodeStatsRequestCount(apiRequestsJson)
+          : null,
+      channels: (channelsJson != null)
+          ? _decodeStatsResourceCount(channelsJson)
+          : null,
+      connections: (connectionsJson != null)
+          ? _decodeStatsConnectionTypes(connectionsJson)
+          : null,
+      inbound: (inboundJson != null)
+          ? _decodeStatsMessageTraffic(inboundJson)
+          : null,
+      intervalId: _readFromJson<String?>(jsonMap, TxStats.intervalId),
+      outbound: (outboundJson != null)
+          ? _decodeStatsMessageTraffic(outboundJson)
+          : null,
+      persisted: (persistedJson != null)
+          ? _decodeStatsMessageTypes(persistedJson)
+          : null,
+      tokenRequests: (tokenRequestsJson != null)
+          ? _decodeStatsRequestCount(tokenRequestsJson)
+          : null,
+    );
+  }
+
+  StatsMessageTypes _decodeStatsMessageTypes(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.all,
+    ));
+    final messagesJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.messages,
+    ));
+    final presenceJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTypes.presence,
+    ));
+
+    return StatsMessageTypes(
+      all: (allJson != null) ? _decodeStatsMessageCount(allJson) : null,
+      messages: (messagesJson != null)
+          ? _decodeStatsMessageCount(messagesJson)
+          : null,
+      presence: (presenceJson != null)
+          ? _decodeStatsMessageCount(presenceJson)
+          : null,
+    );
+  }
+
+  StatsMessageCount _decodeStatsMessageCount(Map<String, dynamic> jsonMap) =>
+      StatsMessageCount(
+          count: _readFromJson<double>(jsonMap, TxStatsMessageCount.count),
+          data: _readFromJson<double>(jsonMap, TxStatsMessageCount.data));
+
+  StatsResourceCount _decodeStatsResourceCount(Map<String, dynamic> jsonMap) =>
+      StatsResourceCount(
+          mean: _readFromJson(jsonMap, TxStatsResourceCount.mean),
+          min: _readFromJson(jsonMap, TxStatsResourceCount.min),
+          opened: _readFromJson(jsonMap, TxStatsResourceCount.opened),
+          peak: _readFromJson(jsonMap, TxStatsResourceCount.peak),
+          refused: _readFromJson(
+            jsonMap,
+            TxStatsResourceCount.refused,
+          ));
+
+  StatsConnectionTypes _decodeStatsConnectionTypes(
+      Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.all,
+    ));
+    final plainJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.plain,
+    ));
+    final tlsJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsConnectionTypes.tls,
+    ));
+
+    return StatsConnectionTypes(
+      all: (allJson != null) ? _decodeStatsResourceCount(allJson) : null,
+      plain: (plainJson != null) ? _decodeStatsResourceCount(plainJson) : null,
+      tls: (tlsJson != null) ? _decodeStatsResourceCount(tlsJson) : null,
+    );
+  }
+
+  StatsMessageTraffic _decodeStatsMessageTraffic(Map<String, dynamic> jsonMap) {
+    final allJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.all,
+    ));
+    final realtimeJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.realtime,
+    ));
+    final restJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.rest,
+    ));
+    final webhookJson = toJsonMap(_readFromJson<Map>(
+      jsonMap,
+      TxStatsMessageTraffic.webhook,
+    ));
+
+    return StatsMessageTraffic(
+        all: (allJson != null) ? _decodeStatsMessageTypes(allJson) : null,
+        realtime: (realtimeJson != null)
+            ? _decodeStatsMessageTypes(realtimeJson)
+            : null,
+        rest: (restJson != null) ? _decodeStatsMessageTypes(restJson) : null,
+        webhook: (webhookJson != null)
+            ? _decodeStatsMessageTypes(webhookJson)
+            : null);
+  }
+
+  StatsRequestCount _decodeStatsRequestCount(Map<String, dynamic> jsonMap) =>
+      StatsRequestCount(
+          failed: _readFromJson<double>(jsonMap, TxStatsRequestCount.failed),
+          succeeded:
+              _readFromJson<double>(jsonMap, TxStatsRequestCount.succeeded),
+          refused: _readFromJson<double>(
+            jsonMap,
+            TxStatsRequestCount.refused,
+          ));
 
   /// Decodes [action] to [PresenceAction] enum if not null
   PresenceAction? _decodePresenceAction(String? action) {

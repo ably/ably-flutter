@@ -23,16 +23,17 @@ class CodecTypes {
   static const int restPresenceParams = 142;
   static const int presenceMessage = 143;
   static const int realtimePresenceParams = 144;
-  static const int deviceDetails = 145;
-  static const int localDevice = 146;
-  static const int pushChannelSubscription = 147;
-  static const int unNotificationSettings = 148;
-  static const int remoteMessage = 149;
-  static const int errorInfo = 150;
-  static const int logLevel = 151;
-  static const int connectionStateChange = 152;
-  static const int channelStateChange = 153;
-  static const int cipherParams = 154;
+  static const int stats = 145;
+  static const int deviceDetails = 146;
+  static const int localDevice = 147;
+  static const int pushChannelSubscription = 148;
+  static const int unNotificationSettings = 149;
+  static const int remoteMessage = 150;
+  static const int errorInfo = 151;
+  static const int logLevel = 152;
+  static const int connectionStateChange = 153;
+  static const int channelStateChange = 154;
+  static const int cipherParams = 155;
 }
 
 class PlatformMethod {
@@ -66,6 +67,7 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String realtimeTime = 'realtimeTime';
   static const String restTime = 'restTime';
+  static const String stats = 'stats';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
   static const String pushSubscribeDevice = 'pushSubscribeDevice';
@@ -450,4 +452,54 @@ class TxCryptoGetParams {
 
 class TxCryptoGenerateRandomKey {
   static const String keyLength = 'keyLength';
+}
+
+class TxStats {
+  static const String all = 'all';
+  static const String apiRequests = 'apiRequests';
+  static const String channels = 'channels';
+  static const String connections = 'connections';
+  static const String inbound = 'inbound';
+  static const String intervalId = 'intervalId';
+  static const String outbound = 'outbound';
+  static const String persisted = 'persisted';
+  static const String tokenRequests = 'tokenRequests';
+}
+
+class TxStatsMessageTypes {
+  static const String all = 'all';
+  static const String messages = 'messages';
+  static const String presence = 'presence';
+}
+
+class TxStatsMessageCount {
+  static const String count = 'count';
+  static const String data = 'data';
+}
+
+class TxStatsRequestCount {
+  static const String failed = 'failed';
+  static const String refused = 'refused';
+  static const String succeeded = 'succeeded';
+}
+
+class TxStatsResourceCount {
+  static const String mean = 'mean';
+  static const String min = 'min';
+  static const String opened = 'opened';
+  static const String peak = 'peak';
+  static const String refused = 'refused';
+}
+
+class TxStatsConnectionTypes {
+  static const String all = 'all';
+  static const String plain = 'plain';
+  static const String tls = 'tls';
+}
+
+class TxStatsMessageTraffic {
+  static const String all = 'all';
+  static const String realtime = 'realtime';
+  static const String rest = 'rest';
+  static const String webhook = 'webhook';
 }

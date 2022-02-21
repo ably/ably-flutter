@@ -4,7 +4,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// for different (message vs presence) message types
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS6
-abstract class StatsMessageTypes {
+class StatsMessageTypes {
+  /// Creates instance of [StatsMessageTypes]
+  StatsMessageTypes({this.all, this.messages, this.presence});
+
   /// All messages count (includes both presence & messages).
   StatsMessageCount? all;
 

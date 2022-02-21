@@ -26,16 +26,17 @@ final public class PlatformConstants {
         public static final byte restPresenceParams = (byte) 142;
         public static final byte presenceMessage = (byte) 143;
         public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte deviceDetails = (byte) 145;
-        public static final byte localDevice = (byte) 146;
-        public static final byte pushChannelSubscription = (byte) 147;
-        public static final byte unNotificationSettings = (byte) 148;
-        public static final byte remoteMessage = (byte) 149;
-        public static final byte errorInfo = (byte) 150;
-        public static final byte logLevel = (byte) 151;
-        public static final byte connectionStateChange = (byte) 152;
-        public static final byte channelStateChange = (byte) 153;
-        public static final byte cipherParams = (byte) 154;
+        public static final byte stats = (byte) 145;
+        public static final byte deviceDetails = (byte) 146;
+        public static final byte localDevice = (byte) 147;
+        public static final byte pushChannelSubscription = (byte) 148;
+        public static final byte unNotificationSettings = (byte) 149;
+        public static final byte remoteMessage = (byte) 150;
+        public static final byte errorInfo = (byte) 151;
+        public static final byte logLevel = (byte) 152;
+        public static final byte connectionStateChange = (byte) 153;
+        public static final byte channelStateChange = (byte) 154;
+        public static final byte cipherParams = (byte) 155;
     }
 
     static final public class PlatformMethod {
@@ -68,6 +69,7 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String realtimeTime = "realtimeTime";
         public static final String restTime = "restTime";
+        public static final String stats = "stats";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
         public static final String pushSubscribeDevice = "pushSubscribeDevice";
@@ -444,6 +446,56 @@ final public class PlatformConstants {
 
     static final public class TxCryptoGenerateRandomKey {
         public static final String keyLength = "keyLength";
+    }
+
+    static final public class TxStats {
+        public static final String all = "all";
+        public static final String apiRequests = "apiRequests";
+        public static final String channels = "channels";
+        public static final String connections = "connections";
+        public static final String inbound = "inbound";
+        public static final String intervalId = "intervalId";
+        public static final String outbound = "outbound";
+        public static final String persisted = "persisted";
+        public static final String tokenRequests = "tokenRequests";
+    }
+
+    static final public class TxStatsMessageTypes {
+        public static final String all = "all";
+        public static final String messages = "messages";
+        public static final String presence = "presence";
+    }
+
+    static final public class TxStatsMessageCount {
+        public static final String count = "count";
+        public static final String data = "data";
+    }
+
+    static final public class TxStatsRequestCount {
+        public static final String failed = "failed";
+        public static final String refused = "refused";
+        public static final String succeeded = "succeeded";
+    }
+
+    static final public class TxStatsResourceCount {
+        public static final String mean = "mean";
+        public static final String min = "min";
+        public static final String opened = "opened";
+        public static final String peak = "peak";
+        public static final String refused = "refused";
+    }
+
+    static final public class TxStatsConnectionTypes {
+        public static final String all = "all";
+        public static final String plain = "plain";
+        public static final String tls = "tls";
+    }
+
+    static final public class TxStatsMessageTraffic {
+        public static final String all = "all";
+        public static final String realtime = "realtime";
+        public static final String rest = "rest";
+        public static final String webhook = "webhook";
     }
 
 }

@@ -2,19 +2,23 @@
 /// in a specific scope
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS9
-abstract class StatsResourceCount {
+class StatsResourceCount {
+  /// Creates instance of [StatsResourceCount]
+  StatsResourceCount(
+      {this.mean, this.min, this.opened, this.peak, this.refused});
+
   /// Average resources of this type used for this period.
-  int? mean;
+  double? mean;
 
   /// Minimum total resources of this type used for this period.
-  int? min;
+  double? min;
 
   /// Total resources of this type opened.
-  int? opened;
+  double? opened;
 
   /// Peak resources of this type used for this period.
-  int? peak;
+  double? peak;
 
   /// Resource requests refused within this period.
-  int? refused;
+  double? refused;
 }

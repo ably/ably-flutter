@@ -36,6 +36,7 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_realtimeTime= @"realtimeTime";
 NSString *const AblyPlatformMethod_restTime= @"restTime";
+NSString *const AblyPlatformMethod_stats= @"stats";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
 NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
@@ -370,3 +371,46 @@ NSString *const TxCryptoGetParams_key = @"key";
 
 // key constants for CryptoGenerateRandomKey
 NSString *const TxCryptoGenerateRandomKey_keyLength = @"keyLength";
+
+// key constants for Stats
+NSString *const TxStats_all = @"all";
+NSString *const TxStats_apiRequests = @"apiRequests";
+NSString *const TxStats_channels = @"channels";
+NSString *const TxStats_connections = @"connections";
+NSString *const TxStats_inbound = @"inbound";
+NSString *const TxStats_intervalId = @"intervalId";
+NSString *const TxStats_outbound = @"outbound";
+NSString *const TxStats_persisted = @"persisted";
+NSString *const TxStats_tokenRequests = @"tokenRequests";
+
+// key constants for StatsMessageTypes
+NSString *const TxStatsMessageTypes_all = @"all";
+NSString *const TxStatsMessageTypes_messages = @"messages";
+NSString *const TxStatsMessageTypes_presence = @"presence";
+
+// key constants for StatsMessageCount
+NSString *const TxStatsMessageCount_count = @"count";
+NSString *const TxStatsMessageCount_data = @"data";
+
+// key constants for StatsRequestCount
+NSString *const TxStatsRequestCount_failed = @"failed";
+NSString *const TxStatsRequestCount_refused = @"refused";
+NSString *const TxStatsRequestCount_succeeded = @"succeeded";
+
+// key constants for StatsResourceCount
+NSString *const TxStatsResourceCount_mean = @"mean";
+NSString *const TxStatsResourceCount_min = @"min";
+NSString *const TxStatsResourceCount_opened = @"opened";
+NSString *const TxStatsResourceCount_peak = @"peak";
+NSString *const TxStatsResourceCount_refused = @"refused";
+
+// key constants for StatsConnectionTypes
+NSString *const TxStatsConnectionTypes_all = @"all";
+NSString *const TxStatsConnectionTypes_plain = @"plain";
+NSString *const TxStatsConnectionTypes_tls = @"tls";
+
+// key constants for StatsMessageTraffic
+NSString *const TxStatsMessageTraffic_all = @"all";
+NSString *const TxStatsMessageTraffic_realtime = @"realtime";
+NSString *const TxStatsMessageTraffic_rest = @"rest";
+NSString *const TxStatsMessageTraffic_webhook = @"webhook";
