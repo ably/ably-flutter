@@ -145,6 +145,33 @@ class RealtimeSliver extends HookWidget {
         child: const Text('Release'),
       );
 
+  Widget buildEncryptionSwitch(ValueNotifier<bool> isEnabled) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Enable encryption',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Switch(
+            onChanged: (switchedOn) async {
+              isEnabled.value = switchedOn;
+              if (switchedOn) {
+                await channel.setOptions(
+                  await ably.RealtimeChannelOptions.withCipherKey(
+                    keyFromPassword(
+                      Constants.examplePasswordForEncryptedChannel,
+                    ),
+                  ),
+                );
+              } else {
+                await channel.setOptions(ably.RealtimeChannelOptions());
+              }
+            },
+            value: isEnabled.value,
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     final connectionState =
@@ -154,6 +181,7 @@ class RealtimeSliver extends HookWidget {
     final channelSubscription =
         useState<StreamSubscription<ably.Message>?>(null);
     final realtimeTime = useState<DateTime?>(null);
+    final useEncryption = useState(false);
 
     useEffect(() {
       realtime.time().then((value) => realtimeTime.value = value);
@@ -170,6 +198,7 @@ class RealtimeSliver extends HookWidget {
         ),
         Text('Realtime time: ${realtimeTime.value}'),
         Text('Connection State: ${connectionState.value}'),
+        buildEncryptionSwitch(useEncryption),
         Row(
           children: <Widget>[
             Expanded(
