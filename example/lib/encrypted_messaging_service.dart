@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import 'package:crypto/crypto.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'constants.dart';
@@ -20,20 +17,6 @@ class EncryptedMessagingService {
   ValueStream<List<ably.Message>> get messageHistoryStream =>
       messageHistoryBehaviorSubject.stream;
 
-  static const examplePassword = 'password-to-encrypt-and-decrypt-text';
-
-  // This is a quick way to create a key from a password. In production,
-  // you should either create a random key or use a key derivation
-  // function (KDF) or other secure, attack-resistance mechanism instead.
-  // However, in the example app, we use this so that 2 devices running
-  // the example app can decrypt each other's message.
-  Uint8List get keyFromPassword {
-    final data = utf8.encode(examplePassword);
-    final digest = sha256.convert(data);
-    print('Length of digest: ${digest.bytes.length}');
-    return Uint8List.fromList(digest.bytes);
-  }
-
   EncryptedMessagingService(this._realtime, this._rest) {
     _restChannel = _rest.channels.get(Constants.encryptedChannelName);
     _realtimeChannel = _realtime.channels.get(Constants.encryptedChannelName);
@@ -41,18 +24,6 @@ class EncryptedMessagingService {
 
   void clearMessageHistory() {
     messageHistoryBehaviorSubject.add([]);
-  }
-
-  Future<void> initialize() async {
-    final cipherParams =
-        await ably.Crypto.getDefaultParams(key: keyFromPassword);
-    final restChannelOptions =
-        ably.RestChannelOptions(cipherParams: cipherParams);
-    await _restChannel!.setOptions(restChannelOptions);
-
-    final channelOptions =
-        ably.RealtimeChannelOptions(cipherParams: cipherParams);
-    await _realtimeChannel!.setOptions(channelOptions);
   }
 
   Future<void> connectRealtime() async {

@@ -10,4 +10,6 @@ class Constants {
   static const String channelNameForPushNotifications =
       'push:test-push-channel';
   static const String pushMetaChannelName = '[meta]log:push';
+  static const examplePasswordForEncryptedChannel =
+      'password-to-encrypt-and-decrypt-text';
 }
