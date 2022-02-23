@@ -11,7 +11,9 @@ class TestName {
       'testHelperUnhandledExceptionTest';
 
   static const String restPublish = 'restPublish';
+  static const String restEncryptedPublish = 'restEncryptedPublish';
   static const String restPublishSpec = 'restPublishSpec';
+  static const String restEncryptedPublishSpec = 'restEncryptedPublishSpec';
   static const String restCapabilities = 'restCapabilities';
   static const String restHistory = 'restHistory';
   static const String restPublishWithAuthCallback =
@@ -22,6 +24,7 @@ class TestName {
   static const String restPresenceHistory = 'restPresenceHistory';
 
   static const String realtimePublish = 'realtimePublish';
+  static const String realtimeEncryptedPublish = 'realtimeEncryptedPublish';
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeHistory = 'realtimeHistory';

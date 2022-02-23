@@ -23,6 +23,19 @@ void testRealtimePublish(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRealtimeEncryptedPublish(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimeEncryptedPublish);
+  late TestControlResponseMessage response;
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+  });
+
+  test('publishes encrypted message without any response', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+}
+
 void testRealtimeEvents(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEvents);
   late TestControlResponseMessage response;
