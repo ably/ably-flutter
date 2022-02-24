@@ -19,11 +19,6 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3a
   String? clientId;
 
-  /// Custom log handler
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
-  LogHandler? logHandler;
-
   /// Controls the level of verbosity of log messages from the library
   ///
   /// Use constants from [LogLevel] to pass arguments
