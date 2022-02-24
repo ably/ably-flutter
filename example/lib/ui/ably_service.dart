@@ -10,20 +10,16 @@ class AblyService {
 
   AblyService() {
     realtime = ably.Realtime(
-        options: ably.ClientOptions.fromKey(apiKey)
-          ..clientId = Constants.clientId
-          ..logLevel = ably.LogLevel.verbose
-          ..autoConnect = false
-          ..logHandler = ({msg, exception}) {
-            print('Custom logger :: $msg $exception');
-          });
+      options: ably.ClientOptions.fromKey(apiKey)
+        ..clientId = Constants.clientId
+        ..logLevel = ably.LogLevel.verbose
+        ..autoConnect = false,
+    );
     rest = ably.Rest(
-        options: ably.ClientOptions.fromKey(apiKey)
-          ..clientId = Constants.clientId
-          ..logLevel = ably.LogLevel.verbose
-          ..logHandler = ({msg, exception}) {
-            print('Custom logger :: $msg $exception');
-          });
+      options: ably.ClientOptions.fromKey(apiKey)
+        ..clientId = Constants.clientId
+        ..logLevel = ably.LogLevel.verbose,
+    );
     pushNotificationService = PushNotificationService(realtime, rest);
   }
 }
