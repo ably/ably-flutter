@@ -18,9 +18,7 @@ Future<Map<String, dynamic>> testRestPublish({
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   );
   await publishMessages(rest.channels.get('test'));
   return {

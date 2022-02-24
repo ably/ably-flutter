@@ -17,9 +17,7 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
   final options = ClientOptions.fromKey(appKey.toString())
     ..environment = 'sandbox'
     ..clientId = 'someClientId'
-    ..logLevel = LogLevel.verbose
-    ..logHandler =
-        ({msg, exception}) => logMessages.add([msg, exception.toString()]);
+    ..logLevel = LogLevel.verbose;
 
   final rest = Rest(options: options);
   final channel = rest.channels.get('test');
