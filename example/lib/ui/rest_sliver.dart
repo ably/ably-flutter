@@ -2,13 +2,14 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/ui/paginated_result_viewer.dart';
 import 'package:ably_flutter_example/ui/text_row.dart';
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RestSliver extends HookWidget {
   final ably.Rest rest;
-  late final ably.RestChannel channel;
+  late ably.RestChannel channel;
 
   RestSliver(this.rest, {Key? key}) : super(key: key) {
     channel = rest.channels.get(Constants.channelName);
@@ -34,11 +35,40 @@ class RestSliver extends HookWidget {
         child: const Text('Release channel'),
       );
 
+  Widget buildEncryptionSwitch(ValueNotifier<bool> isEnabled) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Enable encryption',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Switch(
+            onChanged: (switchedOn) async {
+              isEnabled.value = switchedOn;
+              if (switchedOn) {
+                await channel.setOptions(
+                  await ably.RestChannelOptions.withCipherKey(
+                    keyFromPassword(
+                      Constants.examplePasswordForEncryptedChannel,
+                    ),
+                  ),
+                );
+              } else {
+                await channel.setOptions(ably.RestChannelOptions());
+              }
+            },
+            value: isEnabled.value,
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     final messageCount = useState(1);
     final messageName = useState('Message ${messageCount.value}');
     final restTime = useState<DateTime?>(null);
+    final useEncryption = useState(false);
+
     useEffect(() {
       rest.time().then((value) => restTime.value = value);
       messageName.value = 'Message ${messageCount.value}';
@@ -52,6 +82,7 @@ class RestSliver extends HookWidget {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Text('Rest time: ${restTime.value}'),
+        buildEncryptionSwitch(useEncryption),
         Row(
           children: [
             Expanded(
