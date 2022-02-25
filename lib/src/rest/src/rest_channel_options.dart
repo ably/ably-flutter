@@ -9,6 +9,8 @@ class RestChannelOptions {
 
   /// Create a [RestChannelOptions] directly from a CipherKey. This is
   /// equivalent to calling the constructor.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TB3
   static Future<RestChannelOptions> withCipherKey(key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RestChannelOptions(cipherParams: cipherParams);
@@ -16,5 +18,7 @@ class RestChannelOptions {
 
   /// Create channel options with a cipher.
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TB2
   RestChannelOptions({this.cipherParams});
 }
