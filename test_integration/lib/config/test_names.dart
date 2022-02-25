@@ -16,6 +16,7 @@ class TestName {
   static const String restEncryptedPublishSpec = 'restEncryptedPublishSpec';
   static const String restCapabilities = 'restCapabilities';
   static const String restHistory = 'restHistory';
+  static const String restTime = 'restTime';
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
 
@@ -28,6 +29,7 @@ class TestName {
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeHistory = 'realtimeHistory';
+  static const String realtimeTime = 'realtimeTime';
   static const String realtimePublishWithAuthCallback =
       'realtimePublishWithAuthCallback';
   static const String realtimePresenceGet = 'realtimePresenceGet';
