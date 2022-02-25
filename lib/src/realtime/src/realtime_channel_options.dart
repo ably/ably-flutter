@@ -3,9 +3,8 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// Configuration options for a [RealtimeChannel]
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
-class RealtimeChannelOptions extends RestChannelOptions {
+class RealtimeChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
-  @override
   final CipherParams? cipherParams;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
@@ -17,6 +16,8 @@ class RealtimeChannelOptions extends RestChannelOptions {
   /// Create a [RealtimeChannelOptions] directly from a CipherKey. This is a
   /// convenience method you can use if you don't need to specify
   /// other parameters of [RealtimeChannelOptions].
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TB3
   static Future<RealtimeChannelOptions> withCipherKey(key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RealtimeChannelOptions(cipherParams: cipherParams);
@@ -24,6 +25,7 @@ class RealtimeChannelOptions extends RestChannelOptions {
 
   /// create channel options with a cipher, params and modes
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
-  RealtimeChannelOptions({this.params, this.modes, this.cipherParams})
-      : super(cipherParams: cipherParams);
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TB2
+  RealtimeChannelOptions({this.params, this.modes, this.cipherParams});
 }

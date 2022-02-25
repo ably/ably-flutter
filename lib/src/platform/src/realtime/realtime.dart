@@ -110,9 +110,10 @@ class Realtime extends PlatformObject {
   /// returns server time
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
-  // Future<DateTime> time() {
-  //   throw UnimplementedError();
-  // }
+  Future<DateTime> time() async {
+    final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
+    return DateTime.fromMillisecondsSinceEpoch(time);
+  }
 
   /// represents the current state of the device in respect of it being a
   /// target for push notifications.

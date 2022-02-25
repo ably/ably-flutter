@@ -38,7 +38,9 @@ class RestSliver extends HookWidget {
   Widget build(BuildContext context) {
     final messageCount = useState(1);
     final messageName = useState('Message ${messageCount.value}');
+    final restTime = useState<DateTime?>(null);
     useEffect(() {
+      rest.time().then((value) => restTime.value = value);
       messageName.value = 'Message ${messageCount.value}';
     }, [messageCount]);
 
@@ -49,6 +51,7 @@ class RestSliver extends HookWidget {
           'Rest',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        Text('Rest time: ${restTime.value}'),
         Row(
           children: [
             Expanded(

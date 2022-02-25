@@ -21,8 +21,14 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
 
+      # test_integration package depends on ably_flutter, so before we run integration 
+      # tests it's best to perform dependency update in both packages, to make sure that
+      # integration tests are run with exactly the same dependencies as specified in 
+      # current version of ably_flutter package
       - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
         run: |
@@ -46,7 +52,9 @@ jobs:
         with:
           java-version: '8.x'
 
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
 
       - name: 'Run Flutter Driver tests'
         timeout-minutes: 30

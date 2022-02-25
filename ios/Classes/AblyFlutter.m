@@ -549,6 +549,34 @@ static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const a
     result(nil);
 };
 
+static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+    
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:message.message];
+    [realtime time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
+        if(error){
+            result(error);
+        }else{
+            result(@([@(dateTimeResult.timeIntervalSince1970 *1000) longValue]));
+        }
+    }];
+};
+
+static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const message = call.arguments;
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+    NSNumber *const handle = message.message;
+    ARTRest *const rest = [instanceStore restFrom:handle];
+    [rest time:^(NSDate * _Nullable dateTimeResult, NSError * _Nullable error) {
+        if(error){
+            result(error);
+        }else{
+            result(@([@(dateTimeResult.timeIntervalSince1970 *1000) longValue]));
+        }
+    }];
+};
+
 static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const message = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
@@ -665,6 +693,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_realtimePresenceUpdate: _updateRealtimePresence,
         AblyPlatformMethod_realtimePresenceLeave: _leaveRealtimePresence,
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
+        AblyPlatformMethod_realtimeTime:_realtimeTime,
+        AblyPlatformMethod_restTime:_restTime,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,

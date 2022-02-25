@@ -16,6 +16,18 @@ void testRestPublish(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRestEncryptedPublish(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restEncryptedPublish);
+  late TestControlResponseMessage response;
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
+
+  test('rest instance has a valid handle on encrypted publish', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+}
+
 void testRestPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishSpec);
   late TestControlResponseMessage response;
@@ -152,6 +164,78 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRestEncryptedPublishSpec(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restEncryptedPublishSpec);
+  late TestControlResponseMessage response;
+  late List historyOfChannelWithClientId;
+  late List historyOfChannelWithoutClientId;
+  late List historyOfPushEnabledChannel;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+
+    historyOfChannelWithClientId =
+        response.payload['historyOfChannelWithClientId'] as List;
+    historyOfChannelWithoutClientId =
+        response.payload['historyOfChannelWithoutClientId'] as List;
+    historyOfPushEnabledChannel =
+        response.payload['historyOfPushEnabledChannel'] as List;
+  });
+
+  group('RSl1', () {
+    test('publishes without a name and data', () {
+      expect(historyOfChannelWithClientId[0]['name'], null);
+      expect(historyOfChannelWithClientId[0]['data'], null);
+    });
+    test('publishes without data', () {
+      expect(historyOfChannelWithClientId[1]['name'], 'name');
+      expect(historyOfChannelWithClientId[1]['data'], null);
+    });
+    test('publishes without a name', () {
+      expect(historyOfChannelWithClientId[2]['name'], null);
+      expect(historyOfChannelWithClientId[2]['data'], 'data');
+    });
+    test('publishes with name and data', () {
+      expect(historyOfChannelWithClientId[3]['name'], 'name');
+      expect(historyOfChannelWithClientId[3]['data'], 'data');
+    });
+    test('publishes single message object', () {
+      expect(historyOfChannelWithClientId[4]['name'], 'single-message-name');
+      expect(historyOfChannelWithClientId[4]['data'], 'single-message-data');
+    });
+    test('publishes multiple message objects', () {
+      expect(historyOfChannelWithClientId[5]['name'], 'multi-message-name-1');
+      expect(historyOfChannelWithClientId[5]['data'], 'multi-message-data-1');
+      expect(historyOfChannelWithClientId[6]['name'], 'multi-message-name-2');
+      expect(historyOfChannelWithClientId[6]['data'], 'multi-message-data-2');
+    });
+    test('publishes multiple messages at once', () {
+      expect(
+          historyOfChannelWithClientId[5]['timestamp'] ==
+              historyOfChannelWithClientId[6]['timestamp'],
+          true);
+      expect(
+          historyOfChannelWithClientId[5]['timestamp'] !=
+              historyOfChannelWithClientId[4]['timestamp'],
+          true);
+    });
+  });
+
+  test('RSL6a2 publishes message extras', () {
+    expect(
+      historyOfPushEnabledChannel[0]['name'],
+      'single-message-push-enabled-name',
+    );
+    expect(
+      historyOfPushEnabledChannel[0]['data'],
+      'single-message-push-enabled-data',
+    );
+    checkMessageExtras(
+        historyOfPushEnabledChannel[0]['extras']['extras'] as Map);
+    expect(historyOfPushEnabledChannel[0]['extras']['delta'], null);
+  });
+}
+
 void testRestPublishWithAuthCallback(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishWithAuthCallback);
   late TestControlResponseMessage response;
@@ -231,6 +315,23 @@ void testRestHistory(FlutterDriver Function() getDriver) {
       expect(historyWithStartAndEnd.length, equals(1));
       expect(historyWithStartAndEnd[0]['name'], equals('history'));
       expect(historyWithStartAndEnd[0]['data'], equals('test'));
+    });
+  });
+}
+
+void testRestTime(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restTime);
+  late TestControlResponseMessage response;
+  late DateTime restTime;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    restTime = DateTime.parse(response.payload['time'] as String);
+  });
+
+  group('rest#time', () {
+    test('returns non-zero date and time', () {
+      expect(restTime.millisecondsSinceEpoch, isNot(0));
     });
   });
 }

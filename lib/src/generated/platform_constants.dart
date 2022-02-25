@@ -64,6 +64,8 @@ class PlatformMethod {
       'publishRealtimeChannelMessage';
   static const String releaseRealtimeChannel = 'releaseRealtimeChannel';
   static const String realtimeHistory = 'realtimeHistory';
+  static const String realtimeTime = 'realtimeTime';
+  static const String restTime = 'restTime';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
   static const String pushSubscribeDevice = 'pushSubscribeDevice';
