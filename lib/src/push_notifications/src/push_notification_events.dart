@@ -30,9 +30,6 @@ abstract class PushNotificationEvents {
 
   /// Called when notification is tapped while the app is already in the
   /// foreground or in the background
-  ///
-  /// Check the [ApplicationState] to know if the app was in foreground or
-  /// background.
   Stream<RemoteMessage> get onNotificationTap;
 
   /// Called when the user visits the "In-app settings", such as when in the
