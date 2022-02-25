@@ -37,6 +37,7 @@ public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         applicationContext = flutterPluginBinding.getApplicationContext();
         setupChannels(flutterPluginBinding.getBinaryMessenger(), applicationContext);
+        PushActivationEventHandlers.getInstance().registerReceiver();
     }
 
     private void setupChannels(BinaryMessenger messenger, Context applicationContext) {
@@ -54,7 +55,9 @@ public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry
     }
 
     @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {}
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        PushActivationEventHandlers.getInstance().unregisterReceiver();
+    }
 
     private static MethodCodec createCodec(CipherParamsStorage cipherParamsStorage) {
         return new StandardMethodCodec(new AblyMessageCodec(cipherParamsStorage));

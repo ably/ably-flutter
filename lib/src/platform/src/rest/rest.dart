@@ -65,9 +65,10 @@ class Rest extends PlatformObject {
   /// returns server time
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
-  // Future<DateTime> time() {
-  //   throw UnimplementedError();
-  // }
+  Future<DateTime> time() async {
+    final time = await invokeRequest<int>(PlatformMethod.restTime);
+    return DateTime.fromMillisecondsSinceEpoch(time);
+  }
 
   /// a push object interacting with Push API, such as
   /// subscribing for push notifications by clientId.

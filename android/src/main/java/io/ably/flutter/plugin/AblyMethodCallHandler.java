@@ -25,6 +25,7 @@ import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
 import io.ably.lib.realtime.Presence;
+import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.transport.Defaults;
@@ -87,6 +88,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceUpdate, this::updateRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.realtimePresenceLeave, this::leaveRealtimePresence);
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
+    _map.put(PlatformConstants.PlatformMethod.realtimeTime, this::realtimeTime);
+    _map.put(PlatformConstants.PlatformMethod.restTime, this::restTime);
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -600,7 +603,33 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     });
   }
 
-  private void getRealtimeHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    private void realtimeTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+        time(result, instanceStore.getRealtime((int) message.message));
+    }
+
+    private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage message = (AblyFlutterMessage) methodCall.arguments;
+        time(result, instanceStore.getRest((int) message.message));
+    }
+
+    private void time(@NonNull MethodChannel.Result result, AblyBase client) {
+        Callback<Long> callback = new Callback<Long>() {
+            @Override
+            public void onSuccess(Long timeResult) {
+                result.success(timeResult);
+            }
+
+            @Override
+            public void onError(ErrorInfo reason) {
+                result.error("40000", reason.message, reason);
+            }
+        };
+        client.timeAsync(callback);
+    }
+
+
+    private void getRealtimeHistory(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     this.<AblyFlutterMessage<Map<String, Object>>>ablyDo(message, (ablyLibrary, messageData) -> {
       final Map<String, Object> map = messageData.message;
@@ -628,7 +657,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
       Integer handle = (Integer) message.message;
-      PushActivationEventHandlers.setResultForActivate(result);
+      PushActivationEventHandlers.getInstance().setResultForActivate(result);
       instanceStore.getPush(handle).activate();
     } catch (AblyException e) {
       handleAblyException(result, e);
@@ -639,7 +668,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
     try {
       Integer handle = (Integer) message.message;
-      PushActivationEventHandlers.setResultForDeactivate(result);
+      PushActivationEventHandlers.getInstance().setResultForDeactivate(result);
       instanceStore.getPush(handle).deactivate();
     } catch (AblyException e) {
       handleAblyException(result, e);

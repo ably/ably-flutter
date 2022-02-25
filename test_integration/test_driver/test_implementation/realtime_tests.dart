@@ -23,6 +23,19 @@ void testRealtimePublish(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRealtimeEncryptedPublish(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimeEncryptedPublish);
+  late TestControlResponseMessage response;
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+  });
+
+  test('publishes encrypted message without any response', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+}
+
 void testRealtimeEvents(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEvents);
   late TestControlResponseMessage response;
@@ -333,6 +346,23 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
       expect(historyWithStartAndEnd.length, equals(1));
       expect(historyWithStartAndEnd[0]['name'], equals('history'));
       expect(historyWithStartAndEnd[0]['data'], equals('test'));
+    });
+  });
+}
+
+void testRealtimeTime(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimeTime);
+  late TestControlResponseMessage response;
+  late DateTime realtimeTime;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    realtimeTime = DateTime.parse(response.payload['time'] as String);
+  });
+
+  group('realtime#time', () {
+    test('returns non-zero date and time', () {
+      expect(realtimeTime.millisecondsSinceEpoch, isNot(0));
     });
   });
 }
