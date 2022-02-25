@@ -58,7 +58,9 @@ abstract class PlatformObject {
   }
 
   /// invoke platform method channel with AblyMessage encapsulation
-  /* FIXME(ikurek): This seems wrong - the structure is either
+  /* FIXME(ikurek): https://github.com/ably/ably-flutter/issues/179
+  This seems wrong - the structure is either
+
   {
       message: {
           message: argument,
