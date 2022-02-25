@@ -40,7 +40,7 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
         if let result = flutterResultForActivate {
             result(error)
         } else {
-            print("Did not return a value asynchronously because flutterResultForActivate was nil. The app might have been restarted since calling activate.")
+            NSLog("Did not return a value asynchronously because flutterResultForActivate was nil. The app might have been restarted since calling activate.")
         }
     }
     
@@ -53,7 +53,7 @@ public class PushActivationEventHandlers: NSObject, ARTPushRegistererDelegate {
         if let result = flutterResultForDeactivate {
             result(error)
         } else {
-            print("Did not return a value asynchronously because flutterResultForDeactivate was nil. The app might have been restarted since calling deactivate.")
+            NSLog("Did not return a value asynchronously because flutterResultForDeactivate was nil. The app might have been restarted since calling deactivate.")
         }
     }
     
