@@ -350,6 +350,23 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRealtimeTime(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimeTime);
+  late TestControlResponseMessage response;
+  late DateTime realtimeTime;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    realtimeTime = DateTime.parse(response.payload['time'] as String);
+  });
+
+  group('realtime#time', () {
+    test('returns non-zero date and time', () {
+      expect(realtimeTime.millisecondsSinceEpoch, isNot(0));
+    });
+  });
+}
+
 void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePresenceGet);
   late TestControlResponseMessage response;
