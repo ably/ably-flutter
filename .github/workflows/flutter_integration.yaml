@@ -61,6 +61,5 @@ jobs:
           api-level: ${{ matrix.api-level }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
             flutter pub get
             cd test_integration && ./run_integration_tests.sh
