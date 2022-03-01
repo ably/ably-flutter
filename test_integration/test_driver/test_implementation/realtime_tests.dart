@@ -36,6 +36,116 @@ void testRealtimeEncryptedPublish(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimePublishSpec);
+  late TestControlResponseMessage response;
+  late List messages;
+  late List messages2;
+  late List messages3;
+  late List messagesWithExtras;
+  Map<String, dynamic>? exception;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+
+    messages = response.payload['publishedMessages'] as List;
+    messages2 = response.payload['publishedMessages2'] as List;
+    messages3 = response.payload['publishedMessages3'] as List;
+    messagesWithExtras = response.payload['publishedExtras'] as List;
+    exception = response.payload['exception'] as Map<String, dynamic>?;
+  });
+
+  group('RSl1', () {
+    test('publishes without a name and data', () {
+      expect(messages[0]['name'], null);
+      expect(messages[0]['data'], null);
+    });
+
+    test('publishes without data', () {
+      expect(messages[1]['name'], 'name1');
+      expect(messages[1]['data'], null);
+    });
+
+    test('publishes without a name', () {
+      expect(messages[2]['name'], null);
+      expect(messages[2]['data'], 'data1');
+    });
+
+    test('publishes with name and data', () {
+      expect(messages[3]['name'], 'name1');
+      expect(messages[3]['data'], 'data1');
+    });
+
+    test('publishes single message object', () {
+      expect(messages[4]['name'], 'message-name1');
+      expect(messages[4]['data'], 'message-data1');
+    });
+
+    test('publishes multiple message objects', () {
+      expect(messages[5]['name'], 'messages-name1');
+      expect(messages[5]['data'], 'messages-data1');
+      expect(messages[6]['name'], 'messages-name2');
+      expect(messages[6]['data'], 'messages-data2');
+    });
+
+    test('publishes multiple messages at once', () {
+      expect(messages[5]['timestamp'] == messages[6]['timestamp'], true);
+      expect(messages[5]['timestamp'] != messages[4]['timestamp'], true);
+    });
+
+    test(
+        '(RSL1m1) Publishing a Message with no clientId when the clientId'
+        ' is set to some value in the client options should result in a message'
+        ' received with the clientId property set to that value', () {
+      expect(messages[0]['clientId'], 'someClientId');
+    });
+
+    test(
+        '(RSL1m2) Publishing a Message with a clientId set to the same'
+        ' value as the clientId in the client options should result in'
+        ' a message received with the clientId property set to that value', () {
+      expect(messages[7]['clientId'], 'someClientId');
+    });
+
+    test(
+      '(RSL1d) Raises an error if the message was not successfully published',
+      () => expect(exception == null, false),
+    );
+
+    test(
+      '(RSL1m4) Publishing a Message with a clientId set to a different value'
+      ' from the clientId in the client options should result in a message'
+      ' being rejected by the server.',
+      () {
+        expect(response.payload['exception'], isA<Map>());
+      },
+    );
+
+    test(
+      '(RSL1m3) Publishing a Message with a clientId set to a value'
+      ' from an unidentified client (no clientId in the client options'
+      ' and credentials that can assume any clientId) should result in'
+      ' a message received with the clientId property set to that value',
+      () => expect(messages2[0]['clientId'], 'client-id'),
+    );
+
+    test(
+      'publishes non-ascii characters',
+      () {
+        expect(messages3[0]['name'], 'Ωπ');
+        expect(messages3[0]['data'], 'ΨΔ');
+      },
+    );
+  });
+
+  test('(RSL6a2) publishes message extras', () {
+    expect(messagesWithExtras[0]['name'], 'name');
+    expect(messagesWithExtras[0]['data'], 'data');
+    checkMessageExtras(messagesWithExtras[0]['extras']['extras'] as Map);
+    expect(messagesWithExtras[0]['extras']['delta'], null);
+  });
+}
+
 void testRealtimeEvents(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEvents);
   late TestControlResponseMessage response;

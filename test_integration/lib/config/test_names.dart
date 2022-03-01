@@ -26,6 +26,7 @@ class TestName {
 
   static const String realtimePublish = 'realtimePublish';
   static const String realtimeEncryptedPublish = 'realtimeEncryptedPublish';
+  static const String realtimePublishSpec = 'realtimePublishSpec';
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeHistory = 'realtimeHistory';
