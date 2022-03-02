@@ -41,9 +41,7 @@ jobs:
         api-level: [21, 29]
       fail-fast: false
 
-    # ubuntu-latest cannot be used as it is only a docker container, and unfortunately running
-    # hardware acceleration in container is not allowed by android emulator.
-    runs-on: 'macos-latest'
+    runs-on: 'ubuntu-latest'
 
     steps:
       - uses: actions/checkout@v2
@@ -61,7 +59,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            /Users/runner/Library/Android/sdk/tools/bin/avdmanager list
             flutter pub get
             cd test_integration && ./run_integration_tests.sh
