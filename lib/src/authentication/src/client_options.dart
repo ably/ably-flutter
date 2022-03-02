@@ -19,6 +19,19 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3a
   String? clientId;
 
+  /// Custom log handler
+  ///
+  /// For discussion about removing this component see
+  /// https://github.com/ably/ably-flutter/issues/238
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
+  @Deprecated(
+    'Not used, as log messages are handled by the default mechanism '
+    'in the underlying SDK. This instance variable will be removed '
+    'in future.',
+  )
+  LogHandler? logHandler;
+
   /// Controls the level of verbosity of log messages from the library
   ///
   /// Use constants from [LogLevel] to pass arguments
