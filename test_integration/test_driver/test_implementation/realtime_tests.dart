@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
@@ -149,87 +151,50 @@ void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
 void testRealtimeEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEncryptedPublishSpec);
   late TestControlResponseMessage response;
-  late List historyOfEncryptedChannelWithClientId;
-  late List historyOfPlaintextChannelWithClientId;
-  late List historyOfEncryptedChannelWithoutClientId;
-  late List historyOfPlaintextChannelWithoutClientId;
+  late List historyOfEncryptedChannel;
+  late List historyOfPlaintextChannel;
   late List historyOfEncryptedPushEnabledChannel;
   late List historyOfPlaintextPushEnabledChannel;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    historyOfEncryptedChannelWithClientId =
-        response.payload['historyOfEncryptedChannelWithClientId'] as List;
-    historyOfPlaintextChannelWithClientId =
-        response.payload['historyOfPlaintextChannelWithClientId'] as List;
-    historyOfEncryptedChannelWithoutClientId =
-        response.payload['historyOfEncryptedChannelWithoutClientId'] as List;
-    historyOfPlaintextChannelWithoutClientId =
-        response.payload['historyOfPlaintextChannelWithoutClientId'] as List;
+    historyOfEncryptedChannel =
+        response.payload['historyOfEncryptedChannel'] as List;
+    historyOfPlaintextChannel =
+        response.payload['historyOfPlaintextChannel'] as List;
     historyOfEncryptedPushEnabledChannel =
         response.payload['historyOfEncryptedPushEnabledChannel'] as List;
     historyOfPlaintextPushEnabledChannel =
         response.payload['historyOfPlaintextPushEnabledChannel'] as List;
   });
 
-  group('RSl1', () {
-    test('publishes without a name and data', () {
-      expect(historyOfEncryptedChannelWithClientId[0]['name'], null);
-      expect(historyOfEncryptedChannelWithClientId[0]['data'], null);
+  group('RSL5', () {
+    test('does not encrypt name', () {
+      for (var i = 0; i < historyOfEncryptedPushEnabledChannel.length; i++) {
+        expect(historyOfEncryptedChannel[i]['name'],
+            equals(historyOfPlaintextChannel[i]['name']));
+      }
     });
-    test('publishes without data', () {
-      expect(historyOfEncryptedChannelWithClientId[1]['name'], 'name');
-      expect(historyOfEncryptedChannelWithClientId[1]['data'], null);
-    });
-    test('publishes without a name', () {
-      expect(historyOfEncryptedChannelWithClientId[2]['name'], null);
-      expect(historyOfEncryptedChannelWithClientId[2]['data'], 'data');
-    });
-    test('publishes with name and data', () {
-      expect(historyOfEncryptedChannelWithClientId[3]['name'], 'name');
-      expect(historyOfEncryptedChannelWithClientId[3]['data'], 'data');
-    });
-    test('publishes single message object', () {
-      expect(historyOfEncryptedChannelWithClientId[4]['name'],
-          'single-message-name');
-      expect(historyOfEncryptedChannelWithClientId[4]['data'],
-          'single-message-data');
-    });
-    test('publishes multiple message objects', () {
-      expect(historyOfEncryptedChannelWithClientId[5]['name'],
-          'multi-message-name-1');
-      expect(historyOfEncryptedChannelWithClientId[5]['data'],
-          'multi-message-data-1');
-      expect(historyOfEncryptedChannelWithClientId[6]['name'],
-          'multi-message-name-2');
-      expect(historyOfEncryptedChannelWithClientId[6]['data'],
-          'multi-message-data-2');
-    });
-    test('publishes multiple messages at once', () {
-      expect(
-          historyOfEncryptedChannelWithClientId[5]['timestamp'] ==
-              historyOfEncryptedChannelWithClientId[6]['timestamp'],
-          true);
-      expect(
-          historyOfEncryptedChannelWithClientId[5]['timestamp'] !=
-              historyOfEncryptedChannelWithClientId[4]['timestamp'],
-          true);
-    });
-  });
 
-  test('RSL6a2 publishes message extras', () {
-    expect(
-      historyOfEncryptedPushEnabledChannel[0]['name'],
-      'single-message-push-enabled-name',
-    );
-    expect(
-      historyOfEncryptedPushEnabledChannel[0]['data'],
-      'single-message-push-enabled-data',
-    );
-    checkMessageExtras(
-        historyOfEncryptedPushEnabledChannel[0]['extras']['extras'] as Map);
-    expect(historyOfEncryptedPushEnabledChannel[0]['extras']['delta'], null);
+    test('does encrypt data', () {
+      for (var i = 0; i < historyOfEncryptedPushEnabledChannel.length; i++) {
+        final encryptedData = historyOfEncryptedChannel[i]['data'];
+        final plaintextData = historyOfPlaintextChannel[i]['data'];
+
+        if (encryptedData != null) {
+          expect(encryptedData, isNot(equals(plaintextData)));
+          expect(plaintextData, isA<Uint8List>());
+        }
+      }
+    });
+
+    test('does not encrypt extras', () {
+      for (var i = 0; i < historyOfEncryptedPushEnabledChannel.length; i++) {
+        expect(historyOfEncryptedPushEnabledChannel[i]['name'],
+            equals(historyOfPlaintextPushEnabledChannel[i]['name']));
+      }
+    });
   });
 }
 

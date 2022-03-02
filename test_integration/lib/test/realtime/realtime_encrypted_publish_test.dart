@@ -52,22 +52,19 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
       ..logLevel = LogLevel.verbose,
   );
 
-  // Create encrypted  & plaintext channels with client ID
-  final encryptedChannelWithClientId =
-      realtimeWithClientId.channels.get('test');
-  await encryptedChannelWithClientId.setOptions(channelOptions);
-  final plaintextChannelWithClientId =
-      realtimeWithClientId.channels.get('test');
+  // Create encrypted channel with client ID
+  final encryptedChannel = realtimeWithClientId.channels.get('test');
+  await encryptedChannel.setOptions(channelOptions);
 
   // Send simple message data
-  await encryptedChannelWithClientId.publish();
-  await encryptedChannelWithClientId.publish(name: 'name');
-  await encryptedChannelWithClientId.publish(data: 'data');
-  await encryptedChannelWithClientId.publish(name: 'name', data: 'data');
+  await encryptedChannel.publish();
+  await encryptedChannel.publish(name: 'name');
+  await encryptedChannel.publish(data: 'data');
+  await encryptedChannel.publish(name: 'name', data: 'data');
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send single message object
-  await encryptedChannelWithClientId.publish(
+  await encryptedChannel.publish(
     message: Message(
       name: 'single-message-name',
       data: 'single-message-data',
@@ -76,14 +73,14 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send multiple message objects at once
-  await encryptedChannelWithClientId.publish(messages: [
+  await encryptedChannel.publish(messages: [
     Message(name: 'multi-message-name-1', data: 'multi-message-data-1'),
     Message(name: 'multi-message-name-2', data: 'multi-message-data-2'),
   ]);
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send message with [clientId] defined
-  await encryptedChannelWithClientId.publish(
+  await encryptedChannel.publish(
     message: Message(
       name: 'single-message-with-client-id-name',
       data: 'single-message-with-client-id-data',
@@ -92,56 +89,19 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
   );
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  // Retrieve history of channels where client id was specified
-  final historyOfEncryptedChannelWithClientId = await getHistory(
-    encryptedChannelWithClientId,
-    RealtimeHistoryParams(direction: 'forwards'),
-  );
-  final historyOfPlaintextChannelWithClientId = await getHistory(
-    plaintextChannelWithClientId,
-    RealtimeHistoryParams(direction: 'forwards'),
-  );
-
-  // Realtime instance where client id has to be specified in messages
-  final realtimeWithoutClientId = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
-  );
-
-  // Create encrypted channel without client ID
-  final encryptedChannelWithoutClientId =
-      realtimeWithoutClientId.channels.get('test2');
-  await encryptedChannelWithoutClientId.setOptions(channelOptions);
-  final plaintextChannelWithoutClientId =
-      realtimeWithoutClientId.channels.get('test2');
-
-  // Send message with client ID provided
-  await encryptedChannelWithoutClientId.publish(
-    message: Message(
-      name: 'single-message-with-client-id',
-      clientId: clientId,
-    ),
-  );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
-
-  // Retrieve history of channels where client id was not specified
-  final historyOfEncryptedChannelWithoutClientId = await getHistory(
-    encryptedChannelWithoutClientId,
-    RealtimeHistoryParams(direction: 'forwards'),
-  );
-  final historyOfPlaintextChannelWithoutClientId = await getHistory(
-    plaintextChannelWithoutClientId,
+  // Retrieve history of channel where client id was specified
+  final historyOfEncryptedChannel = await getHistory(
+    encryptedChannel,
     RealtimeHistoryParams(direction: 'forwards'),
   );
 
   // Create encrypted channel with push capability
-  final encryptedPushEnabledChannelWithClientId =
+  final encryptedPushEnabledChannel =
       realtimeWithClientId.channels.get('pushenabled:test:extras');
-  await encryptedPushEnabledChannelWithClientId.setOptions(channelOptions);
-  final plaintextPushEnabledChannelWithClientId =
-      realtimeWithClientId.channels.get('pushenabled:test:extras');
+  await encryptedPushEnabledChannel.setOptions(channelOptions);
 
   // Send message with extras to encrypted push-enabled channel
-  await encryptedPushEnabledChannelWithClientId.publish(
+  await encryptedPushEnabledChannel.publish(
     message: Message(
       name: 'single-message-push-enabled-name',
       data: 'single-message-push-enabled-data',
@@ -151,20 +111,22 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
 
   // Retrieve history of push-enabled channels
   final historyOfEncryptedPushEnabledChannel =
-      await getHistory(encryptedPushEnabledChannelWithClientId);
+      await getHistory(encryptedPushEnabledChannel);
+
+  // Retreive plaintext history of encrypted channel
+  await encryptedChannel.setOptions(RealtimeChannelOptions());
+  final historyOfPlaintextChannel = await getHistory(
+    encryptedChannel,
+    RealtimeHistoryParams(direction: 'forwards'),
+  );
+  await encryptedPushEnabledChannel.setOptions(RealtimeChannelOptions());
   final historyOfPlaintextPushEnabledChannel =
-      await getHistory(plaintextPushEnabledChannelWithClientId);
+      await getHistory(encryptedPushEnabledChannel);
 
   return {
     'handle': await realtimeWithClientId.handle,
-    'historyOfEncryptedChannelWithClientId':
-        historyOfEncryptedChannelWithClientId,
-    'historyOfPlaintextChannelWithClientId':
-        historyOfPlaintextChannelWithClientId,
-    'historyOfEncryptedChannelWithoutClientId':
-        historyOfEncryptedChannelWithoutClientId,
-    'historyOfPlaintextChannelWithoutClientId':
-        historyOfPlaintextChannelWithoutClientId,
+    'historyOfEncryptedChannel': historyOfEncryptedChannel,
+    'historyOfPlaintextChannel': historyOfPlaintextChannel,
     'historyOfEncryptedPushEnabledChannel':
         historyOfEncryptedPushEnabledChannel,
     'historyOfPlaintextPushEnabledChannel':
