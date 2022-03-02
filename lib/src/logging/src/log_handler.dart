@@ -8,7 +8,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
 @Deprecated(
   'All usages of this type are marked as deprecated '
-  'so it will be removed in future releases',
+  'so it will be removed in a future release.',
 )
 typedef LogHandler = void Function({
   String? msg,

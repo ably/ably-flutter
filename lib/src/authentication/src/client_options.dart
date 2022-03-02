@@ -28,7 +28,7 @@ class ClientOptions extends AuthOptions {
   @Deprecated(
     'Not used, as log messages are handled by the default mechanism '
     'in the underlying SDK. This instance variable will be removed '
-    'in future.',
+    'in a future release.',
   )
   LogHandler? logHandler;
 
