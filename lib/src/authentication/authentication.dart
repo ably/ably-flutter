@@ -1,3 +1,4 @@
+export 'src/app_provisioning.dart';
 export 'src/auth.dart';
 export 'src/auth_options.dart';
 export 'src/client_options.dart';
