@@ -7,13 +7,15 @@
 
 import 'package:ably_flutter_example/main.dart';
 import 'package:ably_flutter_example/ui/ably_service.dart';
+import 'package:ably_flutter_example/ui/api_key_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Verify Platform version', (tester) async {
     // Build our app and trigger a frame.
-    final ablyService = AblyService();
+    final apiKeyProvision = await ApiKeyService().getOrProvisionApiKey();
+    final ablyService = AblyService(apiKeyProvision: apiKeyProvision);
     await tester.pumpWidget(AblyFlutterExampleApp(ablyService));
 
     // Verify that platform version is retrieved.
