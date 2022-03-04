@@ -17,7 +17,7 @@ class AppProvisioning {
   /// List of capabilities for the provisioned key
   ///
   /// Defaults to [defaultKeyCapabilities]
-  List<String> keyCapabilities;
+  Map<String, List<dynamic>> keyCapabilities;
 
   /// Determines whether the provisioned key will have push capabilities
   ///
@@ -35,14 +35,17 @@ class AppProvisioning {
   static const String defaultEnvironmentPrefix = 'sandbox-';
 
   /// Default list of key capabilities
-  static const List<String> defaultKeyCapabilities = [
-    'publish',
-    'subscribe',
-    'history',
-    'presence',
-    'push-subscribe',
-    'push-admin',
-  ];
+  /// Enables all capabilities on all channels
+  static const Map<String, List<dynamic>> defaultKeyCapabilities = {
+    '*': [
+      'publish',
+      'subscribe',
+      'history',
+      'presence',
+      'push-subscribe',
+      'push-admin',
+    ],
+  };
 
   /// Internal HTTP client used to make provisioning API requests
   final http.Client _httpRetryClient = RetryClient(
@@ -65,13 +68,6 @@ class AppProvisioning {
         'Accept': 'application/json',
       };
 
-  /// Capability spec of provisioned key
-  /// It's a wrapper over [keyCapabilities] that's required because
-  /// of the provisioning POST request body construction
-  Map<String, List<dynamic>> get _keyCapabilitySpec => {
-        '*': keyCapabilities,
-      };
-
   /// App spec used to provision the app
   ///
   /// See: https://docs.ably.com/client-lib-development-guide/test-api
@@ -88,7 +84,7 @@ class AppProvisioning {
             // Sandbox Test API. The capability map has to be JSON encoded
             // as a string and then appropriately escaped in order for
             // presentation within a string value.
-            'capability': jsonEncode(_keyCapabilitySpec),
+            'capability': jsonEncode(keyCapabilities),
           },
         ],
       };
