@@ -5,12 +5,12 @@ import static io.ably.flutter.plugin.push.PushActivationReceiver.PUSH_DEACTIVATE
 import static io.ably.flutter.plugin.push.PushActivationReceiver.PUSH_UPDATE_FAILED_ACTION;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.lib.types.ErrorInfo;
+import io.ably.lib.util.Log;
 import io.flutter.plugin.common.MethodChannel;
 
 public class PushActivationEventHandlers {

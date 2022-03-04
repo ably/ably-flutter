@@ -10,7 +10,6 @@ void main() {
     final clientOptions = ClientOptions();
     expect(clientOptions.clientId, isNull);
     expect(clientOptions.logLevel, LogLevel.info);
-    expect(clientOptions.logHandler, isNull);
     expect(clientOptions.tls, isNull);
     expect(clientOptions.restHost, isNull);
     expect(clientOptions.realtimeHost, isNull);

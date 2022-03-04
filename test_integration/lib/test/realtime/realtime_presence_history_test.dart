@@ -16,9 +16,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   final options = ClientOptions.fromKey(appKey.toString())
     ..environment = 'sandbox'
     ..clientId = 'someClientId'
-    ..logLevel = LogLevel.verbose
-    ..logHandler =
-        ({msg, exception}) => logMessages.add([msg, exception.toString()]);
+    ..logLevel = LogLevel.verbose;
 
   final realtime = Realtime(options: options);
   final channel = realtime.channels.get('test');

@@ -11,15 +11,12 @@ Future<Map<String, dynamic>> testRestHistory({
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String?>>[];
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   );
   final channel = rest.channels.get('test');
   await publishMessages(channel);
@@ -69,6 +66,5 @@ Future<Map<String, dynamic>> testRestHistory({
     'historyAll': historyAll,
     't1': time1.toIso8601String(),
     't2': time2.toIso8601String(),
-    'log': logMessages,
   };
 }

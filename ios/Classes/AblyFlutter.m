@@ -9,6 +9,7 @@
 #import "AblyFlutterStreamHandler.h"
 #import "AblyStreamsChannel.h"
 #import "codec/AblyPlatformConstants.h"
+#import "ARTLog.h"
 
 #define LOG(fmt, ...) NSLog((@"%@:%d " fmt), [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, ##__VA_ARGS__)
 
@@ -45,6 +46,8 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterClientOptions *const options = message.message;
     options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    ARTLog *const logger = [[ARTLog alloc] init];
+    logger.logLevel = options.clientOptions.logLevel;
 
     NSNumber *const handle = [instanceStore getNextHandle];
     if(options.hasAuthCallback){
@@ -55,11 +58,11 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
                              arguments:message
                                 result:^(id tokenData){
                 if (!tokenData) {
-                    NSLog(@"No token data received %@", tokenData);
+                    [logger log:[NSString stringWithFormat:@"No token data received %@", tokenData] withLevel: ARTLogLevelWarn];
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
                                                       code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
-                    NSLog(@"Error getting token data %@", tokenData);
+                    [logger log:[NSString stringWithFormat:@"Error getting token data %@", tokenData] withLevel: ARTLogLevelError];
                     callback(nil, tokenData);
                 } else {
                     callback(tokenData, nil);
@@ -223,6 +226,8 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     AblyFlutterClientOptions *const options = message.message;
     options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    ARTLog *const logger = [[ARTLog alloc] init];
+    logger.logLevel = options.clientOptions.logLevel;
 
     NSNumber *const handle = [instanceStore getNextHandle];
     if(options.hasAuthCallback){
@@ -234,11 +239,11 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
                                arguments:message
                                   result:^(id tokenData){
                 if (!tokenData) {
-                    NSLog(@"No token data received %@", tokenData);
+                    [logger log:[NSString stringWithFormat:@"No token data received %@", tokenData] withLevel: ARTLogLevelWarn];
                     callback(nil, [NSError errorWithDomain:ARTAblyErrorDomain
                                                       code:ARTErrorAuthConfiguredProviderFailure userInfo:nil]);
                 } if ([tokenData isKindOfClass:[FlutterError class]]) {
-                    NSLog(@"Error getting token data %@", tokenData);
+                    [logger log:[NSString stringWithFormat:@"Error getting token data %@", tokenData] withLevel: ARTLogLevelError];
                     callback(nil, tokenData);
                 } else {
                     callback(tokenData, nil);
@@ -627,8 +632,6 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
 @synthesize instanceStore = _instanceStore;
 
 +(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-    LOG(@"registrar: %@", [registrar class]);
-    
     // Initializing reader writer and method codecs
     FlutterStandardReaderWriter *const readerWriter = [AblyFlutterReaderWriter new];
     FlutterStandardMethodCodec *const methodCodec = [FlutterStandardMethodCodec codecWithReaderWriter:readerWriter];
@@ -717,6 +720,8 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
 }
 
 -(void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    // We can't use ARTLog here because Ably library may not have been initialized yet
+    // And ARTLogLevel is only available after ARTClientOptions are set
     LOG(@"%@(%@)", call.method, call.arguments ? [call.arguments class] : @"");
     const FlutterHandler handler = _handlers[call.method];
     if (!handler) {

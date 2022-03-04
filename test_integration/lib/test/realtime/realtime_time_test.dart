@@ -14,9 +14,7 @@ Future<Map<String, dynamic>> testRealtimeTime({
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   );
 
   final realtimeTime = await realtime.time();

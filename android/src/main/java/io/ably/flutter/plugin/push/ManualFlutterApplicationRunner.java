@@ -5,7 +5,6 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.AblyMessageCodec;
 import io.ably.flutter.plugin.util.CipherParamsStorage;
+import io.ably.lib.util.Log;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.plugin.common.MethodCall;

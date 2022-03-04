@@ -14,8 +14,7 @@ Future<Map<String, dynamic>> testRealtimePublish({
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler = ({msg, exception}) => logMessages.add([msg, '$exception']),
+      ..logLevel = LogLevel.verbose,
   );
   await publishMessages(realtime.channels.get('test'));
   await realtime.close();

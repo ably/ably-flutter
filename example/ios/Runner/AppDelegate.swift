@@ -12,6 +12,6 @@ import Flutter
   }
     
     override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("application:didFailToRegisterForRemoteNotificationsWithError was called with error: %@", error.localizedDescription)
+        NSLog("application:didFailToRegisterForRemoteNotificationsWithError was called with error: %@", error.localizedDescription)
     }
 }

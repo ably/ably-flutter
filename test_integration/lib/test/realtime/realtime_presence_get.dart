@@ -14,9 +14,7 @@ ClientOptions getClientOptions(
     ClientOptions.fromKey(appKey)
       ..environment = 'sandbox'
       ..clientId = clientId
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]);
+      ..logLevel = LogLevel.verbose;
 
 Future<Map<String, dynamic>> testRealtimePresenceGet({
   required Reporter reporter,

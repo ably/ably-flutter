@@ -21,7 +21,6 @@
 package io.ably.flutter.plugin;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import androidx.annotation.UiThread;
 
@@ -36,6 +35,7 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodCodec;
 
+import io.ably.lib.util.Log;
 
 final class StreamsChannel {
 

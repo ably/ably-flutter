@@ -22,9 +22,7 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
     options: ClientOptions.fromKey(appKey)
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   ).channels.get('test').presence;
 
   final allMessages = <PresenceMessage>[];
