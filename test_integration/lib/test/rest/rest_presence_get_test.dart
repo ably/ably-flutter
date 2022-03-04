@@ -1,7 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/config/test_constants.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:ably_flutter_integration_test/utils/rest.dart';
 
@@ -21,7 +20,7 @@ Future<Map<String, dynamic>> testRestPresenceGet({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = await AppProvisioning().provisionApp();
 
   final rest = Rest(options: getClientOptions(appKey));
   final channel = rest.channels.get('test');

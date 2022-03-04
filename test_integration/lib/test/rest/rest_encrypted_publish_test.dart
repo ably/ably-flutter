@@ -1,7 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/config/test_constants.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:ably_flutter_integration_test/utils/rest.dart';
 
@@ -10,7 +9,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublish({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = await provision('sandbox-');
+  final appKey = await AppProvisioning().provisionApp();
 
   final cipherParams =
       await Crypto.getDefaultParams(key: TestConstants.encryptedChannelKey);
@@ -38,7 +37,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
   Map<String, dynamic>? payload,
 }) async {
   const clientId = 'clientId';
-  final appKey = await provision('sandbox-');
+  final appKey = await AppProvisioning().provisionApp();
 
   final cipherParams =
       await Crypto.getDefaultParams(key: TestConstants.encryptedChannelKey);
