@@ -5,7 +5,7 @@ import static io.ably.flutter.plugin.generated.PlatformConstants.PlatformMethod.
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.RemoteMessage;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.lib.util.Log;
 import io.flutter.plugin.common.MethodChannel;
 
 /**

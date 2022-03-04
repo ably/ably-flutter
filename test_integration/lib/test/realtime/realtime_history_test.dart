@@ -11,15 +11,12 @@ Future<Map<String, dynamic>> testRealtimeHistory({
 }) async {
   reporter.reportLog('init start');
   final appKey = await provision('sandbox-');
-  final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   );
   final channel = realtime.channels.get('test');
   await publishMessages(channel);
@@ -81,6 +78,5 @@ Future<Map<String, dynamic>> testRealtimeHistory({
     'historyAll': historyAll,
     't1': time1.toIso8601String(),
     't2': time2.toIso8601String(),
-    'log': logMessages,
   };
 }

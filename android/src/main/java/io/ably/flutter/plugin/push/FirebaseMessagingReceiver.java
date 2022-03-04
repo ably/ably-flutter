@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.ably.flutter.plugin.AblyFlutter;
+import io.ably.lib.util.Log;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();

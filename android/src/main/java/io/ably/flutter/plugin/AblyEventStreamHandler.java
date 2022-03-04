@@ -2,7 +2,6 @@ package io.ably.flutter.plugin;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import io.ably.lib.realtime.Presence;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.Message;
 import io.ably.lib.types.PresenceMessage;
+import io.ably.lib.util.Log;
 import io.flutter.plugin.common.EventChannel;
 
 

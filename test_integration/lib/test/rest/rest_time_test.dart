@@ -14,9 +14,7 @@ Future<Map<String, dynamic>> testRestTime({
     options: ClientOptions.fromKey(appKey.toString())
       ..environment = 'sandbox'
       ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose
-      ..logHandler =
-          ({msg, exception}) => logMessages.add([msg, exception.toString()]),
+      ..logLevel = LogLevel.verbose,
   );
 
   final restTime = await rest.time();
