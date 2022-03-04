@@ -52,12 +52,21 @@ Features that we do not currently support, but we do plan to add in the future:
 
 ### Running example app
 
-- To run the example app, you need an Ably API key. Create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app.
-- Clone the project
-- For Android, a Firebase instance configuration is required to build the app. In order run the application on Android device:
-  - Create a Firebase project following [official Firebase guide](https://firebase.google.com/docs/android/setup#create-firebase-project) (you can also use an existing one)
-  - Register the sample app with your Firebase project using `io.ably.flutter.example` as package name
-  - Download `google_services.json` file from Firebase and put it into [example/android/app](example/android/app) directory
+On iOS, the example application can be run without any additional configuration. For Android, a Firebase instance configuration is required to build the app. In order run the application on Android device:
+
+- Create a Firebase project following [official Firebase guide](https://firebase.google.com/docs/android/setup#create-firebase-project) (you can also use an existing one)
+- Register the sample app with your Firebase project using `io.ably.flutter.example` as package name
+- Download `google_services.json` file from Firebase and put it into [example/android/app](example/android/app) directory
+
+There are two different ways the example application can be configured to use Ably services:
+
+1. Without the Ably SKD key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
+
+    - provisioned key may not support all features available in Ably SDK.
+    - provisioned keys aren't able to use Ably push notifications. This feature requires APNS and FCM identifiers to be registered for Ably instance, which can't be done with sandbox applications
+    - provisioned key will change on application restart
+
+2. With the Ably SDK key: you can create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app. This approach will give you much more control over the API capabilities and grant access to development console, where API communication can be conveniently inspected.
 
 #### Android Studio / IntelliJ Idea
 
