@@ -52,12 +52,6 @@ Features that we do not currently support, but we do plan to add in the future:
 
 ### Running example app
 
-On iOS, the example application can be run without any additional configuration. For Android, a Firebase instance configuration is required to build the app. In order run the application on Android device:
-
-- Create a Firebase project following [official Firebase guide](https://firebase.google.com/docs/android/setup#create-firebase-project) (you can also use an existing one)
-- Register the sample app with your Firebase project using `io.ably.flutter.example` as package name
-- Download `google_services.json` file from Firebase and put it into [example/android/app](example/android/app) directory
-
 There are two different ways the example application can be configured to use Ably services:
 
 1. Without the Ably SKD key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
@@ -95,6 +89,8 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
   - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
 
 ### Push Notifications
+
+By default, push-related components in the sample app won't work on Android, because of a dummy [google-services.json](example/android/app/src/google-services.json) file. In order to use push messaging features of Ably SDK, additional FCM/APNS configuration is required.
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
