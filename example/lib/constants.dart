@@ -5,6 +5,7 @@ class Constants {
   static const String ablyApiKey = 'ABLY_API_KEY';
   static String platform = EnumToString.convertToString(defaultTargetPlatform);
   static String clientId = 'ably-flutter-example-app-$platform-client-id';
+  static String sandboxEnvironment = 'sandbox';
   static const String channelName = 'test-channel';
   static const encryptedChannelName = 'encrypted-test-channel';
   static const String channelNameForPushNotifications =
