@@ -35,7 +35,7 @@ class AblyFlutterExampleApp extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
-                  SystemDetailsSliver(ablyService.apiKeyProvision.key),
+                  SystemDetailsSliver(ablyService.apiKeyProvision),
                   const Divider(),
                   RealtimeSliver(ablyService),
                   const Divider(),
