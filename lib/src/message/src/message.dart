@@ -1,4 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:meta/meta.dart';
 
 /// An individual message to be sent/received by Ably
@@ -86,32 +87,30 @@ class Message {
   ///
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TM3
-  Message.fromEncoded(
+  static Future<Message> fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
-  ])  : id = jsonObject['id'] as String?,
-        name = jsonObject['name'] as String?,
-        clientId = jsonObject['clientId'] as String?,
-        connectionId = jsonObject['connectionId'] as String?,
-        _data = MessageData.fromValue(jsonObject['data']),
-        encoding = jsonObject['encoding'] as String?,
-        extras = MessageExtras.fromMap(
-          Map.castFrom<dynamic, dynamic, String, dynamic>(
-            jsonObject['extras'] as Map,
-          ),
-        ),
-        timestamp = jsonObject['timestamp'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                jsonObject['timestamp'] as int,
-              )
-            : null;
+  ]) async =>
+      Platform().invokePlatformMethodNonNull<Message>(
+          PlatformMethod.messageFromEncoded, {
+        TxTransportKeys.message: jsonObject,
+        TxTransportKeys.options: channelOptions,
+      });
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
-  static List<Message> fromEncodedArray(
+  static Future<List<Message>> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,
-  ]) =>
-      jsonArray.map((e) => Message.fromEncoded(e, channelOptions)).toList();
+  ]) async {
+    final decodedMessages = List<Message>.empty();
+
+    for (final message in jsonArray) {
+      final decodedMessage = await Message.fromEncoded(message, channelOptions);
+      decodedMessages.add(decodedMessage);
+    }
+
+    return decodedMessages;
+  }
 
   @override
   String toString() => 'Message'
