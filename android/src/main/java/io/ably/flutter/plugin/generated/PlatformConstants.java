@@ -95,6 +95,7 @@ final public class PlatformConstants {
         public static final String firstPage = "firstPage";
         public static final String cryptoGetParams = "cryptoGetParams";
         public static final String cryptoGenerateRandomKey = "cryptoGenerateRandomKey";
+        public static final String messageFromEncoded = "messageFromEncoded";
     }
 
     static final public class TxTransportKeys {
@@ -103,6 +104,7 @@ final public class PlatformConstants {
         public static final String data = "data";
         public static final String clientId = "clientId";
         public static final String options = "options";
+        public static final String message = "message";
         public static final String messages = "messages";
     }
 

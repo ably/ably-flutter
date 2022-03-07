@@ -99,6 +99,7 @@ class PlatformMethod {
   static const String firstPage = 'firstPage';
   static const String cryptoGetParams = 'cryptoGetParams';
   static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
+  static const String messageFromEncoded = 'messageFromEncoded';
 }
 
 class TxTransportKeys {
@@ -107,6 +108,7 @@ class TxTransportKeys {
   static const String data = 'data';
   static const String clientId = 'clientId';
   static const String options = 'options';
+  static const String message = 'message';
   static const String messages = 'messages';
 }
 
@@ -383,8 +385,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -400,8 +401,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

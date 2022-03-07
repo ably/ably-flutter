@@ -93,6 +93,7 @@ extern NSString *const AblyPlatformMethod_nextPage;
 extern NSString *const AblyPlatformMethod_firstPage;
 extern NSString *const AblyPlatformMethod_cryptoGetParams;
 extern NSString *const AblyPlatformMethod_cryptoGenerateRandomKey;
+extern NSString *const AblyPlatformMethod_messageFromEncoded;
 
 // key constants for TransportKeys
 extern NSString *const TxTransportKeys_channelName;
@@ -100,6 +101,7 @@ extern NSString *const TxTransportKeys_params;
 extern NSString *const TxTransportKeys_data;
 extern NSString *const TxTransportKeys_clientId;
 extern NSString *const TxTransportKeys_options;
+extern NSString *const TxTransportKeys_message;
 extern NSString *const TxTransportKeys_messages;
 
 // key constants for AblyMessage

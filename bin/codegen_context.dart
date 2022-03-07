@@ -155,6 +155,9 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Encryption
   {'name': 'cryptoGetParams', 'value': 'cryptoGetParams'},
   {'name': 'cryptoGenerateRandomKey', 'value': 'cryptoGenerateRandomKey'},
+
+  // Messages
+  {'name': 'messageFromEncoded', 'value': 'messageFromEncoded'},
 ];
 
 const List<Map<String, dynamic>> _objects = [
@@ -169,6 +172,7 @@ const List<Map<String, dynamic>> _objects = [
       'data',
       'clientId',
       'options',
+      'message',
       'messages',
     ]
   },
