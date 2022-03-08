@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:meta/meta.dart';
@@ -83,19 +85,27 @@ class Message {
           '${extras?.hashCode}:'
       .hashCode;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
+  /// Decodes message from JSON format. For encrypted messages, [channelOptions]
+  /// param can be provided, to decrypt then during the decoding process
   ///
-  /// TODO(tiholic): decoding and decryption is not implemented as per
-  ///  RSL6 and RLS6b as mentioned in TM3
+  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static Future<Message> fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
-  ]) async =>
-      Platform().invokePlatformMethodNonNull<Message>(
-          PlatformMethod.messageFromEncoded, {
-        TxTransportKeys.message: jsonObject,
-        TxTransportKeys.options: channelOptions,
-      });
+  ]) async {
+    /// Ably-Java and Ably-Cocoa parsing methods require 'extras' to be
+    /// always present in the input JSON. Since the extras object is internally
+    /// a map, we can just add [MessageExtras] as an empty map
+    if (!jsonObject.containsKey('extras') || jsonObject['extras'] == null) {
+      jsonObject['extras'] = const MessageExtras({});
+    }
+
+    return Platform().invokePlatformMethodNonNull<Message>(
+        PlatformMethod.messageFromEncoded, {
+      TxTransportKeys.message: jsonEncode(jsonObject),
+      TxTransportKeys.options: channelOptions,
+    });
+  }
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static Future<List<Message>> fromEncodedArray(
@@ -122,6 +132,4 @@ class Message {
       ' clientId=$clientId'
       ' timestamp=$timestamp'
       ' connectionId=$connectionId';
-
-// TODO(tiholic) add support for fromEncoded and fromEncodedArray (TM3)
 }
