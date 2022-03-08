@@ -109,6 +109,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     // Encryption
     _map.put(PlatformConstants.PlatformMethod.cryptoGetParams, this::cryptoGetParams);
     _map.put(PlatformConstants.PlatformMethod.cryptoGenerateRandomKey, this::cryptoGenerateRandomKey);
+
+    // Messages
+    _map.put(PlatformConstants.PlatformMethod.messageFromEncoded, this::messageFromEncrypted);
   }
 
   // MethodChannel.Result wrapper that responds on the platform thread.
@@ -807,6 +810,19 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private void cryptoGenerateRandomKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
     final Integer keyLength = (Integer) call.arguments;
     result.success(Crypto.generateRandomKey(keyLength));
+  }
+
+  private void messageFromEncrypted(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    final Map<String, Object> message = (Map<String, Object>) call.arguments;
+    final String json = (String) message.get(PlatformConstants.TxTransportKeys.message);
+    final ChannelOptions options = (ChannelOptions) message.get(PlatformConstants.TxTransportKeys.options);
+
+    try {
+      final Message decodedMessage = Message.fromEncoded(json, options);
+      result.success(decodedMessage);
+    } catch (io.ably.lib.types.MessageDecodeException exception) {
+      result.error(String.valueOf(exception.errorInfo.code), exception.errorInfo.message, exception);
+    }
   }
 
   // Extracts the message from an AblyFlutterMessage.
