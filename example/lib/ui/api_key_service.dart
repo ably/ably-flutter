@@ -1,4 +1,4 @@
-import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_example/app_provisioning.dart';
 import 'package:ably_flutter_example/constants.dart';
 
 class ApiKeyService {
