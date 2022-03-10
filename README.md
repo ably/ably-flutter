@@ -60,7 +60,7 @@ On iOS, the example application can be run without any additional configuration.
 
 There are two different ways the example application can be configured to use Ably services:
 
-1. Without the Ably SKD key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
+1. Without the Ably SDK key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
 
     - provisioned key may not support all features available in Ably SDK.
     - provisioned keys aren't able to use Ably push notifications. This feature requires APNS and FCM identifiers to be registered for Ably instance, which can't be done with sandbox applications
