@@ -45,6 +45,8 @@ final testFactory = <String, TestFactory>{
   // realtime tests
   TestName.realtimePublish: testRealtimePublish,
   TestName.realtimeEncryptedPublish: testRealtimeEncryptedPublish,
+  TestName.realtimePublishSpec: testRealtimePublishSpec,
+  TestName.realtimeEncryptedPublishSpec: testRealtimeEncryptedPublishSpec,
   TestName.realtimeEvents: testRealtimeEvents,
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimePublishWithAuthCallback: testRealtimePublishWithAuthCallback,

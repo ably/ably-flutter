@@ -53,18 +53,19 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
       ..logLevel = LogLevel.verbose,
   );
 
-  final channelWithClientId = restWithClientId.channels.get('test');
-  await channelWithClientId.setOptions(channelOptions);
+  // Create encrypted channel with client ID
+  final encryptedChannel = restWithClientId.channels.get('test');
+  await encryptedChannel.setOptions(channelOptions);
 
   // Send simple message data
-  await channelWithClientId.publish();
-  await channelWithClientId.publish(name: 'name');
-  await channelWithClientId.publish(data: 'data');
-  await channelWithClientId.publish(name: 'name', data: 'data');
+  await encryptedChannel.publish();
+  await encryptedChannel.publish(name: 'name');
+  await encryptedChannel.publish(data: 'data');
+  await encryptedChannel.publish(name: 'name', data: 'data');
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send single message object
-  await channelWithClientId.publish(
+  await encryptedChannel.publish(
     message: Message(
       name: 'single-message-name',
       data: 'single-message-data',
@@ -73,14 +74,14 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send multiple message objects at once
-  await channelWithClientId.publish(messages: [
+  await encryptedChannel.publish(messages: [
     Message(name: 'multi-message-name-1', data: 'multi-message-data-1'),
     Message(name: 'multi-message-name-2', data: 'multi-message-data-2'),
   ]);
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   // Send message with [clientId] defined
-  await channelWithClientId.publish(
+  await encryptedChannel.publish(
     message: Message(
       name: 'single-message-with-client-id-name',
       data: 'single-message-with-client-id-data',
@@ -89,37 +90,19 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
   );
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
-  // Retrieve history of encrypted channel where client id was specified
-  final historyOfChannelWithClientId = await getHistory(
-    channelWithClientId,
+  // Retrieve history of channel where client id was specified
+  final historyOfEncryptedChannel = await getHistory(
+    encryptedChannel,
     RestHistoryParams(direction: 'forwards'),
   );
 
-  // Rest instance where client id has to be specified in messages
-  final restWithoutClientId = Rest(
-    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
-  );
-
-  // Send message with client ID provided
-  final channelWithoutClientId = restWithoutClientId.channels.get('test2');
-  await channelWithoutClientId.publish(
-    message: Message(
-      name: 'single-message-with-client-id',
-      clientId: clientId,
-    ),
-  );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
-
-  // Retrieve history of encrypted channel where client id was not specified
-  final historyOfChannelWithoutClientId = await getHistory(
-    channelWithoutClientId,
-    RestHistoryParams(direction: 'forwards'),
-  );
-
-  // Send message with extras to push-enabled channel
-  final pushEnabledChannelWithClientId =
+  // Create encrypted channel with push capability
+  final encryptedPushEnabledChannel =
       restWithClientId.channels.get('pushenabled:test:extras');
-  await pushEnabledChannelWithClientId.publish(
+  await encryptedPushEnabledChannel.setOptions(channelOptions);
+
+  // Send message with extras to encrypted push-enabled channel
+  await encryptedPushEnabledChannel.publish(
     message: Message(
       name: 'single-message-push-enabled-name',
       data: 'single-message-push-enabled-data',
@@ -127,14 +110,27 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
     ),
   );
 
-  // Retrieve history of encrypted push-enabled channel
-  final historyOfPushEnabledChannel =
-      await getHistory(pushEnabledChannelWithClientId);
+  // Retrieve history of push-enabled channels
+  final historyOfEncryptedPushEnabledChannel =
+      await getHistory(encryptedPushEnabledChannel);
+
+  // Retreive plaintext history of encrypted channel
+  await encryptedChannel.setOptions(RestChannelOptions());
+  final historyOfPlaintextChannel = await getHistory(
+    encryptedChannel,
+    RestHistoryParams(direction: 'forwards'),
+  );
+  await encryptedPushEnabledChannel.setOptions(RestChannelOptions());
+  final historyOfPlaintextPushEnabledChannel =
+      await getHistory(encryptedPushEnabledChannel);
 
   return {
     'handle': await restWithClientId.handle,
-    'historyOfChannelWithClientId': historyOfChannelWithClientId,
-    'historyOfChannelWithoutClientId': historyOfChannelWithoutClientId,
-    'historyOfPushEnabledChannel': historyOfPushEnabledChannel,
+    'historyOfEncryptedChannel': historyOfEncryptedChannel,
+    'historyOfPlaintextChannel': historyOfPlaintextChannel,
+    'historyOfEncryptedPushEnabledChannel':
+        historyOfEncryptedPushEnabledChannel,
+    'historyOfPlaintextPushEnabledChannel':
+        historyOfPlaintextPushEnabledChannel,
   };
 }
