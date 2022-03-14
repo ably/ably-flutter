@@ -2,10 +2,11 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import 'test_implementation/basic_platform_tests.dart';
 import 'test_implementation/helper_tests.dart';
+import 'test_implementation/message_tests.dart';
 import 'test_implementation/realtime_tests.dart';
 import 'test_implementation/rest_tests.dart';
 
-enum TestModules { basicTests, helperTests, rest, realtime }
+enum TestModules { basicTests, helperTests, rest, realtime, messages }
 
 final _tests =
     <TestModules, Map<String, void Function(FlutterDriver Function())>>{
@@ -39,6 +40,9 @@ final _tests =
     'realtime#channels#channel#presence#history': testRealtimePresenceHistory,
     'should enter, update and leave Presence': testRealtimeEnterUpdateLeave,
     'should subscribe to channel presence': testRealtimePresenceSubscription,
+  },
+  TestModules.messages: {
+    'encrypts and decrypts message': testMessageEncoding,
   }
 };
 

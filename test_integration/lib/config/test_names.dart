@@ -37,7 +37,10 @@ class TestName {
   static const String realtimePresenceEnterUpdateLeave =
       'realtimePresenceEnterUpdateLeave';
   static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
+
 // TODO(tiholic) handle realtimeHistoryWithAuthCallback
+
+  static const String messageFromEncrypted = 'messageFromEncrypted';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases
