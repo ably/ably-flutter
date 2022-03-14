@@ -31,6 +31,8 @@ final _tests =
   TestModules.realtime: {
     'should publish': testRealtimePublish,
     'should publish encrypted': testRealtimeEncryptedPublish,
+    'conforms to publish spec': testRealtimePublishSpec,
+    'conforms to publish spec when encrypted': testRealtimeEncryptedPublishSpec,
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,
