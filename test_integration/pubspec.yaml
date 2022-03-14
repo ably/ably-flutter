@@ -15,8 +15,7 @@ dependencies:
 
   args: ^2.0.0
   enum_to_string: ^2.0.1
-  http: ^0.13.3
-  retry: ^3.1.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_driver:

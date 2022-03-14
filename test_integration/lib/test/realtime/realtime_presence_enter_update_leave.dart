@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_catching_errors
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 
 final logMessages = <List<String?>>[];
@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = (await provision('sandbox-')).toString();
+  final appKey = await AppProvisioning().provisionApp();
 
   final clientIds = [null, 'client-1', 'client-2'];
   final clientIDClashMatrix = <Map<String, dynamic>>[];

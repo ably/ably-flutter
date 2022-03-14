@@ -1,6 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:ably_flutter_integration_test/utils/encoders.dart';
 import 'package:ably_flutter_integration_test/utils/realtime.dart';
@@ -40,7 +40,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final appKey = await provision('sandbox-');
+  final appKey = await AppProvisioning().provisionApp();
 
   final allMessages = await _getAllMessages(appKey.toString(), 'test-all');
   final nameFiltered = await _getAllMessages(

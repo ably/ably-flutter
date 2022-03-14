@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/config/test_constants.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:ably_flutter_integration_test/utils/realtime.dart';
 
@@ -10,7 +10,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final appKey = await provision('sandbox-');
+  final appKey = await AppProvisioning().provisionApp();
   final logMessages = <List<String?>>[];
 
   final options = ClientOptions.fromKey(appKey.toString())

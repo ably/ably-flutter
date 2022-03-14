@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/data.dart';
 import 'package:ably_flutter_integration_test/utils/encoders.dart';
 
@@ -18,11 +16,8 @@ Future<Map<String, dynamic>> testRestCapabilities({
   for (var i = 0; i < combinations.length; i++) {
     capabilitySpec['channel-$i'] = combinations[i];
   }
-  final appKey = await provision('sandbox-', {
-    'keys': [
-      {'capability': jsonEncode(capabilitySpec)},
-    ],
-  });
+  final appKey =
+      await AppProvisioning(keyCapabilities: capabilitySpec).provisionApp();
 
   final rest = Rest(
     options: ClientOptions.fromKey(appKey.toString())

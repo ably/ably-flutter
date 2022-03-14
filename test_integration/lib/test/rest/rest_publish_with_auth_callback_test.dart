@@ -1,6 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-import 'package:ably_flutter_integration_test/provisioning.dart';
 import 'package:ably_flutter_integration_test/utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestPublishWithAuthCallback({
@@ -15,7 +15,9 @@ Future<Map<String, dynamic>> testRestPublishWithAuthCallback({
         ..logLevel = LogLevel.verbose
         ..authCallback = ((params) async {
           authCallbackInvoked = true;
-          return TokenRequest.fromMap(await getTokenRequest());
+          return TokenRequest.fromMap(
+            await AppProvisioning().getTokenRequest(),
+          );
         }));
   await publishMessages(rest.channels.get('test'));
   return {
