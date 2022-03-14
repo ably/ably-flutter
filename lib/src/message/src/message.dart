@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:meta/meta.dart';
@@ -90,32 +88,25 @@ class Message {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static Future<Message> fromEncoded(
-    Map<String, dynamic> jsonObject, [
+    String jsonObject, [
     RestChannelOptions? channelOptions,
-  ]) async {
-    /// Ably-Java and Ably-Cocoa parsing methods require 'extras' to be
-    /// always present in the input JSON. Since the extras object is internally
-    /// a map, we can just add [MessageExtras] as an empty map
-    if (!jsonObject.containsKey('extras') || jsonObject['extras'] == null) {
-      jsonObject['extras'] = const MessageExtras({});
-    }
-
-    return Platform().invokePlatformMethodNonNull<Message>(
-        PlatformMethod.messageFromEncoded, {
-      TxTransportKeys.message: jsonEncode(jsonObject),
-      TxTransportKeys.options: channelOptions,
-    });
-  }
+  ]) async =>
+      Platform().invokePlatformMethodNonNull<Message>(
+          PlatformMethod.messageFromEncoded, {
+        TxTransportKeys.message: jsonObject,
+        TxTransportKeys.options: channelOptions,
+      });
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   static Future<List<Message>> fromEncodedArray(
-    List<Map<String, dynamic>> jsonArray, [
+    List<String> jsonObjects, [
     RestChannelOptions? channelOptions,
   ]) async {
     final decodedMessages = List<Message>.empty();
 
-    for (final message in jsonArray) {
-      final decodedMessage = await Message.fromEncoded(message, channelOptions);
+    for (final jsonObject in jsonObjects) {
+      final decodedMessage =
+          await Message.fromEncoded(jsonObject, channelOptions);
       decodedMessages.add(decodedMessage);
     }
 
