@@ -99,65 +99,6 @@ void main() {
         expect(message.hashCode == object.hashCode, false);
       });
 
-      group('fromEncoded', () {
-        test('returns a message object', () {
-          final message = Message.fromEncoded({
-            'id': messageId,
-            'name': name,
-            'clientId': clientId,
-            'connectionId': connectionId,
-            'data': data,
-            'encoding': encoding,
-            'extras': extras,
-            'timestamp': timestamp.millisecondsSinceEpoch,
-          });
-          expect(message.id, messageId);
-          expect(message.name, name);
-          expect(message.clientId, clientId);
-          expect(message.connectionId, connectionId);
-          expect(message.data, data);
-          expect(message.encoding, encoding);
-          expect(message.extras!.map, extras);
-          expect(
-            message.timestamp,
-            DateTime.fromMillisecondsSinceEpoch(
-              timestamp.millisecondsSinceEpoch,
-            ),
-          );
-        });
-      });
-
-      group('fromEncodedArray', () {
-        test('returns a list of message objects', () {
-          final messages = Message.fromEncodedArray([
-            {
-              'id': messageId,
-              'name': name,
-              'clientId': clientId,
-              'connectionId': connectionId,
-              'data': data,
-              'encoding': encoding,
-              'extras': extras,
-              'timestamp': timestamp.millisecondsSinceEpoch,
-            }
-          ]);
-          final message = messages[0];
-          expect(message.id, messageId);
-          expect(message.name, name);
-          expect(message.clientId, clientId);
-          expect(message.connectionId, connectionId);
-          expect(message.data, data);
-          expect(message.encoding, encoding);
-          expect(message.extras!.map, extras);
-          expect(
-            message.timestamp,
-            DateTime.fromMillisecondsSinceEpoch(
-              timestamp.millisecondsSinceEpoch,
-            ),
-          );
-        });
-      });
-
       group('arguments with ', () {
         test('null name, extras, client_id and encoding are allowed', () {
           final message = Message();
