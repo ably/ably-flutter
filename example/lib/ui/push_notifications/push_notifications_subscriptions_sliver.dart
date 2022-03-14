@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 import 'package:ably_flutter_example/ui/bool_stream_button.dart';
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -77,13 +78,25 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 Expanded(
                   child: BoolStreamButton(
                       stream: _pushNotificationService.hasPushChannelStream,
-                      onPressed: _pushNotificationService.subscribeDevice,
+                      onPressed: () async {
+                        try {
+                          await _pushNotificationService.subscribeDevice();
+                        } on ably.AblyException catch (ablyException) {
+                          showPushActivationError(context, ablyException);
+                        }
+                      },
                       child: const Text('Subscribe device')),
                 ),
                 Expanded(
                   child: BoolStreamButton(
                     stream: _pushNotificationService.hasPushChannelStream,
-                    onPressed: _pushNotificationService.unsubscribeDevice,
+                    onPressed: () async {
+                      try {
+                        await _pushNotificationService.unsubscribeDevice();
+                      } on ably.AblyException catch (ablyException) {
+                        showPushActivationError(context, ablyException);
+                      }
+                    },
                     child: const Text('Unsubscribe device'),
                   ),
                 ),
@@ -104,13 +117,25 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                 Expanded(
                   child: BoolStreamButton(
                       stream: _pushNotificationService.hasPushChannelStream,
-                      onPressed: _pushNotificationService.subscribeClient,
+                      onPressed: () async {
+                        try {
+                          await _pushNotificationService.subscribeClient();
+                        } on ably.AblyException catch (ablyException) {
+                          showPushActivationError(context, ablyException);
+                        }
+                      },
                       child: const Text('Subscribe client')),
                 ),
                 Expanded(
                   child: BoolStreamButton(
                       stream: _pushNotificationService.hasPushChannelStream,
-                      onPressed: _pushNotificationService.unsubscribeClient,
+                      onPressed: () async {
+                        try {
+                          await _pushNotificationService.unsubscribeClient();
+                        } on ably.AblyException catch (ablyException) {
+                          showPushActivationError(context, ablyException);
+                        }
+                      },
                       child: const Text('Unsubscribe client')),
                 )
               ],
@@ -151,4 +176,20 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
     }
     return const SizedBox.shrink();
   }
+
+  void showPushActivationError(
+    BuildContext context,
+    ably.AblyException exception,
+  ) async =>
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Push notification error'),
+          content:
+              Text('Failed to perform operation on push notification service. '
+                  'Please verify your push notification setup with Readme '
+                  'files in the ably-flutter repository.\n\n'
+                  '${exception.errorInfo?.message}'),
+        ),
+      );
 }

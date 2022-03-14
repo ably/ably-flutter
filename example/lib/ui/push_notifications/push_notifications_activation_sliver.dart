@@ -21,9 +21,13 @@ class PushNotificationsActivationSliver extends HookWidget {
       BuildContext context, ably.AblyException error) async {
     await showDialog(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: const Text('Error'),
-        content: Text(error.message ?? 'No error message'),
+      builder: (context) => AlertDialog(
+        title: const Text('Push notification error'),
+        content:
+            Text('Failed to perform operation on push notification service. '
+                'Please verify your push notification setup with Readme '
+                'files in the ably-flutter repository.\n\n'
+                '${error.errorInfo?.message}'),
       ),
     );
   }

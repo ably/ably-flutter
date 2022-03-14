@@ -39,7 +39,7 @@ To get push notifications setup in your own app, read [Setting up your own app](
 - Create a Firebase project, and in the Project settings, add an android app with your unique application ID. Follow the steps provided on the setup process, or the following:
     - You can leave `Debug signing certificate SHA-1` empty.
     - Download the generated `google-services.json` file
-    - Place `google-services.json` in `example/android/app/`. We have `gitignore`d this file since it is associated with our Firebase project, but it is [not sensitive](https://stackoverflow.com/questions/37358340/should-i-add-the-google-services-json-from-firebase-to-my-repository), so you can commit it to share it with other developers/colleagues.
+    - Replace the default `google-services.json` in `example/android/app/` with the one generated for your project
 - Provide ably with the FCM server key: In your [firebase project settings](https://knowledge.ably.com/where-can-i-find-my-google/firebase-cloud-messaging-api-key), create or use an existing cloud messaging server key, and enter it in your Ably app's dashboard (App > Notifications tab > Push Notifications Setup > Setup Push Notifications).
 
 ### iOS
