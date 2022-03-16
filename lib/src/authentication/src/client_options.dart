@@ -4,14 +4,6 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 class ClientOptions extends AuthOptions {
-  /// Set fields on [ClientOptions] to configure it.
-  ClientOptions();
-
-  /// initializes [ClientOptions] with a key and log level set to info
-  ///
-  /// See [AuthOptions.fromKey] for more details
-  ClientOptions.fromKey(String key) : super.fromKey(key);
-
   /// Optional clientId that can be used to specify the identity for this client
   ///
   /// In most cases it is preferable to instead specific a clientId in the token
@@ -194,6 +186,78 @@ class ClientOptions extends AuthOptions {
   /// default 15,000 (15s)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l7
   int channelRetryTimeout = 15000;
+
+  /// Initializes an instance with defaults
+  ClientOptions({
+    AuthCallback? authCallback,
+    String? authUrl,
+    String? authMethod,
+    String? key,
+    TokenDetails? tokenDetails,
+    Map<String, String>? authHeaders,
+    Map<String, String>? authParams,
+    bool? queryTime,
+    bool? useTokenAuth,
+    this.clientId,
+    this.logHandler,
+    LogLevel? logLevel,
+    this.restHost,
+    this.realtimeHost,
+    this.port,
+    bool? tls,
+    this.tlsPort,
+    bool? autoConnect,
+    bool? useBinaryProtocol,
+    bool? queueMessages,
+    bool? echoMessages,
+    this.recover,
+    this.environment,
+    this.fallbackHosts,
+    this.fallbackHostsUseDefault,
+    this.defaultTokenParams,
+    int? disconnectedRetryTimeout,
+    int? suspendedRetryTimeout,
+    this.idempotentRestPublishing,
+    this.transportParams,
+    int? httpOpenTimeout,
+    int? httpRequestTimeout,
+    int? httpMaxRetryCount,
+    this.realtimeRequestTimeout,
+    int? fallbackRetryTimeout,
+    int? channelRetryTimeout,
+  }) : super(
+          authCallback: authCallback,
+          authUrl: authUrl,
+          authMethod: authMethod,
+          key: key,
+          tokenDetails: tokenDetails,
+          authHeaders: authHeaders,
+          authParams: authParams,
+          queryTime: queryTime,
+          useTokenAuth: useTokenAuth,
+        ) {
+    this.logLevel = logLevel ?? this.logLevel;
+    this.tls = tls ?? this.tls;
+    this.autoConnect = autoConnect ?? this.autoConnect;
+    this.useBinaryProtocol = useBinaryProtocol ?? this.useBinaryProtocol;
+    this.queueMessages = queueMessages ?? this.queueMessages;
+    this.echoMessages = echoMessages ?? this.echoMessages;
+    this.disconnectedRetryTimeout =
+        disconnectedRetryTimeout ?? this.disconnectedRetryTimeout;
+    this.suspendedRetryTimeout =
+        suspendedRetryTimeout ?? this.suspendedRetryTimeout;
+    this.httpOpenTimeout = httpOpenTimeout ?? this.httpOpenTimeout;
+    this.httpRequestTimeout = httpRequestTimeout ?? this.httpRequestTimeout;
+    this.httpMaxRetryCount = httpMaxRetryCount ?? this.httpMaxRetryCount;
+    this.fallbackRetryTimeout =
+        fallbackRetryTimeout ?? this.fallbackRetryTimeout;
+    this.channelRetryTimeout = channelRetryTimeout ?? this.channelRetryTimeout;
+  }
+
+  /// initializes [ClientOptions] with a key and log level set to info
+  ///
+  /// See [AuthOptions.fromKey] for more details
+  ClientOptions.fromKey(String key) : super.fromKey(key);
 
 // TODO(tiholic) unimplemented:
 //

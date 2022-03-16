@@ -8,20 +8,6 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#AO1
 abstract class AuthOptions {
-  /// initializes an instance without any defaults
-  AuthOptions();
-
-  /// Convenience constructor, to create an AuthOptions based
-  /// on the key string obtained from the application dashboard.
-  /// param [key]: the full key string as obtained from the dashboard
-  AuthOptions.fromKey(String key) {
-    if (key.contains(':')) {
-      this.key = key;
-    } else {
-      tokenDetails = TokenDetails(key);
-    }
-  }
-
   /// A function which is called when a new token is required.
   ///
   /// The role of the callback is to either generate a signed [TokenRequest]
@@ -83,6 +69,30 @@ abstract class AuthOptions {
 
 // TODO(tiholic) missing token attribute here
 //  see: https://docs.ably.com/client-lib-development-guide/features/#AO2h
+
+  /// Initializes an instance without any defaults
+  AuthOptions({
+    this.authCallback,
+    this.authUrl,
+    this.authMethod,
+    this.key,
+    this.tokenDetails,
+    this.authHeaders,
+    this.authParams,
+    this.queryTime,
+    this.useTokenAuth,
+  });
+
+  /// Convenience constructor, to create an AuthOptions based
+  /// on the key string obtained from the application dashboard.
+  /// param [key]: the full key string as obtained from the dashboard
+  AuthOptions.fromKey(String key) {
+    if (key.contains(':')) {
+      this.key = key;
+    } else {
+      tokenDetails = TokenDetails(key);
+    }
+  }
 }
 
 /// Function-type alias implemented by a function that provides either tokens,

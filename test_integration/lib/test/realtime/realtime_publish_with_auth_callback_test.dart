@@ -9,14 +9,16 @@ Future<Map<String, dynamic>> testRealtimePublishWithAuthCallback({
 }) async {
   var authCallbackInvoked = false;
   final realtime = Realtime(
-      options: ClientOptions()
-        ..logLevel = LogLevel.verbose
-        ..authCallback = ((params) async {
-          authCallbackInvoked = true;
-          return TokenRequest.fromMap(
-            await AppProvisioning().getTokenRequest(),
-          );
-        }));
+    options: ClientOptions(
+      logLevel: LogLevel.verbose,
+      authCallback: (params) async {
+        authCallbackInvoked = true;
+        return TokenRequest.fromMap(
+          await AppProvisioning().getTokenRequest(),
+        );
+      },
+    ),
+  );
   await publishMessages(realtime.channels.get('test'));
   await realtime.close();
 
