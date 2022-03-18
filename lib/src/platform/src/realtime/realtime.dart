@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io' as io show Platform;
 import 'dart:collection';
+import 'dart:io' as io show Platform;
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
@@ -20,7 +20,7 @@ class Realtime extends PlatformObject {
     ClientOptions? options,
     final String? key,
   })  : assert(options != null || key != null),
-        options = options ?? ClientOptions.fromKey(key!),
+        options = options ?? ClientOptions(key: key!),
         super() {
     _connection = Connection(this);
     _channels = RealtimeChannels(this);
@@ -29,7 +29,7 @@ class Realtime extends PlatformObject {
 
   /// Create a realtime client from an API key without configuring other parameters
   factory Realtime.fromKey(String key) =>
-      Realtime(options: ClientOptions.fromKey(key));
+      Realtime(options: ClientOptions(key: key));
 
   @override
   Future<int?> createPlatformInstance() async {
