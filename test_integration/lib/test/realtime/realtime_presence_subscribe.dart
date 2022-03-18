@@ -19,10 +19,12 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   reporter.reportLog('init start');
   final appKey = await AppProvisioning().provisionApp();
   final presence = Realtime(
-    options: ClientOptions.fromKey(appKey)
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   ).channels.get('test').presence;
 
   final allMessages = <PresenceMessage>[];

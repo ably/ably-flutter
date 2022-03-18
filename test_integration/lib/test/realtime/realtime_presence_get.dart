@@ -11,10 +11,12 @@ ClientOptions getClientOptions(
   String appKey, [
   String clientId = 'someClientId',
 ]) =>
-    ClientOptions.fromKey(appKey)
-      ..environment = 'sandbox'
-      ..clientId = clientId
-      ..logLevel = LogLevel.verbose;
+    ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: clientId,
+      logLevel: LogLevel.verbose,
+    );
 
 Future<Map<String, dynamic>> testRealtimePresenceGet({
   required Reporter reporter,
