@@ -236,6 +236,9 @@ class ClientOptions extends AuthOptions {
           queryTime: queryTime,
           useTokenAuth: useTokenAuth,
         ) {
+    /// These default value assignments are only required until
+    /// [ClientOptions.fromKey] is removed, because then defaults can be set
+    /// directly in the constructor invocation
     this.logLevel = logLevel ?? this.logLevel;
     this.tls = tls ?? this.tls;
     this.autoConnect = autoConnect ?? this.autoConnect;
@@ -257,6 +260,8 @@ class ClientOptions extends AuthOptions {
   /// initializes [ClientOptions] with a key and log level set to info
   ///
   /// See [AuthOptions.fromKey] for more details
+  @Deprecated(
+      "Use ClientOptions constructor with named 'key' parameter instead")
   ClientOptions.fromKey(String key) : super.fromKey(key);
 
 // TODO(tiholic) unimplemented:

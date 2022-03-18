@@ -81,11 +81,17 @@ abstract class AuthOptions {
     this.authParams,
     this.queryTime,
     this.useTokenAuth,
-  });
+  }) {
+    if (key != null && !key!.contains(':')) {
+      tokenDetails = TokenDetails(key);
+      key = null;
+    }
+  }
 
   /// Convenience constructor, to create an AuthOptions based
   /// on the key string obtained from the application dashboard.
   /// param [key]: the full key string as obtained from the dashboard
+  @Deprecated("Use AuthOptions constructor with named 'key' parameter instead")
   AuthOptions.fromKey(String key) {
     if (key.contains(':')) {
       this.key = key;
