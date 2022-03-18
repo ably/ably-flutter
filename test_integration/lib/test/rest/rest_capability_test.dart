@@ -20,10 +20,12 @@ Future<Map<String, dynamic>> testRestCapabilities({
       await AppProvisioning(keyCapabilities: capabilitySpec).provisionApp();
 
   final rest = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   final matrix = <Map>[];

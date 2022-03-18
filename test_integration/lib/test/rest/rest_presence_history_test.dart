@@ -13,10 +13,12 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
   final appKey = await AppProvisioning().provisionApp();
   final logMessages = <List<String?>>[];
 
-  final options = ClientOptions.fromKey(appKey.toString())
-    ..environment = 'sandbox'
-    ..clientId = 'someClientId'
-    ..logLevel = LogLevel.verbose;
+  final options = ClientOptions(
+    key: appKey,
+    environment: 'sandbox',
+    clientId: 'someClientId',
+    logLevel: LogLevel.verbose,
+  );
 
   final rest = Rest(options: options);
   final channel = rest.channels.get('test');

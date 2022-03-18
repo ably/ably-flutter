@@ -11,10 +11,12 @@ Future<Map<String, dynamic>> testRestTime({
   final logMessages = <List<String?>>[];
 
   final rest = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   final restTime = await rest.time();
