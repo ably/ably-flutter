@@ -51,8 +51,9 @@ class Platform {
       [Object? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
     if (result == null) {
-      throw AblyException('invokePlatformMethodNonNull("$method") platform '
-          'method unexpectedly returned a null value.');
+      throw AblyException(
+          message: 'invokePlatformMethodNonNull("$method") platform '
+              'method unexpectedly returned a null value.');
     } else {
       return result;
     }
