@@ -337,7 +337,7 @@ client libraries.
 ### Supported functionality
 
 - Create a REST or Realtime instance by passing `ClientOptions`:
-    - `ClientOptions` can be created by passing an API token (`ClientOptions(key: key)`)
+    - `ClientOptions` can be created by passing an API token (`ClientOptions.fromKey`)
     - `defaultTokenParams`, `authCallback` and `logHandler` are not supported yet
 - Get a REST channel and publish messages
 - Listen for Realtime connection state changes using a stream subscription
