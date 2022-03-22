@@ -74,7 +74,9 @@ class PushChannel extends PlatformObject {
       // This error only happen on Androids. They are thrown here
       // for both platforms (iOS/ Android) to make the API more consistent.
       throw AblyException(
-          "expected parameter 'deviceId', 'clientId', 'deviceClientId', and/or 'channel'");
+        message: "expected parameter 'deviceId', 'clientId', "
+            "'deviceClientId', and/or 'channel'",
+      );
     }
 
     final message = await invokeRequest<AblyMessage>(

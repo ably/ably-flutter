@@ -29,7 +29,9 @@ class Crypto {
     } else if (key is Uint8List) {
       ensureSupportedKeyLength(key);
     } else {
-      throw AblyException(keyTypeErrorMessage);
+      throw AblyException(
+        message: keyTypeErrorMessage,
+      );
     }
 
     return Platform().invokePlatformMethodNonNull<CipherParams>(
@@ -42,7 +44,9 @@ class Crypto {
   static void ensureSupportedKeyLength(Uint8List key) {
     if (key.length != defaultKeyLengthInBits / 8 &&
         key.length != keyLength128bits / 8) {
-      throw AblyException(keyLengthErrorMessage);
+      throw AblyException(
+        message: keyLengthErrorMessage,
+      );
     }
   }
 

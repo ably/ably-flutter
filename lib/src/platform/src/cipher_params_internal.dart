@@ -28,12 +28,16 @@ class CipherParamsInternal implements CipherParams {
     required this.key,
   }) {
     if (!io.Platform.isIOS) {
-      throw AblyException('This method is for iOS platforms only');
+      throw AblyException(
+        message: 'This method is for iOS platforms only',
+      );
     }
     if (key == null) {
-      throw AblyException('CipherParamsNative on iOS must have a key, as '
-          'this key is used to regenerate the ARTCipherParams on the '
-          'iOS side.');
+      throw AblyException(
+        message: 'CipherParamsNative on iOS must have a key, as '
+            'this key is used to regenerate the ARTCipherParams on the '
+            'iOS side.',
+      );
     }
   }
 
@@ -41,12 +45,14 @@ class CipherParamsInternal implements CipherParams {
     required this.androidHandle,
   }) {
     if (!io.Platform.isAndroid) {
-      throw AblyException('This method is for Android platforms only');
+      throw AblyException(message: 'This method is for Android platforms only');
     }
     if (androidHandle == null) {
-      throw AblyException('CipherParamsNative on Android must have a handle, '
-          'as this key is used to get the previously generated '
-          'CipherParams on the Android side');
+      throw AblyException(
+        message: 'CipherParamsNative on Android must have a handle, '
+            'as this key is used to get the previously generated '
+            'CipherParams on the Android side',
+      );
     }
   }
 
