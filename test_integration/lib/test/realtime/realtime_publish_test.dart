@@ -14,10 +14,12 @@ Future<Map<String, dynamic>> testRealtimePublish({
   final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
   await publishMessages(realtime.channels.get('test'));
   await realtime.close();
@@ -34,10 +36,12 @@ Future<Map<String, dynamic>> testRealtimePublishSpec({
   final appKey = await AppProvisioning().provisionApp();
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
   final channel = realtime.channels.get('test');
   await channel.publish();
@@ -78,7 +82,10 @@ Future<Map<String, dynamic>> testRealtimePublishSpec({
 
   // client options - no client id, message has client id
   final realtime2 = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+    ),
   );
 
   final channel2 = realtime2.channels.get('test2');

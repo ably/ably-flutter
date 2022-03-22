@@ -13,10 +13,12 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   final appKey = await AppProvisioning().provisionApp();
   final logMessages = <List<String?>>[];
 
-  final options = ClientOptions.fromKey(appKey.toString())
-    ..environment = 'sandbox'
-    ..clientId = 'someClientId'
-    ..logLevel = LogLevel.verbose;
+  final options = ClientOptions(
+    key: appKey,
+    environment: 'sandbox',
+    clientId: 'someClientId',
+    logLevel: LogLevel.verbose,
+  );
 
   final realtime = Realtime(options: options);
   final channel = realtime.channels.get('test');

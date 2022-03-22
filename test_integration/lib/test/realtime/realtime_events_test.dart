@@ -19,10 +19,12 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   final filteredChannelStateChanges = <Map<String, dynamic>>[];
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..autoConnect = false,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      autoConnect: false,
+    ),
   );
 
   void recordConnectionState() =>

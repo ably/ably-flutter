@@ -18,9 +18,11 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublish({
   final channelOptions = RealtimeChannelOptions(cipherParams: cipherParams);
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId',
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+    ),
   );
 
   final channel = realtime.channels.get('test');
@@ -46,10 +48,12 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
 
   // Realtime instance where client id is specified in the instance itself
   final realtimeWithClientId = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = clientId
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: clientId,
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   // Create encrypted channel with client ID

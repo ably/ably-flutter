@@ -15,10 +15,12 @@ Future<Map<String, dynamic>> testRestPublish({
   final logMessages = <List<String?>>[];
 
   final rest = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey.toString(),
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
   await publishMessages(rest.channels.get('test'));
   return {
@@ -34,10 +36,12 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   final appKey = await AppProvisioning().provisionApp();
 
   final rest = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
   final channel = rest.channels.get('test');
   await channel.publish();
@@ -78,7 +82,10 @@ Future<Map<String, dynamic>> testRestPublishSpec({
 
   // client options - no client id, message has client id
   final rest2 = Rest(
-    options: ClientOptions.fromKey(appKey.toString())..environment = 'sandbox',
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+    ),
   );
 
   final channel2 = rest2.channels.get('test2');

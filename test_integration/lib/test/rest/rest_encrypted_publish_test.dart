@@ -18,10 +18,12 @@ Future<Map<String, dynamic>> testRestEncryptedPublish({
   final channelOptions = RestChannelOptions(cipherParams: cipherParams);
 
   final rest = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   final channel = rest.channels.get('test');
@@ -47,10 +49,12 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
 
   // Rest instance where client id is specified in the instance itself
   final restWithClientId = Rest(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = clientId
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: clientId,
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   // Create encrypted channel with client ID

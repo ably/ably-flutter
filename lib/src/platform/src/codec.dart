@@ -545,102 +545,102 @@ class Codec extends StandardMessageCodec {
       jsonMap,
       TxClientOptions.defaultTokenParams,
     ));
-    final clientOptions = ClientOptions()
+    final clientOptions = ClientOptions(
       // AuthOptions (super class of ClientOptions)
-      ..authUrl = _readFromJson<String>(
+      authUrl: _readFromJson<String>(
         jsonMap,
         TxClientOptions.authUrl,
-      )
-      ..authMethod = _readFromJson<String>(
+      ),
+      authMethod: _readFromJson<String>(
         jsonMap,
         TxClientOptions.authMethod,
-      )
-      ..key = _readFromJson<String>(
+      ),
+      key: _readFromJson<String>(
         jsonMap,
         TxClientOptions.key,
-      )
-      ..tokenDetails =
-          (tokenDetails == null) ? null : _decodeTokenDetails(tokenDetails)
-      ..authHeaders = _readFromJson<Map<String, String>>(
+      ),
+      tokenDetails:
+          (tokenDetails == null) ? null : _decodeTokenDetails(tokenDetails),
+      authHeaders: _readFromJson<Map<String, String>>(
         jsonMap,
         TxClientOptions.authHeaders,
-      )
-      ..authParams = _readFromJson<Map<String, String>>(
+      ),
+      authParams: _readFromJson<Map<String, String>>(
         jsonMap,
         TxClientOptions.authParams,
-      )
-      ..queryTime = _readFromJson<bool>(
+      ),
+      queryTime: _readFromJson<bool>(
         jsonMap,
         TxClientOptions.queryTime,
-      )
-      ..useTokenAuth = _readFromJson<bool>(
+      ),
+      useTokenAuth: _readFromJson<bool>(
         jsonMap,
         TxClientOptions.useTokenAuth,
-      )
+      ),
 
       // ClientOptions
-      ..clientId = _readFromJson<String>(
+      clientId: _readFromJson<String>(
         jsonMap,
         TxClientOptions.clientId,
-      )
-      ..logLevel = _decodeLogLevel(jsonMap[TxClientOptions.logLevel] as String?)
+      ),
+      logLevel: _decodeLogLevel(jsonMap[TxClientOptions.logLevel] as String?),
       //TODO handle logHandler
-      ..tls = jsonMap[TxClientOptions.tls] as bool
-      ..restHost = _readFromJson<String>(
+      tls: jsonMap[TxClientOptions.tls] as bool,
+      restHost: _readFromJson<String>(
         jsonMap,
         TxClientOptions.restHost,
-      )
-      ..realtimeHost = _readFromJson<String>(
+      ),
+      realtimeHost: _readFromJson<String>(
         jsonMap,
         TxClientOptions.realtimeHost,
-      )
-      ..port = _readFromJson<int>(
+      ),
+      port: _readFromJson<int>(
         jsonMap,
         TxClientOptions.port,
-      )
-      ..tlsPort = _readFromJson<int>(
+      ),
+      tlsPort: _readFromJson<int>(
         jsonMap,
         TxClientOptions.tlsPort,
-      )
-      ..autoConnect = jsonMap[TxClientOptions.autoConnect] as bool
-      ..useBinaryProtocol = jsonMap[TxClientOptions.useBinaryProtocol] as bool
-      ..queueMessages = jsonMap[TxClientOptions.queueMessages] as bool
-      ..echoMessages = jsonMap[TxClientOptions.echoMessages] as bool
-      ..recover = _readFromJson<String>(
+      ),
+      autoConnect: jsonMap[TxClientOptions.autoConnect] as bool,
+      useBinaryProtocol: jsonMap[TxClientOptions.useBinaryProtocol] as bool,
+      queueMessages: jsonMap[TxClientOptions.queueMessages] as bool,
+      echoMessages: jsonMap[TxClientOptions.echoMessages] as bool,
+      recover: _readFromJson<String>(
         jsonMap,
         TxClientOptions.recover,
-      )
-      ..environment = _readFromJson<String>(
+      ),
+      environment: _readFromJson<String>(
         jsonMap,
         TxClientOptions.environment,
-      )
-      ..idempotentRestPublishing = _readFromJson<bool>(
+      ),
+      idempotentRestPublishing: _readFromJson<bool>(
         jsonMap,
         TxClientOptions.idempotentRestPublishing,
-      )
-      ..realtimeRequestTimeout =
-          jsonMap[TxClientOptions.realtimeRequestTimeout] as int?
-      ..httpOpenTimeout = jsonMap[TxClientOptions.httpOpenTimeout] as int
-      ..httpRequestTimeout = jsonMap[TxClientOptions.httpRequestTimeout] as int
-      ..httpMaxRetryCount = jsonMap[TxClientOptions.httpMaxRetryCount] as int
-      ..fallbackHosts = _readFromJson<List<String>>(
+      ),
+      realtimeRequestTimeout:
+          jsonMap[TxClientOptions.realtimeRequestTimeout] as int?,
+      httpOpenTimeout: jsonMap[TxClientOptions.httpOpenTimeout] as int,
+      httpRequestTimeout: jsonMap[TxClientOptions.httpRequestTimeout] as int,
+      httpMaxRetryCount: jsonMap[TxClientOptions.httpMaxRetryCount] as int,
+      fallbackHosts: _readFromJson<List<String>>(
         jsonMap,
         TxClientOptions.fallbackHosts,
-      )
-      ..fallbackHostsUseDefault = _readFromJson<bool>(
+      ),
+      fallbackHostsUseDefault: _readFromJson<bool>(
         jsonMap,
         TxClientOptions.fallbackHostsUseDefault,
-      )
-      ..fallbackRetryTimeout =
-          jsonMap[TxClientOptions.fallbackRetryTimeout] as int
-      ..defaultTokenParams =
-          (tokenParams == null) ? null : _decodeTokenParams(tokenParams)
-      ..channelRetryTimeout =
-          jsonMap[TxClientOptions.channelRetryTimeout] as int
-      ..transportParams = _readFromJson<Map<String, String>>(
+      ),
+      fallbackRetryTimeout:
+          jsonMap[TxClientOptions.fallbackRetryTimeout] as int,
+      defaultTokenParams:
+          (tokenParams == null) ? null : _decodeTokenParams(tokenParams),
+      channelRetryTimeout: jsonMap[TxClientOptions.channelRetryTimeout] as int,
+      transportParams: _readFromJson<Map<String, String>>(
         jsonMap,
         TxClientOptions.transportParams,
-      );
+      ),
+    );
     return clientOptions;
   }
 
