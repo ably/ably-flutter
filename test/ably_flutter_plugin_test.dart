@@ -51,9 +51,10 @@ void main() {
   });
 
   test(PlatformMethod.createRest, () async {
-    final o = ClientOptions();
     const host = 'http://rest.ably.io/';
-    o.restHost = host;
+    final o = ClientOptions(
+      restHost: host,
+    );
     final rest = Rest(options: o);
     expect(await rest.handle, counter);
     expect(rest.options.restHost, host);

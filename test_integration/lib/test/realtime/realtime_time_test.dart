@@ -11,10 +11,12 @@ Future<Map<String, dynamic>> testRealtimeTime({
   final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
-    options: ClientOptions.fromKey(appKey.toString())
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..logLevel = LogLevel.verbose,
+    options: ClientOptions(
+      key: appKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      logLevel: LogLevel.verbose,
+    ),
   );
 
   final realtimeTime = await realtime.time();

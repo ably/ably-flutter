@@ -7,10 +7,12 @@ import 'package:ably_flutter_integration_test/utils/realtime.dart';
 
 Future<Realtime> _createRealtime(String apiKey) async {
   final realtime = Realtime(
-    options: ClientOptions.fromKey(apiKey)
-      ..environment = 'sandbox'
-      ..clientId = 'someClientId'
-      ..autoConnect = false,
+    options: ClientOptions(
+      key: apiKey,
+      environment: 'sandbox',
+      clientId: 'someClientId',
+      autoConnect: false,
+    ),
   );
   await realtime.connect();
   return realtime;

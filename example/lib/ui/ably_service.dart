@@ -11,21 +11,26 @@ class AblyService {
 
   AblyService({required this.apiKeyProvision}) {
     realtime = ably.Realtime(
-      options: ably.ClientOptions.fromKey(apiKeyProvision.key)
-        ..clientId = Constants.clientId
-        ..logLevel = ably.LogLevel.verbose
-        ..environment = apiKeyProvision.source == ApiKeySource.env
+      options: ably.ClientOptions(
+        key: apiKeyProvision.key,
+        clientId: Constants.clientId,
+        logLevel: ably.LogLevel.verbose,
+        environment: apiKeyProvision.source == ApiKeySource.env
             ? null
-            : Constants.sandboxEnvironment
-        ..autoConnect = false,
+            : Constants.sandboxEnvironment,
+        autoConnect: false,
+      ),
     );
     rest = ably.Rest(
-        options: ably.ClientOptions.fromKey(apiKeyProvision.key)
-          ..clientId = Constants.clientId
-          ..logLevel = ably.LogLevel.verbose
-          ..environment = apiKeyProvision.source == ApiKeySource.env
-              ? null
-              : Constants.sandboxEnvironment);
+      options: ably.ClientOptions(
+        key: apiKeyProvision.key,
+        clientId: Constants.clientId,
+        logLevel: ably.LogLevel.verbose,
+        environment: apiKeyProvision.source == ApiKeySource.env
+            ? null
+            : Constants.sandboxEnvironment,
+      ),
+    );
     pushNotificationService = PushNotificationService(realtime, rest);
   }
 }
