@@ -1013,9 +1013,9 @@ class Codec extends StandardMessageCodec {
         toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
     return ConnectionStateChange(
-      current,
-      previous,
-      event,
+      current: current,
+      previous: previous,
+      event: event,
       retryIn: retryIn,
       reason: reason,
     );
