@@ -1034,8 +1034,13 @@ class Codec extends StandardMessageCodec {
     final errorInfo =
         toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
-    return ChannelStateChange(current, previous, event,
-        resumed: resumed, reason: reason);
+    return ChannelStateChange(
+      current: current,
+      previous: previous,
+      event: event,
+      resumed: resumed,
+      reason: reason,
+    );
   }
 
   /// Decodes value [jsonMap] to [MessageData]
