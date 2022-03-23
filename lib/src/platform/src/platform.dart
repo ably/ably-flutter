@@ -63,7 +63,10 @@ class Platform {
           [final Object? payload]) =>
       _streamsChannel!.receiveBroadcastStream<T>(
         AblyMessage(
-          AblyEventMessage(methodName, payload),
+          message: AblyEventMessage(
+            eventName: methodName,
+            message: payload,
+          ),
           handle: handle,
         ),
       );
