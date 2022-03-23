@@ -35,7 +35,7 @@ class Realtime extends PlatformObject {
   Future<int?> createPlatformInstance() async {
     final handle = await invokeRaw<int>(
       PlatformMethod.createRealtime,
-      AblyMessage(options),
+      AblyMessage(message: options),
     );
     _realtimeInstances[handle] = this;
 

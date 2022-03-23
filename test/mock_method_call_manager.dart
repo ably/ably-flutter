@@ -55,7 +55,7 @@ class MockMethodCallManager {
               'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
           await AblyMethodCallHandler(channel).onAuthCallback(
             AblyMessage(
-              TokenParams(timestamp: DateTime.now()),
+              message: TokenParams(timestamp: DateTime.now()),
               handle: handle,
             ),
           );
@@ -77,7 +77,12 @@ class MockMethodCallManager {
           final channel = MethodChannel(
               'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
           await AblyMethodCallHandler(channel).onRealtimeAuthCallback(
-            AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
+            AblyMessage(
+              message: TokenParams(
+                timestamp: DateTime.now(),
+              ),
+              handle: handle,
+            ),
           );
           isAuthenticated = true;
         }
