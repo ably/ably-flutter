@@ -690,13 +690,14 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
-      jsonMap[TxDeviceDetails.id] as String?,
-      jsonMap[TxDeviceDetails.clientId] as String?,
-      _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
-      formFactor,
-      toTypedJsonMap<String>(
+      id: jsonMap[TxDeviceDetails.id] as String?,
+      clientId: jsonMap[TxDeviceDetails.clientId] as String?,
+      platform:
+          _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+      formFactor: formFactor,
+      metadata: toTypedJsonMap<String>(
           jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>?),
-      _decodeDevicePushDetails(
+      push: _decodeDevicePushDetails(
         Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
             as Map<Object?, Object?>),
       ),
@@ -719,9 +720,11 @@ class Codec extends StandardMessageCodec {
   }
 
   LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
-      _decodeDeviceDetails(jsonMap),
-      jsonMap[TxLocalDevice.deviceSecret] as String?,
-      jsonMap[TxLocalDevice.deviceIdentityToken] as String?);
+        deviceDetails: _decodeDeviceDetails(jsonMap),
+        deviceSecret: jsonMap[TxLocalDevice.deviceSecret] as String?,
+        deviceIdentityToken:
+            jsonMap[TxLocalDevice.deviceIdentityToken] as String?,
+      );
 
   FormFactor _decodeFormFactor(String? enumValue) {
     switch (enumValue) {
