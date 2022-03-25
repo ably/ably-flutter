@@ -22,6 +22,19 @@ class AblyMessage<T> {
     this.type,
   });
 
+  /// creates instance with [message] set to empty map
+  ///
+  /// [handle] and [type] are optional
+  static AblyMessage<Map<String, dynamic>> empty({
+    int? handle,
+    int? type,
+  }) =>
+      AblyMessage(
+        message: const {},
+        handle: handle,
+        type: type,
+      );
+
   /// Cast ably message from [G] to [T]
   static AblyMessage<T> castFrom<G, T>(AblyMessage<G> source) => AblyMessage(
         message: source.message as T,

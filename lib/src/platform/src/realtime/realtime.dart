@@ -45,7 +45,12 @@ class Realtime extends PlatformObject {
       // If this happens, we won't be able to identify which realtime client
       // the authCallback belongs to. Instead, on Android, we set autoConnect
       // to false, and call connect immediately once we get the handle.
-      await invokeRaw(PlatformMethod.connectRealtime, handle);
+      // This is also a specific case where it's required to use [invokeRaw]
+      // because we need to pass message with handle outside of [PlatformObject]
+      await invokeRaw(
+        PlatformMethod.connectRealtime,
+        AblyMessage.empty(handle: handle),
+      );
     }
     return handle;
   }
