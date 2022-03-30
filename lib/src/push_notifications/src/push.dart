@@ -2,6 +2,7 @@ import 'dart:io' as io show Platform;
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:meta/meta.dart';
 
 /// Class providing push notification functionality
 ///
@@ -123,6 +124,14 @@ class Push extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
+
+  /// Resets activation state of push device by removing device data from
+  /// Android / iOS native storage solutions
+  ///
+  /// Warning: This is an experimental method and it's use can lead to
+  /// unexpected behavior in Push
+  @experimental
+  Future<void> reset() => invoke(PlatformMethod.pushReset);
 
   @override
   Future<int?> createPlatformInstance() => (realtime != null)

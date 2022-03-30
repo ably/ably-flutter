@@ -38,6 +38,7 @@ NSString *const AblyPlatformMethod_realtimeTime= @"realtimeTime";
 NSString *const AblyPlatformMethod_restTime= @"restTime";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
+NSString *const AblyPlatformMethod_pushReset= @"pushReset";
 NSString *const AblyPlatformMethod_pushSubscribeDevice= @"pushSubscribeDevice";
 NSString *const AblyPlatformMethod_pushUnsubscribeDevice= @"pushUnsubscribeDevice";
 NSString *const AblyPlatformMethod_pushSubscribeClient= @"pushSubscribeClient";
