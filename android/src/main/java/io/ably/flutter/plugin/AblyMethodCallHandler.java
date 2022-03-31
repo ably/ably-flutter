@@ -682,7 +682,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       Integer handle = (Integer) message.message;
       instanceStore.getPush(handle)
               .getActivationContext()
-              .getActivationStateMachine()
               .reset();
     } catch (AblyException e) {
       handleAblyException(result, e);
