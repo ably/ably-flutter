@@ -1,5 +1,4 @@
 import 'dart:io' as io show Platform;
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
@@ -125,13 +124,21 @@ class Push extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
-  /// Resets activation state of push device by removing device data from
-  /// Android / iOS native storage solutions
+  /// Resets activation state of Android push device by removing
+  /// device data from Android SharedPreferences. After this operation, device
+  /// is recognized as a completely new push device and all device data
+  /// has to be regenerated with [Push.activate] call
   ///
   /// Warning: This is an experimental method and it's use can lead to
-  /// unexpected behavior in Push
+  /// unexpected behavior in Push module
   @experimental
-  Future<void> reset() => invoke(PlatformMethod.pushReset);
+  Future<void> reset() {
+    if (io.Platform.isAndroid) {
+      return invoke(PlatformMethod.pushReset);
+    } else {
+      return Future.value(null);
+    }
+  }
 
   @override
   Future<int?> createPlatformInstance() => (realtime != null)
