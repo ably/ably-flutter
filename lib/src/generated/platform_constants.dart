@@ -68,6 +68,7 @@ class PlatformMethod {
   static const String restTime = 'restTime';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
+  static const String pushReset = 'pushReset';
   static const String pushSubscribeDevice = 'pushSubscribeDevice';
   static const String pushUnsubscribeDevice = 'pushUnsubscribeDevice';
   static const String pushSubscribeClient = 'pushSubscribeClient';
