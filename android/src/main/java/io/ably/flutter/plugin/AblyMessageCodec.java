@@ -351,8 +351,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     final TokenDetails o = new TokenDetails();
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.token, v -> o.token = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.expires, v -> o.expires = (int) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.issued, v -> o.issued = (int) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.expires, v -> o.expires = (long) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.issued, v -> o.issued = (long) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.capability, v -> o.capability = (String) v);
     readValueFromJson(jsonMap, PlatformConstants.TxTokenDetails.clientId, v -> o.clientId = (String) v);
 
