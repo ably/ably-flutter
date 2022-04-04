@@ -51,6 +51,15 @@ class PushNotificationsActivationSliver extends HookWidget {
     await _pushNotificationService.getDevice();
   }
 
+  Future<void> handleResetDeviceButton(BuildContext context) async {
+    try {
+      await _pushNotificationService.resetActivation();
+    } on ably.AblyException catch (error) {
+      await showErrorDialog(context, error);
+    }
+    await _pushNotificationService.getDevice();
+  }
+
   Widget buildiOSSimulatorWarningText(bool isIOSSimulator) {
     if (isIOSSimulator) {
       return Padding(
@@ -107,6 +116,12 @@ class PushNotificationsActivationSliver extends HookWidget {
                     onPressed: () => handleDeactivateDeviceButton(context),
                     child: const Text('Deactivate device')),
               ),
+              Expanded(
+                child: BoolStreamButton(
+                    stream: _pushNotificationService.hasPushChannelStream,
+                    onPressed: () => handleResetDeviceButton(context),
+                    child: const Text('Reset activation')),
+              )
             ],
           ),
           const Text('Once devices are activated, a Push Admin can '
