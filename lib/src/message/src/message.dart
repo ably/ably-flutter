@@ -1,11 +1,12 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:meta/meta.dart';
 
 /// An individual message to be sent/received by Ably
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TM1
 @immutable
-class Message {
+class Message with ObjectHash {
   /// A unique ID for this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
@@ -72,15 +73,16 @@ class Message {
       other.connectionId == connectionId;
 
   @override
-  int get hashCode => '$id:'
-          '$name:'
-          '$encoding:'
-          '$clientId:'
-          '$timestamp:'
-          '$connectionId:'
-          '${data?.hashCode}:'
-          '${extras?.hashCode}:'
-      .hashCode;
+  int get hashCode => objectHash([
+        id,
+        name,
+        encoding,
+        clientId,
+        timestamp,
+        connectionId,
+        data,
+        extras,
+      ]);
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   ///

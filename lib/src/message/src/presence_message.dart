@@ -1,11 +1,12 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:meta/meta.dart';
 
 /// An individual presence message sent or received via realtime
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TP1
 @immutable
-class PresenceMessage {
+class PresenceMessage with ObjectHash {
   /// unique ID for this presence message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3a
@@ -72,15 +73,16 @@ class PresenceMessage {
       other.timestamp == timestamp;
 
   @override
-  int get hashCode => '$id:'
-          '$encoding:'
-          '$clientId:'
-          '$timestamp:'
-          '$connectionId:'
-          '${data?.toString()}:'
-          '${action.toString()}:'
-          '${extras?.toString()}:'
-      .hashCode;
+  int get hashCode => objectHash([
+        id,
+        encoding,
+        clientId,
+        timestamp,
+        connectionId,
+        data,
+        action,
+        extras,
+      ]);
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   ///
