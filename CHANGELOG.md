@@ -6,7 +6,6 @@
 
 **Implemented enhancements:**
 
-- Implement stats Rest and Realtime clients [\#260](https://github.com/ably/ably-flutter/issues/260)
 - Drop support for Android v1 embedding API [\#178](https://github.com/ably/ably-flutter/issues/178)
 - Defaults: Generate environment fallbacks [\#47](https://github.com/ably/ably-flutter/issues/47)
 
