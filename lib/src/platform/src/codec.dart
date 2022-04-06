@@ -647,24 +647,27 @@ class Codec extends StandardMessageCodec {
   /// Decodes value [jsonMap] to [TokenDetails]
   /// returns null if [jsonMap] is null
   TokenDetails _decodeTokenDetails(Map<String, dynamic> jsonMap) =>
-      TokenDetails(_readFromJson<String>(jsonMap, TxTokenDetails.token))
-        ..expires = _readFromJson<int>(jsonMap, TxTokenDetails.expires)
-        ..issued = _readFromJson<int>(jsonMap, TxTokenDetails.issued)
-        ..capability = _readFromJson<String>(jsonMap, TxTokenDetails.capability)
-        ..clientId = _readFromJson<String>(jsonMap, TxTokenDetails.clientId);
+      TokenDetails(
+        _readFromJson<String>(jsonMap, TxTokenDetails.token),
+        expires: _readFromJson<int>(jsonMap, TxTokenDetails.expires),
+        issued: _readFromJson<int>(jsonMap, TxTokenDetails.issued),
+        capability: _readFromJson<String>(jsonMap, TxTokenDetails.capability),
+        clientId: _readFromJson<String>(jsonMap, TxTokenDetails.clientId),
+      );
 
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
   TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
     final timestamp = _readFromJson<int>(jsonMap, TxTokenParams.timestamp);
-    final params = TokenParams()
-      ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
-      ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
-      ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
-      ..timestamp = (timestamp != null)
+    final params = TokenParams(
+      capability: _readFromJson<String>(jsonMap, TxTokenParams.capability),
+      clientId: _readFromJson<String>(jsonMap, TxTokenParams.clientId),
+      nonce: _readFromJson<String>(jsonMap, TxTokenParams.nonce),
+      timestamp: (timestamp != null)
           ? DateTime.fromMillisecondsSinceEpoch(timestamp)
-          : null
-      ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+          : null,
+      ttl: _readFromJson<int>(jsonMap, TxTokenParams.ttl),
+    );
     return params;
   }
 
@@ -1019,9 +1022,9 @@ class Codec extends StandardMessageCodec {
         toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
     return ConnectionStateChange(
-      current,
-      previous,
-      event,
+      current: current,
+      previous: previous,
+      event: event,
       retryIn: retryIn,
       reason: reason,
     );
@@ -1040,8 +1043,13 @@ class Codec extends StandardMessageCodec {
     final errorInfo =
         toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
-    return ChannelStateChange(current, previous, event,
-        resumed: resumed, reason: reason);
+    return ChannelStateChange(
+      current: current,
+      previous: previous,
+      event: event,
+      resumed: resumed,
+      reason: reason,
+    );
   }
 
   /// Decodes value [jsonMap] to [MessageData]

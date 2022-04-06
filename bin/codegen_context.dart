@@ -100,6 +100,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
   {'name': 'pushDeactivate', 'value': 'pushDeactivate'},
+  {'name': 'pushReset', 'value': 'pushReset'},
   {'name': 'pushSubscribeDevice', 'value': 'pushSubscribeDevice'},
   {'name': 'pushUnsubscribeDevice', 'value': 'pushUnsubscribeDevice'},
   {'name': 'pushSubscribeClient', 'value': 'pushSubscribeClient'},

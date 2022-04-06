@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
+
 /// Params for realtime history
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
+@immutable
 class RealtimeHistoryParams {
   /// [start] must be equal to or less than end and is unaffected
   /// by the request direction
@@ -39,7 +42,7 @@ class RealtimeHistoryParams {
   /// was attached or emitted an UPDATE indicating loss of continuity.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10b
-  bool? untilAttach;
+  final bool? untilAttach;
 
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
