@@ -14,8 +14,8 @@ class DeltaExtras {
   /// create instance from a map
   @protected
   DeltaExtras.fromMap(Map value)
-      : from = value[TxDeltaExtras.from] as String?,
-        format = value[TxDeltaExtras.format] as String?;
+      : format = value[TxDeltaExtras.format] as String?,
+        from = value[TxDeltaExtras.from] as String?;
 
   @override
   bool operator ==(Object other) =>
