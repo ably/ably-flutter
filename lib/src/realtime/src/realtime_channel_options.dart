@@ -30,8 +30,8 @@ class RealtimeChannelOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2
   const RealtimeChannelOptions({
-    this.params,
-    this.modes,
     this.cipherParams,
+    this.modes,
+    this.params,
   });
 }

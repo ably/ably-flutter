@@ -24,8 +24,8 @@ class RealtimePresenceParams {
 
   /// initializes with [waitForSync] set to true by default
   const RealtimePresenceParams({
-    this.waitForSync = true,
     this.clientId,
     this.connectionId,
+    this.waitForSync = true,
   });
 }
