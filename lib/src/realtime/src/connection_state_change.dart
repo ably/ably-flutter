@@ -1,9 +1,11 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:meta/meta.dart';
 
 /// Whenever the connection state changes,
 /// a ConnectionStateChange object is emitted on the [Connection] object
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TA1
+@immutable
 class ConnectionStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   final ConnectionEvent event;
@@ -25,20 +27,20 @@ class ConnectionStateChange {
   /// object describing the reason for the error
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA3
-  ErrorInfo? reason;
+  final ErrorInfo? reason;
 
   /// when the client is not connected, a connection attempt will be made
   /// automatically by the library after the number of milliseconds
   /// specified by [retryIn]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
-  int? retryIn;
+  final int? retryIn;
 
   /// initializes without any defaults
-  ConnectionStateChange(
-    this.current,
-    this.previous,
-    this.event, {
+  const ConnectionStateChange({
+    required this.current,
+    required this.previous,
+    required this.event,
     this.reason,
     this.retryIn,
   });
