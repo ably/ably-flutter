@@ -1,5 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 /// Configuration options for a [RealtimeChannel]
 ///

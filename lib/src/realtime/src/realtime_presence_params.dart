@@ -1,5 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 /// Params used as a filter for querying presence on a channel
 ///
