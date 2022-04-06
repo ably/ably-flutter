@@ -1,24 +1,27 @@
+import 'package:flutter/material.dart';
+
 /// Response to a `requestToken` request
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TD1
+@immutable
 class TokenDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#TD2
-  String? token;
+  final String? token;
 
   /// Token expiry time in milliseconds
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD3
-  int? expires;
+  final int? expires;
 
   /// the time the token was issued in milliseconds
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD4
-  int? issued;
+  final int? issued;
 
   /// stringified capabilities JSON
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD5
-  String? capability;
+  final String? capability;
 
   /// Client ID assigned to the token.
   ///
@@ -29,10 +32,10 @@ class TokenDetails {
   /// clientId is both enforced and assumed for all operations for this token
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD6
-  String? clientId;
+  final String? clientId;
 
   /// instantiates a [TokenDetails] with provided values
-  TokenDetails(
+  const TokenDetails(
     this.token, {
     this.expires,
     this.issued,
@@ -43,11 +46,10 @@ class TokenDetails {
   /// Creates an instance from the map
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD7
-  TokenDetails.fromMap(Map<String, dynamic> map) {
-    token = map['token'] as String?;
-    expires = map['expires'] as int?;
-    issued = map['issued'] as int?;
-    capability = map['capability'] as String?;
-    clientId = map['clientId'] as String?;
-  }
+  TokenDetails.fromMap(Map<String, dynamic> map)
+      : token = map['token'] as String?,
+        expires = map['expires'] as int?,
+        issued = map['issued'] as int?,
+        capability = map['capability'] as String?,
+        clientId = map['clientId'] as String?;
 }

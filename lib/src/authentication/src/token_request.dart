@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
+
 /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE1
+@immutable
 class TokenRequest {
   /// [keyName] is the first part of Ably API Key.
   ///
@@ -7,7 +10,7 @@ class TokenRequest {
   ///
   /// More details about Ably API Key:
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA11
-  String? keyName;
+  final String? keyName;
 
   /// An opaque nonce string of at least 16 characters to ensure
   ///	uniqueness of this request. Any subsequent request using the
@@ -16,39 +19,39 @@ class TokenRequest {
   /// spec:
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
   /// https://docs.ably.com/client-lib-development-guide/features/#TE5
-  String? nonce;
+  final String? nonce;
 
   /// The "Message Authentication Code" for this request.
   ///
   /// See the Ably Authentication documentation for more details.
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE2
-  String? mac;
+  final String? mac;
 
   /// stringified capabilities JSON
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE3
-  String? capability;
+  final String? capability;
 
   ///  Client ID assigned to the tokenRequest.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
-  String? clientId;
+  final String? clientId;
 
   /// timestamp long – The timestamp (in milliseconds since the epoch)
   /// of this request. Timestamps, in conjunction with the nonce,
   /// are used to prevent requests from being replayed
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE5
-  DateTime? timestamp;
+  final DateTime? timestamp;
 
   /// ttl attribute represents time to live (expiry)
   /// of this token in milliseconds
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE4
-  int? ttl;
+  final int? ttl;
 
   /// instantiates a [TokenRequest] with provided values
-  TokenRequest({
+  const TokenRequest({
     this.keyName,
     this.nonce,
     this.clientId,
@@ -59,14 +62,13 @@ class TokenRequest {
   });
 
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
-  TokenRequest.fromMap(Map<String, dynamic> map) {
-    keyName = map['keyName'] as String?;
-    nonce = map['nonce'] as String?;
-    mac = map['mac'] as String?;
-    capability = map['capability'] as String?;
-    clientId = map['clientId'] as String?;
-    timestamp = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
-    final ttl = map['ttl'] as int?;
-    if (ttl != null) this.ttl = ttl;
-  }
+  TokenRequest.fromMap(Map<String, dynamic> map)
+      : keyName = map['keyName'] as String?,
+        nonce = map['nonce'] as String?,
+        mac = map['mac'] as String?,
+        capability = map['capability'] as String?,
+        clientId = map['clientId'] as String?,
+        timestamp =
+            DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
+        ttl = map['ttl'] as int?;
 }
