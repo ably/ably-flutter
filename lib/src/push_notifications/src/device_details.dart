@@ -41,11 +41,11 @@ class DeviceDetails {
 
   /// Initializes an instance without any defaults
   const DeviceDetails({
-    required this.platform,
     required this.formFactor,
     required this.metadata,
+    required this.platform,
     required this.push,
-    this.id,
     this.clientId,
+    this.id,
   });
 }
