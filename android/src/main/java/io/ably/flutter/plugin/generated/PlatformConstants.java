@@ -70,6 +70,7 @@ final public class PlatformConstants {
         public static final String restTime = "restTime";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
+        public static final String pushReset = "pushReset";
         public static final String pushSubscribeDevice = "pushSubscribeDevice";
         public static final String pushUnsubscribeDevice = "pushUnsubscribeDevice";
         public static final String pushSubscribeClient = "pushSubscribeClient";

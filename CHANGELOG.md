@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.2.13](https://github.com/ably/ably-flutter/tree/v1.2.13)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.12...v1.2.13)
+
+**Implemented enhancements:**
+
+- Drop support for Android v1 embedding API [\#178](https://github.com/ably/ably-flutter/issues/178)
+- Defaults: Generate environment fallbacks [\#47](https://github.com/ably/ably-flutter/issues/47)
+
+**Fixed bugs:**
+
+- Android only - Returning a TokenDetails with 'issued' and 'expires' values in epoch milliseconds throws java error [\#356](https://github.com/ably/ably-flutter/issues/356)
+- Fix AblyException assigning 'Message' to 'Code' field [\#349](https://github.com/ably/ably-flutter/issues/349)
+- Investigate and fix encryption in sample app [\#334](https://github.com/ably/ably-flutter/issues/334)
+-  Execution failed for task ':ably\_flutter:compileDebugJavaWithJavac' while running integration test for android device [\#322](https://github.com/ably/ably-flutter/issues/322)
+- Realtime types \(e.g. `RealtimeHistoryParams`\) extending Rest ones \(e.g. `RestHistoryParams`\) can cause problems \(crashes\) [\#241](https://github.com/ably/ably-flutter/issues/241)
+- Fix LogHandler \(use it\) [\#238](https://github.com/ably/ably-flutter/issues/238)
+- Broken dartdoc link generated from readme [\#110](https://github.com/ably/ably-flutter/issues/110)
+
+**Closed issues:**
+
+- Ably interferes with firebase\_messaging [\#346](https://github.com/ably/ably-flutter/issues/346)
+- Missing link to `ApplicationState` in documentation [\#335](https://github.com/ably/ably-flutter/issues/335)
+- Write integration tests for realtime channel specs [\#332](https://github.com/ably/ably-flutter/issues/332)
+- Consider Simplifying AblyMessage [\#329](https://github.com/ably/ably-flutter/issues/329)
+- Upgrade `firebase-messaging` to version 23.0.0 [\#320](https://github.com/ably/ably-flutter/issues/320)
+- Example App should be able to build and run without Firebase configured via `google-services.json` [\#318](https://github.com/ably/ably-flutter/issues/318)
+- No need for GitHub workflows to explicitly run `flutter pub get` in the `example` folder [\#317](https://github.com/ably/ably-flutter/issues/317)
+- Example App should be able to build and run without `ABLY_API_KEY` [\#316](https://github.com/ably/ably-flutter/issues/316)
+- resultForDeactivate and resultForActivate are set to null in some situations in Android plugin [\#304](https://github.com/ably/ably-flutter/issues/304)
+- Test device activation, subscription, receiving messages and deactivation [\#153](https://github.com/ably/ably-flutter/issues/153)
+- Add docstring for "spec" folder [\#29](https://github.com/ably/ably-flutter/issues/29)
 
 ## [1.2.12](https://github.com/ably/ably-flutter/tree/v1.2.12)
 

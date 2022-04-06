@@ -14,14 +14,14 @@ class AblyException implements Exception {
   final String? message;
 
   /// error message from ably native sdk
-  late final ErrorInfo? errorInfo;
+  final ErrorInfo? errorInfo;
 
   /// initializes with no defaults
-  AblyException([
+  AblyException({
     this.code,
     this.message,
     this.errorInfo,
-  ]);
+  });
 
   /// create AblyException from [PlatformException]
   AblyException.fromPlatformException(PlatformException exception)

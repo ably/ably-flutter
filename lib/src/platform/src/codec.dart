@@ -25,7 +25,11 @@ class _CodecPair<T> {
   /// if passed [value] is null, encoder will not be called.
   /// This method will throw an [AblyException] if encoder is null.
   Map<String, dynamic>? encode(final Object? value) {
-    if (_encoder == null) throw AblyException('Codec encoder is null');
+    if (_encoder == null) {
+      throw AblyException(
+        message: 'Codec encoder is null',
+      );
+    }
     if (value == null) return null;
     return _encoder!(value as T);
   }
@@ -34,7 +38,11 @@ class _CodecPair<T> {
   /// if passed [jsonMap] is null, decoder will not be called.
   /// This method will throw an [AblyException] if decoder is null.
   T? decode(Map<String, dynamic>? jsonMap) {
-    if (_decoder == null) throw AblyException('Codec decoder is null');
+    if (_decoder == null) {
+      throw AblyException(
+        message: 'Codec decoder is null',
+      );
+    }
     if (jsonMap == null) return null;
     return _decoder!(jsonMap);
   }
@@ -378,7 +386,9 @@ class Codec extends StandardMessageCodec {
         key: key,
       );
     } else {
-      throw AblyException("Unsupported platform");
+      throw AblyException(
+        message: 'Unsupported platform',
+      );
     }
   }
 
@@ -736,7 +746,8 @@ class Codec extends StandardMessageCodec {
         return FormFactor.other;
     }
     throw AblyException(
-      'Platform communication error. FormFactor is invalid: $enumValue',
+      message:
+          'Platform communication error. FormFactor is invalid: $enumValue',
     );
   }
 
@@ -763,7 +774,8 @@ class Codec extends StandardMessageCodec {
         return DevicePlatform.browser;
     }
     throw AblyException(
-      'Platform communication error. DevicePlatform is invalid: $enumValue',
+      message:
+          'Platform communication error. DevicePlatform is invalid: $enumValue',
     );
   }
 
@@ -816,8 +828,8 @@ class Codec extends StandardMessageCodec {
         return UNShowPreviewsSetting.never;
     }
     throw AblyException(
-      'Platform communication error. '
-      'UNShowPreviewsSetting is invalid: $setting',
+      message: 'Platform communication error. '
+          'UNShowPreviewsSetting is invalid: $setting',
     );
   }
 
@@ -831,8 +843,8 @@ class Codec extends StandardMessageCodec {
         return UNAlertStyle.none;
     }
     throw AblyException(
-      'Platform communication error. '
-      'UNAlertStyle is invalid: $style',
+      message: 'Platform communication error. '
+          'UNAlertStyle is invalid: $style',
     );
   }
 
@@ -850,7 +862,8 @@ class Codec extends StandardMessageCodec {
         return UNAuthorizationStatus.ephemeral;
     }
     throw AblyException(
-      'Platform communication error. UNAuthorizationStatus is invalid: $status',
+      message: 'Platform communication error. '
+          'UNAuthorizationStatus is invalid: $status',
     );
   }
 
@@ -864,8 +877,8 @@ class Codec extends StandardMessageCodec {
         return UNNotificationSetting.notSupported;
     }
     throw AblyException(
-      'Platform communication error. '
-      'UNNotificationSetting is invalid: $setting',
+      message: 'Platform communication error. '
+          'UNNotificationSetting is invalid: $setting',
     );
   }
 
@@ -906,7 +919,8 @@ class Codec extends StandardMessageCodec {
         return ConnectionEvent.update;
     }
     throw AblyException(
-      'Platform communication error. Connection event is invalid: $eventName',
+      message:
+          'Platform communication error. Connection event is invalid: $eventName',
     );
   }
 
@@ -931,7 +945,8 @@ class Codec extends StandardMessageCodec {
         return ConnectionState.failed;
     }
     throw AblyException(
-      'Platform communication error. Connection state is invalid: $state',
+      message:
+          'Platform communication error. Connection state is invalid: $state',
     );
   }
 
@@ -956,7 +971,8 @@ class Codec extends StandardMessageCodec {
         return ChannelEvent.update;
     }
     throw AblyException(
-      'Platform communication error. Channel event is invalid: $eventName',
+      message:
+          'Platform communication error. Channel event is invalid: $eventName',
     );
   }
 
@@ -979,7 +995,7 @@ class Codec extends StandardMessageCodec {
         return ChannelState.failed;
     }
     throw AblyException(
-      'Platform communication error. Channel state is invalid: $state',
+      message: 'Platform communication error. Channel state is invalid: $state',
     );
   }
 
@@ -1110,7 +1126,8 @@ class Codec extends StandardMessageCodec {
     final hasNext = _readFromJson<bool>(jsonMap, TxPaginatedResult.hasNext);
     if (hasNext == null) {
       throw AblyException(
-        'Platform communication error. PaginatedResult.hasNext is null',
+        message:
+            'Platform communication error. PaginatedResult.hasNext is null',
       );
     }
     return PaginatedResult(items, hasNext: hasNext);
@@ -1150,7 +1167,7 @@ class Codec extends StandardMessageCodec {
         return LogLevel.error;
     }
     throw AblyException(
-      'Error decoding LogLevel from platform string: $logLevelString',
+      message: 'Error decoding LogLevel from platform string: $logLevelString',
     );
   }
 }

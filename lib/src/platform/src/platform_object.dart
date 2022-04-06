@@ -50,7 +50,8 @@ abstract class PlatformObject {
     final response = await invoke<T>(method, argument);
     if (response == null) {
       throw AblyException(
-        'Platform communication error. Response cannot be null for $method',
+        message:
+            'Platform communication error. Response cannot be null for $method',
       );
     } else {
       return response;

@@ -104,6 +104,8 @@ class PushNotificationService {
 
   Future<void> deactivateDevice() => getPushFromAblyClient().deactivate();
 
+  Future<void> resetActivation() => getPushFromAblyClient().reset();
+
   Future<void> getDevice() async {
     if (useRealtimeClient) {
       final localDevice = await _realtime.device();
