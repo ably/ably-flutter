@@ -73,13 +73,13 @@ abstract class AuthOptions {
   /// Initializes an instance without any defaults
   AuthOptions({
     this.authCallback,
-    this.authUrl,
-    this.authMethod,
-    this.key,
-    this.tokenDetails,
     this.authHeaders,
+    this.authMethod,
     this.authParams,
+    this.authUrl,
+    this.key,
     this.queryTime,
+    this.tokenDetails,
     this.useTokenAuth,
   }) {
     if (key != null && !key!.contains(':')) {

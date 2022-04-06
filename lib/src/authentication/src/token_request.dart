@@ -52,23 +52,23 @@ class TokenRequest {
 
   /// instantiates a [TokenRequest] with provided values
   const TokenRequest({
-    this.keyName,
-    this.nonce,
-    this.clientId,
-    this.mac,
     this.capability,
+    this.clientId,
+    this.keyName,
+    this.mac,
+    this.nonce,
     this.timestamp,
     this.ttl,
   });
 
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
   TokenRequest.fromMap(Map<String, dynamic> map)
-      : keyName = map['keyName'] as String?,
-        nonce = map['nonce'] as String?,
-        mac = map['mac'] as String?,
-        capability = map['capability'] as String?,
+      : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,
+        mac = map['mac'] as String?,
+        nonce = map['nonce'] as String?,
         timestamp =
             DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
-        ttl = map['ttl'] as int?;
+        ttl = map['ttl'] as int?,
+        keyName = map['keyName'] as String?;
 }
