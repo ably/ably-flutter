@@ -1,4 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:flutter/cupertino.dart';
 
 /// A class providing parameters of a token request.
 ///
@@ -8,6 +9,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// accept an instance of TokenParams as a parameter
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TK1
+@immutable
 class TokenParams {
   /// Capability of the token.
   ///
@@ -16,14 +18,14 @@ class TokenParams {
   /// with the capability of the issuing key.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2b
-  String? capability;
+  final String? capability;
 
   /// A clientId to associate with this token.
   ///
   /// The generated token may be used to authenticate as this clientId.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2c
-  String? clientId;
+  final String? clientId;
 
   /// An opaque nonce string of at least 16 characters to ensure uniqueness.
   ///
@@ -31,7 +33,7 @@ class TokenParams {
   /// are used to prevent requests from being replayed
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  String? nonce;
+  final String? nonce;
 
   /// The timestamp (in millis since the epoch) of this request.
   ///
@@ -39,7 +41,7 @@ class TokenParams {
   ///	token requests from being replayed.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  DateTime? timestamp;
+  final DateTime? timestamp;
 
   /// Requested time to live for the token.
   ///
@@ -50,10 +52,10 @@ class TokenParams {
   /// 0 means Ably will set it to the default value
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
-  int? ttl;
+  final int? ttl;
 
   /// instantiates a [TokenParams] with provided values
-  TokenParams({
+  const TokenParams({
     this.capability,
     this.clientId,
     this.nonce,
