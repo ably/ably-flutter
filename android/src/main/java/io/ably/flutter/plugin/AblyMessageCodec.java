@@ -375,12 +375,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
     if (jsonMap == null) return null;
     // It's not possible to initialize the array here, because that way,
     // Params will have a (null, null) entry, so we need to initialize it later with `Params.set`
-    Param[] o = null;
+    Param[] transportParams = null;
     for (String key: jsonMap.keySet()) {
       // Params.set() creates new parms instance if o is null
-      o = Param.set(o, key, jsonMap.get(key));
+      transportParams = Param.set(transportParams, key, jsonMap.get(key));
     }
-    return o;
+    return transportParams;
   }
 
   private Auth.TokenRequest decodeTokenRequest(Map<String, Object> jsonMap) {
