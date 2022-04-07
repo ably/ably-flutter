@@ -12,6 +12,8 @@ class Connection extends PlatformObject {
 
   ConnectionState _state;
 
+  ErrorInfo? _errorReason;
+
   /// instantiates a connection with [realtime] client instance
   ///
   /// sets default [state] to [ConnectionState.initialized] and starts listening
@@ -21,6 +23,7 @@ class Connection extends PlatformObject {
         super() {
     on().listen((event) {
       _state = event.current;
+      _errorReason = event.reason;
     });
   }
 
@@ -32,7 +35,7 @@ class Connection extends PlatformObject {
   /// See:
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN14
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN15
-  ErrorInfo? errorReason;
+  ErrorInfo? get errorReason => _errorReason;
 
   /// A public identifier for this connection, used to identify
   /// this member in presence events and message ids.
