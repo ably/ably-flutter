@@ -35,10 +35,8 @@ class RestHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b3
   final int limit;
 
-  /// instantiates with [direction] set to "backwards", [limit] to 100
-  /// [start] to epoch and end to current time
-  ///
-  /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
+  /// instantiates with [direction] set to [HistoryDirection.backwards],
+  /// [limit] to 100, [start] to epoch and [end] to current time
   RestHistoryParams({
     this.direction = HistoryDirection.backwards,
     DateTime? end,

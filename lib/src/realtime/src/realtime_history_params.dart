@@ -45,10 +45,8 @@ class RealtimeHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10b
   final bool? untilAttach;
 
-  /// instantiates with [direction] set to "backwards", [limit] to 100
-  /// [start] to epoch and end to current time
-  ///
-  /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
+  /// instantiates with [direction] set to [HistoryDirection.backwards],
+  /// [limit] to 100, [start] to epoch and [end] to current time
   RealtimeHistoryParams({
     this.direction = HistoryDirection.backwards,
     DateTime? end,
