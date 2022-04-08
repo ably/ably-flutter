@@ -53,7 +53,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
 
   final historyForwards = await getPresenceHistory(
     channel,
-    RealtimeHistoryParams(direction: 'forwards'),
+    RealtimeHistoryParams(direction: HistoryDirection.forwards),
   );
   await Future.delayed(TestConstants.publishToHistoryDelay);
 

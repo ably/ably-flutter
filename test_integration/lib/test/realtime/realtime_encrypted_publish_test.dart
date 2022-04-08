@@ -96,7 +96,7 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
   // Retrieve history of channel where client id was specified
   final historyOfEncryptedChannel = await getHistory(
     encryptedChannel,
-    RealtimeHistoryParams(direction: 'forwards'),
+    RealtimeHistoryParams(direction: HistoryDirection.forwards),
   );
 
   // Create encrypted channel with push capability
@@ -121,7 +121,7 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
   await encryptedChannel.setOptions(RealtimeChannelOptions());
   final historyOfPlaintextChannel = await getHistory(
     encryptedChannel,
-    RealtimeHistoryParams(direction: 'forwards'),
+    RealtimeHistoryParams(direction: HistoryDirection.forwards),
   );
   await encryptedPushEnabledChannel.setOptions(RealtimeChannelOptions());
   final historyOfPlaintextPushEnabledChannel =

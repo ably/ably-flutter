@@ -77,7 +77,7 @@ Future<Map<String, dynamic>> testRealtimePublishSpec({
   }
   final history = await getHistory(
     channel,
-    RealtimeHistoryParams(direction: 'forwards'),
+    RealtimeHistoryParams(direction: HistoryDirection.forwards),
   );
 
   // client options - no client id, message has client id
@@ -95,7 +95,7 @@ Future<Map<String, dynamic>> testRealtimePublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
   final history2 = await getHistory(
     channel2,
-    RealtimeHistoryParams(direction: 'forwards'),
+    RealtimeHistoryParams(direction: HistoryDirection.forwards),
   );
 
   final channel3 = realtime2.channels.get('©Äblý');

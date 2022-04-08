@@ -34,7 +34,11 @@ Future<Map<String, dynamic>> testRestHistory({
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final historyForwardLimit4 = await getHistory(
-      channel, RestHistoryParams(direction: 'forwards', limit: 4));
+      channel,
+      RestHistoryParams(
+        direction: HistoryDirection.forwards,
+        limit: 4,
+      ));
   await Future.delayed(TestConstants.publishToHistoryDelay);
 
   final time1 = DateTime.now();
