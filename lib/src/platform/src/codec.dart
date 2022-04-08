@@ -400,7 +400,7 @@ class Codec extends StandardMessageCodec {
         jsonMap, TxRestHistoryParams.start, v.start.millisecondsSinceEpoch);
     _writeToJson(
         jsonMap, TxRestHistoryParams.end, v.end.millisecondsSinceEpoch);
-    _writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction);
+    _writeToJson(jsonMap, TxRestHistoryParams.direction, v.direction.value());
     _writeToJson(jsonMap, TxRestHistoryParams.limit, v.limit);
     return jsonMap;
   }
@@ -441,7 +441,8 @@ class Codec extends StandardMessageCodec {
       TxRealtimeHistoryParams.end,
       v.end.millisecondsSinceEpoch,
     );
-    _writeToJson(jsonMap, TxRealtimeHistoryParams.direction, v.direction);
+    _writeToJson(
+        jsonMap, TxRealtimeHistoryParams.direction, v.direction.value());
     _writeToJson(jsonMap, TxRealtimeHistoryParams.limit, v.limit);
     _writeToJson(jsonMap, TxRealtimeHistoryParams.untilAttach, v.untilAttach);
     return jsonMap;
