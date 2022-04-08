@@ -20,14 +20,14 @@ class LocalDevice extends DeviceDetails {
   /// Initializes an instance without any defaults
   LocalDevice({
     required DeviceDetails deviceDetails,
-    this.deviceSecret,
     this.deviceIdentityToken,
+    this.deviceSecret,
   }) : super(
-          id: deviceDetails.id,
           clientId: deviceDetails.clientId,
-          platform: deviceDetails.platform,
           formFactor: deviceDetails.formFactor,
+          id: deviceDetails.id,
           metadata: deviceDetails.metadata,
+          platform: deviceDetails.platform,
           push: deviceDetails.push,
         );
 }

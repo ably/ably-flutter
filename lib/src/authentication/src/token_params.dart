@@ -1,5 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 /// A class providing parameters of a token request.
 ///

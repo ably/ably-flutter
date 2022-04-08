@@ -22,7 +22,7 @@ class Notification {
   });
 
   factory Notification.fromMap(Map<String, dynamic> map) => Notification(
-        title: map[TxNotification.title] as String,
         body: map[TxNotification.body] as String?,
+        title: map[TxNotification.title] as String,
       );
 }

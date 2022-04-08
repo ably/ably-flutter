@@ -24,7 +24,7 @@ class PushChannelSubscription {
   /// Initializes an instance without any defaults
   const PushChannelSubscription({
     required this.channel,
-    this.deviceId,
     this.clientId,
+    this.deviceId,
   });
 }

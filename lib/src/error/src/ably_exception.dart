@@ -19,15 +19,15 @@ class AblyException implements Exception {
   /// initializes with no defaults
   AblyException({
     this.code,
-    this.message,
     this.errorInfo,
+    this.message,
   });
 
   /// create AblyException from [PlatformException]
   AblyException.fromPlatformException(PlatformException exception)
       : code = exception.code,
-        message = exception.message,
-        errorInfo = exception.details as ErrorInfo?;
+        errorInfo = exception.details as ErrorInfo?,
+        message = exception.message;
 
   @override
   String toString() {
