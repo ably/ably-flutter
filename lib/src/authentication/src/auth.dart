@@ -18,8 +18,8 @@ abstract class Auth {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA10
   Future<TokenDetails> authorize({
-    TokenParams? tokenParams,
     AuthOptions? authOptions,
+    TokenParams? tokenParams,
   });
 
   /// Returns a signed TokenRequest object that can be used to obtain
@@ -27,8 +27,8 @@ abstract class Auth {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA9
   Future<TokenRequest> createTokenRequest({
-    TokenParams? tokenParams,
     AuthOptions? authOptions,
+    TokenParams? tokenParams,
   });
 
   /// Implicitly creates a TokenRequest if required and requests a token
@@ -36,7 +36,7 @@ abstract class Auth {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA8
   Future<TokenDetails> requestToken({
-    TokenParams? tokenParams,
     AuthOptions? authOptions,
+    TokenParams? tokenParams,
   });
 }
