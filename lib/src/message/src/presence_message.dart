@@ -49,26 +49,26 @@ class PresenceMessage {
 
   /// instantiates presence message with
   PresenceMessage({
-    this.id,
     this.action,
     this.clientId,
     this.connectionId,
     Object? data,
     this.encoding,
     this.extras,
+    this.id,
     this.timestamp,
   }) : _data = MessageData.fromValue(data);
 
   @override
   bool operator ==(Object other) =>
       other is PresenceMessage &&
-      other.id == id &&
       other.action == action &&
       other.clientId == clientId &&
       other.connectionId == connectionId &&
       other.data == data &&
       other.encoding == encoding &&
       other.extras == extras &&
+      other.id == id &&
       other.timestamp == timestamp;
 
   @override

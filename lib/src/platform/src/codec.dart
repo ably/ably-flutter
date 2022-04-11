@@ -647,24 +647,27 @@ class Codec extends StandardMessageCodec {
   /// Decodes value [jsonMap] to [TokenDetails]
   /// returns null if [jsonMap] is null
   TokenDetails _decodeTokenDetails(Map<String, dynamic> jsonMap) =>
-      TokenDetails(_readFromJson<String>(jsonMap, TxTokenDetails.token))
-        ..expires = _readFromJson<int>(jsonMap, TxTokenDetails.expires)
-        ..issued = _readFromJson<int>(jsonMap, TxTokenDetails.issued)
-        ..capability = _readFromJson<String>(jsonMap, TxTokenDetails.capability)
-        ..clientId = _readFromJson<String>(jsonMap, TxTokenDetails.clientId);
+      TokenDetails(
+        _readFromJson<String>(jsonMap, TxTokenDetails.token),
+        expires: _readFromJson<int>(jsonMap, TxTokenDetails.expires),
+        issued: _readFromJson<int>(jsonMap, TxTokenDetails.issued),
+        capability: _readFromJson<String>(jsonMap, TxTokenDetails.capability),
+        clientId: _readFromJson<String>(jsonMap, TxTokenDetails.clientId),
+      );
 
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
   TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
     final timestamp = _readFromJson<int>(jsonMap, TxTokenParams.timestamp);
-    final params = TokenParams()
-      ..capability = _readFromJson<String>(jsonMap, TxTokenParams.capability)
-      ..clientId = _readFromJson<String>(jsonMap, TxTokenParams.clientId)
-      ..nonce = _readFromJson<String>(jsonMap, TxTokenParams.nonce)
-      ..timestamp = (timestamp != null)
+    final params = TokenParams(
+      capability: _readFromJson<String>(jsonMap, TxTokenParams.capability),
+      clientId: _readFromJson<String>(jsonMap, TxTokenParams.clientId),
+      nonce: _readFromJson<String>(jsonMap, TxTokenParams.nonce),
+      timestamp: (timestamp != null)
           ? DateTime.fromMillisecondsSinceEpoch(timestamp)
-          : null
-      ..ttl = _readFromJson<int>(jsonMap, TxTokenParams.ttl);
+          : null,
+      ttl: _readFromJson<int>(jsonMap, TxTokenParams.ttl),
+    );
     return params;
   }
 
@@ -690,13 +693,14 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
-      jsonMap[TxDeviceDetails.id] as String?,
-      jsonMap[TxDeviceDetails.clientId] as String?,
-      _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
-      formFactor,
-      toTypedJsonMap<String>(
+      id: jsonMap[TxDeviceDetails.id] as String?,
+      clientId: jsonMap[TxDeviceDetails.clientId] as String?,
+      platform:
+          _decodeDevicePlatform(jsonMap[TxDeviceDetails.platform] as String),
+      formFactor: formFactor,
+      metadata: toTypedJsonMap<String>(
           jsonMap[TxDeviceDetails.metadata] as Map<Object?, Object?>?),
-      _decodeDevicePushDetails(
+      push: _decodeDevicePushDetails(
         Map<String, dynamic>.from(jsonMap[TxDeviceDetails.devicePushDetails]
             as Map<Object?, Object?>),
       ),
@@ -711,17 +715,22 @@ class Codec extends StandardMessageCodec {
         jsonMap[TxDevicePushDetails.recipient] as Map<Object?, Object?>?;
 
     return DevicePushDetails(
-        recipient != null ? Map<String, String>.from(recipient) : null,
-        _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
-        (jsonMapErrorReason != null)
-            ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
-            : null);
+      recipient:
+          (recipient != null) ? Map<String, String>.from(recipient) : null,
+      state:
+          _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
+      errorReason: (jsonMapErrorReason != null)
+          ? _decodeErrorInfo(Map<String, dynamic>.from(jsonMapErrorReason))
+          : null,
+    );
   }
 
   LocalDevice _decodeLocalDevice(Map<String, dynamic> jsonMap) => LocalDevice(
-      _decodeDeviceDetails(jsonMap),
-      jsonMap[TxLocalDevice.deviceSecret] as String?,
-      jsonMap[TxLocalDevice.deviceIdentityToken] as String?);
+        deviceDetails: _decodeDeviceDetails(jsonMap),
+        deviceSecret: jsonMap[TxLocalDevice.deviceSecret] as String?,
+        deviceIdentityToken:
+            jsonMap[TxLocalDevice.deviceIdentityToken] as String?,
+      );
 
   FormFactor _decodeFormFactor(String? enumValue) {
     switch (enumValue) {
@@ -1013,9 +1022,9 @@ class Codec extends StandardMessageCodec {
         toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
     return ConnectionStateChange(
-      current,
-      previous,
-      event,
+      current: current,
+      previous: previous,
+      event: event,
       retryIn: retryIn,
       reason: reason,
     );
@@ -1034,8 +1043,13 @@ class Codec extends StandardMessageCodec {
     final errorInfo =
         toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
-    return ChannelStateChange(current, previous, event,
-        resumed: resumed, reason: reason);
+    return ChannelStateChange(
+      current: current,
+      previous: previous,
+      event: event,
+      resumed: resumed,
+      reason: reason,
+    );
   }
 
   /// Decodes value [jsonMap] to [MessageData]

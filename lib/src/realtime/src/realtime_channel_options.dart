@@ -1,8 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:meta/meta.dart';
 
 /// Configuration options for a [RealtimeChannel]
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
+@immutable
 class RealtimeChannelOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
   final CipherParams? cipherParams;
@@ -27,5 +29,9 @@ class RealtimeChannelOptions {
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2
-  RealtimeChannelOptions({this.params, this.modes, this.cipherParams});
+  const RealtimeChannelOptions({
+    this.cipherParams,
+    this.modes,
+    this.params,
+  });
 }

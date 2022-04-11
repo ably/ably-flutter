@@ -28,12 +28,12 @@ class ErrorInfo {
 
   /// instantiates a [ErrorInfo] with provided values
   ErrorInfo({
+    this.cause,
     this.code,
     this.href,
     this.message,
-    this.cause,
-    this.statusCode,
     this.requestId,
+    this.statusCode,
   });
 
   @override

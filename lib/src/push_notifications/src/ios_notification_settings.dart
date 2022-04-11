@@ -16,55 +16,68 @@ enum UNAuthorizationStatus {
   denied,
   authorized,
   provisional,
-  ephemeral
+  ephemeral,
 }
 
 /// Constants indicating the presentation styles for alerts.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unalertstyle)
-enum UNAlertStyle { none, banner, alert }
+enum UNAlertStyle {
+  none,
+  banner,
+  alert,
+}
 
 /// Constants that indicate the current status of a notification setting.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsetting)
-enum UNNotificationSetting { notSupported, disabled, enabled }
+enum UNNotificationSetting {
+  notSupported,
+  disabled,
+  enabled,
+}
 
 /// Constants indicating the style previewing a notification's content.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unshowpreviewssetting)
-enum UNShowPreviewsSetting { always, whenAuthenticated, never }
+enum UNShowPreviewsSetting {
+  always,
+  whenAuthenticated,
+  never,
+}
 
 /// The object for managing notification-related settings and the authorization
 /// status of your app.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsettings)
 class UNNotificationSettings {
-  UNAuthorizationStatus authorizationStatus;
-  UNNotificationSetting soundSetting;
-  UNNotificationSetting badgeSetting;
   UNNotificationSetting alertSetting;
-  UNNotificationSetting notificationCenterSetting;
-  UNNotificationSetting lockScreenSetting;
-  UNNotificationSetting carPlaySetting;
   UNAlertStyle alertStyle;
-  UNShowPreviewsSetting showPreviewsSetting;
-  UNNotificationSetting criticalAlertSetting;
-  bool providesAppNotificationSettings;
   UNNotificationSetting announcementSetting;
+  UNAuthorizationStatus authorizationStatus;
+  UNNotificationSetting badgeSetting;
+  UNNotificationSetting carPlaySetting;
+  UNNotificationSetting criticalAlertSetting;
+  UNNotificationSetting lockScreenSetting;
+  UNNotificationSetting notificationCenterSetting;
+  bool providesAppNotificationSettings;
+  UNNotificationSetting soundSetting;
+  UNShowPreviewsSetting showPreviewsSetting;
 
   /// Users do not create this class. Call [Push.getNotificationSettings]
   /// instead.
-  UNNotificationSettings(
-      {required this.authorizationStatus,
-      required this.soundSetting,
-      required this.badgeSetting,
-      required this.alertSetting,
-      required this.notificationCenterSetting,
-      required this.lockScreenSetting,
-      required this.carPlaySetting,
-      required this.alertStyle,
-      required this.showPreviewsSetting,
-      required this.criticalAlertSetting,
-      required this.providesAppNotificationSettings,
-      required this.announcementSetting});
+  UNNotificationSettings({
+    required this.alertSetting,
+    required this.alertStyle,
+    required this.announcementSetting,
+    required this.authorizationStatus,
+    required this.badgeSetting,
+    required this.carPlaySetting,
+    required this.criticalAlertSetting,
+    required this.lockScreenSetting,
+    required this.notificationCenterSetting,
+    required this.providesAppNotificationSettings,
+    required this.showPreviewsSetting,
+    required this.soundSetting,
+  });
 }

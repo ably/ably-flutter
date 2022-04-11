@@ -1,6 +1,9 @@
+import 'package:meta/meta.dart';
+
 /// Params for realtime history
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
+@immutable
 class RealtimeHistoryParams {
   /// [start] must be equal to or less than end and is unaffected
   /// by the request direction
@@ -39,21 +42,21 @@ class RealtimeHistoryParams {
   /// was attached or emitted an UPDATE indicating loss of continuity.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10b
-  bool? untilAttach;
+  final bool? untilAttach;
 
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
   RealtimeHistoryParams({
-    DateTime? start,
-    DateTime? end,
     this.direction = 'backwards',
+    DateTime? end,
     this.limit = 100,
+    DateTime? start,
     this.untilAttach,
   })  : assert(direction == 'backwards' || direction == 'forwards'),
-        start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
-        end = end ?? DateTime.now();
+        end = end ?? DateTime.now(),
+        start = start ?? DateTime.fromMillisecondsSinceEpoch(0);
 
   @override
   String toString() => 'RealtimeHistoryParams:'

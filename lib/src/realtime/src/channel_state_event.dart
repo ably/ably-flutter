@@ -1,9 +1,11 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:meta/meta.dart';
 
 /// Whenever the channel state changes, a ChannelStateChange object
 /// is emitted on the Channel object
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TH1
+@immutable
 class ChannelStateChange {
   /// the event that generated the channel state change
   ///
@@ -27,16 +29,16 @@ class ChannelStateChange {
   /// object describing the reason for the error
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH3
-  ErrorInfo? reason;
+  final ErrorInfo? reason;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TH4
   final bool resumed;
 
   /// initializes with [resumed] set to false
-  ChannelStateChange(
-    this.current,
-    this.previous,
-    this.event, {
+  const ChannelStateChange({
+    required this.current,
+    required this.event,
+    required this.previous,
     this.reason,
     this.resumed = false,
   });

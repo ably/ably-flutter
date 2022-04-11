@@ -38,13 +38,13 @@ class RestHistoryParams {
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
   RestHistoryParams({
-    DateTime? start,
-    DateTime? end,
     this.direction = 'backwards',
+    DateTime? end,
     this.limit = 100,
+    DateTime? start,
   })  : assert(direction == 'backwards' || direction == 'forwards'),
-        start = start ?? DateTime.fromMillisecondsSinceEpoch(0),
-        end = end ?? DateTime.now();
+        end = end ?? DateTime.now(),
+        start = start ?? DateTime.fromMillisecondsSinceEpoch(0);
 
   @override
   String toString() => 'RestHistoryParams:'
