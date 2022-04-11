@@ -37,9 +37,9 @@ abstract class PlatformObject {
   /// invoke platform method channel without AblyMessage encapsulation
   @protected
   Future<T?> invokeRaw<T>(
-    final String method, [
-    final Object? arguments,
-  ]) async =>
+    final String method,
+    final AblyMessage arguments,
+  ) async =>
       _platform.invokePlatformMethod<T>(method, arguments);
 
   /// invoke platform method channel with AblyMessage encapsulation
@@ -59,36 +59,12 @@ abstract class PlatformObject {
   }
 
   /// invoke platform method channel with AblyMessage encapsulation
-  /* FIXME(ikurek): https://github.com/ably/ably-flutter/issues/179
-  This seems wrong - the structure is either
-
-  {
-      message: {
-          message: argument,
-          handle: handle,
-          type: null
-      },
-      handle: null,
-      type: null
-   }
-
-   or
-
-   {
-       message: handle,
-       handle: null,
-       type: null
-   }
-
-   Which means that the structure is wrong every time, but I can't
-   understand why and it seems that iOS/Android code reads handle from
-   message field, so I don't want to touch it now
-  */
   Future<T?> invoke<T>(final String method, [final Object? argument]) async {
     final _handle = await handle;
-    final message = (null != argument)
-        ? AblyMessage(AblyMessage(argument, handle: _handle))
-        : AblyMessage(_handle);
+    final message = AblyMessage(
+      message: argument ?? {},
+      handle: _handle,
+    );
     return invokeRaw<T>(method, message);
   }
 

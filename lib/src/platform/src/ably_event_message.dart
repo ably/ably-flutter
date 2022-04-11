@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// An encapsulating object used to pass data to platform for registering events
+@immutable
 class AblyEventMessage {
   /// name of the event to register a listener for
   final String eventName;
@@ -9,7 +12,8 @@ class AblyEventMessage {
   /// creates an instance with non-nul [eventName]
   ///
   /// [message] is optional
-  ///
-  /// Raises [AssertionError] if [eventName] is null
-  AblyEventMessage(this.eventName, [this.message]);
+  const AblyEventMessage({
+    required this.eventName,
+    this.message,
+  });
 }

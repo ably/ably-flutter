@@ -35,7 +35,10 @@ class Platform {
 
   Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
     try {
-      return await _methodChannel!.invokeMethod<T>(method, arguments);
+      // If argument is null, pass an empty [AblyMessage], because codec fails
+      // if argument value is null
+      final methodArguments = arguments ?? AblyMessage.empty();
+      return await _methodChannel!.invokeMethod<T>(method, methodArguments);
     } on PlatformException catch (platformException) {
       // Convert some PlatformExceptions into AblyException
       if (platformException.details is ErrorInfo) {
@@ -63,7 +66,10 @@ class Platform {
           [final Object? payload]) =>
       _streamsChannel!.receiveBroadcastStream<T>(
         AblyMessage(
-          AblyEventMessage(methodName, payload),
+          message: AblyEventMessage(
+            eventName: methodName,
+            message: payload,
+          ),
           handle: handle,
         ),
       );

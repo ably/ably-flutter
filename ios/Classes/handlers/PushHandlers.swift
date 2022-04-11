@@ -33,9 +33,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let requestPermission: FlutterHandler = { ably, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let messageData = message.message as! AblyFlutterMessage
-        let dataMap = messageData.message as! Dictionary<String, Any>
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let dataMap = ablyMessage.message as! Dictionary<String, Any>
 
         var options: UNAuthorizationOptions = []
 
@@ -83,10 +82,9 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let device: FlutterHandler = { ably, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = ably.instanceStore.realtime(from: ablyClientHandle)
-        let rest = ably.instanceStore.rest(from: ablyClientHandle)
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let realtime = ably.instanceStore.realtime(from: ablyMessage.handle)
+        let rest = ably.instanceStore.rest(from: ablyMessage.handle)
 
         if let realtime = realtime {
             result(realtime.device)
@@ -97,9 +95,8 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let listSubscriptions: FlutterHandler = { ably, call, result in
-        let message = call.arguments as! AblyFlutterMessage
-        let nestedMessage = message.message as! AblyFlutterMessage
-        let dataMap = nestedMessage.message as! Dictionary<String, Any>
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let dataMap = ablyMessage.message as! Dictionary<String, Any>
         let params = dataMap[TxTransportKeys_params] as! Dictionary<String, String>
 
         if let pushChannel = getPushChannel(ably: ably, call: call, result: result) {
@@ -159,10 +156,9 @@ public class PushHandlers: NSObject {
 
     /// Gets the client.push property from ARTRealtime or ARTRest when the call contains a handle.
     private static func getPush(instanceStore: AblyInstanceStore, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPush? {
-        let message = call.arguments as! AblyFlutterMessage
-        let ablyClientHandle = message.message as! NSNumber
-        let realtime = instanceStore.realtime(from: ablyClientHandle)
-        let rest = instanceStore.rest(from: ablyClientHandle)
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let realtime = instanceStore.realtime(from: ablyMessage.handle)
+        let rest = instanceStore.rest(from: ablyMessage.handle)
 
         if let realtime = realtime {
             return realtime.push;
@@ -182,26 +178,14 @@ public class PushHandlers: NSObject {
     /// The dart side can provide a handle (Int) which gets a ARTRealtime or ARTRest Ably client.
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
-        let instanceStore = ably.instanceStore
-        let message = call.arguments as! AblyFlutterMessage
-
-        var clientHandle: NSNumber? = nil;
-        var channelName: String? = nil;
-
-        if let ablyFlutterMessage = message.message as? AblyFlutterMessage {
-            if let nestedAblyFlutterMessage = ablyFlutterMessage.message as? AblyFlutterMessage {
-                clientHandle = nestedAblyFlutterMessage.handle
-                let dictionary = nestedAblyFlutterMessage.message as! Dictionary<String, Any>
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            } else if let dictionary = ablyFlutterMessage.message as? Dictionary<String, Any> {
-                clientHandle = ablyFlutterMessage.handle
-                channelName = (dictionary[TxTransportKeys_channelName] as! String)
-            }
-        } else {
-            clientHandle = (message.message as! NSNumber)
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let handle: NSNumber? = ablyMessage.handle
+        var channelName: String? = nil
+        if let dataMap = ablyMessage.message as? Dictionary<String, Any> {
+            channelName = dataMap[TxTransportKeys_channelName] as? String
         }
 
-        guard let clientHandle = clientHandle else {
+        guard let handle = handle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
@@ -210,10 +194,11 @@ public class PushHandlers: NSObject {
             return nil
         }
 
-        let realtime = instanceStore.realtime(from: clientHandle)
+        let instanceStore = ably.instanceStore
+        let realtime = instanceStore.realtime(from: handle)
         if let realtime = realtime {
             return realtime.channels.get(channelName).push
-        } else if let rest = instanceStore.rest(from: clientHandle) {
+        } else if let rest = instanceStore.rest(from: handle) {
             return rest.channels.get(channelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
