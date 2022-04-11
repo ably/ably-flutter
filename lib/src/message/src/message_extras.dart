@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 /// Handles supported message extras types, their encoding and decoding
 @immutable
-class MessageExtras {
+class MessageExtras with ObjectHash {
   /// json-encodable map of extras
   final Map<String, dynamic>? map;
 
@@ -47,5 +48,8 @@ class MessageExtras {
       other.delta == delta;
 
   @override
-  int get hashCode => '${map.hashCode}:${delta.hashCode}'.hashCode;
+  int get hashCode => objectHash([
+        map,
+        delta,
+      ]);
 }

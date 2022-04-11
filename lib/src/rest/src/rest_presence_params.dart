@@ -19,8 +19,8 @@ class RestPresenceParams {
 
   /// initializes with default [limit] set to 100
   RestPresenceParams({
-    this.limit = 100,
     this.clientId,
     this.connectionId,
+    this.limit = 100,
   });
 }

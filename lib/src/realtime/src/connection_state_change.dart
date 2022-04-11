@@ -39,8 +39,8 @@ class ConnectionStateChange {
   /// initializes without any defaults
   const ConnectionStateChange({
     required this.current,
-    required this.previous,
     required this.event,
+    required this.previous,
     this.reason,
     this.retryIn,
   });

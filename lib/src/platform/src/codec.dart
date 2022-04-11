@@ -682,7 +682,7 @@ class Codec extends StandardMessageCodec {
       ) as Object;
     }
     return AblyMessage(
-      message,
+      message: message,
       handle: jsonMap[TxAblyMessage.registrationHandle] as int?,
       type: type,
     );

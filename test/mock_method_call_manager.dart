@@ -42,9 +42,8 @@ class MockMethodCallManager {
         return handle;
 
       case PlatformMethod.publish:
-        final message = methodCall.arguments as AblyMessage;
-        final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle!]!;
+        final ablyMessage = methodCall.arguments as AblyMessage;
+        final ablyChannel = channels[ablyMessage.handle!]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,
@@ -55,19 +54,18 @@ class MockMethodCallManager {
               'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
           await AblyMethodCallHandler(channel).onAuthCallback(
             AblyMessage(
-              TokenParams(timestamp: DateTime.now()),
-              handle: handle,
+              message: TokenParams(timestamp: DateTime.now()),
+              handle: ablyMessage.handle,
             ),
           );
           isAuthenticated = true;
         }
-        publishedMessages.add(message);
+        publishedMessages.add(ablyMessage);
         return null;
 
       case PlatformMethod.publishRealtimeChannelMessage:
-        final message = methodCall.arguments as AblyMessage;
-        final handle = (message.message as AblyMessage).handle;
-        final ablyChannel = channels[handle!]!;
+        final ablyMessage = methodCall.arguments as AblyMessage;
+        final ablyChannel = channels[ablyMessage.handle]!;
         final clientOptions = ablyChannel.message as ClientOptions;
 
         // `authUrl` is used to indicate the presence of an authCallback,
@@ -77,12 +75,17 @@ class MockMethodCallManager {
           final channel = MethodChannel(
               'io.ably.flutter.plugin', StandardMethodCodec(Codec()));
           await AblyMethodCallHandler(channel).onRealtimeAuthCallback(
-            AblyMessage(TokenParams(timestamp: DateTime.now()), handle: handle),
+            AblyMessage(
+              message: TokenParams(
+                timestamp: DateTime.now(),
+              ),
+              handle: ablyMessage.handle,
+            ),
           );
           isAuthenticated = true;
         }
 
-        publishedMessages.add(message);
+        publishedMessages.add(ablyMessage);
         return null;
 
       case PlatformMethod.releaseRestChannel:

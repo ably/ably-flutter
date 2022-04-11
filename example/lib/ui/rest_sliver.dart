@@ -3,7 +3,6 @@ import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/ui/paginated_result_viewer.dart';
 import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:ably_flutter_example/ui/utilities.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

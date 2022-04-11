@@ -40,8 +40,8 @@ class PaginatedResult<T> extends PlatformObject {
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
   PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult> message)
-      : _items = message.message.items.map<T>((e) => e as T).toList(),
-        _hasNext = message.message.hasNext(),
+      : _hasNext = message.message.hasNext(),
+        _items = message.message.items.map<T>((e) => e as T).toList(),
         _pageHandle = message.handle,
         super(fetchHandle: false);
 

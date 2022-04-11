@@ -22,7 +22,10 @@ class Push extends PlatformObject {
   final Realtime? realtime;
 
   /// Pass an Ably realtime or rest client.
-  Push({this.rest, this.realtime}) : super() {
+  Push({
+    this.realtime,
+    this.rest,
+  }) : super() {
     final ablyClientNotPresent = rest == null && realtime == null;
     final moreThanOneAblyClientPresent = rest != null && realtime != null;
     if (ablyClientNotPresent || moreThanOneAblyClientPresent) {
@@ -72,26 +75,27 @@ class Push extends PlatformObject {
   /// @returns bool Permission was granted.
   ///
   /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorization)
-  Future<bool> requestPermission(
-      {bool badge = true,
-      bool sound = true,
-      bool alert = true,
-      bool carPlay = true,
-      bool criticalAlert = false,
-      bool provisional = false,
-      bool providesAppNotificationSettings = false,
-      bool announcement = true}) async {
+  Future<bool> requestPermission({
+    bool alert = true,
+    bool announcement = true,
+    bool badge = true,
+    bool carPlay = true,
+    bool criticalAlert = false,
+    bool providesAppNotificationSettings = false,
+    bool provisional = false,
+    bool sound = true,
+  }) async {
     if (io.Platform.isIOS) {
       return invokeRequest<bool>(PlatformMethod.pushRequestPermission, {
-        TxPushRequestPermission.badge: badge,
-        TxPushRequestPermission.sound: sound,
         TxPushRequestPermission.alert: alert,
+        TxPushRequestPermission.announcement: announcement,
+        TxPushRequestPermission.badge: badge,
         TxPushRequestPermission.carPlay: carPlay,
         TxPushRequestPermission.criticalAlert: criticalAlert,
-        TxPushRequestPermission.provisional: provisional,
         TxPushRequestPermission.providesAppNotificationSettings:
             providesAppNotificationSettings,
-        TxPushRequestPermission.announcement: announcement,
+        TxPushRequestPermission.provisional: provisional,
+        TxPushRequestPermission.sound: sound,
       });
     } else {
       return true;
