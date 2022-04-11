@@ -181,6 +181,7 @@ class TxClientOptions {
   static const String defaultTokenParams = 'defaultTokenParams';
   static const String channelRetryTimeout = 'channelRetryTimeout';
   static const String transportParams = 'transportParams';
+  static const String dartVersion = 'dartVersion';
 }
 
 class TxRestChannelOptions {
@@ -384,8 +385,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -401,8 +401,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

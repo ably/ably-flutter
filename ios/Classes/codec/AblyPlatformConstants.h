@@ -167,6 +167,7 @@ extern NSString *const TxClientOptions_fallbackRetryTimeout;
 extern NSString *const TxClientOptions_defaultTokenParams;
 extern NSString *const TxClientOptions_channelRetryTimeout;
 extern NSString *const TxClientOptions_transportParams;
+extern NSString *const TxClientOptions_dartVersion;
 
 // key constants for RestChannelOptions
 extern NSString *const TxRestChannelOptions_cipherParams;
