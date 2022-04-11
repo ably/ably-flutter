@@ -276,6 +276,7 @@ class Codec extends StandardMessageCodec {
     _writeToJson(
         jsonMap, TxClientOptions.channelRetryTimeout, v.channelRetryTimeout);
     _writeToJson(jsonMap, TxClientOptions.transportParams, v.transportParams);
+    _writeToJson(jsonMap, TxClientOptions.dartVersion, dartVersion());
     return jsonMap;
   }
 

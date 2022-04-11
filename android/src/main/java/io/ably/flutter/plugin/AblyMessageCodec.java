@@ -325,6 +325,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     o.agents = new HashMap<>();
     o.agents.put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
+    o.agents.put("dart", (String) jsonMap.get(PlatformConstants.TxClientOptions.dartVersion));
 
     return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
   }
