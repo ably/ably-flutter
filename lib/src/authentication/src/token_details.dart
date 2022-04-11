@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 /// Response to a `requestToken` request
 ///
@@ -37,19 +37,19 @@ class TokenDetails {
   /// instantiates a [TokenDetails] with provided values
   const TokenDetails(
     this.token, {
-    this.expires,
-    this.issued,
     this.capability,
     this.clientId,
+    this.expires,
+    this.issued,
   });
 
   /// Creates an instance from the map
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD7
   TokenDetails.fromMap(Map<String, dynamic> map)
-      : token = map['token'] as String?,
+      : capability = map['capability'] as String?,
+        clientId = map['clientId'] as String?,
         expires = map['expires'] as int?,
         issued = map['issued'] as int?,
-        capability = map['capability'] as String?,
-        clientId = map['clientId'] as String?;
+        token = map['token'] as String?;
 }

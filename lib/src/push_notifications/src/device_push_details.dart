@@ -24,8 +24,8 @@ class DevicePushDetails {
 
   /// Initializes an instance without any defaults
   const DevicePushDetails({
+    this.errorReason,
     this.recipient,
     this.state,
-    this.errorReason,
   });
 }

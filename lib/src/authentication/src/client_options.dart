@@ -190,41 +190,41 @@ class ClientOptions extends AuthOptions {
   /// Initializes an instance with defaults
   ClientOptions({
     AuthCallback? authCallback,
-    String? authUrl,
-    String? authMethod,
-    String? key,
-    TokenDetails? tokenDetails,
     Map<String, String>? authHeaders,
+    String? authMethod,
     Map<String, String>? authParams,
-    bool? queryTime,
-    bool? useTokenAuth,
-    this.clientId,
-    this.logHandler,
-    LogLevel? logLevel,
-    this.restHost,
-    this.realtimeHost,
-    this.port,
-    bool? tls,
-    this.tlsPort,
+    String? authUrl,
     bool? autoConnect,
-    bool? useBinaryProtocol,
-    bool? queueMessages,
-    bool? echoMessages,
-    this.recover,
-    this.environment,
-    this.fallbackHosts,
-    this.fallbackHostsUseDefault,
+    int? channelRetryTimeout,
+    this.clientId,
     this.defaultTokenParams,
     int? disconnectedRetryTimeout,
-    int? suspendedRetryTimeout,
-    this.idempotentRestPublishing,
-    this.transportParams,
+    bool? echoMessages,
+    this.environment,
+    this.fallbackHosts,
+    int? fallbackRetryTimeout,
+    this.fallbackHostsUseDefault,
+    int? httpMaxRetryCount,
     int? httpOpenTimeout,
     int? httpRequestTimeout,
-    int? httpMaxRetryCount,
+    this.idempotentRestPublishing,
+    String? key,
+    this.logHandler,
+    LogLevel? logLevel,
+    this.port,
+    bool? queryTime,
+    bool? queueMessages,
+    this.realtimeHost,
     this.realtimeRequestTimeout,
-    int? fallbackRetryTimeout,
-    int? channelRetryTimeout,
+    this.recover,
+    this.restHost,
+    int? suspendedRetryTimeout,
+    bool? tls,
+    this.tlsPort,
+    this.transportParams,
+    TokenDetails? tokenDetails,
+    bool? useBinaryProtocol,
+    bool? useTokenAuth,
   }) : super(
           authCallback: authCallback,
           authUrl: authUrl,
@@ -239,22 +239,22 @@ class ClientOptions extends AuthOptions {
     /// These default value assignments are only required until
     /// [ClientOptions.fromKey] is removed, because then defaults can be set
     /// directly in the constructor invocation
-    this.logLevel = logLevel ?? this.logLevel;
-    this.tls = tls ?? this.tls;
     this.autoConnect = autoConnect ?? this.autoConnect;
-    this.useBinaryProtocol = useBinaryProtocol ?? this.useBinaryProtocol;
-    this.queueMessages = queueMessages ?? this.queueMessages;
-    this.echoMessages = echoMessages ?? this.echoMessages;
+    this.channelRetryTimeout = channelRetryTimeout ?? this.channelRetryTimeout;
     this.disconnectedRetryTimeout =
         disconnectedRetryTimeout ?? this.disconnectedRetryTimeout;
-    this.suspendedRetryTimeout =
-        suspendedRetryTimeout ?? this.suspendedRetryTimeout;
-    this.httpOpenTimeout = httpOpenTimeout ?? this.httpOpenTimeout;
-    this.httpRequestTimeout = httpRequestTimeout ?? this.httpRequestTimeout;
-    this.httpMaxRetryCount = httpMaxRetryCount ?? this.httpMaxRetryCount;
+    this.echoMessages = echoMessages ?? this.echoMessages;
     this.fallbackRetryTimeout =
         fallbackRetryTimeout ?? this.fallbackRetryTimeout;
-    this.channelRetryTimeout = channelRetryTimeout ?? this.channelRetryTimeout;
+    this.httpMaxRetryCount = httpMaxRetryCount ?? this.httpMaxRetryCount;
+    this.httpOpenTimeout = httpOpenTimeout ?? this.httpOpenTimeout;
+    this.httpRequestTimeout = httpRequestTimeout ?? this.httpRequestTimeout;
+    this.logLevel = logLevel ?? this.logLevel;
+    this.queueMessages = queueMessages ?? this.queueMessages;
+    this.suspendedRetryTimeout =
+        suspendedRetryTimeout ?? this.suspendedRetryTimeout;
+    this.tls = tls ?? this.tls;
+    this.useBinaryProtocol = useBinaryProtocol ?? this.useBinaryProtocol;
   }
 
   /// initializes [ClientOptions] with a key and log level set to info

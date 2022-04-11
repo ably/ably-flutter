@@ -1,11 +1,12 @@
 import 'package:ably_flutter/ably_flutter.dart';
+import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:meta/meta.dart';
 
 /// An individual message to be sent/received by Ably
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TM1
 @immutable
-class Message {
+class Message with ObjectHash {
   /// A unique ID for this message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
@@ -49,38 +50,39 @@ class Message {
 
   /// Creates a message instance with [name], [data] and [clientId]
   Message({
-    this.id,
-    this.name,
-    Object? data,
     this.clientId,
     this.connectionId,
-    this.timestamp,
+    Object? data,
     this.encoding,
     this.extras,
+    this.id,
+    this.name,
+    this.timestamp,
   }) : _data = MessageData.fromValue(data);
 
   @override
   bool operator ==(Object other) =>
       other is Message &&
+      other.clientId == clientId &&
+      other.connectionId == connectionId &&
+      other.data == data &&
+      other.encoding == encoding &&
+      other.extras == extras &&
       other.id == id &&
       other.name == name &&
-      other.data == data &&
-      other.extras == extras &&
-      other.encoding == encoding &&
-      other.clientId == clientId &&
-      other.timestamp == timestamp &&
-      other.connectionId == connectionId;
+      other.timestamp == timestamp;
 
   @override
-  int get hashCode => '$id:'
-          '$name:'
-          '$encoding:'
-          '$clientId:'
-          '$timestamp:'
-          '$connectionId:'
-          '${data?.hashCode}:'
-          '${extras?.hashCode}:'
-      .hashCode;
+  int get hashCode => objectHash([
+        id,
+        name,
+        encoding,
+        clientId,
+        timestamp,
+        connectionId,
+        data,
+        extras,
+      ]);
 
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   ///
@@ -89,9 +91,7 @@ class Message {
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
-  ])  : id = jsonObject['id'] as String?,
-        name = jsonObject['name'] as String?,
-        clientId = jsonObject['clientId'] as String?,
+  ])  : clientId = jsonObject['clientId'] as String?,
         connectionId = jsonObject['connectionId'] as String?,
         _data = MessageData.fromValue(jsonObject['data']),
         encoding = jsonObject['encoding'] as String?,
@@ -100,6 +100,8 @@ class Message {
             jsonObject['extras'] as Map,
           ),
         ),
+        id = jsonObject['id'] as String?,
+        name = jsonObject['name'] as String?,
         timestamp = jsonObject['timestamp'] != null
             ? DateTime.fromMillisecondsSinceEpoch(
                 jsonObject['timestamp'] as int,

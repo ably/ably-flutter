@@ -1,5 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 /// Configuration options for a [RealtimeChannel]
 ///
@@ -30,8 +30,8 @@ class RealtimeChannelOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2
   const RealtimeChannelOptions({
-    this.params,
-    this.modes,
     this.cipherParams,
+    this.modes,
+    this.params,
   });
 }
