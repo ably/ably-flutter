@@ -321,7 +321,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = readValueAsLong(v));
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = (Param[]) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = decodeTransportParams((Map<String, String>) v));
 
     o.agents = new HashMap<>();
     o.agents.put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
@@ -369,6 +369,18 @@ public class AblyMessageCodec extends StandardMessageCodec {
     // nonce is not supported in ably-java
     // Track @ https://github.com/ably/ably-flutter/issues/14
     return o;
+  }
+
+  private Param[] decodeTransportParams(Map<String, String> jsonMap) {
+    if (jsonMap == null) return null;
+    // It's not possible to initialize the array here, because that way,
+    // Params will have a (null, null) entry, so we need to initialize it later with `Params.set`
+    Param[] transportParams = null;
+    for (String key: jsonMap.keySet()) {
+      // Params.set() creates new parms instance if o is null
+      transportParams = Param.set(transportParams, key, jsonMap.get(key));
+    }
+    return transportParams;
   }
 
   private Auth.TokenRequest decodeTokenRequest(Map<String, Object> jsonMap) {

@@ -135,13 +135,14 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     READ_VALUE(clientOptions, idempotentRestPublishing, dictionary, TxClientOptions_idempotentRestPublishing);
     READ_VALUE(clientOptions, fallbackHosts, dictionary, TxClientOptions_fallbackHosts);
     READ_VALUE(clientOptions, fallbackHostsUseDefault, dictionary, TxClientOptions_fallbackHostsUseDefault);
+    READ_VALUE(clientOptions, transportParams, dictionary, TxClientOptions_transportParams);
     ON_VALUE(^(const id value) {
         clientOptions.defaultTokenParams = [AblyFlutterReader tokenParamsFromDictionary: value];
     }, dictionary, TxClientOptions_defaultTokenParams);
     // Following properties not supported by Objective C library
     // useAuthToken, port, tlsPort, httpOpenTimeout, httpRequestTimeout,
     // httpMaxRetryCount, realtimeRequestTimeout, fallbackRetryTimeout,
-    // channelRetryTimeout, transportParams, asyncHttpThreadpoolSize, pushFullWait
+    // channelRetryTimeout, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
 
     [clientOptions addAgent:@"ably-flutter" version:FLUTTER_PACKAGE_PLUGIN_VERSION];
