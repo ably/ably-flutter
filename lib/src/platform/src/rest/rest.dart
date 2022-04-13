@@ -24,9 +24,9 @@ class Rest extends PlatformObject {
 
   @override
   Future<int?> createPlatformInstance() async {
-    final handle = await invokeRaw<int>(
+    final handle = await invokeWithoutHandle<int>(
       PlatformMethod.createRest,
-      AblyMessage(message: options),
+      options,
     );
     _restInstances[handle] = this;
     return handle;
