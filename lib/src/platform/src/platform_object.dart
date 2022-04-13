@@ -39,7 +39,7 @@ abstract class PlatformObject {
   /// case for creating rest and realtime instances
   @protected
   Future<T?> invokeWithoutHandle<T>(final String method,
-      [final Object? argument]) async {
+      [final Map<String, dynamic>? argument]) async {
     final message = AblyMessage(
       message: argument ?? {},
       handle: null,

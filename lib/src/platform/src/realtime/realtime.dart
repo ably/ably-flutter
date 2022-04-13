@@ -33,10 +33,10 @@ class Realtime extends PlatformObject {
 
   @override
   Future<int?> createPlatformInstance() async {
-    final handle = await invokeWithoutHandle<int>(
-      PlatformMethod.createRealtime,
-      options,
-    );
+    final handle =
+        await invokeWithoutHandle<int>(PlatformMethod.createRealtime, {
+      TxTransportKeys.options: options,
+    });
     _realtimeInstances[handle] = this;
 
     if (io.Platform.isAndroid && options.autoConnect) {

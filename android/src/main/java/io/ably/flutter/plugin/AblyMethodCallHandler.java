@@ -184,8 +184,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void createRest(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage<PlatformClientOptions> ablyMessage = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
-    final PlatformClientOptions clientOptions = (PlatformClientOptions) ablyMessage.message;
+    final AblyFlutterMessage<Map<String,Object>> ablyMessage = (AblyFlutterMessage<Map<String,Object>>) call.arguments;
+    final PlatformClientOptions clientOptions = (PlatformClientOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
     try {
       final AblyInstanceStore.ClientHandle clientHandle = instanceStore.reserveClientHandle();
       if (clientOptions.hasAuthCallback) {
@@ -427,12 +427,12 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void createRealtime(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage<PlatformClientOptions> ablyMessage = (AblyFlutterMessage<PlatformClientOptions>) call.arguments;
-    final PlatformClientOptions message = ablyMessage.message;
+    final AblyFlutterMessage<Map<String,Object>> ablyMessage = (AblyFlutterMessage<Map<String,Object>>) call.arguments;
+    final PlatformClientOptions clientOptions = (PlatformClientOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
     try {
       final AblyInstanceStore.ClientHandle clientHandle = instanceStore.reserveClientHandle();
-      if (message.hasAuthCallback) {
-        message.options.authCallback = (Auth.TokenParams params) -> {
+      if (clientOptions.hasAuthCallback) {
+        clientOptions.options.authCallback = (Auth.TokenParams params) -> {
           final Object[] token = {null};
           final CountDownLatch latch = new CountDownLatch(1);
           new Handler(Looper.getMainLooper()).post(() -> {
@@ -469,7 +469,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
           return token[0];
         };
       }
-      result.success(clientHandle.createRealtime(message.options, applicationContext));
+      result.success(clientHandle.createRealtime(clientOptions.options, applicationContext));
     } catch (final AblyException e) {
       handleAblyException(result, e);
     }
