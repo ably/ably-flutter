@@ -35,10 +35,12 @@ class Crypto {
     }
 
     return Platform().invokePlatformMethodNonNull<CipherParams>(
-        PlatformMethod.cryptoGetParams, {
-      TxCryptoGetParams.algorithm: defaultAlgorithm,
-      TxCryptoGetParams.key: key,
-    });
+      PlatformMethod.cryptoGetParams,
+      AblyMessage(message: {
+        TxCryptoGetParams.algorithm: defaultAlgorithm,
+        TxCryptoGetParams.key: key,
+      }),
+    );
   }
 
   static void ensureSupportedKeyLength(Uint8List key) {
@@ -60,7 +62,9 @@ class Crypto {
   static Future<Uint8List> generateRandomKey(
           {keyLength = defaultKeyLengthInBits}) =>
       Platform().invokePlatformMethodNonNull<Uint8List>(
-          PlatformMethod.cryptoGenerateRandomKey, {
-        TxCryptoGenerateRandomKey.keyLength: keyLength,
-      });
+        PlatformMethod.cryptoGenerateRandomKey,
+        AblyMessage(message: {
+          TxCryptoGenerateRandomKey.keyLength: keyLength,
+        }),
+      );
 }

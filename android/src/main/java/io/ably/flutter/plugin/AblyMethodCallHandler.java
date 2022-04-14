@@ -749,9 +749,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void cryptoGetParams(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final Map<String, Object> message = (Map<String, Object>) call.arguments;
-    final String algorithm = (String) message.get(PlatformConstants.TxCryptoGetParams.algorithm);
-    final byte[] keyData = getKeyData(message.get(PlatformConstants.TxCryptoGetParams.key));
+    final AblyFlutterMessage<Map<String, Object>> ablyMessage = (AblyFlutterMessage<Map<String, Object>>) call.arguments;
+    final String algorithm = (String) ablyMessage.message.get(PlatformConstants.TxCryptoGetParams.algorithm);
+    final byte[] keyData = getKeyData(ablyMessage.message.get(PlatformConstants.TxCryptoGetParams.key));
     if (keyData == null) {
       result.error("40000", "A key must be set for encryption, being either a base64 encoded key, or a byte array.", null);
       return;
@@ -778,8 +778,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void cryptoGenerateRandomKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final Map<String, Object> message = (Map<String, Object>) call.arguments;
-    final Integer keyLength = (Integer) message.get(PlatformConstants.TxCryptoGenerateRandomKey.keyLength);
+    final AblyFlutterMessage<Map<String, Object>> ablyMessage = (AblyFlutterMessage<Map<String, Object>>) call.arguments;
+    final Integer keyLength = (Integer) ablyMessage.message.get(PlatformConstants.TxCryptoGenerateRandomKey.keyLength);
     result.success(Crypto.generateRandomKey(keyLength));
   }
 
