@@ -619,10 +619,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void pushReset(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage message = (AblyFlutterMessage) call.arguments;
+    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) call.arguments;
     try {
-      Integer handle = (Integer) message.message;
-      instanceStore.getPush(handle)
+      instanceStore.getPush(ablyMessage.handle)
               .getActivationContext()
               .reset();
     } catch (AblyException e) {
