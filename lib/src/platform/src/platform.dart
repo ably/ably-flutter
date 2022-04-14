@@ -51,7 +51,7 @@ class Platform {
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
-      [Object? arguments]) async {
+      [Map<String, dynamic>? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
     if (result == null) {
       throw AblyException(

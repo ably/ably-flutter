@@ -778,7 +778,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void cryptoGenerateRandomKey(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final Integer keyLength = (Integer) call.arguments;
+    final Map<String, Object> message = (Map<String, Object>) call.arguments;
+    final Integer keyLength = (Integer) message.get(PlatformConstants.TxCryptoGenerateRandomKey.keyLength);
     result.success(Crypto.generateRandomKey(keyLength));
   }
 

@@ -23,7 +23,8 @@ public class CryptoHandlers: NSObject {
     
     @objc
     public static let generateRandomKey: FlutterHandler = { plugin, call, result in
-        let keyLength = call.arguments as! Int;
+        let dictionary = call.arguments as! Dictionary<String, Any>
+        let keyLength = dictionary[TxCryptoGenerateRandomKey_keyLength] as! Int;
         result(ARTCrypto.generateRandomKey(UInt(keyLength)));
     }
 }

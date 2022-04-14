@@ -60,5 +60,7 @@ class Crypto {
   static Future<Uint8List> generateRandomKey(
           {keyLength = defaultKeyLengthInBits}) =>
       Platform().invokePlatformMethodNonNull<Uint8List>(
-          PlatformMethod.cryptoGenerateRandomKey, keyLength);
+          PlatformMethod.cryptoGenerateRandomKey, {
+        TxCryptoGenerateRandomKey.keyLength: keyLength,
+      });
 }
