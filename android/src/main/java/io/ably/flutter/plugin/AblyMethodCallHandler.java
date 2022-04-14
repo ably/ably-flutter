@@ -264,8 +264,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void releaseRestChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) call.arguments;
-    final String channelName = (String) ablyMessage.message;
+    final AblyFlutterMessage<Map<String, Object>> ablyMessage = (AblyFlutterMessage<Map<String, Object>>) call.arguments;
+    final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
     instanceStore.getRest(ablyMessage.handle).channels.release(channelName);
     result.success(null);
   }
@@ -561,8 +561,8 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   }
 
   private void releaseRealtimeChannel(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) call.arguments;
-    final String channelName = (String) ablyMessage.message;
+    final AblyFlutterMessage<Map<String, Object>> ablyMessage = (AblyFlutterMessage<Map<String, Object>>) call.arguments;
+    final String channelName = (String) ablyMessage.message.get(PlatformConstants.TxTransportKeys.channelName);
 
     instanceStore.getRealtime(ablyMessage.handle).channels.release(channelName);
     result.success(null);

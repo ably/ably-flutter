@@ -217,7 +217,8 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutter *const a
 
 static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    NSString *const channelName = (NSString*) ablyMessage.message;
+    NSDictionary *const message = ablyMessage.message;
+    NSString *const channelName = (NSString*) message[TxTransportKeys_channelName];
     
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRest *const rest = [instanceStore restFrom:ablyMessage.handle];
@@ -558,7 +559,8 @@ static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutter *const ab
 
 static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    NSString *const channelName = (NSString*) ablyMessage.message;
+    NSDictionary *const message = ablyMessage.message;
+    NSString *const channelName = (NSString*) message[TxTransportKeys_channelName];
     
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];

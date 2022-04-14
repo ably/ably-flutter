@@ -50,9 +50,10 @@ abstract class PlatformObject {
   /// invoke platform method channel with provided handle, or
   /// current handle if [externalHandle] is not provided
   Future<T?> invoke<T>(final String method,
-      [final Object? argument, final int? externalHandle]) async {
+      [final Map<String, dynamic>? arguments,
+      final int? externalHandle]) async {
     final message = AblyMessage(
-      message: argument ?? {},
+      message: arguments ?? {},
       handle: externalHandle ?? await handle,
     );
     return _platform.invokePlatformMethod<T>(method, message);
@@ -62,8 +63,8 @@ abstract class PlatformObject {
   ///
   /// this is similar to [invoke], but ensures the response is not null
   Future<T> invokeRequest<T>(final String method,
-      [final Object? argument]) async {
-    final response = await invoke<T>(method, argument);
+      [final Map<String, dynamic>? arguments]) async {
+    final response = await invoke<T>(method, arguments);
     if (response == null) {
       throw AblyException(
         message:
