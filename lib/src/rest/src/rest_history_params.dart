@@ -1,3 +1,5 @@
+import 'package:ably_flutter/src/common/src/history_direction.dart';
+
 /// Params for rest history
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b
@@ -23,7 +25,7 @@ class RestHistoryParams {
   /// if omitted the direction defaults to the REST API default (backwards)
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b2
-  final String direction;
+  final HistoryDirection direction;
 
   /// Number of items returned in one page
   /// [limit] supports up to 1,000 items.
@@ -33,17 +35,14 @@ class RestHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b3
   final int limit;
 
-  /// instantiates with [direction] set to "backwards", [limit] to 100
-  /// [start] to epoch and end to current time
-  ///
-  /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
+  /// instantiates with [direction] set to [HistoryDirection.backwards],
+  /// [limit] to 100, [start] to epoch and [end] to current time
   RestHistoryParams({
-    this.direction = 'backwards',
+    this.direction = HistoryDirection.backwards,
     DateTime? end,
     this.limit = 100,
     DateTime? start,
-  })  : assert(direction == 'backwards' || direction == 'forwards'),
-        end = end ?? DateTime.now(),
+  })  : end = end ?? DateTime.now(),
         start = start ?? DateTime.fromMillisecondsSinceEpoch(0);
 
   @override

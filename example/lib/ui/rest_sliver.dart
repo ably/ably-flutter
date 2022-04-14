@@ -93,7 +93,7 @@ class RestSliver extends HookWidget {
         PaginatedResultViewer<ably.Message>(
             title: 'History',
             query: () => channel.history(ably.RestHistoryParams(
-                  direction: 'forwards',
+                  direction: ably.HistoryDirection.forwards,
                   limit: 10,
                 )),
             builder: (context, message, _) => Column(
