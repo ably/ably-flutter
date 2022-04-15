@@ -1,6 +1,7 @@
 import 'package:ably_flutter_integration_test/config/test_names.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/test/basic_test.dart';
+import 'package:ably_flutter_integration_test/test/crypto/crypto_test.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
@@ -57,6 +58,8 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePresenceEnterUpdateLeave:
       testRealtimePresenceEnterUpdateLeave,
   TestName.realtimePresenceSubscribe: testRealtimePresenceSubscribe,
+  // crypto tests
+  TestName.cryptoGenerateRandomKey: testCryptoGenerateRandomKey,
   // helper tests
   TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
 };
