@@ -34,3 +34,46 @@ void testCryptoGenerateRandomKey(FlutterDriver Function() getDriver) {
     });
   });
 }
+
+void testCryptoEnsureSupportedKeyLength(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.cryptoEnsureSupportedKeyLength);
+  late TestControlResponseMessage response;
+  Map<String, dynamic>? keyWithDefaultLengthException;
+  Map<String, dynamic>? keyWith128BitLengthException;
+  Map<String, dynamic>? keyWith256BitLengthException;
+  Map<String, dynamic>? keyWith127BitLengthException;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    keyWithDefaultLengthException = response
+        .payload['keyWithDefaultLengthException'] as Map<String, dynamic>?;
+    keyWith128BitLengthException = response
+        .payload['keyWith128BitLengthException'] as Map<String, dynamic>?;
+    keyWith256BitLengthException = response
+        .payload['keyWith256BitLengthException'] as Map<String, dynamic>?;
+    keyWith127BitLengthException = response
+        .payload['keyWith127BitLengthException'] as Map<String, dynamic>?;
+  });
+
+  group('crypto#ensureSupportedKeyLength', () {
+    test('does not fail for key with default length', () {
+      expect(keyWithDefaultLengthException, isNull);
+    });
+
+    test('does not fail for key with 128bit length', () {
+      expect(keyWith128BitLengthException, isNull);
+    });
+
+    test('does not fail for key with 256bit length', () {
+      expect(keyWith256BitLengthException, isNull);
+    });
+
+    test('fails for key with unsupported length', () {
+      expect(keyWith127BitLengthException, isNotNull);
+      expect(
+        keyWith127BitLengthException!['message'],
+        equals(Crypto.keyLengthErrorMessage),
+      );
+    });
+  });
+}

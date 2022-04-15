@@ -43,6 +43,8 @@ class TestName {
 // TODO(tiholic) handle realtimeHistoryWithAuthCallback
 
   static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
+  static const String cryptoEnsureSupportedKeyLength =
+      'cryptoEnsureSupportedKeyLength';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases

@@ -45,6 +45,7 @@ final _tests =
   },
   TestModules.crypto: {
     'should generate random crypto key': testCryptoGenerateRandomKey,
+    'should validate supported key lengths': testCryptoEnsureSupportedKeyLength,
   }
 };
 
