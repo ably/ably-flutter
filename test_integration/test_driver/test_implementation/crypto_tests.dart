@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void testCryptoGenerateRandomKey(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.cryptoGenerateRandomKey);
