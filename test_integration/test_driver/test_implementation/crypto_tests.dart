@@ -1,4 +1,3 @@
-import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/driver_data_handler.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
@@ -22,7 +21,8 @@ void testCryptoGenerateRandomKey(FlutterDriver Function() getDriver) {
 
   group('crypto#generateRandomKey', () {
     test('generates key with default length if length is not specified', () {
-      const defaultKeyLength = Crypto.defaultKeyLengthInBits / 8;
+      // Default key length is 128bit, but we need the same value in bytes
+      const defaultKeyLength = 128 / 8;
       expect(keyWithDefaultLength.length, defaultKeyLength);
     });
 
@@ -70,10 +70,6 @@ void testCryptoEnsureSupportedKeyLength(FlutterDriver Function() getDriver) {
 
     test('fails for key with unsupported length', () {
       expect(keyWith127BitLengthException, isNotNull);
-      expect(
-        keyWith127BitLengthException!['message'],
-        equals(Crypto.keyLengthErrorMessage),
-      );
     });
   });
 }
@@ -82,26 +78,25 @@ void testCryptoGetDefaultParams(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.cryptoGetDefaultParams);
   late TestControlResponseMessage response;
   Map<String, dynamic>? keyWith127BitLengthException;
-  CipherParams? defaultParams;
+
+  // Can't use [CipherParams]as a type here because import from
+  // ably_flutter package in this file breaks integration test suite
+  late dynamic defaultCipherParams;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
     keyWith127BitLengthException = response
         .payload['keyWith127BitLengthException'] as Map<String, dynamic>?;
-    defaultParams = response.payload['defaultParams'] as CipherParams?;
+    defaultCipherParams = response.payload['defaultParams'];
   });
 
   group('crypto#getDefaultParams', () {
     test('fails for key with unsupported length', () {
       expect(keyWith127BitLengthException, isNotNull);
-      expect(
-        keyWith127BitLengthException!['message'],
-        equals(Crypto.keyLengthErrorMessage),
-      );
     });
 
     test('returns default params from platform', () {
-      expect(defaultParams, isNotNull);
+      expect(defaultCipherParams, isNotNull);
     });
   });
 }
