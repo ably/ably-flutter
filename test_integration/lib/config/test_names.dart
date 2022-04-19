@@ -45,6 +45,7 @@ class TestName {
   static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
   static const String cryptoEnsureSupportedKeyLength =
       'cryptoEnsureSupportedKeyLength';
+  static const String cryptoGetDefaultParams = 'cryptoGetDefaultParams';
 
   // This is not a test, but a way to retrieve
   // more information of failures from any of the tests cases

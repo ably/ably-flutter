@@ -77,3 +77,31 @@ void testCryptoEnsureSupportedKeyLength(FlutterDriver Function() getDriver) {
     });
   });
 }
+
+void testCryptoGetDefaultParams(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.cryptoGetDefaultParams);
+  late TestControlResponseMessage response;
+  Map<String, dynamic>? keyWith127BitLengthException;
+  CipherParams? defaultParams;
+
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+    keyWith127BitLengthException = response
+        .payload['keyWith127BitLengthException'] as Map<String, dynamic>?;
+    defaultParams = response.payload['defaultParams'] as CipherParams?;
+  });
+
+  group('crypto#getDefaultParams', () {
+    test('fails for key with unsupported length', () {
+      expect(keyWith127BitLengthException, isNotNull);
+      expect(
+        keyWith127BitLengthException!['message'],
+        equals(Crypto.keyLengthErrorMessage),
+      );
+    });
+
+    test('returns default params from platform', () {
+      expect(defaultParams, isNotNull);
+    });
+  });
+}

@@ -3,6 +3,7 @@ import 'package:ably_flutter_integration_test/factory/reporter.dart';
 import 'package:ably_flutter_integration_test/test/basic_test.dart';
 import 'package:ably_flutter_integration_test/test/crypto/crypto_ensure_supported_key_length_test.dart';
 import 'package:ably_flutter_integration_test/test/crypto/crypto_generate_random_key_test.dart';
+import 'package:ably_flutter_integration_test/test/crypto/crypto_get_default_params.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
@@ -62,6 +63,7 @@ final testFactory = <String, TestFactory>{
   // crypto tests
   TestName.cryptoGenerateRandomKey: testCryptoGenerateRandomKey,
   TestName.cryptoEnsureSupportedKeyLength: testCryptoEnsureSupportedKeyLength,
+  TestName.cryptoGetDefaultParams: testCryptoGetDefaultParams,
   // helper tests
   TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
 };
