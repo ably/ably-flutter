@@ -79,15 +79,16 @@ void testCryptoGetDefaultParams(FlutterDriver Function() getDriver) {
   late TestControlResponseMessage response;
   Map<String, dynamic>? keyWith127BitLengthException;
 
-  // Can't use [CipherParams]as a type here because import from
+  // Can't use [CipherParams] as a type here because import from
   // ably_flutter package in this file breaks integration test suite
-  late dynamic defaultCipherParams;
+  // So we can only pass a value to determine if params were fetched
+  late bool? didFetchDefaultParams;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
     keyWith127BitLengthException = response
         .payload['keyWith127BitLengthException'] as Map<String, dynamic>?;
-    defaultCipherParams = response.payload['defaultParams'];
+    didFetchDefaultParams = response.payload['didFetchDefaultParams'] as bool?;
   });
 
   group('crypto#getDefaultParams', () {
@@ -96,7 +97,7 @@ void testCryptoGetDefaultParams(FlutterDriver Function() getDriver) {
     });
 
     test('returns default params from platform', () {
-      expect(defaultCipherParams, isNotNull);
+      expect(didFetchDefaultParams, isTrue);
     });
   });
 }

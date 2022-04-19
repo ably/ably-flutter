@@ -9,6 +9,7 @@ Future<Map<String, dynamic>> testCryptoGetDefaultParams({
   Map<String, dynamic>? payload,
 }) async {
   Map<String, dynamic>? keyWith127BitLengthException;
+  bool? didFetchDefaultParams;
 
   final keyWithDefaultLength = await Crypto.generateRandomKey();
 
@@ -21,11 +22,15 @@ Future<Map<String, dynamic>> testCryptoGetDefaultParams({
     keyWith127BitLengthException = encodeAblyException(exception);
   }
 
-  final defaultParams =
-      await Crypto.getDefaultParams(key: keyWithDefaultLength);
+  try {
+    await Crypto.getDefaultParams(key: keyWithDefaultLength);
+    didFetchDefaultParams = true;
+  } on AblyException {
+    didFetchDefaultParams = false;
+  }
 
   return {
     'keyWith127BitLengthException': keyWith127BitLengthException,
-    'defaultParams': defaultParams,
+    'didFetchDefaultParams': didFetchDefaultParams,
   };
 }
