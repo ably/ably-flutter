@@ -8,7 +8,7 @@ Future<Map<String, dynamic>> testRestCapabilities({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
-  final capabilitySpec = <String, List>{};
+  final capabilitySpec = <String, List<dynamic>>{};
   final combinations = getAllSubsets(['publish', 'history', 'subscribe'])
       .where((spec) => spec.isNotEmpty)
       .toList();
@@ -28,7 +28,7 @@ Future<Map<String, dynamic>> testRestCapabilities({
     ),
   );
 
-  final matrix = <Map>[];
+  final matrix = <Map<String, dynamic>>[];
   for (final entry in capabilitySpec.entries) {
     Map<String, dynamic>? publishException;
     Map<String, dynamic>? historyException;

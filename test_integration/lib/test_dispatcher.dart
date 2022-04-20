@@ -235,7 +235,9 @@ class DispatcherController {
 
   Future<String> driveHandler(String? encodedMessage) async {
     final response = await _dispatcher.handleDriverMessage(
-      TestControlMessage.fromJson(json.decode(encodedMessage!) as Map),
+      TestControlMessage.fromJson(
+        json.decode(encodedMessage!) as Map<String, dynamic>,
+      ),
     );
     return json.encode(response);
   }

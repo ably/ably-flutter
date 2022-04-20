@@ -33,10 +33,10 @@ void testRestEncryptedPublish(FlutterDriver Function() getDriver) {
 void testRestPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishSpec);
   late TestControlResponseMessage response;
-  late List messages;
-  late List messages2;
-  late List messages3;
-  late List messagesWithExtras;
+  late List<Map<String, dynamic>> messages;
+  late List<Map<String, dynamic>> messages2;
+  late List<Map<String, dynamic>> messages3;
+  late List<Map<String, dynamic>> messagesWithExtras;
   Map<String, dynamic>? exception;
   Map<String, dynamic>? exception2;
   Map<String, dynamic>? exception3;
@@ -44,10 +44,14 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    messages = response.payload['publishedMessages'] as List;
-    messages2 = response.payload['publishedMessages2'] as List;
-    messages3 = response.payload['publishedMessages3'] as List;
-    messagesWithExtras = response.payload['publishedExtras'] as List;
+    messages =
+        response.payload['publishedMessages'] as List<Map<String, dynamic>>;
+    messages2 =
+        response.payload['publishedMessages2'] as List<Map<String, dynamic>>;
+    messages3 =
+        response.payload['publishedMessages3'] as List<Map<String, dynamic>>;
+    messagesWithExtras =
+        response.payload['publishedExtras'] as List<Map<String, dynamic>>;
     exception = response.payload['exception'] as Map<String, dynamic>?;
     exception2 = response.payload['exception2'] as Map<String, dynamic>?;
     exception3 = response.payload['exception3'] as Map<String, dynamic>?;
@@ -111,7 +115,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
       ' from the clientId in the client options should result in a message'
       ' being rejected by the server.',
       () {
-        expect(response.payload['exception'], isA<Map>());
+        expect(response.payload['exception'], isA<Map<String, dynamic>>());
         // TODO as error details are incompatible from both libraries,
         //  it makes no sense to include below expect's
         //
@@ -169,22 +173,24 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 void testRestEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restEncryptedPublishSpec);
   late TestControlResponseMessage response;
-  late List historyOfEncryptedChannel;
-  late List historyOfPlaintextChannel;
-  late List historyOfEncryptedPushEnabledChannel;
-  late List historyOfPlaintextPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextPushEnabledChannel;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    historyOfEncryptedChannel =
-        response.payload['historyOfEncryptedChannel'] as List;
-    historyOfPlaintextChannel =
-        response.payload['historyOfPlaintextChannel'] as List;
+    historyOfEncryptedChannel = response.payload['historyOfEncryptedChannel']
+        as List<Map<String, dynamic>>;
+    historyOfPlaintextChannel = response.payload['historyOfPlaintextChannel']
+        as List<Map<String, dynamic>>;
     historyOfEncryptedPushEnabledChannel =
-        response.payload['historyOfEncryptedPushEnabledChannel'] as List;
+        response.payload['historyOfEncryptedPushEnabledChannel']
+            as List<Map<String, dynamic>>;
     historyOfPlaintextPushEnabledChannel =
-        response.payload['historyOfPlaintextPushEnabledChannel'] as List;
+        response.payload['historyOfPlaintextPushEnabledChannel']
+            as List<Map<String, dynamic>>;
   });
 
   group('RSL5', () {
@@ -258,7 +264,7 @@ void testRestHistory(FlutterDriver Function() getDriver) {
 
   group('paginated result', () {
     test('#items is a list', () {
-      expect(paginatedResult['items'], isA<List>());
+      expect(paginatedResult['items'], isA<List<dynamic>>());
     });
     test('#hasNext indicates whether there are more entries', () {
       expect(paginatedResult['hasNext'], false);

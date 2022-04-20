@@ -41,19 +41,23 @@ void testRealtimeEncryptedPublish(FlutterDriver Function() getDriver) {
 void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimePublishSpec);
   late TestControlResponseMessage response;
-  late List messages;
-  late List messages2;
-  late List messages3;
-  late List messagesWithExtras;
+  late List<Map<String, dynamic>> messages;
+  late List<Map<String, dynamic>> messages2;
+  late List<Map<String, dynamic>> messages3;
+  late List<Map<String, dynamic>> messagesWithExtras;
   Map<String, dynamic>? exception;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    messages = response.payload['publishedMessages'] as List;
-    messages2 = response.payload['publishedMessages2'] as List;
-    messages3 = response.payload['publishedMessages3'] as List;
-    messagesWithExtras = response.payload['publishedExtras'] as List;
+    messages =
+        response.payload['publishedMessages'] as List<Map<String, dynamic>>;
+    messages2 =
+        response.payload['publishedMessages2'] as List<Map<String, dynamic>>;
+    messages3 =
+        response.payload['publishedMessages3'] as List<Map<String, dynamic>>;
+    messagesWithExtras =
+        response.payload['publishedExtras'] as List<Map<String, dynamic>>;
     exception = response.payload['exception'] as Map<String, dynamic>?;
   });
 
@@ -119,7 +123,7 @@ void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
       ' from the clientId in the client options should result in a message'
       ' being rejected by the server.',
       () {
-        expect(response.payload['exception'], isA<Map>());
+        expect(response.payload['exception'], isA<Map<String, dynamic>>());
       },
     );
 
@@ -151,22 +155,24 @@ void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
 void testRealtimeEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEncryptedPublishSpec);
   late TestControlResponseMessage response;
-  late List historyOfEncryptedChannel;
-  late List historyOfPlaintextChannel;
-  late List historyOfEncryptedPushEnabledChannel;
-  late List historyOfPlaintextPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextPushEnabledChannel;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    historyOfEncryptedChannel =
-        response.payload['historyOfEncryptedChannel'] as List;
-    historyOfPlaintextChannel =
-        response.payload['historyOfPlaintextChannel'] as List;
+    historyOfEncryptedChannel = response.payload['historyOfEncryptedChannel']
+        as List<Map<String, dynamic>>;
+    historyOfPlaintextChannel = response.payload['historyOfPlaintextChannel']
+        as List<Map<String, dynamic>>;
     historyOfEncryptedPushEnabledChannel =
-        response.payload['historyOfEncryptedPushEnabledChannel'] as List;
+        response.payload['historyOfEncryptedPushEnabledChannel']
+            as List<Map<String, dynamic>>;
     historyOfPlaintextPushEnabledChannel =
-        response.payload['historyOfPlaintextPushEnabledChannel'] as List;
+        response.payload['historyOfPlaintextPushEnabledChannel']
+            as List<Map<String, dynamic>>;
   });
 
   group('RSL5', () {
@@ -471,7 +477,7 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
 
   group('paginated result', () {
     test('#items is a list', () {
-      expect(paginatedResult['items'], isA<List>());
+      expect(paginatedResult['items'], isA<List<Map<String, dynamic>>>());
     });
     test('#hasNext indicates whether there are more entries', () {
       expect(paginatedResult['hasNext'], false);
@@ -654,7 +660,7 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
   });
 
   void testMatrixEntry(
-    Map entry, {
+    Map<String, dynamic> entry, {
     bool enter = false,
     bool update = false,
     bool leave = false,
