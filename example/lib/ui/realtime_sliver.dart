@@ -15,7 +15,7 @@ class RealtimeSliver extends HookWidget {
   final AblyService ablyService;
   final ably.Realtime realtime;
   late ably.RealtimeChannel channel;
-  List<StreamSubscription> _subscriptions = [];
+  List<StreamSubscription<dynamic>> _subscriptions = [];
 
   RealtimeSliver(this.ablyService, {Key? key})
       : realtime = ablyService.realtime,
@@ -84,7 +84,7 @@ class RealtimeSliver extends HookWidget {
       );
 
   Widget buildChannelUnsubscribeButton(
-          ValueNotifier<StreamSubscription?> channelSubscription) =>
+          ValueNotifier<StreamSubscription<dynamic>?> channelSubscription) =>
       TextButton(
         onPressed: (channelSubscription.value != null)
             ? () async {
