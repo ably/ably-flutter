@@ -21,8 +21,8 @@ void testCryptoGenerateRandomKey(FlutterDriver Function() getDriver) {
 
   group('crypto#generateRandomKey', () {
     test('generates key with default length if length is not specified', () {
-      // Default key length is 128bit, but we need the same value in bytes
-      const defaultKeyLength = 128 / 8;
+      // Default key length is 256bit, but we need the same value in bytes
+      const defaultKeyLength = 256 / 8;
       expect(keyWithDefaultLength.length, defaultKeyLength);
     });
 
