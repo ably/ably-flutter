@@ -12,7 +12,7 @@ class MessageData<T> {
   T get data => _data;
 
   /// initializes [MessageData] with given value and asserts from input type
-  static MessageData? fromValue(Object? value) {
+  static MessageData<dynamic>? fromValue(Object? value) {
     if (value == null) {
       return null;
     }
@@ -28,11 +28,11 @@ class MessageData<T> {
     if (value is MessageData) {
       return value;
     } else if (value is Map) {
-      return MessageData<Map>(value);
+      return MessageData<Map<dynamic, dynamic>>(value);
     } else if (value is Uint8List) {
       return MessageData<Uint8List>(value);
     } else if (value is List) {
-      return MessageData<List>(value);
+      return MessageData<List<dynamic>>(value);
     } else if (value is String) {
       return MessageData<String>(value);
     } else {

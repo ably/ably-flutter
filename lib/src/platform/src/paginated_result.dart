@@ -39,7 +39,7 @@ class PaginatedResult<T> extends PlatformObject {
   ///
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
-  PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult> message)
+  PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult<dynamic>> message)
       : _hasNext = message.message.hasNext(),
         _items = message.message.items.map<T>((e) => e as T).toList(),
         _pageHandle = message.handle,
@@ -53,9 +53,10 @@ class PaginatedResult<T> extends PlatformObject {
   /// If there are no further pages, then null is returned.
   /// https://docs.ably.com/client-lib-development-guide/features/#TG4
   Future<PaginatedResult<T>> next() async {
-    final message = await invokeRequest<AblyMessage>(PlatformMethod.nextPage);
+    final message =
+        await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.nextPage);
     return PaginatedResult<T>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 
@@ -64,9 +65,10 @@ class PaginatedResult<T> extends PlatformObject {
   /// If there are no further pages, then null is returned.
   /// https://docs.ably.com/client-lib-development-guide/features/#TG5
   Future<PaginatedResult<T>> first() async {
-    final message = await invokeRequest<AblyMessage>(PlatformMethod.firstPage);
+    final message =
+        await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.firstPage);
     return PaginatedResult<T>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 

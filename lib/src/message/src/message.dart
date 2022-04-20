@@ -30,7 +30,7 @@ class Message with ObjectHash {
   /// Any transformation applied to the data for this message
   final String? encoding;
 
-  final MessageData? _data;
+  final MessageData<dynamic>? _data;
 
   /// Message payload
   ///

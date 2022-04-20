@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:flutter/services.dart';
 
 /// A named channel through with rest client can interact with ably service.
 ///
@@ -45,7 +43,7 @@ class RestChannel extends PlatformObject {
   Future<PaginatedResult<Message>> history([
     RestHistoryParams? params,
   ]) async {
-    final message = await invokeRequest<AblyMessage>(
+    final message = await invokeRequest<AblyMessage<dynamic>>(
       PlatformMethod.restHistory,
       {
         TxTransportKeys.channelName: name,
@@ -53,7 +51,7 @@ class RestChannel extends PlatformObject {
       },
     );
     return PaginatedResult<Message>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 
