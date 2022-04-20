@@ -49,8 +49,8 @@ void main() {
     final emitter = MockEmitter(3, [1, 2, 3, 4, 5]);
     final streams = emitter.streams;
 
-    StreamSubscription subscriptionPre;
-    late StreamSubscription subscriptionPost;
+    StreamSubscription<dynamic> subscriptionPre;
+    late StreamSubscription<dynamic> subscriptionPost;
 
     subscriptionPre = streams[1].listen(resultsNestedPre.add);
 
