@@ -324,7 +324,7 @@ This is a preview release of v1.2.2, which adds support for push notifications, 
 
 With this release we are conforming our version numbering to match that used in our other client libraries.
 This reflects the fact that this plugin is heading towards compliance with version 1.2 of our
-[Features Specification](https://docs.ably.io/client-lib-development-guide/features/), also aligning with the
+[Features Specification](https://ably.com/docs/client-lib-development-guide/features), also aligning with the
 underlying implementations of
 [ably-cocoa](https://github.com/ably/ably-cocoa)
 and
