@@ -123,7 +123,7 @@ class Realtime extends PlatformObject {
   /// represents the current state of the device in respect of it being a
   /// target for push notifications.
   ///
-  /// https://docs.ably.io/client-lib-development-guide/features/#RSH8
+  /// https://ably.com/docs/client-lib-development-guide/features/#RSH8
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
