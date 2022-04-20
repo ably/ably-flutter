@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// Current state of the device in respect of it being a target for
 /// push notifications.
 ///
-/// https://ably.com/docs/client-lib-development-guide/features/#RSH8
+/// https://docs.ably.com/client-lib-development-guide/features/#RSH8
 @immutable
 class LocalDevice extends DeviceDetails {
   /// Device token. Generated locally, if not available.
