@@ -36,16 +36,16 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
     ).channels.get('test').presence.enter(messagesToPublish[i][1]);
   }
 
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final membersDefault = await getPresenceMembers(channel);
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final membersClientId = await getPresenceMembers(
     channel,
     RealtimePresenceParams(clientId: 'client-1'),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // TODO(tiholic) extract connection ID from realtime instance
   //  after implementing `id` update on connection object from platform
@@ -54,7 +54,7 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
     channel,
     RealtimePresenceParams(connectionId: 'connection-1'),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   return {
     'handle': await realtime.handle,

@@ -37,39 +37,39 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
   await realtimePresence.leave(messagesToPublish.last[1]);
 
   final historyDefault = await getPresenceHistory(channel);
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final historyLimit4 = await getPresenceHistory(
     channel,
     RealtimeHistoryParams(limit: 4),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final historyLimit2 = await getPresenceHistory(
     channel,
     RealtimeHistoryParams(limit: 2),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final historyForwards = await getPresenceHistory(
     channel,
     RealtimeHistoryParams(direction: 'forwards'),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final time1 = DateTime.now();
   //TODO(tiholic) iOS fails without this delay
   // - timestamp on message retrieved from history
   // is earlier than expected when ran in CI
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.enter('enter-start-time');
   // TODO(tiholic) understand why tests fail without this delay
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final time2 = DateTime.now();
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await realtimePresence.leave('leave-end-time');
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   final historyWithStart = await getPresenceHistory(
     channel,

@@ -71,9 +71,9 @@ Future<Map<String, dynamic>> testRealtimeEvents({
   recordConnectionState(); // connection: connected
   reporter.reportLog({'before connection.close': ''});
   await realtime.close();
-  await Future.delayed(Duration.zero);
+  await Future<void>.delayed(Duration.zero);
   while (realtime.connection.state != ConnectionState.closed) {
-    await Future.delayed(TestConstants.publishToHistoryDelay);
+    await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   }
   recordChannelState(); // channel: detached
   recordConnectionState(); // connection: closed

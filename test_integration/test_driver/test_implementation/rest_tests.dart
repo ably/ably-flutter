@@ -245,21 +245,22 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> historyWithStart;
   late List<Map<String, dynamic>> historyWithStartAndEnd;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
     paginatedResult =
         response.payload['paginatedResult'] as Map<String, dynamic>;
-    historyDefault = transform(response.payload['historyDefault']);
-    historyLimit4 = transform(response.payload['historyLimit4']);
-    historyLimit2 = transform(response.payload['historyLimit2']);
-    historyForwardLimit4 = transform(response.payload['historyForwardLimit4']);
-    historyWithStart = transform(response.payload['historyWithStart']);
-    historyWithStartAndEnd = transform(
-      response.payload['historyWithStartAndEnd'],
-    );
+    historyDefault =
+        response.payload['historyDefault'] as List<Map<String, dynamic>>;
+    historyLimit4 =
+        response.payload['historyLimit4'] as List<Map<String, dynamic>>;
+    historyLimit2 =
+        response.payload['historyLimit2'] as List<Map<String, dynamic>>;
+    historyForwardLimit4 =
+        response.payload['historyForwardLimit4'] as List<Map<String, dynamic>>;
+    historyWithStart =
+        response.payload['historyWithStart'] as List<Map<String, dynamic>>;
+    historyWithStartAndEnd = response.payload['historyWithStartAndEnd']
+        as List<Map<String, dynamic>>;
   });
 
   group('paginated result', () {
@@ -333,17 +334,20 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> membersClientId;
   late List<Map<String, dynamic>> membersConnectionId;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    membersInitial = transform(response.payload['membersInitial']);
-    membersDefault = transform(response.payload['membersDefault']);
-    membersLimit4 = transform(response.payload['membersLimit4']);
-    membersLimit2 = transform(response.payload['membersLimit2']);
-    membersClientId = transform(response.payload['membersClientId']);
-    membersConnectionId = transform(response.payload['membersConnectionId']);
+    membersInitial =
+        response.payload['membersInitial'] as List<Map<String, dynamic>>;
+    membersDefault =
+        response.payload['membersDefault'] as List<Map<String, dynamic>>;
+    membersLimit4 =
+        response.payload['membersLimit4'] as List<Map<String, dynamic>>;
+    membersLimit2 =
+        response.payload['membersLimit2'] as List<Map<String, dynamic>>;
+    membersClientId =
+        response.payload['membersClientId'] as List<Map<String, dynamic>>;
+    membersConnectionId =
+        response.payload['membersConnectionId'] as List<Map<String, dynamic>>;
   });
 
   group('rest#channels#channel#presence#get', () {
@@ -379,9 +383,6 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceHistory);
   late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   late List<Map<String, dynamic>> historyInitial;
   late List<Map<String, dynamic>> historyDefault;
   late List<Map<String, dynamic>> historyLimit4;
@@ -393,18 +394,23 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    historyInitial = transform(response.payload['historyInitial']);
-    historyDefault = transform(response.payload['historyDefault']);
-    historyLimit4 = transform(response.payload['historyLimit4']);
-    historyLimit2 = transform(response.payload['historyLimit2']);
-    historyForwards = transform(response.payload['historyForwards']);
-    historyWithStart = transform(
-      response.payload['historyWithStart'],
-    ).reversed.toList();
-    historyWithStartAndEnd = transform(
-      response.payload['historyWithStartAndEnd'],
-    );
-    historyAll = transform(response.payload['historyAll']);
+    historyInitial =
+        response.payload['historyInitial'] as List<Map<String, dynamic>>;
+    historyDefault =
+        response.payload['historyDefault'] as List<Map<String, dynamic>>;
+    historyLimit4 =
+        response.payload['historyLimit4'] as List<Map<String, dynamic>>;
+    historyLimit2 =
+        response.payload['historyLimit2'] as List<Map<String, dynamic>>;
+    historyForwards =
+        response.payload['historyForwards'] as List<Map<String, dynamic>>;
+    historyWithStart =
+        (response.payload['historyWithStart'] as List<Map<String, dynamic>>)
+            .reversed
+            .toList();
+    historyWithStartAndEnd = response.payload['historyWithStartAndEnd']
+        as List<Map<String, dynamic>>;
+    historyAll = response.payload['historyAll'] as List<Map<String, dynamic>>;
   });
 
   group('rest#channels#channel#presence#history', () {
@@ -448,12 +454,9 @@ void testCapabilityMatrix(FlutterDriver Function() getDriver) {
   late TestControlResponseMessage response;
   late List<Map<String, dynamic>> capabilityMatrix;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    capabilityMatrix = transform(response.payload['matrix']);
+    capabilityMatrix = response.payload['matrix'] as List<Map<String, dynamic>>;
   });
 
   test('capabilitySpec', () {
