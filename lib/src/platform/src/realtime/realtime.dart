@@ -33,10 +33,10 @@ class Realtime extends PlatformObject {
 
   @override
   Future<int?> createPlatformInstance() async {
-    final handle = await invokeRaw<int>(
-      PlatformMethod.createRealtime,
-      AblyMessage(message: options),
-    );
+    final handle =
+        await invokeWithoutHandle<int>(PlatformMethod.createRealtime, {
+      TxTransportKeys.options: options,
+    });
     _realtimeInstances[handle] = this;
 
     if (io.Platform.isAndroid && options.autoConnect) {
@@ -45,11 +45,12 @@ class Realtime extends PlatformObject {
       // If this happens, we won't be able to identify which realtime client
       // the authCallback belongs to. Instead, on Android, we set autoConnect
       // to false, and call connect immediately once we get the handle.
-      // This is also a specific case where it's required to use [invokeRaw]
-      // because we need to pass message with handle outside of [PlatformObject]
-      await invokeRaw(
+      // This is also a specific case where it's required to pass the handle
+      // value from external source
+      await invoke(
         PlatformMethod.connectRealtime,
-        AblyMessage.empty(handle: handle),
+        null,
+        handle,
       );
     }
     return handle;

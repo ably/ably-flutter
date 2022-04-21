@@ -43,17 +43,18 @@ static const FlutterHandler _resetAblyClients = ^void(AblyFlutter *const ably, F
 
 static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    AblyFlutterClientOptions *const message = ablyMessage.message;
+    NSMutableDictionary<NSString *, NSObject *> *const message = ablyMessage.message;
+    AblyFlutterClientOptions *const options = (AblyFlutterClientOptions*) message[TxTransportKeys_options];
     
-    message.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
     ARTLog *const logger = [[ARTLog alloc] init];
-    logger.logLevel = message.clientOptions.logLevel;
+    logger.logLevel = options.clientOptions.logLevel;
 
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = [instanceStore getNextHandle];
     
-    if(message.hasAuthCallback){
-        message.clientOptions.authCallback =
+    if(options.hasAuthCallback){
+        options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
             [ably.channel invokeMethod:AblyPlatformMethod_authCallback
@@ -72,7 +73,7 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
             }];
         };
     }
-    ARTRest *const rest = [[ARTRest alloc] initWithOptions:message.clientOptions];
+    ARTRest *const rest = [[ARTRest alloc] initWithOptions:options.clientOptions];
     [instanceStore setRest:rest with: handle];
 
     NSData *const apnsDeviceToken = ably.instanceStore.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
@@ -216,7 +217,8 @@ static const FlutterHandler _getRestPresenceHistory = ^void(AblyFlutter *const a
 
 static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    NSString *const channelName = (NSString*) ablyMessage.message;
+    NSDictionary *const message = ablyMessage.message;
+    NSString *const channelName = (NSString*) message[TxTransportKeys_channelName];
     
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRest *const rest = [instanceStore restFrom:ablyMessage.handle];
@@ -227,17 +229,18 @@ static const FlutterHandler _releaseRestChannel = ^void(AblyFlutter *const ably,
 
 static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    AblyFlutterClientOptions *const message = ablyMessage.message;
+    NSMutableDictionary<NSString *, NSObject *> *const message = ablyMessage.message;
+    AblyFlutterClientOptions *const options = (AblyFlutterClientOptions*) message[TxTransportKeys_options];
     
-    message.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
+    options.clientOptions.pushRegistererDelegate = [PushActivationEventHandlers getInstanceWithMethodChannel: ably.channel];
     ARTLog *const logger = [[ARTLog alloc] init];
-    logger.logLevel = message.clientOptions.logLevel;
+    logger.logLevel = options.clientOptions.logLevel;
 
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     NSNumber *const handle = [instanceStore getNextHandle];
     
-    if(message.hasAuthCallback){
-        message.clientOptions.authCallback =
+    if(options.hasAuthCallback){
+        options.clientOptions.authCallback =
         ^(ARTTokenParams *tokenParams, void(^callback)(id<ARTTokenDetailsCompatible>, NSError *)){
             AblyFlutterMessage *const message
             = [[AblyFlutterMessage alloc] initWithMessage:tokenParams handle: handle];
@@ -257,7 +260,7 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
             }];
         };
     }
-    ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:message.clientOptions];
+    ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
     [instanceStore setRealtime:realtime with:handle];
 
     // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
@@ -556,7 +559,8 @@ static const FlutterHandler _leaveRealtimePresence = ^void(AblyFlutter *const ab
 
 static const FlutterHandler _releaseRealtimeChannel = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    NSString *const channelName = (NSString*) ablyMessage.message;
+    NSDictionary *const message = ablyMessage.message;
+    NSString *const channelName = (NSString*) message[TxTransportKeys_channelName];
     
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
