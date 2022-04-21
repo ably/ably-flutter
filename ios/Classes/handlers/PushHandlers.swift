@@ -180,28 +180,28 @@ public class PushHandlers: NSObject {
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ablyMessage = call.arguments as! AblyFlutterMessage
-        let handle: NSNumber? = ablyMessage.handle
-        var channelName: String?
+        let optionalHandle: NSNumber? = ablyMessage.handle
+        var optionalChannelName: String?
         
         if let dataMap = ablyMessage.message as? Dictionary<String, Any> {
-            channelName = dataMap[TxTransportKeys_channelName] as? String
+            optionalChannelName = dataMap[TxTransportKeys_channelName] as? String
         }
 
-        guard let handleUnwrapped: NSNumber = handle else {
+        guard let handle: NSNumber = optionalHandle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
-        guard let channelNameUnwrapped: String = channelName else {
+        guard let channelName: String = optionalChannelName else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
             return nil
         }
 
         let instanceStore = ably.instanceStore
-        let realtime = instanceStore.realtime(from: handleUnwrapped)
+        let realtime = instanceStore.realtime(from: handle)
         if let realtime = realtime {
-            return realtime.channels.get(channelNameUnwrapped).push
-        } else if let rest = instanceStore.rest(from: handleUnwrapped) {
-            return rest.channels.get(channelNameUnwrapped).push
+            return realtime.channels.get(channelName).push
+        } else if let rest = instanceStore.rest(from: handle) {
+            return rest.channels.get(channelName).push
         } else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "No ably client (rest or realtime) exists for that handle.", details: nil))
             return nil
