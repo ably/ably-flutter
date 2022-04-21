@@ -20,7 +20,7 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   /// so it can be garbage collected.
   @override
   void release(String name) {
-    realtime.invoke(PlatformMethod.releaseRealtimeChannel, {
+    realtime.invoke<void>(PlatformMethod.releaseRealtimeChannel, {
       TxTransportKeys.channelName: name,
     });
     super.release(name);

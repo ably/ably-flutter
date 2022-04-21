@@ -67,7 +67,7 @@ class RestChannel extends PlatformObject {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    await invoke(PlatformMethod.publish, {
+    await invoke<void>(PlatformMethod.publish, {
       TxTransportKeys.channelName: this.name,
       TxTransportKeys.messages: messages,
     });

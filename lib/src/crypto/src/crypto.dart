@@ -23,7 +23,7 @@ class Crypto {
   ///  If you have a password, do not use it directly, instead you should
   ///  derive a key from this password, for example by using a key derivation
   ///  function (KDF) such as PBKDF2.
-  static Future<CipherParams> getDefaultParams({required key}) async {
+  static Future<CipherParams> getDefaultParams({required dynamic key}) async {
     if (key is String) {
       ensureSupportedKeyLength(base64Decode(key));
     } else if (key is Uint8List) {
@@ -59,8 +59,9 @@ class Crypto {
   ///
   /// Warning: If you create a random key and encrypt messages without sharing
   /// this key with other clients, there is no way to decrypt the messages.
-  static Future<Uint8List> generateRandomKey(
-          {keyLength = defaultKeyLengthInBits}) =>
+  static Future<Uint8List> generateRandomKey({
+    int keyLength = defaultKeyLengthInBits,
+  }) =>
       Platform().invokePlatformMethodNonNull<Uint8List>(
         PlatformMethod.cryptoGenerateRandomKey,
         AblyMessage(message: {

@@ -66,7 +66,7 @@ class RealtimeChannel extends PlatformObject {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    await invoke(PlatformMethod.publishRealtimeChannelMessage, {
+    await invoke<void>(PlatformMethod.publishRealtimeChannelMessage, {
       TxTransportKeys.channelName: this.name,
       TxTransportKeys.messages: messages,
     });

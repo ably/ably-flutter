@@ -20,7 +20,7 @@ class RealtimeChannelOptions {
   /// other parameters of [RealtimeChannelOptions].
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB3
-  static Future<RealtimeChannelOptions> withCipherKey(key) async {
+  static Future<RealtimeChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RealtimeChannelOptions(cipherParams: cipherParams);
   }
