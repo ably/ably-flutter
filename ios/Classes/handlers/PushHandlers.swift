@@ -180,6 +180,9 @@ public class PushHandlers: NSObject {
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ablyMessage = call.arguments as! AblyFlutterMessage
+
+        /// Using `guard let handle` in that case caused compilation errors for some users
+        /// See https://github.com/ably/ably-flutter/issues/347 for more information and
         let optionalHandle: NSNumber? = ablyMessage.handle
         var optionalChannelName: String?
         
