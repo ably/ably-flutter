@@ -67,7 +67,7 @@ void main() {
     subscriptionPost = streams[2].listen(resultsNestedPost.add);
 
     //Waiting for stream to end
-    await Future.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
 
     //Checking if data received by stream is same as expected
     expect(
