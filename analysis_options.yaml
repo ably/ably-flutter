@@ -1,15 +1,14 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-
-  strong-mode:
-    implicit-casts: false
-# TODO(zoechi) conflicts with some other rules and is subject to be reworked
-# https://github.com/dart-lang/sdk/issues/33749
-# but in general a useful setting to be enabled eventually
-#    implicit-dynamic: false
-
+  # Templates for code generation can be excluded from analysis
+  exclude:
+    - bin/templates/**
   language:
+    # Replacements for deprecated implicit-casts: false
+    # Following https://dart.dev/guides/language/analysis-options#enabling-additional-type-checks
+    strict-casts: true
+    strict-inference: true
     strict-raw-types: true
 
 linter:
@@ -38,7 +37,6 @@ linter:
     - always_declare_return_types
     - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
-    - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
     - avoid_catching_errors
@@ -61,7 +59,6 @@ linter:
     - avoid_setters_without_getters
     - avoid_shadowing_type_parameters
     - avoid_single_cascade_in_expression_statements
-    - avoid_types_on_closure_parameters
     - avoid_void_async
     - await_only_futures
     - cascade_invocations
