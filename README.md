@@ -620,7 +620,7 @@ However, using a neat little workaround will fix this...
 Instead of `await subscriptionToBeCancelled.cancel();`, use
 
 ```dart
-Future.delayed(Duration.zero, () {
+Future<void>.delayed(Duration.zero, () {
     subscriptionToBeCancelled.cancel();
 });
 ```
