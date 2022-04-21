@@ -1,4 +1,5 @@
 import Foundation
+import UserNotifications
 
 public class PushHandlers: NSObject {
     @objc
@@ -26,7 +27,7 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let getNotificationSettings: (_ ably: AblyFlutter, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { ably, call, result in
-        UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
             result(settings)
         }
     }
