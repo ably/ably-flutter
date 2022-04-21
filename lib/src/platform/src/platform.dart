@@ -33,7 +33,8 @@ class Platform {
   /// instance of method channel to listen to android/ios events
   late final StreamsChannel? _streamsChannel;
 
-  Future<T?> invokePlatformMethod<T>(String method, [Object? arguments]) async {
+  Future<T?> invokePlatformMethod<T>(String method,
+      [AblyMessage? arguments]) async {
     try {
       // If argument is null, pass an empty [AblyMessage], because codec fails
       // if argument value is null
@@ -51,7 +52,7 @@ class Platform {
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
-      [Object? arguments]) async {
+      [AblyMessage? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
     if (result == null) {
       throw AblyException(

@@ -4,9 +4,10 @@ import Ably
 public class CryptoHandlers: NSObject {
     @objc
     public static let getParams: FlutterHandler = { plugin, call, result in
-        let dictionary = call.arguments as! Dictionary<String, Any>
-        let algorithm = dictionary[TxCryptoGetParams_algorithm] as! String
-        let key = dictionary[TxCryptoGetParams_key]
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let message = ablyMessage.message as! Dictionary<String, Any>
+        let algorithm = message[TxCryptoGetParams_algorithm] as! String
+        let key = message[TxCryptoGetParams_key]
 
         if let key = key as? NSString {
             result(ARTCipherParams(algorithm: algorithm, key: key))
@@ -23,7 +24,8 @@ public class CryptoHandlers: NSObject {
     
     @objc
     public static let generateRandomKey: FlutterHandler = { plugin, call, result in
-        let keyLength = call.arguments as! Int;
+        let dictionary = call.arguments as! Dictionary<String, Any>
+        let keyLength = dictionary[TxCryptoGenerateRandomKey_keyLength] as! Int;
         result(ARTCrypto.generateRandomKey(UInt(keyLength)));
     }
 }
