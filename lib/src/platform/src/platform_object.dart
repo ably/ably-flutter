@@ -34,20 +34,37 @@ abstract class PlatformObject {
   Future<int> _acquireHandle() =>
       createPlatformInstance().then((value) => (_handleValue = value)!);
 
-  /// invoke platform method channel without AblyMessage encapsulation
+  /// invoke platform method channel without current handle
+  /// this method should be protected since it's only used to cover edge
+  /// case for creating rest and realtime instances
   @protected
-  Future<T?> invokeRaw<T>(
-    final String method,
-    final AblyMessage arguments,
-  ) async =>
-      _platform.invokePlatformMethod<T>(method, arguments);
+  Future<T?> invokeWithoutHandle<T>(final String method,
+      [final Map<String, dynamic>? argument]) async {
+    final message = AblyMessage(
+      message: argument ?? {},
+      handle: null,
+    );
+    return _platform.invokePlatformMethod<T>(method, message);
+  }
+
+  /// invoke platform method channel with provided handle, or
+  /// current handle if [externalHandle] is not provided
+  Future<T?> invoke<T>(final String method,
+      [final Map<String, dynamic>? arguments,
+      final int? externalHandle]) async {
+    final message = AblyMessage(
+      message: arguments ?? {},
+      handle: externalHandle ?? await handle,
+    );
+    return _platform.invokePlatformMethod<T>(method, message);
+  }
 
   /// invoke platform method channel with AblyMessage encapsulation
   ///
   /// this is similar to [invoke], but ensures the response is not null
   Future<T> invokeRequest<T>(final String method,
-      [final Object? argument]) async {
-    final response = await invoke<T>(method, argument);
+      [final Map<String, dynamic>? arguments]) async {
+    final response = await invoke<T>(method, arguments);
     if (response == null) {
       throw AblyException(
         message:
@@ -56,16 +73,6 @@ abstract class PlatformObject {
     } else {
       return response;
     }
-  }
-
-  /// invoke platform method channel with AblyMessage encapsulation
-  Future<T?> invoke<T>(final String method, [final Object? argument]) async {
-    final _handle = await handle;
-    final message = AblyMessage(
-      message: argument ?? {},
-      handle: _handle,
-    );
-    return invokeRaw<T>(method, message);
   }
 
   /// Listen for events

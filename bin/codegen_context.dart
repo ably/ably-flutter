@@ -242,6 +242,7 @@ const List<Map<String, dynamic>> _objects = [
       'defaultTokenParams',
       'channelRetryTimeout',
       'transportParams',
+      'dartVersion',
     ]
   },
   {

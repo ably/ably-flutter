@@ -323,8 +323,11 @@ public class AblyMessageCodec extends StandardMessageCodec {
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
     readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = decodeTransportParams((Map<String, String>) v));
 
-    o.agents = new HashMap<>();
-    o.agents.put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
+    o.agents = new HashMap<String, String>() {{
+        put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
+        put("dart", (String) jsonMap.get(PlatformConstants.TxClientOptions.dartVersion));
+    }};
+
 
     return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
   }
