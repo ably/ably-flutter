@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 /// A collection of rest channel objects
 ///
-/// https://docs.ably.io/client-lib-development-guide/features/#RSN1
+/// https://docs.ably.com/client-lib-development-guide/features/#RSN1
 class RestChannels extends Channels<RestChannel> {
   final Rest _rest;
 

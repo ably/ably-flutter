@@ -58,7 +58,7 @@ class PushChannel extends PlatformObject {
   ///
   /// as [PushChannelSubscription] objects encapsulated in a paginated result.
   /// Optional filters can be passed as a [params] map. These filters include
-  /// [channel, deviceId, clientId and limit](https://docs.ably.io/rest-api/#list-channel-subscriptions).
+  /// [channel, deviceId, clientId and limit](https://ably.com/docs/rest-api/#list-channel-subscriptions).
   ///
   /// Requires Push Admin capability
   ///

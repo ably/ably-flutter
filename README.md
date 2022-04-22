@@ -4,7 +4,7 @@
 [![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
 [![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
 
-_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/documentation)._
+_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/docs)._
 
 ## Overview
 
@@ -13,7 +13,7 @@ built on top of Ably's [iOS](https://github.com/ably/ably-cocoa) and [Android](h
 
 ## Resources
 
-- [Quickstart Guide](https://www.ably.com/documentation/quick-start-guide?lang=flutter)
+- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
 - [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
 - [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
 - [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
@@ -124,9 +124,9 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 ### Configure a Client Options object
 
-For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/documentation/core-features/authentication/#selecting-auth).
+For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/docs/core-features/authentication/#selecting-auth).
 
-Authenticating using [basic authentication/ API key](https://ably.com/documentation/core-features/authentication/#basic-authentication) (for running example app/ test apps and not for production)
+Authenticating using [basic authentication/ API key](https://ably.com/docs/core-features/authentication/#basic-authentication) (for running example app/ test apps and not for production)
 
 ```dart
 // Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
@@ -135,7 +135,7 @@ final clientOptions = ably.ClientOptions(key: ablyApiKey);
 clientOptions.logLevel = ably.LogLevel.verbose;  // optional
 ```
 
-Authenticating using [token authentication](https://ably.com/documentation/core-features/authentication/#token-authentication)
+Authenticating using [token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
 
 ```dart
 // Used to create a clientId when a client first doesn't have one. 
@@ -555,7 +555,7 @@ channel
 
 ### Symmetric Encryption
 
-When a key is provided to the library, the `data` attribute of all messages is encrypted and decrypted automatically using that key. The secret key is never transmitted to Ably. See https://www.ably.com/documentation/realtime/encryption.
+When a key is provided to the library, the `data` attribute of all messages is encrypted and decrypted automatically using that key. The secret key is never transmitted to Ably. See https://www.ably.com/docs/realtime/encryption.
 
 1. Create a key by calling `ably.Crypto.generateRandomKey()` (or retrieve one from your server using your own secure API). The same key needs to be used to encrypt and decrypt the messages.
 2. Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);` - the key can be a Base64-encoded `String`, or a `Uint8List`

@@ -177,6 +177,7 @@ final public class PlatformConstants {
         public static final String defaultTokenParams = "defaultTokenParams";
         public static final String channelRetryTimeout = "channelRetryTimeout";
         public static final String transportParams = "transportParams";
+        public static final String dartVersion = "dartVersion";
     }
 
     static final public class TxRestChannelOptions {
