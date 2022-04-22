@@ -77,7 +77,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   }
   final history = await getHistory(
     channel,
-    RestHistoryParams(direction: 'forwards'),
+    RestHistoryParams(direction: HistoryDirection.forwards),
   );
 
   // client options - no client id, message has client id
@@ -95,7 +95,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await Future.delayed(TestConstants.publishToHistoryDelay);
   final history2 = await getHistory(
     channel2,
-    RestHistoryParams(direction: 'forwards'),
+    RestHistoryParams(direction: HistoryDirection.forwards),
   );
 
   // publish max allowed length - sandbox apps message limit is 16384

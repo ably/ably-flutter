@@ -237,7 +237,7 @@ void getHistory([ably.RestHistoryParams params]) async {
 getHistory();
 
 // sorted and filtered history
-getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
+getHistory(ably.RestHistoryParams(direction: HistoryDirection.forwards, limit: 10));
 ```
 
 Get REST Channel Presence:
@@ -294,7 +294,7 @@ void getPresenceHistory([ably.RestHistoryParams params]) async {
 getPresenceHistory();
 
 // filtered presence members
-getPresenceHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
+getPresenceHistory(ably.RestHistoryParams(direction: HistoryDirection.forwards, limit: 10));
 ```
 
 ### Using the Realtime API
@@ -414,7 +414,7 @@ void getHistory([ably.RealtimeHistoryParams params]) async {
 getHistory();
 
 // sorted and filtered history
-getHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+getHistory(ably.RealtimeHistoryParams(direction: HistoryDirection.forwards, limit: 10));
 ```
 
 Enter Realtime Presence:
@@ -516,7 +516,7 @@ void getPresenceHistory([ably.RealtimeHistoryParams params]) async {
 getPresenceHistory();
 
 // sorted and filtered history
-getPresenceHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+getPresenceHistory(ably.RealtimeHistoryParams(direction: HistoryDirection.forwards, limit: 10));
 ```
 
 Subscribe to Realtime Presence messages
