@@ -181,6 +181,7 @@ class TxClientOptions {
   static const String defaultTokenParams = 'defaultTokenParams';
   static const String channelRetryTimeout = 'channelRetryTimeout';
   static const String transportParams = 'transportParams';
+  static const String dartVersion = 'dartVersion';
 }
 
 class TxRestChannelOptions {

@@ -146,6 +146,9 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     // track @ https://github.com/ably/ably-flutter/issues/14
 
     [clientOptions addAgent:@"ably-flutter" version:FLUTTER_PACKAGE_PLUGIN_VERSION];
+    ON_VALUE(^(const id value) {
+        [clientOptions addAgent:@"dart" version:value];
+    }, dictionary, TxClientOptions_dartVersion);
 
     return  [[AblyFlutterClientOptions alloc]
              initWithClientOptions:clientOptions
