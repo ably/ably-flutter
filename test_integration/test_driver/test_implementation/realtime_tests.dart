@@ -50,14 +50,11 @@ void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    messages =
-        response.payload['publishedMessages'] as List<Map<String, dynamic>>;
-    messages2 =
-        response.payload['publishedMessages2'] as List<Map<String, dynamic>>;
-    messages3 =
-        response.payload['publishedMessages3'] as List<Map<String, dynamic>>;
+    messages = transformListResponse(response.payload['publishedMessages']);
+    messages2 = transformListResponse(response.payload['publishedMessages2']);
+    messages3 = transformListResponse(response.payload['publishedMessages3']);
     messagesWithExtras =
-        response.payload['publishedExtras'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['publishedExtras']);
     exception = response.payload['exception'] as Map<String, dynamic>?;
   });
 
@@ -163,16 +160,14 @@ void testRealtimeEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    historyOfEncryptedChannel = response.payload['historyOfEncryptedChannel']
-        as List<Map<String, dynamic>>;
-    historyOfPlaintextChannel = response.payload['historyOfPlaintextChannel']
-        as List<Map<String, dynamic>>;
-    historyOfEncryptedPushEnabledChannel =
-        response.payload['historyOfEncryptedPushEnabledChannel']
-            as List<Map<String, dynamic>>;
-    historyOfPlaintextPushEnabledChannel =
-        response.payload['historyOfPlaintextPushEnabledChannel']
-            as List<Map<String, dynamic>>;
+    historyOfEncryptedChannel =
+        transformListResponse(response.payload['historyOfEncryptedChannel']);
+    historyOfPlaintextChannel =
+        transformListResponse(response.payload['historyOfPlaintextChannel']);
+    historyOfEncryptedPushEnabledChannel = transformListResponse(
+        response.payload['historyOfEncryptedPushEnabledChannel']);
+    historyOfPlaintextPushEnabledChannel = transformListResponse(
+        response.payload['historyOfPlaintextPushEnabledChannel']);
   });
 
   group('RSL5', () {
@@ -214,19 +209,25 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> channelStateChanges;
   late List<Map<String, dynamic>> filteredChannelStateChanges;
 
+  List<String> transformState(dynamic items) =>
+      List<dynamic>.from(items as List).map((t) => t as String).toList();
+
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    connectionStates = response.payload['connectionStates'] as List<String>;
-    connectionStateChanges = response.payload['connectionStateChanges']
-        as List<Map<String, dynamic>>;
-    filteredConnectionStateChanges =
-        response.payload['filteredConnectionStateChanges']
-            as List<Map<String, dynamic>>;
-    channelStates = response.payload['channelStates'] as List<String>;
-    channelStateChanges =
-        response.payload['channelStateChanges'] as List<Map<String, dynamic>>;
-    filteredChannelStateChanges = response
-        .payload['filteredChannelStateChanges'] as List<Map<String, dynamic>>;
+    connectionStates = transformState(response.payload['connectionStates']);
+    connectionStateChanges = transformListResponse(
+      response.payload['connectionStateChanges'],
+    );
+    filteredConnectionStateChanges = transformListResponse(
+      response.payload['filteredConnectionStateChanges'],
+    );
+    channelStates = transformState(response.payload['channelStates']);
+    channelStateChanges = transformListResponse(
+      response.payload['channelStateChanges'],
+    );
+    filteredChannelStateChanges = transformListResponse(
+      response.payload['filteredChannelStateChanges'],
+    );
   });
 
   group('realtime#channel#connection', () {
@@ -372,19 +373,15 @@ void testRealtimeSubscribe(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> filteredWithNames;
   late List<Map<String, dynamic>> extrasMessages;
 
-  List<Map<String, dynamic>> transformMessages(messages) =>
-      List.from(messages as List)
-          .map((t) => t as Map<String, dynamic>)
-          .toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    all = transformMessages(response.payload['all']);
-    filteredWithName = transformMessages(response.payload['filteredWithName']);
-    filteredWithNames = transformMessages(
+    all = transformListResponse(response.payload['all']);
+    filteredWithName =
+        transformListResponse(response.payload['filteredWithName']);
+    filteredWithNames = transformListResponse(
       response.payload['filteredWithNames'],
     );
-    extrasMessages = transformMessages(response.payload['extrasMessages']);
+    extrasMessages = transformListResponse(response.payload['extrasMessages']);
   });
 
   test(
@@ -453,23 +450,21 @@ void testRealtimeHistory(FlutterDriver Function() getDriver) {
     response = await requestDataForTest(getDriver(), message);
     paginatedResult =
         response.payload['paginatedResult'] as Map<String, dynamic>;
-    historyDefault =
-        response.payload['historyDefault'] as List<Map<String, dynamic>>;
-    historyLimit4 =
-        response.payload['historyLimit4'] as List<Map<String, dynamic>>;
-    historyLimit2 =
-        response.payload['historyLimit2'] as List<Map<String, dynamic>>;
+    historyDefault = transformListResponse(response.payload['historyDefault']);
+    historyLimit4 = transformListResponse(response.payload['historyLimit4']);
+    historyLimit2 = transformListResponse(response.payload['historyLimit2']);
     historyForwardLimit4 =
-        response.payload['historyForwardLimit4'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['historyForwardLimit4']);
     historyWithStart =
-        response.payload['historyWithStart'] as List<Map<String, dynamic>>;
-    historyWithStartAndEnd = response.payload['historyWithStartAndEnd']
-        as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['historyWithStart']);
+    historyWithStartAndEnd = transformListResponse(
+      response.payload['historyWithStartAndEnd'],
+    );
   });
 
   group('paginated result', () {
     test('#items is a list', () {
-      expect(paginatedResult['items'], isA<List<Map<String, dynamic>>>());
+      expect(paginatedResult['items'], isA<List<dynamic>>());
     });
     test('#hasNext indicates whether there are more entries', () {
       expect(paginatedResult['hasNext'], false);
@@ -538,14 +533,12 @@ void testRealtimePresenceGet(FlutterDriver Function() getDriver) {
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    membersInitial =
-        response.payload['membersInitial'] as List<Map<String, dynamic>>;
-    membersDefault =
-        response.payload['membersDefault'] as List<Map<String, dynamic>>;
+    membersInitial = transformListResponse(response.payload['membersInitial']);
+    membersDefault = transformListResponse(response.payload['membersDefault']);
     membersClientId =
-        response.payload['membersClientId'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['membersClientId']);
     membersConnectionId =
-        response.payload['membersConnectionId'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['membersConnectionId']);
   });
 
   group('realtime#channels#channel#presence#get', () {
@@ -585,23 +578,19 @@ void testRealtimePresenceHistory(FlutterDriver Function() getDriver) {
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    historyInitial =
-        response.payload['historyInitial'] as List<Map<String, dynamic>>;
-    historyDefault =
-        response.payload['historyDefault'] as List<Map<String, dynamic>>;
-    historyLimit4 =
-        response.payload['historyLimit4'] as List<Map<String, dynamic>>;
-    historyLimit2 =
-        response.payload['historyLimit2'] as List<Map<String, dynamic>>;
+    historyInitial = transformListResponse(response.payload['historyInitial']);
+    historyDefault = transformListResponse(response.payload['historyDefault']);
+    historyLimit4 = transformListResponse(response.payload['historyLimit4']);
+    historyLimit2 = transformListResponse(response.payload['historyLimit2']);
     historyForwards =
-        response.payload['historyForwards'] as List<Map<String, dynamic>>;
-    historyWithStart =
-        (response.payload['historyWithStart'] as List<Map<String, dynamic>>)
-            .reversed
-            .toList();
-    historyWithStartAndEnd = response.payload['historyWithStartAndEnd']
-        as List<Map<String, dynamic>>;
-    historyAll = response.payload['historyAll'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['historyForwards']);
+    historyWithStart = transformListResponse(
+      response.payload['historyWithStart'],
+    ).reversed.toList();
+    historyWithStartAndEnd = transformListResponse(
+      response.payload['historyWithStartAndEnd'],
+    );
+    historyAll = transformListResponse(response.payload['historyAll']);
   });
 
   test('queries all entries by default', () {
@@ -648,9 +637,8 @@ void testRealtimeEnterUpdateLeave(FlutterDriver Function() getDriver) {
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
     clientIDClashMatrix =
-        response.payload['clientIDClashMatrix'] as List<Map<String, dynamic>>;
-    actionMatrix =
-        response.payload['actionMatrix'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['clientIDClashMatrix']);
+    actionMatrix = transformListResponse(response.payload['actionMatrix']);
   });
 
   void testMatrixEntry(
@@ -773,13 +761,12 @@ void testRealtimePresenceSubscription(FlutterDriver Function() getDriver) {
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    allMessages = response.payload['allMessages'] as List<Map<String, dynamic>>;
-    enterMessages =
-        response.payload['enterMessages'] as List<Map<String, dynamic>>;
+    allMessages = transformListResponse(response.payload['allMessages']);
+    enterMessages = transformListResponse(response.payload['enterMessages']);
     enterUpdateMessages =
-        response.payload['enterUpdateMessages'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['enterUpdateMessages']);
     partialMessages =
-        response.payload['partialMessages'] as List<Map<String, dynamic>>;
+        transformListResponse(response.payload['partialMessages']);
   });
 
   void _test(List<Map<String, dynamic>> messages) {

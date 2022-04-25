@@ -111,3 +111,8 @@ void checkMessageExtras(Map<dynamic, dynamic> messageExtras) {
   );
   expect(messageExtras['push']['data']['foo'], 'bar');
 }
+
+List<Map<String, dynamic>> transformListResponse(dynamic items) =>
+    List<dynamic>.from(items as List)
+        .map((t) => t as Map<String, dynamic>)
+        .toList();
