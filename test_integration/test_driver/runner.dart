@@ -5,9 +5,7 @@ import 'tests_abstract.dart';
 import 'tests_config.dart';
 
 void main(List<String> args) {
-  final parser = ArgParser();
-
-  parser
+  final parser = ArgParser()
     ..addMultiOption(
       'modules',
       abbr: 'm',
@@ -32,7 +30,7 @@ void main(List<String> args) {
 
   if (selectedModules.isEmpty) {
     runTests(all: true);
-  } else if (selectedModules is Iterable) {
+  } else {
     runTests(testModules: selectedModules);
   }
 }

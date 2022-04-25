@@ -28,6 +28,7 @@ Future<Map<String, dynamic>> testCryptoEnsureSupportedKeyLength({
   }
 
   try {
+    // ignore: avoid_redundant_argument_values
     final keyWith256BitLength = await Crypto.generateRandomKey(keyLength: 256);
     Crypto.ensureSupportedKeyLength(keyWith256BitLength);
   } on AblyException catch (exception) {

@@ -43,7 +43,7 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
 
   final membersClientId = await getPresenceMembers(
     channel,
-    RealtimePresenceParams(clientId: 'client-1'),
+    const RealtimePresenceParams(clientId: 'client-1'),
   );
   await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
@@ -52,7 +52,7 @@ Future<Map<String, dynamic>> testRealtimePresenceGet({
   // Until then, `membersConnectionId` will be empty list
   final membersConnectionId = await getPresenceMembers(
     channel,
-    RealtimePresenceParams(connectionId: 'connection-1'),
+    const RealtimePresenceParams(connectionId: 'connection-1'),
   );
   await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 

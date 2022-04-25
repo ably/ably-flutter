@@ -8,7 +8,6 @@ Future<Map<String, dynamic>> testRealtimeTime({
 }) async {
   reporter.reportLog('init start');
   final appKey = await AppProvisioning().provisionApp();
-  final logMessages = <List<String?>>[];
 
   final realtime = Realtime(
     options: ClientOptions(
