@@ -86,20 +86,24 @@ class AblyMethodCallHandler {
 
   Future<Object?> _onPushOnMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.onMessageStreamController.add(remoteMessage);
+    return null;
   }
 
   Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
+    return null;
   }
 
   Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.onNotificationTapStreamController
         .add(remoteMessage);
+    return null;
   }
 
   Future<Object?> onOpenSettingsFor() async {
     if (_pushNotificationEvents.onOpenSettingsHandler != null) {
       _pushNotificationEvents.onOpenSettingsHandler!();
     }
+    return null;
   }
 }

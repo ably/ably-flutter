@@ -123,8 +123,8 @@ class RealtimePresence extends PlatformObject {
   /// subscribes to presence messages on a realtime channel
   ///
   /// there is no unsubscribe api in flutter like in other Ably client SDK's
-  /// as subscribe returns a stream which can be cancelled
-  /// by calling [StreamSubscription.cancel]
+  /// as subscribe returns a stream which can be used to create a
+  /// cancellable stream subscription
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP6
   Stream<PresenceMessage> subscribe({

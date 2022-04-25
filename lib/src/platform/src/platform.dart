@@ -13,7 +13,7 @@ class Platform {
     _streamsChannel = StreamsChannel('io.ably.flutter.stream', _codec);
     AblyMethodCallHandler(_methodChannel!);
     BackgroundIsolateAndroidPlatform().setupCallHandler();
-    invokePlatformMethod(PlatformMethod.resetAblyClients);
+    invokePlatformMethod<void>(PlatformMethod.resetAblyClients);
   }
 
   static Platform? _platform;
@@ -34,7 +34,7 @@ class Platform {
   late final StreamsChannel? _streamsChannel;
 
   Future<T?> invokePlatformMethod<T>(String method,
-      [AblyMessage? arguments]) async {
+      [AblyMessage<Map<String, dynamic>>? arguments]) async {
     try {
       // If argument is null, pass an empty [AblyMessage], because codec fails
       // if argument value is null
@@ -52,7 +52,7 @@ class Platform {
 
   /// Call a platform method which always provides a result.
   Future<T> invokePlatformMethodNonNull<T>(String method,
-      [AblyMessage? arguments]) async {
+      [AblyMessage<Map<String, dynamic>>? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
     if (result == null) {
       throw AblyException(

@@ -695,7 +695,7 @@ class Codec extends StandardMessageCodec {
   }
 
   DeviceDetails _decodeDeviceDetails(Map<String, dynamic> jsonMap) {
-    FormFactor formFactor = _decodeFormFactor(
+    final formFactor = _decodeFormFactor(
         _readFromJson<String>(jsonMap, TxDeviceDetails.formFactor));
 
     return DeviceDetails(
@@ -931,8 +931,8 @@ class Codec extends StandardMessageCodec {
         return ConnectionEvent.update;
     }
     throw AblyException(
-      message:
-          'Platform communication error. Connection event is invalid: $eventName',
+      message: 'Platform communication error. '
+          'Connection event is invalid: $eventName',
     );
   }
 
