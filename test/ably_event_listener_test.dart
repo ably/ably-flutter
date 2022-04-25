@@ -37,8 +37,6 @@ class MockEmitter {
   }
 }
 
-Function eq = const ListEquality().equals;
-
 void main() {
   test('RTE6a: nested cancellation of a listener', () async {
     //lists to store data received by listeners
@@ -71,8 +69,9 @@ void main() {
 
     //Checking if data received by stream is same as expected
     expect(
-        const ListEquality().equals(resultsDefault, emitter.injectables), true);
-    expect(const ListEquality().equals(resultsNestedPre, [1, 2]), true);
-    expect(const ListEquality().equals(resultsNestedPost, [1]), true);
+        const ListEquality<int>().equals(resultsDefault, emitter.injectables),
+        true);
+    expect(const ListEquality<int>().equals(resultsNestedPre, [1, 2]), true);
+    expect(const ListEquality<int>().equals(resultsNestedPost, [1]), true);
   });
 }
