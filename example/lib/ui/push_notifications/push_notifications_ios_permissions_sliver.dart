@@ -10,10 +10,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 class PushNotificationsIOSNotificationSettingsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsIOSNotificationSettingsSliver(
-      this._pushNotificationService,
-      {Key? key})
-      : super(key: key);
+  const PushNotificationsIOSNotificationSettingsSliver({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   Widget buildIOSPermissionSliver() {
     if (Platform.isIOS) {

@@ -7,7 +7,11 @@ import 'package:flutter/widgets.dart';
 class PushNotificationsPublishingSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsPublishingSliver(this._pushNotificationService);
+  const PushNotificationsPublishingSliver({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(

@@ -7,7 +7,7 @@ import 'package:ably_flutter_example/ui/rest_sliver.dart';
 import 'package:ably_flutter_example/ui/system_details_sliver.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+Future<void> main() async {
   // Before calling any Ably methods, ensure the widget binding is ready.
   WidgetsFlutterBinding.ensureInitialized();
   PushNotificationHandlers.setUpEventHandlers();
@@ -16,13 +16,16 @@ void main() async {
   // provisioning also has to be done before the app starts
   final apiKeyProvision = await ApiKeyService().getOrProvisionApiKey();
   final ablyService = AblyService(apiKeyProvision: apiKeyProvision);
-  runApp(AblyFlutterExampleApp(ablyService));
+  runApp(AblyFlutterExampleApp(ablyService: ablyService));
 }
 
 class AblyFlutterExampleApp extends StatelessWidget {
   final AblyService ablyService;
 
-  AblyFlutterExampleApp(this.ablyService);
+  const AblyFlutterExampleApp({
+    required this.ablyService,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -35,7 +38,9 @@ class AblyFlutterExampleApp extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
                 children: [
-                  SystemDetailsSliver(ablyService.apiKeyProvision),
+                  SystemDetailsSliver(
+                    apiKeyProvision: ablyService.apiKeyProvision,
+                  ),
                   const Divider(),
                   RealtimeSliver(ablyService),
                   const Divider(),

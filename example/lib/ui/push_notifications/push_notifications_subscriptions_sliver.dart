@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
 import 'package:ably_flutter_example/ui/bool_stream_button.dart';
-import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class PushNotificationsSubscriptionsSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsSubscriptionsSliver(this._pushNotificationService,
-      {Key? key})
-      : super(key: key);
+  const PushNotificationsSubscriptionsSliver({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   Widget buildSubscriptionsList(
           Stream<ably.PaginatedResult<ably.PushChannelSubscription>> stream) =>
@@ -82,7 +82,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                         try {
                           await _pushNotificationService.subscribeDevice();
                         } on ably.AblyException catch (ablyException) {
-                          showPushActivationError(context, ablyException);
+                          await showPushActivationError(context, ablyException);
                         }
                       },
                       child: const Text('Subscribe device')),
@@ -94,7 +94,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                       try {
                         await _pushNotificationService.unsubscribeDevice();
                       } on ably.AblyException catch (ablyException) {
-                        showPushActivationError(context, ablyException);
+                        await showPushActivationError(context, ablyException);
                       }
                     },
                     child: const Text('Unsubscribe device'),
@@ -121,7 +121,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                         try {
                           await _pushNotificationService.subscribeClient();
                         } on ably.AblyException catch (ablyException) {
-                          showPushActivationError(context, ablyException);
+                          await showPushActivationError(context, ablyException);
                         }
                       },
                       child: const Text('Subscribe client')),
@@ -133,7 +133,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                         try {
                           await _pushNotificationService.unsubscribeClient();
                         } on ably.AblyException catch (ablyException) {
-                          showPushActivationError(context, ablyException);
+                          await showPushActivationError(context, ablyException);
                         }
                       },
                       child: const Text('Unsubscribe client')),
@@ -158,6 +158,7 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
   Widget buildWarningTextForListSubscriptionsOnAndroid() {
     if (Platform.isAndroid) {
       return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: RichText(
           text:
               const TextSpan(style: TextStyle(color: Colors.black), children: [
@@ -171,17 +172,16 @@ class PushNotificationsSubscriptionsSliver extends StatelessWidget {
                     'push.listSubscriptions. Track ably-java issue #705'),
           ]),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8),
       );
     }
     return const SizedBox.shrink();
   }
 
-  void showPushActivationError(
+  Future<void> showPushActivationError(
     BuildContext context,
     ably.AblyException exception,
   ) async =>
-      await showDialog(
+      showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Push notification error'),

@@ -26,14 +26,24 @@ class PushNotificationsSliver extends StatelessWidget {
             ),
           ),
           buildSummaryText(),
-          PushNotificationsActivationSliver(_pushNotificationService),
-          PushNotificationsDeviceInformation(_pushNotificationService),
+          PushNotificationsActivationSliver(
+            pushNotificationService: _pushNotificationService,
+          ),
+          PushNotificationsDeviceInformation(
+            pushNotificationService: _pushNotificationService,
+          ),
           PushNotificationsIOSNotificationSettingsSliver(
-              _pushNotificationService),
-          PushNotificationsSubscriptionsSliver(_pushNotificationService),
-          PushNotificationsPublishingSliver(_pushNotificationService),
+            pushNotificationService: _pushNotificationService,
+          ),
+          PushNotificationsSubscriptionsSliver(
+            pushNotificationService: _pushNotificationService,
+          ),
+          PushNotificationsPublishingSliver(
+              pushNotificationService: _pushNotificationService),
           const PushNotificationsReceivedSliver(),
-          PushRealtimeClientReceivedSliver(_pushNotificationService),
+          PushRealtimeClientReceivedSliver(
+            pushNotificationService: _pushNotificationService,
+          ),
         ],
       );
 
