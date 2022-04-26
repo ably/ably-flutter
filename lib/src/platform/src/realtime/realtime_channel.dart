@@ -98,6 +98,9 @@ class RealtimeChannel extends PlatformObject {
   /// (see IDL for more details)
   late PushChannel push;
 
+  /// Current state of the channel
+  ///
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTL2b
   ChannelState state;
 
   /// Attaches the realtime client to this channel.
@@ -124,6 +127,7 @@ class RealtimeChannel extends PlatformObject {
         TxTransportKeys.options: options,
       });
 
+  /// stream of channel events with specified [ChannelEvent] type
   Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,

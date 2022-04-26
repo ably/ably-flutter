@@ -5,16 +5,25 @@ import 'dart:ui';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
+/// package-private implementation of [PushNotificationEvents]
 class PushNotificationEventsInternal implements PushNotificationEvents {
+  /// Invoked when pushOpenSettingsFor platform method is called
   VoidCallback? onOpenSettingsHandler;
+
+  /// Invoked when pushOnShowNotificationInForeground platform method is called
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
+
+  /// Exposes stream of received [RemoteMessage] objects
+  /// New message is emitted after pushOnMessage platform method is called
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
 
   /// Controller used to indicate notification was tapped
   StreamController<RemoteMessage> onNotificationTapStreamController =
       StreamController();
+
+  BackgroundMessageHandler? _onBackgroundMessage;
 
   @override
   Future<RemoteMessage?> get notificationTapLaunchedAppFromTerminated =>
@@ -48,8 +57,6 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     return onShowNotificationInForegroundHandler!(message);
   }
 
-  BackgroundMessageHandler? _onBackgroundMessage;
-
   /// Implementation of setOnBackgroundMessage. For more documentation,
   /// see [PushNotificationEvents.setOnBackgroundMessage]
   @override
@@ -77,6 +84,8 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     }
   }
 
+  /// Used to close internal [StreamController] instances
+  // FIXME: This method is not called anywhere, and it probably should be
   void close() {
     onMessageStreamController.close();
     onNotificationTapStreamController.close();

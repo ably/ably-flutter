@@ -63,6 +63,7 @@ class Connection extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
   ConnectionState get state => _state;
 
+  /// stream of connection events with specified [ConnectionEvent] type
   Stream<ConnectionStateChange> on([ConnectionEvent? connectionEvent]) =>
       listen<ConnectionStateChange>(
         PlatformMethod.onRealtimeConnectionStateChanged,

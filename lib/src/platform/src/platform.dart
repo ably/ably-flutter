@@ -4,6 +4,9 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
+/// Used to communicate between Dart and native platforms
+/// holds reference to [MethodChannel] and exposes methods used to invoke
+/// platform calls and listen to platform data streams
 class Platform {
   Platform._internal({MethodChannel? methodChannel}) {
     _methodChannel = methodChannel;
@@ -33,6 +36,7 @@ class Platform {
   /// instance of method channel to listen to android/ios events
   late final StreamsChannel? _streamsChannel;
 
+  /// Call a platform method which may return null/void as a result
   Future<T?> invokePlatformMethod<T>(String method,
       [AblyMessage<Map<String, dynamic>>? arguments]) async {
     try {
@@ -50,7 +54,7 @@ class Platform {
     }
   }
 
-  /// Call a platform method which always provides a result.
+  /// Call a platform method which always provides a non-null result
   Future<T> invokePlatformMethodNonNull<T>(String method,
       [AblyMessage<Map<String, dynamic>>? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
@@ -63,6 +67,8 @@ class Platform {
     }
   }
 
+  /// Call a platform method which always provides an observable stream
+  /// of data as a result
   Stream<T> receiveBroadcastStream<T>(String methodName, int handle,
           [final Object? payload]) =>
       _streamsChannel!.receiveBroadcastStream<T>(
