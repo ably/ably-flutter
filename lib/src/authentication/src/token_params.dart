@@ -63,6 +63,7 @@ class TokenParams {
     this.ttl,
   });
 
+  /// converts to a map of objects
   Map<String, dynamic> toMap() {
     final jsonMap = <String, dynamic>{};
     if (capability != null) jsonMap['capability'] = capability;
