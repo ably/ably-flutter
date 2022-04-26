@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:ably_flutter/ably_flutter.dart';
 
+/// type definition for a callback invoked when background push message
+/// is received
 typedef BackgroundMessageHandler = void Function(RemoteMessage message);
 
 /// Push Notification events, such as message arriving or notification tap.

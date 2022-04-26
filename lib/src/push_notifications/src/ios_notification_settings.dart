@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:ably_flutter/ably_flutter.dart';
 
 /// This file contains push notification types specific to iOS. All types begin
