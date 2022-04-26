@@ -7,13 +7,23 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// Utility methods for creating keys ([generateRandomKey]) and configuration
 /// objects ([CipherParams]) for symmetric encryption.
 class Crypto {
+  /// Default algorithm used of encryption
+  /// Currently only AES is supported
   static const defaultAlgorithm = 'aes';
-  static const defaultBlockLengthInBytes = 16;
-  static const defaultKeyLengthInBits = 256;
+
+  /// Default length of the key in bits
+  /// Equals to [keyLength256bits]
+  static const defaultKeyLengthInBits = keyLength256bits;
+
+  /// Length of 256-bit key
+  static const keyLength256bits = 256;
+
+  /// Length of 128-bit key
   static const keyLength128bits = 128;
+
+  /// Default mode used of encryption
+  /// Currently only CBC is supported
   static const defaultMode = 'cbc';
-  static const keyTypeErrorMessage = 'key must be a String or Uint8List.';
-  static const keyLengthErrorMessage = 'key must be 256 bits or 128 bits long.';
 
   /// Gets the CipherParams which can be used to with [RestChannelOptions] or
   /// [RealtimeChannelOptions] to specify encryption.
@@ -30,7 +40,7 @@ class Crypto {
       ensureSupportedKeyLength(key);
     } else {
       throw AblyException(
-        message: keyTypeErrorMessage,
+        message: 'key must be a String or Uint8List.',
       );
     }
 
@@ -43,11 +53,13 @@ class Crypto {
     );
   }
 
+  /// Validates the length of provided [key]
+  /// Throws [AblyException] if key length is different than 128 or 256 bits
   static void ensureSupportedKeyLength(Uint8List key) {
-    if (key.length != defaultKeyLengthInBits / 8 &&
+    if (key.length != keyLength256bits / 8 &&
         key.length != keyLength128bits / 8) {
       throw AblyException(
-        message: keyLengthErrorMessage,
+        message: 'Key must be 256 bits or 128 bits long.',
       );
     }
   }
