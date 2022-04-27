@@ -54,14 +54,14 @@ class Codec extends StandardMessageCodec {
   /// Map of codec type (a value from [CodecTypes]) vs encoder/decoder pair.
   /// Encoder/decoder can be null.
   /// For example, [ErrorInfo] only needs a decoder but not an encoder.
-  late Map<int, _CodecPair> codecMap;
+  late Map<int, _CodecPair<dynamic>> codecMap;
 
   /// initializes codec with codec map linking codec type to codec pair
   Codec() : super() {
     codecMap = {
       // Ably flutter plugin protocol message
-      CodecTypes.ablyMessage:
-          _CodecPair<AblyMessage>(_encodeAblyMessage, _decodeAblyMessage),
+      CodecTypes.ablyMessage: _CodecPair<AblyMessage<dynamic>>(
+          _encodeAblyMessage, _decodeAblyMessage),
       CodecTypes.ablyEventMessage:
           _CodecPair<AblyEventMessage>(_encodeAblyEventMessage, null),
 
@@ -81,7 +81,7 @@ class Codec extends StandardMessageCodec {
         null,
       ),
       CodecTypes.paginatedResult:
-          _CodecPair<PaginatedResult>(null, _decodePaginatedResult),
+          _CodecPair<PaginatedResult<dynamic>>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
           _CodecPair<RealtimeHistoryParams>(_encodeRealtimeHistoryParams, null),
       CodecTypes.restHistoryParams:
@@ -106,7 +106,7 @@ class Codec extends StandardMessageCodec {
 
       CodecTypes.errorInfo:
           _CodecPair<ErrorInfo>(_encodeErrorInfo, _decodeErrorInfo),
-      CodecTypes.messageData: _CodecPair<MessageData?>(
+      CodecTypes.messageData: _CodecPair<MessageData<dynamic>?>(
         _encodeChannelMessageData,
         _decodeChannelMessageData,
       ),
@@ -450,7 +450,7 @@ class Codec extends StandardMessageCodec {
 
   /// Encodes [AblyMessage] to a Map
   /// returns null of [v] is null
-  Map<String, dynamic> _encodeAblyMessage(final AblyMessage v) {
+  Map<String, dynamic> _encodeAblyMessage(final AblyMessage<dynamic> v) {
     final codecType = getCodecType(v.message);
     final message = (codecType == null)
         ? v.message
@@ -494,7 +494,9 @@ class Codec extends StandardMessageCodec {
 
   /// Encodes [MessageData] to a Map
   /// returns null of [v] is null
-  Map<String, dynamic>? _encodeChannelMessageData(final MessageData? v) {
+  Map<String, dynamic>? _encodeChannelMessageData(
+    final MessageData<dynamic>? v,
+  ) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxMessageData.data, v.data);
@@ -538,11 +540,11 @@ class Codec extends StandardMessageCodec {
   /// Decodes value [jsonMap] to [ClientOptions]
   /// returns null if [jsonMap] is null
   ClientOptions _decodeClientOptions(Map<String, dynamic> jsonMap) {
-    final tokenDetails = toJsonMap(_readFromJson<Map>(
+    final tokenDetails = toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
       jsonMap,
       TxClientOptions.tokenDetails,
     ));
-    final tokenParams = toJsonMap(_readFromJson<Map>(
+    final tokenParams = toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
       jsonMap,
       TxClientOptions.defaultTokenParams,
     ));
@@ -674,12 +676,15 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [AblyMessage]
   /// returns null if [jsonMap] is null
-  AblyMessage _decodeAblyMessage(Map<String, dynamic> jsonMap) {
+  AblyMessage<dynamic> _decodeAblyMessage(Map<String, dynamic> jsonMap) {
     final type = _readFromJson<int>(jsonMap, TxAblyMessage.type);
     var message = jsonMap[TxAblyMessage.message] as Object;
     if (type != null) {
       message = codecMap[type]!.decode(
-        toJsonMap(_readFromJson<Map>(jsonMap, TxAblyMessage.message)),
+        toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
+          jsonMap,
+          TxAblyMessage.message,
+        )),
       ) as Object;
     }
     return AblyMessage(
@@ -1019,8 +1024,10 @@ class Codec extends StandardMessageCodec {
         _readFromJson<String>(jsonMap, TxConnectionStateChange.event));
     final retryIn =
         _readFromJson<int>(jsonMap, TxConnectionStateChange.retryIn);
-    final errorInfo =
-        toJsonMap(_readFromJson<Map>(jsonMap, TxConnectionStateChange.reason));
+    final errorInfo = toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
+      jsonMap,
+      TxConnectionStateChange.reason,
+    ));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
     return ConnectionStateChange(
       current: current,
@@ -1041,8 +1048,10 @@ class Codec extends StandardMessageCodec {
     final event = _decodeChannelEvent(
         _readFromJson<String>(jsonMap, TxChannelStateChange.event));
     final resumed = _readFromJson<bool>(jsonMap, TxChannelStateChange.resumed)!;
-    final errorInfo =
-        toJsonMap(_readFromJson<Map>(jsonMap, TxChannelStateChange.reason));
+    final errorInfo = toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
+      jsonMap,
+      TxChannelStateChange.reason,
+    ));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
     return ChannelStateChange(
       current: current,
@@ -1055,7 +1064,9 @@ class Codec extends StandardMessageCodec {
 
   /// Decodes value [jsonMap] to [MessageData]
   /// returns null if [jsonMap] is null
-  MessageData? _decodeChannelMessageData(Map<String, dynamic> jsonMap) =>
+  MessageData<dynamic>? _decodeChannelMessageData(
+    Map<String, dynamic> jsonMap,
+  ) =>
       MessageData.fromValue(_readFromJson<Object>(jsonMap, TxMessageData.data));
 
   /// Decodes value [jsonMap] to [MessageExtras]
@@ -1131,7 +1142,7 @@ class Codec extends StandardMessageCodec {
   /// returns null if [jsonMap] is null
   PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
     final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);
-    final items = _readFromJson<List>(jsonMap, TxPaginatedResult.items)
+    final items = _readFromJson<List<dynamic>>(jsonMap, TxPaginatedResult.items)
             ?.map((e) => codecMap[type]?.decode(toJsonMap(e as Map)) as Object)
             .toList() ??
         [];

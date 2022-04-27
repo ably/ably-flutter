@@ -55,14 +55,14 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
   // Wait for the update event as it is asynchronously triggered.
   // Then cancelling partial subscription expecting it to not receive
   // further presence events.
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await partialMessagesSubscription.cancel();
 
   await presence.leave(messagesToPublish.last[1]);
 
   // Wait for the leave event to be received by listeners.
   // Assuming, they'd turn out in 2 seconds.
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await allMessagesSubscription.cancel();
   await enterMessagesSubscription.cancel();
   await enterUpdateMessagesSubscription.cancel();

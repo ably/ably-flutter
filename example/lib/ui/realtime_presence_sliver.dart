@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:ably_flutter/src/platform/src/realtime/realtime.dart';
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/ui/paginated_result_viewer.dart';
-import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,14 +11,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class RealtimePresenceSliver extends HookWidget {
   final ably.Realtime realtime;
   final ably.RealtimeChannel channel;
-  final List<StreamSubscription> _subscriptions = [];
+  final List<StreamSubscription<ably.PresenceMessage?>> _subscriptions = [];
 
   RealtimePresenceSliver(this.realtime, this.channel);
 
   Widget createChannelPresenceSubscribeButton(
-          ValueNotifier<ably.PresenceMessage?> latestMessage,
-          ably.ChannelState? channelState,
-          ValueNotifier<StreamSubscription?> presenceSubscription) =>
+    ValueNotifier<ably.PresenceMessage?> latestMessage,
+    ably.ChannelState? channelState,
+    ValueNotifier<StreamSubscription<ably.PresenceMessage?>?>
+        presenceSubscription,
+  ) =>
       TextButton(
         onPressed: (channelState == ably.ChannelState.attached &&
                 presenceSubscription.value == null)
@@ -37,7 +38,9 @@ class RealtimePresenceSliver extends HookWidget {
       );
 
   Widget createChannelPresenceUnsubscribeButton(
-          ValueNotifier<StreamSubscription?> presenceSubscription) =>
+    ValueNotifier<StreamSubscription<ably.PresenceMessage?>?>
+        presenceSubscription,
+  ) =>
       TextButton(
         onPressed: (presenceSubscription.value != null)
             ? () async {
@@ -58,7 +61,7 @@ class RealtimePresenceSliver extends HookWidget {
         child: const Text('Get Realtime presence members'),
       );
 
-  final List _presenceData = [
+  final List<dynamic> _presenceData = [
     null,
     1,
     'hello',

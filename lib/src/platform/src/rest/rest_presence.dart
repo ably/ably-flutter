@@ -20,7 +20,7 @@ class RestPresence extends PlatformObject {
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
   ]) async {
-    final message = await invokeRequest<AblyMessage>(
+    final message = await invokeRequest<AblyMessage<dynamic>>(
       PlatformMethod.restPresenceGet,
       {
         TxTransportKeys.channelName: _restChannel.name,
@@ -28,7 +28,7 @@ class RestPresence extends PlatformObject {
       },
     );
     return PaginatedResult<PresenceMessage>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 
@@ -38,7 +38,7 @@ class RestPresence extends PlatformObject {
   Future<PaginatedResult<PresenceMessage>> history([
     RestHistoryParams? params,
   ]) async {
-    final message = await invokeRequest<AblyMessage>(
+    final message = await invokeRequest<AblyMessage<dynamic>>(
       PlatformMethod.restPresenceHistory,
       {
         TxTransportKeys.channelName: _restChannel.name,
@@ -46,7 +46,7 @@ class RestPresence extends PlatformObject {
       },
     );
     return PaginatedResult<PresenceMessage>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 }

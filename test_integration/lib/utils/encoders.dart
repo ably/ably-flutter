@@ -70,7 +70,7 @@ Map<String, dynamic> encodePaginatedResult<T>(
       'isLast': paginatedResult.isLast(),
     };
 
-Map<String, dynamic> encodeAblyException<T>(AblyException exception) => {
+Map<String, dynamic> encodeAblyException(AblyException exception) => {
       'code': exception.code,
       'message': exception.message,
       'errorInfo': {

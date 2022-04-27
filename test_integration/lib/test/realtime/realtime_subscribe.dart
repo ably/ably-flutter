@@ -70,7 +70,7 @@ Future<Map<String, dynamic>> testRealtimeSubscribe({
       extras: const MessageExtras({...pushPayload}),
     ),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future<void>.delayed(const Duration(seconds: 2));
   await extrasSubscription.cancel();
 
   return {

@@ -31,9 +31,10 @@ class TestControlMessage {
   final Map<String, dynamic>? payload;
 
   factory TestControlMessage.fromJsonEncoded(String encoded) =>
-      TestControlMessage.fromJson(json.decode(encoded) as Map);
+      TestControlMessage.fromJson(json.decode(encoded) as Map<String, dynamic>);
 
-  factory TestControlMessage.fromJson(Map jsonValue) => TestControlMessage(
+  factory TestControlMessage.fromJson(Map<String, dynamic> jsonValue) =>
+      TestControlMessage(
         jsonValue[testNameKey] as String,
         payload: jsonValue[payloadKey] as Map<String, dynamic>?,
       );
@@ -66,9 +67,11 @@ class TestControlResponseMessage {
   final List<dynamic> log;
 
   factory TestControlResponseMessage.fromJsonEncoded(String encoded) =>
-      TestControlResponseMessage.fromJson(json.decode(encoded) as Map);
+      TestControlResponseMessage.fromJson(
+        json.decode(encoded) as Map<String, dynamic>,
+      );
 
-  factory TestControlResponseMessage.fromJson(Map jsonValue) =>
+  factory TestControlResponseMessage.fromJson(Map<String, dynamic> jsonValue) =>
       TestControlResponseMessage(
         jsonValue[testNameKey] as String,
         payload: jsonValue[payloadKey] as Map<String, dynamic>,

@@ -37,10 +37,10 @@ void testDemoDependencies(FlutterDriver Function() getDriver) {
   });
 
   group('token request has', () {
-    late Map tokenRequest;
+    late Map<String, dynamic> tokenRequest;
 
     setUp(() {
-      tokenRequest = response.payload['tokenRequest'] as Map;
+      tokenRequest = response.payload['tokenRequest'] as Map<String, dynamic>;
     });
 
     test('non-empty keyName', () {

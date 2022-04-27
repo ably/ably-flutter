@@ -22,7 +22,7 @@ class RealtimePresence extends PlatformObject {
   Future<List<PresenceMessage>> get([
     RealtimePresenceParams? params,
   ]) async {
-    final presenceMessages = await invokeRequest<List>(
+    final presenceMessages = await invokeRequest<List<dynamic>>(
       PlatformMethod.realtimePresenceGet,
       {
         TxTransportKeys.channelName: _channel.name,
@@ -42,7 +42,7 @@ class RealtimePresence extends PlatformObject {
   Future<PaginatedResult<PresenceMessage>> history([
     RealtimeHistoryParams? params,
   ]) async {
-    final message = await invokeRequest<AblyMessage>(
+    final message = await invokeRequest<AblyMessage<dynamic>>(
       PlatformMethod.realtimePresenceHistory,
       {
         TxTransportKeys.channelName: _channel.name,
@@ -50,7 +50,7 @@ class RealtimePresence extends PlatformObject {
       },
     );
     return PaginatedResult<PresenceMessage>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 
@@ -75,7 +75,7 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
   Future<void> enterClient(String clientId, [Object? data]) async {
-    await invoke(PlatformMethod.realtimePresenceEnter, {
+    await invoke<void>(PlatformMethod.realtimePresenceEnter, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
@@ -94,7 +94,7 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
   Future<void> updateClient(String clientId, [Object? data]) async {
-    await invoke(PlatformMethod.realtimePresenceUpdate, {
+    await invoke<void>(PlatformMethod.realtimePresenceUpdate, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
@@ -113,7 +113,7 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
   Future<void> leaveClient(String clientId, [Object? data]) async {
-    await invoke(PlatformMethod.realtimePresenceLeave, {
+    await invoke<void>(PlatformMethod.realtimePresenceLeave, {
       TxTransportKeys.channelName: _channel.name,
       TxTransportKeys.clientId: clientId,
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),

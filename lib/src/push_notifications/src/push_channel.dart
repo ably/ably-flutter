@@ -79,12 +79,12 @@ class PushChannel extends PlatformObject {
       );
     }
 
-    final message = await invokeRequest<AblyMessage>(
+    final message = await invokeRequest<AblyMessage<dynamic>>(
       PlatformMethod.pushListSubscriptions,
       {TxTransportKeys.params: params, TxTransportKeys.channelName: _name},
     );
 
     return PaginatedResult<PushChannelSubscription>.fromAblyMessage(
-        AblyMessage.castFrom<dynamic, PaginatedResult>(message));
+        AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message));
   }
 }

@@ -42,7 +42,8 @@ String getRandomString(int length) => String.fromCharCodes(
     );
 
 /// returns subsets of all entries in a list
-List<List> getAllSubsets(List l) => l.fold<List<List>>(
+List<List<dynamic>> getAllSubsets(List<dynamic> l) =>
+    l.fold<List<List<dynamic>>>(
       [[]],
       (subLists, element) => subLists
           .map((subList) => [

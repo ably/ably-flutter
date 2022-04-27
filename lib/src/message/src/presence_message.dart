@@ -26,7 +26,7 @@ class PresenceMessage with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3d
   final String? connectionId;
 
-  final MessageData? _data;
+  final MessageData<dynamic>? _data;
 
   /// Message payload
   ///

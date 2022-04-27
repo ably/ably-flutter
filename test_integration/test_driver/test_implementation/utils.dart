@@ -94,7 +94,7 @@ void testAllPresenceMessagesHistory(Object messagesHistory) {
   }
 }
 
-int timestampSorter(Map a, Map b) {
+int timestampSorter(Map<String, dynamic> a, Map<String, dynamic> b) {
   if (DateTime.parse(a['timestamp'] as String).millisecondsSinceEpoch >
       DateTime.parse(b['timestamp'] as String).millisecondsSinceEpoch) {
     return 1;
@@ -103,7 +103,7 @@ int timestampSorter(Map a, Map b) {
   }
 }
 
-void checkMessageExtras(Map messageExtras) {
+void checkMessageExtras(Map<dynamic, dynamic> messageExtras) {
   expect(messageExtras['push']['notification']['title'], 'Hello from Ably!');
   expect(
     messageExtras['push']['notification']['body'],
@@ -111,3 +111,8 @@ void checkMessageExtras(Map messageExtras) {
   );
   expect(messageExtras['push']['data']['foo'], 'bar');
 }
+
+List<Map<String, dynamic>> transformListResponse(dynamic items) =>
+    List<dynamic>.from(items as List)
+        .map((t) => t as Map<String, dynamic>)
+        .toList();

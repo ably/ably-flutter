@@ -48,16 +48,16 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await channel.publish(name: 'name1');
   await channel.publish(data: 'data1');
   await channel.publish(name: 'name1', data: 'data1');
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(
     message: Message(name: 'message-name1', data: 'message-data1'),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(messages: [
     Message(name: 'messages-name1', data: 'messages-data1'),
     Message(name: 'messages-name2', data: 'messages-data2'),
   ]);
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   await channel.publish(
     message: Message(
       name: 'message-name1',
@@ -65,7 +65,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
       clientId: 'someClientId',
     ),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // publishing message with a different client id
   Map<String, dynamic>? exception;
@@ -92,7 +92,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   await channel2.publish(
     message: Message(name: 'name-client-id', clientId: 'client-id'),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   final history2 = await getHistory(
     channel2,
     RestHistoryParams(direction: 'forwards'),
@@ -117,7 +117,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   final channel3 = rest2.channels.get('©Äblý');
   await channel3.publish(name: 'Ωπ', data: 'ΨΔ');
 
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
   final history3 = await getHistory(channel3);
 
   final channelExtras = rest.channels.get('pushenabled:test:extras');

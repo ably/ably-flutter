@@ -49,8 +49,8 @@ void main() {
     final emitter = MockEmitter(3, [1, 2, 3, 4, 5]);
     final streams = emitter.streams;
 
-    StreamSubscription subscriptionPre;
-    late StreamSubscription subscriptionPost;
+    StreamSubscription<dynamic> subscriptionPre;
+    late StreamSubscription<dynamic> subscriptionPost;
 
     subscriptionPre = streams[1].listen(resultsNestedPre.add);
 
@@ -67,7 +67,7 @@ void main() {
     subscriptionPost = streams[2].listen(resultsNestedPost.add);
 
     //Waiting for stream to end
-    await Future.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
 
     //Checking if data received by stream is same as expected
     expect(

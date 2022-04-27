@@ -43,13 +43,13 @@ class RealtimeChannel extends PlatformObject {
   Future<PaginatedResult<Message>> history([
     RealtimeHistoryParams? params,
   ]) async {
-    final message =
-        await invokeRequest<AblyMessage>(PlatformMethod.realtimeHistory, {
+    final message = await invokeRequest<AblyMessage<dynamic>>(
+        PlatformMethod.realtimeHistory, {
       TxTransportKeys.channelName: name,
-      if (params != null) TxTransportKeys.params: params
+      if (params != null) TxTransportKeys.params: params,
     });
     return PaginatedResult<Message>.fromAblyMessage(
-      AblyMessage.castFrom<dynamic, PaginatedResult>(message),
+      AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
 
@@ -66,7 +66,7 @@ class RealtimeChannel extends PlatformObject {
     messages ??= [
       if (message == null) Message(name: name, data: data) else message
     ];
-    await invoke(PlatformMethod.publishRealtimeChannelMessage, {
+    await invoke<void>(PlatformMethod.publishRealtimeChannelMessage, {
       TxTransportKeys.channelName: this.name,
       TxTransportKeys.messages: messages,
     });

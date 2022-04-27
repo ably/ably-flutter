@@ -31,7 +31,8 @@ class MessageExtras with ObjectHash {
     extrasMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
       json.decode(json.encode(extrasMap)) as Map,
     );
-    final deltaMap = extrasMap.remove(TxMessageExtras.delta) as Map?;
+    final deltaMap =
+        extrasMap.remove(TxMessageExtras.delta) as Map<String, dynamic>?;
     return MessageExtras._withDelta(
       extrasMap,
       (deltaMap == null) ? null : DeltaExtras.fromMap(deltaMap),
@@ -44,7 +45,7 @@ class MessageExtras with ObjectHash {
   @override
   bool operator ==(Object other) =>
       other is MessageExtras &&
-      const MapEquality().equals(other.map, map) &&
+      const MapEquality<String, dynamic>().equals(other.map, map) &&
       other.delta == delta;
 
   @override

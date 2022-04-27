@@ -9,7 +9,7 @@ class MockMethodCallManager {
   int handleCounter = 0;
   bool isAuthenticated = false;
   final channels = <int, ClientOptions?>{};
-  final publishedMessages = <AblyMessage>[];
+  final publishedMessages = <AblyMessage<dynamic>>[];
 
   MockMethodCallManager() {
     final channel =

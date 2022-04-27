@@ -39,7 +39,7 @@ class AblyMethodCallHandler {
   }
 
   /// handles auth callback for rest instances
-  Future<Object> onAuthCallback(AblyMessage message) async {
+  Future<Object> onAuthCallback(AblyMessage<dynamic> message) async {
     final tokenParams = message.message as TokenParams;
     final rest = restInstances[message.handle];
     if (rest == null) {
@@ -52,7 +52,7 @@ class AblyMethodCallHandler {
   }
 
   /// handles auth callback for realtime instances
-  Future<Object?> onRealtimeAuthCallback(AblyMessage? message) async {
+  Future<Object?> onRealtimeAuthCallback(AblyMessage<dynamic>? message) async {
     final tokenParams = message!.message as TokenParams;
     final realtime = realtimeInstances[message.handle];
     if (realtime == null) {

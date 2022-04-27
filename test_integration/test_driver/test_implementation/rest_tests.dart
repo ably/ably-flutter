@@ -33,10 +33,10 @@ void testRestEncryptedPublish(FlutterDriver Function() getDriver) {
 void testRestPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPublishSpec);
   late TestControlResponseMessage response;
-  late List messages;
-  late List messages2;
-  late List messages3;
-  late List messagesWithExtras;
+  late List<Map<String, dynamic>> messages;
+  late List<Map<String, dynamic>> messages2;
+  late List<Map<String, dynamic>> messages3;
+  late List<Map<String, dynamic>> messagesWithExtras;
   Map<String, dynamic>? exception;
   Map<String, dynamic>? exception2;
   Map<String, dynamic>? exception3;
@@ -44,10 +44,11 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
-    messages = response.payload['publishedMessages'] as List;
-    messages2 = response.payload['publishedMessages2'] as List;
-    messages3 = response.payload['publishedMessages3'] as List;
-    messagesWithExtras = response.payload['publishedExtras'] as List;
+    messages = transformListResponse(response.payload['publishedMessages']);
+    messages2 = transformListResponse(response.payload['publishedMessages2']);
+    messages3 = transformListResponse(response.payload['publishedMessages3']);
+    messagesWithExtras =
+        transformListResponse(response.payload['publishedExtras']);
     exception = response.payload['exception'] as Map<String, dynamic>?;
     exception2 = response.payload['exception2'] as Map<String, dynamic>?;
     exception3 = response.payload['exception3'] as Map<String, dynamic>?;
@@ -111,7 +112,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
       ' from the clientId in the client options should result in a message'
       ' being rejected by the server.',
       () {
-        expect(response.payload['exception'], isA<Map>());
+        expect(response.payload['exception'], isA<Map<dynamic, dynamic>>());
         // TODO as error details are incompatible from both libraries,
         //  it makes no sense to include below expect's
         //
@@ -169,22 +170,22 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
 void testRestEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restEncryptedPublishSpec);
   late TestControlResponseMessage response;
-  late List historyOfEncryptedChannel;
-  late List historyOfPlaintextChannel;
-  late List historyOfEncryptedPushEnabledChannel;
-  late List historyOfPlaintextPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextChannel;
+  late List<Map<String, dynamic>> historyOfEncryptedPushEnabledChannel;
+  late List<Map<String, dynamic>> historyOfPlaintextPushEnabledChannel;
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
 
     historyOfEncryptedChannel =
-        response.payload['historyOfEncryptedChannel'] as List;
+        transformListResponse(response.payload['historyOfEncryptedChannel']);
     historyOfPlaintextChannel =
-        response.payload['historyOfPlaintextChannel'] as List;
-    historyOfEncryptedPushEnabledChannel =
-        response.payload['historyOfEncryptedPushEnabledChannel'] as List;
-    historyOfPlaintextPushEnabledChannel =
-        response.payload['historyOfPlaintextPushEnabledChannel'] as List;
+        transformListResponse(response.payload['historyOfPlaintextChannel']);
+    historyOfEncryptedPushEnabledChannel = transformListResponse(
+        response.payload['historyOfEncryptedPushEnabledChannel']);
+    historyOfPlaintextPushEnabledChannel = transformListResponse(
+        response.payload['historyOfPlaintextPushEnabledChannel']);
   });
 
   group('RSL5', () {
@@ -239,26 +240,25 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> historyWithStart;
   late List<Map<String, dynamic>> historyWithStartAndEnd;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
     paginatedResult =
         response.payload['paginatedResult'] as Map<String, dynamic>;
-    historyDefault = transform(response.payload['historyDefault']);
-    historyLimit4 = transform(response.payload['historyLimit4']);
-    historyLimit2 = transform(response.payload['historyLimit2']);
-    historyForwardLimit4 = transform(response.payload['historyForwardLimit4']);
-    historyWithStart = transform(response.payload['historyWithStart']);
-    historyWithStartAndEnd = transform(
+    historyDefault = transformListResponse(response.payload['historyDefault']);
+    historyLimit4 = transformListResponse(response.payload['historyLimit4']);
+    historyLimit2 = transformListResponse(response.payload['historyLimit2']);
+    historyForwardLimit4 =
+        transformListResponse(response.payload['historyForwardLimit4']);
+    historyWithStart =
+        transformListResponse(response.payload['historyWithStart']);
+    historyWithStartAndEnd = transformListResponse(
       response.payload['historyWithStartAndEnd'],
     );
   });
 
   group('paginated result', () {
     test('#items is a list', () {
-      expect(paginatedResult['items'], isA<List>());
+      expect(paginatedResult['items'], isA<List<dynamic>>());
     });
     test('#hasNext indicates whether there are more entries', () {
       expect(paginatedResult['hasNext'], false);
@@ -327,17 +327,16 @@ void testRestPresenceGet(FlutterDriver Function() getDriver) {
   late List<Map<String, dynamic>> membersClientId;
   late List<Map<String, dynamic>> membersConnectionId;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    membersInitial = transform(response.payload['membersInitial']);
-    membersDefault = transform(response.payload['membersDefault']);
-    membersLimit4 = transform(response.payload['membersLimit4']);
-    membersLimit2 = transform(response.payload['membersLimit2']);
-    membersClientId = transform(response.payload['membersClientId']);
-    membersConnectionId = transform(response.payload['membersConnectionId']);
+    membersInitial = transformListResponse(response.payload['membersInitial']);
+    membersDefault = transformListResponse(response.payload['membersDefault']);
+    membersLimit4 = transformListResponse(response.payload['membersLimit4']);
+    membersLimit2 = transformListResponse(response.payload['membersLimit2']);
+    membersClientId =
+        transformListResponse(response.payload['membersClientId']);
+    membersConnectionId =
+        transformListResponse(response.payload['membersConnectionId']);
   });
 
   group('rest#channels#channel#presence#get', () {
@@ -373,9 +372,6 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restPresenceHistory);
   late TestControlResponseMessage response;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   late List<Map<String, dynamic>> historyInitial;
   late List<Map<String, dynamic>> historyDefault;
   late List<Map<String, dynamic>> historyLimit4;
@@ -387,18 +383,19 @@ void testRestPresenceHistory(FlutterDriver Function() getDriver) {
 
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    historyInitial = transform(response.payload['historyInitial']);
-    historyDefault = transform(response.payload['historyDefault']);
-    historyLimit4 = transform(response.payload['historyLimit4']);
-    historyLimit2 = transform(response.payload['historyLimit2']);
-    historyForwards = transform(response.payload['historyForwards']);
-    historyWithStart = transform(
+    historyInitial = transformListResponse(response.payload['historyInitial']);
+    historyDefault = transformListResponse(response.payload['historyDefault']);
+    historyLimit4 = transformListResponse(response.payload['historyLimit4']);
+    historyLimit2 = transformListResponse(response.payload['historyLimit2']);
+    historyForwards =
+        transformListResponse(response.payload['historyForwards']);
+    historyWithStart = transformListResponse(
       response.payload['historyWithStart'],
     ).reversed.toList();
-    historyWithStartAndEnd = transform(
+    historyWithStartAndEnd = transformListResponse(
       response.payload['historyWithStartAndEnd'],
     );
-    historyAll = transform(response.payload['historyAll']);
+    historyAll = transformListResponse(response.payload['historyAll']);
   });
 
   group('rest#channels#channel#presence#history', () {
@@ -442,12 +439,9 @@ void testCapabilityMatrix(FlutterDriver Function() getDriver) {
   late TestControlResponseMessage response;
   late List<Map<String, dynamic>> capabilityMatrix;
 
-  List<Map<String, dynamic>> transform(items) =>
-      List.from(items as List).map((t) => t as Map<String, dynamic>).toList();
-
   setUpAll(() async {
     response = await requestDataForTest(getDriver(), message);
-    capabilityMatrix = transform(response.payload['matrix']);
+    capabilityMatrix = transformListResponse(response.payload['matrix']);
   });
 
   test('capabilitySpec', () {

@@ -18,7 +18,7 @@ class PushNotificationsActivationSliver extends HookWidget {
 
   Future<void> showErrorDialog(
       BuildContext context, ably.AblyException error) async {
-    await showDialog(
+    await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Push notification error'),

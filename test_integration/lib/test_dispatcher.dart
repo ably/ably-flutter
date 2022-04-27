@@ -50,7 +50,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
   ) {
     final reporter = Reporter(message, widget.controller);
 
-    Future.delayed(Duration.zero, () async {
+    Future<void>.delayed(Duration.zero, () async {
       // check if a test is running and throw error
       if (_reporters.containsKey(reporter.testName)) {
         reporter.reportTestError(
@@ -69,11 +69,10 @@ class _TestDispatcherState extends State<TestDispatcher> {
             reporter: reporter,
             payload: reporter.message.payload,
           ).then(reporter.reportTestCompletion).catchError(
-                (error, stack) => reporter.reportTestCompletion({
-                  TestControlMessage.errorKey: ErrorHandler.encodeException(
-                    error as Object,
-                    stack as StackTrace,
-                  ),
+                (Object error, StackTrace stack) =>
+                    reporter.reportTestCompletion({
+                  TestControlMessage.errorKey:
+                      ErrorHandler.encodeException(error, stack),
                 }),
               );
         }
@@ -163,7 +162,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
           IconButton(
             icon: const Icon(Icons.remove_red_eye),
             onPressed: () {
-              showDialog(
+              showDialog<void>(
                 context: context,
                 builder: (context) => AlertDialog(
                   contentPadding: const EdgeInsets.all(4),
@@ -235,7 +234,9 @@ class DispatcherController {
 
   Future<String> driveHandler(String? encodedMessage) async {
     final response = await _dispatcher.handleDriverMessage(
-      TestControlMessage.fromJson(json.decode(encodedMessage!) as Map),
+      TestControlMessage.fromJson(
+        json.decode(encodedMessage!) as Map<String, dynamic>,
+      ),
     );
     return json.encode(response);
   }

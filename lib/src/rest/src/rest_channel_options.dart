@@ -11,7 +11,7 @@ class RestChannelOptions {
   /// equivalent to calling the constructor.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB3
-  static Future<RestChannelOptions> withCipherKey(key) async {
+  static Future<RestChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RestChannelOptions(cipherParams: cipherParams);
   }

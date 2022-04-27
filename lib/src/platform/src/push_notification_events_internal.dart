@@ -58,8 +58,9 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     if (io.Platform.isAndroid) {
       // Inform Android side that the Flutter application
       // is ready to receive push messages.
-      await BackgroundIsolateAndroidPlatform().invokeMethod(
-          PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid);
+      await BackgroundIsolateAndroidPlatform().invokeMethod<void>(
+        PlatformMethod.pushBackgroundFlutterApplicationReadyOnAndroid,
+      );
     }
   }
 

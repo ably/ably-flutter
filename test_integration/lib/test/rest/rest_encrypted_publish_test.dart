@@ -66,7 +66,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
   await encryptedChannel.publish(name: 'name');
   await encryptedChannel.publish(data: 'data');
   await encryptedChannel.publish(name: 'name', data: 'data');
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // Send single message object
   await encryptedChannel.publish(
@@ -75,14 +75,14 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
       data: 'single-message-data',
     ),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // Send multiple message objects at once
   await encryptedChannel.publish(messages: [
     Message(name: 'multi-message-name-1', data: 'multi-message-data-1'),
     Message(name: 'multi-message-name-2', data: 'multi-message-data-2'),
   ]);
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // Send message with [clientId] defined
   await encryptedChannel.publish(
@@ -92,7 +92,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
       clientId: clientId,
     ),
   );
-  await Future.delayed(TestConstants.publishToHistoryDelay);
+  await Future<void>.delayed(TestConstants.publishToHistoryDelay);
 
   // Retrieve history of channel where client id was specified
   final historyOfEncryptedChannel = await getHistory(

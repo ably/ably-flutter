@@ -14,7 +14,7 @@ class DeltaExtras with ObjectHash {
 
   /// create instance from a map
   @protected
-  DeltaExtras.fromMap(Map value)
+  DeltaExtras.fromMap(Map<String, dynamic> value)
       : format = value[TxDeltaExtras.format] as String?,
         from = value[TxDeltaExtras.from] as String?;
 

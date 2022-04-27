@@ -12,8 +12,9 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
-  HttpPaginatedResponse.fromAblyMessage(AblyMessage<PaginatedResult> message)
-      : super.fromAblyMessage(message);
+  HttpPaginatedResponse.fromAblyMessage(
+    AblyMessage<PaginatedResult<dynamic>> message,
+  ) : super.fromAblyMessage(message);
 
   /// HTTP status code for the response
   ///

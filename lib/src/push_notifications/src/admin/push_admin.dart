@@ -16,5 +16,8 @@ abstract class PushAdmin {
   PushChannelSubscriptions? channelSubscriptions;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1a
-  Future<void> publish(Map<String, dynamic> recipient, Map payload);
+  Future<void> publish(
+    Map<String, dynamic> recipient,
+    Map<String, dynamic> payload,
+  );
 }
