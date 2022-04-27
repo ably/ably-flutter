@@ -26,10 +26,8 @@ jobs:
       - name: 'Check formatting issues in the code'
         run: flutter format --set-exit-if-changed .
         
-      # Suppressing info - deprecated entries fall under info, and CI shouldn't fail if there are any Deprecated APIs
-      # FIXME(ikurek): We should probably just configure linter to ignore deprecation, instead of disabling errors here
       - name: 'Statically analyze the Dart code for any errors'
-        run: 'flutter analyze --no-pub --no-fatal-infos .'
+        run: 'flutter analyze --no-pub .'
 
       - name: 'Run unit tests'
         run: flutter test --no-pub
