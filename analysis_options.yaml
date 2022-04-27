@@ -10,37 +10,27 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+  errors:
+    # treat missing required parameters as an error
+    missing_required_param: error
+    # treat missing returns as an error
+    missing_return: error
+    # allow self-reference to deprecated members
+    # suppresses issues for deprecated members of the library like ClientOptions.fallbackHostsUseDefault
+    deprecated_member_use_from_same_package: ignore
 
 linter:
+    # subject to false positives, perhaps worth suppressing in code in such cases
   rules:
-    ## Error Rules
-    - always_use_package_imports
-    - avoid_relative_lib_imports
-    - avoid_returning_null_for_future
-    - avoid_slow_async_io
-    - avoid_type_to_string
-    # subject to false positives, perhaps worth suppressing in code in such cases
-    - cancel_subscriptions
-    # subject to false positives, perhaps worth suppressing in code in such cases
-    - close_sinks
-    - comment_references
-    - control_flow_in_finally
-    - hash_and_equals
-    - invariant_booleans
-    - literal_only_boolean_expressions
-    - no_adjacent_strings_in_list
-    - test_types_in_equals
-    - throw_in_finally
-    - unnecessary_statements
-
-    ## Style Rules
     - always_declare_return_types
     - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
+    - always_use_package_imports
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
     - avoid_catching_errors
     - avoid_double_and_int_checks
+    - avoid_empty_else
     - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
@@ -51,27 +41,39 @@ linter:
     - avoid_null_checks_in_equality_operators
     - avoid_positional_boolean_parameters
     - avoid_redundant_argument_values
+    - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
     - avoid_returning_null
+    - avoid_returning_null_for_future
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_shadowing_type_parameters
     - avoid_single_cascade_in_expression_statements
+    - avoid_slow_async_io
+    - avoid_type_to_string
     - avoid_void_async
     - await_only_futures
+    - cancel_subscriptions
     - cascade_invocations
+    - close_sinks
+    - comment_references
     - constant_identifier_names
+    - control_flow_in_finally
     - curly_braces_in_flow_control_structures
     - directives_ordering
     - do_not_use_environment
     - empty_constructor_bodies
+    - hash_and_equals
+    - invariant_booleans
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - lines_longer_than_80_chars
+    - literal_only_boolean_expressions
     - missing_whitespace_between_adjacent_strings
-    - no_default_cases             # experimental
+    - no_adjacent_strings_in_list
+    - no_default_cases
     - no_runtimeType_toString
     - omit_local_variable_types
     - only_throw_errors
@@ -79,8 +81,8 @@ linter:
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
     - prefer_expression_function_bodies
-    - prefer_final_in_for_each     # personal preference
-    - prefer_final_locals          # personal preference
+    - prefer_final_in_for_each # personal preference
+    - prefer_final_locals # personal preference
     - prefer_foreach
     - prefer_if_elements_to_conditional_expressions
     - prefer_int_literals
@@ -89,16 +91,32 @@ linter:
     - prefer_single_quotes
     - public_member_api_docs
     - sort_child_properties_last
+    - test_types_in_equals
+    - throw_in_finally
     - type_annotate_public_apis
+    - type_init_formals
     - unawaited_futures
     - unnecessary_await_in_return
+    - unnecessary_brace_in_string_interps
+    - unnecessary_const
+    - unnecessary_constructor_name
     - unnecessary_lambdas
+    - unnecessary_late
+    - unnecessary_new
     - unnecessary_null_aware_assignments
-    - unnecessary_nullable_for_final_variable_declarations # experimental
+    - unnecessary_null_checks
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_overrides
     - unnecessary_parenthesis
     - unnecessary_raw_strings
+    - unnecessary_statements
+    - unnecessary_string_escapes
+    - unnecessary_string_interpolations
+    - unnecessary_this
+    - unrelated_type_equality_checks
     - use_is_even_rather_than_modulo
-    - use_late_for_private_fields_and_variables # experimental
+    - use_late_for_private_fields_and_variables
     - use_raw_strings
     - use_setters_to_change_properties
     - use_string_buffers
