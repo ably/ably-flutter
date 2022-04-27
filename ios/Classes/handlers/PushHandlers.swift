@@ -1,4 +1,5 @@
 import Foundation
+import UserNotifications
 
 public class PushHandlers: NSObject {
     @objc
@@ -26,7 +27,7 @@ public class PushHandlers: NSObject {
 
     @objc
     public static let getNotificationSettings: (_ ably: AblyFlutter, _ call: FlutterMethodCall, _ result: @escaping (_ result: Any?) -> Void) -> Void = { ably, call, result in
-        UNUserNotificationCenter.current().getNotificationSettings { [result] settings in
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
             result(settings)
         }
     }
@@ -179,17 +180,21 @@ public class PushHandlers: NSObject {
     /// This function will callback the with the push channel for the channelName and client handle you provide.
     private static func getPushChannel(ably: AblyFlutter, call: FlutterMethodCall, result: @escaping FlutterResult) -> ARTPushChannel? {
         let ablyMessage = call.arguments as! AblyFlutterMessage
-        let handle: NSNumber? = ablyMessage.handle
-        var channelName: String? = nil
+
+        /// Using `guard let handle` in that case caused compilation errors for some users
+        /// See https://github.com/ably/ably-flutter/issues/347 for more information and
+        let optionalHandle: NSNumber? = ablyMessage.handle
+        var optionalChannelName: String?
+        
         if let dataMap = ablyMessage.message as? Dictionary<String, Any> {
-            channelName = dataMap[TxTransportKeys_channelName] as? String
+            optionalChannelName = dataMap[TxTransportKeys_channelName] as? String
         }
 
-        guard let handle = handle else {
+        guard let handle: NSNumber = optionalHandle else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "clientHandle was null", details: nil))
             return nil
         }
-        guard let channelName = channelName else {
+        guard let channelName: String = optionalChannelName else {
             result(FlutterError(code: "getAblyPushChannel_error", message: "channelName was null", details: nil))
             return nil
         }
