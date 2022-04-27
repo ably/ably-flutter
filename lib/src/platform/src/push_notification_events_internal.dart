@@ -85,7 +85,8 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
   }
 
   /// Used to close internal [StreamController] instances
-  // FIXME: This method is not called anywhere, and it probably should be
+  // FIXME: This method is not called anywhere
+  // See: https://github.com/ably/ably-flutter/issues/382
   void close() {
     onMessageStreamController.close();
     onNotificationTapStreamController.close();
