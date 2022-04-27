@@ -20,7 +20,7 @@ class Realtime extends PlatformObject {
     ClientOptions? options,
     final String? key,
   })  : assert(options != null || key != null),
-        options = options ?? ClientOptions(key: key!),
+        options = options ?? ClientOptions(key: key),
         super() {
     _connection = Connection(this);
     _channels = RealtimeChannels(this);
