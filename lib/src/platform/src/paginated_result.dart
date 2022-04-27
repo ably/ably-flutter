@@ -23,7 +23,6 @@ class PaginatedResult<T> extends PlatformObject {
   /// items contain page of results
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TG3
-  @override
   List<T> get items => _items;
 
   final bool _hasNext;

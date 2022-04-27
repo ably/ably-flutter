@@ -9,11 +9,17 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 class RealtimeChannel extends PlatformObject {
-  final Realtime realtime;
+  final Realtime _realtime;
 
-  final String name;
+  final String _channelName;
 
   late RealtimePresence _presence;
+
+  /// Required by [RealtimePresence], should not be used in other cases
+  Realtime get realtime => _realtime;
+
+  /// Required by [RealtimePresence], should not be used in other cases
+  String get name => _channelName;
 
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
   RealtimePresence get presence => _presence;
@@ -22,11 +28,13 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
   /// for updates to the channel [state]/
-  RealtimeChannel(this.realtime, this.name)
-      : state = ChannelState.initialized,
+  RealtimeChannel(Realtime realtime, String channelName)
+      : _realtime = realtime,
+        _channelName = channelName,
+        state = ChannelState.initialized,
         super() {
     _presence = RealtimePresence(this);
-    push = PushChannel(name, realtime: realtime);
+    push = PushChannel(_channelName, realtime: _realtime);
     on().listen((event) => state = event.current);
   }
 
@@ -34,18 +42,17 @@ class RealtimeChannel extends PlatformObject {
   /// as that is what will be required in platforms end to find realtime
   /// instance and send message to channel
   @override
-  Future<int> createPlatformInstance() async => realtime.handle;
+  Future<int> createPlatformInstance() async => _realtime.handle;
 
   /// returns channel history based on filters passed as [params]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
-  @override
   Future<PaginatedResult<Message>> history([
     RealtimeHistoryParams? params,
   ]) async {
     final message = await invokeRequest<AblyMessage<dynamic>>(
         PlatformMethod.realtimeHistory, {
-      TxTransportKeys.channelName: name,
+      TxTransportKeys.channelName: _channelName,
       if (params != null) TxTransportKeys.params: params,
     });
     return PaginatedResult<Message>.fromAblyMessage(
@@ -56,7 +63,6 @@ class RealtimeChannel extends PlatformObject {
   /// publishes messages onto the channel
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
-  @override
   Future<void> publish({
     Message? message,
     List<Message>? messages,
@@ -67,7 +73,7 @@ class RealtimeChannel extends PlatformObject {
       if (message == null) Message(name: name, data: data) else message
     ];
     await invoke<void>(PlatformMethod.publishRealtimeChannelMessage, {
-      TxTransportKeys.channelName: this.name,
+      TxTransportKeys.channelName: _channelName,
       TxTransportKeys.messages: messages,
     });
   }
@@ -81,7 +87,7 @@ class RealtimeChannel extends PlatformObject {
   List<ChannelMode>? modes;
 
   /// Subset of the params passed via [ClientOptions]
-  /// that the server has recognised and validated
+  /// that the server has recognized and validated
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
   Map<String, String>? params;
@@ -98,14 +104,14 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4
   Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
-        TxTransportKeys.channelName: name,
+        TxTransportKeys.channelName: _channelName,
       });
 
   /// Detaches the realtime client from this channel.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL5
   Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
-        TxTransportKeys.channelName: name,
+        TxTransportKeys.channelName: _channelName,
       });
 
   /// takes a [RealtimeChannelOptions]] object and sets or updates the
@@ -114,14 +120,14 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   Future<void> setOptions(RealtimeChannelOptions options) =>
       invoke(PlatformMethod.setRealtimeChannelOptions, {
-        TxTransportKeys.channelName: name,
+        TxTransportKeys.channelName: _channelName,
         TxTransportKeys.options: options,
       });
 
   Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
-        {TxTransportKeys.channelName: name},
+        {TxTransportKeys.channelName: _channelName},
       ).where(
         (stateChange) =>
             channelEvent == null || stateChange.event == channelEvent,
@@ -144,7 +150,7 @@ class RealtimeChannel extends PlatformObject {
   Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
-      TxTransportKeys.channelName: this.name,
+      TxTransportKeys.channelName: _channelName,
     }).where((message) =>
         subscribedNames.isEmpty ||
         subscribedNames.any((n) => n == message.name));

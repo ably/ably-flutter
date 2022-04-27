@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter_test/flutter_test.dart';

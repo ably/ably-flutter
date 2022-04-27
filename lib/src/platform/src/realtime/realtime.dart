@@ -27,7 +27,8 @@ class Realtime extends PlatformObject {
     push = Push(realtime: this);
   }
 
-  /// Create a realtime client from an API key without configuring other parameters
+  /// Create a realtime client from an API key without
+  /// configuring other parameters
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
 
@@ -47,7 +48,7 @@ class Realtime extends PlatformObject {
       // to false, and call connect immediately once we get the handle.
       // This is also a specific case where it's required to pass the handle
       // value from external source
-      await invoke(
+      await invoke<void>(
         PlatformMethod.connectRealtime,
         null,
         handle,
@@ -89,9 +90,7 @@ class Realtime extends PlatformObject {
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   /// connects to [connection]
-  Future<void> connect() async {
-    await invoke(PlatformMethod.connectRealtime);
-  }
+  Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
   /// creates and sends a raw request to ably service
   ///

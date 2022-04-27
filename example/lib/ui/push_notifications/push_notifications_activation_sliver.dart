@@ -12,9 +12,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 class PushNotificationsActivationSliver extends HookWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsActivationSliver(this._pushNotificationService,
-      {Key? key})
-      : super(key: key);
+  const PushNotificationsActivationSliver({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   Future<void> showErrorDialog(
       BuildContext context, ably.AblyException error) async {
@@ -59,7 +61,7 @@ class PushNotificationsActivationSliver extends HookWidget {
     await _pushNotificationService.getDevice();
   }
 
-  Widget buildiOSSimulatorWarningText(bool isIOSSimulator) {
+  Widget buildiOSSimulatorWarningText({required bool isIOSSimulator}) {
     if (isIOSSimulator) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -89,6 +91,7 @@ class PushNotificationsActivationSliver extends HookWidget {
             .iosInfo
             .then((info) => isIOSSimulator.value = !info.isPhysicalDevice);
       }
+      return;
     });
 
     return Padding(
@@ -100,7 +103,7 @@ class PushNotificationsActivationSliver extends HookWidget {
             'Activation',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          buildiOSSimulatorWarningText(isIOSSimulator.value),
+          buildiOSSimulatorWarningText(isIOSSimulator: isIOSSimulator.value),
           Row(
             children: [
               Expanded(
@@ -138,7 +141,7 @@ class PushNotificationsActivationSliver extends HookWidget {
       final authorizationStatus = _pushNotificationService
           .notificationSettingsStream.value.authorizationStatus;
       if (authorizationStatus == ably.UNAuthorizationStatus.notDetermined) {
-        await showDialog(
+        await showDialog<void>(
           context: context,
           builder: (context) => CupertinoAlertDialog(
             title: const Text('Reminder for the developer'),

@@ -8,9 +8,9 @@ import 'package:ably_flutter_example/ui/realtime_presence_sliver.dart';
 import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+// ignore: must_be_immutable
 class RealtimeSliver extends HookWidget {
   final AblyService ablyService;
   final ably.Realtime realtime;
@@ -164,7 +164,7 @@ class RealtimeSliver extends HookWidget {
                   ),
                 );
               } else {
-                await channel.setOptions(ably.RealtimeChannelOptions());
+                await channel.setOptions(const ably.RealtimeChannelOptions());
               }
             },
             value: isEnabled.value,
@@ -239,7 +239,7 @@ class RealtimeSliver extends HookWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextRow('Next message to be published:', null),
+            const TextRow('Next message to be published:', null),
             TextRow('  Name', 'Message $realtimePubCounter'),
             TextRow(
                 '  Data',
@@ -248,11 +248,14 @@ class RealtimeSliver extends HookWidget {
                     .toString()),
           ],
         ),
-        RealtimePresenceSliver(realtime, channel),
+        RealtimePresenceSliver(
+          realtime: realtime,
+          channel: channel,
+        ),
         PaginatedResultViewer<ably.Message>(
             title: 'History',
             subtitle: Column(
-              children: [
+              children: const [
                 TextRow(
                     'Hint',
                     'Use realtime history as a way to get messages that were'

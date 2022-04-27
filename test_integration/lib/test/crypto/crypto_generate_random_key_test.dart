@@ -9,6 +9,7 @@ Future<Map<String, dynamic>> testCryptoGenerateRandomKey({
 
   final keyWith128BitLength = await Crypto.generateRandomKey(keyLength: 128);
 
+  // ignore: avoid_redundant_argument_values
   final keyWith256BitLength = await Crypto.generateRandomKey(keyLength: 256);
 
   return {

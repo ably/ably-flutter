@@ -2,6 +2,7 @@ import 'package:ably_flutter_example/app_provisioning.dart';
 import 'package:ably_flutter_example/constants.dart';
 
 class ApiKeyService {
+  // ignore: do_not_use_environment
   static const envKey = String.fromEnvironment(Constants.ablyApiKey);
   static const defaultEnvKeyPlaceholder = 'replace_with_your_api_key';
 

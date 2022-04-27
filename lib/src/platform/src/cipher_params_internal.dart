@@ -59,7 +59,7 @@ class CipherParamsInternal implements CipherParams {
   static CipherParamsInternal fromCipherParams(CipherParams cipherParams) =>
       cipherParams as CipherParamsInternal;
 
-  /// Explicitly cast the [CipherParamsInternal] to [CipherParams] so users do not
-  /// see implementation details (e.g. [androidHandle]).
+  /// Explicitly cast the [CipherParamsInternal] to [CipherParams] so
+  /// users do not see implementation details (e.g. [androidHandle]).
   CipherParams toCipherParams() => this;
 }

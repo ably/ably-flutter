@@ -8,7 +8,6 @@ Future<Map<String, dynamic>> testRestTime({
 }) async {
   reporter.reportLog('init start');
   final appKey = await AppProvisioning().provisionApp();
-  final logMessages = <List<String?>>[];
 
   final rest = Rest(
     options: ClientOptions(

@@ -1,17 +1,17 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/ui/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../ui/utilities.dart';
 
 class PushNotificationHandlers {
   static BuildContext? context;
   static final activationEvents = ably.Push.activationEvents;
   static final notificationEvents = ably.Push.notificationEvents;
 
-  static BehaviorSubject<List<ably.RemoteMessage>>
+  static final BehaviorSubject<List<ably.RemoteMessage>>
       _receivedMessagesBehaviorSubject =
       BehaviorSubject<List<ably.RemoteMessage>>.seeded([]);
+
   static ValueStream<List<ably.RemoteMessage>> receivedMessagesStream =
       _receivedMessagesBehaviorSubject.stream;
 
@@ -31,11 +31,11 @@ class PushNotificationHandlers {
   static void setUpMessageHandlers() {
     getLaunchMessage();
 
-    notificationEvents.setOnBackgroundMessage(_backgroundMessageHandler);
-
-    notificationEvents.setOnOpenSettings(() {
-      print('The iOS user has asked to see the In-app Notification Settings');
-    });
+    notificationEvents
+      ..setOnBackgroundMessage(_backgroundMessageHandler)
+      ..setOnOpenSettings(() {
+        print('The iOS user has asked to see the In-app Notification Settings');
+      });
 
     notificationEvents.onMessage.listen((message) {
       addMessage(message);

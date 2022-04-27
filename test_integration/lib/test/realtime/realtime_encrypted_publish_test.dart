@@ -118,12 +118,12 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
       await getHistory(encryptedPushEnabledChannel);
 
   // Retreive plaintext history of encrypted channel
-  await encryptedChannel.setOptions(RealtimeChannelOptions());
+  await encryptedChannel.setOptions(const RealtimeChannelOptions());
   final historyOfPlaintextChannel = await getHistory(
     encryptedChannel,
     RealtimeHistoryParams(direction: 'forwards'),
   );
-  await encryptedPushEnabledChannel.setOptions(RealtimeChannelOptions());
+  await encryptedPushEnabledChannel.setOptions(const RealtimeChannelOptions());
   final historyOfPlaintextPushEnabledChannel =
       await getHistory(encryptedPushEnabledChannel);
 

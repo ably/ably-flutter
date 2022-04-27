@@ -12,7 +12,7 @@ class RestPresence extends PlatformObject {
   RestPresence(this._restChannel);
 
   @override
-  Future<int> createPlatformInstance() => (_restChannel.rest as Rest).handle;
+  Future<int> createPlatformInstance() => _restChannel.rest.handle;
 
   /// Obtain the set of members currently present for a channel.
   ///

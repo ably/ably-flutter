@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 class PushNotificationsDeviceInformation extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushNotificationsDeviceInformation(this._pushNotificationService,
-      {Key? key})
-      : super(key: key);
+  const PushNotificationsDeviceInformation({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(

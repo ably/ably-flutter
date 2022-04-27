@@ -19,7 +19,8 @@ class BoolStreamButton extends StatelessWidget {
     required this.child,
     this.stream,
     this.streams,
-  }) {
+    Key? key,
+  }) : super(key: key) {
     if (stream != null && streams != null) {
       throw Exception('Use either streams or stream argument, not both');
     }

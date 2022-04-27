@@ -16,7 +16,7 @@ void main() {
     // Build our app and trigger a frame.
     final apiKeyProvision = await ApiKeyService().getOrProvisionApiKey();
     final ablyService = AblyService(apiKeyProvision: apiKeyProvision);
-    await tester.pumpWidget(AblyFlutterExampleApp(ablyService));
+    await tester.pumpWidget(AblyFlutterExampleApp(ablyService: ablyService));
 
     // Verify that platform version is retrieved.
     expect(

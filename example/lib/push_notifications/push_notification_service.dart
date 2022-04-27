@@ -9,11 +9,11 @@ import 'package:rxdart/rxdart.dart';
 
 class PushNotificationService {
   final bool useRealtimeClient;
-  ably.Realtime _realtime;
-  ably.Rest _rest;
-  ably.RealtimeChannel? _realtimeChannel;
-  ably.RealtimeChannel? _pushLogMetaChannel;
-  ably.RestChannel? _restChannel;
+  final ably.Realtime _realtime;
+  final ably.Rest _rest;
+  late ably.RealtimeChannel? _realtimeChannel;
+  late ably.RealtimeChannel? _pushLogMetaChannel;
+  late ably.RestChannel? _restChannel;
   late ably.PushChannel? _pushChannel;
 
   PushNotificationService(

@@ -93,7 +93,7 @@ void testRestPublishSpec(FlutterDriver Function() getDriver) {
       expect(messages[0]['clientId'], 'someClientId');
     },
         skip:
-            "Failing on Android, the clientId is null`. See https://github.com/ably/ably-flutter/issues/150");
+            'Failing on Android, the clientId is null`. See https://github.com/ably/ably-flutter/issues/150');
 
     test(
         '(RSL1m2) Publishing a Message with a clientId set to the same'

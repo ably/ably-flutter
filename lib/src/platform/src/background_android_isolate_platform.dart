@@ -41,9 +41,8 @@ class BackgroundIsolateAndroidPlatform {
   final PushNotificationEventsInternal _pushNotificationEvents =
       Push.notificationEvents as PushNotificationEventsInternal;
 
-  Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
-    _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
-  }
+  Future<void> _onPushBackgroundMessage(RemoteMessage remoteMessage) async =>
+      _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
 
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) async =>
       _methodChannel.invokeMethod<T>(method, arguments);

@@ -1,13 +1,16 @@
+import 'package:ably_flutter_example/constants.dart';
+import 'package:ably_flutter_example/push_notifications/push_notification_service.dart';
+import 'package:ably_flutter_example/ui/bool_stream_button.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants.dart';
-import '../../push_notifications/push_notification_service.dart';
-import '../bool_stream_button.dart';
 
 class PushRealtimeClientReceivedSliver extends StatelessWidget {
   final PushNotificationService _pushNotificationService;
 
-  const PushRealtimeClientReceivedSliver(this._pushNotificationService);
+  const PushRealtimeClientReceivedSliver({
+    required PushNotificationService pushNotificationService,
+    Key? key,
+  })  : _pushNotificationService = pushNotificationService,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(

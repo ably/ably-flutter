@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:ably_flutter_example/push_notifications/push_notification_handlers.dart';
+import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../../push_notifications/push_notification_handlers.dart';
-import '../text_row.dart';
 
 class PushNotificationsReceivedSliver extends StatelessWidget {
-  const PushNotificationsReceivedSliver();
+  const PushNotificationsReceivedSliver({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(

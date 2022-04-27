@@ -3,9 +3,10 @@ import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-/// Displays a column of Widgets built from a [PaginatedResult.items], and
-/// allows users to navigate between others pages of a [PaginatedResult]
+/// Displays a column of Widgets built from a [ably.PaginatedResult.items], and
+/// allows users to navigate between others pages of a [ably.PaginatedResult]
 /// by going to the next page, and going back to the first page.
+// ignore: must_be_immutable
 class PaginatedResultViewer<T> extends HookWidget {
   final String title;
   final Widget? subtitle;
@@ -14,11 +15,13 @@ class PaginatedResultViewer<T> extends HookWidget {
   final ValueWidgetBuilder<T> builder;
   final Future<ably.PaginatedResult<T>> Function() query;
 
-  PaginatedResultViewer(
-      {required this.title,
-      required this.query,
-      required this.builder,
-      this.subtitle});
+  PaginatedResultViewer({
+    required this.title,
+    required this.query,
+    required this.builder,
+    this.subtitle,
+    Key? key,
+  }) : super(key: key);
 
   Future<void> getFirstPaginatedResult(
       ValueNotifier<ably.PaginatedResult<T>?> currentPaginatedResult,
@@ -48,6 +51,7 @@ class PaginatedResultViewer<T> extends HookWidget {
           currentPaginatedResult.value = result;
         });
       }
+      return;
     }, [pageNumber.value]);
 
     return Column(
