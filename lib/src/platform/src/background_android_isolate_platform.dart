@@ -44,6 +44,9 @@ class BackgroundIsolateAndroidPlatform {
   Future<void> _onPushBackgroundMessage(RemoteMessage remoteMessage) async =>
       _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
 
+  /// Equivalent of [Platform.invokePlatformMethod] which cannot be used here
+  /// because we may not be able to acquire [Platform] instance here, so we
+  /// need to use a raw [MethodChannel] communication
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) async =>
       _methodChannel.invokeMethod<T>(method, arguments);
 }

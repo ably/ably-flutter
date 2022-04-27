@@ -15,14 +15,19 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// needing to store instances on the Android side and pass references/handles
 /// to the dart side.
 class CipherParamsInternal implements CipherParams {
+  /// Android only
+  /// Handle value read from platform implementation
   int? androidHandle;
+
+  /// iOS only
+  /// Encryption key returned by platform implementation
   Uint8List? key;
 
+  /// iOS only
+  /// Encryption algorithm returned by platform implementation
   String? algorithm;
 
-  String? mode = 'cbc';
-
-  /// Create a Dart side representation of CipherParams
+  /// Create a Dart side representation of CipherParams for iOS devices
   CipherParamsInternal.forIOS({
     required this.algorithm,
     required this.key,
@@ -41,6 +46,7 @@ class CipherParamsInternal implements CipherParams {
     }
   }
 
+  /// Create a Dart side representation of CipherParams for Android devices
   CipherParamsInternal.forAndroid({
     required this.androidHandle,
   }) {
@@ -56,10 +62,11 @@ class CipherParamsInternal implements CipherParams {
     }
   }
 
+  /// Explicitly cast the [CipherParams] to [CipherParamsInternal] so
+  /// it's possible to access the internal implementation details
+  ///
+  /// This method is actually package-private, because [CipherParamsInternal]
+  /// is not exposed outside of the package
   static CipherParamsInternal fromCipherParams(CipherParams cipherParams) =>
       cipherParams as CipherParamsInternal;
-
-  /// Explicitly cast the [CipherParamsInternal] to [CipherParams] so
-  /// users do not see implementation details (e.g. [androidHandle]).
-  CipherParams toCipherParams() => this;
 }

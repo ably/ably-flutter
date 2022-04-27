@@ -18,18 +18,18 @@ class RestChannel extends PlatformObject {
   /// name of the channel
   String name;
 
+  late RestPresence _presence;
+
   /// presence interface for this channel
   ///
   /// can only query presence on the channel and presence history
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
-  late RestPresence _presence;
+  RestPresence get presence => _presence;
 
   /// instantiates with [Rest], [name] and [RestChannelOptions]
   RestChannel(this.rest, this.push, this.name) {
     _presence = RestPresence(this);
   }
-
-  RestPresence get presence => _presence;
 
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance

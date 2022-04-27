@@ -27,9 +27,9 @@ class AblyMethodCallHandler {
           return _pushNotificationEvents
               .showNotificationInForeground(call.arguments as RemoteMessage);
         case PlatformMethod.pushOnNotificationTap:
-          return onNotificationTap(call.arguments as RemoteMessage);
+          return _onNotificationTap(call.arguments as RemoteMessage);
         case PlatformMethod.pushOpenSettingsFor:
-          return onOpenSettingsFor();
+          return _onOpenSettingsFor();
         default:
           throw PlatformException(
               code: 'Received invalid method channel call from Platform side',
@@ -94,13 +94,13 @@ class AblyMethodCallHandler {
     return null;
   }
 
-  Future<Object?> onNotificationTap(RemoteMessage remoteMessage) async {
+  Future<Object?> _onNotificationTap(RemoteMessage remoteMessage) async {
     _pushNotificationEvents.onNotificationTapStreamController
         .add(remoteMessage);
     return null;
   }
 
-  Future<Object?> onOpenSettingsFor() async {
+  Future<Object?> _onOpenSettingsFor() async {
     if (_pushNotificationEvents.onOpenSettingsHandler != null) {
       _pushNotificationEvents.onOpenSettingsHandler!();
     }

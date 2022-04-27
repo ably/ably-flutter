@@ -22,6 +22,7 @@ class RemoteMessage {
     this.notification,
   }) : data = data ??= {};
 
+  /// create instance from a map
   factory RemoteMessage.fromMap(Map<String, dynamic> map) => RemoteMessage(
         data: (map[TxRemoteMessage.data] == null)
             ? <String, dynamic>{}
