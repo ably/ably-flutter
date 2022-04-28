@@ -566,7 +566,7 @@ presenceMessages = await channel.presence.get(
 
 ```dart
 // Get presence history with default parameters
-ably.PaginatedResult<ably.PresenceMessage> history = await channel.presence.history()
+ably.PaginatedResult<ably.PresenceMessage> history = await channel.presence.history();
 
 // Get presence history with custom parameters
 ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.presence.history(
@@ -574,5 +574,28 @@ ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.prese
         direction: 'forwards',
         limit: 10,
     )
-)
+);
+```
+
+### Encryption
+
+#### Create CipherParams
+
+```dart
+String key = 'base64EncodedKey'; // Can also be an UInt8List
+CipherParams cipherParams = ably.Crypto.getDefaultParams(key: key);
+```
+
+#### Setup encryption on a channel
+
+```dart
+// For realtime
+RealtimeChannelOptions realtimeChannelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
+RealtimeChannel channel = realtime.channels.get("channel-name");
+channel.setOptions(realtimeChannelOptions)
+
+// For rest
+RestChannelOptions restChannelOptions = ably.RestChannelOptions(cipherParams: cipherParams);
+RestChannel channel = rest.channels.get("channel-name");
+channel.setOptions(restChannelOptions)
 ```
