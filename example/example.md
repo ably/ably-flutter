@@ -363,3 +363,204 @@ StreamSubscription<ably.PresenceMessage> subscription =
             // Handle `enter` and `update` presence message
         },
 );
+```
+
+## Using the REST API
+
+### Rest instance
+
+#### Create instance of REST API
+
+```dart
+ably.Rest rest = ably.Rest(options: clientOptions);
+```
+
+### Rest channel
+
+#### Create instance of Rest channel
+
+```dart
+ably.RestChannel channel = rest.channels.get('channel-name');
+```
+
+### Rest channel messages
+
+#### Publish single message on Rest channel
+
+```dart
+// Publish simple message
+await channel.publish(
+    name: "event1",
+    data: "hello world",
+);
+
+// Publish message data as json-encodable object
+await channel.publish(
+    name: "event1",
+    data: {
+        "hello": "world",
+        "hey": "ably",
+    },
+);
+
+// Publish message as array of json-encodable objects
+await channel.publish(
+    name: "event1",
+    data: [
+        {
+        "hello": {
+            "world": true,
+        },
+        "ably": {
+            "serious": "realtime",
+        },
+    ],
+);
+
+// Publish message as an `ably.Message` object
+await channel.publish(
+    message: ably.Message(
+        name: "event1",
+        data: {
+            "hello": "world",
+        }
+    ),
+);
+```
+
+#### Publish multiple messages on Rest channel
+
+```dart
+await channel.publish(
+    messages: [
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "world",
+            }
+        ),
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "ably",
+            }
+        ),
+    ],
+);
+```
+
+### Rest channel history
+
+#### Read Rest channel history
+
+```dart
+// Get channel history with default parameters
+ably.PaginatedResult<ably.Message> history = await channel.history()
+
+// Get channel history with custom parameters
+ably.PaginatedResult<ably.Message> filteredHistory = await channel.history(
+    ably.RestHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+)
+```
+
+### Rest presence
+
+#### Enter Rest presence
+
+```dart
+// Enter using client ID from `ClientOptions`
+await channel.presence.enter();
+
+// Enter using client ID from `ClientOptions` with additional data
+await channel.presence.enter("hello");
+await channel.presence.enter([1, 2, 3]);
+await channel.presence.enter({"key": "value"});
+
+// Enter with specified client ID
+await channel.presence.enterClient("user1");
+
+// Enter with specified client ID and additional data
+await channel.presence.enterClient("user1", "hello");
+await channel.presence.enterClient("user1", [1, 2, 3]);
+await channel.presence.enterClient("user1", {"key": "value"});
+```
+
+#### Update Rest presence
+
+```dart
+// Update using client ID from `ClientOptions`
+await channel.presence.update();
+
+// Update using client ID from `ClientOptions` with additional data
+await channel.presence.update("hello");
+await channel.presence.update([1, 2, 3]);
+await channel.presence.update({"key": "value"});
+
+// Update with specified client ID
+await channel.presence.updateClient("user1");
+
+// Update with specified client ID and additional data
+await channel.presence.updateClient("user1", "hello");
+await channel.presence.updateClient("user1", [1, 2, 3]);
+await channel.presence.updateClient("user1", {"key": "value"});
+```
+
+#### Leave Rest presence
+
+```dart
+// Leave using client ID from `ClientOptions`
+await channel.presence.leave();
+
+// Leave using client ID from `ClientOptions` with additional data
+await channel.presence.leave("hello");
+await channel.presence.leave([1, 2, 3]);
+await channel.presence.leave({"key": "value"});
+
+// Leave with specified client ID
+await channel.presence.leaveClient("user1");
+
+// Leave with specified client ID and additional data
+await channel.presence.leaveClient("user1", "hello");
+await channel.presence.leaveClient("user1", [1, 2, 3]);
+await channel.presence.leaveClient("user1", {"key": "value"});
+```
+
+#### Get Rest presence
+
+```dart
+
+// Get all presence messages
+List<ably.PresenceMessage> presenceMessages = await channel.presence.get();
+
+// Get presence messages with specific Client ID
+presenceMessages = await channel.presence.get(
+    ably.RestPresenceParams(
+        clientId: 'clientId',
+    ),
+);
+
+// Get presence messages with specific Connection ID
+presenceMessages = await channel.presence.get(
+    ably.RestPresenceParams(
+        connectionId: 'connectionId',
+    ),
+);
+```
+
+#### Read Rest presence history
+
+```dart
+// Get presence history with default parameters
+ably.PaginatedResult<ably.PresenceMessage> history = await channel.presence.history()
+
+// Get presence history with custom parameters
+ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.presence.history(
+    ably.RestHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+)
+```
