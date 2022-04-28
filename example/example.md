@@ -43,6 +43,12 @@ ably.Rest rest = ably.Rest(options: clientOptions);
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ```
 
+#### Read Realtime time
+
+```dart
+DateTime time = realtime.time()
+```
+
 ### Connection state
 
 #### Listen for all connection state events
@@ -373,6 +379,12 @@ StreamSubscription<ably.PresenceMessage> subscription =
 
 ```dart
 ably.Rest rest = ably.Rest(options: clientOptions);
+```
+
+#### Read Rest time
+
+```dart
+DateTime time = rest.time()
 ```
 
 ### Rest channel
