@@ -480,70 +480,9 @@ ably.PaginatedResult<ably.Message> filteredHistory = await channel.history(
 
 ### Rest presence
 
-#### Enter Rest presence
-
-```dart
-// Enter using client ID from `ClientOptions`
-await channel.presence.enter();
-
-// Enter using client ID from `ClientOptions` with additional data
-await channel.presence.enter("hello");
-await channel.presence.enter([1, 2, 3]);
-await channel.presence.enter({"key": "value"});
-
-// Enter with specified client ID
-await channel.presence.enterClient("user1");
-
-// Enter with specified client ID and additional data
-await channel.presence.enterClient("user1", "hello");
-await channel.presence.enterClient("user1", [1, 2, 3]);
-await channel.presence.enterClient("user1", {"key": "value"});
-```
-
-#### Update Rest presence
-
-```dart
-// Update using client ID from `ClientOptions`
-await channel.presence.update();
-
-// Update using client ID from `ClientOptions` with additional data
-await channel.presence.update("hello");
-await channel.presence.update([1, 2, 3]);
-await channel.presence.update({"key": "value"});
-
-// Update with specified client ID
-await channel.presence.updateClient("user1");
-
-// Update with specified client ID and additional data
-await channel.presence.updateClient("user1", "hello");
-await channel.presence.updateClient("user1", [1, 2, 3]);
-await channel.presence.updateClient("user1", {"key": "value"});
-```
-
-#### Leave Rest presence
-
-```dart
-// Leave using client ID from `ClientOptions`
-await channel.presence.leave();
-
-// Leave using client ID from `ClientOptions` with additional data
-await channel.presence.leave("hello");
-await channel.presence.leave([1, 2, 3]);
-await channel.presence.leave({"key": "value"});
-
-// Leave with specified client ID
-await channel.presence.leaveClient("user1");
-
-// Leave with specified client ID and additional data
-await channel.presence.leaveClient("user1", "hello");
-await channel.presence.leaveClient("user1", [1, 2, 3]);
-await channel.presence.leaveClient("user1", {"key": "value"});
-```
-
 #### Get Rest presence
 
 ```dart
-
 // Get all presence messages
 List<ably.PresenceMessage> presenceMessages = await channel.presence.get();
 
