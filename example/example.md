@@ -6,7 +6,7 @@
 
 ```dart
 // Create an instance of ClientOptions with Ably key
-final clientOptions = ably.ClientOptions(key: 'xxxx:xxxx');
+final clientOptions = ably.ClientOptions(key: '<KEY>');
 
 // Use ClientOptions to create realtime or rest instance
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
@@ -15,11 +15,24 @@ ably.Rest rest = ably.Rest(options: clientOptions);
 
 ### Authenticate using [token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
 
+#### Token only
+
 ```dart
 // Create an instance of ClientOptions with Ably token
+ably.ClientOptions clientOptions = ably.ClientOptions(key: '<TOKEN>');
+
+// Use ClientOptions to create realtime or rest instance
+ably.Realtime realtime = ably.Realtime(options: clientOptions);
+ably.Rest rest = ably.Rest(options: clientOptions);
+```
+
+#### Token with TokenCallback
+
+```dart
+// Create an instance of ClientOptions with Ably token and authCallback
 ably.ClientOptions clientOptions = ably.ClientOptions(
-    key: 'xxxxxxxx', 
-    clientId: 'ably_client_id', // Optional
+    key: '<TOKEN>', 
+    clientId: '<CLIENT>', // Optional
     authCallback: (ably.TokenParams tokenParams) async {
         // `createTokenRequest` should be implemented to communicate with user server
         ably.TokenRequest tokenRequest = await createTokenRequest(tokenParams);
