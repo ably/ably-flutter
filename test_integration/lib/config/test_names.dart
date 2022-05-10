@@ -16,11 +16,12 @@ class TestName {
   static const String restEncryptedPublishSpec = 'restEncryptedPublishSpec';
   static const String restCapabilities = 'restCapabilities';
   static const String restHistory = 'restHistory';
+  static const String restHistoryWithAuthCallback =
+      'restHistoryWithAuthCallback';
   static const String restTime = 'restTime';
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
 
-  // TODO(tiholic) handle restHistoryWithAuthCallback
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
 
