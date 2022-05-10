@@ -73,10 +73,9 @@ public class PushNotificationEncoders: NSObject {
         if #available(iOS 13.0, *) {
             dictionary[TxUNNotificationSettings_announcementSetting] = settings.announcementSetting.toString()
         }
-        // TODO Use this once Xcode 13 is used (iOS15 is released/ supported)
-//        if #available(iOS 15.0, *) {
-//            dictionary[TxUNNotificationSettings_scheduledDeliverySetting] = settings.scheduledDeliverySetting.toString()
-//        }
+        if #available(iOS 15.0, *) {
+           dictionary[TxUNNotificationSettings_scheduledDeliverySetting] = settings.scheduledDeliverySetting.toString()
+        }
         
         return dictionary;
     }
