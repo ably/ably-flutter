@@ -8,6 +8,7 @@ import 'package:ably_flutter_integration_test/test/helpers_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_history_with_auth_callback_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_enter_update_leave.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_get.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_history_test.dart';
@@ -56,6 +57,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimePublishWithAuthCallback: testRealtimePublishWithAuthCallback,
   TestName.realtimeHistory: testRealtimeHistory,
+  TestName.realtimeHistoryWithAuthCallback: testRealtimeHistoryWithAuthCallback,
   TestName.realtimeTime: testRealtimeTime,
   TestName.realtimePresenceGet: testRealtimePresenceGet,
   TestName.realtimePresenceHistory: testRealtimePresenceHistory,

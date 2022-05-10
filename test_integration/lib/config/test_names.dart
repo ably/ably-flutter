@@ -33,6 +33,8 @@ class TestName {
   static const String realtimeEvents = 'realtimeEvents';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeHistory = 'realtimeHistory';
+  static const String realtimeHistoryWithAuthCallback =
+      'realtimeHistoryWithAuthCallback';
   static const String realtimeTime = 'realtimeTime';
   static const String realtimePublishWithAuthCallback =
       'realtimePublishWithAuthCallback';
@@ -41,7 +43,6 @@ class TestName {
   static const String realtimePresenceEnterUpdateLeave =
       'realtimePresenceEnterUpdateLeave';
   static const String realtimePresenceSubscribe = 'realtimePresenceSubscribe';
-// TODO(tiholic) handle realtimeHistoryWithAuthCallback
 
   static const String cryptoGenerateRandomKey = 'cryptoGenerateRandomKey';
   static const String cryptoEnsureSupportedKeyLength =
