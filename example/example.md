@@ -8,7 +8,7 @@
 // Create an instance of ClientOptions with Ably key
 final clientOptions = ably.ClientOptions(key: '<KEY>');
 
-// Use ClientOptions to create realtime or REST instance
+// Use ClientOptions to create Realtime or REST instance
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
@@ -33,7 +33,7 @@ ably.ClientOptions clientOptions = ably.ClientOptions(
     }
 );
 
-// Use ClientOptions to create realtime or REST instance
+// Use ClientOptions to create Realtime or REST instance
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
@@ -81,7 +81,7 @@ realtime.connection
 
 ### Realtime channel
 
-#### Create instance of realtime channel
+#### Create instance of Realtime channel
 
 ```dart
 ably.RealtimeChannel channel = realtime.channels.get('channel-name');
@@ -337,7 +337,7 @@ ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.prese
 )
 ```
 
-#### Listen for all realtime presence messages
+#### Listen for all Realtime presence messages
 
 ```dart
 StreamSubscription<ably.PresenceMessage> subscription =
@@ -563,7 +563,7 @@ CipherParams cipherParams = ably.Crypto.getDefaultParams(key: key);
 ### Setup encryption on a channel
 
 ```dart
-// For realtime
+// For Realtime
 RealtimeChannelOptions realtimeChannelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
 RealtimeChannel channel = realtime.channels.get("channel-name");
 channel.setOptions(realtimeChannelOptions)
