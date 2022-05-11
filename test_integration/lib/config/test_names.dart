@@ -53,7 +53,7 @@ class TestName {
   static const String testHelperUnhandledExceptionTest =
       'testHelperUnhandledExceptionTest';
 
-  // more information of failures from any of the tests cases
   // This is not a test, but a way to retrieve
+  // more information of failures from any of the tests cases
   static const String getFlutterErrors = 'getFlutterErrors';
 }
