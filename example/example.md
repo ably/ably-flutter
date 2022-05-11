@@ -8,7 +8,7 @@
 // Create an instance of ClientOptions with Ably key
 final clientOptions = ably.ClientOptions(key: '<KEY>');
 
-// Use ClientOptions to create realtime or rest instance
+// Use ClientOptions to create realtime or REST instance
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
@@ -33,7 +33,7 @@ ably.ClientOptions clientOptions = ably.ClientOptions(
     }
 );
 
-// Use ClientOptions to create realtime or rest instance
+// Use ClientOptions to create realtime or REST instance
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
@@ -381,7 +381,7 @@ StreamSubscription<ably.PresenceMessage> subscription =
 
 ## Using the REST API
 
-### Rest instance
+### REST instance
 
 #### Create instance of REST API
 
@@ -389,23 +389,23 @@ StreamSubscription<ably.PresenceMessage> subscription =
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
 
-#### Read Rest time
+#### Read REST time
 
 ```dart
 DateTime time = rest.time()
 ```
 
-### Rest channel
+### REST channel
 
-#### Create instance of Rest channel
+#### Create instance of REST channel
 
 ```dart
 ably.RestChannel channel = rest.channels.get('channel-name');
 ```
 
-### Rest channel messages
+### REST channel messages
 
-#### Publish single message on Rest channel
+#### Publish single message on REST channel
 
 ```dart
 // Publish simple message
@@ -448,7 +448,7 @@ await channel.publish(
 );
 ```
 
-#### Publish multiple messages on Rest channel
+#### Publish multiple messages on REST channel
 
 ```dart
 await channel.publish(
@@ -469,9 +469,9 @@ await channel.publish(
 );
 ```
 
-### Rest channel history
+### REST channel history
 
-#### Read Rest channel history
+#### Read REST channel history
 
 ```dart
 // Get channel history with default parameters
@@ -486,9 +486,9 @@ ably.PaginatedResult<ably.Message> filteredHistory = await channel.history(
 )
 ```
 
-### Rest presence
+### REST presence
 
-#### Get Rest presence
+#### Get REST presence
 
 ```dart
 // Get all presence messages
@@ -509,7 +509,7 @@ presenceMessages = await channel.presence.get(
 );
 ```
 
-#### Read Rest presence history
+#### Read REST presence history
 
 ```dart
 // Get presence history with default parameters
@@ -568,7 +568,7 @@ RealtimeChannelOptions realtimeChannelOptions = ably.RealtimeChannelOptions(ciph
 RealtimeChannel channel = realtime.channels.get("channel-name");
 channel.setOptions(realtimeChannelOptions)
 
-// For rest
+// For REST
 RestChannelOptions restChannelOptions = ably.RestChannelOptions(cipherParams: cipherParams);
 RestChannel channel = rest.channels.get("channel-name");
 channel.setOptions(restChannelOptions)
