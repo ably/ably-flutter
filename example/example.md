@@ -1,4 +1,4 @@
-# Ably-Flutter examples
+# Ably Flutter Plugin Examples
 
 ## Authentication
 
