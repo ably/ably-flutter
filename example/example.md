@@ -41,11 +41,11 @@ ably.Rest rest = ably.Rest(options: clientOptions);
 Also see docs:
 [Auth and Security: Token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
 
-## Using the Realtime API
+## Using the Realtime Client
 
 ### Realtime instance
 
-#### Create instance of Realtime API
+#### Create an instance of the Realtime Client
 
 ```dart
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
@@ -379,11 +379,11 @@ StreamSubscription<ably.PresenceMessage> subscription =
 );
 ```
 
-## Using the REST API
+## Using the REST Client
 
 ### REST instance
 
-#### Create instance of REST API
+#### Create an instance of the REST Client
 
 ```dart
 ably.Rest rest = ably.Rest(options: clientOptions);
