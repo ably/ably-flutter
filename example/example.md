@@ -2,7 +2,7 @@
 
 ## Authentication
 
-### Authenticate using [key authentication](https://ably.com/docs/core-features/authentication/#basic-authentication)
+### Authentication using API Key
 
 ```dart
 // Create an instance of ClientOptions with Ably key
@@ -13,20 +13,12 @@ ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
 
-### Authenticate using [token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
+Also see docs:
+[Auth and Security: Basic authentication](https://ably.com/docs/core-features/authentication/#basic-authentication)
 
-#### Token only
+### Token Authentication
 
-```dart
-// Create an instance of ClientOptions with Ably token
-ably.ClientOptions clientOptions = ably.ClientOptions(key: '<TOKEN>');
-
-// Use ClientOptions to create realtime or rest instance
-ably.Realtime realtime = ably.Realtime(options: clientOptions);
-ably.Rest rest = ably.Rest(options: clientOptions);
-```
-
-#### Token with TokenCallback
+Supplying a `TokenCallback`:
 
 ```dart
 // Create an instance of ClientOptions with Ably token and authCallback
@@ -45,6 +37,9 @@ ably.ClientOptions clientOptions = ably.ClientOptions(
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
+
+Also see docs:
+[Auth and Security: Token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
 
 ## Using the Realtime API
 
