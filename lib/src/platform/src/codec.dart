@@ -828,6 +828,9 @@ class Codec extends StandardMessageCodec {
                 as bool,
         announcementSetting: _decodeUNNotificationSetting(
             jsonMap[TxUNNotificationSettings.announcementSetting] as String),
+        scheduledDeliverySetting: _decodeUNNotificationSetting(
+            jsonMap[TxUNNotificationSettings.scheduledDeliverySetting]
+                as String),
       );
 
   UNShowPreviewsSetting _decodeUNShowPreviewsSetting(String setting) {
