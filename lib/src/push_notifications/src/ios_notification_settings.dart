@@ -65,6 +65,7 @@ class UNNotificationSettings {
   bool providesAppNotificationSettings;
   UNNotificationSetting soundSetting;
   UNShowPreviewsSetting showPreviewsSetting;
+  UNNotificationSetting scheduledDeliverySetting;
 
   /// Users do not create this class. Call [Push.getNotificationSettings]
   /// instead.
@@ -81,5 +82,6 @@ class UNNotificationSettings {
     required this.providesAppNotificationSettings,
     required this.showPreviewsSetting,
     required this.soundSetting,
+    required this.scheduledDeliverySetting,
   });
 }
