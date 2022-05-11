@@ -529,16 +529,43 @@ ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.prese
 );
 ```
 
-### Encryption
+## PaginatedResult handling
 
-#### Create CipherParams
+### Get items on current page
+
+```dart
+// Example PaginatedResult returned from channel history
+ably.PaginatedResult<ably.Message> paginatedResult = await channel.history(params);
+
+// Get list of items from result
+List<ably.Message> items = paginatedResult.items;
+```
+
+### Get next page if available
+
+```dart
+// Example PaginatedResult returned from channel history
+ably.PaginatedResult<ably.Message> paginatedResult = await channel.history(params);
+
+// Check if next page is available
+bool hasNextPage = paginatedResult.hasNext();
+
+// Fetch next page if it's available
+if (hasNextPage) {    
+  paginatedResult = await paginatedResult.next();
+}
+```
+
+## Encryption
+
+### Create CipherParams
 
 ```dart
 String key = 'base64EncodedKey'; // Can also be an UInt8List
 CipherParams cipherParams = ably.Crypto.getDefaultParams(key: key);
 ```
 
-#### Setup encryption on a channel
+### Setup encryption on a channel
 
 ```dart
 // For realtime
