@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
@@ -28,13 +26,14 @@ class MessageExtras with ObjectHash {
   /// the data type, runtime
   static MessageExtras? fromMap(Map<String, dynamic>? extrasMap) {
     if (extrasMap == null) return null;
-    extrasMap = Map.castFrom<dynamic, dynamic, String, dynamic>(
-      json.decode(json.encode(extrasMap)) as Map,
-    );
+    // In some cases, extrasMap may not be a mutable map
+    // for example, when it's a CastMap, so we need to create a mutable
+    // instance from the existing extras map
+    final mutableExtrasMap = Map<String, dynamic>.from(extrasMap);
     final deltaMap =
-        extrasMap.remove(TxMessageExtras.delta) as Map<String, dynamic>?;
+        mutableExtrasMap.remove(TxMessageExtras.delta) as Map<String, dynamic>?;
     return MessageExtras._withDelta(
-      extrasMap,
+      mutableExtrasMap,
       (deltaMap == null) ? null : DeltaExtras.fromMap(deltaMap),
     );
   }
