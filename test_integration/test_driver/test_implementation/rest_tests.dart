@@ -299,6 +299,17 @@ void testRestHistory(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRestHistoryWithAuthCallback(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restHistoryWithAuthCallback);
+  late TestControlResponseMessage response;
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
+
+  test('auth callback is invoked', () {
+    expect(response.payload['authCallbackInvoked'], isTrue);
+  });
+}
+
 void testRestTime(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restTime);
   late TestControlResponseMessage response;

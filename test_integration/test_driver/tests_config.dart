@@ -21,6 +21,8 @@ final _tests =
     'should publish': testRestPublish,
     'should publish encrypted': testRestEncryptedPublish,
     'should retrieve history': testRestHistory,
+    'should retrieve history with auth callback':
+        testRestHistoryWithAuthCallback,
     'should retrieve time': testRestTime,
     'conforms to publish spec': testRestPublishSpec,
     'conforms to publish spec when encrypted': testRestEncryptedPublishSpec,
@@ -37,6 +39,8 @@ final _tests =
     'should subscribe to connection and channel': testRealtimeEvents,
     'should subscribe to messages': testRealtimeSubscribe,
     'should retrieve history': testRealtimeHistory,
+    'should retrieve history with auth callback':
+        testRealtimeHistoryWithAuthCallback,
     'should retrieve time': testRealtimeTime,
     'realtime#channels#channel#presence#get': testRealtimePresenceGet,
     'realtime#channels#channel#presence#history': testRealtimePresenceHistory,
