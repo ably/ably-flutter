@@ -1,17 +1,17 @@
 name: ably_flutter_integration_test
 description: Integration tests for Ably Flutter plugin.
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   ably_flutter:
-    path: '..'
+    path: ".."
 
   args: ^2.0.0
   enum_to_string: ^2.0.1
@@ -22,8 +22,13 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  test: ^1.16.7
+  test: ^1.21.1
   flutter_lints: ^1.0.4
+
+# Overrides are explained in main pubspec.yaml file
+dependency_overrides:
+  test_api: 0.4.9
+  matcher: 0.12.11
 
 flutter:
   uses-material-design: true
