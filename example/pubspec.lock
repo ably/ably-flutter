@@ -21,14 +21,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.2"
-  boolean_selector:
-    dependency: transitive
-    description:
-      name: boolean_selector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
+    version: "2.8.1"
   characters:
     dependency: transitive
     description:
@@ -120,13 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  fake_async:
-    dependency: transitive
-    description:
-      name: fake_async
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
   ffi:
     dependency: transitive
     description:
@@ -181,11 +167,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  flutter_test:
-    dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -226,20 +207,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  matcher:
-    dependency: transitive
-    description:
-      name: matcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.11"
-  material_color_utilities:
-    dependency: transitive
-    description:
-      name: material_color_utilities
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -308,20 +275,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
-  stack_trace:
-    dependency: transitive
-    description:
-      name: stack_trace
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.10.0"
-  stream_channel:
-    dependency: transitive
-    description:
-      name: stream_channel
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   stream_transform:
     dependency: "direct main"
     description:
@@ -343,13 +296,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  test_api:
-    dependency: transitive
-    description:
-      name: test_api
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.8"
   timezone:
     dependency: transitive
     description:
@@ -377,7 +323,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.10"
+    version: "2.3.6"
   xdg_directories:
     dependency: transitive
     description:
@@ -393,5 +339,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.15.0 <3.0.0"
-  flutter: ">=2.2.3"
+  dart: ">=2.14.0 <3.0.0"
+  flutter: ">=2.8.0"
