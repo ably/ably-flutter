@@ -6,9 +6,7 @@
 
 **Implemented enhancements:**
 
-- Use consistent type for platform method parameters [\#359](https://github.com/ably/ably-flutter/issues/359)
 - Add Flutter and/or Dart runtime version to Ably-Agent header, if possible [\#286](https://github.com/ably/ably-flutter/issues/286)
-- Avoid additional wrapper types for platform method invocations [\#179](https://github.com/ably/ably-flutter/issues/179)
 - Custom Transport Parameters \(Params\) [\#108](https://github.com/ably/ably-flutter/issues/108)
 
 **Fixed bugs:**
@@ -23,16 +21,7 @@
 - Check compatibility with XCode 13 [\#389](https://github.com/ably/ably-flutter/issues/389)
 - Document public members of classes [\#380](https://github.com/ably/ably-flutter/issues/380)
 - Ably iOS interferes with firebase\_messaging [\#378](https://github.com/ably/ably-flutter/issues/378)
-- Add integration tests for Crypto module [\#370](https://github.com/ably/ably-flutter/issues/370)
-- Flutter Update urls in readme [\#368](https://github.com/ably/ably-flutter/issues/368)
 - Sort named constructor parameters alphabetically [\#351](https://github.com/ably/ably-flutter/issues/351)
-- Sync Gradle-generated `aar`'s version with SDK version [\#315](https://github.com/ably/ably-flutter/issues/315)
-- Remove `--no-fatal-infos` argument from the `flutter analyze` invocation in the check workflow  [\#278](https://github.com/ably/ably-flutter/issues/278)
-- Avoid unnecessary use of JSON serialization [\#133](https://github.com/ably/ably-flutter/issues/133)
-- Conform hashCode implementations [\#132](https://github.com/ably/ably-flutter/issues/132)
-- Simplify channel subscribe API [\#131](https://github.com/ably/ably-flutter/issues/131)
-- Add tests for history API with authcallback [\#87](https://github.com/ably/ably-flutter/issues/87)
-- Lint rule to avoid for implicit dynamic variables [\#84](https://github.com/ably/ably-flutter/issues/84)
 - Use named arguments for options classes and make all fields private [\#61](https://github.com/ably/ably-flutter/issues/61)
 
 ## [1.2.13](https://github.com/ably/ably-flutter/tree/v1.2.13)
