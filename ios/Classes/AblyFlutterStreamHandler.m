@@ -34,7 +34,14 @@
         if ([AblyPlatformMethod_onRealtimeConnectionStateChanged isEqual: eventName]) {
             ARTRealtime *const realtime = [_instanceStore realtimeFrom:handle];
             listener = [realtime.connection  on: ^(ARTConnectionStateChange * const stateChange) {
-                emitter(stateChange);
+                if(![stateChange isKindOfClass:[ARTConnectionStateChange class]]) {
+                    emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                             message:[NSString stringWithFormat:@"Expected ARTConnectionStateChange but received %@", [stateChange class]]
+                             details:eventName
+                    ]);
+                } else {
+                    emitter(stateChange);
+                }
             }];
         } else if ([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
             NSAssert(eventMessage.message, @"event message is missing");
@@ -45,7 +52,14 @@
             ARTRealtimeChannel *const channel  = [realtime.channels get:channelName];
             
             listener = [channel on: ^(ARTChannelStateChange * const stateChange) {
-                emitter(stateChange);
+                if(![stateChange isKindOfClass:[ARTChannelStateChange class]]) {
+                    emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                                message:[NSString stringWithFormat:@"Expected ARTChannelStateChange but received %@", [stateChange class]]
+                                details:[NSString stringWithFormat:@"Event %@", eventName]
+                    ]);
+                } else {
+                    emitter(stateChange);
+                }
             }];
         } else if ([AblyPlatformMethod_onRealtimeChannelMessage isEqual: eventName]) {
             NSAssert(eventMessage.message, @"event message is missing");
@@ -56,7 +70,14 @@
             ARTRealtimeChannel *const channel  = [realtime.channels get:channelName];
             
             listener = [channel subscribe: ^(ARTMessage * const message) {
-                emitter(message);
+                if(![message isKindOfClass:[ARTMessage class]]) {
+                    emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                                message:[NSString stringWithFormat:@"Expected ARTMessage but received %@", [message class]]
+                                details:[NSString stringWithFormat:@"Event %@", eventName]
+                    ]);
+                } else {
+                    emitter(message);
+                }
             }];
         } else if ([AblyPlatformMethod_onRealtimePresenceMessage isEqual: eventName]) {
             NSAssert(eventMessage.message, @"event message is missing");
@@ -66,13 +87,26 @@
             NSString *const channelName = (NSString*) eventPayload[TxTransportKeys_channelName];
             ARTRealtimeChannel *const channel  = [realtime.channels get:channelName];
             listener = [[channel presence] subscribe: ^(ARTPresenceMessage * const message) {
-                emitter(message);
+                if(![message isKindOfClass:[ARTPresenceMessage class]]) {
+                    emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                                message:[NSString stringWithFormat:@"Expected ARTPresenceMessage but received %@", [message class]]
+                                details:[NSString stringWithFormat:@"Event %@", eventName]
+                    ]);
+                } else {
+                    emitter(message);
+                }
             }];
         } else {
-            emitter([FlutterError errorWithCode:@"error" message:[NSString stringWithFormat:@"Invalid event name: %@", eventName] details:nil]);
+            emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                        message:[NSString stringWithFormat:@"Invalid event name: %@", eventName]
+                        details:[NSString stringWithFormat:@"Event %@", eventName]
+            ]);
         }
     }@catch (NSException *exception) {
-        emitter([FlutterError errorWithCode:@"error" message:exception.reason details:eventName]);
+        emitter([FlutterError errorWithCode:@"AblyFlutterStreamHandler.startListening"
+                    message:exception.reason
+                    details:[NSString stringWithFormat:@"Event %@", eventName]
+        ]);
     }
 }
 
