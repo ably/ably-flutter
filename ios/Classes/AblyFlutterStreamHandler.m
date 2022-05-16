@@ -26,6 +26,8 @@
     return nil;
 }
 
+/// Additional type checks were introduced in all listeners due wrong types of object being emitted
+/// See https://github.com/ably/ably-flutter/issues/355
 - (void) startListening:(AblyFlutterMessage *const)message emitter:(FlutterEventSink)emitter {
     AblyFlutterEventMessage *const eventMessage = message.message;
     NSNumber *const handle = message.handle;
