@@ -8,26 +8,26 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.0.x"
           cache: true
 
-      # This step requires fetch of test_integration packages because flutter format and 
+      # This step requires fetch of test_integration packages because flutter format and
       # flutter analyze check test_integration package too
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: |
           flutter pub get
           cd test_integration && flutter pub get
 
-      - name: 'Check formatting issues in the code'
+      - name: "Check formatting issues in the code"
         run: flutter format --set-exit-if-changed .
-        
-      - name: 'Statically analyze the Dart code for any errors'
-        run: 'flutter analyze --no-pub .'
 
-      - name: 'Run unit tests'
+      - name: "Statically analyze the Dart code for any errors"
+        run: "flutter analyze --no-pub ."
+
+      - name: "Run unit tests"
         run: flutter test --no-pub
