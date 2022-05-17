@@ -9,28 +9,28 @@ jobs:
     strategy:
       matrix:
         device: # Device names must be shown in `xcrun simctl list devices`
-          - "iPhone 12" # we are not specifying the iOS version as it tends to change
+          - 'iPhone 12' # we are not specifying the iOS version as it tends to change
       fail-fast: false
-    runs-on: "macos-11"
+    runs-on: 'macos-11'
     steps:
-      - name: "List Simulators"
-        run: "xcrun simctl list devices"
+      - name: 'List Simulators'
+        run: 'xcrun simctl list devices'
 
-      - name: "Start Simulator"
+      - name: 'Start Simulator'
         run: xcrun simctl boot "${{ matrix.device }}"
 
       - uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.0.x"
+          flutter-version: '3.0.x'
           cache: true
 
       # test_integration package depends on ably_flutter, so before we run integration
       # tests it's best to perform dependency update in both packages, to make sure that
       # integration tests are run with exactly the same dependencies as specified in
       # current version of ably_flutter package
-      - name: "Run Flutter Driver tests"
+      - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
         run: |
           flutter pub get
@@ -42,21 +42,21 @@ jobs:
         api-level: [21, 29]
       fail-fast: false
 
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
 
     steps:
       - uses: actions/checkout@v2
 
       - uses: actions/setup-java@v1
         with:
-          java-version: "8.x"
+          java-version: '8.x'
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.0.x"
+          flutter-version: '3.0.x'
           cache: true
 
-      - name: "Run Flutter Driver tests"
+      - name: 'Run Flutter Driver tests'
         timeout-minutes: 30
         uses: reactivecircus/android-emulator-runner@v2
         with:
