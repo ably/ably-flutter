@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 typedef Injector = int? Function(int id);
 
