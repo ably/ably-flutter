@@ -42,7 +42,6 @@ abstract class PlatformObject {
       [final Map<String, dynamic>? argument]) async {
     final message = AblyMessage(
       message: argument ?? {},
-      handle: null,
     );
     return _platform.invokePlatformMethod<T>(method, message);
   }
