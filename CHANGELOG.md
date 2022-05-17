@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.2.14](https://github.com/ably/ably-flutter/tree/v1.2.14)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.13...v1.2.14)
+
+**Implemented enhancements:**
+
+- Add Flutter and/or Dart runtime version to Ably-Agent header, if possible [\#286](https://github.com/ably/ably-flutter/issues/286)
+- Custom Transport Parameters \(Params\) [\#108](https://github.com/ably/ably-flutter/issues/108)
+
+**Fixed bugs:**
+
+- Check requirements and update for Flutter 3.0.0 [\#394](https://github.com/ably/ably-flutter/issues/394)
+- Upgrade `ably-java` dependency to version 1.2.12 [\#385](https://github.com/ably/ably-flutter/issues/385)
+- Swift Compiler Error \(Xcode\): Definition conflicts with previous value [\#347](https://github.com/ably/ably-flutter/issues/347)
+- Update errorReason on Realtime.connection [\#120](https://github.com/ably/ably-flutter/issues/120)
+
+**Closed issues:**
+
+- Check compatibility with XCode 13 [\#389](https://github.com/ably/ably-flutter/issues/389)
+- Document public members of classes [\#380](https://github.com/ably/ably-flutter/issues/380)
+- Ably iOS interferes with firebase\_messaging [\#378](https://github.com/ably/ably-flutter/issues/378)
+- Sort named constructor parameters alphabetically [\#351](https://github.com/ably/ably-flutter/issues/351)
+- Use named arguments for options classes and make all fields private [\#61](https://github.com/ably/ably-flutter/issues/61)
+
 ## [1.2.13](https://github.com/ably/ably-flutter/tree/v1.2.13)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.12...v1.2.13)

@@ -2,6 +2,11 @@
 
 This guide lists the changes needed to upgrade from one version of Ably to a newer one when there are breaking changes.
 
+## [Upgrading from v1.2.13]
+
+- Updated SDK constraint to `>=2.14.0 <3.0.0`
+- Updated Flutter constraint to `>=2.5.0`
+
 ## [Upgrading from v1.2.12]
 
 - `TokenDetails`, `TokenParams` and `TokenRequest` classes are now immutable, parameters have to be passed through constructor
