@@ -48,6 +48,9 @@ class StreamsChannel {
 
     late StreamController<T> controller;
     controller = StreamController<T>.broadcast(onListen: () async {
+      // We need to keep this null-asserted for backwards compatibility with
+      // Flutter versions before 3.0.0
+      // ignore: unnecessary_non_null_assertion
       ServicesBinding.instance!.defaultBinaryMessenger
           .setMessageHandler(handlerName, (reply) async {
         if (reply == null) {
@@ -78,6 +81,9 @@ class StreamsChannel {
         ));
       }
     }, onCancel: () async {
+      // We need to keep this null-asserted for backwards compatibility with
+      // Flutter versions before 3.0.0
+      // ignore: unnecessary_non_null_assertion
       ServicesBinding.instance!.defaultBinaryMessenger
           .setMessageHandler(handlerName, null);
       try {
