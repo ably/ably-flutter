@@ -140,7 +140,7 @@ class Push extends PlatformObject {
     if (io.Platform.isAndroid) {
       return invoke(PlatformMethod.pushReset);
     } else {
-      return Future.value(null);
+      return Future.value();
     }
   }
 
