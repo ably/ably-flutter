@@ -1,0 +1,4 @@
+# Test suite is not published for pub.dev
+# See <https://github.com/ably/ably-flutter/issues/400#issuecomment-1129236627>
+test/
+test_integration/
