@@ -15,6 +15,10 @@
 - Upgrade `ably-java` dependency to version 1.2.12 [\#385](https://github.com/ably/ably-flutter/issues/385)
 - Swift Compiler Error \(Xcode\): Definition conflicts with previous value [\#347](https://github.com/ably/ably-flutter/issues/347)
 - Update errorReason on Realtime.connection [\#120](https://github.com/ably/ably-flutter/issues/120)
+- Logging and error handling for ObjC stream listeners [\#399](https://github.com/ably/ably-flutter/pull/399)
+- Fixed argument error in Swift implementation of Crypto.generateRandomKey [\#377](https://github.com/ably/ably-flutter/pull/377)
+- Fixed iOS push module compilation issue on some versions of XCode [\#373](https://github.com/ably/ably-flutter/pull/373)
+- Updated realtime connection to update `errorReason` [\#365](https://github.com/ably/ably-flutter/pull/365)
 
 **Closed issues:**
 
