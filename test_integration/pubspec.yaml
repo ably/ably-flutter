@@ -20,15 +20,8 @@ dependencies:
 dev_dependencies:
   flutter_driver:
     sdk: flutter
-  flutter_test:
-    sdk: flutter
   test: ^1.21.1
   flutter_lints: ^1.0.4
-
-# Overrides are explained in main pubspec.yaml file
-dependency_overrides:
-  test_api: 0.4.9
-  matcher: 0.12.11
 
 flutter:
   uses-material-design: true
