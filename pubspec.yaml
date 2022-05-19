@@ -18,20 +18,6 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
-  test: ^1.21.1
-
-dependency_overrides:
-  # 'flutter_test' from Flutter 2.5.0 depends on 'test_api' 0.4.2
-  # and versions of 'test' above 1.19.5 depend on 'test_api' 0.4.9
-  # the 'test_api' below 1.20.0 is not compatible with FLutter 3.0.0
-  # so if we want to support from 2.5.0 to 3.0.0 with test suite
-  # we need to force 'test_api' version to 0.4.9
-  # this should not be an issue, because there are no breaking changes between 0.4.2 and 0.4.9
-  test_api: 0.4.9
-  # 'flutter_test' from Flutter 2.5.0 depends on 'matcher' 0.12.10
-  # and 'test_api' 0.4.9 depends on 'matcher' 0.12.11
-  # so we want this to go along with 'test_api' override
-  matcher: 0.12.11
 
 flutter:
   plugin:

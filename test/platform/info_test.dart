@@ -1,7 +1,7 @@
 import 'dart:io' as io show Platform;
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../test_constants.dart';
 
