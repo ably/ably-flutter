@@ -55,7 +55,7 @@ To debug both platform and Dart code simultaneously:
 
 After the app is launched, it can be re-launched from XCode/Android Studio with debugger already attached. This may be useful to debug startup issues.
 
-### Testing changes in dependencies
+### Testing changes in platform libraries
 
 After making changes to `ably-java` or `ably-cocoa`, you can test changes without releasing those dependencies to users. To do this, you need a local copy of the repo with the changes you want to test.
 
