@@ -67,18 +67,25 @@ To test `ably-cocoa` changes, in `Podfile`, below `target 'Runner' do`, add:
 
 To test `ably-java` changes, see [Using ably-java / ably-android locally in other projects](https://github.com/ably/ably-java/blob/main/CONTRIBUTING.md#using-ably-java--ably-android-locally-in-other-projects).
 
-### Writing documentation
+## Building Platform-Specific Documentation
 
-As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
+### Documentation files structure
 
-### Helpful Resources
+Documentation stored in repository should follow the schema defined in [Ably Templates](https://github.com/ably/ably-common/tree/main/templates). As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. 
 
-- Flutter
-[plug-in package development](https://flutter.dev/developing-packages/),
-being a specialized package that includes platform-specific implementation code for Android and/or iOS.
-- Flutter
-[documentation](https://flutter.dev/docs), offering tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Including images in documentation
+
+When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
+
+### Generating package documentation
+
+`Ably-flutter` uses [dartdoc](https://pub.dev/packages/dartdoc) to generate package documentation. To build the docset, execute:
+
+```bash
+dart doc .
+```
+
+in the root directory of `ably-flutter`. The docs are also generated in [docs](.github/workflows/docs.yml) GitHub Workflow.
 
 ### Generating platform constants
 
