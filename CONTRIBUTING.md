@@ -69,14 +69,6 @@ To test `ably-java` changes, see [Using ably-java / ably-android locally in othe
 
 ## Building Platform-Specific Documentation
 
-### Documentation files structure
-
-Documentation stored in repository should follow the schema defined in [Ably Templates](https://github.com/ably/ably-common/tree/main/templates). As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. 
-
-### Including images in documentation
-
-When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
-
 ### Generating package documentation
 
 `Ably-flutter` uses [dartdoc](https://pub.dev/packages/dartdoc) to generate package documentation. To build the docset, execute:
@@ -86,6 +78,14 @@ dart doc .
 ```
 
 in the root directory of `ably-flutter`. The docs are also generated in [docs](.github/workflows/docs.yml) GitHub Workflow.
+
+### Markdown files structure
+
+Documentation stored in repository should follow the schema defined in [Ably Templates](https://github.com/ably/ably-common/tree/main/templates). As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. 
+
+### Including images in markdown files
+
+When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
 
 ### Generating platform constants
 
@@ -133,81 +133,6 @@ Or, use the good old dart analyzer
 dartanalyzer --fatal-warnings lib/**/*.dart
 
 dartanalyzer --fatal-warnings example/lib/**/*.dart
-```
-
-## dartdoc
-
-### Tool Installation
-
-With just the Flutter tools installed, the following is observed:
-
-```
-ably-flutter % which dartdoc
-dartdoc not found
-
-?1 ably-flutter % which flutter
-/Users/quintinwillison/flutter/bin/flutter
-```
-
-The `dartdoc` tool can be activated via the `flutter` command like this:
-
-```
-ably-flutter % flutter pub global activate dartdoc
-Resolving dependencies...
-Downloading...
-Precompiling executables...
-Precompiled dartdoc:dartdoc.
-Installed executable dartdoc.
-Warning: Pub installs executables into $HOME/flutter/.pub-cache/bin, which is not on your path.
-You can fix that by adding this to your shell's config file (.bashrc, .bash_profile, etc.):
-
-  export PATH="$PATH":"$HOME/flutter/.pub-cache/bin"
-
-Activated dartdoc 0.39.0.
-```
-
-And, indeed, on inspecting my path I could confirm that it wasn't present:
-
-```
-ably-flutter % echo $PATH
-/Users/quintinwillison/.asdf/shims:/Users/quintinwillison/.asdf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin
-```
-
-So I edited my configuration to add the `PATH` export suggested:
-
-```
-ably-flutter % vi ~/.zshrc
-ably-flutter % source ~/.zshrc
-ably-flutter % echo $PATH
-/Users/quintinwillison/.asdf/shims:/Users/quintinwillison/.asdf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin:/Users/quintinwillison/Library/Android/sdk/platform-tools:/Users/quintinwillison/flutter/bin:/Users/quintinwillison/flutter/.pub-cache/bin
-```
-
-And I was then able to find the `dartdoc` tool:
-
-```
-ably-flutter % which dartdoc
-/Users/quintinwillison/flutter/.pub-cache/bin/dartdoc
-```
-
-And see that it had been installed globally in the Flutter context:
-
-```
-ably-flutter % flutter pub global list
-dartdoc 0.39.0
-```
-
-### Generating Documentation
-
-```
-ably-flutter % dartdoc
-Documenting ably_flutter...
-Initialized dartdoc with 195 libraries in 180.4 seconds
-Generating docs for library ably_flutter from package:ably_flutter/ably_flutter.dart...
-Validating docs...
-  warning: dartdoc generated a broken link to: DeveloperNotes.md, linked to from package-ably_flutter: file:///Users/quintinwillison/code/ably/ably-flutter
-found 1 warning and 0 errors
-Documented 1 public library in 5.6 seconds
-Success! Docs generated into /Users/quintinwillison/code/ably/ably-flutter/doc/api
 ```
 
 ## Release Process
