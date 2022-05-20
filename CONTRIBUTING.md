@@ -20,7 +20,8 @@ You may also find it insightful to run the following command, as it can reveal i
 ### Hot reload, hot restart and app restart
 
 There are 3 types of "refreshes" you might see in a Flutter app:
-- **[Hot reload](https://docs.flutter.dev/development/tools/hot-reload):** Both Flutter and iOS apps are **not** restarted. The application state remains the same. Updated source files are injected into the running Dart VM.
+
+- **Hot reload** Both Flutter and iOS apps are **not** restarted. The application state remains the same. Updated source files are injected into the running Dart VM.
 - **Hot restart:** The Flutter application is restarted, but the host application (Android and iOS apps which host the Flutter application) does not.
   - State of the flutter application is reset. This means fields are all reset to their default values (or null).
   - This also means we must remember to clear the state in the host application when the app hot restarts. We do this by calling `await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);`.
@@ -38,7 +39,7 @@ For the moment it would not seem appropriate for our plugin to throw instances c
 of the [Error class](https://api.dart.dev/stable/2.4.0/dart-core/Error-class.html), as this is perhaps more
 appropriate for programmer's failures on the Dart side of things. But time will tell.
 
-### Push Notifications 
+### Push Notifications
 
 #### Push Notifications activation and deactivation
 
@@ -52,13 +53,14 @@ Android's Firebase Messaging library enables users to select the Intent action u
 
 #### Notifications generation for Foreground Apps
 
-iOS enables users to show the notification received remotely even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`. 
+iOS enables users to show the notification received remotely even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`.
 
 #### Push Notifications Background Message Handling
 
 Background processing in Flutter is a complicated subject that has not been explored publicly in detail. It involves creating Dart isolates manually (for Android), passing messages back and forth, etc.
 
 Differences between Ably Flutter and Firebase Messaging implementation (Android only):
+
 - **Isolate code:** Firebase Messaging explicitly defines a callback which is launched in a custom isolate. Ably Flutter does not launch a custom dart entrypoint, but instead re-uses the user's default entrypoint (their Flutter application), by using `DartExecutor.DartEntrypoint.createDefault()`. Therefore, Ably Flutter provides the same environment for message handling on both Android and iOS: users application **is running** when we handle the message.
 - **Resource consumption tradeoffs:** Firebase launches an isolate capable of only handling messages at app launch, even if users' application isn't handling remote messages. Firebase Messaging keeps this isolate running throughout the app, and have a queue process to queue messages by maintaining an Android Service. This allows 10 minutes of execution time, where as on iOS, Firebase Messaging only has 30 seconds of execution time. Instead, Ably Flutter launches a new isolate on every message if the application is not yet running and avoids creating a service and queueing work. A new message will spawn a new engine.
 - **Execution time:** Ably Flutter provides users with an execution time of 30 seconds on both Android and iOS to handle each message. On Android, Firebase messaging launches a Service which has [approximately 10 minutes](https://stackoverflow.com/questions/48630606/how-long-is-the-jobservice-execution-time-limit-mentioned-in-androids-jobinte) of execution time from it's launch to handle all messages received before Android stops the service. It's unclear if the Service will be automatically launched by iOS immediately, or if it will only be launched in the future. On iOS, each message has 30 seconds of execution time. This seems to be a bug in the design of firebase_messaging. Users can extend their execution time by using [package:workmanager](https://pub.dev/packages/workmanager).
@@ -89,8 +91,9 @@ got both iOS and Android emulators open:
 ### Debugging notes (Android Studio)
 
 To debug both platform and Dart code simultaneously:
+
 - In Android: in the Flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
-- In iOS: To debug iOS code, you must set breakpoints in Xcode. In Android Studio or command line, run the flutter run --dart-define` command you would usually run. This ensures when you build with Xcode, the environment variables are available to the app. Then, re-run the application using Xcode. Then, in Android Studio, click `Run` > `Flutter Attach`, or click the `Flutter Attach` button.
+- In iOS: To debug iOS code, you must set breakpoints in Xcode. In Android Studio or command line, run the flutter run --dart-define` command you would usually run. This ensures when you build with Xcode, the environment variables are available to the app. Then, re-run the application using Xcode. Then, in Android Studio, click `Run` > `Flutter Attach`, or click the`Flutter Attach` button.
 
 ### Testing changes in dependencies
 
@@ -114,9 +117,8 @@ As features are developed, ensure documentation (both in the public API interfac
 [plug-in package development](https://flutter.dev/developing-packages/),
 being a specialized package that includes platform-specific implementation code for Android and/or iOS.
 - Flutter
-[documentation](https://flutter.dev/docs), offering tutorials, 
+[documentation](https://flutter.dev/docs), offering tutorials,
 samples, guidance on mobile development, and a full API reference.
-
 
 ### Generating platform constants
 
@@ -131,7 +133,7 @@ Some files in the project are generated to maintain sync between
 1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
  This will create `Tx<ObjectName>` under which all properties are accessible.
- 
+
 Generate platform constants and continue
 
 3. update `getCodecType` in [Codec.dart](lib/src/platform/src/codec.dart) so new codec type is returned based on runtime type
@@ -157,7 +159,6 @@ The new flutter analyzer does a great job at analyzing complete flutter package.
 
 Running `flutter analyze` in project root will analyze dart files in complete project,
  i.e., plugin code and example code
-
 
 Or, use the good old dart analyzer
 
@@ -256,9 +257,9 @@ The release process must include the following steps:
    - Update the version of ably-flutter used in the example app and test integration app `podfile.lock` files:
    - Run `pod install` in `example/ios` and `test_integration/ios`, or run `pod install --project-directory=example/ios` and `pod install --project-directory=test_integration/ios`
    - Commit this
-4. Add a commit to update the change log. 
-  - Autogenerate the changelog contents by running `github_changelog_generator -u ably -p ably-flutter --since-tag v1.2.2 --output delta.md` and manually copying the relevant contents from `delta.md` into `CHANGELOG.md`
-  - Make sure to replace `HEAD` in the autogenerated URL's with the version tag you will create (e.g. `v1.2.3`).
+4. Add a commit to update the change log.
+    - Autogenerate the changelog contents by running `github_changelog_generator -u ably -p ably-flutter --since-tag v1.2.2 --output delta.md` and manually copying the relevant contents from `delta.md` into `CHANGELOG.md`
+    - Make sure to replace `HEAD` in the autogenerated URL's with the version tag you will create (e.g. `v1.2.3`).
 5. Check that everything is looking sensible to the Flutter tools without publishing by running: `flutter pub publish --dry-run`
 6. Push the release branch to GitHub
 7. Open a PR for the release against the release branch you just pushed
