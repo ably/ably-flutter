@@ -37,26 +37,6 @@ await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
 
 This is not required when `hot reload` or `app restart` is performed.
 
-### Platform Notes
-
-#### Android
-
-The Android project does use [AndroidX](https://developer.android.com/jetpack/androidx), which appears to be the default specified when Flutter created the plugin project, however Flutter's Java API for plugins (e.g. [MethodChannel](https://api.flutter.dev/javadoc/io/flutter/plugin/common/MethodChannel.html)) appears to still use deprecated platform APIs like the [UiThread](https://developer.android.com/reference/android/support/annotation/UiThread) annotation.
-
-#### iOS
-
-Once changes have been made to the platform code in the [ios folder](ios), especially if those changes involve changing
-[the pod spec](ios/ably_flutter.podspec) to add a dependency, then it may be necessary to force that build up stream with:
-
-1. Bump `s.version` in the pod spec
-2. From [example/ios](example/ios) run `pod install`
-3. Open [Runner.xcworkspace](example/ios/Runner.xcworkspace) in Xcode, clean and build
-
-Otherwise, after making simple code changes to the platform code it will not get seen with a hot restart "R".
-Therefore if there's a current emulation running then use "q" to quit it and then re-run the emulator - e.g. with this if you've
-got both iOS and Android emulators open:
-
-    flutter run -d all
 
 ### Debugging notes (Android Studio)
 
