@@ -14,15 +14,6 @@ The code in this repository has been constructed to be
 - Push to the branch
 - Create a new Pull Request
 
-### Code generation
-
-To generate Obj-C and Java classes for components shared between Flutter SDK and platform SDKs, open [bin](bin) directory and execute [codegen.dart](bin/codegen.dart):
-
-```bash
-cd bin
-dart codegen.dart
-```
-
 ### Hot restart
 
 When performing `hot restart`, it's required to also reset the platform clients by calling:
@@ -63,6 +54,43 @@ To test `ably-cocoa` changes, in `Podfile`, below `target 'Runner' do`, add:
 
 To test `ably-java` changes, see [Using ably-java / ably-android locally in other projects](https://github.com/ably/ably-java/blob/main/CONTRIBUTING.md#using-ably-java--ably-android-locally-in-other-projects).
 
+### Generating platform constants
+
+Some files in the project are generated to maintain sync between platform constants on both native and dart side. Generated file paths are configured as values in `bin/codegen.dart`. To generate Obj-C and Java classes for components shared between Flutter SDK and platform SDKs, open [bin](bin) directory and execute [codegen.dart](bin/codegen.dart):
+
+```bash
+cd bin
+dart codegen.dart
+```
+
+[Read more about generation of platform specific constant files](bin/README.md)
+
+### Implementing new codec types
+
+1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
+2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
+ This will create `Tx<ObjectName>` under which all properties are accessible.
+3. Generate platform constants
+4. Update `getCodecType` in [Codec.dart](lib/src/platform/src/codec.dart) so new codec type is returned based on runtime type
+5. Update `codecPair` in [Codec.dart](lib/src/platform/src/codec.dart)  so new encoder/decoder is assigned for new type
+6. Update `writeValue` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
+ so new codec type is obtained from runtime type
+7. Update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
+ so new encoder/decoder is assigned for new type
+8. Add new codec encoder method in [ios.Classes.codec.AblyFlutterWriter](ios/Classes/codec/AblyFlutterWriter.m)
+ and update `getType` and `getEncoder` so that new codec encoder is called
+9. Add new codec encoder method in [ios.classes.codec.AblyFlutterReader](ios/Classes/codec/AblyFlutterReader.m)
+ and update `getDecoder` so that new codec decoder is called
+
+### Implementing new platform methods
+
+1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
+2. Generate platform constants
+3. Add new method in [android.src.main.java.io.ably.flutter.plugin.AblyMethodCallHandler.java](android/src/main/java/io/ably/flutter/plugin/AblyMethodCallHandler.java)
+ and update `_map` so that new method name is assigned to a method call
+4. Add new method in [ios.classes.AblyFlutter](ios/Classes/AblyFlutter.m)
+ and update `initWithChannel` so that new method name is assigned to a method call
+
 ## Building Platform-Specific Documentation
 
 ### Generating package documentation
@@ -70,7 +98,7 @@ To test `ably-java` changes, see [Using ably-java / ably-android locally in othe
 `Ably-flutter` uses [dartdoc](https://pub.dev/packages/dartdoc) to generate package documentation. To build the docset, execute:
 
 ```bash
-dart doc .
+dart doc
 ```
 
 in the root directory of `ably-flutter`. The docs are also generated in [docs](.github/workflows/docs.yml) GitHub Workflow.
@@ -82,54 +110,6 @@ Documentation stored in repository should follow the schema defined in [Ably Tem
 ### Including images in markdown files
 
 When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
-
-### Generating platform constants
-
-Some files in the project are generated to maintain sync between
- platform constants on both native and dart side.
-  Generated file paths are configured as values in `bin/codegen.dart` for `toGenerate` Map
-
-[Read about generation of platform specific constant files](bin/README.md)
-
-### Implementing new codec types
-
-1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
-2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
- This will create `Tx<ObjectName>` under which all properties are accessible.
-
-Generate platform constants and continue
-
-3. update `getCodecType` in [Codec.dart](lib/src/platform/src/codec.dart) so new codec type is returned based on runtime type
-4. update `codecPair` in [Codec.dart](lib/src/platform/src/codec.dart)  so new encoder/decoder is assigned for new type
-5. update `writeValue` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
- so new codec type is obtained from runtime type
-6. update `codecMap` in [android.src.main.java.io.ably.flutter.plugin.AblyMessageCodec](android/src/main/java/io/ably/flutter/plugin/AblyMessageCodec.java)
- so new encoder/decoder is assigned for new type
-7. add new codec encoder method in [ios.Classes.codec.AblyFlutterWriter](ios/Classes/codec/AblyFlutterWriter.m)
- and update `getType` and `getEncoder` so that new codec encoder is called
-8. add new codec encoder method in [ios.classes.codec.AblyFlutterReader](ios/Classes/codec/AblyFlutterReader.m)
- and update `getDecoder` so that new codec decoder is called
-
-### Implementing new platform methods
-
-1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
-
-Generate platform constants and use wherever required
-
-### Static plugin code analyzer
-
-The new flutter analyzer does a great job at analyzing complete flutter package.
-
-Running `flutter analyze` in project root will analyze dart files in complete project,
- i.e., plugin code and example code
-
-Or, use the good old dart analyzer
-
-```bash
-dartanalyzer --fatal-warnings lib/**/*.dart
-
-dartanalyzer --fatal-warnings example/lib/**/*.dart
-```
 
 ## Release Process
 
