@@ -17,6 +17,16 @@ You may also find it insightful to run the following command, as it can reveal i
 
     flutter doctor
 
+
+### Code generation
+
+To generate Obj-C and Java classes for components shared between Flutter SDK and platform SDKs, open [bin](bin) directory and execute [codegen.dart](bin/codegen.dart):
+
+```bash
+cd bin
+dart codegen.dart
+```
+
 ### Hot restart
 
 When performing `hot restart`, it's required to also reset the platform clients by calling:
