@@ -56,7 +56,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private static class CodecPair<T> {
-    private static final String TAG = CodecPair.class.getName();
     final CodecEncoder<T> encoder;
     final CodecDecoder<T> decoder;
 
@@ -67,16 +66,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     Map<String, Object> encode(final Object value) {
       if (this.encoder == null) {
-        Log.w(TAG, "Encoder is null");
-        return null;
+        throw SerializationException.forEncoder(value.getClass());
       }
       return this.encoder.encode((T) value);
     }
 
     T decode(Map<String, Object> jsonMap) {
       if (this.decoder == null) {
-        Log.w(TAG, "Decoder is null");
-        return null;
+        throw SerializationException.forDecoder(jsonMap);
       }
       return this.decoder.decode(jsonMap);
     }
