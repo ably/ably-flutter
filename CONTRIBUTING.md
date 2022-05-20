@@ -27,16 +27,6 @@ await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
 
 This is not required when `hot reload` or `app restart` is performed.
 
-### Exceptions and Errors
-
-Dart libraries don't _extend_ the [Exception class](https://api.dart.dev/stable/3.0.0/dart-core/Exception-class.html),
-they _implement_ its implicit interface.
-(see [this comment](https://stackoverflow.com/questions/13579982/custom-exceptions-in-dart#comment18616624_13580222)).
-
-For the moment it would not seem appropriate for our plugin to throw instances conforming to the implicit interface
-of the [Error class](https://api.dart.dev/stable/2.4.0/dart-core/Error-class.html), as this is perhaps more
-appropriate for programmer's failures on the Dart side of things. But time will tell.
-
 ### Push Notifications
 
 #### Push Notifications activation and deactivation
