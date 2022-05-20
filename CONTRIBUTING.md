@@ -37,13 +37,23 @@ await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);
 
 This is not required when `hot reload` or `app restart` is performed.
 
-
-### Debugging notes (Android Studio)
+### Debugging
 
 To debug both platform and Dart code simultaneously:
 
-- In Android: in the Flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
-- In iOS: To debug iOS code, you must set breakpoints in Xcode. In Android Studio or command line, run the flutter run --dart-define` command you would usually run. This ensures when you build with Xcode, the environment variables are available to the app. Then, re-run the application using Xcode. Then, in Android Studio, click `Run` > `Flutter Attach`, or click the`Flutter Attach` button.
+#### Android
+
+1. Launch the Flutter app on Android Emulator from CLI, Android Studio or VS Code
+2. Open `android` directory in Android Studio
+3. From Android Studio select "Run" -> "Attach debugger to Android Process" and select the running app
+
+#### iOS
+
+1. Launch the Flutter app on iOS Simulator from CLI, Android Studio or VS Code
+2. Open `ios` directory in XCode
+3. From XCode select "Debug" -> "Attach to process" and select the running process
+
+After the app is launched, it can be re-launched from XCode/Android Studio with debugger already attached. This may be useful to debug startup issues.
 
 ### Testing changes in dependencies
 
