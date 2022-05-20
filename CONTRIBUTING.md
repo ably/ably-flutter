@@ -2,21 +2,17 @@
 
 ## Development Flow
 
-### Getting Started
-
 The code in this repository has been constructed to be
-[built as a Flutter Plugin](https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin).
-It is not yet constructed as a federated plugin but this is in our backlog as
-[issue 118](https://github.com/ably/ably-flutter/issues/118).
+[built as a Flutter Plugin](https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin). In this repository the main branch contains the latest development version of the Ably SDK. All development (bug fixing, feature implementation, etc.) is done against the main branch, which you should branch from whenever you'd like to make modifications. Here's the steps to follow when contributing to this repository.
 
-After checking out this repository, run the following command:
-
-    flutter pub get
-
-You may also find it insightful to run the following command, as it can reveal issues with your development environment:
-
-    flutter doctor
-
+- Fork it
+- Install and update dependencies (`flutter pub get`)
+- Create your feature branch from `main`
+- Run static analysis on your changes and make sure there are no issues (`flutter analyze`)
+- Commit your changes
+- Ensure you have added suitable tests and the test suite is passing
+- Push to the branch
+- Create a new Pull Request
 
 ### Code generation
 
@@ -81,7 +77,7 @@ in the root directory of `ably-flutter`. The docs are also generated in [docs](.
 
 ### Markdown files structure
 
-Documentation stored in repository should follow the schema defined in [Ably Templates](https://github.com/ably/ably-common/tree/main/templates). As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. 
+Documentation stored in repository should follow the schema defined in [Ably Templates](https://github.com/ably/ably-common/tree/main/templates). As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated.
 
 ### Including images in markdown files
 
