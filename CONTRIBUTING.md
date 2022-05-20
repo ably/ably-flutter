@@ -1,6 +1,8 @@
 # Contributing to Ably Flutter
 
-## Getting Started
+## Development Flow
+
+### Getting Started
 
 The code in this repository has been constructed to be
 [built as a Flutter Plugin](https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin).
@@ -15,8 +17,6 @@ You may also find it insightful to run the following command, as it can reveal i
 
     flutter doctor
 
-## Implementation Notes
-
 ### Hot reload, hot restart and app restart
 
 There are 3 types of "refreshes" you might see in a Flutter app:
@@ -25,7 +25,7 @@ There are 3 types of "refreshes" you might see in a Flutter app:
   - State of the flutter application is reset. This means fields are all reset to their default values (or null).
   - This also means we must remember to clear the state in the host application when the app hot restarts. We do this by calling `await methodChannel.invokeMethod(PlatformMethod.resetAblyClients);`.
   - From Flutter documentation:
-> With a hot restart, the program starts from the beginning, executes the new version of main(), and builds a widget tree that displays the text Hello.
+    > With a hot restart, the program starts from the beginning, executes the new version of main(), and builds a widget tree that displays the text Hello.
 - **App restart:** The entire application is restarted, clearing the state of both the Flutter application and the host application (Android and iOS apps).
 
 ### Exceptions and Errors
@@ -65,13 +65,13 @@ Differences between Ably Flutter and Firebase Messaging implementation (Android 
   
 Because of this architectural simplicity, Ably Flutter does not need to use [`PluginUtilities`](https://stackoverflow.com/questions/69208164/what-does-pluginutilities-do-in-flutters-dartui-library-and-how-do-i-use/69208165#69208165), pass references of two methods between Dart and host platform, or save and load these methods in `SharedPreferences`. Ably Flutter avoids conflicts between the default `FlutterEngine` launched with a `FlutterActivity` and the one manually launched in the `BroadcastReceiver`, by using method channels with unique channel names.
 
-## Platform Notes
+### Platform Notes
 
-### Android
+#### Android
 
 The Android project does use [AndroidX](https://developer.android.com/jetpack/androidx), which appears to be the default specified when Flutter created the plugin project, however Flutter's Java API for plugins (e.g. [MethodChannel](https://api.flutter.dev/javadoc/io/flutter/plugin/common/MethodChannel.html)) appears to still use deprecated platform APIs like the [UiThread](https://developer.android.com/reference/android/support/annotation/UiThread) annotation.
 
-### iOS
+#### iOS
 
 Once changes have been made to the platform code in the [ios folder](ios), especially if those changes involve changing
 [the pod spec](ios/ably_flutter.podspec) to add a dependency, then it may be necessary to force that build up stream with:
@@ -86,13 +86,13 @@ got both iOS and Android emulators open:
 
     flutter run -d all
 
-## Debugging notes (Android Studio)
+### Debugging notes (Android Studio)
 
 To debug both platform and Dart code simultaneously:
 - In Android: in the Flutter project window, launch the application in debug mode in Android Studio. Then, in the Android project window, attach the debugger to the Android process.
 - In iOS: To debug iOS code, you must set breakpoints in Xcode. In Android Studio or command line, run the flutter run --dart-define` command you would usually run. This ensures when you build with Xcode, the environment variables are available to the app. Then, re-run the application using Xcode. Then, in Android Studio, click `Run` > `Flutter Attach`, or click the `Flutter Attach` button.
 
-## Testing changes in dependencies
+### Testing changes in dependencies
 
 After making changes to `ably-java` or `ably-cocoa`, you can test changes without releasing those dependencies to users. To do this, you need a local copy of the repo with the changes you want to test.
 
@@ -104,11 +104,11 @@ To test `ably-cocoa` changes, in `Podfile`, below `target 'Runner' do`, add:
 
 To test `ably-java` changes, see [Using ably-java / ably-android locally in other projects](https://github.com/ably/ably-java/blob/main/CONTRIBUTING.md#using-ably-java--ably-android-locally-in-other-projects).
 
-## Writing documentation
+### Writing documentation
 
 As features are developed, ensure documentation (both in the public API interface) and in relevant markdown files are updated. When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
 
-## Helpful Resources
+### Helpful Resources
 
 - Flutter
 [plug-in package development](https://flutter.dev/developing-packages/),
@@ -118,7 +118,7 @@ being a specialized package that includes platform-specific implementation code 
 samples, guidance on mobile development, and a full API reference.
 
 
-## Generating platform constants
+### Generating platform constants
 
 Some files in the project are generated to maintain sync between
  platform constants on both native and dart side.
@@ -126,7 +126,7 @@ Some files in the project are generated to maintain sync between
 
 [Read about generation of platform specific constant files](bin/README.md)
 
-## Implementing new codec types
+### Implementing new codec types
 
 1. Add new type along with value in `_types` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 2. Add an object definition  with object name and its properties to `objects` list at [bin/codegen_context.dart](bin/codegen_context.dart)
@@ -145,13 +145,13 @@ Generate platform constants and continue
 8. add new codec encoder method in [ios.classes.codec.AblyFlutterReader](ios/Classes/codec/AblyFlutterReader.m)
  and update `getDecoder` so that new codec decoder is called
 
-## Implementing new platform methods
+### Implementing new platform methods
 
 1. Add new method name in `_platformMethods` list at [bin/codegen_context.dart](bin/codegen_context.dart)
 
 Generate platform constants and use wherever required
 
-## Static plugin code analyzer
+### Static plugin code analyzer
 
 The new flutter analyzer does a great job at analyzing complete flutter package.
 
