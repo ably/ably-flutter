@@ -91,6 +91,25 @@ dart codegen.dart
 4. Add new method in [ios.classes.AblyFlutter](ios/Classes/AblyFlutter.m)
  and update `initWithChannel` so that new method name is assigned to a method call
 
+## Running Tests
+
+### Unit tests
+
+Unit tests are located in [test](test/) directory and built on top of `flutter_test` package. The complete test suite can be executed with this command:
+
+```bash
+flutter test
+```
+
+### Integration tests
+
+Integration tests are located in [test_integration](test_integration/) directory and use `flutter_test` and `flutter_driver` packages. Integration tests have to be executed on virtual machine or real device, and a dedicated test app is provided to track the test progress. To run the test app and all tests, execute:
+
+```bash
+cd test_integration
+flutter drive --target lib/main.dart
+```
+
 ## Building Platform-Specific Documentation
 
 ### Generating package documentation
