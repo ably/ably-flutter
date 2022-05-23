@@ -7,6 +7,7 @@
 **Implemented enhancements:**
 
 - Add Flutter and/or Dart runtime version to Ably-Agent header, if possible [\#286](https://github.com/ably/ably-flutter/issues/286)
+- Throw errors instead of returning null when serialization/ deserialization fails [\#149](https://github.com/ably/ably-flutter/issues/149)
 - Custom Transport Parameters \(Params\) [\#108](https://github.com/ably/ably-flutter/issues/108)
 
 **Fixed bugs:**
@@ -15,6 +16,10 @@
 - Upgrade `ably-java` dependency to version 1.2.12 [\#385](https://github.com/ably/ably-flutter/issues/385)
 - Swift Compiler Error \(Xcode\): Definition conflicts with previous value [\#347](https://github.com/ably/ably-flutter/issues/347)
 - Update errorReason on Realtime.connection [\#120](https://github.com/ably/ably-flutter/issues/120)
+- Logging and error handling for ObjC stream listeners [\#399](https://github.com/ably/ably-flutter/pull/399)
+- Fixed argument error in Swift implementation of Crypto.generateRandomKey [\#377](https://github.com/ably/ably-flutter/pull/377)
+- Fixed iOS push module compilation issue on some versions of XCode [\#373](https://github.com/ably/ably-flutter/pull/373)
+- Updated realtime connection to update `errorReason` [\#365](https://github.com/ably/ably-flutter/pull/365)
 
 **Closed issues:**
 
