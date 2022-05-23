@@ -7,6 +7,7 @@
 **Implemented enhancements:**
 
 - Add Flutter and/or Dart runtime version to Ably-Agent header, if possible [\#286](https://github.com/ably/ably-flutter/issues/286)
+- Throw errors instead of returning null when serialization/ deserialization fails [\#149](https://github.com/ably/ably-flutter/issues/149)
 - Custom Transport Parameters \(Params\) [\#108](https://github.com/ably/ably-flutter/issues/108)
 
 **Fixed bugs:**
