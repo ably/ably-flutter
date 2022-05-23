@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.flutter.plugin.types.SerializationException;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.CipherParamsStorage;
 import io.ably.flutter.plugin.util.Consumer;
@@ -55,7 +56,6 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private static class CodecPair<T> {
-    private static final String TAG = CodecPair.class.getName();
     final CodecEncoder<T> encoder;
     final CodecDecoder<T> decoder;
 
@@ -66,16 +66,14 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
     Map<String, Object> encode(final Object value) {
       if (this.encoder == null) {
-        Log.w(TAG, "Encoder is null");
-        return null;
+        throw SerializationException.forEncoder(value.getClass());
       }
       return this.encoder.encode((T) value);
     }
 
     T decode(Map<String, Object> jsonMap) {
       if (this.decoder == null) {
-        Log.w(TAG, "Decoder is null");
-        return null;
+        throw SerializationException.forDecoder(jsonMap);
       }
       return this.decoder.decode(jsonMap);
     }
@@ -346,7 +344,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case PlatformConstants.TxLogLevelEnum.error:
         return Log.ERROR;
       default:
-        return Log.WARN;
+        throw SerializationException.forEnum(logLevelString, Log.class);
     }
   }
 
@@ -461,7 +459,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case PlatformConstants.TxEnumConstants.presenceSubscribe:
         return ChannelMode.presence_subscribe;
       default:
-        return null;
+        throw SerializationException.forEnum(mode, ChannelMode.class);
     }
   }
 
@@ -644,7 +642,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case failed:
         return PlatformConstants.TxEnumConstants.failed;
       default:
-        return null;
+        throw SerializationException.forEnum(state, String.class);
     }
   }
 
@@ -669,7 +667,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case update:
         return PlatformConstants.TxEnumConstants.update;
       default:
-        return null;
+        throw SerializationException.forEnum(event, String.class);
     }
   }
 
@@ -690,7 +688,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case suspended:
         return PlatformConstants.TxEnumConstants.suspended;
       default:
-        return null;
+        throw SerializationException.forEnum(state, String.class);
     }
   }
 
@@ -713,7 +711,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case update:
         return PlatformConstants.TxEnumConstants.update;
       default:
-        return null;
+        throw SerializationException.forEnum(event, String.class);
     }
   }
 
@@ -801,7 +799,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case FAILED:
         return PlatformConstants.TxDevicePushStateEnum.failed;
       default:
-        return null;
+        throw SerializationException.forEnum(state, String.class);
     }
   }
 
@@ -874,7 +872,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
       case update:
         return PlatformConstants.TxEnumConstants.update;
       default:
-        return null;
+        throw SerializationException.forEnum(action, String.class);
     }
   }
 
