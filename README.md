@@ -4,12 +4,58 @@
 [![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
 [![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
 
-_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/docs)._
+_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/documentation)._
 
 ## Overview
 
 A [Flutter](https://flutter.dev/) plugin for [Ably](https://www.ably.com),
 built on top of Ably's [iOS](https://github.com/ably/ably-cocoa) and [Android](https://github.com/ably/ably-java) SDKs.
+
+## Running the example
+
+### Authorization in the example app
+
+There are two different ways the example application can be configured to use Ably services:
+
+1. Without the Ably SDK key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
+
+    - provisioned key may not support all features available in Ably SDK.
+    - provisioned keys aren't able to use Ably push notifications. This feature requires APNS and FCM identifiers to be registered for Ably instance, which can't be done with sandbox applications
+    - provisioned key will change on application restart
+
+2. With the Ably SDK key: you can create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app. This approach will give you much more control over the API capabilities and grant access to development console, where API communication can be conveniently inspected.
+
+#### Android Studio / IntelliJ Idea
+
+Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
+
+![Drop down menu for Run/Debug Configurations in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-1.png)
+
+![Run/Debug Configurations window in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-2.png)
+
+#### Visual Studio Code
+
+- Under `Run and Debug`,
+  - Select the gear icon to view [launch.json](.vscode/launch.json)
+  - Find `Example App` launch configuration
+  - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
+  - Choose a device to launch the app:
+    - to launch on a device, make sure it is the only device plugged in.
+    - to run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`. Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`.
+- From `Run and Debug` select the `Example App` configuration and run it
+
+#### Command Line using the Flutter Tool
+
+- Change into the example app directory: `cd example`
+- Install dependencies: `flutter pub get`
+- Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
+  - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
+
+### Push Notifications
+
+By default, push-related components in the sample app won't work on Android, because of a dummy [google-services.json](example/android/app/src/google-services.json) file. In order to use push messaging features of Ably SDK, additional FCM/APNS configuration is required.
+
+See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
 ## Resources
 
@@ -48,63 +94,7 @@ Features that we do not currently support, but we do plan to add in the future:
 - Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 - Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
 
-## Example app
 
-### Running example app
-
-There are two different ways the example application can be configured to use Ably services:
-
-1. Without the Ably SDK key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
-
-    - provisioned key may not support all features available in Ably SDK.
-    - provisioned keys aren't able to use Ably push notifications. This feature requires APNS and FCM identifiers to be registered for Ably instance, which can't be done with sandbox applications
-    - provisioned key will change on application restart
-
-2. With the Ably SDK key: you can create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app. This approach will give you much more control over the API capabilities and grant access to development console, where API communication can be conveniently inspected.
-
-#### Android Studio / IntelliJ Idea
-
-Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
-
-![Drop down menu for Run/Debug Configurations in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-1.png)
-
-![Run/Debug Configurations window in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-2.png)
-
-#### Visual Studio Code
-
-- Under `Run and Debug`,
-  - Select the gear icon to view [launch.json](.vscode/launch.json)
-  - Find `Example App` launch configuration
-  - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
-  - Choose a specific device to launch the app:
-    - to launch on a specific device, make sure it is the only device plugged in.
-    - to run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`. Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`.
-- From `Run and Debug` select the `Example App` configuration and run it
-
-#### Command Line using the Flutter Tool
-
-- Change into the example app directory: `cd example`
-- Install dependencies: `flutter pub get`
-- Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
-  - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
-
-### Push Notifications
-
-By default, push-related components in the sample app won't work on Android, because of a dummy [google-services.json](example/android/app/src/google-services.json) file. In order to use push messaging features of Ably SDK, additional FCM/APNS configuration is required.
-
-See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
-
-### Troubleshooting
-
-- Running on simulator on M1 macs:
-  - Flutter has added support for running apps on the [iOS simulator](https://github.com/flutter/flutter/pull/85059) running on M1 architecture, but this is not yet available on the stable branch. In the mean time, you can change the iOS target to build for Mac in Xcode.
-- `fatal error: 'ruby/config.h' file not found`: Ruby is required to install cocoapods and other tools which are used in the build process, and your machine may not have a supported version. To install an up-to-date version of Ruby:
-  - Run `brew install rbenv ruby-build`
-  - Install [rbenv](https://github.com/rbenv/rbenv#installation):
-    - Run `rbenv init` (and follow its recommended instructions)
-    - Run `rbenv install 3.0.1`
-  - Run `sudo gem install cocoapods ffi`
-    - Why do we need `ffi`?: https://github.com/CocoaPods/CocoaPods/issues/9907#issuecomment-729980327
 
 ## Usage
 
