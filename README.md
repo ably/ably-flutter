@@ -607,6 +607,14 @@ Future<void>.delayed(Duration.zero, () {
 });
 ```
 
+## Support, feedback and troubleshooting
+
+Please visit http://support.ably.com/ for access to our knowledg ebase and to ask for any assistance.
+
+You can also view the [community reported Github issues](https://github.com/ably/ably-flutter/issues).
+
+To see what has changed in recent versions, see the [CHANGELOG](CHANGELOG.md).
+
 ## Contributing
 
 For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
