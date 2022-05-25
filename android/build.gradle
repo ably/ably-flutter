@@ -33,7 +33,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
 
     // Require Java language level 8 so we can use Method References (used with Lambdas)
     compileOptions {
