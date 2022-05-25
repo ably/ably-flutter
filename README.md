@@ -57,6 +57,23 @@ By default, push-related components in the sample app won't work on Android, bec
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
+## Installation
+
+### Specify Dependency
+
+In `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  ably_flutter: ^1.2.14
+```
+
+### Import the package
+
+```dart
+import 'package:ably_flutter/ably_flutter.dart' as ably;
+```
+
 ## Resources
 
 - [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
@@ -98,19 +115,7 @@ Features that we do not currently support, but we do plan to add in the future:
 
 ## Usage
 
-### Specify Dependency
 
-Package home:
-[pub.dev/packages/ably_flutter](https://pub.dev/packages/ably_flutter)
-
-See:
-[Adding a package dependency to an app](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app)
-
-### Import the package
-
-```dart
-import 'package:ably_flutter/ably_flutter.dart' as ably;
-```
 
 ### Configure a Client Options object
 
