@@ -684,6 +684,10 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
 
+## Feature support
+
+See Ably [feature support matrix](https://ably.com/download/sdk-feature-support-matrix) for a list of features supported by this SDK.
+
 ## Known limitations
 
 ### RTE6a compliance
