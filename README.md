@@ -60,6 +60,8 @@ See [PushNotifications.md](PushNotifications.md) for detailed information on get
 
 ## Installation
 
+See [requirements](#requirements) for a list of prerequisites
+
 ### Specify Dependency
 
 In `pubspec.yaml` file:
@@ -77,7 +79,7 @@ import 'package:ably_flutter/ably_flutter.dart' as ably;
 
 ## Usage
 
-Examples are also available in [examples](example/example.md)
+Also available in [examples](example/example.md) for [pub.dev examples page](https://pub.dev/packages/ably_flutter/example)
 
 ### Authentication
 
@@ -733,7 +735,7 @@ Future<void>.delayed(Duration.zero, () {
 
 ## Support, feedback and troubleshooting
 
-Please visit http://support.ably.com/ for access to our knowledg ebase and to ask for any assistance.
+Please visit <http://support.ably.com/> for access to our knowledge base and to ask for any assistance.
 
 You can also view the [community reported Github issues](https://github.com/ably/ably-flutter/issues).
 
