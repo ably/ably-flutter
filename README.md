@@ -1,5 +1,6 @@
 # Ably Flutter Plugin
 
+[![https://pub.dev/packages/ably_flutter](https://img.shields.io/pub/v/ably_flutter)](https://pub.dev/packages/ably_flutter)
 [![.github/workflows/check.yaml](https://github.com/ably/ably-flutter/actions/workflows/check.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/check.yaml)
 [![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
 [![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
@@ -101,15 +102,7 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
 
-## Known Limitations
 
-Features that we do not currently support, but we do plan to add in the future:
-
-- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
-- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
-- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
-- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
-- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
 
 
 
