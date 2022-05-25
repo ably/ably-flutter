@@ -75,40 +75,7 @@ dependencies:
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 ```
 
-## Resources
-
-- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
-- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
-- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
-- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
-
-## Supported Platforms
-
-### iOS
-
-iOS 10 or newer.
-
-### Android
-
-API Level 19 (Android 4.4, KitKat) or newer.
-
-_This project uses Java 8 language features, utilising [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
-
-If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
-You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
-
-## Updating to a newer version
-
-When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
-
-
-
-
-
 ## Usage
-
-
 
 ### Configure a Client Options object
 
@@ -565,6 +532,37 @@ Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messagin
 ### Push Notifications
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on using PN with this plugin.
+
+## Resources
+
+- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
+- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
+- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
+- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
+
+## Requirements
+
+### Flutter
+
+Flutter 2.5.0 or higher is required.
+
+### iOS
+
+iOS 10 or newer.
+
+### Android
+
+API Level 19 (Android 4.4, KitKat) or newer.
+
+_This project uses Java 8 language features, utilizing [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
+to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
+
+If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
+You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
+
+## Updating to a newer version
+
+When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
 
 ## Caveats
 
