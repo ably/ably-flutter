@@ -564,7 +564,7 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
 
-## Caveats
+## Known limitations
 
 ### RTE6a compliance
 
@@ -572,8 +572,6 @@ Using the Streams based approach doesn't fully conform with
 [RTE6a](https://docs.ably.com/client-lib-development-guide/features/#RTE6a)
 from our
 [client library features specification](https://docs.ably.com/client-lib-development-guide/features/).
-
-#### The Problem
 
 ```dart
 StreamSubscription subscriptionToBeCancelled;
@@ -598,8 +596,6 @@ the 2nd listener should also be triggered.
 It will not be as the 2nd listener was registered after the 1st listener and stream subscription is cancelled immediately after 1st listener is triggered.
 
 This wouldn't have happened if the 2nd listener had been registered before the 1st was.
-
-However, using a neat little workaround will fix this...
 
 #### The Workaround - Cancelling using delay
 
