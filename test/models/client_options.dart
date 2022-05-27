@@ -27,6 +27,7 @@ void main() {
     expect(clientOptions.httpMaxRetryCount, isNull);
     expect(clientOptions.realtimeRequestTimeout, isNull);
     expect(clientOptions.fallbackHosts, isNull);
+    // ignore: deprecated_member_use_from_same_package
     expect(clientOptions.fallbackHostsUseDefault, isNull);
     expect(clientOptions.fallbackRetryTimeout, isNull);
     expect(clientOptions.defaultTokenParams, isNull);
