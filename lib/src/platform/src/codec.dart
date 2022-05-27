@@ -267,7 +267,10 @@ class Codec extends StandardMessageCodec {
     _writeToJson(jsonMap, TxClientOptions.realtimeRequestTimeout,
         v.realtimeRequestTimeout);
     _writeToJson(jsonMap, TxClientOptions.fallbackHosts, v.fallbackHosts);
-    _writeToJson(jsonMap, TxClientOptions.fallbackHostsUseDefault,
+    _writeToJson(
+        jsonMap,
+        TxClientOptions.fallbackHostsUseDefault,
+        // ignore: deprecated_member_use_from_same_package
         v.fallbackHostsUseDefault);
     _writeToJson(
         jsonMap, TxClientOptions.fallbackRetryTimeout, v.fallbackRetryTimeout);
