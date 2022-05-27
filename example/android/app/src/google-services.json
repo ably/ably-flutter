@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "1:805978203344:android:351562e0e66401655aaad5",
         "android_client_info": {
           "package_name": "io.ably.flutter.example"
         }

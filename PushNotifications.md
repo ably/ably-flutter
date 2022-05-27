@@ -426,7 +426,9 @@ Do this only if you do not want the device to receive push notifications at all.
     }
 ```
 
-## Debugging applications from launch
+## Development and debugging
+
+### Debugging applications from launch
 
 During development, you may want to validate or debug situations where your application is either in the terminated state, in the background or in the foreground. 
 
@@ -437,6 +439,32 @@ During development, you may want to validate or debug situations where your appl
 **iOS:** In Xcode, configure your Xcode app scheme's **launch option** to "Wait for the executable to be launched" instead of "Automatically". Then "Attach Flutter" in Android Studio or CLI if you want to, as well. 
 
 ![Xcode project scheme showing "Wait for the executable to be launched" selected](images/ios-xcode-scheme.png)
+
+### Activation and deactivation
+
+The platform SDKs ([ably-android](https://github.com/ably/ably-java) and [ably-cocoa](https://github.com/ably/ably-cocoa)) enable users to check if device activation, deactivation, or registration update fails. On Android, these errors are sent in Intents which users should register for at runtime. In Cocoa, errors are returned through `ARTPushRegistererDelegate` methods. However, in both SDKs, this error does not always return quickly. For example, if there was no internet connection, then `Push.activate()` will not throw an error, it will just block forever, because errors are not provided by the SDKs. Once an internet connection is made, the Intent will be sent and delegate methods will be called.
+
+Ably Flutter does this by passing a reference to the `FlutterResult` used to pass back the result to the Dart side, when the activation or deactivation completes. This makes it convenient for users: they can `await push.activate()`. However, users should not rely on this Future completing, in the case of network issues.
+
+### Notification tap handling
+
+Android's Firebase Messaging library enables users to select the Intent action used when the automatically-generated notification is tapped by the user. Users can do this by setting `fcm.notification.click_action` in Ably's push payload. However, for this to work, users would need to declare the intent action within their `AndroidManifest.xml`. Therefore, we don't really tell users they can modify `click_action` and configure it. However, they can do so if they wish.
+
+### Notifications generation for Foreground Apps
+
+iOS enables users to show the notification received remotely even if the app is in the foreground, by calling a delegate method ([`userNotificationCenter(_:willPresent:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649518-usernotificationcenter)) which the user can choose to show the message to the user, based on the notification content. FCM does not provide this functionality. Users can only configure this behaviour for iOS, by using `PushNotificationEvents#setOnShowNotificationInForeground`.
+
+### Push Notifications Background Message Handling
+
+Background processing in Flutter is a complicated subject that has not been explored publicly in detail. It involves creating Dart isolates manually (for Android), passing messages back and forth, etc.
+
+Differences between Ably Flutter and Firebase Messaging implementation (Android only):
+
+- **Isolate code:** Firebase Messaging explicitly defines a callback which is launched in a custom isolate. Ably Flutter does not launch a custom dart entrypoint, but instead re-uses the user's default entrypoint (their Flutter application), by using `DartExecutor.DartEntrypoint.createDefault()`. Therefore, Ably Flutter provides the same environment for message handling on both Android and iOS: users application **is running** when we handle the message.
+- **Resource consumption tradeoffs:** Firebase launches an isolate capable of only handling messages at app launch, even if users' application isn't handling remote messages. Firebase Messaging keeps this isolate running throughout the app, and have a queue process to queue messages by maintaining an Android Service. This allows 10 minutes of execution time, where as on iOS, Firebase Messaging only has 30 seconds of execution time. Instead, Ably Flutter launches a new isolate on every message if the application is not yet running and avoids creating a service and queueing work. A new message will spawn a new engine.
+- **Execution time:** Ably Flutter provides users with an execution time of 30 seconds on both Android and iOS to handle each message. On Android, Firebase messaging launches a Service which has [approximately 10 minutes](https://stackoverflow.com/questions/48630606/how-long-is-the-jobservice-execution-time-limit-mentioned-in-androids-jobinte) of execution time from it's launch to handle all messages received before Android stops the service. It's unclear if the Service will be automatically launched by iOS immediately, or if it will only be launched in the future. On iOS, each message has 30 seconds of execution time. This seems to be a bug in the design of firebase_messaging. Users can extend their execution time by using [package:workmanager](https://pub.dev/packages/workmanager).
+  
+Because of this architectural simplicity, Ably Flutter does not need to use [`PluginUtilities`](https://stackoverflow.com/questions/69208164/what-does-pluginutilities-do-in-flutters-dartui-library-and-how-do-i-use/69208165#69208165), pass references of two methods between Dart and host platform, or save and load these methods in `SharedPreferences`. Ably Flutter avoids conflicts between the default `FlutterEngine` launched with a `FlutterActivity` and the one manually launched in the `BroadcastReceiver`, by using method channels with unique channel names.
 
 ## Troubleshooting/ FAQ
 
