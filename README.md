@@ -664,15 +664,15 @@ See [PushNotifications.md](PushNotifications.md) for detailed information on usi
 
 ## Requirements
 
-### Flutter
+### Flutter Runtime Requirements
 
 Flutter 2.5.0 or higher is required.
 
-### iOS
+### iOS Runtime Requirements
 
 iOS 10 or newer.
 
-### Android
+### Android Runtime Requirements
 
 API Level 19 (Android 4.4, KitKat) or newer.
 
