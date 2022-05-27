@@ -692,6 +692,14 @@ See Ably [feature support matrix](https://ably.com/download/sdk-feature-support-
 
 ## Known limitations
 
+### Missing features
+
+Features that we do not currently support, but we do plan to add in the future:
+
+- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
+- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
+- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
+
 ### RTE6a compliance
 
 Using the Streams based approach doesn't fully conform with
