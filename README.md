@@ -1,57 +1,21 @@
 # Ably Flutter Plugin
 
+[![https://pub.dev/packages/ably_flutter](https://img.shields.io/pub/v/ably_flutter)](https://pub.dev/packages/ably_flutter)
 [![.github/workflows/check.yaml](https://github.com/ably/ably-flutter/actions/workflows/check.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/check.yaml)
 [![.github/workflows/docs.yml](https://github.com/ably/ably-flutter/actions/workflows/docs.yml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/docs.yml)
 [![.github/workflows/flutter_integration.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_integration.yaml)
 [![.github/workflows/flutter_example_app.yaml](https://github.com/ably/ably-flutter/actions/workflows/flutter_example_app.yaml/badge.svg)](https://github.com/ably/ably-flutter/actions/workflows/flutter_example_app.yaml)
 
-_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/docs)._
+_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/documentation)._
 
 ## Overview
 
 A [Flutter](https://flutter.dev/) plugin for [Ably](https://www.ably.com),
 built on top of Ably's [iOS](https://github.com/ably/ably-cocoa) and [Android](https://github.com/ably/ably-java) SDKs.
 
-## Resources
+## Running the example
 
-- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
-- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
-- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
-- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
-
-## Supported Platforms
-
-### iOS
-
-iOS 10 or newer.
-
-### Android
-
-API Level 19 (Android 4.4, KitKat) or newer.
-
-_This project uses Java 8 language features, utilising [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
-
-If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
-You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
-
-## Updating to a newer version
-
-When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
-
-## Known Limitations
-
-Features that we do not currently support, but we do plan to add in the future:
-
-- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
-- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
-- Custom transportParams ([#108](https://github.com/ably/ably-flutter/issues/108))
-- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
-- Remember fallback host during failures ([#47](https://github.com/ably/ably-flutter/issues/47))
-
-## Example app
-
-### Running example app
+### Authorization in the example app
 
 There are two different ways the example application can be configured to use Ably services:
 
@@ -77,8 +41,8 @@ Under the run/ debug configuration drop down menu, click `Edit Configurations...
   - Select the gear icon to view [launch.json](.vscode/launch.json)
   - Find `Example App` launch configuration
   - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
-  - Choose a specific device to launch the app:
-    - to launch on a specific device, make sure it is the only device plugged in.
+  - Choose a device to launch the app:
+    - to launch on a device, make sure it is the only device plugged in.
     - to run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`. Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`.
 - From `Run and Debug` select the `Example App` configuration and run it
 
@@ -95,27 +59,18 @@ By default, push-related components in the sample app won't work on Android, bec
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on getting PN working with the example app.
 
-### Troubleshooting
+## Installation
 
-- Running on simulator on M1 macs:
-  - Flutter has added support for running apps on the [iOS simulator](https://github.com/flutter/flutter/pull/85059) running on M1 architecture, but this is not yet available on the stable branch. In the mean time, you can change the iOS target to build for Mac in Xcode.
-- `fatal error: 'ruby/config.h' file not found`: Ruby is required to install cocoapods and other tools which are used in the build process, and your machine may not have a supported version. To install an up-to-date version of Ruby:
-  - Run `brew install rbenv ruby-build`
-  - Install [rbenv](https://github.com/rbenv/rbenv#installation):
-    - Run `rbenv init` (and follow its recommended instructions)
-    - Run `rbenv install 3.0.1`
-  - Run `sudo gem install cocoapods ffi`
-    - Why do we need `ffi`?: https://github.com/CocoaPods/CocoaPods/issues/9907#issuecomment-729980327
-
-## Usage
+See [requirements](#requirements) for a list of prerequisites
 
 ### Specify Dependency
 
-Package home:
-[pub.dev/packages/ably_flutter](https://pub.dev/packages/ably_flutter)
+In `pubspec.yaml` file:
 
-See:
-[Adding a package dependency to an app](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app)
+```yaml
+dependencies:
+  ably_flutter: ^1.2.14
+```
 
 ### Import the package
 
@@ -123,463 +78,628 @@ See:
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 ```
 
-### Configure a Client Options object
+## Usage
 
-For guidance on selecting an authentication method (basic authentication vs. token authentication), read [Selecting an authentication mechanism](https://ably.com/docs/core-features/authentication/#selecting-auth).
+Also available in [examples](example/example.md) for [pub.dev examples page](https://pub.dev/packages/ably_flutter/example)
 
-Authenticating using [basic authentication/ API key](https://ably.com/docs/core-features/authentication/#basic-authentication) (for running example app/ test apps and not for production)
+### Authentication
 
-```dart
-// Specify your apiKey with `flutter run --dart-define=ABLY_API_KEY=replace_your_api_key`
-final String ablyApiKey = const String.fromEnvironment("ABLY_API_KEY");
-final clientOptions = ably.ClientOptions(key: ablyApiKey);
-clientOptions.logLevel = ably.LogLevel.verbose;  // optional
-```
-
-Authenticating using [token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
+#### Authentication using API Key
 
 ```dart
-// Used to create a clientId when a client first doesn't have one. 
-// Note: you should implement `createTokenRequest`, which makes a request to your server that uses your Ably API key directly.
-final clientOptions = ably.ClientOptions()
-  // If a clientId was set in ClientOptions, it will be available in the authCallback's first parameter (ably.TokenParams).
-  ..clientId = _clientId
-  ..authCallback = (ably.TokenParams tokenParams) async {
-    try {
-      // Send the tokenParamsMap (Map<String, dynamic>) to your server, using it to create a TokenRequest.
-      final Map<String, dynamic> tokenRequestMap = await createTokenRequest(
-              tokenParams.toMap());
-      return ably.TokenRequest.fromMap(tokenRequestMap);
-    } on http.ClientException catch (e) {
-      print('Failed to createTokenRequest: $e');
-      rethrow;
-    }
-  };
-final realtime = ably.Realtime(options: clientOptions);
-```
+// Create an instance of ClientOptions with Ably key
+final clientOptions = ably.ClientOptions(key: '<KEY>');
 
-An example of `createTokenRequest`'s implementation making a network request to your server could be:
-
-```dart
-Future<Map<String, dynamic>> createTokenRequest(
-    Map<String, dynamic> tokenParamsMap) async {
-  var url = Uri.parse('https://example.com/api/v1/createTokenRequest');
-  // For debugging:
-  bool runningServerLocally = true;
-  if (runningServerLocally) {
-    if (Platform.isAndroid) { // Connect Android device to local server
-      url = Uri.parse(
-          'http://localhost:6001/api/v1/createTokenRequest');
-    } else if (Platform.isIOS) { // Connect iOS device to local server
-      const localDeviceIPAddress = '192.168.1.9';
-      url = Uri.parse(
-          'http://$localDeviceIPAddress:6001/api/v1/createTokenRequest');
-    }
-  }
-
-  final response = await http.post(url, body: tokenParamsMap);
-  return jsonDecode(response.body) as Map<String, dynamic>;
-}
-```
-
-- **Android:** To connect to a local server running on a computer from an Android device, you can redirect the port on your device to the port the application is hosted on on your computer. For example, if you want to connect to a local server running at `localhost:3000` but connect from Android from `localhost:80` Run `adb reverse tcp:80 tcp:3000`.
-- **iOS:** To connect to a local server running on a computer using `http` on iOS for debugging, you will need to explicitly enable this in your `Info.plist` file, by following [Transport security has blocked a cleartext HTTP](https://stackoverflow.com/a/30751597/7365866). To allow devices to connect from the IP address of your device, you need your server to listen on `0.0.0.0` instead of `127.0.0.1`.
-
-### Using the REST API
-
-Creating the REST client instance:
-
-```dart
+// Use ClientOptions to create Realtime or REST instance
+ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ably.Rest rest = ably.Rest(options: clientOptions);
 ```
 
-Getting a channel instance
+Also see docs:
+[Auth and Security: Basic authentication](https://ably.com/docs/core-features/authentication/#basic-authentication)
+
+#### Token Authentication
+
+Supplying a `TokenCallback`:
 
 ```dart
-ably.RestChannel channel = rest.channels.get('test');
+// Create an instance of ClientOptions with Ably token and authCallback
+ably.ClientOptions clientOptions = ably.ClientOptions(
+    key: '<TOKEN>', 
+    clientId: '<CLIENT>', // Optional
+    authCallback: (ably.TokenParams tokenParams) async {
+        // `createTokenRequest` should be implemented to communicate with user server
+        ably.TokenRequest tokenRequest = await createTokenRequest(tokenParams);
+        // `authCallback` has to return an instance of TokenRequest
+        return tokenRequest;
+    }
+);
+
+// Use ClientOptions to create Realtime or REST instance
+ably.Realtime realtime = ably.Realtime(options: clientOptions);
+ably.Rest rest = ably.Rest(options: clientOptions);
 ```
 
-Publishing messages using REST:
+Also see docs:
+[Auth and Security: Token authentication](https://ably.com/docs/core-features/authentication/#token-authentication)
 
-```dart
-// both name and data
-await channel.publish(name: "Hello", data: "Ably");
+### Realtime instance
 
-// just name
-await channel.publish(name: "Hello");
-
-// just data
-await channel.publish(data: "Ably");
-
-// an empty message
-await channel.publish();
-```
-
-Get REST history:
-
-```dart
-void getHistory([ably.RestHistoryParams params]) async {
-  // getting channel history, by passing or omitting the optional params
-  var result = await channel.history(params);
-
-  var messages = result.items;        // get messages
-  var hasNextPage = result.hasNext(); // tells whether there are more results
-  if (hasNextPage) {    
-    result = await result.next();     // will fetch next page results
-    messages = result.items;
-  }
-  if (!hasNextPage) {
-    result = await result.first();    // will fetch first page results
-    messages = result.items;
-  }
-}
-
-// history with default params
-getHistory();
-
-// sorted and filtered history
-getHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
-```
-
-Get REST Channel Presence:
-
-```dart
-void getPresence([ably.RestPresenceParams params]) async {
-  // getting channel presence members, by passing or omitting the optional params
-  var result = await channel.presence.get(params);
-
-  var presenceMembers = result.items; // returns PresenceMessages
-  var hasNextPage = result.hasNext(); // tells whether there are more results
-  if (hasNextPage) {
-    result = await result.next();     // will fetch next page results
-    presenceMembers = result.items;
-  }
-  if (!hasNextPage) {
-    result = await result.first();    // will fetch first page results
-    presenceMembers = result.items;
-  }
-}
-
-// getting presence members with default params
-getPresence();
-
-// filtered presence members
-getPresence(ably.RestPresenceParams(
-  limit: 10,
-  clientId: '<clientId>',
-  connectionId: '<connectionID>',
-));
-```
-
-Get REST Presence History:
-
-```dart
-void getPresenceHistory([ably.RestHistoryParams params]) async {
-
-  // getting channel presence history, by passing or omitting the optional params
-  var result = await channel.presence.history(params);
-
-  var presenceHistory = result.items; // returns PresenceMessages
-  var hasNextPage = result.hasNext(); // tells whether there are more results
-  if (hasNextPage) {
-    result = await result.next();     // will fetch next page results
-    presenceHistory = result.items;
-  }
-  if (!hasNextPage) {
-    result = await result.first();    // will fetch first page results
-    presenceHistory = result.items;
-  }
-}
-
-// getting presence members with default params
-getPresenceHistory();
-
-// filtered presence members
-getPresenceHistory(ably.RestHistoryParams(direction: 'forwards', limit: 10));
-```
-
-### Using the Realtime API
-
-Creating the Realtime client instance:
+#### Create an instance of the Realtime Client
 
 ```dart
 ably.Realtime realtime = ably.Realtime(options: clientOptions);
 ```
 
-Listening for connection state change events:
+#### Read Realtime time
+
+```dart
+DateTime time = realtime.time()
+```
+
+### Connection state
+
+#### Listen for all connection state events
 
 ```dart
 realtime.connection
-  .on()
-  .listen((ably.ConnectionStateChange stateChange) async {
-    print('Realtime connection state changed: ${stateChange.event}');
-    setState(() {
-      _realtimeConnectionState = stateChange.current;
+    .on()
+    .listen((ably.ConnectionStateChange stateChange) async {
+        // Handle connection state change events
     });
-});
 ```
 
-Listening for a particular connection state change event (e.g. `connected`):
+#### Listen for particular connection state event
 
 ```dart
 realtime.connection
-  .on(ably.ConnectionEvent.connected)
-  .listen((ably.ConnectionStateChange stateChange) async {
-    print('Realtime connection state changed: ${stateChange.event}');
-    setState(() {
-      _realtimeConnectionState = stateChange.current;
+    .on(ably.ConnectionEvent.connected) // Any type of `ConnectionEvent` can be specified
+    .listen((ably.ConnectionStateChange stateChange) async {
+        // Handle connection state change events
     });
-});
 ```
 
-Creating a Realtime channel instance:
+### Realtime channel
+
+#### Create instance of Realtime channel
 
 ```dart
 ably.RealtimeChannel channel = realtime.channels.get('channel-name');
 ```
 
-Listening for channel events:
+#### Attach and detach from channel
 
 ```dart
-channel.on().listen((ably.ChannelStateChange stateChange) {
-  print("Channel state changed: ${stateChange.current}");
-});
+await channel.attach()
+await channel.detach()
 ```
 
-Attaching to the channel:
+### Channel state
+
+#### Listen for all channel state events
 
 ```dart
-await channel.attach();
+channel
+    .on()
+    .listen((ably.ChannelStateChange stateChange) async {
+        // Handle channel state change events
+    });
 ```
 
-Detaching from the channel:
+#### Listen for particular channel state event
 
 ```dart
-await channel.detach();
+channel
+    .on(ably.ChannelEvent.failed) // Any type of `ConnectionEvent` can be specified
+    .listen((ably.ChannelStateChange stateChange) async {
+        // Handle channel state change events
+    });
 ```
 
-Subscribing to messages on the channel:
+### Channel messages
+
+#### Listen for all messages
 
 ```dart
-var messageStream = channel.subscribe();
-var channelMessageSubscription = messageStream.listen((ably.Message message) {
-  print("New message arrived ${message.data}");
-});
+StreamSubscription<ably.Message> subscription = 
+    channel
+        .subscribe()
+        .listen((ably.Message message) {
+            // Handle channel message
+        });
 ```
 
-Use `channel.subscribe(name: "event1")` or `channel.subscribe(names: ["event1", "event2"])` to listen to specific named messages.
-
-UnSubscribing from receiving messages on the channel:
+#### Listen for message with selected name
 
 ```dart
-await channelMessageSubscription.cancel();
+StreamSubscription<ably.Message> subscription = 
+    channel
+        .subscribe(name: 'event1')
+        .listen((ably.Message message) {
+            // Handle channel messages with name 'event1'
+        });
 ```
 
-Publishing channel messages
+#### Listen for messages with a set of selected names
 
 ```dart
-// both name and data
-await channel.publish(name: "event1", data: "hello world");
-await channel.publish(name: "event1", data: {"hello": "world", "hey": "ably"});
-await channel.publish(name: "event1", data: [{"hello": {"world": true}, "ably": {"serious": "realtime"}]);
-
-// single message
-await channel.publish(message: ably.Message()..name = "event1"..data = {"hello": "world"});
-
-// multiple messages
-await channel.publish(messages: [
-  ably.Message()..name="event1"..data = {"hello": "ably"},
-  ably.Message()..name="event1"..data = {"hello": "world"}
-]);
+StreamSubscription<ably.Message> subscription =
+    channel
+        .subscribe(names: ['event1', 'event2'])
+        .listen((ably.Message message) {
+            // Handle channel messages with name 'event1' or `event2`
+        });
 ```
 
-Get Realtime history
+#### Stop listening for messages
 
 ```dart
-void getHistory([ably.RealtimeHistoryParams params]) async {
-  var result = await channel.history(params);
-
-  var messages = result.items;        // get messages
-  var hasNextPage = result.hasNext(); // tells whether there are more results
-  if (hasNextPage) {    
-    result = await result.next();     // will fetch next page results
-    messages = result.items;
-  }
-  if (!hasNextPage) {
-    result = await result.first();    // will fetch first page results
-    messages = result.items;
-  }
-}
-
-// history with default params
-getHistory();
-
-// sorted and filtered history
-getHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
+await subscription.cancel()
 ```
 
-Enter Realtime Presence:
+#### Publish single message on channel
 
 ```dart
+// Publish simple message
+await channel.publish(
+    name: "event1",
+    data: "hello world",
+);
+
+// Publish message data as json-encodable object
+await channel.publish(
+    name: "event1",
+    data: {
+        "hello": "world",
+        "hey": "ably",
+    },
+);
+
+// Publish message as array of json-encodable objects
+await channel.publish(
+    name: "event1",
+    data: [
+        {
+        "hello": {
+            "world": true,
+        },
+        "ably": {
+            "serious": "realtime",
+        },
+    ],
+);
+
+// Publish message as an `ably.Message` object
+await channel.publish(
+    message: ably.Message(
+        name: "event1",
+        data: {
+            "hello": "world",
+        }
+    ),
+);
+```
+
+#### Publish multiple messages on channel
+
+```dart
+await channel.publish(
+    messages: [
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "world",
+            }
+        ),
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "ably",
+            }
+        ),
+    ],
+);
+```
+
+### Channel history
+
+#### Read channel history
+
+```dart
+// Get channel history with default parameters
+ably.PaginatedResult<ably.Message> history = await channel.history()
+
+// Get channel history with custom parameters
+ably.PaginatedResult<ably.Message> filteredHistory = await channel.history(
+    ably.RealtimeHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+)
+```
+
+### Realtime presence
+
+#### Enter Realtime presence
+
+```dart
+// Enter using client ID from `ClientOptions`
 await channel.presence.enter();
 
-// with data
+// Enter using client ID from `ClientOptions` with additional data
 await channel.presence.enter("hello");
 await channel.presence.enter([1, 2, 3]);
 await channel.presence.enter({"key": "value"});
 
-// with Client ID
+// Enter with specified client ID
 await channel.presence.enterClient("user1");
 
-// with Client ID and data
+// Enter with specified client ID and additional data
 await channel.presence.enterClient("user1", "hello");
 await channel.presence.enterClient("user1", [1, 2, 3]);
 await channel.presence.enterClient("user1", {"key": "value"});
 ```
 
-Update Realtime Presence:
+#### Update Realtime presence
 
 ```dart
+// Update using client ID from `ClientOptions`
 await channel.presence.update();
 
-// with data
+// Update using client ID from `ClientOptions` with additional data
 await channel.presence.update("hello");
 await channel.presence.update([1, 2, 3]);
 await channel.presence.update({"key": "value"});
 
-// with Client ID
+// Update with specified client ID
 await channel.presence.updateClient("user1");
 
-// with Client ID and data
+// Update with specified client ID and additional data
 await channel.presence.updateClient("user1", "hello");
 await channel.presence.updateClient("user1", [1, 2, 3]);
 await channel.presence.updateClient("user1", {"key": "value"});
 ```
 
-Leave Realtime Presence:
+#### Leave Realtime presence
 
 ```dart
+// Leave using client ID from `ClientOptions`
 await channel.presence.leave();
 
-// with data
+// Leave using client ID from `ClientOptions` with additional data
 await channel.presence.leave("hello");
 await channel.presence.leave([1, 2, 3]);
 await channel.presence.leave({"key": "value"});
 
-// with Client ID
+// Leave with specified client ID
 await channel.presence.leaveClient("user1");
 
-// with Client ID and data
+// Leave with specified client ID and additional data
 await channel.presence.leaveClient("user1", "hello");
 await channel.presence.leaveClient("user1", [1, 2, 3]);
 await channel.presence.leaveClient("user1", {"key": "value"});
 ```
 
-Get Realtime Presence members:
+#### Get Realtime presence
 
 ```dart
-var presenceMessages = await channel.presence.get();
 
-// filter by Client Id
-var presenceMessages = await channel.presence.get(
-  ably.RealtimePresenceParams(
-    clientId: 'clientId',
-  ),
+// Get all presence messages
+List<ably.PresenceMessage> presenceMessages = await channel.presence.get();
+
+// Get presence messages with specific Client ID
+presenceMessages = await channel.presence.get(
+    ably.RealtimePresenceParams(
+        clientId: 'clientId',
+    ),
 );
 
-// filter by Connection Id
-var presenceMessages = await channel.presence.get(
-  ably.RealtimePresenceParams(
-    connectionId: 'connectionId',
-  ),
+// Get presence messages with specific Connection ID
+presenceMessages = await channel.presence.get(
+    ably.RealtimePresenceParams(
+        connectionId: 'connectionId',
+    ),
 );
 ```
 
-Get Realtime Presence history
+#### Read Realtime presence history
 
 ```dart
-void getPresenceHistory([ably.RealtimeHistoryParams params]) async {
-  var result = await channel.presence.history(params);
+// Get presence history with default parameters
+ably.PaginatedResult<ably.PresenceMessage> history = await channel.presence.history()
 
-  var messages = result.items;        // get messages
-  var hasNextPage = result.hasNext(); // tells whether there are more results
-  if (hasNextPage) {    
-    result = await result.next();     // will fetch next page results
-    messages = result.items;
-  }
-  if (!hasNextPage) {
-    result = await result.first();    // will fetch first page results
-    messages = result.items;
-  }
+// Get presence history with custom parameters
+ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.presence.history(
+    ably.RealtimeHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+)
+```
+
+#### Listen for all Realtime presence messages
+
+```dart
+StreamSubscription<ably.PresenceMessage> subscription =
+    channel
+        .presence
+        .subscribe()
+        .listen((presenceMessage) {
+            // Handle presence message
+        },
+);
+```
+
+#### Listen for a particular presence message
+
+```dart
+StreamSubscription<ably.PresenceMessage> subscription =
+    channel
+        .presence
+        .subscribe(action: PresenceAction.enter)
+        .listen((presenceMessage) {
+            // Handle `enter` presence message
+        },
+);
+```
+
+#### Listen for a set of particular presence messages
+
+```dart
+StreamSubscription<ably.PresenceMessage> subscription =
+    channel
+        .presence
+        .subscribe(actions: [
+            PresenceAction.enter,
+            PresenceAction.update,
+        ])
+        .listen((presenceMessage) {
+            // Handle `enter` and `update` presence message
+        },
+);
+```
+
+### REST instance
+
+#### Create an instance of the REST Client
+
+```dart
+ably.Rest rest = ably.Rest(options: clientOptions);
+```
+
+#### Read REST time
+
+```dart
+DateTime time = rest.time()
+```
+
+### REST channel
+
+#### Create instance of REST channel
+
+```dart
+ably.RestChannel channel = rest.channels.get('channel-name');
+```
+
+### REST channel messages
+
+#### Publish single message on REST channel
+
+```dart
+// Publish simple message
+await channel.publish(
+    name: "event1",
+    data: "hello world",
+);
+
+// Publish message data as json-encodable object
+await channel.publish(
+    name: "event1",
+    data: {
+        "hello": "world",
+        "hey": "ably",
+    },
+);
+
+// Publish message as array of json-encodable objects
+await channel.publish(
+    name: "event1",
+    data: [
+        {
+        "hello": {
+            "world": true,
+        },
+        "ably": {
+            "serious": "realtime",
+        },
+    ],
+);
+
+// Publish message as an `ably.Message` object
+await channel.publish(
+    message: ably.Message(
+        name: "event1",
+        data: {
+            "hello": "world",
+        }
+    ),
+);
+```
+
+#### Publish multiple messages on REST channel
+
+```dart
+await channel.publish(
+    messages: [
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "world",
+            }
+        ),
+        ably.Message(
+            name: "event1",
+            data: {
+                "hello": "ably",
+            }
+        ),
+    ],
+);
+```
+
+### REST channel history
+
+#### Read REST channel history
+
+```dart
+// Get channel history with default parameters
+ably.PaginatedResult<ably.Message> history = await channel.history()
+
+// Get channel history with custom parameters
+ably.PaginatedResult<ably.Message> filteredHistory = await channel.history(
+    ably.RestHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+)
+```
+
+### REST presence
+
+#### Get REST presence
+
+```dart
+// Get all presence messages
+List<ably.PresenceMessage> presenceMessages = await channel.presence.get();
+
+// Get presence messages with specific Client ID
+presenceMessages = await channel.presence.get(
+    ably.RestPresenceParams(
+        clientId: 'clientId',
+    ),
+);
+
+// Get presence messages with specific Connection ID
+presenceMessages = await channel.presence.get(
+    ably.RestPresenceParams(
+        connectionId: 'connectionId',
+    ),
+);
+```
+
+#### Read REST presence history
+
+```dart
+// Get presence history with default parameters
+ably.PaginatedResult<ably.PresenceMessage> history = await channel.presence.history();
+
+// Get presence history with custom parameters
+ably.PaginatedResult<ably.PresenceMessage> filteredHistory = await channel.presence.history(
+    ably.RestHistoryParams(
+        direction: 'forwards',
+        limit: 10,
+    )
+);
+```
+
+### PaginatedResult handling
+
+#### Get items on current page
+
+```dart
+// Example PaginatedResult returned from channel history
+ably.PaginatedResult<ably.Message> paginatedResult = await channel.history(params);
+
+// Get list of items from result
+List<ably.Message> items = paginatedResult.items;
+```
+
+#### Get next page if available
+
+```dart
+// Example PaginatedResult returned from channel history
+ably.PaginatedResult<ably.Message> paginatedResult = await channel.history(params);
+
+// Check if next page is available
+bool hasNextPage = paginatedResult.hasNext();
+
+// Fetch next page if it's available
+if (hasNextPage) {    
+  paginatedResult = await paginatedResult.next();
 }
-
-// presence history with default params
-getPresenceHistory();
-
-// sorted and filtered history
-getPresenceHistory(ably.RealtimeHistoryParams(direction: 'forwards', limit: 10));
 ```
 
-Subscribe to Realtime Presence messages
+### Encryption
+
+#### Create CipherParams
 
 ```dart
-// subscribe for all presence actions
-channel
-  .presence
-  .subscribe()
-  .listen((presenceMessage) {
-    print(presenceMessage);
-  },
-);
-
-// subscribe for specific action
-channel
-  .presence
-  .subscribe(action: PresenceAction.enter)
-  .listen((presenceMessage) {
-    print(presenceMessage);
-  },
-);
-
-// subscribe for multiple actions
-channel
-  .presence
-  .subscribe(actions: [
-    PresenceAction.enter,
-    PresenceAction.update,
-  ])
-  .listen((presenceMessage) {
-    print(presenceMessage);
-  },
-);
+String key = 'base64EncodedKey'; // Can also be an UInt8List
+CipherParams cipherParams = ably.Crypto.getDefaultParams(key: key);
 ```
 
-### Symmetric Encryption
+#### Setup encryption on a channel
 
-When a key is provided to the library, the `data` attribute of all messages is encrypted and decrypted automatically using that key. The secret key is never transmitted to Ably. See https://www.ably.com/docs/realtime/encryption.
-
-1. Create a key by calling `ably.Crypto.generateRandomKey()` (or retrieve one from your server using your own secure API). The same key needs to be used to encrypt and decrypt the messages.
-2. Create a `CipherParams` instance by passing a key to `final cipherParams = await ably.Crypto.getDefaultParams(key: key);` - the key can be a Base64-encoded `String`, or a `Uint8List`
-3. Create a `RealtimeChannelOptions` or `RestChannelOptions` from this key: e.g. `final channelOptions = ably.RealtimeChannelOptions(cipher: cipherParams);`. Alternatively, if you are only setting CipherParams on ChannelOptions, you could skip creating the `CipherParams` instance: `ably.RestChannelOptions.withCipherKey(cipherKey)` or `ably.RealtimeChannelOptions.withCipherKey(cipherKey)`.
-4. Set these options on your channel: `realtimeClient.channels.get(channelName).setOptions(channelOptions);`
-5. Use your channel as normal, such as by publishing messages or subscribing for messages.
-
-Overall, it would like this:
 ```dart
-final key = ...; // from your server, from password or create random
-final cipherParams = ably.Crypto.getDefaultParams(key: key);
-final channelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
-final channel = realtime.channels.get("your channel name");
-await channel.setOptions(channelOptions);
+// For Realtime
+RealtimeChannelOptions realtimeChannelOptions = ably.RealtimeChannelOptions(cipherParams: cipherParams);
+RealtimeChannel channel = realtime.channels.get("channel-name");
+channel.setOptions(realtimeChannelOptions)
+
+// For REST
+RestChannelOptions restChannelOptions = ably.RestChannelOptions(cipherParams: cipherParams);
+RestChannel channel = rest.channels.get("channel-name");
+channel.setOptions(restChannelOptions)
 ```
 
-Take a look at [`encrypted_message_service.dart`](example/lib/encrypted_messaging_service.dart) for an example of how to implement end-to-end encrypted messages over Ably. There are several options to choose from when you have decided to your encrypt your messages.
-
-### Push Notifications
+### Handling push notifications
 
 See [PushNotifications.md](PushNotifications.md) for detailed information on using PN with this plugin.
 
-## Caveats
+## Resources
+
+- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
+- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
+- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
+- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
+
+## Requirements
+
+### Flutter Runtime Requirements
+
+Flutter 2.5.0 or higher is required.
+
+### iOS Runtime Requirements
+
+iOS 10 or newer.
+
+### Android Runtime Requirements
+
+API Level 19 (Android 4.4, KitKat) or newer.
+
+_This project uses Java 8 language features, utilizing [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
+to support lower versions of the Android runtime (i.e. API Levels prior to 24)_
+
+If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
+You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
+
+## Updating to a newer version
+
+When increasing the version of `ably_flutter` in your `pubspec.yaml`, there may be breaking changes. To migrate code across these breaking changes, follow the [updating / migration guide](UPDATING.md).
+
+## Feature support
+
+See Ably [feature support matrix](https://ably.com/download/sdk-feature-support-matrix) for a list of features supported by this SDK.
+
+## Known limitations
+
+### Missing features
+
+Features that we do not currently support, but we do plan to add in the future:
+
+- Ably token generation ([#105](https://github.com/ably/ably-flutter/issues/105))
+- REST and Realtime Stats ([#106](https://github.com/ably/ably-flutter/issues/106))
+- Push Notifications Admin ([#109](https://github.com/ably/ably-flutter/issues/109))
 
 ### RTE6a compliance
 
@@ -587,8 +707,6 @@ Using the Streams based approach doesn't fully conform with
 [RTE6a](https://docs.ably.com/client-lib-development-guide/features/#RTE6a)
 from our
 [client library features specification](https://docs.ably.com/client-lib-development-guide/features/).
-
-#### The Problem
 
 ```dart
 StreamSubscription subscriptionToBeCancelled;
@@ -614,8 +732,6 @@ It will not be as the 2nd listener was registered after the 1st listener and str
 
 This wouldn't have happened if the 2nd listener had been registered before the 1st was.
 
-However, using a neat little workaround will fix this...
-
 #### The Workaround - Cancelling using delay
 
 Instead of `await subscriptionToBeCancelled.cancel();`, use
@@ -625,6 +741,12 @@ Future<void>.delayed(Duration.zero, () {
     subscriptionToBeCancelled.cancel();
 });
 ```
+
+## Support, feedback and troubleshooting
+
+Please visit [ably.com/support](https://ably.com/support) for access to our knowledge base and to ask for any assistance.
+
+To see what has changed in recent versions, see the [CHANGELOG](CHANGELOG.md).
 
 ## Contributing
 
