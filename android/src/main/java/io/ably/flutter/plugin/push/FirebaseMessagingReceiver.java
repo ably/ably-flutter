@@ -30,7 +30,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     listenForFlutterApplicationToFinishProcessingMessage(context);
-      sendMessageToFlutterApplication(context, intent);
+    sendMessageToFlutterApplication(context, intent);
   }
 
   /**
