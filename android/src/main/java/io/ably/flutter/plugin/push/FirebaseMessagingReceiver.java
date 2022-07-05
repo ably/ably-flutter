@@ -21,7 +21,6 @@ import io.ably.lib.util.Log;
 
 public class FirebaseMessagingReceiver extends BroadcastReceiver {
   private static final String TAG = FirebaseMessagingReceiver.class.getName();
-  private static final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
   @Nullable
   private PendingResult asyncProcessingPendingResult = null;
 
@@ -31,10 +30,7 @@ public class FirebaseMessagingReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     listenForFlutterApplicationToFinishProcessingMessage(context);
-
-    backgroundThreadExecutor.execute(() -> {
-      sendMessageToFlutterApplication(context, intent);
-    });
+    sendMessageToFlutterApplication(context, intent);
   }
 
   /**
