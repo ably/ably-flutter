@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.2.15](https://github.com/ably/ably-flutter/tree/v1.2.15)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.14...v1.2.15)
+
+**Fixed bugs:**
+
+- Update `ably-android` dependency to version `1.2.13` or later [\#430](https://github.com/ably/ably-flutter/issues/430)
+- Android application got crash on notification receive in killed state using Ably notifications [\#429](https://github.com/ably/ably-flutter/issues/429)
+- Building Example App on Android fails [\#418](https://github.com/ably/ably-flutter/issues/418)
+- Fix for running didFinishLaunchingWithOptions [\#433](https://github.com/ably/ably-flutter/pull/433) ([Neelansh-ns](https://github.com/Neelansh-ns))
+- Main thread fix [\#431](https://github.com/ably/ably-flutter/pull/431) ([ikbalkaya](https://github.com/ikbalkaya))
+- Fix missing App ID build error in example app [\#421](https://github.com/ably/ably-flutter/pull/421) ([ikurek](https://github.com/ikurek))
+
+**Closed issues:**
+
+- Android Application got crash and also IOS onMessage not trggerd [\#425](https://github.com/ably/ably-flutter/issues/425)
+- Update CI to test example app builds [\#419](https://github.com/ably/ably-flutter/issues/419)
+- Update Android CI to Java 11 [\#417](https://github.com/ably/ably-flutter/issues/417)
+- Ignore deprecated API usage warning for 'fallbackHostsUseDefault' [\#416](https://github.com/ably/ably-flutter/issues/416)
+- 1.2.14 / Flutter 3.0.0 Operand of null-aware operation [\#412](https://github.com/ably/ably-flutter/issues/412)
+- Update dartdoc usage on CI [\#410](https://github.com/ably/ably-flutter/issues/410)
+- Update Gradle version and Android Gradle build tools [\#408](https://github.com/ably/ably-flutter/issues/408)
+
+**Merged pull requests:**
+
+- Update ably-android to 1.2.14 [\#435](https://github.com/ably/ably-flutter/pull/435) ([JakubJankowski](https://github.com/JakubJankowski))
+- Replaced old dartdoc usage with new doc tool [\#424](https://github.com/ably/ably-flutter/pull/424) ([ikurek](https://github.com/ikurek))
+- Added lint ignore on deprecated fields [\#423](https://github.com/ably/ably-flutter/pull/423) ([ikurek](https://github.com/ikurek))
+- Added CI workflow to build example app for iOS and Android [\#422](https://github.com/ably/ably-flutter/pull/422) ([ikurek](https://github.com/ikurek))
+- Updated Android CI to Java 11 [\#420](https://github.com/ably/ably-flutter/pull/420) ([ikurek](https://github.com/ikurek))
+- Updated Gradle and Android build tools versions [\#415](https://github.com/ably/ably-flutter/pull/415) ([ikurek](https://github.com/ikurek))
+- Changes to README [\#413](https://github.com/ably/ably-flutter/pull/413) ([ikurek](https://github.com/ikurek))
+- Changes to CONTRIBUTING [\#411](https://github.com/ably/ably-flutter/pull/411) ([ikurek](https://github.com/ikurek))
+
 ## [1.2.14](https://github.com/ably/ably-flutter/tree/v1.2.14)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.13...v1.2.14)
