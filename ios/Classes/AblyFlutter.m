@@ -767,7 +767,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         PushHandlers.pushNotificationTapLaunchedAppFromTerminatedData = notification;
     }
     
-    return NO;
+    return YES;
 }
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
@@ -785,7 +785,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [_pushNotificationEventHandlers application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-    return NO;
+    return YES;
 }
 
 @end
