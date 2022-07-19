@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.15](https://github.com/ably/ably-flutter/tree/v1.2.15)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.14...v1.2.15)
+
+**Fixed bugs:**
+
+- Update `ably-android` dependency to version `1.2.13` or later [\#430](https://github.com/ably/ably-flutter/issues/430), fixed in: Update ably-android to `1.2.15` [\#435](https://github.com/ably/ably-flutter/pull/435) ([JakubJankowski](https://github.com/JakubJankowski))
+- Android application got crash on notification receive in killed state using Ably notifications [\#429](https://github.com/ably/ably-flutter/issues/429), fixed in: Main thread fix [\#431](https://github.com/ably/ably-flutter/pull/431) ([ikbalkaya](https://github.com/ikbalkaya)) - reverting the change made under [\#291](https://github.com/ably/ably-flutter/pull/291), released at version `1.2.9`
+- Building Example App on Android fails [\#418](https://github.com/ably/ably-flutter/issues/418), fixed in: Fix missing App ID build error in example app [\#421](https://github.com/ably/ably-flutter/pull/421) ([ikurek](https://github.com/ikurek))
+- Fix for running didFinishLaunchingWithOptions [\#433](https://github.com/ably/ably-flutter/pull/433) ([Neelansh-ns](https://github.com/Neelansh-ns))
+
+**Closed issues:**
+
+- Deprecated API usage warning for `fallbackHostsUseDefault` [\#416](https://github.com/ably/ably-flutter/issues/416), fixed in: Added lint ignore on deprecated fields [\#423](https://github.com/ably/ably-flutter/pull/423) ([ikurek](https://github.com/ikurek))
+
 ## [1.2.14](https://github.com/ably/ably-flutter/tree/v1.2.14)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.13...v1.2.14)
