@@ -4,26 +4,40 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
+/// BEGIN LEGACY DOCSTRING
 /// Handles supported message extras types, their encoding and decoding
+/// END LEGACY DOCSTRING
 @immutable
 class MessageExtras with ObjectHash {
+  /// BEGIN LEGACY DOCSTRING
   /// json-encodable map of extras
+  /// END LEGACY DOCSTRING
   final Map<String, dynamic>? map;
 
+  /// BEGIN LEGACY DOCSTRING
   /// configuration for delta compression extension
+  /// END LEGACY DOCSTRING
   final DeltaExtras? _delta;
 
+  /// BEGIN LEGACY DOCSTRING
   /// delta configuration received from channel message
+  /// END LEGACY DOCSTRING
   DeltaExtras? get delta => _delta;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Creates an instance from given extras map
+  /// END LEGACY DOCSTRING
   const MessageExtras(this.map) : _delta = null;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Creates an instance from given extras map and an instance of DeltaExtras
+  /// END LEGACY DOCSTRING
   const MessageExtras._withDelta(this.map, this._delta);
 
+  /// BEGIN LEGACY DOCSTRING
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
+  /// END LEGACY DOCSTRING
   static MessageExtras? fromMap(Map<String, dynamic>? extrasMap) {
     if (extrasMap == null) return null;
     // In some cases, extrasMap may not be a mutable map

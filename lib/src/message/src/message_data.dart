@@ -1,17 +1,25 @@
 import 'dart:typed_data';
 
+/// BEGIN LEGACY DOCSTRING
 /// Handles supported message data types, their encoding and decoding
+/// END LEGACY DOCSTRING
 class MessageData<T> {
   final T _data;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Only Map, List, string and Buffer types are supported
+  /// END LEGACY DOCSTRING
   MessageData(this._data)
       : assert(T == Map || T == List || T == String || T == Uint8List);
 
+  /// BEGIN LEGACY DOCSTRING
   /// retrieve data
+  /// END LEGACY DOCSTRING
   T get data => _data;
 
+  /// BEGIN LEGACY DOCSTRING
   /// initializes [MessageData] with given value and asserts from input type
+  /// END LEGACY DOCSTRING
   static MessageData<dynamic>? fromValue(Object? value) {
     if (value == null) {
       return null;

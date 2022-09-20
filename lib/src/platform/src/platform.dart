@@ -4,9 +4,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
+/// BEGIN LEGACY DOCSTRING
 /// Used to communicate between Dart and native platforms
 /// holds reference to [MethodChannel] and exposes methods used to invoke
 /// platform calls and listen to platform data streams
+/// END LEGACY DOCSTRING
 class Platform {
   Platform._internal({MethodChannel? methodChannel}) {
     _methodChannel = methodChannel;
@@ -21,22 +23,32 @@ class Platform {
 
   static Platform? _platform;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Singleton instance of Platform
+  /// END LEGACY DOCSTRING
   factory Platform({MethodChannel? methodChannel}) =>
       _platform ??= Platform._internal(methodChannel: methodChannel);
 
+  /// BEGIN LEGACY DOCSTRING
   /// instance of [StandardMethodCodec] with custom [MessageCodec] for
   /// exchanging Ably types with platform via platform channels
   /// viz., [MethodChannel] and [StreamsChannel]
+  /// END LEGACY DOCSTRING
   final StandardMethodCodec _codec = StandardMethodCodec(Codec());
 
+  /// BEGIN LEGACY DOCSTRING
   /// instance of method channel to interact with android/ios code
+  /// END LEGACY DOCSTRING
   MethodChannel? _methodChannel;
 
+  /// BEGIN LEGACY DOCSTRING
   /// instance of method channel to listen to android/ios events
+  /// END LEGACY DOCSTRING
   late final StreamsChannel? _streamsChannel;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Call a platform method which may return null/void as a result
+  /// END LEGACY DOCSTRING
   Future<T?> invokePlatformMethod<T>(String method,
       [AblyMessage<Map<String, dynamic>>? arguments]) async {
     try {
@@ -54,7 +66,9 @@ class Platform {
     }
   }
 
+  /// BEGIN LEGACY DOCSTRING
   /// Call a platform method which always provides a non-null result
+  /// END LEGACY DOCSTRING
   Future<T> invokePlatformMethodNonNull<T>(String method,
       [AblyMessage<Map<String, dynamic>>? arguments]) async {
     final result = await invokePlatformMethod<T>(method, arguments);
@@ -67,8 +81,10 @@ class Platform {
     }
   }
 
+  /// BEGIN LEGACY DOCSTRING
   /// Call a platform method which always provides an observable stream
   /// of data as a result
+  /// END LEGACY DOCSTRING
   Stream<T> receiveBroadcastStream<T>(String methodName, int handle,
           [final Object? payload]) =>
       _streamsChannel!.receiveBroadcastStream<T>(

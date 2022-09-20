@@ -9,14 +9,20 @@ import 'package:ably_flutter/ably_flutter.dart';
 // FIXME: StreamControllers here may leak, we should add a `close()` method
 // See: https://github.com/ably/ably-flutter/issues/382
 class PushActivationEventsInternal extends PushActivationEvents {
+  /// BEGIN LEGACY DOCSTRING
   /// [StreamController] used to handle onActivate events
+  /// END LEGACY DOCSTRING
   StreamController<ErrorInfo?> onActivateStreamController = StreamController();
 
+  /// BEGIN LEGACY DOCSTRING
   /// [StreamController] used to handle onDeactivate events
+  /// END LEGACY DOCSTRING
   StreamController<ErrorInfo?> onDeactivateStreamController =
       StreamController();
 
+  /// BEGIN LEGACY DOCSTRING
   /// [StreamController] used to handle onUpdateFailed events
+  /// END LEGACY DOCSTRING
   StreamController<ErrorInfo> onUpdateFailedStreamController =
       StreamController();
 
