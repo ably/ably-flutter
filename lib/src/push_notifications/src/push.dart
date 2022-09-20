@@ -3,25 +3,37 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
 
+/// BEGIN LEGACY DOCSTRING
 /// Class providing push notification functionality
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
+/// END LEGACY DOCSTRING
 class Push extends PlatformObject {
+  /// BEGIN LEGACY DOCSTRING
   /// An instance to access activation events related to push, such as device
   /// activation, deactivation and notification permissions.
+  /// END LEGACY DOCSTRING
   static PushActivationEvents activationEvents = PushActivationEventsInternal();
 
+  /// BEGIN LEGACY DOCSTRING
   /// An instance to access message events related to push
+  /// END LEGACY DOCSTRING
   static PushNotificationEvents notificationEvents =
       PushNotificationEventsInternal();
 
+  /// BEGIN LEGACY DOCSTRING
   /// A rest client used platform side to invoke push notification methods
+  /// END LEGACY DOCSTRING
   final Rest? rest;
 
+  /// BEGIN LEGACY DOCSTRING
   /// A realtime client used platform side to invoke push notification methods
+  /// END LEGACY DOCSTRING
   final Realtime? realtime;
 
+  /// BEGIN LEGACY DOCSTRING
   /// Pass an Ably realtime or rest client.
+  /// END LEGACY DOCSTRING
   Push({
     this.realtime,
     this.rest,
@@ -34,6 +46,7 @@ class Push extends PlatformObject {
     }
   }
 
+  /// BEGIN LEGACY DOCSTRING
   /// Activate this device for push notifications by registering
   /// with the push transport such as FCM/APNs.
   ///
@@ -45,8 +58,10 @@ class Push extends PlatformObject {
   /// throws: AblyException when the server returns an error.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
+  /// END LEGACY DOCSTRING
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
+  /// BEGIN LEGACY DOCSTRING
   /// Request permission from the user to show them notifications. This is
   /// required to show user notifications. Otherwise, notifications may
   /// silently get received by the application.
@@ -75,6 +90,7 @@ class Push extends PlatformObject {
   /// @returns bool Permission was granted.
   ///
   /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorization)
+  /// END LEGACY DOCSTRING
   Future<bool> requestPermission({
     bool alert = true,
     bool announcement = true,
@@ -102,10 +118,12 @@ class Push extends PlatformObject {
     }
   }
 
+  /// BEGIN LEGACY DOCSTRING
   /// Gets the iOS notification settings ([UNNotificationSettings]) for
   /// the application.
   ///
   /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649524-getnotificationsettings)
+  /// END LEGACY DOCSTRING
   Future<UNNotificationSettings> getNotificationSettings() async {
     if (io.Platform.isIOS) {
       return invokeRequest<UNNotificationSettings>(
@@ -115,6 +133,7 @@ class Push extends PlatformObject {
     }
   }
 
+  /// BEGIN LEGACY DOCSTRING
   /// Deactivate this device for push notifications by removing
   /// the registration with the push transport such as FCM/APNS.
   ///
@@ -126,8 +145,10 @@ class Push extends PlatformObject {
   /// throws: AblyException
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
+  /// END LEGACY DOCSTRING
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
+  /// BEGIN LEGACY DOCSTRING
   /// Resets activation state of Android push device by removing
   /// device data from Android SharedPreferences. After this operation, device
   /// is recognized as a completely new push device and all device data
@@ -135,6 +156,7 @@ class Push extends PlatformObject {
   ///
   /// Warning: This is an experimental method and it's use can lead to
   /// unexpected behavior in Push module
+  /// END LEGACY DOCSTRING
   @experimental
   Future<void> reset() {
     if (io.Platform.isAndroid) {
