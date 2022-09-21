@@ -128,6 +128,10 @@ class Rest extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Channels]{@link Channels} object.
+  /// END CANONICAL DOCSTRING
   late RestChannels channels;
 
   /// BEGIN LEGACY DOCSTRING
