@@ -91,7 +91,7 @@ class Rest extends PlatformObject {
   /// documented or is not yet included in the public API, without having to
   /// directly handle features such as authentication, paging, fallback hosts,
   /// MsgPack and JSON support.
-  /// END CANONICAL DOCSTRINGAdd canonical docstring forAdd canonical docstring for
+  /// END CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   String? method,
   //   String? path,
