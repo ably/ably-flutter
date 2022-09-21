@@ -26,6 +26,14 @@ class Rest extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Pass a [ClientOptions] to configure the rest client.
   /// END LEGACY DOCSTRING
+  /// 
+  /// BEGIN CANONICAL DOCSTRING
+  /// Construct a RestClient object using an Ably
+  /// [ClientOptions]{@link ClientOptions} object.
+  /// 
+  /// [ClientOptions] - A [ClientOptions]{@link ClientOptions} object to 
+  /// configure the client connection to Ably.
+  /// END CANONICAL DOCSTRING
   Rest({required this.options}) : super() {
     channels = RestChannels(this);
     push = Push(rest: this);
