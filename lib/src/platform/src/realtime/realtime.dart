@@ -13,6 +13,12 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// Learn more at the [Realtime Client Library API documentation](https://ably.com/documentation/realtime).
 /// END LEGACY DOCSTRING
 
+/// BEGIN CANONICAL DOCSTRING
+/// A client that extends the functionality of the
+/// [RestClient]{@link RestClient} and provides additional realtime-specific
+/// features.
+/// END CANONICAL DOCSTRING
+
 class Realtime extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// instantiates with [ClientOptions] and a String [key]
