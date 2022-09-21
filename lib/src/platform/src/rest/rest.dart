@@ -17,6 +17,11 @@ Map<int?, Rest> get restInstances => UnmodifiableMapView(_restInstances);
 ///
 /// Learn more at the [REST Client Library API documentation](https://ably.com/documentation/rest).
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// A client that offers a simple stateless API to interact directly with Ably's
+/// REST API.
+/// END CANONICAL DOCSTRING
 class Rest extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Pass a [ClientOptions] to configure the rest client.
