@@ -138,7 +138,7 @@ class Rest extends PlatformObject {
   /// start or end times are rounded down to the start of the relevant interval
   /// depending on the unit granularity of the query.
   ///
-  /// [PaginatedResult] - A [PaginatedResult]{@link PaginatedResult} object 
+  /// [PaginatedResult] - A [PaginatedResult]{@link PaginatedResult} object
   /// containing an array of [Stats]{@link Stats} objects.
   /// END CANONICAL DOCSTRING
   // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
@@ -150,6 +150,17 @@ class Rest extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves the time from the Ably service as milliseconds since the Unix
+  /// epoch. Clients that do not have access to a sufficiently well maintained
+  /// time source and wish to issue Ably [TokenRequests]{@link TokenRequest}
+  /// with a more accurate timestamp should use the
+  /// [queryTime]{@link ClientOptions#queryTime} property instead of this
+  /// method.
+  ///
+  /// [Time] - The time as milliseconds since the Unix epoch.
+  /// END CANONICAL DOCSTRING
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.restTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
