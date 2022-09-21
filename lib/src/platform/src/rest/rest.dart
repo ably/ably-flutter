@@ -26,12 +26,12 @@ class Rest extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Pass a [ClientOptions] to configure the rest client.
   /// END LEGACY DOCSTRING
-  /// 
+  ///
   /// BEGIN CANONICAL DOCSTRING
   /// Construct a RestClient object using an Ably
   /// [ClientOptions]{@link ClientOptions} object.
-  /// 
-  /// [ClientOptions] - A [ClientOptions]{@link ClientOptions} object to 
+  ///
+  /// [ClientOptions] - A [ClientOptions]{@link ClientOptions} object to
   /// configure the client connection to Ably.
   /// END CANONICAL DOCSTRING
   Rest({required this.options}) : super() {
@@ -66,7 +66,7 @@ class Rest extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
   /// END LEGACY DOCSTRING
-  
+
   /// BEGIN CANONICAL DOCSTRING
   /// An [Auth]{@link Auth} object.
   /// END CANONICAL DOCSTRING
@@ -117,6 +117,10 @@ class Rest extends PlatformObject {
   /// a push object interacting with Push API, such as
   /// subscribing for push notifications by clientId.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Push]{@link Push} object.
+  /// END CANONICAL DOCSTRING
   late Push push;
 
   /// BEGIN LEGACY DOCSTRING
