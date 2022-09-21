@@ -34,6 +34,13 @@ class Rest extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Create a rest client from an API key without configuring other parameters
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Constructs a RestClient object using an Ably API key or token string.
+  ///
+  /// [keyOrTokenStr] - The Ably API key or token string used to validate the
+  /// client.
+  /// END CANONICAL DOCSTRING
   factory Rest.fromKey(String key) => Rest(options: ClientOptions(key: key));
 
   @override
