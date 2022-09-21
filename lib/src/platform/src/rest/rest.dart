@@ -91,17 +91,17 @@ class Rest extends PlatformObject {
   /// documented or is not yet included in the public API, without having to
   /// directly handle features such as authentication, paging, fallback hosts,
   /// MsgPack and JSON support.
-  /// 
+  ///
   /// [method] - The request method to use, such as GET, POST.
   /// [path] - The request path.
-  /// [params] - The parameters to include in the URL query of the request. 
+  /// [params] - The parameters to include in the URL query of the request.
   /// The parameters depend on the endpoint being queried. See the REST API
   /// reference for the available parameters of each endpoint.
   /// [body] - The JSON body of the request.
   /// [headers] - Additional HTTP headers to include in the request.
-  /// 
-  /// [HttpPaginatedResponse] - An 
-  /// [HttpPaginatedResponse]{@link HttpPaginatedResponse} object returned by 
+  ///
+  /// [HttpPaginatedResponse] - An
+  /// [HttpPaginatedResponse]{@link HttpPaginatedResponse} object returned by
   /// the HTTP request, containing an empty or JSON-encodable object.
   /// END CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
@@ -118,10 +118,32 @@ class Rest extends PlatformObject {
   /// gets stats based on params as a [PaginatedResult]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
+  /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Queries the REST /stats API and retrieves your application's usage
+  /// statistics. Returns a [PaginatedResult]{@link PaginatedResult} object
+  /// containing an array of [Stats]{@link Stats} objects. See the Stats docs.
+  ///
+  /// [start] - The time from which stats are retrieved, specified as
+  /// milliseconds since the Unix epoch.
+  /// [end] - The time until stats are retrieved, specified as milliseconds
+  /// since the Unix epoch.
+  /// [direction] - The order for which stats are returned in. Valid values are
+  /// backwards which orders stats from most recent to oldest, or forwards
+  /// which orders stats from oldest to most recent. The default is backwards.
+  /// [limit] - An upper limit on the number of stats returned. The default
+  /// is 100, and the maximum is 1000.
+  /// [unit] - minute, hour, day or month. Based on the unit selected, the given
+  /// start or end times are rounded down to the start of the relevant interval
+  /// depending on the unit granularity of the query.
+  ///
+  /// [PaginatedResult] - A [PaginatedResult]{@link PaginatedResult} object 
+  /// containing an array of [Stats]{@link Stats} objects.
+  /// END CANONICAL DOCSTRING
   // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
   //   throw UnimplementedError();
   // }
-  /// END LEGACY DOCSTRING
 
   /// BEGIN LEGACY DOCSTRING
   /// returns server time
