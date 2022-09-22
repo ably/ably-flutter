@@ -19,6 +19,16 @@ class ClientOptions extends AuthOptions {
   /// issued to this client.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A client ID, used for identifying this client when publishing messages or
+  /// for presence purposes. The clientId can be any non-empty string, except it
+  /// cannot contain a *. This option is primarily intended to be used in
+  /// situations where the library is instantiated with a key. Note that a
+  /// clientId may also be implicit in a token used to instantiate the library.
+  /// An error will be raised if a clientId specified here conflicts with the
+  /// clientId implicit in the token.
+  /// END CANONICAL DOCSTRING
   String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
