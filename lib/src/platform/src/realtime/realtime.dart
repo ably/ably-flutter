@@ -166,6 +166,20 @@ class Realtime extends PlatformObject {
   /// documented or is not yet included in the public API, without having to
   /// directly handle features such as authentication, paging, fallback hosts,
   /// MsgPack and JSON support.
+  ///
+  /// [method] - The request method to use, such as GET, POST.
+  /// [path] - 	The request path.
+  /// [params] - The parameters to include in the URL query of the request. The
+  /// parameters depend on the endpoint being queried. See the REST API
+  /// reference for the available parameters of each endpoint:
+  /// https://ably.com/docs/api/rest-api
+  /// [body] - The JSON body of the request.
+  /// [headers] - Additional HTTP headers to include in the request.
+  ///
+  /// [HttpPaginatedResponse] - An
+  /// [HttpPaginatedResponse]{@link HttpPaginatedResponse} response object
+  /// returned by the HTTP request, containing an empty or JSON-encodable
+  /// object.
   /// END CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   required String method,
