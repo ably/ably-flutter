@@ -5,6 +5,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Passes additional client-specific properties to the REST
+/// [constructor()]{@link RestClient#constructor} or the Realtime
+/// [constructor()]{@link RealtimeClient#constructor}.
+/// END CANONICAL DOCSTRING
 class ClientOptions extends AuthOptions {
   /// BEGIN LEGACY DOCSTRING
   /// Optional clientId that can be used to specify the identity for this client
@@ -145,7 +151,7 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3j11
   /// END LEGACY DOCSTRING
-    TokenParams? defaultTokenParams;
+  TokenParams? defaultTokenParams;
 
   /// BEGIN LEGACY DOCSTRING
   /// When the connection enters the [ConnectionState.disconnected] state,
@@ -316,6 +322,7 @@ class ClientOptions extends AuthOptions {
     this.tls = tls ?? this.tls;
     this.useBinaryProtocol = useBinaryProtocol ?? this.useBinaryProtocol;
   }
+
   /// BEGIN LEGACY DOCSTRING
   /// initializes [ClientOptions] with a key and log level set to info
   ///
