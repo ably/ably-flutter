@@ -134,6 +134,10 @@ class Realtime extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Channels]{@link Channels} object.
+  /// END CANONICAL DOCSTRING
   RealtimeChannels get channels => _channels;
 
   /// BEGIN LEGACY DOCSTRING
