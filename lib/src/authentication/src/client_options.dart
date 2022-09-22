@@ -69,6 +69,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a non-default Ably host to be specified. For development
+  /// environments only. The default value is rest.ably.io.
+  /// END CANONICAL DOCSTRING
   String? restHost;
 
   /// BEGIN LEGACY DOCSTRING
