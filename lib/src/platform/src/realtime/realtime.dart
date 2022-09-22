@@ -159,6 +159,13 @@ class Realtime extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// connects to [connection]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Calls [connection.connect()]{@link Connection#connect} and causes the
+  /// connection to open, entering the connecting state. Explicitly calling
+  /// connect() is unnecessary unless the
+  /// [autoConnect]{@link ClientOptions#autoConnect} property is disabled.
+  /// END CANONICAL DOCSTRING
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
   /// BEGIN LEGACY DOCSTRING
