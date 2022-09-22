@@ -294,6 +294,12 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A set of key-value pairs that can be used to pass in arbitrary connection
+  /// parameters, such as [heartbeatInterval](https://ably.com/docs/realtime/connection#heartbeats)
+  /// or [remainPresentFor](https://ably.com/docs/realtime/presence#unstable-connections).
+  /// END CANONICAL DOCSTRING
   Map<String, String>? transportParams;
 
   /// BEGIN LEGACY DOCSTRING
