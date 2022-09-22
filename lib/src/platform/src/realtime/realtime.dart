@@ -27,6 +27,14 @@ class Realtime extends PlatformObject {
   ///
   /// raises [AssertionError] if both [options] and [key] are null
   /// END LEGACY DOCSTRING
+  ///
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Constructs a RealtimeClient object using an Ably
+  /// [ClientOptions]{@link ClientOptions} object.
+  ///
+  /// [ClientOptions] - A [ClientOptions]{@link ClientOptions} object.
+  /// END CANONICAL DOCSTRING
   Realtime({
     ClientOptions? options,
     final String? key,
