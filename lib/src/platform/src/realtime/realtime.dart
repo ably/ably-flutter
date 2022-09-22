@@ -42,6 +42,13 @@ class Realtime extends PlatformObject {
   /// Create a realtime client from an API key without
   /// configuring other parameters
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Constructs a RealtimeClient object using an Ably API key or token string.
+  ///
+  /// [keyOrTokenStr] - The Ably API key or token string used to validate the
+  /// client.
+  /// END CANONICAL DOCSTRING
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
 
