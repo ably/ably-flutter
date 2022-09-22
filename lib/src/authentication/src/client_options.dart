@@ -129,6 +129,11 @@ class ClientOptions extends AuthOptions {
   /// This is true by default.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3h
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// If false, prevents messages originating from this connection being echoed
+  /// back on the same connection. The default is true.
+  /// END CANONICAL DOCSTRING
   bool echoMessages = true;
 
   /// BEGIN LEGACY DOCSTRING
