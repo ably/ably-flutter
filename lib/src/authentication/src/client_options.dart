@@ -147,6 +147,11 @@ class ClientOptions extends AuthOptions {
   /// operations, instead of the default binary msgpack encoding.
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When true, the more efficient MsgPack binary encoding is used. When false,
+  /// JSON text encoding is used. The default is true.
+  /// END CANONICAL DOCSTRING
   bool useBinaryProtocol = true;
 
   /// BEGIN LEGACY DOCSTRING
