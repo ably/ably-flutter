@@ -39,6 +39,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Controls the log output of the library. This is a function to handle each
+  /// line of log output.
+  /// END CANONICAL DOCSTRING
   @Deprecated(
     'Not used, as log messages are handled by the default mechanism '
     'in the underlying SDK. This instance variable will be removed '
@@ -149,6 +154,12 @@ class ClientOptions extends AuthOptions {
   ///
   /// Use this only if you have been provided a dedicated environment by Ably
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a
+  /// [custom environment](https://ably.com/docs/platform-customization) to be
+  /// used with the Ably service.
+  /// END CANONICAL DOCSTRING
   String? environment;
 
   /// BEGIN LEGACY DOCSTRING
