@@ -211,6 +211,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// DEPRECATED: this property is deprecated and will be removed in a future
+  /// version. Enables default fallback hosts to be used.
+  /// END CANONICAL DOCSTRING
   @Deprecated('no alternative to this')
   bool? fallbackHostsUseDefault;
 
