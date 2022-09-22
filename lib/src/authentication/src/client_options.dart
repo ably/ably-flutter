@@ -106,6 +106,11 @@ class ClientOptions extends AuthOptions {
   /// By default, a TLS connection is used to connect to Ably
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When false, the client will use an insecure connection. The default is
+  /// true, meaning a TLS connection will be used to connect to Ably.
+  /// END CANONICAL DOCSTRING
   bool tls = true;
 
   /// BEGIN LEGACY DOCSTRING
