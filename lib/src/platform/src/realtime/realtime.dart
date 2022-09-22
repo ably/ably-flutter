@@ -97,6 +97,10 @@ class Realtime extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Connection]{@link Connection} object.
+  /// END CANONICAL DOCSTRING
   Connection get connection => _connection;
 
   /// BEGIN LEGACY DOCSTRING
