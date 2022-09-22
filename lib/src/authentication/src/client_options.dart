@@ -81,6 +81,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a non-default Ably host to be specified for realtime connections.
+  /// For development environments only. The default value is realtime.ably.io.
+  /// END CANONICAL DOCSTRING
   String? realtimeHost;
 
   /// BEGIN LEGACY DOCSTRING
