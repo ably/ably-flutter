@@ -57,6 +57,11 @@ class ClientOptions extends AuthOptions {
   /// Use constants from [LogLevel] to pass arguments
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Controls the verbosity of the logs output from the library. Levels include
+  /// verbose, debug, info, warn and error.
+  /// END CANONICAL DOCSTRING
   LogLevel logLevel = LogLevel.info;
 
   /// BEGIN LEGACY DOCSTRING
