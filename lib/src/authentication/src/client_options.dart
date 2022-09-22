@@ -83,6 +83,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a non-default Ably port to be specified. For development
+  /// environments only. The default value is 80.
+  /// END CANONICAL DOCSTRING
   int? port;
 
   /// BEGIN LEGACY DOCSTRING
