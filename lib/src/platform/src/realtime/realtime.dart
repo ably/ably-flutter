@@ -186,6 +186,13 @@ class Realtime extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves a [LocalDevice]{@link LocalDevice} object that represents the
+  /// current state of the device as a target for push notifications.
+  ///
+  /// [LocalDevice] - A [LocalDevice]{@link LocalDevice} object.
+  /// END CANONICAL DOCSTRING
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
