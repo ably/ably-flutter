@@ -167,6 +167,12 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3j11
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When a [TokenParams]{@link TokenParams} object is provided, it overrides
+  /// the client library defaults when issuing new Ably Tokens or Ably
+  /// [TokenRequests]{@link TokenRequest}.
+  /// END CANONICAL DOCSTRING
   TokenParams? defaultTokenParams;
 
   /// BEGIN LEGACY DOCSTRING
