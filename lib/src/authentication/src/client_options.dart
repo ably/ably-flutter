@@ -177,6 +177,19 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3i
   /// Also see https://www.ably.com/documentation/realtime/connection#connection-state-recovery
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a connection to inherit the state of a previous connection that
+  /// may have existed under a different instance of the Realtime library. This
+  /// might typically be used by clients of the browser library to ensure
+  /// connection state can be preserved when the user refreshes the page.
+  /// A recovery key string can be explicitly provided, or alternatively if a
+  /// callback function is provided, the client library will automatically
+  /// persist the recovery key between page reloads and call the callback
+  /// when the connection is recoverable. The callback is then responsible for
+  /// confirming whether the connection should be recovered or not. See
+  /// [connection state recovery](https://ably.com/docs/realtime/connection/#connection-state-recovery) for further information.
+  /// END CANONICAL DOCSTRING
   String? recover;
 
   /// BEGIN LEGACY DOCSTRING
