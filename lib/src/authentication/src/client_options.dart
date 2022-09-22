@@ -197,6 +197,13 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An array of fallback hosts to be used in the case of an error
+  /// necessitating the use of an alternative host.
+  /// If you have been provided a set of custom fallback hosts by Ably, please
+  /// specify them here.
+  /// END CANONICAL DOCSTRING
   List<String>? fallbackHosts;
 
   /// BEGIN LEGACY DOCSTRING
