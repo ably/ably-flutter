@@ -104,8 +104,12 @@ class Realtime extends PlatformObject {
   /// based on the [options]
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
-  // Auth? auth;
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An [Auth]{@link Auth} object.
+  /// END CANONICAL DOCSTRING
+  // Auth? auth;
 
   /// BEGIN LEGACY DOCSTRING
   /// [ClientOptions] indicating authentication and other settings for this
