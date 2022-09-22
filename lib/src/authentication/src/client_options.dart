@@ -87,6 +87,12 @@ class ClientOptions extends AuthOptions {
   /// [Connection.connect] to be called before connecting
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When true, the client connects to Ably as soon as it is instantiated.
+  /// You can set this to false and explicitly connect to Ably using the
+  /// [connect()]{@link Connection#connect} method. The default is true.
+  /// END CANONICAL DOCSTRING
   bool autoConnect = true;
 
   /// BEGIN LEGACY DOCSTRING
