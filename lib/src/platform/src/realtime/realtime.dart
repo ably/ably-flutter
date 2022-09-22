@@ -241,6 +241,17 @@ class Realtime extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves the time from the Ably service as milliseconds since the Unix
+  /// epoch. Clients that do not have access to a sufficiently well maintained
+  /// time source and wish to issue Ably [TokenRequests]{@link TokenRequest
+  /// with a more accurate timestamp should use the
+  /// [queryTime]{@link ClientOptions#queryTime} property instead of this
+  /// method.
+  ///
+  /// [time] - The time as milliseconds since the Unix epoch.
+  /// END CANONICAL DOCSTRING
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
