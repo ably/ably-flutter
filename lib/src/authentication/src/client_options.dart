@@ -118,6 +118,11 @@ class ClientOptions extends AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enables a non-default Ably TLS port to be specified. For development
+  /// environments only. The default value is 443.
+  /// END CANONICAL DOCSTRING
   int? tlsPort;
 
   /// BEGIN LEGACY DOCSTRING
