@@ -158,6 +158,15 @@ class Realtime extends PlatformObject {
   /// creates and sends a raw request to ably service
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
+  /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Makes a REST request to a provided path. This is provided as a convenience
+  /// for developers who wish to use REST API functionality that is either not
+  /// documented or is not yet included in the public API, without having to
+  /// directly handle features such as authentication, paging, fallback hosts,
+  /// MsgPack and JSON support.
+  /// END CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   required String method,
   //   required String path,
@@ -167,7 +176,6 @@ class Realtime extends PlatformObject {
   // }) {
   //   throw UnimplementedError();
   // }
-  /// END LEGACY DOCSTRING
 
   /// BEGIN LEGACY DOCSTRING
   /// gets stats based on params as a [PaginatedResult]
