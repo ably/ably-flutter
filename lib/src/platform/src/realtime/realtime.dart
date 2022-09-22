@@ -121,6 +121,10 @@ class Realtime extends PlatformObject {
   /// a push object interacting with Push API
   /// viz., subscribing for push notifications, etc
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Push]{@link Push} object.
+  /// END CANONICAL DOCSTRING
   late Push push;
 
   late RealtimeChannels _channels;
