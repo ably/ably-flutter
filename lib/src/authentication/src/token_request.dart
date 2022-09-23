@@ -3,6 +3,11 @@ import 'package:flutter/foundation.dart';
 /// BEGIN LEGACY DOCSTRING
 /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the properties of a request for a token to Ably. Tokens are
+/// generated using [requestToken]{@link Auth#requestToken}.
+/// END CANONICAL DOCSTRING
 @immutable
 class TokenRequest {
   /// BEGIN LEGACY DOCSTRING
