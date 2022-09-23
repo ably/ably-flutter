@@ -83,6 +83,11 @@ class PushChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Unsubscribes all devices associated with the current device's clientId
+  /// from receiving push notifications for the channel.
+  /// END CANONICAL DOCSTRING
   Future<void> unsubscribeClient() => invoke(
       PlatformMethod.pushUnsubscribeClient,
       {TxTransportKeys.channelName: _name});
