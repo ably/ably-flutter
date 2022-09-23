@@ -142,6 +142,10 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL2b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The current [ChannelState]{@link ChannelState} of the channel.
+  /// END CANONICAL DOCSTRING
   ChannelState state;
 
   /// BEGIN LEGACY DOCSTRING
