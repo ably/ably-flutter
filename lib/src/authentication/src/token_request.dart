@@ -61,6 +61,12 @@ class TokenRequest {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client ID to associate with the requested Ably Token. When provided,
+  /// the Ably Token may only be used to perform operations on behalf of that
+  /// client ID.
+  /// END CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
