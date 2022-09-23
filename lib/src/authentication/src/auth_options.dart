@@ -9,6 +9,13 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#AO1
 /// END LEGACY DOCSTRING
+
+/// BEGIN LEGACY DOCSTRING
+/// Passes authentication-specific properties in authentication requests to
+/// Ably. Properties set using AuthOptions are used instead of the default
+/// values set when the client library is instantiated, as opposed to being
+/// merged with them.
+/// END LEGACY DOCSTRING
 abstract class AuthOptions {
   /// BEGIN LEGACY DOCSTRING
   /// A function which is called when a new token is required.
