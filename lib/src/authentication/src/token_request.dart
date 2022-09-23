@@ -45,6 +45,15 @@ class TokenRequest {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TE3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Capability of the requested Ably Token. If the Ably TokenRequest is
+  /// successful, the capability of the returned Ably Token will be the
+  /// intersection of this capability with the capability of the issuing key.
+  /// The capabilities value is a JSON-encoded representation of the resource
+  /// paths and associated operations. Read more about capabilities in the
+  /// [capabilities docs](https://ably.com/docs/realtime/authentication).
+  /// END CANONICAL DOCSTRING
   final String? capability;
 
   /// BEGIN LEGACY DOCSTRING
