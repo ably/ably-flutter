@@ -43,6 +43,10 @@ class RestChannel extends PlatformObject {
   /// can only query presence on the channel and presence history
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [RestPresence]{@link RestPresence} object.
+  /// END CANONICAL DOCSTRING
   RestPresence get presence => _presence;
 
   /// BEGIN LEGACY DOCSTRING
