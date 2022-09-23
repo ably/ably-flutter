@@ -135,6 +135,11 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview)
+  /// that configure the behavior of the channel.
+  /// END CANONICAL DOCSTRING
   Map<String, String>? params;
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
