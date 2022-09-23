@@ -160,6 +160,13 @@ abstract class AuthOptions {
   /// [authUrl], [authCallback], token, or [TokenDetails] is provided
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When true, forces token authentication to be used by the library. If a
+  /// clientId is not specified in the [ClientOptions]{@link ClientOptions} or
+  /// [TokenParams]{@link TokenParams}, then the Ably Token issued is
+  /// [anonymous](https://ably.com/docs/core-features/authentication#identified-clients).
+  /// END CANONICAL DOCSTRING
   bool? useTokenAuth;
 
 // TODO(tiholic) missing token attribute here
