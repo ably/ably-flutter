@@ -63,6 +63,11 @@ class TokenParams {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A cryptographically secure random string of at least 16 characters, used
+  /// to ensure the [TokenRequest]{@link TokenRequest} cannot be reused.
+  /// END CANONICAL DOCSTRING
   final String? nonce;
 
   /// BEGIN LEGACY DOCSTRING
