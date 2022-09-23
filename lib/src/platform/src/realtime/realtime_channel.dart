@@ -139,6 +139,10 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
   /// (see IDL for more details)
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [PushChannel]{@link PushChannel} object.
+  /// END CANONICAL DOCSTRING
   late PushChannel push;
 
   /// BEGIN LEGACY DOCSTRING
