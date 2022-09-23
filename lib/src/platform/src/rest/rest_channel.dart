@@ -21,9 +21,13 @@ class RestChannel extends PlatformObject {
   /// END LEGACY DOCSTRING
   Rest rest;
 
-  /// END LEGACY DOCSTRING
+  /// BEGIN LEGACY DOCSTRING
   /// Channel to receive push notifications on
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [PushChannel]{@link PushChannel} object.
+  /// END CANONICAL DOCSTRING
   PushChannel push;
 
   /// BEGIN LEGACY DOCSTRING
