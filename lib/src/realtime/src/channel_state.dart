@@ -42,6 +42,12 @@ enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// channel is detaching
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A detach has been initiated on an ATTACHED channel by sending a request to
+  /// Ably. This is a transient state, followed either by a transition to
+  /// DETACHED or FAILED.
+  /// END CANONICAL DOCSTRING
   detaching,
 
   /// BEGIN LEGACY DOCSTRING
