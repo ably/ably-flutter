@@ -16,6 +16,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// needing to store instances on the Android side and pass references/handles
 /// to the dart side.
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Sets the properties to configure encryption for a
+/// [RestChannel]{@link RestChannel} or [RealtimeChannel]{@link RealtimeChannel}
+/// object.
+/// END CANONICAL DOCSTRING
 class CipherParamsInternal implements CipherParams {
   /// BEGIN LEGACY DOCSTRING
   /// Android only
