@@ -5,6 +5,11 @@
 /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the possible flags used to configure client capabilities, using
+/// [ChannelOptions]{@link ChannelOptions}.
+/// END CANONICAL DOCSTRING
 enum ChannelMode {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that channel can check for presence
