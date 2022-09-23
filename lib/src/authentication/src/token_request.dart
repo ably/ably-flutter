@@ -35,6 +35,11 @@ class TokenRequest {
   /// https://docs.ably.com/client-lib-development-guide/features/#TE2
   /// https://docs.ably.com/client-lib-development-guide/features/#TE5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A cryptographically secure random string of at least 16 characters, used
+  /// to ensure the TokenRequest cannot be reused.
+  /// END CANONICAL DOCSTRING
   final String? nonce;
 
   /// BEGIN LEGACY DOCSTRING
