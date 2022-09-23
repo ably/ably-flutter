@@ -123,6 +123,10 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An array of [ChannelMode]{@link ChannelMode} objects.
+  /// END CANONICAL DOCSTRING
   List<ChannelMode>? modes;
 
   /// BEGIN LEGACY DOCSTRING
