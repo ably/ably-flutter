@@ -33,6 +33,10 @@ class CipherParamsInternal implements CipherParams {
   /// iOS only
   /// Encryption key returned by platform implementation
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The private key used to encrypt and decrypt payloads.
+  /// END CANONICAL DOCSTRING
   Uint8List? key;
 
   /// BEGIN LEGACY DOCSTRING
