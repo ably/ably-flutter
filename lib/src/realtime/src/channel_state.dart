@@ -2,6 +2,11 @@
 /// See Ably Realtime API documentation for more details.
 /// https://docs.ably.com/client-lib-development-guide/features/#channel-states-operations
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the possible states of a [RestChannel]{@link RestChannel}
+/// or [RealtimeChannel]{@link RealtimeChannel} object.
+/// END CANONICAL DOCSTRING
 enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// represents that a channel is initialized and no action was taken
