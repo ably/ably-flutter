@@ -63,6 +63,13 @@ enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// channel is suspended
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The channel, having previously been ATTACHED, has lost continuity, usually
+  /// due to the client being disconnected from Ably for longer than two
+  /// minutes. It will automatically attempt to reattach as soon as connectivity
+  /// is restored.
+  /// END CANONICAL DOCSTRING
   suspended,
 
   /// BEGIN LEGACY DOCSTRING
