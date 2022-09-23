@@ -41,5 +41,9 @@ enum ChannelMode {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that channel can subscribe to presence events
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client can receive presence messages.
+  /// END CANONICAL DOCSTRING
   presenceSubscribe,
 }
