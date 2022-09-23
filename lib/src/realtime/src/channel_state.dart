@@ -12,6 +12,10 @@ enum ChannelState {
   /// represents that a channel is initialized and no action was taken
   /// i.e., even auto connect was not triggered - if enabled
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The channel has been initialized but no attach has yet been attempted.
+  /// END CANONICAL DOCSTRING
   initialized,
 
   /// BEGIN LEGACY DOCSTRING
