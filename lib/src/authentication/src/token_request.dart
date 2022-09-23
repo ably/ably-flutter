@@ -102,6 +102,13 @@ class TokenRequest {
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Requested time to live for the Ably Token in milliseconds. If the Ably
+  /// TokenRequest is successful, the TTL of the returned Ably Token is less
+  /// than or equal to this value, depending on application settings and th
+  /// attributes of the issuing key. The default is 60 minutes.
+  /// END CANONICAL DOCSTRING
   final int? ttl;
 
   /// BEGIN LEGACY DOCSTRING
