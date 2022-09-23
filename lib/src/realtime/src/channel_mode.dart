@@ -23,6 +23,10 @@ enum ChannelMode {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that channel can publish
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client can publish messages.
+  /// END CANONICAL DOCSTRING
   publish,
 
   /// BEGIN LEGACY DOCSTRING
