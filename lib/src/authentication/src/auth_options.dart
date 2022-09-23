@@ -72,6 +72,14 @@ abstract class AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The full API key string, as obtained from the [Ably dashboard](https://ably.com/dashboard).
+  /// Use this option if you wish to use Basic authentication, or wish to be
+  /// able to issue Ably Tokens without needing to defer to a separate entity to
+  /// sign Ably [TokenRequests]{@link TokenRequest}. Read more about
+  /// [Basic authentication](https://ably.com/docs/core-features/authentication#basic-authentication).
+  /// END CANONICAL DOCSTRING
   String? key;
 
   /// BEGIN LEGACY DOCSTRING
