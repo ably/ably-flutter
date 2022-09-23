@@ -121,6 +121,15 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Publish a message to the channel. A callback may optionally be passed in
+  /// to this call to be notified of success or failure of the operation. When
+  /// publish is called with this client library, it won't attempt to implicitly
+  /// attach to the channel.
+  ///
+  /// [Message] - A [Message]{@link Message} object.
+  /// END CANONICAL DOCSTRING
   Future<void> publish({
     Message? message,
     List<Message>? messages,
