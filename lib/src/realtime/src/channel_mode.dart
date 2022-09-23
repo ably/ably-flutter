@@ -32,6 +32,10 @@ enum ChannelMode {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that channel can subscribe to messages
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client can subscribe to messages.
+  /// END CANONICAL DOCSTRING
   subscribe,
 
   /// BEGIN LEGACY DOCSTRING
