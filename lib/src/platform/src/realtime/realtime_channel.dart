@@ -130,6 +130,15 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// [Message] - A [Message]{@link Message} object.
   /// END CANONICAL DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Publishes an array of messages to the channel. A callback may optionally
+  /// be passed in to this call to be notified of success or failure of the
+  /// operation. When publish is called with this client library, it won't
+  /// attempt to implicitly attach to the channel.
+  ///
+  /// [messages] - An array of [Message]{@link Message} objects.
+  /// END CANONICAL DOCSTRING
   Future<void> publish({
     Message? message,
     List<Message>? messages,
