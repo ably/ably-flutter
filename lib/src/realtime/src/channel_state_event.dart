@@ -7,6 +7,12 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TH1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains state change information emitted by
+/// [RestChannel]{@link RestChannel} and
+/// [RealtimeChannel]{@link RealtimeChannel} objects.
+/// END CANONICAL DOCSTRING
 @immutable
 class ChannelStateChange {
   /// BEGIN LEGACY DOCSTRING
