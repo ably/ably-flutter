@@ -5,6 +5,11 @@ import 'package:meta/meta.dart';
 /// A collection of Channel objects accessible
 /// through [Rest.channels] or [Realtime.channels]
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Creates and destroys [RestChannel]{@link RestChannel} and
+/// [RealtimeChannel]{@link RealtimeChannel} objects.
+/// END CANONICAL DOCSTRING
 abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// BEGIN LEGACY DOCSTRING
   /// stores channel name vs instance of [ChannelType]
