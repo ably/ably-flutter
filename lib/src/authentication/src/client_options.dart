@@ -301,6 +301,12 @@ class ClientOptions extends AuthOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3n
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// When true, enables idempotent publishing by assigning a unique message ID
+  /// client-side, allowing the Ably servers to discard automatic publish
+  /// retries following a failure such as a network fault. The default is true.
+  /// END LEGACY DOCSTRING
   bool? idempotentRestPublishing;
 
   /// BEGIN LEGACY DOCSTRING
