@@ -6,6 +6,10 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH7
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables devices to subscribe to push notifications for a channel.
+/// END CANONICAL DOCSTRING
 class PushChannel extends PlatformObject {
   final String _name;
 
