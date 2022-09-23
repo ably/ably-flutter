@@ -66,6 +66,24 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// TD7	A static factory method to create a TokenDetails object from a
+  /// deserialized TokenDetails-like object or a JSON stringified TokenDetails
+  /// object. This method is provided to minimize bugs as a result of differing
+  /// types by platform for fields such as timestamp or ttl. For example, in
+  /// Ruby ttl in the TokenDetails object is exposed in seconds as that is
+  /// idiomatic for the language, yet when serialized to JSON using to_json it
+  /// is automatically converted to the Ably standard which is milliseconds. By
+  /// using the fromJson() method when constructing a TokenDetails object, Ably
+  /// ensures that all fields are consistently serialized and deserialized
+  /// across platforms.
+  ///
+  /// [String | JsonObject] - A deserialized TokenDetails-like object or a JSON
+  /// stringified TokenDetails object.
+  ///
+  /// [TokenDetails] - An Ably authentication token.
+  /// END CANONICAL DOCSTRING
   TokenDetails.fromMap(Map<String, dynamic> map)
       : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,
