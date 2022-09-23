@@ -68,6 +68,12 @@ class ChannelStateChange {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TH4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Indicates whether message continuity on this channel is preserved, see
+  /// [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors)
+  /// for more info.
+  /// END CANONICAL DOCSTRING
   final bool resumed;
 
   /// BEGIN LEGACY DOCSTRING
