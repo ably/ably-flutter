@@ -351,6 +351,12 @@ class ClientOptions extends AuthOptions {
   /// default 3
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// The maximum number of fallback hosts to use as a fallback when an HTTP
+  /// request to the primary host is unreachable or indicates that it is
+  /// unserviceable. The default value is 3.
+  /// END LEGACY DOCSTRING
   int httpMaxRetryCount = 3;
 
   /// BEGIN LEGACY DOCSTRING
