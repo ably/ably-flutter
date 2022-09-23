@@ -259,6 +259,14 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Sets the [ChannelOptions]{@link ChannelOptions} for the channel. An
+  /// optional callback may be provided to notify of the success or failure of
+  /// the operation.
+  ///
+  /// [options] - A [ChannelOptions]{@link ChannelOptions} object.
+  /// END CANONICAL DOCSTRING
   Future<void> setOptions(RealtimeChannelOptions options) =>
       invoke(PlatformMethod.setRealtimeChannelOptions, {
         TxTransportKeys.channelName: _channelName,
