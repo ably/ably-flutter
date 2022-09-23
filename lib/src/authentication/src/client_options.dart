@@ -363,6 +363,15 @@ class ClientOptions extends AuthOptions {
   /// default 10s
   /// https://docs.ably.com/client-lib-development-guide/features/#DF1b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// Timeout for the wait of acknowledgement for operations performed via a
+  /// realtime connection, before the client library considers a request failed
+  /// and triggers a failure condition. Operations include establishing a
+  /// connection with Ably, or sending a HEARTBEAT, CONNECT, ATTACH, DETACH or
+  /// CLOSE request. It is the equivalent of httpRequestTimeout but for realtime
+  ///  operations, rather than REST. The default is 10 seconds.
+  /// END LEGACY DOCSTRING
   int? realtimeRequestTimeout;
 
   /// BEGIN LEGACY DOCSTRING
