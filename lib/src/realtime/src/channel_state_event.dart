@@ -20,6 +20,10 @@ class ChannelStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The event that triggered this [ChannelState]{@link ChannelState} change.
+  /// END CANONICAL DOCSTRING
   final ChannelEvent event;
 
   /// BEGIN LEGACY DOCSTRING
