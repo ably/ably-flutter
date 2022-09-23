@@ -55,6 +55,14 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client ID, if any, bound to this Ably Token. If a client ID is
+  /// included, then the Ably Token authenticates its bearer as that client ID,
+  /// and the Ably Token may only be used to perform operations on behalf of
+  /// that client ID. The client is then considered to be an
+  /// [identified client](https://ably.com/docs/core-features/authentication#identified-clients).
+  /// END CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
