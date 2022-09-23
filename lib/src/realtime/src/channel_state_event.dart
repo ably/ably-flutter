@@ -27,6 +27,10 @@ class ChannelStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The new current [ChannelState]{@link ChannelState}.
+  /// END CANONICAL DOCSTRING
   final ChannelState current;
 
   /// BEGIN LEGACY DOCSTRING
