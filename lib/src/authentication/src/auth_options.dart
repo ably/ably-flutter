@@ -45,6 +45,12 @@ abstract class AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2c
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A URL that the library may use to obtain a token string (in plain text
+  /// format), or a signed [TokenRequest]{@link TokenRequest} or
+  /// [TokenDetails]{@link TokenDetails} (in JSON format) from.
+  /// END CANONICAL DOCSTRING
   String? authUrl;
 
   /// BEGIN LEGACY DOCSTRING
