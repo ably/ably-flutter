@@ -28,6 +28,11 @@ class RealtimeChannelOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview)
+  /// that configure the behavior of the channel.
+  /// END CANONICAL DOCSTRING
   final Map<String, String>? params;
 
   /// BEGIN LEGACY DOCSTRING
