@@ -194,6 +194,15 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Detach from this channel. Any resulting channel state change is emitted to
+  /// any listeners registered using the [on()]{@link EventEmitter#on} or
+  /// [once()]{@link EventEmitter#once} methods. A callback may optionally be
+  /// passed in to this call to be notified of success or failure of the
+  /// operation. Once all clients globally have detached from the channel, the
+  /// channel will be released in the Ably service within two minutes.
+  /// END CANONICAL DOCSTRING
   Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
         TxTransportKeys.channelName: _channelName,
       });
