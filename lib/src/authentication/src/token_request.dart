@@ -19,6 +19,11 @@ class TokenRequest {
   /// More details about Ably API Key:
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA11
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The name of the key against which this request is made. The key name is
+  /// public, whereas the key secret is private.
+  /// END CANONICAL DOCSTRING
   final String? keyName;
 
   /// BEGIN LEGACY DOCSTRING
