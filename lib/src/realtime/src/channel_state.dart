@@ -53,6 +53,11 @@ enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// channel is detached
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The channel, having previously been ATTACHED, has been detached by the
+  /// user.
+  /// END CANONICAL DOCSTRING
   detached,
 
   /// BEGIN LEGACY DOCSTRING
