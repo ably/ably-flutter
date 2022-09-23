@@ -96,6 +96,14 @@ abstract class AuthOptions {
   /// and as form-encoded in the body in the case of POST
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// A set of key-value pair params to be added to any request made to the
+  ///  authUrl. When the authMethod is GET, query params are added to the URL,
+  /// whereas when authMethod is POST, the params are sent as URL encoded form
+  /// data. Useful when an application requires these to be added to validate
+  /// the request or implement the response.
+  /// END LEGACY DOCSTRING
   Map<String, String>? authParams;
 
   /// BEGIN LEGACY DOCSTRING
