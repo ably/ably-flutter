@@ -14,6 +14,10 @@ enum ChannelMode {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that channel can check for presence
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client can enter the presence set.
+  /// END CANONICAL DOCSTRING
   presence,
 
   /// BEGIN LEGACY DOCSTRING
