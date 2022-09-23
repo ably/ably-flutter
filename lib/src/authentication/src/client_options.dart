@@ -270,6 +270,13 @@ class ClientOptions extends AuthOptions {
   /// default 15,000 (15 seconds)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l1
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// If the connection is still in the
+  /// [DISCONNECTED]{@link ConnectionState#disconnected} state after this delay,
+  /// the client library will attempt to reconnect automatically. The default is
+  /// 15 seconds.
+  /// END CANONICAL DOCSTRING
   int disconnectedRetryTimeout = 15000;
 
   /// BEGIN LEGACY DOCSTRING
