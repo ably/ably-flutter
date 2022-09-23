@@ -38,6 +38,10 @@ class RealtimeChannelOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An array of [ChannelMode]{@link ChannelMode} objects.
+  /// END CANONICAL DOCSTRING
   final List<ChannelMode>? modes;
 
   /// BEGIN LEGACY DOCSTRING
