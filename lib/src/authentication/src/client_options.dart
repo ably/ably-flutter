@@ -337,6 +337,11 @@ class ClientOptions extends AuthOptions {
   /// default 10,000 (10s)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Timeout for a client performing a complete HTTP request to Ably,
+  /// including the connection phase. The default is 10 seconds.
+  /// END CANONICAL DOCSTRING
   int httpRequestTimeout = 10000;
 
   /// BEGIN LEGACY DOCSTRING
