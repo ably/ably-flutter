@@ -21,6 +21,11 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The timestamp at which this token expires as milliseconds since the Unix
+  /// epoch.
+  /// END CANONICAL DOCSTRING
   final int? expires;
 
   /// BEGIN LEGACY DOCSTRING
