@@ -65,6 +65,9 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// END LEGACY DOCSTRING
   ChannelType operator [](String name) => get(name);
 
+  /// BEGIN CANONICAL DOCSTRING
+  /// Iterates through the existing channels.
+  /// END CANONICAL DOCSTRING
   @override
   Iterator<ChannelType> get iterator =>
       _ChannelIterator<ChannelType>(_channels.values.toList());
