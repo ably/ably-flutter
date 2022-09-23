@@ -105,6 +105,13 @@ class PushChannel extends PlatformObject {
   /// This is because the package plugin uses ably-java.
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves all push subscriptions for the channel. Subscriptions can be
+  /// filtered using a params object. Returns a
+  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
+  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
+  /// END CANONICAL DOCSTRING
   Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&
