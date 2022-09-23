@@ -43,6 +43,10 @@ class TokenRequest {
   /// See the Ably Authentication documentation for more details.
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The Message Authentication Code for this request.
+  /// END CANONICAL DOCSTRING
   final String? mac;
 
   /// BEGIN LEGACY DOCSTRING
