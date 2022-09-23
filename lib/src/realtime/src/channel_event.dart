@@ -1,8 +1,13 @@
 /// BEGIN LEGACY DOCSTRING
 /// See Ably Realtime API documentation for more details.
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the events emitted by a [RestChannel]{@link RestChannel} or
+/// [RealtimeChannel]{@link RealtimeChannel} object. An event is either an
+/// UPDATE or a [ChannelState]{@link ChannelState}.
+/// END CANONICAL DOCSTRING
 enum ChannelEvent {
-  
   /// BEGIN LEGACY DOCSTRING
   /// represents that a channel is initialized and no action was taken
   /// i.e., even auto connect was not triggered - if enabled
