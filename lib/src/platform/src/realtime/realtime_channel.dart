@@ -75,6 +75,34 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves a [PaginatedResult]{@link PaginatedResult} object, containing an
+  /// array of historical [Message]{@link Message} objects for the channel. If
+  /// the channel is configured to persist messages, then messages can be
+  /// retrieved from history for up to 72 hours in the past. If not, messages
+  /// can only be retrieved from history for up to two minutes in the past.
+  ///
+  /// [start] - The time from which messages are retrieved, specified as
+  /// milliseconds since the Unix epoch.
+  /// [end] - The time until messages are retrieved, specified as milliseconds
+  /// since the Unix epoch.
+  /// [direction] - The order for which messages are returned in. Valid values
+  /// are backwards which orders messages from most recent to oldest, or
+  /// forwards which orders messages from oldest to most recent. The default is
+  /// backwards.
+  /// [limit] - An upper limit on the number of messages returned. The default
+  /// is 100, and the maximum is 1000.
+  /// [untilAttach] - When true, ensures message history is up until the point
+  /// of the channel being attached. See
+  /// [continuous history](https://ably.com/docs/realtime/history#continuous-history)
+  /// for more info. Requires the direction to be backwards. If the channel is
+  /// not attached, or if direction is set to forwards, this option results in
+  /// an error.
+  ///
+  /// [PaginatedResult<message>] - 	A [PaginatedResult]{@link PaginatedResult}
+  /// object containing an array of [Message]{@link Message} objects.
+  /// END CANONICAL DOCSTRING
   Future<PaginatedResult<Message>> history([
     RealtimeHistoryParams? params,
   ]) async {
