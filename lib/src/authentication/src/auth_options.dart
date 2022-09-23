@@ -75,6 +75,13 @@ abstract class AuthOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2e
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// A set of key-value pair headers to be added to any request made to the
+  /// authUrl. Useful when an application requires these to be added to validate
+  /// the request or implement the response. If the authHeaders object contains
+  /// an authorization key, then withCredentials is set on the XHR request.
+  /// END LEGACY DOCSTRING
   Map<String, String>? authHeaders;
 
   /// BEGIN LEGACY DOCSTRING
