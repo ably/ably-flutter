@@ -170,6 +170,21 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Attach to this channel ensuring the channel is created in the Ably system
+  /// and all messages published on the channel are received by any channel
+  /// listeners registered using [subscribe()]{@link RealtimeChannel#subscribe}.
+  /// Any resulting channel state change will be emitted to any listeners
+  /// registered using the [on()]{@link EventEmitter#on} or
+  /// [once()]{@link EventEmitter#once} methods. A callback may optionally be
+  /// passed in to this call to be notified of success or failure of the
+  /// operation. As a convenience, attach() is called implicitly if
+  /// [subscribe()]{@link RealtimeChannel#subscribe} for the channel is called,
+  /// or [enter()]{@link RealtimePresence#enter} or
+  /// [subscribe()]{@link RealtimePresence#subscribe} are called on the
+  /// [RealtimePresence]{@link RealtimePresence} object for this channel.
+  /// END CANONICAL DOCSTRING
   Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
         TxTransportKeys.channelName: _channelName,
       });
