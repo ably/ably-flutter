@@ -376,6 +376,15 @@ class ClientOptions extends AuthOptions {
   /// default 15,000 (15s)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When a channel becomes [SUSPENDED]{@link ConnectionState#suspended}
+  /// following a server initiated [DETACHED]{@link ConnectionState#detached},
+  /// after this delay, if the channel is still
+  /// [SUSPENDED]{@link ConnectionState#suspended} and the connection is
+  /// [CONNECTED]{@link ConnectionState#connected}, the client library will
+  /// attempt to re-attach the channel automatically. The default is 15 seconds.
+  /// END CANONICAL DOCSTRING
   int channelRetryTimeout = 15000;
 
   /// BEGIN LEGACY DOCSTRING
