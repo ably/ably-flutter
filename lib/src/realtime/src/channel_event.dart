@@ -47,5 +47,10 @@ enum ChannelEvent {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a channel state is updated
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An event for changes to channel conditions that do not result in a change
+  /// in [ChannelState]{@link ChannelState}.
+  /// END CANONICAL DOCSTRING
   update,
 }
