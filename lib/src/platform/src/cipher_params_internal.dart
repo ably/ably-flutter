@@ -39,6 +39,11 @@ class CipherParamsInternal implements CipherParams {
   /// iOS only
   /// Encryption algorithm returned by platform implementation
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The algorithm to use for encryption. Only AES is supported and is the
+  /// default value.
+  /// END CANONICAL DOCSTRING
   String? algorithm;
 
   /// BEGIN LEGACY DOCSTRING
