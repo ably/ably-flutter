@@ -29,6 +29,10 @@ class RestChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// name of the channel
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The channel name.
+  /// END CANONICAL DOCSTRING
   String name;
 
   late RestPresence _presence;
