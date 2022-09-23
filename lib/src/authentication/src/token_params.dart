@@ -11,6 +11,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TK1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Defines the properties of an Ably Token.
+/// END CANONICAL DOCSTRING
 @immutable
 class TokenParams {
   /// BEGIN LEGACY DOCSTRING
