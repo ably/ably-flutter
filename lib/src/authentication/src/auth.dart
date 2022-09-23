@@ -39,6 +39,23 @@ abstract class Auth {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA10
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Instructs the library to get a new token immediately. When using the
+  /// realtime client, it upgrades the current realtime connection to use the
+  /// new token, or if not connected, initiates a connection to Ably, once the
+  /// new token has been obtained. Also stores any
+  /// [TokenParams]{@link TokenParams} and [AuthOptions]{@link AuthOptions}
+  /// passed in as the new defaults, to be used for all subsequent implicit or
+  /// explicit token requests. Any [TokenParams]{@link TokenParams} and
+  /// [AuthOptions]{@link AuthOptions} objects passed in entirely replace, as
+  /// opposed to being merged with, the current client library saved values.
+  ///
+  /// [TokenParams] - A [TokenParams]{@link TokenParams} object.
+  /// [AuthOptions] - An [AuthOptions]{@link AuthOptions} object.
+  ///
+  /// [TokenDetails] - A [TokenDetails]{@link TokenDetails} object.
+  /// END CANONICAL DOCSTRING
   Future<TokenDetails> authorize({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
