@@ -53,6 +53,11 @@ abstract class AuthOptions {
   /// defaults to 'GET', supports 'GET' and 'POST'
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// The HTTP verb to use for any request made to the authUrl, either GET or
+  /// POST. The default value is GET.
+  /// END LEGACY DOCSTRING
   String? authMethod;
 
   /// BEGIN LEGACY DOCSTRING
