@@ -32,6 +32,11 @@ enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// channel is attached
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The attach has succeeded. In the ATTACHED state a client may publish an
+  /// subscribe to messages, or be present on the channel.
+  /// END CANONICAL DOCSTRING
   attached,
 
   /// BEGIN LEGACY DOCSTRING
