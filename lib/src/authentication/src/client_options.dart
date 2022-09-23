@@ -324,6 +324,11 @@ class ClientOptions extends AuthOptions {
   /// default 4,000 (4s)
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Timeout for opening a connection to Ably to initiate an HTTP request.
+  /// The default is 4 seconds.
+  /// END CANONICAL DOCSTRING
   int httpOpenTimeout = 4000;
 
   /// BEGIN LEGACY DOCSTRING
