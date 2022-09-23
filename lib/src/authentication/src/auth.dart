@@ -67,6 +67,31 @@ abstract class Auth {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSA9
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Creates and signs an Ably [TokenRequest]{@link TokenRequest} based on the
+  /// specified (or if none specified, the client library stored)
+  /// [TokenParams]{@link TokenParams} and [AuthOptions]{@link AuthOptions}.
+  /// Note this can only be used when the API key value is available locally.
+  /// Otherwise, the Ably [TokenRequest]{@link TokenRequest} must be obtained
+  /// from the key owner. Use this to generate an Ably
+  /// [TokenRequest]{@link TokenRequest} in order to implement an Ably Token
+  /// request callback for use by other clients. Both
+  /// [TokenParams]{@link TokenParams} and [AuthOptions]{@link AuthOptions}
+  /// are optional. When omitted or null, the default token parameters and
+  /// authentication options for the client library are used, as specified in
+  /// the [ClientOptions]{@link ClientOptions} when the client library was
+  /// instantiated, or later updated with an explicit authorize request. Values
+  /// passed in are used instead of, rather than being merged with, the default
+  /// values. To understand why an Ably [TokenRequest]{@link TokenRequest} may
+  /// be issued to clients in favor of a token, see
+  /// [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication).
+  ///
+  /// [TokenParams] - A [TokenParams]{@link TokenParams} object.
+  /// [AuthOptions] - An [AuthOptions]{@link AuthOptions} object.
+  ///
+  /// [TokenRequest] - 	A [TokenRequest]{@link TokenRequest} object.
+  /// END CANONICAL DOCSTRING
   Future<TokenRequest> createTokenRequest({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
