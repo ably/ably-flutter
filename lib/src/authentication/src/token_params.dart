@@ -99,6 +99,11 @@ class TokenParams {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Requested time to live for the token in milliseconds. The default is
+  /// 60 minutes.
+  /// END CANONICAL DOCSTRING
   final int? ttl;
 
   /// BEGIN LEGACY DOCSTRING
