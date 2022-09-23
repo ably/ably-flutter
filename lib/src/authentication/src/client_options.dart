@@ -389,6 +389,11 @@ class ClientOptions extends AuthOptions {
   /// default 600000 (10 minutes)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l10
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// The maximum time before HTTP requests are retried against the default
+  /// endpoint. The default is 600 seconds.
+  /// END LEGACY DOCSTRING
   int fallbackRetryTimeout = 600000;
 
   /// BEGIN LEGACY DOCSTRING
