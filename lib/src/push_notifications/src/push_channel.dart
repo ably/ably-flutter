@@ -111,6 +111,15 @@ class PushChannel extends PlatformObject {
   /// filtered using a params object. Returns a
   /// [PaginatedResult]{@link PaginatedResult} object containing an array of
   /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
+  ///
+  /// [params] - An object containing key-value pairs to filter subscriptions
+  /// by. Can contain clientId, deviceId or a combination of both if
+  /// concatFilters is set to true, and a limit on the number of subscriptions
+  /// returned, up to 1,000.
+  ///
+  /// [PaginatedResult<PushChannelSubscription>] - A
+  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
+  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
   /// END CANONICAL DOCSTRING
   Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
