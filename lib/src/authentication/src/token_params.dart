@@ -78,6 +78,14 @@ class TokenParams {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The timestamp of this request as milliseconds since the Unix epoch.
+  /// Timestamps, in conjunction with the nonce, are used to prevent requests
+  /// from being replayed. timestamp is a "one-time" value, and is valid in a
+  /// request, but is not validly a member of any default token params such as
+  /// ClientOptions.defaultTokenParams.
+  /// END CANONICAL DOCSTRING
   final DateTime? timestamp;
 
   /// BEGIN LEGACY DOCSTRING
