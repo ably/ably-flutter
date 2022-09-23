@@ -90,6 +90,10 @@ class TokenRequest {
   ///
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The timestamp of this request as milliseconds since the Unix epoch.
+  /// END CANONICAL DOCSTRING
   final DateTime? timestamp;
 
   /// BEGIN LEGACY DOCSTRING
