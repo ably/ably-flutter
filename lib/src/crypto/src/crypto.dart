@@ -8,6 +8,11 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// Utility methods for creating keys ([generateRandomKey]) and configuration
 /// objects ([CipherParams]) for symmetric encryption.
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the properties required to configure the encryption of
+/// [Message]{@link Message} payloads.
+/// END CANONICAL DOCSTRING
 class Crypto {
   /// BEGIN LEGACY DOCSTRING
   /// Default algorithm used of encryption
