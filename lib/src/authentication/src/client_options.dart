@@ -302,11 +302,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3n
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// When true, enables idempotent publishing by assigning a unique message ID
   /// client-side, allowing the Ably servers to discard automatic publish
   /// retries following a failure such as a network fault. The default is true.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   bool? idempotentRestPublishing;
 
   /// BEGIN LEGACY DOCSTRING
@@ -358,11 +358,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// The maximum number of fallback hosts to use as a fallback when an HTTP
   /// request to the primary host is unreachable or indicates that it is
   /// unserviceable. The default value is 3.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   int httpMaxRetryCount = 3;
 
   /// BEGIN LEGACY DOCSTRING
@@ -376,14 +376,14 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#DF1b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// Timeout for the wait of acknowledgement for operations performed via a
   /// realtime connection, before the client library considers a request failed
   /// and triggers a failure condition. Operations include establishing a
   /// connection with Ably, or sending a HEARTBEAT, CONNECT, ATTACH, DETACH or
   /// CLOSE request. It is the equivalent of httpRequestTimeout but for realtime
   ///  operations, rather than REST. The default is 10 seconds.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   int? realtimeRequestTimeout;
 
   /// BEGIN LEGACY DOCSTRING
@@ -396,10 +396,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l10
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// The maximum time before HTTP requests are retried against the default
   /// endpoint. The default is 600 seconds.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   int fallbackRetryTimeout = 600000;
 
   /// BEGIN LEGACY DOCSTRING

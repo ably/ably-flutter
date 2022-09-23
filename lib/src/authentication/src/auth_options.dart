@@ -10,12 +10,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#AO1
 /// END LEGACY DOCSTRING
 
-/// BEGIN LEGACY DOCSTRING
+/// BEGIN CANONICAL DOCSTRING
 /// Passes authentication-specific properties in authentication requests to
 /// Ably. Properties set using AuthOptions are used instead of the default
 /// values set when the client library is instantiated, as opposed to being
 /// merged with them.
-/// END LEGACY DOCSTRING
+/// END CANONICAL DOCSTRING
 abstract class AuthOptions {
   /// BEGIN LEGACY DOCSTRING
   /// A function which is called when a new token is required.
@@ -27,7 +27,7 @@ abstract class AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// Called when a new token is required. The role of the callback is to obtain
   /// a fresh token, one of: an Ably Token string (in plain text format);
   /// a signed [TokenRequest]{@link TokenRequest}; a
@@ -35,7 +35,7 @@ abstract class AuthOptions {
   /// See the [authentication documentation](https://ably.com/docs/realtime/authentication)
   /// for details of the Ably [TokenRequest]{@link TokenRequest} format and
   /// associated API calls.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   AuthCallback? authCallback;
 
   /// BEGIN LEGACY DOCSTRING
@@ -54,10 +54,10 @@ abstract class AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// The HTTP verb to use for any request made to the authUrl, either GET or
   /// POST. The default value is GET.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   String? authMethod;
 
   /// BEGIN LEGACY DOCSTRING
@@ -81,12 +81,12 @@ abstract class AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2e
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// A set of key-value pair headers to be added to any request made to the
   /// authUrl. Useful when an application requires these to be added to validate
   /// the request or implement the response. If the authHeaders object contains
   /// an authorization key, then withCredentials is set on the XHR request.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   Map<String, String>? authHeaders;
 
   /// BEGIN LEGACY DOCSTRING
@@ -97,13 +97,13 @@ abstract class AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2f
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN CANONICAL DOCSTRING
   /// A set of key-value pair params to be added to any request made to the
   ///  authUrl. When the authMethod is GET, query params are added to the URL,
   /// whereas when authMethod is POST, the params are sent as URL encoded form
   /// data. Useful when an application requires these to be added to validate
   /// the request or implement the response.
-  /// END LEGACY DOCSTRING
+  /// END CANONICAL DOCSTRING
   Map<String, String>? authParams;
 
   /// BEGIN LEGACY DOCSTRING
