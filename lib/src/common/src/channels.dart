@@ -75,6 +75,16 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// BEGIN LEGACY DOCSTRING
   /// Releases the channel resource so it can be garbage collected
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Releases a [RestChannel]{@link RestChannel} or
+  /// [RealtimeChannel]{@link RealtimeChannel} object, deleting it, and enabling
+  /// it to be garbage collected. It also removes any listeners associated with
+  /// the channel. To release a channel, the [ChannelState]{@link ChannelState}
+  /// must be INITIALIZED, DETACHED, or FAILED.
+  /// 
+  /// [String] - The channel name.
+  /// END CANONICAL DOCSTRING
   void release(String name) {
     _channels.remove(name);
   }
