@@ -31,6 +31,10 @@ class RealtimeChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Required by [RealtimePresence], should not be used in other cases
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The channel name.
+  /// END CANONICAL DOCSTRING
   String get name => _channelName;
 
   /// BEGIN LEGACY DOCSTRING
