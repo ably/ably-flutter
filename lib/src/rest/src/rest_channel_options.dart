@@ -23,6 +23,14 @@ class RestChannelOptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Constructor withCipherKey, that takes a key only.
+  ///
+  /// [key] - A private key used to encrypt and decrypt payloads.
+  ///
+  /// [ChannelOptions] - A ChannelOptions object.
+  /// END CANONICAL DOCSTRING
   static Future<RestChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RestChannelOptions(cipherParams: cipherParams);
