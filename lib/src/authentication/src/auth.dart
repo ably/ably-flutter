@@ -7,6 +7,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://www.ably.com/documentation/core-features/authentication#auth-object
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Creates Ably [TokenRequest]{@link TokenRequest} objects and obtains Ably
+/// Tokens from Ably to subsequently issue to less trusted clients.
+/// END CANONICAL DOCSTRING
 abstract class Auth {
   /// BEGIN LEGACY DOCSTRING
   /// The clientId for this library instance
