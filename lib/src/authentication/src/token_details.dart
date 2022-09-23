@@ -33,6 +33,11 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The timestamp at which this token was issued as milliseconds since the
+  /// Unix epoch.
+  /// END CANONICAL DOCSTRING
   final int? issued;
 
   /// BEGIN LEGACY DOCSTRING
