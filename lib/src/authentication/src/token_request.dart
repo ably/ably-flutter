@@ -87,6 +87,24 @@ class TokenRequest {
   /// BEGIN LEGACY DOCSTRING
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A static factory method to create a TokenRequest object from a
+  /// deserialized TokenRequest-like object or a JSON stringified TokenRequest
+  /// object. This method is provided to minimize bugs as a result of differing
+  /// types by platform for fields such as timestamp or ttl. For example, in
+  /// Ruby ttl in the TokenRequest object is exposed in seconds as that is
+  /// idiomatic for the language, yet when serialized to JSON using to_json it
+  /// is automatically converted to the Ably standard which is milliseconds.
+  /// By using the fromJson() method when constructing a TokenRequest object,
+  /// Ably ensures that all fields are consistently serialized and deserialized
+  /// across platforms.
+  ///
+  /// [String | JsonObject] - A deserialized TokenRequest-like object or a JSON
+  /// stringified TokenRequest object to create a TokenRequest.
+  ///
+  /// [TokenRequest] - An Ably token request object.
+  /// END CANONICAL DOCSTRING
   TokenRequest.fromMap(Map<String, dynamic> map)
       : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,
