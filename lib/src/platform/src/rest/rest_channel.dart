@@ -142,6 +142,12 @@ class RestChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Sets the [ChannelOptions]{@link ChannelOptions} for the channel.
+  ///
+  /// [options] - A [ChannelOptions]{@link ChannelOptions} object.
+  /// END CANONICAL DOCSTRING
   Future<void> setOptions(RestChannelOptions options) =>
       invoke(PlatformMethod.setRestChannelOptions, {
         TxTransportKeys.channelName: name,
