@@ -304,6 +304,16 @@ class RealtimeChannel extends PlatformObject {
   /// [String] - The event name.
   /// [(Message)] - An event listener function.
   /// END CANONICAL DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Registers a listener for messages on this channel for multiple event name
+  /// values. A callback may optionally be passed in to this call to be notified
+  /// of success or failure of the channel
+  /// [attach()]{@link RealtimeChannel#attach} operation.
+  ///
+  /// [[String]] - An array of event names.
+  /// [(Message)] - An event listener function.
+  /// END CANONICAL DOCSTRING
   Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
