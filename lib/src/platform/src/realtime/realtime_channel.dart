@@ -107,6 +107,11 @@ class RealtimeChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// will hold reason for failure of attaching to channel in such cases
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An [ErrorInfo]{@link ErrorInfo} object describing the last error which
+  /// occurred on the channel, if any.
+  /// END CANONICAL DOCSTRING
   ErrorInfo? errorReason;
 
   /// BEGIN LEGACY DOCSTRING
