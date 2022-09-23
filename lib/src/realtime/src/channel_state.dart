@@ -21,6 +21,12 @@ enum ChannelState {
   /// BEGIN LEGACY DOCSTRING
   /// channel is attaching
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An attach has been initiated by sending a request to Ably. This is a
+  /// transient state, followed either by a transition to ATTACHED, SUSPENDED,
+  /// or FAILED.
+  /// END CANONICAL DOCSTRING
   attaching,
 
   /// BEGIN LEGACY DOCSTRING
