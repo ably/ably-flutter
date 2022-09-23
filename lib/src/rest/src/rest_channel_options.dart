@@ -5,6 +5,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TB1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Passes additional properties to a [RestChannel]{@link RestChannel} or
+/// [RealtimeChannel]{@link RealtimeChannel} object, such as encryption,
+/// [ChannelMode]{@link ChannelMode} and channel parameters.
+/// END CANONICAL DOCSTRING
 class RestChannelOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
