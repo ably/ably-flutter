@@ -293,6 +293,17 @@ class RealtimeChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Registers a listener for messages with a given event name on this channel.
+  /// The caller supplies a listener function, which is called each time one or
+  /// more matching messages arrives on the channel. A callback may optionally
+  /// be passed in to this call to be notified of success or failure of the
+  /// channel [attach()]{@link RealtimeChannel#attach} operation.
+  ///
+  /// [String] - The event name.
+  /// [(Message)] - An event listener function.
+  /// END CANONICAL DOCSTRING
   Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
     return listen<Message>(PlatformMethod.onRealtimeChannelMessage, {
