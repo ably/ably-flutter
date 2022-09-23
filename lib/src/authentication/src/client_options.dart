@@ -288,6 +288,14 @@ class ClientOptions extends AuthOptions {
   /// default 30,000 (30 seconds)
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When the connection enters the
+  /// [SUSPENDED]{@link ConnectionState#suspended} state, after this delay, if
+  /// the state is still [SUSPENDED]{@link ConnectionState#suspended}, the
+  /// client library attempts to reconnect automatically. The default is 30
+  /// seconds.
+  /// END CANONICAL DOCSTRING
   int suspendedRetryTimeout = 30000;
 
   /// BEGIN LEGACY DOCSTRING
