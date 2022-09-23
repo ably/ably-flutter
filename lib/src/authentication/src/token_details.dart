@@ -35,6 +35,13 @@ class TokenDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TD5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The capabilities associated with this Ably Token. The capabilities value
+  /// is a JSON-encoded representation of the resource paths and associated
+  /// operations. Read more about capabilities in the
+  /// [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
+  /// END CANONICAL DOCSTRING
   final String? capability;
 
   /// BEGIN LEGACY DOCSTRING
