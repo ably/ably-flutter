@@ -26,6 +26,10 @@ class RealtimeChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// Required by [RealtimePresence], should not be used in other cases
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [RealtimePresence]{@link RealtimePresence} object.
+  /// END CANONICAL DOCSTRING
   Realtime get realtime => _realtime;
 
   /// BEGIN LEGACY DOCSTRING
