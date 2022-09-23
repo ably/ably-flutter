@@ -26,6 +26,16 @@ abstract class AuthOptions {
   /// as a [TokenDetails] object.
   /// https://docs.ably.com/client-lib-development-guide/features/#AO2b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN LEGACY DOCSTRING
+  /// Called when a new token is required. The role of the callback is to obtain
+  /// a fresh token, one of: an Ably Token string (in plain text format);
+  /// a signed [TokenRequest]{@link TokenRequest}; a
+  /// TokenDetails]{@link TokenDetails} (in JSON format); an [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt).
+  /// See the [authentication documentation](https://ably.com/docs/realtime/authentication)
+  /// for details of the Ably [TokenRequest]{@link TokenRequest} format and
+  /// associated API calls.
+  /// END LEGACY DOCSTRING
   AuthCallback? authCallback;
 
   /// BEGIN LEGACY DOCSTRING
