@@ -10,6 +10,12 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables messages to be published and subscribed to. Also enables historic
+/// messages to be retrieved and provides access to the
+/// [RealtimePresence]{@link RealtimePresence} object of a channel.
+/// END CANONICAL DOCSTRING
 class RealtimeChannel extends PlatformObject {
   final Realtime _realtime;
 
