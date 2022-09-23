@@ -10,6 +10,11 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables messages to be published and historic messages to be retrieved for a
+/// channel.
+/// END CANONICAL DOCSTRING
 class RestChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// reference to Rest client
