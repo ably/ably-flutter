@@ -111,6 +111,16 @@ class RestChannel extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Publishes a message to the channel. A callback may optionally be passed in
+  /// to this call to be notified of success or failure of the operation.
+  ///
+  /// [Message] - A [Message]{@link Message} object.
+  /// [params] - Optional parameters, such as [quickAck](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes)
+  /// sent as part of the query
+  /// string.
+  /// END CANONICAL DOCSTRING
   Future<void> publish({
     Message? message,
     List<Message>? messages,
