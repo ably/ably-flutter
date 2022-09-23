@@ -17,6 +17,12 @@ class RealtimeChannelOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Requests encryption for this channel when not null, and specifies
+  /// encryption-related parameters (such as algorithm, chaining mode, key
+  /// length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started).
+  /// END CANONICAL DOCSTRING
   final CipherParams? cipherParams;
 
   /// BEGIN LEGACY DOCSTRING
