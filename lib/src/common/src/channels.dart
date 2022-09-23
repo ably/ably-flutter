@@ -29,6 +29,17 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   ///
   /// Doesn't create a channel instance on platform side yet.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Creates a new [RestChannel]{@link RestChannel} or
+  /// [RealtimeChannel]{@link RealtimeChannel} object, or returns the existing
+  /// channel object.
+  ///
+  /// [String] - The channel name
+  ///
+  /// [ChannelType] - A [RestChannel]{@link RestChannel} or
+  /// [RealtimeChannel]{@link RealtimeChannel} object.
+  /// END CANONICAL DOCSTRING
   ChannelType get(String name) {
     if (_channels[name] == null) {
       _channels[name] = createChannel(name);
