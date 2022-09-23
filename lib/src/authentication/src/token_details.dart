@@ -5,6 +5,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TD1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains an Ably Token and its associated metadata.
+/// END CANONICAL DOCSTRING
 @immutable
 class TokenDetails {
   /// BEGIN LEGACY DOCSTRING
