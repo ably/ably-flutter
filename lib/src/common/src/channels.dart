@@ -44,6 +44,8 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// Checks if a channel has been previously retrieved using the get() method.
   ///
   /// [String] - The channel name.
+  ///
+  /// [bool] - true if the channel exists, otherwise false.
   /// END CANONICAL DOCSTRING
   bool exists(String name) => _channels[name] != null;
 
