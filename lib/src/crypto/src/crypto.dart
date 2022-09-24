@@ -52,6 +52,18 @@ class Crypto {
   ///  derive a key from this password, for example by using a key derivation
   ///  function (KDF) such as PBKDF2.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Returns a [CipherParams]{@link CipherParams} object, using the default
+  /// values for any fields not supplied by the
+  /// [CipherParamOptions]{@link CipherParamOptions} object.
+  ///
+  /// [CipherParamOptions] - A [CipherParamOptions]{@link CipherParamOptions}
+  /// object.
+  ///
+  /// [CipherParams] - A [CipherParams]{@link CipherParams} object, using the
+  /// default values for any fields not supplied.
+  /// END CANONICAL DOCSTRING
   static Future<CipherParams> getDefaultParams({required dynamic key}) async {
     if (key is String) {
       ensureSupportedKeyLength(base64Decode(key));
