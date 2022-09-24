@@ -166,6 +166,17 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP9
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Updates the data payload for a presence member. If called before entering
+  /// the presence set, this is treated as an
+  /// [ENTER]{@link PresenceAction#ENTER} event. An optional callback may be
+  /// provided to notify of the success or failure of the operation.
+  /// 
+  /// [Data] - The payload to update for the presence member.
+  /// [extras] - A JSON object of arbitrary key-value pairs that may contain
+  /// metadata, and/or ancillary payloads.
+  /// END CANONICAL DOCSTRING
   Future<void> update([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await updateClient(_realtimeClientId!, data);
