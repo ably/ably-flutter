@@ -205,6 +205,21 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Registers a listener that is called each time a
+  /// [PresenceMessage]{@link PresenceMessage} matching a given
+  /// [PresenceAction]{@link PresenceAction}, or an action within an array of
+  /// [PresenceActions]{@link PresenceAction}, is received on the channel, such
+  /// as a new member entering the presence set. A callback may optionally be
+  /// passed in to this call to be notified of success or failure of the channel
+  /// [attach()]{@link RealtimeChannel#attach} operation.
+  ///
+  /// [PresenceAction | [PresenceAction]] - A
+  /// [PresenceAction]{@link PresenceAction} or an array of
+  /// [PresenceActions]{@link PresenceAction} to register the listener for.
+  /// [(PresenceMessage)] - An event listener function.
+  /// END CANONICAL DOCSTRING
   Stream<PresenceMessage> subscribe({
     PresenceAction? action,
     List<PresenceAction>? actions,
