@@ -13,6 +13,10 @@ enum PresenceAction {
   /// BEGIN LEGACY DOCSTRING
   /// indicates that a client is absent for incoming [PresenceMessage]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A member is not present in the channel.
+  /// END CANONICAL DOCSTRING
   absent,
 
   /// BEGIN LEGACY DOCSTRING
