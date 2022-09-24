@@ -58,5 +58,11 @@ enum PresenceAction {
   /// indicates that presence status of a client in presence member map
   /// needs to be updated
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An already present member has updated their member data. Being notified of
+  /// member data updates can be very useful, for example, it can be used to
+  /// update the status of a user when they are typing a message.
+  /// END CANONICAL DOCSTRING
   update,
 }
