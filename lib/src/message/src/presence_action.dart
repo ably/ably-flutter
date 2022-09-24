@@ -22,6 +22,12 @@ enum PresenceAction {
   /// BEGIN LEGACY DOCSTRING
   /// indicates that a client is present for incoming [PresenceMessage]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When subscribing to presence events on a channel that already has members
+  /// present, this event is emitted for every member already present on the
+  /// channel before the subscribe listener was registered.
+  /// END CANONICAL DOCSTRING
   present,
 
   /// BEGIN LEGACY DOCSTRING
