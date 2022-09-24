@@ -71,6 +71,12 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP13
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Indicates whether the presence set synchronization between Ably and the
+  /// clients on the channel has been completed. Set to true when the sync is
+  /// complete.
+  /// END CANONICAL DOCSTRING
   bool? syncComplete;
 
   String? get _realtimeClientId => _channel.realtime.options.clientId;
