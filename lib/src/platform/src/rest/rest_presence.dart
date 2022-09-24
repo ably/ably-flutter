@@ -34,6 +34,17 @@ class RestPresence extends PlatformObject {
   /// each member, such as their [PresenceAction]{@link PresenceAction} and ID.
   /// Returns a [PaginatedResult]{@link PaginatedResult} object, containing an
   /// array of [PresenceMessage]{@link PresenceMessage} objects.
+  ///
+  /// [limit] - An upper limit on the number of messages returned. The default
+  /// is 100, and the maximum is 1000.
+  /// [clientId] - Filters the list of returned presence members by a specific
+  /// client using its ID.
+  /// [connectionId] - Filters the list of returned presence members by a
+  /// specific connection using its ID.
+  ///
+  /// [PaginatedResult<PresenceMessage>] - 	A
+  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
+  /// [PresenceMessage]{@link PresenceMessage} objects.
   /// END CANONICAL DOCSTRING
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
