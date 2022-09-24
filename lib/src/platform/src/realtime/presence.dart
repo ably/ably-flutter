@@ -138,7 +138,7 @@ class RealtimePresence extends PlatformObject {
   /// payload. A clientId is required to be present on a channel. An optional
   /// callback may be provided to notify of the success or failure of the
   /// operation.
-  /// 
+  ///
   /// [Data] - 	The payload associated with the presence member.
   /// [extras] - A JSON object of arbitrary key-value pairs that may contain
   /// metadata, and/or ancillary payloads.
@@ -172,7 +172,7 @@ class RealtimePresence extends PlatformObject {
   /// the presence set, this is treated as an
   /// [ENTER]{@link PresenceAction#ENTER} event. An optional callback may be
   /// provided to notify of the success or failure of the operation.
-  /// 
+  ///
   /// [Data] - The payload to update for the presence member.
   /// [extras] - A JSON object of arbitrary key-value pairs that may contain
   /// metadata, and/or ancillary payloads.
@@ -200,6 +200,16 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP10
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Leaves the presence set for the channel. A client must have previously
+  /// entered the presence set before they can leave it. An optional callback
+  /// may be provided to notify of the success or failure of the operation.
+  ///
+  /// [Data] - The payload associated with the presence member.
+  /// [extras] - A JSON object of arbitrary key-value pairs that may contain
+  /// metadata, and/or ancillary payloads.
+  /// END CANONICAL DOCSTRING
   Future<void> leave([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await leaveClient(_realtimeClientId!, data);
