@@ -132,6 +132,17 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP8
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enters the presence set for the channel, optionally passing a data
+  /// payload. A clientId is required to be present on a channel. An optional
+  /// callback may be provided to notify of the success or failure of the
+  /// operation.
+  /// 
+  /// [Data] - 	The payload associated with the presence member.
+  /// [extras] - A JSON object of arbitrary key-value pairs that may contain
+  /// metadata, and/or ancillary payloads.
+  /// END CANONICAL DOCSTRING
   Future<void> enter([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await enterClient(_realtimeClientId!, data);
