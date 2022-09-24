@@ -28,6 +28,13 @@ class RestPresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSP3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves the current members present on the channel and the metadata for
+  /// each member, such as their [PresenceAction]{@link PresenceAction} and ID.
+  /// Returns a [PaginatedResult]{@link PaginatedResult} object, containing an
+  /// array of [PresenceMessage]{@link PresenceMessage} objects.
+  /// END CANONICAL DOCSTRING
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
   ]) async {
