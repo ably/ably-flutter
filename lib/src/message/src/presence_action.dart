@@ -44,6 +44,14 @@ enum PresenceAction {
   /// indicates that a client wants to leave a channel presence via
   /// outgoing [PresenceMessage]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A member who was present has now left the channel. This may be a result of
+  /// an explicit request to leave or implicitly when detaching from the
+  /// channel. Alternatively, if a member's connection is abruptly disconnected
+  /// and they do not resume their connection within a minute, Ably treats this
+  /// as a leave event as the client is no longer present.
+  /// END CANONICAL DOCSTRING
   leave,
 
   /// BEGIN LEGACY DOCSTRING
