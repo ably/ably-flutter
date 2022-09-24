@@ -34,6 +34,10 @@ enum PresenceAction {
   /// indicates that a client wants to enter a channel presence via
   /// outgoing [PresenceMessage]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A new member has entered the channel.
+  /// END CANONICAL DOCSTRING
   enter,
 
   /// BEGIN LEGACY DOCSTRING
