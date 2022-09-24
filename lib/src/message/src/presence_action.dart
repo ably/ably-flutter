@@ -5,6 +5,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TP2
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the possible actions members in the presence set can emit.
+/// END CANONICAL DOCSTRING
 enum PresenceAction {
   /// BEGIN LEGACY DOCSTRING
   /// indicates that a client is absent for incoming [PresenceMessage]
