@@ -106,6 +106,18 @@ class Crypto {
   /// Warning: If you create a random key and encrypt messages without sharing
   /// this key with other clients, there is no way to decrypt the messages.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Generates a random key to be used in the encryption of the channel. If the
+  /// language cryptographic randomness primitives are blocking or async, a
+  /// callback is used. The callback returns a generated binary key.
+  ///
+  /// [keyLength] - The length of the key, in bits, to be generated. If not
+  /// specified, this is equal to the default keyLength of the default
+  /// algorithm: for AES this is 256 bits.
+  ///
+  /// [Binary] - The key as a binary, for example, a byte array.
+  /// END CANONICAL DOCSTRING
   static Future<Uint8List> generateRandomKey({
     int keyLength = defaultKeyLengthInBits,
   }) =>
