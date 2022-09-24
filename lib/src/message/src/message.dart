@@ -7,6 +7,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TM1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains an individual message that is sent to, or received from, Ably.
+/// END CANONICAL DOCSTRING
 @immutable
 class Message with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
