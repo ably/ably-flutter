@@ -7,6 +7,11 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTP1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables the presence set to be entered and subscribed to, and the historic
+/// presence set to be retrieved for a channel.
+/// END CANONICAL DOCSTRING
 class RealtimePresence extends PlatformObject {
   final RealtimeChannel _channel;
 
