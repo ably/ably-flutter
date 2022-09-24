@@ -153,6 +153,19 @@ class RealtimePresence extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Enters the presence set of the channel for a given clientId. Enables a
+  /// single client to update presence on behalf of any number of clients using
+  /// a single connection. The library must have been instantiated with an API
+  /// key or a token bound to a wildcard clientId. An optional callback may be
+  /// provided to notify of the success or failure of the operation.
+  ///
+  /// [clientId] - The ID of the client to enter into the presence set.
+  /// [Data] - The payload associated with the presence member.
+  /// [extras] - A JSON object of arbitrary key-value pairs that may contain
+  /// metadata, and/or ancillary payloads.
+  /// END CANONICAL DOCSTRING
   Future<void> enterClient(String clientId, [Object? data]) async {
     await invoke<void>(PlatformMethod.realtimePresenceEnter, {
       TxTransportKeys.channelName: _channel.name,
