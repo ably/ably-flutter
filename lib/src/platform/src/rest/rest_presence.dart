@@ -7,6 +7,11 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSP1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables the retrieval of the current and historic presence set for a
+/// channel.
+/// END CANONICAL DOCSTRING
 class RestPresence extends PlatformObject {
   final RestChannel _restChannel;
 
