@@ -12,6 +12,10 @@ abstract class StatsResourceCount {
   /// BEGIN LEGACY DOCSTRING
   /// Average resources of this type used for this period.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The average number of resources of this type used for this period.
+  /// END CANONICAL DOCSTRING
   int? mean;
 
   /// BEGIN LEGACY DOCSTRING
