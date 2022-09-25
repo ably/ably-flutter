@@ -77,6 +77,14 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Removes a device registered to receive push notifications from Ably using
+  /// the id property of a [DeviceDetails]{@link DeviceDetails} object.
+  ///
+  /// [DeviceDetails] - The [DeviceDetails]{@link DeviceDetails} object
+  /// containing the id property of the device.
+  /// END CANONICAL DOCSTRING
   Future<void> remove({
     DeviceDetails? deviceDetails,
     String? deviceId,
