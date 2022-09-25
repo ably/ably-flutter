@@ -17,6 +17,10 @@ abstract class PushAdmin {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [PushDeviceRegistrations]{@link PushDeviceRegistrations} object.
+  /// END CANONICAL DOCSTRING
   PushDeviceRegistrations? deviceRegistrations;
 
   /// BEGIN LEGACY DOCSTRING
