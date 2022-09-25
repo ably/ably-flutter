@@ -27,6 +27,10 @@ enum StatsIntervalGranularity {
   /// BEGIN LEGACY DOCSTRING
   /// indicates units in days
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Interval unit over which statistics are gathered as days.
+  /// END CANONICAL DOCSTRING
   day,
 
   /// BEGIN LEGACY DOCSTRING
