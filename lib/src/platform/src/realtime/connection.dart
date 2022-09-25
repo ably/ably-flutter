@@ -116,6 +116,10 @@ class Connection extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The current [ConnectionState]{@link ConnectionState} of the connection.
+  /// END CANONICAL DOCSTRING
   ConnectionState get state => _state;
 
   /// BEGIN LEGACY DOCSTRING
