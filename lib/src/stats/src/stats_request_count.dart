@@ -11,6 +11,10 @@ abstract class StatsRequestCount {
   /// BEGIN LEGACY DOCSTRING
   /// Requests failed.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The number of requests that failed.
+  /// END CANONICAL DOCSTRING
   int? failed;
 
   /// BEGIN LEGACY DOCSTRING
