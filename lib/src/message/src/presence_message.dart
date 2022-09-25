@@ -85,6 +85,11 @@ class PresenceMessage with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3i
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A JSON object of arbitrary key-value pairs that may contain metadata,
+  /// and/or ancillary payloads.
+  /// END CANONICAL DOCSTRING
   final MessageExtras? extras;
 
   /// BEGIN LEGACY DOCSTRING
