@@ -167,6 +167,15 @@ class Connection extends PlatformObject {
   /// connected and expects a HEARTBEAT message in response
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN13
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// When connected, sends a heartbeat ping to the Ably server and executes the
+  /// callback with any error and the response time in milliseconds when a
+  /// heartbeat ping request is echoed from the server. This can be useful for
+  /// measuring true round-trip latency to the connected Ably server.
+  ///
+  /// [Duration] - The response time in milliseconds.
+  /// END CANONICAL DOCSTRING
   Future<int> ping() {
     throw UnimplementedError();
   }
