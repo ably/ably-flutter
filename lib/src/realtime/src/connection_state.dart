@@ -2,6 +2,10 @@
 /// See Ably Realtime API documentation for more details.
 /// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the realtime [Connection]{@link Connection} object states.
+/// END CANONICAL DOCSTRING
 enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection is initialized
