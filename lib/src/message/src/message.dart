@@ -78,9 +78,15 @@ class Message with ObjectHash {
   /// END CANONICAL DOCSTRING
   Object? get data => _data?.data;
 
+  ///BEGIN LEGACY DOCSTRING
   /// Name of the message
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2g
+  /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The event name.
+  /// END CANONICAL DOCSTRING
   final String? name;
 
   /// BEGIN LEGACY DOCSTRING
