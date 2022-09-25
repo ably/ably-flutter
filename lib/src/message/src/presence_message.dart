@@ -26,6 +26,11 @@ class PresenceMessage with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The type of [PresenceAction]{@link PresenceAction} the PresenceMessage is
+  /// for.
+  /// END CANONICAL DOCSTRING
   final PresenceAction? action;
 
   /// BEGIN LEGACY DOCSTRING
