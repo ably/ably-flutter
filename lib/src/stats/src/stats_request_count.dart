@@ -3,6 +3,10 @@
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS8
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the aggregate counts for requests made.
+/// END CANONICAL DOCSTRING
 abstract class StatsRequestCount {
   /// BEGIN LEGACY DOCSTRING
   /// Requests failed.
