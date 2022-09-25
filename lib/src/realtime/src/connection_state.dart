@@ -10,6 +10,11 @@ enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection is initialized
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A connection with this state has been initialized but no connection has
+  /// yet been attempted.
+  /// END CANONICAL DOCSTRING
   initialized,
 
   /// BEGIN LEGACY DOCSTRING
