@@ -57,6 +57,11 @@ class ConnectionStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An [ErrorInfo]{@link ErrorInfo} object containing any information relating
+  /// to the transition.
+  /// END CANONICAL DOCSTRING
   final ErrorInfo? reason;
 
   /// BEGIN LEGACY DOCSTRING
