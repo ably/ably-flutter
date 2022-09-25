@@ -85,6 +85,12 @@ class Message with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2i
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A JSON object of arbitrary key-value pairs that may contain metadata,
+  /// and/or ancillary payloads. Valid payloads include [push]{@link Push},
+  /// [delta]{@link DeltaExtras}, [ref]{@link ReferenceExtras} and headers.
+  /// END CANONICAL DOCSTRING
   final MessageExtras? extras;
 
   /// BEGIN LEGACY DOCSTRING
