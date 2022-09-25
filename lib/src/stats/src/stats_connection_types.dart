@@ -25,5 +25,10 @@ abstract class StatsConnectionTypes {
   /// BEGIN LEGACY DOCSTRING
   /// TLS connection count.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing a
+  /// breakdown of usage by scope over TLS connections.
+  /// END CANONICAL DOCSTRING
   StatsResourceCount? tls;
 }
