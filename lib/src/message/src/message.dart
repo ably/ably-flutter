@@ -71,6 +71,15 @@ class Message with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// Creates a message instance with [name], [data] and [clientId]
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Construct a Message object with an event name, payload, and a unique
+  /// client ID.
+  /// 
+  /// [name] - The event name.
+  /// [data] - 	The message payload.
+  /// [clientId] - The client ID of the publisher of this message.
+  /// END CANONICAL DOCSTRING
   Message({
     this.clientId,
     this.connectionId,
