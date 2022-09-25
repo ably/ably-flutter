@@ -89,6 +89,11 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12h
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the
+  /// aggregate count of persisted message stats.
+  /// END CANONICAL DOCSTRING
   StatsMessageTypes? persisted;
 
   /// BEGIN LEGACY DOCSTRING
