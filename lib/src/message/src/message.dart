@@ -125,12 +125,12 @@ class Message with ObjectHash {
   /// BEGIN CANONICAL DOCSTRING
   /// A static factory method to create a Message object from a deserialized
   /// Message-like object encoded using Ably's wire protocol.
-  /// 
+  ///
   /// [JsonObject] - A Message-like deserialized object.
   /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object. If you
   /// have an encrypted channel, use this to allow the library to decrypt the
   /// data.
-  /// 
+  ///
   /// [Message] - A Message object.
   /// END CANONICAL DOCSTRING
   Message.fromEncoded(
@@ -156,6 +156,17 @@ class Message with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A static factory method to create an array of Message objects from an
+  /// array of deserialized Message-like object encoded using Ably's wire
+  /// protocol.
+  ///
+  /// [JsonArray] - An array of Message-like deserialized objects.
+  /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object. If you
+  /// have an encrypted channel, use this to allow the library to decrypt the
+  /// data.
+  /// END CANONICAL DOCSTRING
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,
