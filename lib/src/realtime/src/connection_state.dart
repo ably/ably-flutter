@@ -31,6 +31,10 @@ enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection to ably is established
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A connection exists and is active.
+  /// END CANONICAL DOCSTRING
   connected,
 
   /// BEGIN LEGACY DOCSTRING
