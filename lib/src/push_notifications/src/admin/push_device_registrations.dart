@@ -89,7 +89,7 @@ abstract class PushDeviceRegistrations {
   /// BEGIN CANONICAL DOCSTRING
   /// Removes a device registered to receive push notifications from Ably using
   /// its deviceId.
-  /// 
+  ///
   /// [deviceId] - The unique ID of the device.
   /// END CANONICAL DOCSTRING
   Future<void> remove({
@@ -102,5 +102,13 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Removes all devices registered to receive push notifications from Ably
+  /// matching the filter params provided.
+  ///
+  /// [params] - An object containing key-value pairs to filter devices by. Can
+  /// contain clientId and deviceId.
+  /// END CANONICAL DOCSTRING
   Future<void> removeWhere(DeviceRegistrationParams params);
 }
