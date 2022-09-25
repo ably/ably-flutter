@@ -61,6 +61,10 @@ class Message with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The message payload, if provided.
+  /// END CANONICAL DOCSTRING
   Object? get data => _data?.data;
 
   /// Name of the message
