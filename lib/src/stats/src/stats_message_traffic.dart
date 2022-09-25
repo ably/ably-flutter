@@ -6,6 +6,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS7
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains a breakdown of summary stats data for traffic over various
+/// transport types.
+/// END CANONICAL DOCSTRING
 abstract class StatsMessageTraffic {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes realtime, rest and webhook messages).
