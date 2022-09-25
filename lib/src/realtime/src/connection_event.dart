@@ -55,5 +55,10 @@ enum ConnectionEvent {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection is updated
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An event for changes to connection conditions for which the
+  /// [ConnectionState]{@link ConnectionState} does not change.
+  /// END CANONICAL DOCSTRING
   update,
 }
