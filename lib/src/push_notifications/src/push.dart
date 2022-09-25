@@ -8,6 +8,11 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables a device to be registered and deregistered from receiving push
+/// notifications.
+/// END CANONICAL DOCSTRING
 class Push extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// An instance to access activation events related to push, such as device
