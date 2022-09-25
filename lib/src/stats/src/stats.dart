@@ -35,6 +35,11 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing a
+  /// breakdown of channels.
+  /// END CANONICAL DOCSTRING
   StatsResourceCount? channels;
 
   /// BEGIN LEGACY DOCSTRING
