@@ -7,6 +7,11 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+///Contains the device identity token and secret of a device. LocalDevice
+///extends [DeviceDetails]{@link}.
+/// END CANONICAL DOCSTRING
 @immutable
 class LocalDevice extends DeviceDetails {
   /// BEGIN LEGACY DOCSTRING
