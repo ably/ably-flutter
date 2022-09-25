@@ -87,6 +87,13 @@ class Connection extends PlatformObject {
   /// RTN16b) Connection#recoveryKey is an attribute composed of the
   /// connection key and latest serial received on the connection
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The recovery key string can be used by another client to recover this
+  /// connection's state in the recover client options property. See
+  /// [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
+  /// for more information.
+  /// END CANONICAL DOCSTRING
   String? recoveryKey;
 
   /// BEGIN LEGACY DOCSTRING
