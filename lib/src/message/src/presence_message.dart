@@ -18,6 +18,10 @@ class PresenceMessage with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A unique ID assigned to each PresenceMessage by Ably.
+  /// END CANONICAL DOCSTRING
   final String? id;
 
   /// BEGIN LEGACY DOCSTRING
