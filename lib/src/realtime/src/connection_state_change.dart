@@ -17,6 +17,11 @@ class ConnectionStateChange {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The event that triggered this [ConnectionState]{@link ConnectionState}
+  /// change.
+  /// END CANONICAL DOCSTRING
   final ConnectionEvent event;
 
   /// BEGIN LEGACY DOCSTRING
