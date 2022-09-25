@@ -15,6 +15,12 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b1
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves the [DeviceDetails]{@link DeviceDetails} of a device registered
+  /// to receive push notifications using the id property of a
+  /// [DeviceDetails]{@link DeviceDetails} object.
+  /// END CANONICAL DOCSTRING
   Future<DeviceDetails> get({
     DeviceDetails? deviceDetails,
     String? deviceId,
