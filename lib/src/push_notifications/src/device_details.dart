@@ -61,6 +61,10 @@ class DeviceDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A JSON object of key-value pairs that contains metadata for the device.
+  /// END CANONICAL DOCSTRING
   final Map<String, String> metadata;
 
   /// BEGIN LEGACY DOCSTRING
