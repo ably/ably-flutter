@@ -101,6 +101,14 @@ class Connection extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN10
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The serial number of the last message to be received on this connection,
+  /// used automatically by the library when recovering or resuming a
+  /// connection. When recovering a connection explicitly, the recoveryKey is
+  /// used in the recover client options as it contains both the key and the
+  /// last message serial.
+  /// END CANONICAL DOCSTRING
   int? serial;
 
   /// BEGIN LEGACY DOCSTRING
