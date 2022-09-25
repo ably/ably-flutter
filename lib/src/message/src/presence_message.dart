@@ -70,6 +70,13 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// This will typically be empty as all presence messages received from Ably
+  /// are automatically decoded client-side using this value. However, if the
+  /// message encoding cannot be processed, this attribute will contain the
+  /// remaining transformations not applied to the data payload.
+  /// END CANONICAL DOCSTRING
   final String? encoding;
 
   /// BEGIN LEGACY DOCSTRING
