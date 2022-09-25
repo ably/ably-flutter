@@ -26,6 +26,10 @@ class LocalDevice extends DeviceDetails {
   /// overlaps with APNs device token. Now both terms exist in implementations
   /// Use `X-Ably-DeviceToken` when authenticating with Ably.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A unique device identity token used to communicate with APNS or FCM.
+  /// END CANONICAL DOCSTRING
   final String? deviceIdentityToken;
 
   /// BEGIN LEGACY DOCSTRING
