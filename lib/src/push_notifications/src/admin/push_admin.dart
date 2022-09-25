@@ -6,6 +6,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables the management of device registrations and push notification
+/// subscriptions. Also enables the publishing of push notifications to devices.
+/// END CANONICAL DOCSTRING
 abstract class PushAdmin {
   /// BEGIN LEGACY DOCSTRING
   /// Manage device registrations.
