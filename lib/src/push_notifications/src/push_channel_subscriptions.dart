@@ -37,6 +37,17 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves all channels with at least one device subscribed to push
+  /// notifications. Returns a [PaginatedResult]{@link PaginatedResult} object,
+  /// containing an array of channel names.
+  ///
+  /// [params] - An object containing key-value pairs to filter channels by. Can
+  /// contain a limit on the number of channels returned, up to 1,000.
+  /// [PaginatedResult<String] - A [PaginatedResult]{@link PaginatedResult}
+  /// object containing an array of channel names.
+  /// END CANONICAL DOCSTRING
   Future<PaginatedResult<String>> listChannels(
     PushChannelsParams params,
   );
