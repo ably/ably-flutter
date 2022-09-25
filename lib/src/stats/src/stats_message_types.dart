@@ -6,6 +6,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS6
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains a breakdown of summary stats data for different
+/// (channel vs presence) message types.
+/// END CANONICAL DOCSTRING
 abstract class StatsMessageTypes {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes both presence & messages).
