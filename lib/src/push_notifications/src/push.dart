@@ -160,6 +160,14 @@ class Push extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Deactivates the device from receiving push notifications with Ably and FCM
+  /// or APNS.
+  ///
+  /// [ErrorInfo] - Describes why the deactivation was unsuccessful as an
+  /// [ErrorInfo]{@link ErrorInfo} object.
+  /// END CANONICAL DOCSTRING
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   /// BEGIN LEGACY DOCSTRING
