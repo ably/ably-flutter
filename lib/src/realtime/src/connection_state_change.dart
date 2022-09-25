@@ -24,6 +24,10 @@ class ConnectionStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The new [ConnectionState]{@link ConnectionState}.
+  /// END CANONICAL DOCSTRING
   final ConnectionState current;
 
   /// BEGIN LEGACY DOCSTRING
