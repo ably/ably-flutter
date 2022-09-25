@@ -21,6 +21,10 @@ abstract class StatsResourceCount {
   /// BEGIN LEGACY DOCSTRING
   /// Minimum total resources of this type used for this period.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The minimum total resources of this type used for this period.
+  /// END CANONICAL DOCSTRING
   int? min;
 
   /// BEGIN LEGACY DOCSTRING
