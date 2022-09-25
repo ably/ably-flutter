@@ -57,6 +57,18 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Subscribes a device, or a group of devices sharing the same clientId to
+  /// push notifications on a channel. Returns a
+  /// [PushChannelSubscription]{@link PushChannelSubscription} object.
+  ///
+  /// [PushChannelSubscription] - A [PushChannelSubscription]{@link PushChannelSubscription}
+  /// object.
+  ///
+  /// [PushChannelSubscription] - 	A [PushChannelSubscription]{@link PushChannelSubscription}
+  /// object describing the new or updated subscriptions.
+  /// END CANONICAL DOCSTRING
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
 
   /// BEGIN LEGACY DOCSTRING
