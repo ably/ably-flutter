@@ -32,6 +32,11 @@ class DevicePushDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An [ErrorInfo]{@link ErrorInfo} object describing the most recent error
+  /// when the state is Failing or Failed.
+  /// END CANONICAL DOCSTRING
   final ErrorInfo? errorReason;
 
   /// BEGIN LEGACY DOCSTRING
