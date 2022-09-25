@@ -45,6 +45,11 @@ class Connection extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN14
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN15
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An [ErrorInfo]{@link ErrorInfo} object describing the last error received
+  /// if a connection failure occurs.
+  /// END CANONICAL DOCSTRING
   ErrorInfo? get errorReason => _errorReason;
 
   /// BEGIN LEGACY DOCSTRING
