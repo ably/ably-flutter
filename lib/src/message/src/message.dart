@@ -75,7 +75,7 @@ class Message with ObjectHash {
   /// BEGIN CANONICAL DOCSTRING
   /// Construct a Message object with an event name, payload, and a unique
   /// client ID.
-  /// 
+  ///
   /// [name] - The event name.
   /// [data] - 	The message payload.
   /// [clientId] - The client ID of the publisher of this message.
@@ -121,6 +121,18 @@ class Message with ObjectHash {
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TM3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A static factory method to create a Message object from a deserialized
+  /// Message-like object encoded using Ably's wire protocol.
+  /// 
+  /// [JsonObject] - A Message-like deserialized object.
+  /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object. If you
+  /// have an encrypted channel, use this to allow the library to decrypt the
+  /// data.
+  /// 
+  /// [Message] - A Message object.
+  /// END CANONICAL DOCSTRING
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
