@@ -41,6 +41,11 @@ class DeviceDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The [DevicePlatform]{@link DevicePlatform} associated with the device.
+  /// Describes the platform the device uses, such as android or ios.
+  /// END CANONICAL DOCSTRING
   final DevicePlatform platform;
 
   /// BEGIN LEGACY DOCSTRING
