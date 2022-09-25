@@ -28,6 +28,10 @@ abstract class PushAdmin {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [PushChannelSubscriptions]{@link PushChannelSubscriptions} object.
+  /// END CANONICAL DOCSTRING
   PushChannelSubscriptions? channelSubscriptions;
 
   /// BEGIN LEGACY DOCSTRING
