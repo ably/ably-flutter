@@ -151,6 +151,13 @@ class Connection extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN11
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Explicitly calling connect() is unnecessary unless the autoConnect
+  /// attribute of the [ClientOptions]{@link ClientOptions} object is false.
+  /// Unless already connected or connecting, this method causes the connection
+  /// to open, entering the [CONNECTING]{@link ConnectionState#CONNECTING} state.
+  /// END CANONICAL DOCSTRING
   Future<void> connect() => realtime.connect();
 
   /// BEGIN LEGACY DOCSTRING
