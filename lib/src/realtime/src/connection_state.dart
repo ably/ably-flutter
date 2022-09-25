@@ -20,6 +20,12 @@ enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection to ably is being established
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A connection attempt has been initiated. The connecting state is entered
+  /// as soon as the library has completed initialization, and is reentered each
+  /// time connection is re-attempted following disconnection.
+  /// END CANONICAL DOCSTRING
   connecting,
 
   /// BEGIN LEGACY DOCSTRING
