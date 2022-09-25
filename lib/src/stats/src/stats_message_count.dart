@@ -11,6 +11,10 @@ abstract class StatsMessageCount {
   /// BEGIN LEGACY DOCSTRING
   /// Count of all messages.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The count of all messages.
+  /// END CANONICAL DOCSTRING
   int? count;
 
   /// BEGIN LEGACY DOCSTRING
