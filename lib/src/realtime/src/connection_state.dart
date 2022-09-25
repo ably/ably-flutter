@@ -83,6 +83,13 @@ enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection to ably is closing
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// An explicit request by the developer to close the connection has been sent
+  /// to the Ably service. If a reply is not received from Ably within a short
+  /// period of time, the connection is forcibly terminated and the connection
+  /// state becomes CLOSED.
+  /// END CANONICAL DOCSTRING
   closing,
 
   /// BEGIN LEGACY DOCSTRING
