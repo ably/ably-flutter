@@ -137,6 +137,13 @@ class Connection extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN12
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Causes the connection to close, entering the
+  /// [CLOSING]{@link ConnectionState#CLOSING} state. Once closed, the library
+  /// does not attempt to re-establish the connection without an explicit call
+  /// to [connect()]{@link Connection#connect}.
+  /// END CANONICAL DOCSTRING
   Future<void> close() => realtime.close();
 
   /// BEGIN LEGACY DOCSTRING
