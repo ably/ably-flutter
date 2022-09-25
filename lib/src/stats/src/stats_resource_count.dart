@@ -31,6 +31,10 @@ abstract class StatsResourceCount {
   /// BEGIN LEGACY DOCSTRING
   /// Peak resources of this type used for this period.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The peak number of resources of this type used for this period.
+  /// END CANONICAL DOCSTRING
   int? peak;
 
   /// BEGIN LEGACY DOCSTRING
