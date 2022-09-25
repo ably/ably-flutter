@@ -3,6 +3,10 @@
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS5
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the aggregate counts for messages and data transferred.
+/// END CANONICAL DOCSTRING
 abstract class StatsMessageCount {
   /// BEGIN LEGACY DOCSTRING
   /// Count of all messages.
