@@ -53,6 +53,13 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The UTC time at which the time period covered begins. If unit is set to
+  /// minute this will be in the format YYYY-mm-dd:HH:MM, if hour it will be
+  /// YYYY-mm-dd:HH, if day it will be YYYY-mm-dd:00 and if month it will be
+  /// YYYY-mm-01:00.
+  /// END CANONICAL DOCSTRING
   String? intervalId;
 
   /// BEGIN LEGACY DOCSTRING
