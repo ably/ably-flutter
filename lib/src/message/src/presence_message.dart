@@ -116,6 +116,21 @@ class PresenceMessage with ObjectHash {
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TP4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Decodes and decrypts a deserialized PresenceMessage-like object using the
+  /// cipher in [ChannelOptions]{@link ChannelOptions}. Any residual transforms
+  /// that cannot be decoded or decrypted will be in the encoding property.
+  /// Intended for users receiving messages from a source other than a REST or
+  /// Realtime channel (for example a queue) to avoid having to parse the
+  /// encoding string.
+  ///
+  /// [JsonObject] - 	The deserialized PresenceMessage-like object to decode and
+  /// decrypt.
+  ///
+  /// [ChannelOptions] - 	A [ChannelOptions]{@link ChannelOptions} object
+  /// containing the cipher.
+  /// END CANONICAL DOCSTRING
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
