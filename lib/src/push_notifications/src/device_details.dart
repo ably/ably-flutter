@@ -77,6 +77,11 @@ class DeviceDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The [DevicePushDetails]{@link DevicePushDetails} object associated with
+  /// the device. Describes the details of the push registration of the device.
+  /// END CANONICAL DOCSTRING
   final DevicePushDetails push;
 
   /// BEGIN LEGACY DOCSTRING
