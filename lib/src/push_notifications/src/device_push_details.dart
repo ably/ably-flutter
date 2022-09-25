@@ -30,6 +30,10 @@ class DevicePushDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The current state of the push registration.
+  /// END CANONICAL DOCSTRING
   final DevicePushState? state;
 
   /// BEGIN LEGACY DOCSTRING
