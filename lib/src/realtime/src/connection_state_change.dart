@@ -7,6 +7,11 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TA1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains [ConnectionState]{@link} change information emitted by the
+/// [Connection]{@link} object.
+/// END CANONICAL DOCSTRING
 @immutable
 class ConnectionStateChange {
   /// BEGIN LEGACY DOCSTRING
