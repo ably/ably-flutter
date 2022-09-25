@@ -28,6 +28,11 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.RequestCount]{@link Stats.RequestCount} object containing a
+  /// breakdown of API Requests.
+  /// END CANONICAL DOCSTRING
   StatsRequestCount? apiRequests;
 
   /// BEGIN LEGACY DOCSTRING
