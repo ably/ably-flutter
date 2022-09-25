@@ -48,6 +48,11 @@ class DeviceDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The [DeviceFormFactor]{@link DeviceFormFactor} object associated with the
+  /// device. Describes the type of the device, such as phone or tablet.
+  /// END CANONICAL DOCSTRING
   final FormFactor formFactor;
 
   /// BEGIN LEGACY DOCSTRING
