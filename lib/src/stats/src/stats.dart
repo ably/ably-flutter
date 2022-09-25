@@ -117,5 +117,10 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12l
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.RequestCount]{@link Stats.RequestCount} object containing a
+  /// breakdown of Ably Token requests.
+  /// END CANONICAL DOCSTRING
   StatsRequestCount? tokenRequests;
 }
