@@ -20,6 +20,11 @@ abstract class PushDeviceRegistrations {
   /// Retrieves the [DeviceDetails]{@link DeviceDetails} of a device registered
   /// to receive push notifications using the id property of a
   /// [DeviceDetails]{@link DeviceDetails} object.
+  /// 
+  /// [DeviceDetails] - The [DeviceDetails]{@link DeviceDetails} object
+  /// containing the id property of the device.
+  /// 
+  /// [DeviceDetails] - A [DeviceDetails]{@link DeviceDetails} object.
   /// END CANONICAL DOCSTRING
   Future<DeviceDetails> get({
     DeviceDetails? deviceDetails,
