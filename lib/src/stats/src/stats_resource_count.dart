@@ -22,6 +22,10 @@ abstract class StatsResourceCount {
   /// BEGIN LEGACY DOCSTRING
   /// Total resources of this type opened.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The total number of resources opened of this type.
+  /// END CANONICAL DOCSTRING
   int? opened;
 
   /// BEGIN LEGACY DOCSTRING
