@@ -36,6 +36,10 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3c
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The ID of the client that published the PresenceMessage.
+  /// END CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
