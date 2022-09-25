@@ -30,6 +30,10 @@ class DeviceDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCD3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client ID the device is connected to Ably with.
+  /// END CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
