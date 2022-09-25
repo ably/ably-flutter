@@ -95,6 +95,15 @@ enum ConnectionState {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection to ably is closed
   /// END LEGACY DOCSTRING
+  
+  /// BEGIN CANONICAL DOCSTRING
+  /// The connection has been explicitly closed by the client. In the closed
+  /// state, no reconnection attempts are made automatically by the library,
+  /// and clients may not publish messages. No connection state is preserved by
+  /// the service or by the library. A new connection attempt can be triggered
+  /// by an explicit call to [connect()]{@link Connection#connect}, which
+  /// results in a new connection.
+  /// END CANONICAL DOCSTRING
   closed,
 
   /// BEGIN LEGACY DOCSTRING
