@@ -76,6 +76,14 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Unsubscribes a device, or a group of devices sharing the same clientId
+  /// from receiving push notifications on a channel.
+  ///
+  /// [PushChannelSubscription] - A
+  /// [PushChannelSubscription]{@link PushChannelSubscription} object.
+  /// END CANONICAL DOCSTRING
   Future<void> remove(PushChannelSubscription subscription);
 
   /// BEGIN LEGACY DOCSTRING
