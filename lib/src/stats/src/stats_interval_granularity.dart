@@ -36,5 +36,9 @@ enum StatsIntervalGranularity {
   /// BEGIN LEGACY DOCSTRING
   /// indicates units in months
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Interval unit over which statistics are gathered as months.
+  /// END CANONICAL DOCSTRING
   month,
 }
