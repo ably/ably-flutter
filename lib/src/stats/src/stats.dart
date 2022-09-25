@@ -5,6 +5,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains application statistics for a specified time interval and time
+/// period.
+/// END CANONICAL DOCSTRING
 class Stats {
   /// BEGIN LEGACY DOCSTRING
   /// Aggregates inbound and outbound messages.
