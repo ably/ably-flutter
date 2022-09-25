@@ -20,10 +20,10 @@ abstract class PushDeviceRegistrations {
   /// Retrieves the [DeviceDetails]{@link DeviceDetails} of a device registered
   /// to receive push notifications using the id property of a
   /// [DeviceDetails]{@link DeviceDetails} object.
-  /// 
+  ///
   /// [DeviceDetails] - The [DeviceDetails]{@link DeviceDetails} object
   /// containing the id property of the device.
-  /// 
+  ///
   /// [DeviceDetails] - A [DeviceDetails]{@link DeviceDetails} object.
   /// END CANONICAL DOCSTRING
   Future<DeviceDetails> get({
@@ -36,6 +36,20 @@ abstract class PushDeviceRegistrations {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves all devices matching the filter params provided. Returns a
+  /// [PaginatedResult]{@link PaginatedResult} object, containing an array of
+  /// [DeviceDetails]{@link DeviceDetails} objects.
+  ///
+  /// [params] - An object containing key-value pairs to filter devices by.
+  /// Can contain clientId, deviceId and a limit on the number of devices
+  /// returned, up to 1,000.
+  ///
+  /// [PaginatedResult<DeviceDetails>] - A
+  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
+  /// [DeviceDetails]{@link DeviceDetails} objects.
+  /// END CANONICAL DOCSTRING
   Future<PaginatedResult<DeviceDetails>> list(
     DeviceRegistrationParams params,
   );
