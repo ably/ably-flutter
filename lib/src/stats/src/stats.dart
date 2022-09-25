@@ -50,6 +50,11 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12f
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.MessageTraffic]{@link Stats.MessageTraffic} object containing the
+  /// aggregate count of inbound message stats.
+  /// END CANONICAL DOCSTRING
   StatsMessageTraffic? inbound;
 
   /// BEGIN LEGACY DOCSTRING
