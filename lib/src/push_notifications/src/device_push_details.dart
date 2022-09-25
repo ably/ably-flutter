@@ -18,6 +18,11 @@ class DevicePushDetails {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP3
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A JSON object of key-value pairs that contains of the push transport and
+  /// address.
+  /// END CANONICAL DOCSTRING
   final Map<String, String>? recipient;
 
   /// BEGIN LEGACY DOCSTRING
