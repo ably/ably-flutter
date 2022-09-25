@@ -6,6 +6,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#PCD1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the properties of a device registered for push notifications.
+/// END CANONICAL DOCSTRING
 @immutable
 class DeviceDetails {
   /// BEGIN LEGACY DOCSTRING
