@@ -9,6 +9,10 @@ enum StatsIntervalGranularity {
   /// BEGIN LEGACY DOCSTRING
   /// indicates units in minutes
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Interval unit over which statistics are gathered as minutes.
+  /// END CANONICAL DOCSTRING
   minute,
 
   /// BEGIN LEGACY DOCSTRING
