@@ -43,6 +43,12 @@ class Stats {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TS12i
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.ConnectionTypes]{@link Stats.ConnectionTypes} object containing a
+  /// breakdown of connection related stats, such as min, mean and peak
+  /// connections.
+  /// END CANONICAL DOCSTRING
   StatsConnectionTypes? connections;
 
   /// BEGIN LEGACY DOCSTRING
