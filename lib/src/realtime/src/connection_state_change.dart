@@ -40,6 +40,12 @@ class ConnectionStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The previous [ConnectionState]{@link ConnectionState}. For the
+  /// [UPDATE]{@link ConnectionEvent#UPDATE} event, this is equal to the current
+  /// [ConnectionState]{@link ConnectionState}.
+  /// END CANONICAL DOCSTRING
   final ConnectionState previous;
 
   /// BEGIN LEGACY DOCSTRING
