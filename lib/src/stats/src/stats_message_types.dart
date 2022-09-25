@@ -15,6 +15,11 @@ abstract class StatsMessageTypes {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes both presence & messages).
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.MessageCount]{@link Stats.MessageCount} object containing the
+  /// count and byte value of messages and presence messages.
+  /// END CANONICAL DOCSTRING
   StatsMessageCount? all;
 
   /// BEGIN LEGACY DOCSTRING
