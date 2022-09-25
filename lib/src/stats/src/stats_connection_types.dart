@@ -6,6 +6,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS4
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains a breakdown of summary stats data for different (TLS vs non-TLS)
+/// connection types.
+/// END CANONICAL DOCSTRING
 abstract class StatsConnectionTypes {
   /// BEGIN LEGACY DOCSTRING
   /// All connection count (includes both TLS & non-TLS connections).
