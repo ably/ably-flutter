@@ -61,6 +61,10 @@ class PresenceMessage with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3e
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The payload of the PresenceMessage.
+  /// END CANONICAL DOCSTRING
   Object? get data => _data?.data;
 
   /// BEGIN LEGACY DOCSTRING
