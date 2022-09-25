@@ -5,6 +5,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://ably.com/documentation/general/push/admin#device-registrations
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables the management of push notification registrations with Ably.
+/// END CANONICAL DOCSTRING
 abstract class PushDeviceRegistrations {
   /// BEGIN LEGACY DOCSTRING
   /// Get registered device by device ID.
