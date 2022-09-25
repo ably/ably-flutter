@@ -59,6 +59,15 @@ class Push extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Activates the device for push notifications with FCM or APNS, obtaining a
+  /// unique identifier from them. Subsequently registers the device with Ably
+  /// and stores the deviceIdentityToken in local storage.
+  ///
+  /// [ErrorInfo] - Describes why the activation was unsuccessful as an
+  /// [ErrorInfo]{@link ErrorInfo} object.
+  /// END CANONICAL DOCSTRING
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
   /// BEGIN LEGACY DOCSTRING
