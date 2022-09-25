@@ -20,6 +20,11 @@ abstract class StatsMessageTypes {
   /// BEGIN LEGACY DOCSTRING
   /// Count of channel messages.
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.MessageCount]{@link Stats.MessageCount} object containing the
+  /// count and byte value of messages.
+  /// END CANONICAL DOCSTRING
   StatsMessageCount? messages;
 
   /// BEGIN LEGACY DOCSTRING
