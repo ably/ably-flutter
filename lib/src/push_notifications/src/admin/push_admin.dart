@@ -29,6 +29,15 @@ abstract class PushAdmin {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Sends a push notification directly to a device, or a group of devices
+  /// sharing the same clientId.
+  ///
+  /// [recipient] - A JSON object containing the recipient details using
+  /// clientId, deviceId or the underlying notifications service.
+  /// [data] - A JSON object containing the push notification payload.
+  /// END CANONICAL DOCSTRING
   Future<void> publish(
     Map<String, dynamic> recipient,
     Map<String, dynamic> payload,
