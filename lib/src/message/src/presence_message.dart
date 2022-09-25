@@ -99,6 +99,11 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3g
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The time the PresenceMessage was received by Ably, as milliseconds since
+  /// the Unix epoch.
+  /// END CANONICAL DOCSTRING
   final DateTime? timestamp;
 
   /// BEGIN LEGACY DOCSTRING
