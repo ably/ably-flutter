@@ -155,6 +155,20 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TP4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Decodes and decrypts an array of deserialized PresenceMessage-like object
+  /// using the cipher in [ChannelOptions]{@link ChannelOptions}. Any residual
+  /// transforms that cannot be decoded or decrypted will be in the encoding
+  /// property. Intended for users receiving messages from a source other than a
+  /// REST or Realtime channel (for example a queue) to avoid having to parse
+  /// the encoding string.
+  ///
+  /// [JsonArray] - 	An array of deserialized PresenceMessage-like objects to
+  /// decode and decrypt.
+  /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object
+  /// containing the cipher.
+  /// END CANONICAL DOCSTRING
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,
