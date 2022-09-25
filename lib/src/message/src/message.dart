@@ -52,6 +52,13 @@ class Message with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// Any transformation applied to the data for this message
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// This is typically empty, as all messages received from Ably are
+  /// automatically decoded client-side using this value. However, if the
+  /// message encoding cannot be processed, this attribute contains the
+  /// remaining transformations not applied to the data payload.
+  /// END CANONICAL DOCSTRING
   final String? encoding;
 
   final MessageData<dynamic>? _data;
