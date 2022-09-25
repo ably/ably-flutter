@@ -13,6 +13,21 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Retrieves all push channel subscriptions matching the filter params
+  /// provided. Returns a [PaginatedResult]{@link PaginatedResult} object,
+  /// containing an array of
+  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
+  /// END CANONICAL DOCSTRING
+  ///
+  /// [params] - An object containing key-value pairs to filter subscriptions
+  /// by. Can contain channel, clientId, deviceId and a limit on the number of
+  /// devices returned, up to 1,000.
+  ///
+  /// [PaginatedResult<PushChannelSubscription>] - A
+  /// PaginatedResult]{@link PaginatedResult} object containing an array of
+  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
   Future<PaginatedResult<PushChannelSubscription>> list(
     PushChannelSubscriptionParams params,
   );
