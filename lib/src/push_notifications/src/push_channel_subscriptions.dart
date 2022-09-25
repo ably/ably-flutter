@@ -91,5 +91,13 @@ abstract class PushChannelSubscriptions {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Unsubscribes all devices from receiving push notifications on a channel
+  /// that match the filter params provided.
+  ///
+  /// [params] - An object containing key-value pairs to filter subscriptions
+  /// by. Can contain channel, and optionally either clientId or deviceId.
+  /// END CANONICAL DOCSTRING
   Future<void> removeWhere(PushChannelSubscriptionParams params);
 }
