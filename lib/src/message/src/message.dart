@@ -32,6 +32,10 @@ class Message with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2b
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The client ID of the publisher of this message.
+  /// END CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
