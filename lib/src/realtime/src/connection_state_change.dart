@@ -71,6 +71,11 @@ class ConnectionStateChange {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Duration in milliseconds, after which the client retries a connection
+  /// where applicable.
+  /// END CANONICAL DOCSTRING
   final int? retryIn;
 
   /// BEGIN LEGACY DOCSTRING
