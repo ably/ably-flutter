@@ -18,6 +18,10 @@ class Message with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A Unique ID assigned by Ably to this message.
+  /// END CANONICAL DOCSTRING
   final String? id;
 
   /// BEGIN LEGACY DOCSTRING
