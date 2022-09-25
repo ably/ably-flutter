@@ -7,6 +7,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TP1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains an individual presence update sent to, or received from, Ably.
+/// END CANONICAL DOCSTRING
 @immutable
 class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
