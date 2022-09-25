@@ -8,6 +8,13 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#HP1
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// A superset of [PaginatedResult]{@link PaginatedResult} which represents a
+/// page of results plus metadata indicating the relative queries available to
+/// it. HttpPaginatedResponse additionally carries information about the
+/// response to an HTTP request.
+/// END CANONICAL DOCSTRING
 abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   /// BEGIN LEGACY DOCSTRING
   /// Instantiates by extracting result from [AblyMessage] returned from
@@ -25,6 +32,10 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP4
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The HTTP status code of the response.
+  /// END CANONICAL DOCSTRING
   int? statusCode;
 
   /// BEGIN LEGACY DOCSTRING
@@ -34,6 +45,11 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP5
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Whether statusCode indicates success. This is equivalent to
+  /// 200 <= statusCode < 300.
+  /// END CANONICAL DOCSTRING
   bool? success;
 
   /// BEGIN LEGACY DOCSTRING
@@ -41,6 +57,11 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP6
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The error code if the X-Ably-Errorcode HTTP header is sent in the
+  /// response.
+  /// END CANONICAL DOCSTRING
   int? errorCode;
 
   /// BEGIN LEGACY DOCSTRING
@@ -48,6 +69,11 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP7
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The error message if the X-Ably-Errormessage HTTP header is sent in the
+  /// response.
+  /// END CANONICAL DOCSTRING
   String? errorMessage;
 
   /// BEGIN LEGACY DOCSTRING
@@ -55,6 +81,10 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#HP8
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The headers of the response.
+  /// END CANONICAL DOCSTRING
   List<Map<String, String>>? headers;
 
   /// BEGIN LEGACY DOCSTRING
