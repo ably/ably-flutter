@@ -109,6 +109,14 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3h
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// Combines clientId and connectionId to ensure that multiple connected
+  /// clients with an identical clientId are uniquely identifiable. A string
+  /// function that returns the combined clientId and connectionId.
+  ///
+  /// [String] - A combination of clientId and connectionId.
+  /// END CANONICAL DOCSTRING
   String get memberKey => '$connectionId:$clientId';
 
   /// BEGIN LEGACY DOCSTRING
