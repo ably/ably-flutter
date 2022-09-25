@@ -58,6 +58,11 @@ class Connection extends PlatformObject {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN8
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A unique public identifier for this connection, used to identify this
+  /// member.
+  /// END CANONICAL DOCSTRING
   String? id;
 
   /// BEGIN LEGACY DOCSTRING
