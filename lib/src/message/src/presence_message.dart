@@ -47,6 +47,11 @@ class PresenceMessage with ObjectHash {
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TP3d
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// The ID of the connection associated with the client that published the
+  /// PresenceMessage.
+  /// END CANONICAL DOCSTRING
   final String? connectionId;
 
   final MessageData<dynamic>? _data;
