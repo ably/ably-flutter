@@ -6,6 +6,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// See Ably Realtime API documentation for more details.
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Describes the events emitted by a [Connection]{@link} object. An event is
+/// either an UPDATE or a [ConnectionState]{@link ConnectionState}.
+/// END CANONICAL DOCSTRING
 enum ConnectionEvent {
   /// BEGIN LEGACY DOCSTRING
   /// specifies that a connection is initialized
