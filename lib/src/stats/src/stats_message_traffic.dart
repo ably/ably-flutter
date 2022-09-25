@@ -15,6 +15,12 @@ abstract class StatsMessageTraffic {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes realtime, rest and webhook messages).
   /// END LEGACY DOCSTRING
+
+  /// BEGIN CANONICAL DOCSTRING
+  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing a
+  /// breakdown of usage by message type for all messages (includes realtime,
+  /// rest and webhook messages).
+  /// END CANONICAL DOCSTRING
   StatsMessageTypes? all;
 
   /// BEGIN LEGACY DOCSTRING
