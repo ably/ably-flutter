@@ -4,6 +4,10 @@
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#TS9
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Contains the aggregate data for usage of a resource in a specific scope.
+/// END CANONICAL DOCSTRING
 abstract class StatsResourceCount {
   /// BEGIN LEGACY DOCSTRING
   /// Average resources of this type used for this period.
