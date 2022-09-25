@@ -3,6 +3,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// BEGIN LEGACY DOCSTRING
 /// Manage push notification channel subscriptions for devices or clients
 /// END LEGACY DOCSTRING
+
+/// BEGIN CANONICAL DOCSTRING
+/// Enables device push channel subscriptions.
+/// END CANONICAL DOCSTRING
 abstract class PushChannelSubscriptions {
   /// BEGIN LEGACY DOCSTRING
   /// List channel subscriptions filtered by optional params.
