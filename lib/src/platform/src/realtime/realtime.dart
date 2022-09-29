@@ -13,12 +13,10 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// Learn more at the [Realtime Client Library API documentation](https://ably.com/documentation/realtime).
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// A client that extends the functionality of the
-/// [RestClient]{@link RestClient} and provides additional realtime-specific
-/// features.
-/// END CANONICAL DOCSTRING
-
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// A client that extends the functionality of the [Rest] and provides
+/// additional realtime-specific features.
+/// END EDITED CANONICAL DOCSTRING
 class Realtime extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// instantiates with [ClientOptions] and a String [key]
@@ -29,12 +27,10 @@ class Realtime extends PlatformObject {
   /// END LEGACY DOCSTRING
   ///
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Constructs a RealtimeClient object using an Ably
-  /// [ClientOptions]{@link ClientOptions} object.
-  ///
-  /// [ClientOptions] - A [ClientOptions]{@link ClientOptions} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Constructs a [Realtime] object using an Ably [ClientOptions] object or
+  /// the Ably API [key] or token string used to validate the client.
+  /// END EDITED CANONICAL DOCSTRING
   Realtime({
     ClientOptions? options,
     final String? key,
@@ -52,10 +48,8 @@ class Realtime extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// Constructs a RealtimeClient object using an Ably API key or token string.
-  ///
-  /// [keyOrTokenStr] - The Ably API key or token string used to validate the
-  /// client.
+  /// Constructs a [Realtime] object using an Ably API [key] or token string
+  /// used to validate the client.
   /// END CANONICAL DOCSTRING
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
@@ -98,9 +92,9 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Connection]{@link Connection} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [Connection] object.
+  /// END EDITED CANONICAL DOCSTRING
   Connection get connection => _connection;
 
   /// BEGIN LEGACY DOCSTRING
@@ -110,9 +104,9 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An [Auth]{@link Auth} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An [Auth] object.
+  /// END EDITED CANONICAL DOCSTRING
   // Auth? auth;
 
   /// BEGIN LEGACY DOCSTRING
@@ -126,9 +120,9 @@ class Realtime extends PlatformObject {
   /// viz., subscribing for push notifications, etc
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Push]{@link Push} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [Push] object.
+  /// END EDITED CANONICAL DOCSTRING
   late Push push;
 
   late RealtimeChannels _channels;
@@ -139,33 +133,31 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Channels]{@link Channels} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [Channels] object.
+  /// END EDITED CANONICAL DOCSTRING
   RealtimeChannels get channels => _channels;
 
   /// BEGIN LEGACY DOCSTRING
   /// closes the [connection]
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Calls [connection.close()]{@link Connection#close} and causes the
-  /// connection to close, entering the closing state. Once closed,
-  /// the library will not attempt to re-establish the connection without an
-  /// explicit call to [connect()]{@link Connection#connect}.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Calls [Connection.close] and causes the connection to close, entering the
+  /// closing state. Once closed, the library will not attempt to re-establish
+  /// the connection without an explicit call to [Connection.connect].
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   /// BEGIN LEGACY DOCSTRING
   /// connects to [connection]
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Calls [connection.connect()]{@link Connection#connect} and causes the
-  /// connection to open, entering the connecting state. Explicitly calling
-  /// connect() is unnecessary unless the
-  /// [autoConnect]{@link ClientOptions#autoConnect} property is disabled.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Calls [Connection.connect] and causes the connection to open, entering the
+  /// connecting state. Explicitly calling connect() is unnecessary unless the
+  /// [ClientOptions.autoConnect] property is disabled.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
   /// BEGIN LEGACY DOCSTRING
@@ -174,27 +166,23 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Makes a REST request to a provided path. This is provided as a convenience
-  /// for developers who wish to use REST API functionality that is either not
-  /// documented or is not yet included in the public API, without having to
-  /// directly handle features such as authentication, paging, fallback hosts,
-  /// MsgPack and JSON support.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Makes a REST request to a provided [path] using a [method], such as GET,
+  /// POST. [params] can be specified to include in the URL query of the
+  /// request. The parameters depend on the endpoint being queried. See the
+  /// [REST API reference](https://ably.com/docs/api/rest-api) for the available
+  /// parameters of each endpoint.
+  /// You can also provide the JSON [body] and additional
+  /// [headers] to include in the request.
+  /// Returns an [HttpPaginatedResponse]
+  /// response object returned by the HTTP request, containing an empty or
+  /// JSON-encodable object.
   ///
-  /// [method] - The request method to use, such as GET, POST.
-  /// [path] - 	The request path.
-  /// [params] - The parameters to include in the URL query of the request. The
-  /// parameters depend on the endpoint being queried. See the REST API
-  /// reference for the available parameters of each endpoint:
-  /// https://ably.com/docs/api/rest-api
-  /// [body] - The JSON body of the request.
-  /// [headers] - Additional HTTP headers to include in the request.
-  ///
-  /// [HttpPaginatedResponse] - An
-  /// [HttpPaginatedResponse]{@link HttpPaginatedResponse} response object
-  /// returned by the HTTP request, containing an empty or JSON-encodable
-  /// object.
-  /// END CANONICAL DOCSTRING
+  /// This is provided as a convenience for developers who wish to use REST API
+  /// functionality that is either not documented or is not yet included in the
+  /// public API, without having to directly handle features such as
+  /// authentication, paging, fallback hosts, MsgPack and JSON support.
+  /// END EDITED CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   required String method,
   //   required String path,
@@ -211,27 +199,26 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Queries the REST /stats API and retrieves your application's usage
-  /// statistics. Returns a [PaginatedResult]{@link PaginatedResult} object,
-  /// containing an array of [Stats]{@link Stats} objects. See the Stats docs.
-  ///
-  /// [start] - The time from which stats are retrieved, specified as
-  /// milliseconds since the Unix epoch.
-  /// [end] - The time until stats are retrieved, specified as milliseconds
-  /// since the Unix epoch.
-  /// [direction] - The order for which stats are returned in. Valid values
-  /// are backwards which orders stats from most recent to oldest, or forwards
-  /// which orders stats from oldest to most recent. The default is backwards.
-  /// [limit] - An upper limit on the number of stats returned. The default is
-  /// 100, and the maximum is 1000.
-  /// [unit] - 	minute, hour, day or month. Based on the unit selected, the
+  /// statistics. You must specify the [start] time from which stats are
+  /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
+  /// time until stats are retrieved, specified as milliseconds since the Unix
+  /// epoch.
+  /// You can also provide [direction], which describes the order in which
+  /// stats are returned in. Valid values are backwards which orders stats from
+  /// most recent to oldest, or forwards which orders stats from oldest to most
+  /// recent. The default is backwards.
+  /// You can also provide [limit], which specifies upper limit on the number of
+  /// stats returned (the default is 100, and the maximum is 1000), and the
+  /// [unit] as minute, hour, day or month. Based on the unit selected, the
   /// given start or end times are rounded down to the start of the relevant
   /// interval depending on the unit granularity of the query.
+  /// Returns a [PaginatedResult] object containing an array of
+  /// [Stats] objects.
   ///
-  /// [PaginatedResult] - A [PaginatedResult]{@link PaginatedResult} object
-  /// containing an array of [Stats]{@link Stats} objects.
-  /// END CANONICAL DOCSTRING
+  /// See the [Stats docs](https://ably.com/docs/general/statistics).
+  /// END EDITED CANONICAL DOCSTRING
   // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
   //   throw UnimplementedError();
   // }
@@ -242,16 +229,13 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Retrieves the time from the Ably service as milliseconds since the Unix
-  /// epoch. Clients that do not have access to a sufficiently well maintained
-  /// time source and wish to issue Ably [TokenRequests]{@link TokenRequest
-  /// with a more accurate timestamp should use the
-  /// [queryTime]{@link ClientOptions#queryTime} property instead of this
-  /// method.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Retrieves the [DateTime] from the Ably service. Clients that do not have
+  /// access to a sufficiently well maintained time source and wish to issue
+  /// Ably [TokenRequest]s with a more accurate timestamp should use the
+  /// [AuthOptions.queryTime] property instead of this method.
   ///
-  /// [time] - The time as milliseconds since the Unix epoch.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
@@ -264,12 +248,10 @@ class Realtime extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Retrieves a [LocalDevice]{@link LocalDevice} object that represents the
-  /// current state of the device as a target for push notifications.
-  ///
-  /// [LocalDevice] - A [LocalDevice]{@link LocalDevice} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Retrieves a [LocalDevice] object that represents the current state of the
+  /// device as a target for push notifications.
+  /// END EDITED CANONICAL DOCSTRING
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
