@@ -14,7 +14,7 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// END LEGACY DOCSTRING
 
 /// BEGIN EDITED CANONICAL DOCSTRING
-/// A client that extends the functionality of the [Rest] and provides
+/// A client that extends functionality of the [Rest] and provides
 /// additional realtime-specific features.
 /// END EDITED CANONICAL DOCSTRING
 class Realtime extends PlatformObject {
@@ -155,8 +155,8 @@ class Realtime extends PlatformObject {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls [Connection.connect] and causes the connection to open, entering the
-  /// connecting state. Explicitly calling connect() is unnecessary unless the
-  /// [ClientOptions.autoConnect] property is disabled.
+  /// connecting state. Explicitly calling [Connection.connect] is unnecessary
+  /// unless the [ClientOptions.autoConnect] property is disabled.
   /// END EDITED CANONICAL DOCSTRING
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
@@ -174,9 +174,8 @@ class Realtime extends PlatformObject {
   /// parameters of each endpoint.
   /// You can also provide the JSON [body] and additional
   /// [headers] to include in the request.
-  /// Returns an [HttpPaginatedResponse]
-  /// response object returned by the HTTP request, containing an empty or
-  /// JSON-encodable object.
+  /// Returns an [HttpPaginatedResponse] object returned by the HTTP
+  /// request, containing an empty or JSON-encodable object.
   ///
   /// This is provided as a convenience for developers who wish to use REST API
   /// functionality that is either not documented or is not yet included in the
@@ -205,15 +204,15 @@ class Realtime extends PlatformObject {
   /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
   /// time until stats are retrieved, specified as milliseconds since the Unix
   /// epoch.
-  /// You can also provide [direction], which describes the order in which
-  /// stats are returned in. Valid values are backwards which orders stats from
-  /// most recent to oldest, or forwards which orders stats from oldest to most
-  /// recent. The default is backwards.
-  /// You can also provide [limit], which specifies upper limit on the number of
-  /// stats returned (the default is 100, and the maximum is 1000), and the
-  /// [unit] as minute, hour, day or month. Based on the unit selected, the
-  /// given start or end times are rounded down to the start of the relevant
-  /// interval depending on the unit granularity of the query.
+  /// Set the [direction], which describes the order in which stats are returned
+  /// in. Valid values are backwards which orders stats from most recent to
+  /// oldest, or forwards which orders stats from oldest to most recent. The
+  /// default is backwards.
+  /// Provide [limit], which specifies upper limit on the number of
+  /// stats returned (the default is 100, and the maximum is 1000).
+  /// Set the [unit] as either a minute, hour, day or month. Based on the unit
+  /// selected, the given start or end times are rounded down to the start of
+  /// the relevant interval depending on the unit granularity of the query.
   /// Returns a [PaginatedResult] object containing an array of
   /// [Stats] objects.
   ///
