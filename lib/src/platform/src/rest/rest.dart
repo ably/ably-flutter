@@ -27,7 +27,7 @@ class Rest extends PlatformObject {
   /// END LEGACY DOCSTRING
   ///
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Construct a [Rest] object using an Ably [options] object.
+  /// Construct a `Rest` object using an Ably [options] object.
   /// END EDITED CANONICAL DOCSTRING
   Rest({required this.options}) : super() {
     channels = RestChannels(this);
@@ -39,7 +39,7 @@ class Rest extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Constructs a RestClient object using an Ably API [key] or token string
+  /// Constructs a `Rest` object using an Ably API [key] or token string
   /// that's used to validate the cliet.
   /// END EDITED CANONICAL DOCSTRING
   factory Rest.fromKey(String key) => Rest(options: ClientOptions(key: key));
@@ -79,8 +79,8 @@ class Rest extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Makes a REST request to a provided [path] using a [method], such as GET,
-  /// POST.
+  /// Makes a REST request to a provided [path] using a [method], such as `GET`,
+  /// `POST`.
   /// [params] can be specified to include in the URL query of the
   /// request. The parameters depend on the endpoint being queried. See the
   /// [REST API reference](https://ably.com/docs/api/rest-api) for the available
@@ -112,20 +112,21 @@ class Rest extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Queries the REST /stats API and retrieves your application's usage
+  /// Queries the REST `/stats` API and retrieves your application's usage
   /// statistics. You must specify the [start] time from which stats are
   /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
   /// time until stats are retrieved, specified as milliseconds since the Unix
   /// epoch.
   /// Set the [direction], which describes the order in which stats are returned
-  /// in. Valid values are backwards which orders stats from most recent to
-  /// oldest, or forwards which orders stats from oldest to most recent. The
-  /// default is backwards.
+  /// in. Valid values are `backwards` which orders stats from most recent to
+  /// oldest, or `forwards` which orders stats from oldest to most recent. The
+  /// default is `backwards`.
   /// Provide [limit], which specifies upper limit on the number of
   /// stats returned (the default is 100, and the maximum is 1000).
-  /// Set the [unit] as either a minute, hour, day or month. Based on the unit
-  /// selected, the given start or end times are rounded down to the start of
-  /// the relevant interval depending on the unit granularity of the query.
+  /// Set the [unit] as either a `minute`, `hour`, `day` or `month`. Based on
+  /// the unit selected, the given start or end times are rounded down to the
+  /// start of the relevant interval depending on the unit granularity of the
+  /// query.
   /// Returns a [PaginatedResult] object containing an array of [Stats] objects.
   ///
   /// See the [Stats docs](https://ably.com/docs/general/statistics).

@@ -21,12 +21,12 @@ class ClientOptions extends AuthOptions {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
-  /// for presence purposes. The clientId can be any non-empty string, except it
-  /// cannot contain a *. This option is primarily intended to be used in
+  /// for presence purposes. The `clientId` can be any non-empty string, except
+  /// it cannot contain a `*`. This option is primarily intended to be used in
   /// situations where the library is instantiated with a key. Note that a
-  /// clientId may also be implicit in a token used to instantiate the library.
-  /// An error will be raised if a clientId specified here conflicts with the
-  /// clientId implicit in the token.
+  /// `clientId` may also be implicit in a token used to instantiate the
+  /// library. An error will be raised if a `clientId` specified here conflicts
+  /// with the `clientId` implicit in the token.
   /// END EDITED CANONICAL DOCSTRING
   String? clientId;
 
@@ -59,7 +59,7 @@ class ClientOptions extends AuthOptions {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Controls the verbosity of the logs output from the library. Levels include
-  /// verbose, debug, info, warn and error.
+  /// `verbose`, `debug`, `info`, `warn` and `error`.
   /// END EDITED CANONICAL DOCSTRING
   LogLevel logLevel = LogLevel.info;
 
@@ -108,7 +108,7 @@ class ClientOptions extends AuthOptions {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether the client will use a secure connection. The default is
-  /// true, meaning a TLS connection will be used to connect to Ably.
+  /// `true`, meaning a TLS connection will be used to connect to Ably.
   /// END EDITED CANONICAL DOCSTRING
   bool tls = true;
 
@@ -134,8 +134,8 @@ class ClientOptions extends AuthOptions {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether the client connects to Ably as soon as it is instantiated.
-  /// You can set this to false and explicitly connect to Ably using the
-  /// [Connection.connect] method. The default is true.
+  /// You can set this to `false` and explicitly connect to Ably using the
+  /// [Connection.connect] method. The default is `true`.
   /// END EDITED CANONICAL DOCSTRING
   bool autoConnect = true;
 
@@ -148,8 +148,8 @@ class ClientOptions extends AuthOptions {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Whether the more efficient MsgPack binary encoding is used. When false,
-  /// JSON text encoding is used. The default is true.
+  /// Whether the more efficient MsgPack binary encoding is used. When `false`,
+  /// JSON text encoding is used. The default is `true`.
   /// END EDITED CANONICAL DOCSTRING
   bool useBinaryProtocol = true;
 
@@ -167,7 +167,7 @@ class ClientOptions extends AuthOptions {
   /// instantiating the library without having to wait for the connection to be
   /// established. Applications may use this option to disable queueing if they
   /// wish to have application-level control over the queueing. The default is
-  /// true.
+  /// `true`.
   /// END EDITED CANONICAL DOCSTRING
   bool queueMessages = true;
 
@@ -181,7 +181,7 @@ class ClientOptions extends AuthOptions {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether messages originating from this connection should be echoed back on
-  /// the same connection. The default is true.
+  /// the same connection. The default is `true`.
   /// END EDITED CANONICAL DOCSTRING
   bool echoMessages = true;
 
@@ -375,9 +375,9 @@ class ClientOptions extends AuthOptions {
   /// Timeout for the wait of acknowledgement for operations performed via a
   /// realtime connection, before the client library considers a request failed
   /// and triggers a failure condition. Operations include establishing a
-  /// connection with Ably, or sending a HEARTBEAT, CONNECT, ATTACH, DETACH or
-  /// CLOSE request. It is the equivalent of httpRequestTimeout but for realtime
-  /// operations, rather than REST.
+  /// connection with Ably, or sending a `HEARTBEAT`, `CONNECT`, `ATTACH`,
+  /// `DETACH` or `CLOSE` request. It is the equivalent of `httpRequestTimeout`
+  /// but for realtime operations, rather than REST.
   /// END EDITED CANONICAL DOCSTRING
   int? realtimeRequestTimeout;
 
