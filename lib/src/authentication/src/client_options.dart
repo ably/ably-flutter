@@ -6,11 +6,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TO1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Passes additional client-specific properties to the REST
-/// [constructor()]{@link RestClient#constructor} or the Realtime
-/// [constructor()]{@link RealtimeClient#constructor}.
-/// END CANONICAL DOCSTRING
+/// [Rest.new] or the Realtime [Realtime.new]
+/// END EDITED CANONICAL DOCSTRING
 class ClientOptions extends AuthOptions {
   /// BEGIN LEGACY DOCSTRING
   /// Optional clientId that can be used to specify the identity for this client
@@ -20,7 +19,7 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3a
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
   /// for presence purposes. The clientId can be any non-empty string, except it
   /// cannot contain a *. This option is primarily intended to be used in
@@ -28,7 +27,7 @@ class ClientOptions extends AuthOptions {
   /// clientId may also be implicit in a token used to instantiate the library.
   /// An error will be raised if a clientId specified here conflicts with the
   /// clientId implicit in the token.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
@@ -40,10 +39,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3c
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Controls the log output of the library. This is a function to handle each
   /// line of log output.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   @Deprecated(
     'Not used, as log messages are handled by the default mechanism '
     'in the underlying SDK. This instance variable will be removed '
@@ -58,10 +57,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Controls the verbosity of the logs output from the library. Levels include
   /// verbose, debug, info, warn and error.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   LogLevel logLevel = LogLevel.info;
 
   /// BEGIN LEGACY DOCSTRING
@@ -70,10 +69,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enables a non-default Ably host to be specified. For development
-  /// environments only. The default value is rest.ably.io.
-  /// END CANONICAL DOCSTRING
+  /// environments only.
+  /// END EDITED CANONICAL DOCSTRING
   String? restHost;
 
   /// BEGIN LEGACY DOCSTRING
@@ -82,10 +81,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enables a non-default Ably host to be specified for realtime connections.
-  /// For development environments only. The default value is realtime.ably.io.
-  /// END CANONICAL DOCSTRING
+  /// For development environments only.
+  /// END EDITED CANONICAL DOCSTRING
   String? realtimeHost;
 
   /// BEGIN LEGACY DOCSTRING
@@ -94,10 +93,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enables a non-default Ably port to be specified. For development
-  /// environments only. The default value is 80.
-  /// END CANONICAL DOCSTRING
+  /// environments only.
+  /// END EDITED CANONICAL DOCSTRING
   int? port;
 
   /// BEGIN LEGACY DOCSTRING
@@ -107,10 +106,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When false, the client will use an insecure connection. The default is
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether the client will use a secure connection. The default is
   /// true, meaning a TLS connection will be used to connect to Ably.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   bool tls = true;
 
   /// BEGIN LEGACY DOCSTRING
@@ -119,10 +118,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enables a non-default Ably TLS port to be specified. For development
-  /// environments only. The default value is 443.
-  /// END CANONICAL DOCSTRING
+  /// environments only.
+  /// END EDITED CANONICAL DOCSTRING
   int? tlsPort;
 
   /// BEGIN LEGACY DOCSTRING
@@ -133,11 +132,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When true, the client connects to Ably as soon as it is instantiated.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether the client connects to Ably as soon as it is instantiated.
   /// You can set this to false and explicitly connect to Ably using the
-  /// [connect()]{@link Connection#connect} method. The default is true.
-  /// END CANONICAL DOCSTRING
+  /// [Connection.connect] method. The default is true.
+  /// END EDITED CANONICAL DOCSTRING
   bool autoConnect = true;
 
   /// BEGIN LEGACY DOCSTRING
@@ -148,10 +147,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3f
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When true, the more efficient MsgPack binary encoding is used. When false,
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether the more efficient MsgPack binary encoding is used. When false,
   /// JSON text encoding is used. The default is true.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   bool useBinaryProtocol = true;
 
   /// BEGIN LEGACY DOCSTRING
@@ -161,15 +160,15 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3g
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// If false, this disables the default behavior whereby the library queues
-  /// messages on a connection in the disconnected or connecting states. The
-  /// default behavior enables applications to submit messages immediately upon
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether the default behavior whereby the library queues messages on a
+  /// connection in the disconnected or connecting states is used. The default
+  /// behavior enables applications to submit messages immediately upon
   /// instantiating the library without having to wait for the connection to be
   /// established. Applications may use this option to disable queueing if they
   /// wish to have application-level control over the queueing. The default is
   /// true.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   bool queueMessages = true;
 
   /// BEGIN LEGACY DOCSTRING
@@ -180,10 +179,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3h
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// If false, prevents messages originating from this connection being echoed
-  /// back on the same connection. The default is true.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether messages originating from this connection should be echoed back on
+  /// the same connection. The default is true.
+  /// END EDITED CANONICAL DOCSTRING
   bool echoMessages = true;
 
   /// BEGIN LEGACY DOCSTRING
@@ -193,7 +192,7 @@ class ClientOptions extends AuthOptions {
   /// Also see https://www.ably.com/documentation/realtime/connection#connection-state-recovery
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enables a connection to inherit the state of a previous connection that
   /// may have existed under a different instance of the Realtime library. This
   /// might typically be used by clients of the browser library to ensure
@@ -204,7 +203,7 @@ class ClientOptions extends AuthOptions {
   /// when the connection is recoverable. The callback is then responsible for
   /// confirming whether the connection should be recovered or not. See
   /// [connection state recovery](https://ably.com/docs/realtime/connection/#connection-state-recovery) for further information.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   String? recover;
 
   /// BEGIN LEGACY DOCSTRING
@@ -213,11 +212,10 @@ class ClientOptions extends AuthOptions {
   /// Use this only if you have been provided a dedicated environment by Ably
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Enables a
-  /// [custom environment](https://ably.com/docs/platform-customization) to be
-  /// used with the Ably service.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Enables a [custom environment](https://ably.com/docs/platform-customization)
+  /// to be used with the Ably service.
+  /// END EDITED CANONICAL DOCSTRING
   String? environment;
 
   /// BEGIN LEGACY DOCSTRING
@@ -226,12 +224,12 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k6
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An array of fallback hosts to be used in the case of an error
-  /// necessitating the use of an alternative host.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A list of fallback hosts to be used in the case of an error necessitating
+  /// the use of an alternative host.
   /// If you have been provided a set of custom fallback hosts by Ably, please
   /// specify them here.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   List<String>? fallbackHosts;
 
   /// BEGIN LEGACY DOCSTRING
@@ -240,10 +238,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3k7
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// DEPRECATED: this property is deprecated and will be removed in a future
   /// version. Enables default fallback hosts to be used.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   @Deprecated('no alternative to this')
   bool? fallbackHostsUseDefault;
 
@@ -254,11 +252,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3j11
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When a [TokenParams]{@link TokenParams} object is provided, it overrides
-  /// the client library defaults when issuing new Ably Tokens or Ably
-  /// [TokenRequests]{@link TokenRequest}.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// When a [TokenParams] object is provided, it overrides the client library
+  /// defaults when issuing new Ably Tokens or Ably [TokenRequest]s.
+  /// END EDITED CANONICAL DOCSTRING
   TokenParams? defaultTokenParams;
 
   /// BEGIN LEGACY DOCSTRING
@@ -271,12 +268,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l1
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// If the connection is still in the
-  /// [DISCONNECTED]{@link ConnectionState#disconnected} state after this delay,
-  /// the client library will attempt to reconnect automatically. The default is
-  /// 15 seconds.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// If the connection is still in the [ConnectionState.disconnected] state
+  /// after this delay, the client library will attempt to reconnect
+  /// automatically. The default is 15000 miliseconds (15s).
+  /// END EDITED CANONICAL DOCSTRING
   int disconnectedRetryTimeout = 15000;
 
   /// BEGIN LEGACY DOCSTRING
@@ -289,24 +285,23 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When the connection enters the
-  /// [SUSPENDED]{@link ConnectionState#suspended} state, after this delay, if
-  /// the state is still [SUSPENDED]{@link ConnectionState#suspended}, the
-  /// client library attempts to reconnect automatically. The default is 30
-  /// seconds.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// When the connection enters the [ConnectionState.suspended] state, after
+  /// this delay, if the state is still [ConnectionState.suspended], the client
+  /// library attempts to reconnect automatically. The default is 30000
+  /// miliseconds (30s).
+  /// END EDITED CANONICAL DOCSTRING
   int suspendedRetryTimeout = 30000;
 
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3n
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When true, enables idempotent publishing by assigning a unique message ID
-  /// client-side, allowing the Ably servers to discard automatic publish
-  /// retries following a failure such as a network fault. The default is true.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether idempotent publishing should be enabled - by assigning a unique
+  /// message ID client-side, the Ably servers are allowed to discard automatic
+  /// publish retries following a failure such as a network fault.
+  /// END EDITED CANONICAL DOCSTRING
   bool? idempotentRestPublishing;
 
   /// BEGIN LEGACY DOCSTRING
@@ -316,11 +311,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1f
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A set of key-value pairs that can be used to pass in arbitrary connection
   /// parameters, such as [heartbeatInterval](https://ably.com/docs/realtime/connection#heartbeats)
   /// or [remainPresentFor](https://ably.com/docs/realtime/presence#unstable-connections).
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Map<String, String>? transportParams;
 
   /// BEGIN LEGACY DOCSTRING
@@ -331,10 +326,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTC1f
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Timeout for opening a connection to Ably to initiate an HTTP request.
-  /// The default is 4 seconds.
-  /// END CANONICAL DOCSTRING
+  /// The default is 4000 miliseconds (4s).
+  /// END EDITED CANONICAL DOCSTRING
   int httpOpenTimeout = 4000;
 
   /// BEGIN LEGACY DOCSTRING
@@ -344,10 +339,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Timeout for a client performing a complete HTTP request to Ably,
-  /// including the connection phase. The default is 10 seconds.
-  /// END CANONICAL DOCSTRING
+  /// including the connection phase. The default is 10000 miliseconds (10s).
+  /// END EDITED CANONICAL DOCSTRING
   int httpRequestTimeout = 10000;
 
   /// BEGIN LEGACY DOCSTRING
@@ -358,11 +353,11 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The maximum number of fallback hosts to use as a fallback when an HTTP
   /// request to the primary host is unreachable or indicates that it is
   /// unserviceable. The default value is 3.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   int httpMaxRetryCount = 3;
 
   /// BEGIN LEGACY DOCSTRING
@@ -376,14 +371,14 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#DF1b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Timeout for the wait of acknowledgement for operations performed via a
   /// realtime connection, before the client library considers a request failed
   /// and triggers a failure condition. Operations include establishing a
   /// connection with Ably, or sending a HEARTBEAT, CONNECT, ATTACH, DETACH or
   /// CLOSE request. It is the equivalent of httpRequestTimeout but for realtime
-  ///  operations, rather than REST. The default is 10 seconds.
-  /// END CANONICAL DOCSTRING
+  /// operations, rather than REST.
+  /// END EDITED CANONICAL DOCSTRING
   int? realtimeRequestTimeout;
 
   /// BEGIN LEGACY DOCSTRING
@@ -396,10 +391,10 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l10
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The maximum time before HTTP requests are retried against the default
-  /// endpoint. The default is 600 seconds.
-  /// END CANONICAL DOCSTRING
+  /// endpoint. The default is 600000 miliseconds (600s).
+  /// END EDITED CANONICAL DOCSTRING
   int fallbackRetryTimeout = 600000;
 
   /// BEGIN LEGACY DOCSTRING
@@ -413,14 +408,13 @@ class ClientOptions extends AuthOptions {
   /// https://docs.ably.com/client-lib-development-guide/features/#TO3l7
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// When a channel becomes [SUSPENDED]{@link ConnectionState#suspended}
-  /// following a server initiated [DETACHED]{@link ConnectionState#detached},
-  /// after this delay, if the channel is still
-  /// [SUSPENDED]{@link ConnectionState#suspended} and the connection is
-  /// [CONNECTED]{@link ConnectionState#connected}, the client library will
-  /// attempt to re-attach the channel automatically. The default is 15 seconds.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// When a channel becomes [ChannelState.suspended] following a server
+  /// initiated [ChannelState.detached], after this delay, if the channel is
+  /// still [ChannelState.suspended] and the connection is
+  /// [ConnectionState.connected], the client library will attempt to re-attach
+  /// the channel automatically. The default is 15000 miliseconds (15s).
+  /// END EDITED CANONICAL DOCSTRING
   int channelRetryTimeout = 15000;
 
   /// BEGIN LEGACY DOCSTRING
