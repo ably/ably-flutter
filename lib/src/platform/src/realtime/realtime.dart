@@ -168,12 +168,13 @@ class Realtime extends PlatformObject {
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Makes a REST request to a provided [path] using a [method], such as GET,
-  /// POST. [params] can be specified to include in the URL query of the
+  /// POST.
+  /// [params] can be specified to include in the URL query of the
   /// request. The parameters depend on the endpoint being queried. See the
   /// [REST API reference](https://ably.com/docs/api/rest-api) for the available
   /// parameters of each endpoint.
-  /// You can also provide the JSON [body] and additional
-  /// [headers] to include in the request.
+  /// You can also provide the JSON [body] and additional [headers] to include
+  /// in the request.
   /// Returns an [HttpPaginatedResponse] object returned by the HTTP
   /// request, containing an empty or JSON-encodable object.
   ///
@@ -232,7 +233,8 @@ class Realtime extends PlatformObject {
   /// Retrieves the [DateTime] from the Ably service. Clients that do not have
   /// access to a sufficiently well maintained time source and wish to issue
   /// Ably [TokenRequest]s with a more accurate timestamp should use the
-  /// [AuthOptions.queryTime] property instead of this method.
+  /// [AuthOptions.queryTime] property on a [ClientOptions] object instead of
+  /// this method.
   ///
   /// END EDITED CANONICAL DOCSTRING
   Future<DateTime> time() async {
