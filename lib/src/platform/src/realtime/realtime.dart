@@ -28,7 +28,7 @@ class Realtime extends PlatformObject {
   ///
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Constructs a [Realtime] object using an Ably [ClientOptions] object or
+  /// Constructs a [Realtime] object using an Ably [options] object or
   /// the Ably API [key] or token string used to validate the client.
   /// END EDITED CANONICAL DOCSTRING
   Realtime({
