@@ -6,10 +6,9 @@ import 'package:meta/meta.dart';
 /// through [Rest.channels] or [Realtime.channels]
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// Creates and destroys [RestChannel]{@link RestChannel} and
-/// [RealtimeChannel]{@link RealtimeChannel} objects.
-/// END CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// Creates and destroys [RestChannel] and [RealtimeChannel] objects.
+/// END EDITED CANONICAL DOCSTRING
 abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// BEGIN LEGACY DOCSTRING
   /// stores channel name vs instance of [ChannelType]
@@ -30,16 +29,10 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// Doesn't create a channel instance on platform side yet.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Creates a new [RestChannel]{@link RestChannel} or
-  /// [RealtimeChannel]{@link RealtimeChannel} object, or returns the existing
-  /// channel object.
-  ///
-  /// [String] - The channel name
-  ///
-  /// [ChannelType] - A [RestChannel]{@link RestChannel} or
-  /// [RealtimeChannel]{@link RealtimeChannel} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Creates a new [RestChannel] or [RealtimeChannel] object, or returns the
+  /// existing channel object, using the channel [name] parameter.
+  /// END EDITED CANONICAL DOCSTRING
   ChannelType get(String name) {
     if (_channels[name] == null) {
       _channels[name] = createChannel(name);
@@ -51,13 +44,11 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// returns true if a channel exists [name]
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Checks if a channel has been previously retrieved using the get() method.
-  ///
-  /// [String] - The channel name.
-  ///
-  /// [bool] - true if the channel exists, otherwise false.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Checks whether a channel with a [name] has been previously retrieved using
+  /// the `get()` method. Returns `true` if the channel exists, otherwise
+  /// `false`.
+  /// END EDITED CANONICAL DOCSTRING
   bool exists(String name) => _channels[name] != null;
 
   /// BEGIN LEGACY DOCSTRING
@@ -65,9 +56,9 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// END LEGACY DOCSTRING
   ChannelType operator [](String name) => get(name);
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Iterates through the existing channels.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   @override
   Iterator<ChannelType> get iterator =>
       _ChannelIterator<ChannelType>(_channels.values.toList());
@@ -76,15 +67,12 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// Releases the channel resource so it can be garbage collected
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Releases a [RestChannel]{@link RestChannel} or
-  /// [RealtimeChannel]{@link RealtimeChannel} object, deleting it, and enabling
-  /// it to be garbage collected. It also removes any listeners associated with
-  /// the channel. To release a channel, the [ChannelState]{@link ChannelState}
-  /// must be INITIALIZED, DETACHED, or FAILED.
-  /// 
-  /// [String] - The channel name.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Releases a [RestChannel] or [RealtimeChannel] object with a specified
+  /// [name], deleting it. It also removes any listeners associated with the
+  /// channel. To release a channel, the [ChannelState] must be `INITIALIZED`,
+  /// `DETACHED`, or `FAILED`f.
+  /// END EDITED CANONICAL DOCSTRING
   void release(String name) {
     _channels.remove(name);
   }
