@@ -11,10 +11,10 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables messages to be published and historic messages to be retrieved for a
 /// channel.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 class RestChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// reference to Rest client
@@ -25,18 +25,18 @@ class RestChannel extends PlatformObject {
   /// Channel to receive push notifications on
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [PushChannel]{@link PushChannel} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [PushChannel] object.
+  /// END EDITED CANONICAL DOCSTRING
   PushChannel push;
 
   /// BEGIN LEGACY DOCSTRING
   /// name of the channel
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The channel name.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   String name;
 
   late RestPresence _presence;
@@ -48,9 +48,9 @@ class RestChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [RestPresence]{@link RestPresence} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [RestPresence] object.
+  /// END EDITED CANONICAL DOCSTRING
   RestPresence get presence => _presence;
 
   /// BEGIN LEGACY DOCSTRING
@@ -74,27 +74,14 @@ class RestChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Retrieves a [PaginatedResult]{@link PaginatedResult} object, containing an
-  /// array of historical [Message]{@link Message} objects for the channel.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Retrieves a [PaginatedResult] object, containing an array of historical
+  /// [Message] objects for the channel using the specified [params].
+  ///
   /// If the channel is configured to persist messages, then messages can be
   /// retrieved from history for up to 72 hours in the past. If not, messages
   /// can only be retrieved from history for up to two minutes in the past.
-  ///
-  /// [start] - The time from which messages are retrieved, specified as
-  /// milliseconds since the Unix epoch.
-  /// [end] - The time until messages are retrieved, specified as milliseconds
-  /// since the Unix epoch.
-  /// [direction] - The order for which messages are returned in. Valid values
-  /// are backwards which orders messages from most recent to oldest, or
-  /// forwards which orders messages from oldest to most recent. The default is
-  /// backwards.
-  /// [limit] - An upper limit on the number of messages returned. The default
-  /// is 100, and the maximum is 1000.
-  ///
-  /// [PaginatedResult<Message>] - A [PaginatedResult]{@link PaginatedResult}
-  /// object containing an array of [Message]{@link Message} objects.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<Message>> history([
     RestHistoryParams? params,
   ]) async {
@@ -116,15 +103,10 @@ class RestChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Publishes a message to the channel. A callback may optionally be passed in
-  /// to this call to be notified of success or failure of the operation.
-  ///
-  /// [Message] - A [Message]{@link Message} object.
-  /// [params] - Optional parameters, such as [quickAck](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes)
-  /// sent as part of the query
-  /// string.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Publishes a [message] or list of [messages] to the channel, or a single
+  /// message with the given event [name] and [data] payload.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> publish({
     Message? message,
     List<Message>? messages,
@@ -147,11 +129,9 @@ class RestChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Sets the [ChannelOptions]{@link ChannelOptions} for the channel.
-  ///
-  /// [options] - A [ChannelOptions]{@link ChannelOptions} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Sets the [options] for the channel.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> setOptions(RestChannelOptions options) =>
       invoke(PlatformMethod.setRestChannelOptions, {
         TxTransportKeys.channelName: name,
