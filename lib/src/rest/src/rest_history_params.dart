@@ -14,8 +14,7 @@ class RestHistoryParams {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRINGS
-  /// The time from which messages are retrieved, specified as
-  /// milliseconds since the Unix epoch.
+  /// The [DateTime] from which messages are retrieved.
   /// END CANONICAL DOCSTRINGS
   final DateTime start;
 
@@ -28,10 +27,9 @@ class RestHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRINGS
-  /// The time until messages are retrieved, specified as milliseconds
-  /// since the Unix epoch.
-  /// END CANONICAL DOCSTRINGS
+  /// BEGIN EDITED CANONICAL DOCSTRINGS
+  /// The [DateTime] until messages are retrieved.
+  /// END EDITED CANONICAL DOCSTRINGS
   final DateTime end;
 
   /// BEGIN LEGACY DOCSTRING
@@ -42,12 +40,11 @@ class RestHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRINGS
-  /// The order for which messages are returned in. Valid values
-  /// are backwards which orders messages from most recent to oldest, or
-  /// forwards which orders messages from oldest to most recent. The default is
-  /// backwards.
-  /// END CANONICAL DOCSTRINGS
+  /// BEGIN EDITED CANONICAL DOCSTRINGS
+  /// The order for which messages are returned in. Valid values are `backwards`
+  /// which orders messages from most recent to oldest, or `forwards` which
+  /// orders messages from oldest to most recent. The default is `backwards`.
+  /// END EDITED CANONICAL DOCSTRINGS
   final String direction;
 
   /// BEGIN LEGACY DOCSTRING
@@ -59,10 +56,10 @@ class RestHistoryParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRINGS
+  /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// An upper limit on the number of messages returned. The default
   /// is 100, and the maximum is 1000.
-  /// END CANONICAL DOCSTRINGS
+  /// END EDITED CANONICAL DOCSTRINGS
   final int limit;
 
   /// BEGIN LEGACY DOCSTRING
