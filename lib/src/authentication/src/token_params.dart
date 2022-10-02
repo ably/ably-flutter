@@ -12,9 +12,9 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TK1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Defines the properties of an Ably Token.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class TokenParams {
   /// BEGIN LEGACY DOCSTRING
@@ -27,12 +27,12 @@ class TokenParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The capabilities associated with this Ably Token. The capabilities value
   /// is a JSON-encoded representation of the resource paths and associated
   /// operations. Read more about capabilities in the
   /// [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? capability;
 
   /// BEGIN LEGACY DOCSTRING
@@ -43,16 +43,16 @@ class TokenParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2c
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
-  /// for presence purposes. The clientId can be any non-empty string, except it
-  /// cannot contain a *. This option is primarily intended to be used in
+  /// for presence purposes. The `clientId` can be any non-empty string, except
+  /// it cannot contain a `*`. This option is primarily intended to be used in
   /// situations where the library is instantiated with a key. Note that a
-  /// clientId may also be implicit in a token used to instantiate the library.
-  /// An error is raised if a clientId specified here conflicts with the
-  /// clientId implicit in the token. Find out more about
+  /// `clientId` may also be implicit in a token used to instantiate the
+  /// library. An error is raised if a `clientId` specified here conflicts with
+  /// the clientId implicit in the token. Find out more about
   /// [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
@@ -64,10 +64,10 @@ class TokenParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A cryptographically secure random string of at least 16 characters, used
-  /// to ensure the [TokenRequest]{@link TokenRequest} cannot be reused.
-  /// END CANONICAL DOCSTRING
+  /// to ensure the [TokenRequest] cannot be reused.
+  /// END EDITED CANONICAL DOCSTRING
   final String? nonce;
 
   /// BEGIN LEGACY DOCSTRING
@@ -79,13 +79,13 @@ class TokenParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The timestamp of this request as milliseconds since the Unix epoch.
-  /// Timestamps, in conjunction with the nonce, are used to prevent requests
-  /// from being replayed. timestamp is a "one-time" value, and is valid in a
-  /// request, but is not validly a member of any default token params such as
-  /// ClientOptions.defaultTokenParams.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The [DateTime] of this request. Timestamps, in conjunction with the
+  /// `nonce`,  are used to prevent requests from being replayed. `timestamp`
+  /// is a "one-time" value, and is valid in a request, but is not validly a
+  /// member of any default token params such as
+  /// `ClientOptions.defaultTokenParams`.
+  /// END EDITED CANONICAL DOCSTRING
   final DateTime? timestamp;
 
   /// BEGIN LEGACY DOCSTRING
@@ -100,10 +100,9 @@ class TokenParams {
   /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Requested time to live for the token in milliseconds. The default is
-  /// 60 minutes.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Requested time to live for the token in milliseconds.
+  /// END EDITED CANONICAL DOCSTRING
   final int? ttl;
 
   /// BEGIN LEGACY DOCSTRING
