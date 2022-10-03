@@ -7,20 +7,18 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// END LEGACY DOCSTRING
 
 /// BEGIN CANONICAL DOCSTRING
-/// Passes additional properties to a [RestChannel]{@link RestChannel} or
-/// [RealtimeChannel]{@link RealtimeChannel} object, such as encryption,
-/// [ChannelMode]{@link ChannelMode} and channel parameters.
+/// Passes additional properties to a [RestChannel] object, such as encryption,
+/// [ChannelMode]and channel parameters.
 /// END CANONICAL DOCSTRING
 class RestChannelOptions {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Requests encryption for this channel when not null, and specifies
-  /// encryption-related parameters (such as algorithm, chaining mode, key
-  /// length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started).
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview
+  /// that configure the behavior of the channel.
+  /// END EDITED CANONICAL DOCSTRING
   final CipherParams? cipherParams;
 
   /// BEGIN LEGACY DOCSTRING
@@ -31,11 +29,8 @@ class RestChannelOptions {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// Constructor withCipherKey, that takes a key only.
-  ///
-  /// [key] - A private key used to encrypt and decrypt payloads.
-  ///
-  /// [ChannelOptions] - A ChannelOptions object.
+  /// Constructor `withCipherKey`, that onnly takes a private [key] used to
+  /// encrypt and decrypt payloads.
   /// END CANONICAL DOCSTRING
   static Future<RestChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
