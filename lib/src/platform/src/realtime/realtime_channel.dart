@@ -11,11 +11,11 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables messages to be published and subscribed to. Also enables historic
-/// messages to be retrieved and provides access to the
-/// [RealtimePresence]{@link RealtimePresence} object of a channel.
-/// END CANONICAL DOCSTRING
+/// messages to be retrieved and provides access to the [RealtimePresence]
+/// object of a channel.
+/// END EDITED CANONICAL DOCSTRING
 class RealtimeChannel extends PlatformObject {
   final Realtime _realtime;
 
@@ -27,23 +27,27 @@ class RealtimeChannel extends PlatformObject {
   /// Required by [RealtimePresence], should not be used in other cases
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [RealtimePresence]{@link RealtimePresence} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [RealtimePresence] object.
+  /// END EDITED CANONICAL DOCSTRING
   Realtime get realtime => _realtime;
 
   /// BEGIN LEGACY DOCSTRING
   /// Required by [RealtimePresence], should not be used in other cases
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The channel name.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   String get name => _channelName;
 
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [RealtimePresence] object.
+  /// END EDITED CANONICAL DOCSTRING
   RealtimePresence get presence => _presence;
 
   /// BEGIN LEGACY DOCSTRING
@@ -76,33 +80,14 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Retrieves a [PaginatedResult]{@link PaginatedResult} object, containing an
-  /// array of historical [Message]{@link Message} objects for the channel. If
-  /// the channel is configured to persist messages, then messages can be
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Retrieves a [PaginatedResult] object, containing an array of historical
+  /// [Message] objects for the channel using the specified [params].
+  ///
+  /// If the channel is configured to persist messages, then messages can be
   /// retrieved from history for up to 72 hours in the past. If not, messages
   /// can only be retrieved from history for up to two minutes in the past.
-  ///
-  /// [start] - The time from which messages are retrieved, specified as
-  /// milliseconds since the Unix epoch.
-  /// [end] - The time until messages are retrieved, specified as milliseconds
-  /// since the Unix epoch.
-  /// [direction] - The order for which messages are returned in. Valid values
-  /// are backwards which orders messages from most recent to oldest, or
-  /// forwards which orders messages from oldest to most recent. The default is
-  /// backwards.
-  /// [limit] - An upper limit on the number of messages returned. The default
-  /// is 100, and the maximum is 1000.
-  /// [untilAttach] - When true, ensures message history is up until the point
-  /// of the channel being attached. See
-  /// [continuous history](https://ably.com/docs/realtime/history#continuous-history)
-  /// for more info. Requires the direction to be backwards. If the channel is
-  /// not attached, or if direction is set to forwards, this option results in
-  /// an error.
-  ///
-  /// [PaginatedResult<message>] - 	A [PaginatedResult]{@link PaginatedResult}
-  /// object containing an array of [Message]{@link Message} objects.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<Message>> history([
     RealtimeHistoryParams? params,
   ]) async {
@@ -122,23 +107,13 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Publish a message to the channel. A callback may optionally be passed in
-  /// to this call to be notified of success or failure of the operation. When
-  /// publish is called with this client library, it won't attempt to implicitly
-  /// attach to the channel.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Publishes a [message] or list of [messages] to the channel, or a single
+  /// message with a given event [name] and [data] payload.
   ///
-  /// [Message] - A [Message]{@link Message} object.
-  /// END CANONICAL DOCSTRING
-
-  /// BEGIN CANONICAL DOCSTRING
-  /// Publishes an array of messages to the channel. A callback may optionally
-  /// be passed in to this call to be notified of success or failure of the
-  /// operation. When publish is called with this client library, it won't
-  /// attempt to implicitly attach to the channel.
-  ///
-  /// [messages] - An array of [Message]{@link Message} objects.
-  /// END CANONICAL DOCSTRING
+  /// When publish is called with this client library, it won't attempt to
+  /// implicitly attach to the channel.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> publish({
     Message? message,
     List<Message>? messages,
@@ -158,10 +133,10 @@ class RealtimeChannel extends PlatformObject {
   /// will hold reason for failure of attaching to channel in such cases
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An [ErrorInfo]{@link ErrorInfo} object describing the last error which
-  /// occurred on the channel, if any.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An [ErrorInfo] object describing the last error which occurred on the
+  /// channel, if any.
+  /// END EDITED CANONICAL DOCSTRING
   ErrorInfo? errorReason;
 
   /// BEGIN LEGACY DOCSTRING
@@ -170,9 +145,9 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An array of [ChannelMode]{@link ChannelMode} objects.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An array of [ChannelMode] objects.
+  /// END EDITED CANONICAL DOCSTRING
   List<ChannelMode>? modes;
 
   /// BEGIN LEGACY DOCSTRING
@@ -182,10 +157,10 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview)
   /// that configure the behavior of the channel.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Map<String, String>? params;
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
@@ -195,9 +170,9 @@ class RealtimeChannel extends PlatformObject {
   /// (see IDL for more details)
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [PushChannel]{@link PushChannel} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [PushChannel] object.
+  /// END EDITED CANONICAL DOCSTRING
   late PushChannel push;
 
   /// BEGIN LEGACY DOCSTRING
@@ -206,9 +181,9 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The current [ChannelState]{@link ChannelState} of the channel.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The current [ChannelState] of the channel.
+  /// END EDITED CANONICAL DOCSTRING
   ChannelState state;
 
   /// BEGIN LEGACY DOCSTRING
@@ -217,20 +192,17 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Attach to this channel ensuring the channel is created in the Ably system
   /// and all messages published on the channel are received by any channel
-  /// listeners registered using [subscribe()]{@link RealtimeChannel#subscribe}.
+  /// listeners registered using [RealtimeChannel.subscribe].
   /// Any resulting channel state change will be emitted to any listeners
-  /// registered using the [on()]{@link EventEmitter#on} or
-  /// [once()]{@link EventEmitter#once} methods. A callback may optionally be
-  /// passed in to this call to be notified of success or failure of the
-  /// operation. As a convenience, attach() is called implicitly if
-  /// [subscribe()]{@link RealtimeChannel#subscribe} for the channel is called,
-  /// or [enter()]{@link RealtimePresence#enter} or
-  /// [subscribe()]{@link RealtimePresence#subscribe} are called on the
-  /// [RealtimePresence]{@link RealtimePresence} object for this channel.
-  /// END CANONICAL DOCSTRING
+  /// registered using the [RealtimeChannel.on] stream. As a convenience,
+  /// `attach()` is called implicitly if [RealtimeChannel.subscribe] for the
+  /// channel is called, or [RealtimePresence.enter] or
+  /// [RealtimePresence.subscribe] are called on the [RealtimePresence] object
+  /// for this channel.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> attach() => invoke(PlatformMethod.attachRealtimeChannel, {
         TxTransportKeys.channelName: _channelName,
       });
@@ -241,14 +213,12 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Detach from this channel. Any resulting channel state change is emitted to
-  /// any listeners registered using the [on()]{@link EventEmitter#on} or
-  /// [once()]{@link EventEmitter#once} methods. A callback may optionally be
-  /// passed in to this call to be notified of success or failure of the
-  /// operation. Once all clients globally have detached from the channel, the
-  /// channel will be released in the Ably service within two minutes.
-  /// END CANONICAL DOCSTRING
+  /// any listeners registered using the [RealtimeChannel.on] stream. Once all
+  /// clients globally have detached from the channel, the channel will be
+  /// released in the Ably service within two minutes.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
         TxTransportKeys.channelName: _channelName,
       });
@@ -260,13 +230,9 @@ class RealtimeChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Sets the [ChannelOptions]{@link ChannelOptions} for the channel. An
-  /// optional callback may be provided to notify of the success or failure of
-  /// the operation.
-  ///
-  /// [options] - A [ChannelOptions]{@link ChannelOptions} object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Sets the [options] for the channel.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> setOptions(RealtimeChannelOptions options) =>
       invoke(PlatformMethod.setRealtimeChannelOptions, {
         TxTransportKeys.channelName: _channelName,
@@ -303,24 +269,11 @@ class RealtimeChannel extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// Registers a listener for messages with a given event name on this channel.
-  /// The caller supplies a listener function, which is called each time one or
-  /// more matching messages arrives on the channel. A callback may optionally
-  /// be passed in to this call to be notified of success or failure of the
-  /// channel [attach()]{@link RealtimeChannel#attach} operation.
+  /// Registers a listener for messages on this channel for an event [name] or
+  /// multiple event [names].
   ///
-  /// [String] - The event name.
-  /// [(Message)] - An event listener function.
-  /// END CANONICAL DOCSTRING
-
-  /// BEGIN CANONICAL DOCSTRING
-  /// Registers a listener for messages on this channel for multiple event name
-  /// values. A callback may optionally be passed in to this call to be notified
-  /// of success or failure of the channel
-  /// [attach()]{@link RealtimeChannel#attach} operation.
-  ///
-  /// [[String]] - An array of event names.
-  /// [(Message)] - An event listener function.
+  /// Returns a stream, which is called each time one or more matching messages
+  /// arrives on the channel.
   /// END CANONICAL DOCSTRING
   Stream<Message> subscribe({String? name, List<String>? names}) {
     final subscribedNames = {name, ...?names}.where((n) => n != null).toList();
