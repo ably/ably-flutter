@@ -8,11 +8,10 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TH1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// Contains state change information emitted by
-/// [RestChannel]{@link RestChannel} and
-/// [RealtimeChannel]{@link RealtimeChannel} objects.
-/// END CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// Contains state change information emitted by [RestChannel] and
+/// [RealtimeChannel] objects.
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class ChannelStateChange {
   /// BEGIN LEGACY DOCSTRING
@@ -21,9 +20,9 @@ class ChannelStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TH5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The event that triggered this [ChannelState]{@link ChannelState} change.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The event that triggered this [ChannelState] change.
+  /// END EDITED CANONICAL DOCSTRING
   final ChannelEvent event;
 
   /// BEGIN LEGACY DOCSTRING
@@ -32,9 +31,9 @@ class ChannelStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The new current [ChannelState]{@link ChannelState}.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The new current [ChannelState].
+  /// END EDITED CANONICAL DOCSTRING
   final ChannelState current;
 
   /// BEGIN LEGACY DOCSTRING
@@ -43,10 +42,10 @@ class ChannelStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TH2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The previous state. For the [UPDATE]{@link ChannelEvent#UPDATE} event,
-  /// this is equal to the current [ChannelState]{@link ChannelState}.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The previous state. For the [ChannelEvent.update] event, this is equal to
+  /// the current [ChannelState].
+  /// END EDITED CANONICAL DOCSTRING
   final ChannelState previous;
 
   /// BEGIN LEGACY DOCSTRING
@@ -59,21 +58,21 @@ class ChannelStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TH3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An [ErrorInfo]{@link ErrorInfo} object containing any information relating
-  /// to the transition.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An [ErrorInfo] object containing any information relating to the
+  /// transition.
+  /// END EDITED CANONICAL DOCSTRING
   final ErrorInfo? reason;
 
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TH4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Indicates whether message continuity on this channel is preserved, see
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether message continuity on this channel is preserved, see
   /// [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors)
   /// for more info.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final bool resumed;
 
   /// BEGIN LEGACY DOCSTRING
