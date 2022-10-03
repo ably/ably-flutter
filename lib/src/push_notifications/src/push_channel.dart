@@ -7,9 +7,9 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH7
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables devices to subscribe to push notifications for a channel.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 class PushChannel extends PlatformObject {
   final String _name;
 
@@ -46,9 +46,9 @@ class PushChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7a
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Subscribes the device to push notifications for the channel.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> subscribeDevice() => invoke(
       PlatformMethod.pushSubscribeDevice, {TxTransportKeys.channelName: _name});
 
@@ -58,9 +58,9 @@ class PushChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7c
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Unsubscribes the device from receiving push notifications for the channel.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> unsubscribeDevice() => invoke(
       PlatformMethod.pushUnsubscribeDevice,
       {TxTransportKeys.channelName: _name});
@@ -71,10 +71,10 @@ class PushChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Subscribes all devices associated with the current device's clientId to
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Subscribes all devices associated with the current device's `clientId` to
   /// push notifications for the channel.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> subscribeClient() => invoke(
       PlatformMethod.pushSubscribeClient, {TxTransportKeys.channelName: _name});
 
@@ -84,10 +84,10 @@ class PushChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Unsubscribes all devices associated with the current device's clientId
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Unsubscribes all devices associated with the current device's `clientId`
   /// from receiving push notifications for the channel.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> unsubscribeClient() => invoke(
       PlatformMethod.pushUnsubscribeClient,
       {TxTransportKeys.channelName: _name});
@@ -106,21 +106,17 @@ class PushChannel extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Retrieves all push subscriptions for the channel. Subscriptions can be
-  /// filtered using a params object. Returns a
-  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
-  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Retrieves all push subscriptions for the channel.
   ///
-  /// [params] - An object containing key-value pairs to filter subscriptions
-  /// by. Can contain clientId, deviceId or a combination of both if
-  /// concatFilters is set to true, and a limit on the number of subscriptions
-  /// returned, up to 1,000.
+  /// Subscriptions can be filtered using a [params] object containing key-value
+  /// pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a
+  /// combination of both if concatFilters is set to true, and a limit on the
+  /// number of subscriptions returned, up to 1,000.
   ///
-  /// [PaginatedResult<PushChannelSubscription>] - A
-  /// [PaginatedResult]{@link PaginatedResult} object containing an array of
-  /// [PushChannelSubscription]{@link PushChannelSubscription} objects.
-  /// END CANONICAL DOCSTRING
+  /// Returns a [PaginatedResult] object containing a list of
+  /// [PushChannelSubscription] objects.
+  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&
