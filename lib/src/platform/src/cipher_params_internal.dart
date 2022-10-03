@@ -17,11 +17,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// to the dart side.
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// Sets the properties to configure encryption for a
-/// [RestChannel]{@link RestChannel} or [RealtimeChannel]{@link RealtimeChannel}
-/// object.
-/// END CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// Sets the properties to configure encryption for a [RestChannel] or
+/// [RealtimeChannel] object.
+/// END EDITED CANONICAL DOCSTRING
 class CipherParamsInternal implements CipherParams {
   /// BEGIN LEGACY DOCSTRING
   /// Android only
@@ -34,9 +33,9 @@ class CipherParamsInternal implements CipherParams {
   /// Encryption key returned by platform implementation
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The private key used to encrypt and decrypt payloads.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Uint8List? key;
 
   /// BEGIN LEGACY DOCSTRING
@@ -44,10 +43,9 @@ class CipherParamsInternal implements CipherParams {
   /// Encryption algorithm returned by platform implementation
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The algorithm to use for encryption. Only AES is supported and is the
-  /// default value.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The algorithm to use for encryption. Only `AES` is supported.
+  /// END EDITED CANONICAL DOCSTRING
   String? algorithm;
 
   /// BEGIN LEGACY DOCSTRING
