@@ -9,15 +9,19 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// objects ([CipherParams]) for symmetric encryption.
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// Contains the properties required to configure the encryption of
-/// [Message]{@link Message} payloads.
-/// END CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// Contains the properties required to configure the encryption of [Message]
+/// payloads.
+/// END EDITED CANONICAL DOCSTRING
 class Crypto {
   /// BEGIN LEGACY DOCSTRING
   /// Default algorithm used of encryption
   /// Currently only AES is supported
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The algorithm to use for encryption. Only `aes` is supported.
+  /// END EDITED CANONICAL DOCSTRING
   static const defaultAlgorithm = 'aes';
 
   /// BEGIN LEGACY DOCSTRING
@@ -40,6 +44,10 @@ class Crypto {
   /// Default mode used of encryption
   /// Currently only CBC is supported
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The cipher mode. Only `cbc` is supported.
+  /// END EDITED CANONICAL DOCSTRING
   static const defaultMode = 'cbc';
 
   /// BEGIN LEGACY DOCSTRING
@@ -53,17 +61,10 @@ class Crypto {
   ///  function (KDF) such as PBKDF2.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Returns a [CipherParams]{@link CipherParams} object, using the default
-  /// values for any fields not supplied by the
-  /// [CipherParamOptions]{@link CipherParamOptions} object.
-  ///
-  /// [CipherParamOptions] - A [CipherParamOptions]{@link CipherParamOptions}
-  /// object.
-  ///
-  /// [CipherParams] - A [CipherParams]{@link CipherParams} object, using the
-  /// default values for any fields not supplied.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING - NEEDS DISCUSSION AND CLEARING UP
+  /// Returns a [CipherParams] object, using the private [key] used to encrypt
+  /// and decrypt payloads, and the default mode, key length and algorithm.
+  /// END EDITED CANONICAL DOCSTRING - NEEDS DISCUSSION AND CLEARING UP
   static Future<CipherParams> getDefaultParams({required dynamic key}) async {
     if (key is String) {
       ensureSupportedKeyLength(base64Decode(key));
@@ -107,17 +108,13 @@ class Crypto {
   /// this key with other clients, there is no way to decrypt the messages.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Generates a random key to be used in the encryption of the channel. If the
-  /// language cryptographic randomness primitives are blocking or async, a
-  /// callback is used. The callback returns a generated binary key.
-  ///
-  /// [keyLength] - The length of the key, in bits, to be generated. If not
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Generates and returns a Future with a random key as [Uint8List], to be
+  /// used in the encryption of the channel, using the provided
+  /// [keyLength] - the length of the key, in bits, to be generated. If not
   /// specified, this is equal to the default keyLength of the default
   /// algorithm: for AES this is 256 bits.
-  ///
-  /// [Binary] - The key as a binary, for example, a byte array.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   static Future<Uint8List> generateRandomKey({
     int keyLength = defaultKeyLengthInBits,
   }) =>
