@@ -8,9 +8,9 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TM1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains an individual message that is sent to, or received from, Ably.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class Message with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
@@ -19,9 +19,9 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A Unique ID assigned by Ably to this message.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? id;
 
   /// BEGIN LEGACY DOCSTRING
@@ -30,10 +30,9 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2f
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Timestamp of when the message was received by Ably, as milliseconds since
-  /// the Unix epoch.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Timestamp of when the message was received by Ably, as [DateTime].
+  /// END EDITED CANONICAL DOCSTRING
   final DateTime? timestamp;
 
   /// BEGIN LEGACY DOCSTRING
@@ -42,9 +41,9 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The client ID of the publisher of this message.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
@@ -53,21 +52,21 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2c
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The connection ID of the publisher of this message.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? connectionId;
 
   /// BEGIN LEGACY DOCSTRING
   /// Any transformation applied to the data for this message
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// This is typically empty, as all messages received from Ably are
   /// automatically decoded client-side using this value. However, if the
   /// message encoding cannot be processed, this attribute contains the
-  /// remaining transformations not applied to the data payload.
-  /// END CANONICAL DOCSTRING
+  /// remaining transformations not applied to the `data` payload.
+  /// END EDITED CANONICAL DOCSTRING
   final String? encoding;
 
   final MessageData<dynamic>? _data;
@@ -78,9 +77,9 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2d
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The message payload, if provided.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Object? get data => _data?.data;
 
   ///BEGIN LEGACY DOCSTRING
@@ -89,9 +88,9 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2g
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The event name.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? name;
 
   /// BEGIN LEGACY DOCSTRING
@@ -101,25 +100,19 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM2i
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A JSON object of arbitrary key-value pairs that may contain metadata,
-  /// and/or ancillary payloads. Valid payloads include [push]{@link Push},
-  /// [delta]{@link DeltaExtras}, [ref]{@link ReferenceExtras} and headers.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An object that may contain metadata, and/or ancillary payloads.
+  /// END EDITED CANONICAL DOCSTRING
   final MessageExtras? extras;
 
   /// BEGIN LEGACY DOCSTRING
   /// Creates a message instance with [name], [data] and [clientId]
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Construct a Message object with an event name, payload, and a unique
-  /// client ID.
-  ///
-  /// [name] - The event name.
-  /// [data] - 	The message payload.
-  /// [clientId] - The client ID of the publisher of this message.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Construct a Message object with an event [name], [data] payload, and a unique
+  /// [clientId].
+  /// END EDITED CANONICAL DOCSTRING
   Message({
     this.clientId,
     this.connectionId,
@@ -162,17 +155,13 @@ class Message with ObjectHash {
   ///  RSL6 and RLS6b as mentioned in TM3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A static factory method to create a Message object from a deserialized
-  /// Message-like object encoded using Ably's wire protocol.
-  ///
-  /// [JsonObject] - A Message-like deserialized object.
-  /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object. If you
-  /// have an encrypted channel, use this to allow the library to decrypt the
-  /// data.
-  ///
-  /// [Message] - A Message object.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A static factory method to create a [Message] object from a deserialized
+  /// Message-like object encoded using Ably's wire protocol, with a provided
+  /// Message-like deserialized [jsonObject] and optionally a [channelOptions]
+  /// object, which you can use to allow the library to decrypt the
+  /// data if you have an encrypted channel.
+  /// END EDITED CANONICAL DOCSTRING
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
@@ -197,16 +186,12 @@ class Message with ObjectHash {
   /// https://docs.ably.com/client-lib-development-guide/features/#TM3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A static factory method to create an array of Message objects from an
-  /// array of deserialized Message-like object encoded using Ably's wire
-  /// protocol.
-  ///
-  /// [JsonArray] - An array of Message-like deserialized objects.
-  /// [ChannelOptions] - A [ChannelOptions]{@link ChannelOptions} object. If you
-  /// have an encrypted channel, use this to allow the library to decrypt the
-  /// data.
-  /// END CANONICAL DOCSTRING
+  /// [jsonArray] of deserialized Message-like object encoded using Ably's wire
+  /// protocol, and optionally a [channelOptions] object, which you can use to
+  /// allow the library to decrypt the data if you have an encrypted channel.
+  /// END EDITED CANONICAL DOCSTRING
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,
