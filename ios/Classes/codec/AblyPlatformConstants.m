@@ -36,6 +36,7 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_realtimeTime= @"realtimeTime";
 NSString *const AblyPlatformMethod_restTime= @"restTime";
+NSString *const AblyPlatformMethod_getRealtimeConnectionRecoveryKey= @"getRealtimeConnectionRecoveryKey";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
 NSString *const AblyPlatformMethod_pushReset= @"pushReset";

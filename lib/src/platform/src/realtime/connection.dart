@@ -49,14 +49,10 @@ class Connection extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RTN9
   String? key;
 
-  /// RTN16b) Connection#recoveryKey is an attribute composed of the
-  /// connection key and latest serial received on the connection
-  String? recoveryKey;
-
-  /// The serial number of the last message to be received on this connection.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTN10
-  int? serial;
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTN16g
+  /// https://docs.ably.com/client-lib-development-guide/features/#RTN16h
+  Future<String?> getRecoveryKey() async =>
+      invoke(PlatformMethod.getRealtimeConnectionRecoveryKey);
 
   /// current state of this connection
   ///

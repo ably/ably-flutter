@@ -279,6 +279,15 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
     result(handle);
 };
 
+static const FlutterHandler _getRealtimeConnectionRecoveryKey = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const ablyMessage = call.arguments;
+    
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+
+    NSString *recoveryKey = [[instanceStore realtimeFrom:ablyMessage.handle].connection getRecoveryKey];
+    result(recoveryKey);
+};
+
 static const FlutterHandler _connectRealtime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
     
@@ -702,6 +711,7 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         AblyPlatformMethod_createRealtime: _createRealtime,
         AblyPlatformMethod_setRealtimeChannelOptions: _setRealtimeChannelOptions,
         AblyPlatformMethod_connectRealtime: _connectRealtime,
+        AblyPlatformMethod_getRealtimeConnectionRecoveryKey: _getRealtimeConnectionRecoveryKey,
         AblyPlatformMethod_closeRealtime: _closeRealtime,
         AblyPlatformMethod_attachRealtimeChannel: _attachRealtimeChannel,
         AblyPlatformMethod_detachRealtimeChannel: _detachRealtimeChannel,
