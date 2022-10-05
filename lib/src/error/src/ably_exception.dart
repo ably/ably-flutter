@@ -31,7 +31,7 @@ class AblyException implements Exception {
 
   @override
   String toString() {
-    if(errorInfo != null){
+    if (errorInfo != null) {
       return 'AblyException ($errorInfo)';
     }
 
