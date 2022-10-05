@@ -7,20 +7,19 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TS7
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains a breakdown of summary stats data for traffic over various
 /// transport types.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 abstract class StatsMessageTraffic {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes realtime, rest and webhook messages).
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing a
-  /// breakdown of usage by message type for all messages (includes realtime,
-  /// rest and webhook messages).
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for all messages (includes realtime, rest and webhook messages).
+  /// END EDITED CANONICAL DOCSTRING
   StatsMessageTypes? all;
 
   /// BEGIN LEGACY DOCSTRING
@@ -28,11 +27,10 @@ abstract class StatsMessageTraffic {
   /// such as WebSockets.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing a
-  /// breakdown of usage by message type for messages transferred over a
-  /// realtime transport such as WebSocket.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages transferred over a realtime transport such as WebSocket.
+  /// END EDITED CANONICAL DOCSTRING
   StatsMessageTypes? realtime;
 
   /// BEGIN LEGACY DOCSTRING
@@ -40,9 +38,8 @@ abstract class StatsMessageTraffic {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing a
-  /// breakdown of usage by message type for messages transferred over a rest
-  /// transport such as WebSocket.
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages transferred over a rest transport such as WebSocket.
   /// END CANONICAL DOCSTRING
   StatsMessageTypes? rest;
 
@@ -51,8 +48,8 @@ abstract class StatsMessageTraffic {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing a
-  /// breakdown of usage by message type for messages delivered using webhooks.
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages delivered using webhooks.
   /// END CANONICAL DOCSTRING
   StatsMessageTypes? webhook;
 }
