@@ -7,9 +7,9 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#PCP1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains the details of the push registration of a device.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class DevicePushDetails {
   /// BEGIN LEGACY DOCSTRING
@@ -19,10 +19,10 @@ class DevicePushDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A JSON object of key-value pairs that contains of the push transport and
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [Map] object of key-value pairs that consists of the push transport and
   /// address.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final Map<String, String>? recipient;
 
   /// BEGIN LEGACY DOCSTRING
@@ -31,9 +31,9 @@ class DevicePushDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The current state of the push registration.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final DevicePushState? state;
 
   /// BEGIN LEGACY DOCSTRING
@@ -42,10 +42,10 @@ class DevicePushDetails {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCP2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An [ErrorInfo]{@link ErrorInfo} object describing the most recent error
-  /// when the state is Failing or Failed.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An [ErrorInfo] object describing the most recent error when the `state` is
+  /// `Failing` or `Failed`.
+  /// END EDITED CANONICAL DOCSTRING
   final ErrorInfo? errorReason;
 
   /// BEGIN LEGACY DOCSTRING
