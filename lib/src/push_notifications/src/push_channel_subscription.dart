@@ -6,10 +6,10 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#PCS1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains the subscriptions of a device, or a group of devices sharing the
-/// same clientId, has to a channel in order to receive push notifications.
-/// END CANONICAL DOCSTRING
+/// same `clientId`, has to a channel in order to receive push notifications.
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class PushChannelSubscription {
   /// BEGIN LEGACY DOCSTRING
@@ -18,9 +18,9 @@ class PushChannelSubscription {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The channel the push notification subscription is for.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String channel;
 
   /// BEGIN LEGACY DOCSTRING
@@ -30,9 +30,9 @@ class PushChannelSubscription {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The unique ID of the device.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? deviceId;
 
   /// BEGIN LEGACY DOCSTRING
@@ -41,9 +41,9 @@ class PushChannelSubscription {
   /// https://docs.ably.com/client-lib-development-guide/features/#PCS3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The ID of the client the device, or devices are associated to.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
