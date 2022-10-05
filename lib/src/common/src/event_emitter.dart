@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:ably_flutter/ably_flutter.dart';
+
 /// BEGIN LEGACY DOCSTRING
 /// Interface implemented by Ably classes that can emit events,
 /// offering the capability to create listeners for those events.
@@ -11,13 +13,14 @@ import 'dart:async';
 /// [Stream] which can be subscribed for, and that subscription can be cancelled
 /// using [StreamSubscription.cancel] API
 /// END LEGACY DOCSTRING
-
+///
 /// BEGIN CANONICAL DOCSTRING
 /// A generic interface for event registration and delivery used in a number of
 /// the types in the Realtime client library. For example, the
-/// [Connection]{@link} object emits events for connection state using the
+/// [Connection] object emits events for connection state using the
 /// EventEmitter pattern.
-/// END CANONICAL DOCSTRING
+/// END CANONICAL DOCSTRING - NOTE: This class is not actually used anywhere.
+/// Dead code.
 abstract class EventEmitter<E, G> {
   /// BEGIN LEGACY DOCSTRING
   /// Create a listener, with which registrations may be made.
