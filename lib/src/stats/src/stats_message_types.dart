@@ -7,28 +7,28 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TS6
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains a breakdown of summary stats data for different
 /// (channel vs presence) message types.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 abstract class StatsMessageTypes {
   /// BEGIN LEGACY DOCSTRING
   /// All messages count (includes both presence & messages).
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageCount]{@link Stats.MessageCount} object containing the
-  /// count and byte value of messages and presence messages.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsMessageCount]object containing the count and byte value of
+  /// messages and presence messages.
+  /// END EDITED CANONICAL DOCSTRING
   StatsMessageCount? all;
 
   /// BEGIN LEGACY DOCSTRING
   /// Count of channel messages.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageCount]{@link Stats.MessageCount} object containing the
-  /// count and byte value of messages.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsMessageCount] object containing the count and byte value of
+  /// messages.
   /// END CANONICAL DOCSTRING
   StatsMessageCount? messages;
 
@@ -36,9 +36,9 @@ abstract class StatsMessageTypes {
   /// Count of presence messages.
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.MessageCount]{@link Stats.MessageCount} object containing the
-  /// count and byte value of presence messages.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsMessageCount] object containing the count and byte value of
+  /// presence messages.
+  /// END EDITED CANONICAL DOCSTRING
   StatsMessageCount? presence;
 }
