@@ -8,20 +8,19 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TA1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
-/// Contains [ConnectionState]{@link} change information emitted by the
-/// [Connection]{@link} object.
-/// END CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
+/// Contains [ConnectionState] change information emitted by the [Connection]
+/// object.
+/// END EDITED CANONICAL DOCSTRING
 @immutable
 class ConnectionStateChange {
   /// BEGIN LEGACY DOCSTRING
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// The event that triggered this [ConnectionState]{@link ConnectionState}
-  /// change.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// The event that triggered this [ConnectionState] change.
+  /// END EDITED CANONICAL DOCSTRING
   final ConnectionEvent event;
 
   /// BEGIN LEGACY DOCSTRING
@@ -31,7 +30,7 @@ class ConnectionStateChange {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// The new [ConnectionState]{@link ConnectionState}.
+  /// The new [ConnectionState].
   /// END CANONICAL DOCSTRING
   final ConnectionState current;
 
@@ -42,9 +41,8 @@ class ConnectionStateChange {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// The previous [ConnectionState]{@link ConnectionState}. For the
-  /// [UPDATE]{@link ConnectionEvent#UPDATE} event, this is equal to the current
-  /// [ConnectionState]{@link ConnectionState}.
+  /// The previous [ConnectionState]. For the [ConnectionEvent.update] event,
+  /// this is equal to the current [ConnectionState].
   /// END CANONICAL DOCSTRING
   final ConnectionState previous;
 
@@ -58,10 +56,10 @@ class ConnectionStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TA3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// An [ErrorInfo]{@link ErrorInfo} object containing any information relating
-  /// to the transition.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// An [ErrorInfo object containing any information relating to the
+  /// transition.
+  /// END EDITED CANONICAL DOCSTRING
   final ErrorInfo? reason;
 
   /// BEGIN LEGACY DOCSTRING
@@ -72,10 +70,10 @@ class ConnectionStateChange {
   /// https://docs.ably.com/client-lib-development-guide/features/#TA2
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Duration in milliseconds, after which the client retries a connection
   /// where applicable.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   final int? retryIn;
 
   /// BEGIN LEGACY DOCSTRING
