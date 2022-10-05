@@ -9,12 +9,12 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// relative queries available.
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains a page of results for message or presence history, stats, or REST
-/// presence requests. A PaginatedResult response from a REST API paginated
+/// presence requests. A `PaginatedResult` response from a REST API paginated
 /// query is also accompanied by metadata that indicates the relative queries
-/// available to the PaginatedResult object.
-/// END CANONICAL DOCSTRING
+/// available to the `PaginatedResult` object.
+/// END EDITED CANONICAL DOCSTRING
 class PaginatedResult<T> extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// stores page handle created by platform APIs
@@ -37,11 +37,10 @@ class PaginatedResult<T> extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#TG3
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Contains the current page of results; for example, an array of
-  /// [Message]{@link Message} or [PresenceMessage]{@link PresenceMessage}
-  /// objects for a channel history request.
-  /// END CANONICAL DOCSTRING
+  /// [Message] or [PresenceMessage] objects for a channel history request.
+  /// END EDITED CANONICAL DOCSTRING
   List<T> get items => _items;
 
   final bool _hasNext;
@@ -77,13 +76,13 @@ class PaginatedResult<T> extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#TG4
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Returns a new PaginatedResult loaded with the next page of results. If
-  /// there are no further pages, then null is returned.
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Returns a new [PaginatedResult], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, loaded with the
+  /// next page of results.
   ///
-  /// [PaginatedResult<T>] - A page of results for message and presence history,
-  /// stats, and REST presence requests.
-  /// END CANONICAL DOCSTRING
+  /// If there are no further pages, then null is returned.
+  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<T>> next() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.nextPage);
@@ -99,12 +98,11 @@ class PaginatedResult<T> extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#TG5
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Returns a new PaginatedResult for the first page of results.
-  ///
-  /// [PaginatedResult<T>] - A page of results for message and presence history,
-  /// stats, and REST presence requests.
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Returns a new [PaginatedResult], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, for the first
+  /// page of results.
+  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<T>> first() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.firstPage);
@@ -119,12 +117,10 @@ class PaginatedResult<T> extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#TG6
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Returns true if there are more pages available by calling next and return
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether there are more pages available by calling next. Return
   /// false if this page is the last page available.
-  ///
-  /// [Bool] - Whether or not there are more pages of results.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   bool hasNext() => _hasNext;
 
   /// BEGIN LEGACY DOCSTRING
@@ -133,11 +129,9 @@ class PaginatedResult<T> extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#TG7
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// Returns true if this page is the last page and returns false if there are
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Whether this page is the last page. Returns false if there are
   /// more pages available by calling next available.
-  ///
-  /// [Bool] - Whether or not this is the last page of results.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   bool isLast() => !_hasNext;
 }
