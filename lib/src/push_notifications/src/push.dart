@@ -9,10 +9,10 @@ import 'package:meta/meta.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables a device to be registered and deregistered from receiving push
 /// notifications.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 class Push extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// An instance to access activation events related to push, such as device
@@ -65,14 +65,11 @@ class Push extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2a
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Activates the device for push notifications with FCM or APNS, obtaining a
   /// unique identifier from them. Subsequently registers the device with Ably
-  /// and stores the deviceIdentityToken in local storage.
-  ///
-  /// [ErrorInfo] - Describes why the activation was unsuccessful as an
-  /// [ErrorInfo]{@link ErrorInfo} object.
-  /// END CANONICAL DOCSTRING
+  /// and stores the `deviceIdentityToken` in local storage.
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
   /// BEGIN LEGACY DOCSTRING
@@ -161,13 +158,10 @@ class Push extends PlatformObject {
   /// https://docs.ably.com/client-lib-development-guide/features/#RSH2b
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Deactivates the device from receiving push notifications with Ably and FCM
   /// or APNS.
-  ///
-  /// [ErrorInfo] - Describes why the deactivation was unsuccessful as an
-  /// [ErrorInfo]{@link ErrorInfo} object.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   /// BEGIN LEGACY DOCSTRING
