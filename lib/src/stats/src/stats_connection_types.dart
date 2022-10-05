@@ -7,19 +7,19 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// https://docs.ably.com/client-lib-development-guide/features/#TS4
 /// END LEGACY DOCSTRING
 
-/// BEGIN CANONICAL DOCSTRING
+/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains a breakdown of summary stats data for different (TLS vs non-TLS)
 /// connection types.
-/// END CANONICAL DOCSTRING
+/// END EDITED CANONICAL DOCSTRING
 abstract class StatsConnectionTypes {
   /// BEGIN LEGACY DOCSTRING
   /// All connection count (includes both TLS & non-TLS connections).
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing a
-  /// breakdown of usage by scope over TLS connections (both TLS and non-TLS).
-  /// END CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over TLS connections (both TLS and non-TLS).
+  /// END EDITED CANONICAL DOCSTRING
   StatsResourceCount? all;
 
   /// BEGIN LEGACY DOCSTRING
@@ -27,8 +27,8 @@ abstract class StatsConnectionTypes {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing a
-  /// breakdown of usage by scope over non-TLS connections.
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over non-TLS connections.
   /// END CANONICAL DOCSTRING
   StatsResourceCount? plain;
 
@@ -37,8 +37,8 @@ abstract class StatsConnectionTypes {
   /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
-  /// A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing a
-  /// breakdown of usage by scope over TLS connections.
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over TLS connections.
   /// END CANONICAL DOCSTRING
   StatsResourceCount? tls;
 }
