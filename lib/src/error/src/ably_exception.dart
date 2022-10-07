@@ -31,14 +31,20 @@ class AblyException implements Exception {
 
   @override
   String toString() {
+    final buffer = StringBuffer('AblyException:');
+
     if (errorInfo != null) {
-      return 'AblyException: ($errorInfo)';
+      buffer.write(' errorInfo=($errorInfo)');
     }
 
-    if (message == null) {
-      return 'AblyException: (${(code == null) ? "" : '$code '})';
+    if (message != null) {
+      buffer.write(' message=($message)');
     }
 
-    return 'AblyException: $message (${(code == null) ? "" : '$code '})';
+    if (code != null) {
+      buffer.write(' code=($code)');
+    }
+
+    return buffer.toString();
   }
 }
