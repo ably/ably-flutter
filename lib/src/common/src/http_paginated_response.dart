@@ -93,6 +93,14 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   /// If there are no further pages, then null is returned.
   /// https://docs.ably.com/client-lib-development-guide/features/#HP2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, loaded with the
+  /// next page of results.
+  ///
+  /// If there are no further pages, then null is returned.
+  /// END EDITED CANONICAL DOCSTRING
   @override
   Future<HttpPaginatedResponse<T>> next();
 
@@ -102,6 +110,12 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   /// If there are no further pages, then null is returned.
   /// https://docs.ably.com/client-lib-development-guide/features/#HP2
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, for the first
+  /// page of results.
+  /// END EDITED CANONICAL DOCSTRING
   @override
   Future<HttpPaginatedResponse<T>> first();
 }
