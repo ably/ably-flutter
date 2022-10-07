@@ -32,11 +32,11 @@ class AblyException implements Exception {
   @override
   String toString() {
     if (errorInfo != null) {
-      return 'AblyException ($errorInfo)';
+      return 'AblyException: ($errorInfo)';
     }
 
     if (message == null) {
-      return 'AblyException (${(code == null) ? "" : '$code '})';
+      return 'AblyException: (${(code == null) ? "" : '$code '})';
     }
 
     return 'AblyException: $message (${(code == null) ? "" : '$code '})';
