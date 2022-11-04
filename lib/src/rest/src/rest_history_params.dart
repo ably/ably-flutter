@@ -1,8 +1,14 @@
+import 'package:ably_flutter/ably_flutter.dart';
+
 /// BEGIN LEGACY DOCSTRING
 /// Params for rest history
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [RestChannel] history.
+/// END EDITED CANONICAL DOCSTRINGS
 class RestHistoryParams {
   /// BEGIN LEGACY DOCSTRING
   /// [start] must be equal to or less than end and is unaffected

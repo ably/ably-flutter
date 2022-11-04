@@ -6,6 +6,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTP11c
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [RealtimePresence] members.
+/// END EDITED CANONICAL DOCSTRINGS
 @immutable
 class RealtimePresenceParams {
   /// BEGIN LEGACY DOCSTRING

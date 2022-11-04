@@ -1,3 +1,4 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
 /// BEGIN LEGACY DOCSTRING
@@ -5,6 +6,10 @@ import 'package:meta/meta.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [RealtimeChannel] history.
+/// END EDITED CANONICAL DOCSTRINGS
 @immutable
 class RealtimeHistoryParams {
   /// BEGIN LEGACY DOCSTRING

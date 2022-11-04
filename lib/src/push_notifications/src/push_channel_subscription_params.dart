@@ -6,6 +6,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// See [PushChannelSubscriptions.list], [PushChannelSubscriptions.removeWhere]
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [PushChannel] subscriptions.
+/// END EDITED CANONICAL DOCSTRINGS
 abstract class PushChannelSubscriptionParams {
   /// BEGIN LEGACY DOCSTRING
   /// filter by channel

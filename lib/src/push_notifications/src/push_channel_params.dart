@@ -5,6 +5,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [PushChannelSubscriptions] channels.
+/// END EDITED CANONICAL DOCSTRINGS
 abstract class PushChannelsParams {
   /// BEGIN LEGACY DOCSTRING
   /// limit results for each page

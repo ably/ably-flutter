@@ -6,6 +6,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// see: [PushDeviceRegistrations.list], [PushDeviceRegistrations.removeWhere]
 /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [PushDeviceRegistrations] devices.
+/// END EDITED CANONICAL DOCSTRINGS
 abstract class DeviceRegistrationParams {
   /// BEGIN LEGACY DOCSTRING
   /// filter by client id

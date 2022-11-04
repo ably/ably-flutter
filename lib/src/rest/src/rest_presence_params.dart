@@ -1,8 +1,14 @@
+import 'package:ably_flutter/ably_flutter.dart';
+
 /// BEGIN LEGACY DOCSTRING
 /// Params used as a filter for querying presence on a channel
 ///
 /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED CANONICAL DOCSTRINGS
+/// Contains properties used to filter [RestPresence] members.
+/// END EDITED CANONICAL DOCSTRINGS
 class RestPresenceParams {
   /// BEGIN LEGACY DOCSTRING
   /// number of records to fetch per page
