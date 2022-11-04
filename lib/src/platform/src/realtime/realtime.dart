@@ -63,7 +63,6 @@ class Realtime extends PlatformObject {
     _realtimeInstances[handle] = this;
 
     if (io.Platform.isAndroid && options.autoConnect) {
-      /// BEGIN LEGACY DOCSTRING
       // On Android, clientOptions.autoConnect is set to `false` to prevent
       // the authCallback being called before we get the realtime handle.
       // If this happens, we won't be able to identify which realtime client
@@ -71,7 +70,6 @@ class Realtime extends PlatformObject {
       // to false, and call connect immediately once we get the handle.
       // This is also a specific case where it's required to pass the handle
       // value from external source
-      /// END LEGACY DOCSTRING
       await invoke<void>(
         PlatformMethod.connectRealtime,
         null,
@@ -81,9 +79,7 @@ class Realtime extends PlatformObject {
     return handle;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   // The _connection instance keeps a reference to this platform object.
-  /// END LEGACY DOCSTRING
   late final Connection _connection;
 
   /// BEGIN LEGACY DOCSTRING
