@@ -9,5 +9,9 @@ abstract class PushChannelsParams {
   /// BEGIN LEGACY DOCSTRING
   /// limit results for each page
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A limit on the number of channels returned, up to 1,000.
+  /// END EDITED CANONICAL DOCSTRING
   int? limit;
 }
