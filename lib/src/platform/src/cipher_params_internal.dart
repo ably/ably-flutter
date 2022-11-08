@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ably_flutter/ably_flutter.dart';
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// The internal (non-public) representation of CipherParams.
 ///
 /// On Android, most fields are either private or package-private, and cannot
@@ -16,39 +17,30 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// needing to store instances on the Android side and pass references/handles
 /// to the dart side.
 /// END LEGACY DOCSTRING
-
-/// BEGIN EDITED CANONICAL DOCSTRING
-/// Sets the properties to configure encryption for a [RestChannel] or
-/// [RealtimeChannel] object.
-/// END EDITED CANONICAL DOCSTRING
 class CipherParamsInternal implements CipherParams {
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Android only
   /// Handle value read from platform implementation
   /// END LEGACY DOCSTRING
   int? androidHandle;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// iOS only
   /// Encryption key returned by platform implementation
   /// END LEGACY DOCSTRING
-
-  /// BEGIN EDITED CANONICAL DOCSTRING
-  /// The private key used to encrypt and decrypt payloads.
-  /// END EDITED CANONICAL DOCSTRING
   Uint8List? key;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// iOS only
   /// Encryption algorithm returned by platform implementation
   /// END LEGACY DOCSTRING
-
-  /// BEGIN EDITED CANONICAL DOCSTRING
-  /// The algorithm to use for encryption. Only `AES` is supported.
-  /// END EDITED CANONICAL DOCSTRING
   String? algorithm;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Create a Dart side representation of CipherParams for iOS devices
   /// END LEGACY DOCSTRING
   CipherParamsInternal.forIOS({
@@ -70,6 +62,7 @@ class CipherParamsInternal implements CipherParams {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Create a Dart side representation of CipherParams for Android devices
   /// END LEGACY DOCSTRING
   CipherParamsInternal.forAndroid({
@@ -88,6 +81,7 @@ class CipherParamsInternal implements CipherParams {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Explicitly cast the [CipherParams] to [CipherParamsInternal] so
   /// it's possible to access the internal implementation details
   ///
