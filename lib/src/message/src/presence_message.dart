@@ -117,6 +117,11 @@ class PresenceMessage with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// instantiates presence message with
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// @nodoc
+  /// Constructs a [PresenceMessage] object.
+  /// END EDITED DOCSTRING
   PresenceMessage({
     this.action,
     this.clientId,
@@ -158,6 +163,11 @@ class PresenceMessage with ObjectHash {
   /// TODO(tiholic): decoding and decryption is not implemented as per
   ///  RSL6 and RLS6b as mentioned in TP4
   /// END LEGACY DOCSTRING
+
+  // https://docs.ably.com/client-lib-development-guide/features/#TP4
+  //
+  // TODO(tiholic): decoding and decryption is not implemented as per
+  //  RSL6 and RLS6b as mentioned in TP4
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Decodes and decrypts a deserialized PresenceMessage-like [jsonObject]
