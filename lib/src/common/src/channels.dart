@@ -16,6 +16,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   final _channels = <String, ChannelType>{};
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// creates a channel with provided name and options
   ///
   /// This is a private method to be overridden by implementation classes
@@ -52,6 +53,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   bool exists(String name) => _channels[name] != null;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Same as [get].
   /// END LEGACY DOCSTRING
   ChannelType operator [](String name) => get(name);
@@ -79,6 +81,7 @@ abstract class Channels<ChannelType> extends Iterable<ChannelType> {
 }
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// Iterator class for [Channels.iterator]
 /// END LEGACY DOCSTRING
 class _ChannelIterator<T> implements Iterator<T> {
