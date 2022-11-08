@@ -106,6 +106,7 @@ class TokenParams {
   final int? ttl;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates a [TokenParams] with provided values
   /// END LEGACY DOCSTRING
   const TokenParams({
@@ -117,6 +118,7 @@ class TokenParams {
   });
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// converts to a map of objects
   /// END LEGACY DOCSTRING
   Map<String, dynamic> toMap() {
