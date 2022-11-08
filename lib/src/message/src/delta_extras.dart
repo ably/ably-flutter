@@ -33,6 +33,7 @@ class DeltaExtras with ObjectHash {
   final String? format;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// create instance from a map
   /// END LEGACY DOCSTRING
   @protected
