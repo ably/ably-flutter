@@ -80,6 +80,7 @@ class TokenDetails {
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates a [TokenDetails] with provided values
   /// END LEGACY DOCSTRING
   const TokenDetails(
