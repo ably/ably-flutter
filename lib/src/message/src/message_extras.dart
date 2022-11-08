@@ -7,37 +7,68 @@ import 'package:meta/meta.dart';
 /// BEGIN LEGACY DOCSTRING
 /// Handles supported message extras types, their encoding and decoding
 /// END LEGACY DOCSTRING
+
+/// BEGIN EDITED DOCSTRING
+/// Handles supported message extras types, their encoding and decoding
+/// END EDITED DOCSTRING
 @immutable
 class MessageExtras with ObjectHash {
   /// BEGIN LEGACY DOCSTRING
   /// json-encodable map of extras
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// json-encodable map of extras
+  /// END EDITED DOCSTRING
   final Map<String, dynamic>? map;
 
   /// BEGIN LEGACY DOCSTRING
   /// configuration for delta compression extension
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// @nodoc
+  /// Configuration for delta compression extension
+  /// END EDITED DOCSTRING
   final DeltaExtras? _delta;
 
   /// BEGIN LEGACY DOCSTRING
   /// delta configuration received from channel message
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// A getter for the [_delta] configuration received from channel message
+  /// END EDITED DOCSTRING
   DeltaExtras? get delta => _delta;
 
   /// BEGIN LEGACY DOCSTRING
   /// Creates an instance from given extras map
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// Constructs an instance from given extras [map]
+  /// END EDITED DOCSTRING
   const MessageExtras(this.map) : _delta = null;
 
   /// BEGIN LEGACY DOCSTRING
   /// Creates an instance from given extras map and an instance of DeltaExtras
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// Constructs an instance from given extras map and an instance of
+  /// [DeltaExtras]
+  /// END EDITED DOCSTRING
   const MessageExtras._withDelta(this.map, this._delta);
 
   /// BEGIN LEGACY DOCSTRING
   /// initializes [MessageExtras] with given value and validates
   /// the data type, runtime
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// A static factory method that initializes [MessageExtras] with given
+  /// [extrasMap] and validates the data type.
+  /// END EDITED DOCSTRING
   static MessageExtras? fromMap(Map<String, dynamic>? extrasMap) {
     if (extrasMap == null) return null;
     // In some cases, extrasMap may not be a mutable map
