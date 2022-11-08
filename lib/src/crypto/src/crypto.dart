@@ -25,17 +25,20 @@ class Crypto {
   static const defaultAlgorithm = 'aes';
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Default length of the key in bits
   /// Equals to [keyLength256bits]
   /// END LEGACY DOCSTRING
   static const defaultKeyLengthInBits = keyLength256bits;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Length of 256-bit key
   /// END LEGACY DOCSTRING
   static const keyLength256bits = 256;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Length of 128-bit key
   /// END LEGACY DOCSTRING
   static const keyLength128bits = 128;
@@ -86,6 +89,7 @@ class Crypto {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Validates the length of provided [key]
   /// Throws [AblyException] if key length is different than 128 or 256 bits
   /// END LEGACY DOCSTRING
