@@ -171,6 +171,7 @@ abstract class AuthOptions {
 //  see: https://docs.ably.com/client-lib-development-guide/features/#AO2h
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Initializes an instance without any defaults
   /// END LEGACY DOCSTRING
   AuthOptions({
@@ -191,9 +192,10 @@ abstract class AuthOptions {
   }
 
   /// BEGIN LEGACY DOCSTRING
-  /// Convenience constructor, to create an AuthOptions based
+  /// @nodoc
+  /// Convenience constructor used to create an AuthOptions object based
   /// on the key string obtained from the application dashboard.
-  /// param [key]: the full key string as obtained from the dashboard
+  /// param [key] - the full key string as obtained from the dashboard
   /// END LEGACY DOCSTRING
   @Deprecated("Use AuthOptions constructor with named 'key' parameter instead")
   AuthOptions.fromKey(String key) {
@@ -206,6 +208,7 @@ abstract class AuthOptions {
 }
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// Function-type alias implemented by a function that provides either tokens,
 /// or signed token requests, in response to a request with given token params.
 ///
