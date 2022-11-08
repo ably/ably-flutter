@@ -109,6 +109,10 @@ class Realtime extends PlatformObject {
   /// [ClientOptions] indicating authentication and other settings for this
   /// instance to interact with ably service
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// A [ClientOptions] object used to configure the client connection to Ably.
+  /// END EDITED CANONICAL DOCSTRING
   late ClientOptions options;
 
   /// BEGIN LEGACY DOCSTRING
@@ -257,6 +261,7 @@ class Realtime extends PlatformObject {
 Map<int?, Realtime> _realtimeInstances = {};
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// Returns readonly copy of instances of all [Realtime] clients created.
 /// END LEGACY DOCSTRING
 Map<int?, Realtime> get realtimeInstances =>
