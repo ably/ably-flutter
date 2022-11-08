@@ -418,6 +418,7 @@ class ClientOptions extends AuthOptions {
   int channelRetryTimeout = 15000;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Initializes an instance with defaults
   /// END LEGACY DOCSTRING
   ClientOptions({
@@ -469,6 +470,7 @@ class ClientOptions extends AuthOptions {
           useTokenAuth: useTokenAuth,
         ) {
     /// BEGIN LEGACY DOCSTRING
+    /// @nodoc
     /// These default value assignments are only required until
     /// [ClientOptions.fromKey] is removed, because then defaults can be set
     /// directly in the constructor invocation
@@ -492,6 +494,7 @@ class ClientOptions extends AuthOptions {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// initializes [ClientOptions] with a key and log level set to info
   ///
   /// See [AuthOptions.fromKey] for more details
