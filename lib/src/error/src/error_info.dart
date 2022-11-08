@@ -74,6 +74,7 @@ class ErrorInfo {
   final String? requestId;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates a [ErrorInfo] with provided values
   /// END LEGACY DOCSTRING
   ErrorInfo({
