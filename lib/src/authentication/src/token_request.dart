@@ -113,6 +113,7 @@ class TokenRequest {
   final int? ttl;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates a [TokenRequest] with provided values
   /// END LEGACY DOCSTRING
   const TokenRequest({
@@ -129,7 +130,7 @@ class TokenRequest {
   /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
   /// END LEGACY DOCSTRING
 
-  /// BEGIN CANONICAL DOCSTRING
+  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A static factory method to create a [TokenRequest] object from a
   /// deserialized `TokenRequest`-like object or a JSON stringified
   /// `TokenRequest`
@@ -143,7 +144,7 @@ class TokenRequest {
   /// By using the `fromMap()` method when constructing a `TokenRequest` object,
   /// Ably ensures that all fields are consistently serialized and deserialized
   /// across platforms.
-  /// END CANONICAL DOCSTRING
+  /// END EDITED CANONICAL DOCSTRING
   TokenRequest.fromMap(Map<String, dynamic> map)
       : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,
