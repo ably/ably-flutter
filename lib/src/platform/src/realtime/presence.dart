@@ -225,7 +225,7 @@ class RealtimePresence extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
-  /// Returns a stream that emmits a [presenceMessage]  each time a matching
+  /// Returns a stream that emmits a [PresenceMessage]  each time a matching
   /// given [action], or an action within an array of [actions], is received
   /// on the channel, such as a new member entering the presence set.
   /// END EDITED CANONICAL DOCSTRING
