@@ -4,6 +4,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// A representation of a Platform side instance (Android, iOS).
 /// END LEGACY DOCSTRING
 abstract class PlatformObject {
@@ -12,6 +13,7 @@ abstract class PlatformObject {
   int? _handleValue; // Only for logging. Otherwise use _handle instead.
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// immediately instantiates an object on platform side by calling
   /// [createPlatformInstance] if [fetchHandle] is true,
   /// otherwise, platform instance will be created only when
@@ -27,11 +29,13 @@ abstract class PlatformObject {
   String toString() => 'Ably Flutter PlatformObject with handle: $_handleValue';
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// creates an instance of this object on platform side
   /// END LEGACY DOCSTRING
   Future<int?> createPlatformInstance();
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// returns [_handle] which will be same as handle on platform side
   ///
   /// if [_handle] is empty, it creates platform instance, acquires handle,
@@ -43,6 +47,7 @@ abstract class PlatformObject {
       createPlatformInstance().then((value) => (_handleValue = value)!);
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// invoke platform method channel without current handle
   /// this method should be protected since it's only used to cover edge
   /// case for creating rest and realtime instances
@@ -57,6 +62,7 @@ abstract class PlatformObject {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// invoke platform method channel with provided handle, or
   /// current handle if [externalHandle] is not provided
   /// END LEGACY DOCSTRING
@@ -71,6 +77,7 @@ abstract class PlatformObject {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// invoke platform method channel with AblyMessage encapsulation
   ///
   /// this is similar to [invoke], but ensures the response is not null
@@ -89,6 +96,7 @@ abstract class PlatformObject {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Listen for events
   /// END LEGACY DOCSTRING
   @protected
