@@ -17,6 +17,7 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// END EDITED CANONICAL DOCSTRING
 class PaginatedResult<T> extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// stores page handle created by platform APIs
   ///
   /// handle is updated after creating an instance as they are received
@@ -46,6 +47,7 @@ class PaginatedResult<T> extends PlatformObject {
   final bool _hasNext;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
   /// END LEGACY DOCSTRING
@@ -54,6 +56,7 @@ class PaginatedResult<T> extends PlatformObject {
         super(fetchHandle: false);
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
   ///
