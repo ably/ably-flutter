@@ -111,6 +111,7 @@ class Realtime extends PlatformObject {
   /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
+  /// @nodoc
   /// A [ClientOptions] object used to configure the client connection to Ably.
   /// END EDITED CANONICAL DOCSTRING
   late ClientOptions options;
