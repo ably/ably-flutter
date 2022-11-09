@@ -21,6 +21,7 @@ class Connection extends PlatformObject {
   ErrorInfo? _errorReason;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates a connection with [realtime] client instance
   ///
   /// sets default [state] to [ConnectionState.initialized] and starts listening
@@ -125,6 +126,10 @@ class Connection extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// stream of connection events with specified [ConnectionEvent] type
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// Stream of connection events with specified [ConnectionEvent] type
+  /// END EDITED DOCSTRING
   Stream<ConnectionStateChange> on([ConnectionEvent? connectionEvent]) =>
       listen<ConnectionStateChange>(
         PlatformMethod.onRealtimeConnectionStateChanged,
