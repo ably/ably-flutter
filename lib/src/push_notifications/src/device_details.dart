@@ -85,6 +85,7 @@ class DeviceDetails {
   final DevicePushDetails push;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Initializes an instance without any defaults
   /// END LEGACY DOCSTRING
   const DeviceDetails({
