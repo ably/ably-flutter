@@ -37,6 +37,7 @@ class LocalDevice extends DeviceDetails {
   final String? deviceIdentityToken;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Initializes an instance without any defaults
   /// END LEGACY DOCSTRING
   LocalDevice({
