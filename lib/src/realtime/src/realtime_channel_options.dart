@@ -60,6 +60,7 @@ class RealtimeChannelOptions {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// create channel options with a cipher, params and modes
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///
