@@ -47,6 +47,7 @@ class PushChannelSubscription {
   final String? clientId;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Initializes an instance without any defaults
   /// END LEGACY DOCSTRING
   const PushChannelSubscription({
