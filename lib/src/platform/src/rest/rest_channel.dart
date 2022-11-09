@@ -17,6 +17,7 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// END EDITED CANONICAL DOCSTRING
 class RestChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// reference to Rest client
   /// END LEGACY DOCSTRING
   Rest rest;
@@ -54,6 +55,7 @@ class RestChannel extends PlatformObject {
   RestPresence get presence => _presence;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates with [Rest], [name] and [RestChannelOptions]
   /// END LEGACY DOCSTRING
   RestChannel(this.rest, this.push, this.name) {
@@ -61,6 +63,7 @@ class RestChannel extends PlatformObject {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
