@@ -51,6 +51,7 @@ class RealtimeChannel extends PlatformObject {
   RealtimePresence get presence => _presence;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates with [Rest], [name] and [RealtimeChannelOptions]
   ///
   /// sets default [state] to [ChannelState.initialized] and start listening
@@ -67,6 +68,7 @@ class RealtimeChannel extends PlatformObject {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// createPlatformInstance will return realtimePlatformObject's handle
   /// as that is what will be required in platforms end to find realtime
   /// instance and send message to channel
@@ -242,6 +244,10 @@ class RealtimeChannel extends PlatformObject {
   /// BEGIN LEGACY DOCSTRING
   /// stream of channel events with specified [ChannelEvent] type
   /// END LEGACY DOCSTRING
+
+  /// BEGIN EDITED DOCSTRING
+  /// Stream of channel events with specified [ChannelEvent] type
+  /// END EDITED DOCSTRING
   Stream<ChannelStateChange> on([ChannelEvent? channelEvent]) =>
       listen<ChannelStateChange>(
         PlatformMethod.onRealtimeChannelStateChanged,
