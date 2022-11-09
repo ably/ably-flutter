@@ -38,6 +38,7 @@ class RestChannelOptions {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// Create channel options with a cipher.
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///
