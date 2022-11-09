@@ -77,6 +77,7 @@ class ConnectionStateChange {
   final int? retryIn;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// initializes without any defaults
   /// END LEGACY DOCSTRING
   const ConnectionStateChange({
