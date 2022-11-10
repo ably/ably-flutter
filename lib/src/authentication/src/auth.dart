@@ -1,11 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Creates Ably [TokenRequest] objects and obtains Ably Tokens from Ably to
 /// subsequently issue to less trusted clients.
-/// END EDITED CANONICAL DOCSTRING
 abstract class Auth {
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
   /// for presence purposes. The `clientId` can be any non-empty string, except
   /// it cannot contain a `*`. This option is primarily intended to be used in
@@ -14,10 +11,8 @@ abstract class Auth {
   /// library. An error is raised if a `clientId` specified here conflicts with
   /// the `clientId` implicit in the token. Find out more about
   /// [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
-  /// END EDITED CANONICAL DOCSTRING
   String get clientId;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Instructs the library to get a new token immediately using [tokenParams]
   /// and [authOptions] parameters. When using the realtime client, it upgrades
   /// the current realtime connection to use the new token, or if not connected,
@@ -27,13 +22,11 @@ abstract class Auth {
   /// requests. Any [tokenParams] and [authOptions] objects passed in entirely
   /// replace, as opposed to being merged with, the current client library saved
   /// values. Returns a [TokenDetails] object.
-  /// END EDITED CANONICAL DOCSTRING
   Future<TokenDetails> authorize({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Creates, signs and returns an Ably [TokenRequest] based on the specified
   /// (or if none specified, the client library stored) [tokenParams] and
   /// [authOptions]. Note this can only be used when the API `key` value is
@@ -49,13 +42,11 @@ abstract class Auth {
   /// are used instead of, rather than being merged with, the default
   /// values. To understand why an Ably [TokenRequest] may be issued to clients
   /// in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication).
-  /// END EDITED CANONICAL DOCSTRING
   Future<TokenRequest> createTokenRequest({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls the `requestToken` REST API endpoint to obtain an Ably Token
   /// according to the specified [tokenParams] and [authOptions]. Both
   /// [tokenParams] and [authOptions] are optional. Returns a [TokenDetails]
@@ -69,7 +60,6 @@ abstract class Auth {
   /// with, the default values. To understand why an Ably [TokenRequest] may be
   /// issued to clients in favor of a token, see
   /// [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication).
-  /// END EDITED CANONICAL DOCSTRING
   Future<TokenDetails> requestToken({
     AuthOptions? authOptions,
     TokenParams? tokenParams,

@@ -1,20 +1,15 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Defines the properties of an Ably Token.
-/// END EDITED CANONICAL DOCSTRING
 @immutable
 class TokenParams {
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The capabilities associated with this Ably Token. The capabilities value
   /// is a JSON-encoded representation of the resource paths and associated
   /// operations. Read more about capabilities in the
   /// [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
-  /// END EDITED CANONICAL DOCSTRING
   final String? capability;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
   /// for presence purposes. The `clientId` can be any non-empty string, except
   /// it cannot contain a `*`. This option is primarily intended to be used in
@@ -23,27 +18,20 @@ class TokenParams {
   /// library. An error is raised if a `clientId` specified here conflicts with
   /// the clientId implicit in the token. Find out more about
   /// [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
-  /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A cryptographically secure random string of at least 16 characters, used
   /// to ensure the [TokenRequest] cannot be reused.
-  /// END EDITED CANONICAL DOCSTRING
   final String? nonce;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The [DateTime] of this request. Timestamps, in conjunction with the
   /// `nonce`,  are used to prevent requests from being replayed. `timestamp`
   /// is a "one-time" value, and is valid in a request, but is not validly a
   /// member of any default token params such as
   /// `ClientOptions.defaultTokenParams`.
-  /// END EDITED CANONICAL DOCSTRING
   final DateTime? timestamp;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Requested time to live for the token in milliseconds.
-  /// END EDITED CANONICAL DOCSTRING
   final int? ttl;
 
   /// @nodoc

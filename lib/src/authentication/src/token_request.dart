@@ -1,57 +1,41 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/foundation.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains the properties of a request for a token to Ably. Tokens are
 /// generated using [Auth.requestToken].
-/// END EDITED CANONICAL DOCSTRING
 @immutable
 class TokenRequest {
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The name of the key against which this request is made. The key name is
   /// public, whereas the key secret is private.
-  /// END EDITED CANONICAL DOCSTRING
   final String? keyName;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A cryptographically secure random string of at least 16 characters, used
   /// to ensure the `TokenRequest` cannot be reused.
-  /// END EDITED CANONICAL DOCSTRING
   final String? nonce;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The Message Authentication Code for this request.
-  /// END EDITED CANONICAL DOCSTRING
   final String? mac;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Capability of the requested Ably Token. If the Ably `TokenRequest` is
   /// successful, the capability of the returned Ably Token will be the
   /// intersection of this capability with the capability of the issuing key.
   /// The capabilities value is a JSON-encoded representation of the resource
   /// paths and associated operations. Read more about capabilities in the
   /// [capabilities docs](https://ably.com/docs/realtime/authentication).
-  /// END EDITED CANONICAL DOCSTRING
   final String? capability;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The client ID to associate with the requested Ably Token. When provided,
   /// the Ably Token may only be used to perform operations on behalf of that
   /// client ID.
-  /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The [DateTime] of this request.
-  /// END EDITED CANONICAL DOCSTRING
   final DateTime? timestamp;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Requested time to live for the Ably Token in milliseconds. If the Ably
   /// `TokenRequest` is successful, the TTL of the returned Ably Token is less
   /// than or equal to this value, depending on application settings and th
   /// attributes of the issuing key.
-  /// END EDITED CANONICAL DOCSTRING
   final int? ttl;
 
   /// @nodoc
@@ -66,7 +50,6 @@ class TokenRequest {
     this.ttl,
   });
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A static factory method to create a [TokenRequest] object from a
   /// deserialized `TokenRequest`-like object or a JSON stringified
   /// `TokenRequest`
@@ -80,7 +63,6 @@ class TokenRequest {
   /// By using the `fromMap()` method when constructing a `TokenRequest` object,
   /// Ably ensures that all fields are consistently serialized and deserialized
   /// across platforms.
-  /// END EDITED CANONICAL DOCSTRING
   TokenRequest.fromMap(Map<String, dynamic> map)
       : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,

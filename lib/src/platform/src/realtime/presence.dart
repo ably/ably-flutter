@@ -1,10 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables the presence set to be entered and subscribed to, and the historic
 /// presence set to be retrieved for a channel.
-/// END EDITED CANONICAL DOCSTRING
 class RealtimePresence extends PlatformObject {
   final RealtimeChannel _channel;
 
@@ -15,11 +13,9 @@ class RealtimePresence extends PlatformObject {
   @override
   Future<int> createPlatformInstance() => _channel.realtime.handle;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the current members present on the channel and the metadata for
   /// each member, such as their [PresenceAction] and ID, based on provided
   /// [params]. Returns an array of [PresenceMessage] objects.
-  /// END EDITED CANONICAL DOCSTRING
   Future<List<PresenceMessage>> get([
     RealtimePresenceParams? params,
   ]) async {
@@ -35,7 +31,6 @@ class RealtimePresence extends PlatformObject {
         .toList();
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an array of historical
   /// [PresenceMessage] objects for the channel, based on provided [params].
   ///
@@ -43,7 +38,6 @@ class RealtimePresence extends PlatformObject {
   /// presence messages can be retrieved from history for up to 72 hours in the
   /// past. If not, presence messages can only be retrieved from history for up
   /// to two minutes in the past.
-  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<PresenceMessage>> history([
     RealtimeHistoryParams? params,
   ]) async {
@@ -59,26 +53,21 @@ class RealtimePresence extends PlatformObject {
     );
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether the presence set synchronization between Ably and the
   /// clients on the channel has been completed. Set to `true` when the sync is
   /// complete.
-  /// END EDITED CANONICAL DOCSTRING
   bool? syncComplete;
 
   String? get _realtimeClientId => _channel.realtime.options.clientId;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enters the presence set for the channel, optionally passing a [data]
   /// payload associated with the presence member. A clientId is required to be
   /// present on a channel.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> enter([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await enterClient(_realtimeClientId!, data);
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enters the presence set of the channel for a given [clientId], which is
   /// the ID of the client to enter into the presence set. You can also pass a
   /// [data] payload associated with the presence member.
@@ -86,7 +75,6 @@ class RealtimePresence extends PlatformObject {
   /// Enables a single client to update presence on behalf of any number of
   /// clients using a single connection. The library must have been instantiated
   /// with an API key or a token bound to a wildcard `clientId`.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> enterClient(String clientId, [Object? data]) async {
     await invoke<void>(PlatformMethod.realtimePresenceEnter, {
       TxTransportKeys.channelName: _channel.name,
@@ -95,24 +83,20 @@ class RealtimePresence extends PlatformObject {
     });
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Updates the data payload for a presence member. If called before entering
   /// the presence set, this is treated as a [PresenceAction.enter] event.
   /// You can provide the [data] payload to update for the presence member.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> update([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await updateClient(_realtimeClientId!, data);
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Updates the [data] payload for a presence member using a given [clientId],
   /// which is the ID of a client to update in the presence set.
   ///
   /// Enables a single client to update presence on behalf of any number of
   /// clients using a single connection. The library must have been instantiated
   /// with an API key or a token bound to a wildcard `clientId`.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> updateClient(String clientId, [Object? data]) async {
     await invoke<void>(PlatformMethod.realtimePresenceUpdate, {
       TxTransportKeys.channelName: _channel.name,
@@ -121,17 +105,14 @@ class RealtimePresence extends PlatformObject {
     });
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Leaves the presence set for the channel. A client must have previously
   /// entered the presence set before they can leave it.
   /// You can provide the [data] payload associated with the presence member.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> leave([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await leaveClient(_realtimeClientId!, data);
   }
 
-  /// BEGIN CANONICAL DOCSTRING
   /// Leaves the presence set of the channel for a given [clientId], which is
   /// the ID of the client to leave the presence set for. You can also provide a
   /// [data] payload, associated with the presence member.
@@ -139,7 +120,6 @@ class RealtimePresence extends PlatformObject {
   /// Enables a single client to update presence on behalf of any number of
   /// clients using a single connection. The library must have been instantiated
   /// with an API key or a token bound to a wildcard `clientId`.
-  /// END CANONICAL DOCSTRING
   Future<void> leaveClient(String clientId, [Object? data]) async {
     await invoke<void>(PlatformMethod.realtimePresenceLeave, {
       TxTransportKeys.channelName: _channel.name,
@@ -148,7 +128,6 @@ class RealtimePresence extends PlatformObject {
     });
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Returns a stream that emmits a [PresenceMessage]  each time a matching
   /// given [action], or an action within an array of [actions], is received
   /// on the channel, such as a new member entering the presence set.
@@ -156,7 +135,6 @@ class RealtimePresence extends PlatformObject {
   /// There is no unsubscribe api in flutter like in other Ably client SDK's
   /// as subscribe returns a stream which can be used to create a
   /// cancellable stream subscription
-  /// END EDITED CANONICAL DOCSTRING
   Stream<PresenceMessage> subscribe({
     PresenceAction? action,
     List<PresenceAction>? actions,

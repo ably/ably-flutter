@@ -1,44 +1,33 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Passes authentication-specific properties in authentication requests to
 /// Ably. Properties set using `AuthOptions` are used instead of the default
 /// values set when the client library is instantiated, as opposed to being
 /// merged with them.
-/// END EDITED CANONICAL DOCSTRING
 abstract class AuthOptions {
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Called when a new token is required. The role of the callback is to obtain
   /// a fresh token, one of: an Ably Token string (in plain text format);
   /// a signed [TokenRequest]; a [TokenDetails] (in JSON format); an
   /// [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt).
   /// See the [authentication documentation](https://ably.com/docs/realtime/authentication)
   /// for details of the Ably [TokenRequest] format and associated API calls.
-  /// END EDITED CANONICAL DOCSTRING
   AuthCallback? authCallback;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A URL that the library may use to obtain a token string (in plain text
   /// format), or a signed [TokenRequest] or [TokenDetails] (in JSON format)
   /// from.
-  /// END EDITED CANONICAL DOCSTRING
   String? authUrl;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The HTTP verb to use for any request made to the `authUrl`, either `GET`
   /// or `POST`.
-  /// END EDITED CANONICAL DOCSTRING
   String? authMethod;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// The full API key string, as obtained from the [Ably dashboard](https://ably.com/dashboard).
   /// Use this option if you wish to use Basic authentication, or wish to be
   /// able to issue Ably Tokens without needing to defer to a separate entity to
   /// sign Ably [TokenRequest]s. Read more about [Basic authentication](https://ably.com/docs/core-features/authentication#basic-authentication).
-  /// END EDITED CANONICAL DOCSTRING
   String? key;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// An authenticated [TokenDetails] object (most commonly obtained from an
   /// Ably Token Request response). This option is mostly useful for testing:
   /// since tokens are short-lived, in production you almost always want to use
@@ -46,28 +35,22 @@ abstract class AuthOptions {
   /// token automatically when the previous one expires, such as `authUrl` or
   /// `authCallback`. Use this option if you wish to use Token authentication.
   /// Read more about [Token authentication](https://ably.com/docs/core-features/authentication#token-authentication).
-  /// END EDITED CANONICAL DOCSTRING
   TokenDetails? tokenDetails;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A set of key-value pair headers to be added to any request made to the
   /// `authUrl`. Useful when an application requires these to be added to
   /// validate the request or implement the response. If the `authHeaders`
   /// object contains an `authorization` key, then `withCredentials` is set on
   /// the XHR request.
-  /// END EDITED CANONICAL DOCSTRING
   Map<String, String>? authHeaders;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A set of key-value pair params to be added to any request made to the
   /// `authUrl`. When the `authMethod` is `GET`, query params are added to the
   /// URL, whereas when `authMethod` is `POST`, the params are sent as URL
   /// encoded form data. Useful when an application requires these to be added
   /// to validate the request or implement the response.
-  /// END EDITED CANONICAL DOCSTRING
   Map<String, String>? authParams;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether the library queries the Ably servers for the current time when
   /// issuing [TokenRequest]s instead of relying on a locally-available time of
   /// day. Knowing the time accurately is needed to
@@ -79,14 +62,11 @@ abstract class AuthOptions {
   /// stores the offset from the local clock), so if using this option you
   /// should avoid instancing a new version of the library for each request.
   /// The default is `false`.
-  /// END EDITED CANONICAL DOCSTRING
   bool? queryTime;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// When `true`, forces token authentication to be used by the library. If a
   /// `clientId` is not specified in the [ClientOptions] or
   /// [TokenParams], then the Ably Token issued is [anonymous](https://ably.com/docs/core-features/authentication#identified-clients).
-  /// END EDITED CANONICAL DOCSTRING
   bool? useTokenAuth;
 
 // TODO(tiholic) missing token attribute here

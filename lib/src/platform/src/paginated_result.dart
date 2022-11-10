@@ -1,12 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains a page of results for message or presence history, stats, or REST
 /// presence requests. A `PaginatedResult` response from a REST API paginated
 /// query is also accompanied by metadata that indicates the relative queries
 /// available to the `PaginatedResult` object.
-/// END EDITED CANONICAL DOCSTRING
 class PaginatedResult<T> extends PlatformObject {
   /// @nodoc
   /// stores page handle created by platform APIs
@@ -22,10 +20,8 @@ class PaginatedResult<T> extends PlatformObject {
 
   late final List<T> _items;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Contains the current page of results; for example, an array of
   /// [Message] or [PresenceMessage] objects for a channel history request.
-  /// END EDITED CANONICAL DOCSTRING
   List<T> get items => _items;
 
   final bool _hasNext;
@@ -52,13 +48,11 @@ class PaginatedResult<T> extends PlatformObject {
   @override
   Future<int?> createPlatformInstance() async => _pageHandle;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Returns a new [PaginatedResult], which is a page of results for message
   /// and presence history, stats, and REST presence requests, loaded with the
   /// next page of results.
   ///
   /// If there are no further pages, then null is returned.
-  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<T>> next() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.nextPage);
@@ -67,11 +61,9 @@ class PaginatedResult<T> extends PlatformObject {
     );
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Returns a new [PaginatedResult], which is a page of results for message
   /// and presence history, stats, and REST presence requests, for the first
   /// page of results.
-  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<T>> first() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.firstPage);
@@ -80,15 +72,11 @@ class PaginatedResult<T> extends PlatformObject {
     );
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether there are more pages available by calling next. Return
   /// false if this page is the last page available.
-  /// END EDITED CANONICAL DOCSTRING
   bool hasNext() => _hasNext;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether this page is the last page. Returns false if there are
   /// more pages available by calling next available.
-  /// END EDITED CANONICAL DOCSTRING
   bool isLast() => !_hasNext;
 }

@@ -3,21 +3,15 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables a device to be registered and deregistered from receiving push
 /// notifications.
-/// END EDITED CANONICAL DOCSTRING
 class Push extends PlatformObject {
-  /// BEGIN EDITED DOCSTRING
   /// A static object that can be used to access activation events related to
   /// push, such as device activation, deactivation and notification
   /// permissions.
-  /// END EDITED DOCSTRING
   static PushActivationEvents activationEvents = PushActivationEventsInternal();
 
-  /// BEGIN EDITED DOCSTRING
   /// A static object that can be used to access message events related to push
-  /// END EDITED DOCSTRING
   static PushNotificationEvents notificationEvents =
       PushNotificationEventsInternal();
 
@@ -43,14 +37,11 @@ class Push extends PlatformObject {
     }
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Activates the device for push notifications with FCM or APNS, obtaining a
   /// unique identifier from them. Subsequently registers the device with Ably
   /// and stores the `deviceIdentityToken` in local storage.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 
-  /// BEGIN EDITED DOCSTRING
   /// Request permission from the user to show them notifications. This is
   /// required to show user notifications. Otherwise, notifications may
   /// silently get received by the application.
@@ -78,7 +69,6 @@ class Push extends PlatformObject {
   ///
   /// Asynchrously returns a [bool] indicating whether the permission was
   /// granted
-  /// END EDITED DOCSTRING
   Future<bool> requestPermission({
     bool alert = true,
     bool announcement = true,
@@ -106,12 +96,10 @@ class Push extends PlatformObject {
     }
   }
 
-  /// BEGIN EDITED DOCSTRING
   /// Gets the iOS notification settings ([UNNotificationSettings]) for
   /// the application.
   ///
   /// More details in the [Apple docs](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649524-getnotificationsettings)
-  /// END EDITED DOCSTRING
   Future<UNNotificationSettings> getNotificationSettings() async {
     if (io.Platform.isIOS) {
       return invokeRequest<UNNotificationSettings>(
@@ -121,10 +109,8 @@ class Push extends PlatformObject {
     }
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Deactivates the device from receiving push notifications with Ably and FCM
   /// or APNS.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
   /// @nodoc

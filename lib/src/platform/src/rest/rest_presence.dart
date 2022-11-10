@@ -1,10 +1,8 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables the retrieval of the current and historic presence set for a
 /// channel.
-/// END EDITED CANONICAL DOCSTRING
 class RestPresence extends PlatformObject {
   final RestChannel _restChannel;
 
@@ -15,14 +13,12 @@ class RestPresence extends PlatformObject {
   @override
   Future<int> createPlatformInstance() => _restChannel.rest.handle;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the current members present on the channel and the metadata for
   /// each member, such as their [PresenceAction] and ID, based on provided
   /// [params].
   ///
   /// Returns a [PaginatedResult] object, containing an
   /// array of [PresenceMessage] objects.
-  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
   ]) async {
@@ -38,7 +34,6 @@ class RestPresence extends PlatformObject {
     );
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an
   /// array of historical [PresenceMessage] objects for
   /// the channel, based on provided [params].
@@ -47,7 +42,6 @@ class RestPresence extends PlatformObject {
   /// presence messages can be retrieved from history for up to 72 hours in the
   /// past. If not, presence messages can only be retrieved from history for up
   /// to two minutes in the past.
-  /// END EDITED CANONICAL DOCSTRING
   Future<PaginatedResult<PresenceMessage>> history([
     RestHistoryParams? params,
   ]) async {

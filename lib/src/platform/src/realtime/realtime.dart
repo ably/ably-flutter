@@ -5,15 +5,11 @@ import 'dart:io' as io show Platform;
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// A client that extends functionality of the [Rest] and provides
 /// additional realtime-specific features.
-/// END EDITED CANONICAL DOCSTRING
 class Realtime extends PlatformObject {
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Constructs a `Realtime` object using an Ably [options] object or
   /// the Ably API [key] or token string used to validate the client.
-  /// END EDITED CANONICAL DOCSTRING
   Realtime({
     ClientOptions? options,
     final String? key,
@@ -25,10 +21,8 @@ class Realtime extends PlatformObject {
     push = Push(realtime: this);
   }
 
-  /// BEGIN CANONICAL DOCSTRING
   /// Constructs a `Realtime` object using an Ably API [key] or token string
   /// used to validate the client.
-  /// END CANONICAL DOCSTRING
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
 
@@ -60,49 +54,34 @@ class Realtime extends PlatformObject {
   // The _connection instance keeps a reference to this platform object.
   late final Connection _connection;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Connection] object.
-  /// END EDITED CANONICAL DOCSTRING
   Connection get connection => _connection;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// An [Auth] object.
-  /// END EDITED CANONICAL DOCSTRING
   // Auth? auth;
 
-  /// BEGIN EDITED DOCSTRING
   /// @nodoc
   /// A [ClientOptions] object used to configure the client connection to Ably.
-  /// END EDITED DOCSTRING
   late ClientOptions options;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Push] object.
-  /// END EDITED CANONICAL DOCSTRING
   late Push push;
 
   late RealtimeChannels _channels;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Channels] object.
-  /// END EDITED CANONICAL DOCSTRING
   RealtimeChannels get channels => _channels;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls [Connection.close] and causes the connection to close, entering the
   /// closing state. Once closed, the library will not attempt to re-establish
   /// the connection without an explicit call to [Connection.connect].
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls [Connection.connect] and causes the connection to open, entering the
   /// connecting state. Explicitly calling [Connection.connect] is unnecessary
   /// unless the [ClientOptions.autoConnect] property is disabled.
-  /// END EDITED CANONICAL DOCSTRING
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
   /// `POST`.
   /// [params] can be specified to include in the URL query of the
@@ -118,7 +97,6 @@ class Realtime extends PlatformObject {
   /// functionality that is either not documented or is not yet included in the
   /// public API, without having to directly handle features such as
   /// authentication, paging, fallback hosts, MsgPack and JSON support.
-  /// END EDITED CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   required String method,
   //   required String path,
@@ -129,7 +107,6 @@ class Realtime extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Queries the REST `/stats` API and retrieves your application's usage
   /// statistics. You must specify the [start] time from which stats are
   /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
@@ -149,28 +126,23 @@ class Realtime extends PlatformObject {
   /// [Stats] objects.
   ///
   /// See the [Stats docs](https://ably.com/docs/general/statistics).
-  /// END EDITED CANONICAL DOCSTRING
   // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the [DateTime] from the Ably service. Clients that do not have
   /// access to a sufficiently well maintained time source and wish to issue
   /// Ably [TokenRequest]s with a more accurate timestamp should use the
   /// [AuthOptions.queryTime] property on a [ClientOptions] object instead of
   /// this method.
   ///
-  /// END EDITED CANONICAL DOCSTRING
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [LocalDevice] object that represents the current state of the
   /// device as a target for push notifications.
-  /// END EDITED CANONICAL DOCSTRING
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }

@@ -10,24 +10,18 @@ Map<int?, Rest> _restInstances = {};
 /// Returns readonly copy of instances of all [Rest] clients created.
 Map<int?, Rest> get restInstances => UnmodifiableMapView(_restInstances);
 
-/// BEGIN EDITED CANONICAL DOCSTRING
 /// A client that offers a simple stateless API to interact directly with Ably's
 /// REST API.
-/// END EDITED CANONICAL DOCSTRING
 class Rest extends PlatformObject {
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Construct a `Rest` object using an Ably [options] object.
-  /// END EDITED CANONICAL DOCSTRING
   Rest({required this.options}) : super() {
     channels = RestChannels(this);
     push = Push(rest: this);
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Constructs a `Rest` object using an Ably API [key] or token string
   /// that's used to validate the cliet.
-  /// END EDITED CANONICAL DOCSTRING
   factory Rest.fromKey(String key) => Rest(options: ClientOptions(key: key));
 
   @override
@@ -39,17 +33,12 @@ class Rest extends PlatformObject {
     return handle;
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// An [Auth] object.
-  /// END EDITED CANONICAL DOCSTRING
   // Auth? auth;
 
-  /// BEGIN EDITED DOCSTRING
   /// An object that contains additional client-specific properties
-  /// END EDITED DOCSTRING
   late ClientOptions options;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
   /// `POST`.
   /// [params] can be specified to include in the URL query of the
@@ -65,7 +54,6 @@ class Rest extends PlatformObject {
   /// functionality that is either not documented or is not yet included in the
   /// public API, without having to directly handle features such as
   /// authentication, paging, fallback hosts, MsgPack and JSON support.
-  /// END EDITED CANONICAL DOCSTRING
   // Future<HttpPaginatedResponse> request({
   //   String? method,
   //   String? path,
@@ -76,7 +64,6 @@ class Rest extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Queries the REST `/stats` API and retrieves your application's usage
   /// statistics. You must specify the [start] time from which stats are
   /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
@@ -95,37 +82,28 @@ class Rest extends PlatformObject {
   /// Returns a [PaginatedResult] object containing an array of [Stats] objects.
   ///
   /// See the [Stats docs](https://ably.com/docs/general/statistics).
-  /// END EDITED CANONICAL DOCSTRING
   // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the time from the Ably service as milliseconds since the Unix
   /// epoch. Clients that do not have access to a sufficiently well maintained
   /// time source and wish to issue Ably [TokenRequest]s with a more accurate
   /// timestamp should use the [AuthOptions.queryTime] property on a
   /// [ClientOptions] object instead of this method.
-  /// END EDITED CANONICAL DOCSTRING
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.restTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Push] object.
-  /// END EDITED CANONICAL DOCSTRING
   late Push push;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Channels] object.
-  /// END EDITED CANONICAL DOCSTRING
   late RestChannels channels;
 
-  /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [LocalDevice] object that represents the
   /// current state of the device as a target for push notifications.
-  /// END EDITED CANONICAL DOCSTRING
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
