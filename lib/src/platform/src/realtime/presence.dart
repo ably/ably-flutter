@@ -228,6 +228,10 @@ class RealtimePresence extends PlatformObject {
   /// Returns a stream that emmits a [PresenceMessage]  each time a matching
   /// given [action], or an action within an array of [actions], is received
   /// on the channel, such as a new member entering the presence set.
+  ///
+  /// There is no unsubscribe api in flutter like in other Ably client SDK's
+  /// as subscribe returns a stream which can be used to create a
+  /// cancellable stream subscription
   /// END EDITED CANONICAL DOCSTRING
   Stream<PresenceMessage> subscribe({
     PresenceAction? action,

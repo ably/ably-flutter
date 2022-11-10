@@ -54,6 +54,7 @@ class RealtimePresenceParams {
   final String? connectionId;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// initializes with [waitForSync] set to true by default
   /// END LEGACY DOCSTRING
   const RealtimePresenceParams({

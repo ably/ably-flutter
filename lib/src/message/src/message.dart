@@ -148,12 +148,10 @@ class Message with ObjectHash {
         extras,
       ]);
 
-  /// BEGIN LEGACY DOCSTRING
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
-  ///
-  /// TODO(tiholic): decoding and decryption is not implemented as per
-  ///  RSL6 and RLS6b as mentioned in TM3
-  /// END LEGACY DOCSTRING
+  // https://docs.ably.com/client-lib-development-guide/features/#TM3
+  //
+  // TODO(tiholic): decoding and decryption is not implemented as per
+  // RSL6 and RLS6b as mentioned in TM3
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A static factory method to create a [Message] object from a deserialized

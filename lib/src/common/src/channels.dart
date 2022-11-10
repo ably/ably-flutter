@@ -11,6 +11,7 @@ import 'package:meta/meta.dart';
 /// END EDITED CANONICAL DOCSTRING
 abstract class Channels<ChannelType> extends Iterable<ChannelType> {
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// stores channel name vs instance of [ChannelType]
   /// END LEGACY DOCSTRING
   final _channels = <String, ChannelType>{};

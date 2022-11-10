@@ -71,6 +71,9 @@ class Rest extends PlatformObject {
   /// instance to interact with ably service
   /// END LEGACY DOCSTRING
 
+  /// BEGIN EDITED DOCSTRING
+  /// An object that contains additional client-specific properties
+  /// END EDITED DOCSTRING
   late ClientOptions options;
 
   /// BEGIN LEGACY DOCSTRING

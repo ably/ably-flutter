@@ -90,6 +90,7 @@ class RealtimeHistoryParams {
   final bool? untilAttach;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///

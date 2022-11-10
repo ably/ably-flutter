@@ -47,6 +47,7 @@ class RestPresenceParams {
   String? connectionId;
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// initializes with default [limit] set to 100
   /// END LEGACY DOCSTRING
   RestPresenceParams({

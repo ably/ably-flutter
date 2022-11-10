@@ -3,10 +3,12 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
 /// BEGIN LEGACY DOCSTRING
+/// @nodoc
 /// Handles method calls invoked from platform side to dart side
 /// END LEGACY DOCSTRING
 class AblyMethodCallHandler {
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// creates instance with method channel and forwards calls respective
   /// instance methods: [onAuthCallback], [onRealtimeAuthCallback], etc
   /// END LEGACY DOCSTRING
@@ -43,6 +45,7 @@ class AblyMethodCallHandler {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// handles auth callback for rest instances
   /// END LEGACY DOCSTRING
   Future<Object> onAuthCallback(AblyMessage<dynamic> message) async {
@@ -58,6 +61,7 @@ class AblyMethodCallHandler {
   }
 
   /// BEGIN LEGACY DOCSTRING
+  /// @nodoc
   /// handles auth callback for realtime instances
   /// END LEGACY DOCSTRING
   Future<Object?> onRealtimeAuthCallback(AblyMessage<dynamic>? message) async {

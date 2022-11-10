@@ -278,6 +278,10 @@ class RealtimeChannel extends PlatformObject {
   /// Registers a listener for messages on this channel for an event [name] or
   /// multiple event [names].
   ///
+  /// There is no unsubscribe api in flutter like in other Ably client SDK's
+  /// as subscribe returns a stream which can be cancelled
+  /// by calling [StreamSubscription.cancel]
+  ///
   /// Returns a stream, which is called each time one or more matching messages
   /// arrives on the channel.
   /// END EDITED CANONICAL DOCSTRING

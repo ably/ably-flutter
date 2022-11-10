@@ -32,10 +32,10 @@ class Notification {
   /// and 'RemoteMessage.notification.body' on Android
   /// END LEGACY DOCSTRING
 
-  /// BEGIN LEGACY DOCSTRING
+  /// BEGIN EDITED DOCSTRING
   /// Body of a notification, comes from 'UNNotificationContent.body' on iOS
   /// and 'RemoteMessage.notification.body' on Android
-  /// END LEGACY DOCSTRING
+  /// END EDITED DOCSTRING
   final String? body;
 
   /// BEGIN LEGACY DOCSTRING
