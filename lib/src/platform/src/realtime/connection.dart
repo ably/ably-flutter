@@ -27,6 +27,7 @@ class Connection extends PlatformObject {
     });
   }
 
+  /// @nodoc
   @override
   Future<int> createPlatformInstance() async => realtime.handle;
 

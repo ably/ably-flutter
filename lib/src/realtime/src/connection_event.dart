@@ -38,11 +38,11 @@ enum ConnectionEvent {
   /// library will periodically attempt to open a new connection every 30
   /// seconds. Developers are unable to publish messages in this state. A new
   /// connection attempt can also be triggered by an explicit call to
-  /// [connect()]{@link Connection#connect}. Once the connection has been
-  /// re-established, channels will be automatically re-attached. The client has
-  /// been disconnected for too long for them to resume from where they left
-  /// off, so if it wants to catch up on messages published by other clients
-  /// while it was disconnected, it needs to use [the History API](https://ably.com/docs/realtime/history).
+  /// [Connection.connect]. Once the connection has been re-established,
+  /// channels will be automatically re-attached. The client has been
+  /// disconnected for too long for them to resume from where they left off, so
+  /// if it wants to catch up on messages published by other clients while it
+  /// was disconnected, it needs to use [the History API](https://ably.com/docs/realtime/history).
   suspended,
 
   /// An explicit request by the developer to close the connection has been sent

@@ -45,6 +45,7 @@ class PaginatedResult<T> extends PlatformObject {
         _pageHandle = message.handle,
         super(fetchHandle: false);
 
+  /// @nodoc
   @override
   Future<int?> createPlatformInstance() async => _pageHandle;
 

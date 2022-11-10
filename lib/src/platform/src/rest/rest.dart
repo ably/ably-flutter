@@ -13,7 +13,6 @@ Map<int?, Rest> get restInstances => UnmodifiableMapView(_restInstances);
 /// A client that offers a simple stateless API to interact directly with Ably's
 /// REST API.
 class Rest extends PlatformObject {
-
   /// Construct a `Rest` object using an Ably [options] object.
   Rest({required this.options}) : super() {
     channels = RestChannels(this);
@@ -24,6 +23,7 @@ class Rest extends PlatformObject {
   /// that's used to validate the cliet.
   factory Rest.fromKey(String key) => Rest(options: ClientOptions(key: key));
 
+  /// @nodoc
   @override
   Future<int?> createPlatformInstance() async {
     final handle = await invokeWithoutHandle<int>(PlatformMethod.createRest, {

@@ -24,6 +24,7 @@ class PushChannel extends PlatformObject {
     }
   }
 
+  /// @nodoc
   @override
   Future<int?> createPlatformInstance() => (realtime != null)
       ? (realtime as Realtime).handle

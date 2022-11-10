@@ -26,6 +26,7 @@ class Realtime extends PlatformObject {
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
 
+  ///@nodoc
   @override
   Future<int?> createPlatformInstance() async {
     final handle =
@@ -135,7 +136,6 @@ class Realtime extends PlatformObject {
   /// Ably [TokenRequest]s with a more accurate timestamp should use the
   /// [AuthOptions.queryTime] property on a [ClientOptions] object instead of
   /// this method.
-  ///
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);

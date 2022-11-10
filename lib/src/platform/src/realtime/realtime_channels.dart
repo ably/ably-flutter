@@ -12,6 +12,7 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   /// instantiates with the ably [Realtime] instance
   RealtimeChannels(this.realtime);
 
+  /// @nodoc
   @override
   @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);

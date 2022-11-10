@@ -10,6 +10,7 @@ class RestPresence extends PlatformObject {
   /// instantiates with a channel
   RestPresence(this._restChannel);
 
+  /// @nodoc
   @override
   Future<int> createPlatformInstance() => _restChannel.rest.handle;
 

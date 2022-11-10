@@ -54,7 +54,7 @@ abstract class AuthOptions {
   /// Whether the library queries the Ably servers for the current time when
   /// issuing [TokenRequest]s instead of relying on a locally-available time of
   /// day. Knowing the time accurately is needed to
-  /// create valid signed Ably [TokenRequests], so this
+  /// create valid signed Ably [TokenRequest]s, so this
   /// option is useful for library instances on auth servers where for some
   /// reason the server clock cannot be kept synchronized through normal means,
   /// such as an [NTP daemon](https://en.wikipedia.org/wiki/Ntpd). The server is

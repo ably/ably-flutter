@@ -10,6 +10,7 @@ class RealtimePresence extends PlatformObject {
   /// instantiates with a channel
   RealtimePresence(this._channel);
 
+  /// @nodoc
   @override
   Future<int> createPlatformInstance() => _channel.realtime.handle;
 
