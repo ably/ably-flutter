@@ -36,10 +36,8 @@ class ChannelStateChange {
   /// END EDITED CANONICAL DOCSTRING
   final bool resumed;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes with [resumed] set to false
-  /// END LEGACY DOCSTRING
   const ChannelStateChange({
     required this.current,
     required this.event,

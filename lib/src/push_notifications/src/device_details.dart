@@ -39,10 +39,8 @@ class DeviceDetails {
   /// END CANONICAL DOCSTRING
   final DevicePushDetails push;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   const DeviceDetails({
     required this.formFactor,
     required this.metadata,

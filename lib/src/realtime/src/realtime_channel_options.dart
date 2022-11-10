@@ -34,13 +34,11 @@ class RealtimeChannelOptions {
     return RealtimeChannelOptions(cipherParams: cipherParams);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// create channel options with a cipher, params and modes
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2
-  /// END LEGACY DOCSTRING
   const RealtimeChannelOptions({
     this.cipherParams,
     this.modes,

@@ -8,18 +8,14 @@ import 'package:meta/meta.dart';
 class RestChannels extends Channels<RestChannel> {
   final Rest _rest;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates with the ably [Rest] instance
-  /// END LEGACY DOCSTRING
   RestChannels(this._rest);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// creates a channel with provided name and options
   ///
   /// This is a private method to be overridden by implementation classes
-  /// END LEGACY DOCSTRING
   @override
   @protected
   RestChannel createChannel(String name) =>

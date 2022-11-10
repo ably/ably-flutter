@@ -27,13 +27,11 @@ class RestHistoryParams {
   /// END EDITED CANONICAL DOCSTRINGS
   final int limit;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
-  /// END LEGACY DOCSTRING
   RestHistoryParams({
     this.direction = 'backwards',
     DateTime? end,

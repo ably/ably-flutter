@@ -6,10 +6,8 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 Map<int?, Rest> _restInstances = {};
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Returns readonly copy of instances of all [Rest] clients created.
-/// END LEGACY DOCSTRING
 Map<int?, Rest> get restInstances => UnmodifiableMapView(_restInstances);
 
 /// BEGIN EDITED CANONICAL DOCSTRING

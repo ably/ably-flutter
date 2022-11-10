@@ -54,10 +54,8 @@ class TokenRequest {
   /// END EDITED CANONICAL DOCSTRING
   final int? ttl;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates a [TokenRequest] with provided values
-  /// END LEGACY DOCSTRING
   const TokenRequest({
     this.capability,
     this.clientId,

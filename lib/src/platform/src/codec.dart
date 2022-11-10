@@ -6,36 +6,28 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// a [_Encoder] encodes custom type and converts it to a Map which will
 /// be passed on to platform side
-/// END LEGACY DOCSTRING
 typedef _Encoder<T> = Map<String, dynamic>? Function(T value);
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// a [_Decoder] decodes Map received from platform side and converts to
 /// to respective dart types
-/// END LEGACY DOCSTRING
 typedef _Decoder<T> = T Function(Map<String, dynamic> jsonMap);
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// A class to manage encoding/decoding by provided encoder/decoder functions.
-/// END LEGACY DOCSTRING
 class _CodecPair<T> {
   final _Encoder<T>? _encoder;
   final _Decoder<T>? _decoder;
 
   _CodecPair(this._encoder, this._decoder);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Convert properties from an ably library object instance (dart) to Map.
   /// if passed [value] is null, encoder will not be called.
   /// This method will throw an [AblyException] if encoder is null.
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? encode(final Object? value) {
     if (_encoder == null) {
       throw AblyException(
@@ -46,12 +38,10 @@ class _CodecPair<T> {
     return _encoder!(value as T);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Convert Map entries to an ably library object instance (dart).
   /// if passed [jsonMap] is null, decoder will not be called.
   /// This method will throw an [AblyException] if decoder is null.
-  /// END LEGACY DOCSTRING
   T? decode(Map<String, dynamic>? jsonMap) {
     if (_decoder == null) {
       throw AblyException(
@@ -63,24 +53,18 @@ class _CodecPair<T> {
   }
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Custom message codec for encoding objects to send to platform
 /// or decoding objects received from platform.
-/// END LEGACY DOCSTRING
 class Codec extends StandardMessageCodec {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Map of codec type (a value from [CodecTypes]) vs encoder/decoder pair.
   /// Encoder/decoder can be null.
   /// For example, [ErrorInfo] only needs a decoder but not an encoder.
-  /// END LEGACY DOCSTRING
   late Map<int, _CodecPair<dynamic>> codecMap;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes codec with codec map linking codec type to codec pair
-  /// END LEGACY DOCSTRING
   Codec() : super() {
     codecMap = {
       // Ably flutter plugin protocol message
@@ -157,32 +141,26 @@ class Codec extends StandardMessageCodec {
     };
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Converts a Map with dynamic keys and values to
   /// a Map with String keys and dynamic values.
   /// Returns null of [value] is null.
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? toJsonMap(Map<dynamic, dynamic>? value) {
     if (value == null) return null;
     return Map.castFrom<dynamic, dynamic, String, dynamic>(value);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Converts a Map with dynamic keys and values to
   /// a Map with String keys and dynamic values.
   /// Returns null of [value] is null.
-  /// END LEGACY DOCSTRING
   Map<String, T> toTypedJsonMap<T>(Map<dynamic, dynamic>? value) {
     if (value == null) return <String, T>{};
     return Map.castFrom<dynamic, dynamic, String, T>(value);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Returns a value from [CodecTypes] based of the [Type] of [value]
-  /// END LEGACY DOCSTRING
   int? getCodecType(final Object? value) {
     if (value is ClientOptions) {
       return CodecTypes.clientOptions;
@@ -221,12 +199,10 @@ class Codec extends StandardMessageCodec {
     return null;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes values from [_CodecPair._encoder] available in [_CodecPair]
   /// obtained from [codecMap] against codecType obtained from [value].
   /// If decoder is not found, [StandardMessageCodec] is used to read value
-  /// END LEGACY DOCSTRING
   @override
   void writeValue(final WriteBuffer buffer, final Object? value) {
     final type = getCodecType(value);
@@ -238,12 +214,10 @@ class Codec extends StandardMessageCodec {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes values from [_CodecPair._decoder] available in codec pair,
   /// obtained from [codecMap] against [type].
   /// If decoder is not found, [StandardMessageCodec] is used to read value
-  /// END LEGACY DOCSTRING
   @override
   dynamic readValueOfType(int type, ReadBuffer buffer) {
     final pair = codecMap[type];
@@ -256,21 +230,17 @@ class Codec extends StandardMessageCodec {
   }
 
   // =========== ENCODERS ===========
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Writes [value] for [key] in [map] if [value] is not null
-  /// END LEGACY DOCSTRING
   void _writeToJson(Map<String, dynamic> map, String key, Object? value) {
     assert(value is! DateTime, '`DateTime` objects cannot be encoded');
     if (value == null) return;
     map[key] = value;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [ClientOptions] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeClientOptions(final ClientOptions v) {
     final jsonMap = <String, dynamic>{};
     // AuthOptions (super class of ClientOptions)
@@ -328,11 +298,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [TokenDetails] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? _encodeTokenDetails(final TokenDetails? v) {
     if (v == null) return null;
     return {
@@ -344,11 +312,9 @@ class Codec extends StandardMessageCodec {
     };
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [TokenParams] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? _encodeTokenParams(final TokenParams? v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -360,11 +326,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [TokenRequest] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeTokenRequest(final TokenRequest v) {
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxTokenRequest.capability, v.capability);
@@ -378,11 +342,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [RestChannelOptions] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeRestChannelOptions(final RestChannelOptions v) {
     final jsonMap = <String, dynamic>{};
     jsonMap[TxRestChannelOptions.cipherParams] =
@@ -390,10 +352,8 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [ChannelMode] to a string constant
-  /// END LEGACY DOCSTRING
   String _encodeChannelMode(ChannelMode mode) {
     switch (mode) {
       case ChannelMode.presence:
@@ -407,11 +367,9 @@ class Codec extends StandardMessageCodec {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [RealtimeChannelOptions] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeRealtimeChannelOptions(
       final RealtimeChannelOptions v) {
     final jsonMap = <String, dynamic>{};
@@ -459,11 +417,9 @@ class Codec extends StandardMessageCodec {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [RestHistoryParams] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeRestHistoryParams(final RestHistoryParams v) {
     final jsonMap = <String, dynamic>{};
     _writeToJson(
@@ -475,11 +431,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [RestPresenceParams] to a Map
   /// returns null if [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeRestPresenceParams(final RestPresenceParams v) {
     final jsonMap = <String, dynamic>{};
     _writeToJson(jsonMap, TxRestPresenceParams.limit, v.limit);
@@ -498,11 +452,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [RealtimeHistoryParams] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeRealtimeHistoryParams(
     final RealtimeHistoryParams v,
   ) {
@@ -523,11 +475,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [AblyMessage] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeAblyMessage(final AblyMessage<dynamic> v) {
     final codecType = getCodecType(v.message);
     final message = (codecType == null)
@@ -540,7 +490,6 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [AblyEventMessage] to a Map
   /// returns null of [v] is null
@@ -558,11 +507,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [ErrorInfo] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? _encodeErrorInfo(final ErrorInfo? v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -575,11 +522,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [MessageData] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? _encodeChannelMessageData(
     final MessageData<dynamic>? v,
   ) {
@@ -589,11 +534,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [MessageExtras] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic>? _encodeChannelMessageExtras(final MessageExtras? v) {
     if (v == null) return null;
     final jsonMap = <String, dynamic>{};
@@ -602,11 +545,9 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Encodes [Message] to a Map
   /// returns null of [v] is null
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> _encodeChannelMessage(final Message v) {
     final jsonMap = <String, dynamic>{};
     // Note: connectionId and timestamp are automatically set by platform
@@ -621,21 +562,17 @@ class Codec extends StandardMessageCodec {
   }
 
   // =========== DECODERS ===========
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Casts it to [T] if the value is not null
-  /// END LEGACY DOCSTRING
   T? _readFromJson<T>(Map<String, dynamic> jsonMap, String key) {
     final value = jsonMap[key];
     if (value == null) return null;
     return value as T;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [ClientOptions]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   ClientOptions _decodeClientOptions(Map<String, dynamic> jsonMap) {
     final tokenDetails = toJsonMap(_readFromJson<Map<dynamic, dynamic>>(
       jsonMap,
@@ -744,11 +681,9 @@ class Codec extends StandardMessageCodec {
     return clientOptions;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [TokenDetails]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   TokenDetails _decodeTokenDetails(Map<String, dynamic> jsonMap) =>
       TokenDetails(
         _readFromJson<String>(jsonMap, TxTokenDetails.token),
@@ -758,11 +693,9 @@ class Codec extends StandardMessageCodec {
         clientId: _readFromJson<String>(jsonMap, TxTokenDetails.clientId),
       );
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [TokenParams]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   TokenParams _decodeTokenParams(Map<String, dynamic> jsonMap) {
     final timestamp = _readFromJson<int>(jsonMap, TxTokenParams.timestamp);
     final params = TokenParams(
@@ -777,11 +710,9 @@ class Codec extends StandardMessageCodec {
     return params;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [AblyMessage]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   AblyMessage<dynamic> _decodeAblyMessage(Map<String, dynamic> jsonMap) {
     final type = _readFromJson<int>(jsonMap, TxAblyMessage.type);
     var message = jsonMap[TxAblyMessage.message] as Object;
@@ -1006,11 +937,9 @@ class Codec extends StandardMessageCodec {
   RemoteMessage _decodeRemoteMessage(Map<String, dynamic> jsonMap) =>
       RemoteMessage.fromMap(jsonMap);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [ErrorInfo]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   ErrorInfo _decodeErrorInfo(Map<String, dynamic> jsonMap) => ErrorInfo(
         code: jsonMap[TxErrorInfo.code] as int?,
         message: jsonMap[TxErrorInfo.message] as String?,
@@ -1020,10 +949,8 @@ class Codec extends StandardMessageCodec {
         cause: jsonMap[TxErrorInfo.cause] as ErrorInfo?,
       );
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes [eventName] to [ConnectionEvent] enum if not null
-  /// END LEGACY DOCSTRING
   ConnectionEvent _decodeConnectionEvent(String? eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
@@ -1051,10 +978,8 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes [state] to [ConnectionState] enum if not null
-  /// END LEGACY DOCSTRING
   ConnectionState _decodeConnectionState(String? state) {
     switch (state) {
       case TxEnumConstants.initialized:
@@ -1080,10 +1005,8 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes [eventName] to [ChannelEvent] enum if not null
-  /// END LEGACY DOCSTRING
   ChannelEvent _decodeChannelEvent(String? eventName) {
     switch (eventName) {
       case TxEnumConstants.initialized:
@@ -1109,10 +1032,8 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes [state] to [ChannelState] enum if not null
-  /// END LEGACY DOCSTRING
   ChannelState _decodeChannelState(String? state) {
     switch (state) {
       case TxEnumConstants.initialized:
@@ -1135,11 +1056,9 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [ConnectionStateChange]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   ConnectionStateChange _decodeConnectionStateChange(
     Map<String, dynamic> jsonMap,
   ) {
@@ -1165,11 +1084,9 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [ChannelStateChange]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   ChannelStateChange _decodeChannelStateChange(Map<String, dynamic> jsonMap) {
     final current = _decodeChannelState(
         _readFromJson<String>(jsonMap, TxChannelStateChange.current));
@@ -1192,29 +1109,23 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [MessageData]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   MessageData<dynamic>? _decodeChannelMessageData(
     Map<String, dynamic> jsonMap,
   ) =>
       MessageData.fromValue(_readFromJson<Object>(jsonMap, TxMessageData.data));
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [MessageExtras]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   MessageExtras? _decodeChannelMessageExtras(Map<String, dynamic> jsonMap) =>
       MessageExtras.fromMap(jsonMap);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [Message]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   Message _decodeChannelMessage(Map<String, dynamic> jsonMap) {
     final timestamp = _readFromJson<int>(jsonMap, TxMessage.timestamp);
     // here extras may be a Map or a MessageExtras instance as
@@ -1237,10 +1148,8 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes [action] to [PresenceAction] enum if not null
-  /// END LEGACY DOCSTRING
   PresenceAction? _decodePresenceAction(String? action) {
     switch (action) {
       case TxEnumConstants.present:
@@ -1258,11 +1167,9 @@ class Codec extends StandardMessageCodec {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [PresenceMessage]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   PresenceMessage _decodePresenceMessage(Map<String, dynamic> jsonMap) {
     final timestamp = _readFromJson<int>(jsonMap, TxPresenceMessage.timestamp);
     return PresenceMessage(
@@ -1283,11 +1190,9 @@ class Codec extends StandardMessageCodec {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Decodes value [jsonMap] to [PaginatedResult]
   /// returns null if [jsonMap] is null
-  /// END LEGACY DOCSTRING
   PaginatedResult<Object> _decodePaginatedResult(Map<String, dynamic> jsonMap) {
     final type = _readFromJson<int>(jsonMap, TxPaginatedResult.type);
     final items = _readFromJson<List<dynamic>>(jsonMap, TxPaginatedResult.items)

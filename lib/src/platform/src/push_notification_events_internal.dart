@@ -5,36 +5,26 @@ import 'dart:ui';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// package-private implementation of [PushNotificationEvents]
-/// END LEGACY DOCSTRING
 class PushNotificationEventsInternal implements PushNotificationEvents {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Invoked when pushOpenSettingsFor platform method is called
-  /// END LEGACY DOCSTRING
   VoidCallback? onOpenSettingsHandler;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Invoked when pushOnShowNotificationInForeground platform method is called
-  /// END LEGACY DOCSTRING
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Exposes stream of received [RemoteMessage] objects
   /// New message is emitted after pushOnMessage platform method is called
-  /// END LEGACY DOCSTRING
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Controller used to indicate notification was tapped
-  /// END LEGACY DOCSTRING
   StreamController<RemoteMessage> onNotificationTapStreamController =
       StreamController();
 
@@ -63,11 +53,9 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     onShowNotificationInForegroundHandler = callback;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// An internal method that is called from the Platform side to check if the
   /// user wants notifications to be shown when the app is in the foreground.
-  /// END LEGACY DOCSTRING
   Future<bool> showNotificationInForeground(RemoteMessage message) async {
     if (onShowNotificationInForegroundHandler == null) {
       return false;
@@ -75,11 +63,9 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     return onShowNotificationInForegroundHandler!(message);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Implementation of setOnBackgroundMessage. For more documentation,
   /// see [PushNotificationEvents.setOnBackgroundMessage]
-  /// END LEGACY DOCSTRING
   @override
   Future<void> setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
@@ -92,10 +78,8 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Handles a RemoteMessage passed from the platform side.
-  /// END LEGACY DOCSTRING
   void handleBackgroundMessage(RemoteMessage remoteMessage) {
     if (_onBackgroundMessage != null) {
       _onBackgroundMessage!(remoteMessage);
@@ -108,10 +92,8 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Used to close internal [StreamController] instances
-  /// END LEGACY DOCSTRING
   // FIXME: This method is not called anywhere
   // See: https://github.com/ably/ably-flutter/issues/382
   void close() {

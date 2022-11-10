@@ -39,10 +39,8 @@ class ErrorInfo {
   /// END EDITED CANONICAL DOCSTRING
   final String? requestId;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates a [ErrorInfo] with provided values
-  /// END LEGACY DOCSTRING
   ErrorInfo({
     this.cause,
     this.code,

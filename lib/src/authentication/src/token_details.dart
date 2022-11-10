@@ -39,10 +39,8 @@ class TokenDetails {
   /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates a [TokenDetails] with provided values
-  /// END LEGACY DOCSTRING
   const TokenDetails(
     this.token, {
     this.capability,

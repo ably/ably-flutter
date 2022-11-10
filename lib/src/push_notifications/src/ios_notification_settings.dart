@@ -2,7 +2,6 @@
 
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// This file contains push notification types specific to iOS. All types begin
 /// with "UN", since these types belong to the User Notifications framework
@@ -15,7 +14,6 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// schedule notifications.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsettings/1648391-authorizationstatus)
-/// END LEGACY DOCSTRING
 enum UNAuthorizationStatus {
   notDetermined,
   denied,
@@ -24,49 +22,41 @@ enum UNAuthorizationStatus {
   ephemeral,
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Constants indicating the presentation styles for alerts.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unalertstyle)
-/// END LEGACY DOCSTRING
 enum UNAlertStyle {
   none,
   banner,
   alert,
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Constants that indicate the current status of a notification setting.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsetting)
-/// END LEGACY DOCSTRING
 enum UNNotificationSetting {
   notSupported,
   disabled,
   enabled,
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Constants indicating the style previewing a notification's content.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unshowpreviewssetting)
-/// END LEGACY DOCSTRING
 enum UNShowPreviewsSetting {
   always,
   whenAuthenticated,
   never,
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// The object for managing notification-related settings and the authorization
 /// status of your app.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsettings)
-/// END LEGACY DOCSTRING
 class UNNotificationSettings {
   UNNotificationSetting alertSetting;
   UNAlertStyle alertStyle;
@@ -82,11 +72,9 @@ class UNNotificationSettings {
   UNShowPreviewsSetting showPreviewsSetting;
   UNNotificationSetting scheduledDeliverySetting;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Users do not create this class. Call [Push.getNotificationSettings]
   /// instead.
-  /// END LEGACY DOCSTRING
   UNNotificationSettings({
     required this.alertSetting,
     required this.alertStyle,

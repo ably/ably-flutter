@@ -21,22 +21,16 @@ class Push extends PlatformObject {
   static PushNotificationEvents notificationEvents =
       PushNotificationEventsInternal();
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// A rest client used platform side to invoke push notification methods
-  /// END LEGACY DOCSTRING
   final Rest? rest;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// A realtime client used platform side to invoke push notification methods
-  /// END LEGACY DOCSTRING
   final Realtime? realtime;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Pass an Ably realtime or rest client.
-  /// END LEGACY DOCSTRING
   Push({
     this.realtime,
     this.rest,
@@ -133,7 +127,6 @@ class Push extends PlatformObject {
   /// END EDITED CANONICAL DOCSTRING
   Future<void> deactivate() => invoke(PlatformMethod.pushDeactivate);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Resets activation state of Android push device by removing
   /// device data from Android SharedPreferences. After this operation, device
@@ -142,7 +135,6 @@ class Push extends PlatformObject {
   ///
   /// Warning: This is an experimental method and it's use can lead to
   /// unexpected behavior in Push module
-  /// END LEGACY DOCSTRING
   @experimental
   Future<void> reset() {
     if (io.Platform.isAndroid) {

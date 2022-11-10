@@ -7,22 +7,16 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 class PushChannel extends PlatformObject {
   final String _name;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// A rest client used platform side to invoke push notification methods
-  /// END LEGACY DOCSTRING
   final Rest? rest;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// A realtime client used platform side to invoke push notification methods
-  /// END LEGACY DOCSTRING
   final Realtime? realtime;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Pass the channel name and an Ably realtime or rest client.
-  /// END LEGACY DOCSTRING
   PushChannel(this._name, {this.rest, this.realtime}) {
     final ablyClientNotPresent = rest == null && realtime == null;
     final moreThanOneAblyClientPresent = rest != null && realtime != null;

@@ -6,16 +6,12 @@ import 'package:meta/meta.dart';
 /// Creates and destroys [RealtimeChannel] objects.
 /// END EDITED CANONICAL DOCSTRING
 class RealtimeChannels extends Channels<RealtimeChannel> {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instance of ably realtime client
-  /// END LEGACY DOCSTRING
   Realtime realtime;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates with the ably [Realtime] instance
-  /// END LEGACY DOCSTRING
   RealtimeChannels(this.realtime);
 
   @override

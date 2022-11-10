@@ -177,9 +177,7 @@ class Realtime extends PlatformObject {
 
 Map<int?, Realtime> _realtimeInstances = {};
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Returns readonly copy of instances of all [Realtime] clients created.
-/// END LEGACY DOCSTRING
 Map<int?, Realtime> get realtimeInstances =>
     UnmodifiableMapView(_realtimeInstances);

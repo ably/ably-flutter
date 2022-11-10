@@ -7,6 +7,7 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// Enables the management of a connection to Ably.
 /// END EDITED CANONICAL DOCSTRING
 class Connection extends PlatformObject {
+  /// @nodoc
   /// Realtime client instance
   final Realtime realtime;
 
@@ -14,13 +15,11 @@ class Connection extends PlatformObject {
 
   ErrorInfo? _errorReason;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates a connection with [realtime] client instance
   ///
   /// sets default [state] to [ConnectionState.initialized] and starts listening
   /// for updates to the connection [state].
-  /// END LEGACY DOCSTRING
   Connection(this.realtime)
       : _state = ConnectionState.initialized,
         super() {

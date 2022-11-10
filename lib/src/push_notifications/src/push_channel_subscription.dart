@@ -21,10 +21,8 @@ class PushChannelSubscription {
   /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   const PushChannelSubscription({
     required this.channel,
     this.clientId,

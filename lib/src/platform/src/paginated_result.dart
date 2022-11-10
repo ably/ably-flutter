@@ -8,7 +8,6 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 /// available to the `PaginatedResult` object.
 /// END EDITED CANONICAL DOCSTRING
 class PaginatedResult<T> extends PlatformObject {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// stores page handle created by platform APIs
   ///
@@ -19,7 +18,6 @@ class PaginatedResult<T> extends PlatformObject {
   ///
   /// [PaginatedResult.fromAblyMessage] will act as a utility to update
   /// this property. See [next] and [first] for usages
-  /// END LEGACY DOCSTRING
   int? _pageHandle;
 
   late final List<T> _items;
@@ -32,23 +30,19 @@ class PaginatedResult<T> extends PlatformObject {
 
   final bool _hasNext;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
-  /// END LEGACY DOCSTRING
   PaginatedResult(this._items, {required bool hasNext})
       : _hasNext = hasNext,
         super(fetchHandle: false);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
   ///
   /// Sets appropriate [_pageHandle] for identifying platform side of this
   /// result object so that [next] and [first] can be executed
-  /// END LEGACY DOCSTRING
   PaginatedResult.fromAblyMessage(AblyMessage<PaginatedResult<dynamic>> message)
       : _hasNext = message.message.hasNext(),
         _items = message.message.items.map<T>((e) => e as T).toList(),

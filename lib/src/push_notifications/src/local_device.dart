@@ -17,10 +17,8 @@ class LocalDevice extends DeviceDetails {
   /// END EDITED CANONICAL DOCSTRING
   final String? deviceIdentityToken;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   LocalDevice({
     required DeviceDetails deviceDetails,
     this.deviceIdentityToken,

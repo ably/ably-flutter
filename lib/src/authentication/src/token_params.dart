@@ -46,10 +46,8 @@ class TokenParams {
   /// END EDITED CANONICAL DOCSTRING
   final int? ttl;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates a [TokenParams] with provided values
-  /// END LEGACY DOCSTRING
   const TokenParams({
     this.capability,
     this.clientId,
@@ -58,10 +56,8 @@ class TokenParams {
     this.ttl,
   });
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// converts to a map of objects
-  /// END LEGACY DOCSTRING
   Map<String, dynamic> toMap() {
     final jsonMap = <String, dynamic>{};
     if (capability != null) jsonMap['capability'] = capability;

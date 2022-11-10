@@ -20,12 +20,10 @@ class RestChannelOptions {
     return RestChannelOptions(cipherParams: cipherParams);
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Create channel options with a cipher.
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///
   /// https://docs.ably.com/client-lib-development-guide/features/#TB2
-  /// END LEGACY DOCSTRING
   RestChannelOptions({this.cipherParams});
 }

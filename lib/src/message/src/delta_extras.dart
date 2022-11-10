@@ -20,10 +20,8 @@ class DeltaExtras with ObjectHash {
   /// END EDITED CANONICAL DOCSTRING
   final String? format;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// create instance from a map
-  /// END LEGACY DOCSTRING
   @protected
   DeltaExtras.fromMap(Map<String, dynamic> value)
       : format = value[TxDeltaExtras.format] as String?,

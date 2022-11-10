@@ -35,10 +35,8 @@ class ConnectionStateChange {
   /// END EDITED CANONICAL DOCSTRING
   final int? retryIn;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes without any defaults
-  /// END LEGACY DOCSTRING
   const ConnectionStateChange({
     required this.current,
     required this.event,

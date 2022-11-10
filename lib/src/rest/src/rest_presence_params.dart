@@ -22,10 +22,8 @@ class RestPresenceParams {
   /// END EDITED CANONICAL DOCSTRING
   String? connectionId;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes with default [limit] set to 100
-  /// END LEGACY DOCSTRING
   RestPresenceParams({
     this.clientId,
     this.connectionId,

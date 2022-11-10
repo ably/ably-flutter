@@ -39,13 +39,11 @@ class RealtimeHistoryParams {
   /// END EDITED CANONICAL DOCSTRINGS
   final bool? untilAttach;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///
   /// Raises [AssertionError] if [direction] is not "backwards" or "forwards"
-  /// END LEGACY DOCSTRING
   RealtimeHistoryParams({
     this.direction = 'backwards',
     DateTime? end,

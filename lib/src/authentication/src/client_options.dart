@@ -207,10 +207,8 @@ class ClientOptions extends AuthOptions {
   /// END EDITED CANONICAL DOCSTRING
   int channelRetryTimeout = 15000;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance with defaults
-  /// END LEGACY DOCSTRING
   ClientOptions({
     AuthCallback? authCallback,
     Map<String, String>? authHeaders,
@@ -259,12 +257,10 @@ class ClientOptions extends AuthOptions {
           queryTime: queryTime,
           useTokenAuth: useTokenAuth,
         ) {
-    /// BEGIN LEGACY DOCSTRING
     /// @nodoc
     /// These default value assignments are only required until
     /// [ClientOptions.fromKey] is removed, because then defaults can be set
     /// directly in the constructor invocation
-    /// END LEGACY DOCSTRING
     this.autoConnect = autoConnect ?? this.autoConnect;
     this.channelRetryTimeout = channelRetryTimeout ?? this.channelRetryTimeout;
     this.disconnectedRetryTimeout =
@@ -283,12 +279,10 @@ class ClientOptions extends AuthOptions {
     this.useBinaryProtocol = useBinaryProtocol ?? this.useBinaryProtocol;
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes [ClientOptions] with a key and log level set to info
   ///
   /// See [AuthOptions.fromKey] for more details
-  /// END LEGACY DOCSTRING
   @Deprecated(
       "Use ClientOptions constructor with named 'key' parameter instead")
   ClientOptions.fromKey(String key) : super.fromKey(key);

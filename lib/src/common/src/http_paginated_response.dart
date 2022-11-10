@@ -7,14 +7,12 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// response to an HTTP request.
 /// END EDITED CANONICAL DOCSTRING
 abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
   ///
   /// Sets appropriate [PaginatedResult._pageHandle] for identifying platform
   /// side of this result object so that [next] and [first] can be executed
-  /// END LEGACY DOCSTRING
   HttpPaginatedResponse.fromAblyMessage(
     AblyMessage<PaginatedResult<dynamic>> message,
   ) : super.fromAblyMessage(message);

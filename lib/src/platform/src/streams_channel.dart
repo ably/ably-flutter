@@ -24,37 +24,27 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Manages multiple event listeners which would otherwise require verbose code
 /// on platform side
-/// END LEGACY DOCSTRING
 class StreamsChannel {
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// initializes with event channel [name] and method [codec]
-  /// END LEGACY DOCSTRING
   StreamsChannel(this.name, this.codec);
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// The logical channel on which communication happens, not null.
-  /// END LEGACY DOCSTRING
   final String name;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// The message codec used by this channel, not null.
-  /// END LEGACY DOCSTRING
   final MethodCodec codec;
 
   int _lastId = 0;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// registers a listener on platform side and manages the listener
   /// with incremental identifiers
-  /// END LEGACY DOCSTRING
   Stream<T> receiveBroadcastStream<T>([Object? arguments]) {
     final methodChannel = MethodChannel(name, codec);
 

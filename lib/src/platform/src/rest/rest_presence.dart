@@ -8,10 +8,8 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 class RestPresence extends PlatformObject {
   final RestChannel _restChannel;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// instantiates with a channel
-  /// END LEGACY DOCSTRING
   RestPresence(this._restChannel);
 
   @override

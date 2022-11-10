@@ -92,10 +92,8 @@ abstract class AuthOptions {
 // TODO(tiholic) missing token attribute here
 //  see: https://docs.ably.com/client-lib-development-guide/features/#AO2h
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   AuthOptions({
     this.authCallback,
     this.authHeaders,
@@ -113,12 +111,10 @@ abstract class AuthOptions {
     }
   }
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Convenience constructor used to create an AuthOptions object based
   /// on the key string obtained from the application dashboard.
   /// param [key] - the full key string as obtained from the dashboard
-  /// END LEGACY DOCSTRING
   @Deprecated("Use AuthOptions constructor with named 'key' parameter instead")
   AuthOptions.fromKey(String key) {
     if (key.contains(':')) {
@@ -129,12 +125,10 @@ abstract class AuthOptions {
   }
 }
 
-/// BEGIN LEGACY DOCSTRING
 /// @nodoc
 /// Function-type alias implemented by a function that provides either tokens,
 /// or signed token requests, in response to a request with given token params.
 ///
 /// Java: io.ably.lib.rest.Auth.TokenCallback.getTokenRequest(TokenParams)
 /// returns either a [String] token or [TokenDetails] or [TokenRequest]
-/// END LEGACY DOCSTRING
 typedef AuthCallback = Future<Object> Function(TokenParams params);

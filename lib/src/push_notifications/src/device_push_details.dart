@@ -24,10 +24,8 @@ class DevicePushDetails {
   /// END EDITED CANONICAL DOCSTRING
   final ErrorInfo? errorReason;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   const DevicePushDetails({
     this.errorReason,
     this.recipient,

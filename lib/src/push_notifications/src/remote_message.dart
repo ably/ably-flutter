@@ -23,19 +23,15 @@ class RemoteMessage {
   /// END EDITED DOCSTRING
   Notification? notification;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance with [data] set to empty map
-  /// END LEGACY DOCSTRING
   RemoteMessage({
     Map<String, dynamic>? data,
     this.notification,
   }) : data = data ??= {};
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// create instance from a map
-  /// END LEGACY DOCSTRING
   factory RemoteMessage.fromMap(Map<String, dynamic> map) => RemoteMessage(
         data: (map[TxRemoteMessage.data] == null)
             ? <String, dynamic>{}

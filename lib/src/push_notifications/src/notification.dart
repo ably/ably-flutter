@@ -21,19 +21,15 @@ class Notification {
   /// END EDITED DOCSTRING
   final String? body;
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Initializes an instance without any defaults
-  /// END LEGACY DOCSTRING
   const Notification({
     required this.title,
     this.body,
   });
 
-  /// BEGIN LEGACY DOCSTRING
   /// @nodoc
   /// Creates an instance from the map
-  /// END LEGACY DOCSTRING
   factory Notification.fromMap(Map<String, dynamic> map) => Notification(
         body: map[TxNotification.body] as String?,
         title: map[TxNotification.title] as String,
