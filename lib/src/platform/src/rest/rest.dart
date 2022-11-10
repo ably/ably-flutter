@@ -12,21 +12,12 @@ Map<int?, Rest> _restInstances = {};
 /// END LEGACY DOCSTRING
 Map<int?, Rest> get restInstances => UnmodifiableMapView(_restInstances);
 
-/// BEGIN LEGACY DOCSTRING
-/// A simple stateless API to interact directly with Ably’s REST API
-///
-/// Learn more at the [REST Client Library API documentation](https://ably.com/documentation/rest).
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// A client that offers a simple stateless API to interact directly with Ably's
 /// REST API.
 /// END EDITED CANONICAL DOCSTRING
 class Rest extends PlatformObject {
-  /// BEGIN LEGACY DOCSTRING
-  /// Pass a [ClientOptions] to configure the rest client.
-  /// END LEGACY DOCSTRING
-  ///
+
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Construct a `Rest` object using an Ably [options] object.
   /// END EDITED CANONICAL DOCSTRING
@@ -34,10 +25,6 @@ class Rest extends PlatformObject {
     channels = RestChannels(this);
     push = Push(rest: this);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Create a rest client from an API key without configuring other parameters
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Constructs a `Rest` object using an Ably API [key] or token string
@@ -54,33 +41,15 @@ class Rest extends PlatformObject {
     return handle;
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// a custom auth object to perform authentication related operations
-  /// based on the [options]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// An [Auth] object.
   /// END EDITED CANONICAL DOCSTRING
   // Auth? auth;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// [ClientOptions] indicating authentication and other settings for this
-  /// instance to interact with ably service
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED DOCSTRING
   /// An object that contains additional client-specific properties
   /// END EDITED DOCSTRING
   late ClientOptions options;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// creates and sends a raw request to ably service
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
@@ -109,12 +78,6 @@ class Rest extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// gets stats based on params as a [PaginatedResult]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Queries the REST `/stats` API and retrieves your application's usage
   /// statistics. You must specify the [start] time from which stats are
@@ -139,12 +102,6 @@ class Rest extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// returns server time
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the time from the Ably service as milliseconds since the Unix
   /// epoch. Clients that do not have access to a sufficiently well maintained
@@ -157,33 +114,15 @@ class Rest extends PlatformObject {
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// a push object interacting with Push API, such as
-  /// subscribing for push notifications by clientId.
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Push] object.
   /// END EDITED CANONICAL DOCSTRING
   late Push push;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// collection of [RestChannel] instances
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSN1
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Channels] object.
   /// END EDITED CANONICAL DOCSTRING
   late RestChannels channels;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// represents the current state of the device in respect of it being a
-  /// target for push notifications.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [LocalDevice] object that represents the

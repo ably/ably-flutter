@@ -1,32 +1,11 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// A class providing parameters of a token request.
-///
-/// Parameters for a token request
-///
-/// [Auth.authorize], [Auth.requestToken] and [Auth.createTokenRequest]
-/// accept an instance of TokenParams as a parameter
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TK1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Defines the properties of an Ably Token.
 /// END EDITED CANONICAL DOCSTRING
 @immutable
 class TokenParams {
-  /// BEGIN LEGACY DOCSTRING
-  /// Capability of the token.
-  ///
-  /// If the token request is successful, the capability of the
-  /// returned token will be the intersection of this [capability]
-  /// with the capability of the issuing key.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2b
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The capabilities associated with this Ably Token. The capabilities value
   /// is a JSON-encoded representation of the resource paths and associated
@@ -34,14 +13,6 @@ class TokenParams {
   /// [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
   /// END EDITED CANONICAL DOCSTRING
   final String? capability;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// A clientId to associate with this token.
-  ///
-  /// The generated token may be used to authenticate as this clientId.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2c
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
@@ -55,29 +26,11 @@ class TokenParams {
   /// END EDITED CANONICAL DOCSTRING
   final String? clientId;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// An opaque nonce string of at least 16 characters to ensure uniqueness.
-  ///
-  /// Timestamps, in conjunction with the nonce,
-  /// are used to prevent requests from being replayed
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A cryptographically secure random string of at least 16 characters, used
   /// to ensure the [TokenRequest] cannot be reused.
   /// END EDITED CANONICAL DOCSTRING
   final String? nonce;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// The timestamp (in millis since the epoch) of this request.
-  ///
-  ///	Timestamps, in conjunction with the nonce, are used to prevent
-  ///	token requests from being replayed.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The [DateTime] of this request. Timestamps, in conjunction with the
@@ -87,18 +40,6 @@ class TokenParams {
   /// `ClientOptions.defaultTokenParams`.
   /// END EDITED CANONICAL DOCSTRING
   final DateTime? timestamp;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Requested time to live for the token.
-  ///
-  /// If the token request is successful, the TTL of the returned
-  /// token will be less than or equal to this value depending on
-  /// application settings and the attributes of the issuing key.
-  ///
-  /// 0 means Ably will set it to the default value
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Requested time to live for the token in milliseconds.

@@ -1,27 +1,14 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// See Ably Realtime API documentation for more details.
-/// https://docs.ably.com/client-lib-development-guide/features/#connection-states-operations
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Describes the realtime [Connection] object states.
 /// END EDITED CANONICAL DOCSTRING
 enum ConnectionState {
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection is initialized
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A connection with this state has been initialized but no connection has
   /// yet been attempted.
   /// END EDITED CANONICAL DOCSTRING
   initialized,
-
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is being established
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A connection attempt has been initiated. The connecting state is entered
@@ -30,18 +17,10 @@ enum ConnectionState {
   /// END EDITED CANONICAL DOCSTRING
   connecting,
 
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is established
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A connection exists and is active.
   /// END EDITED CANONICAL DOCSTRING
   connected,
-
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is disconnected
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A temporary failure condition. No current connection exists because there
@@ -61,10 +40,6 @@ enum ConnectionState {
   /// END EDITED CANONICAL DOCSTRING
   disconnected,
 
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is suspended
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A long term failure condition. No current connection exists because there
   /// is no network connectivity or no host is available. The suspended state is
@@ -81,10 +56,6 @@ enum ConnectionState {
   /// END EDITED CANONICAL DOCSTRING
   suspended,
 
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is closing
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// An explicit request by the developer to close the connection has been sent
   /// to the Ably service. If a reply is not received from Ably within a short
@@ -92,10 +63,6 @@ enum ConnectionState {
   /// state becomes `CLOSED`.
   /// END EDITED CANONICAL DOCSTRING
   closing,
-
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is closed
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The connection has been explicitly closed by the client. In the closed
@@ -106,10 +73,6 @@ enum ConnectionState {
   /// connection.
   /// END EDITED CANONICAL DOCSTRING
   closed,
-
-  /// BEGIN LEGACY DOCSTRING
-  /// specifies that a connection to ably is failed
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// This state is entered if the client library encounters a failure condition

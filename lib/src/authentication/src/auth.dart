@@ -1,26 +1,10 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// [Auth] object provides a way to create [TokenRequest] objects
-/// with [createTokenRequest] method or create Ably Tokens with
-/// [requestToken] method.
-///
-/// https://www.ably.com/documentation/core-features/authentication#auth-object
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Creates Ably [TokenRequest] objects and obtains Ably Tokens from Ably to
 /// subsequently issue to less trusted clients.
 /// END EDITED CANONICAL DOCSTRING
 abstract class Auth {
-  /// BEGIN LEGACY DOCSTRING
-  /// The clientId for this library instance
-  ///
-  /// see:
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA12
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA7b
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A client ID, used for identifying this client when publishing messages or
   /// for presence purposes. The `clientId` can be any non-empty string, except
@@ -32,13 +16,6 @@ abstract class Auth {
   /// [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
   /// END EDITED CANONICAL DOCSTRING
   String get clientId;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Instructs the library to create a token immediately and ensures
-  /// Token Auth is used for all future requests
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA10
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Instructs the library to get a new token immediately using [tokenParams]
@@ -55,13 +32,6 @@ abstract class Auth {
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Returns a signed TokenRequest object that can be used to obtain
-  /// a token from Ably.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA9
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Creates, signs and returns an Ably [TokenRequest] based on the specified
@@ -84,13 +54,6 @@ abstract class Auth {
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Implicitly creates a TokenRequest if required and requests a token
-  /// from Ably if required. Returns a [TokenDetails] object.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA8
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls the `requestToken` REST API endpoint to obtain an Ably Token

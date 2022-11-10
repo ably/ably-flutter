@@ -1,13 +1,6 @@
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Notification sent by APNS or FCM
-///
-/// See https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/RemoteMessage.Notification
-/// See https://developer.apple.com/documentation/usernotifications/unnotificationcontent
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED DOCSTRING
 /// Notification sent by APNS or FCM
 ///
@@ -16,21 +9,11 @@ import 'package:meta/meta.dart';
 /// END EDITED DOCSTRING
 @immutable
 class Notification {
-  /// BEGIN LEGACY DOCSTRING
-  /// Title of notification, comes from 'UNNotificationContent.title' on iOS
-  /// and 'RemoteMessage.notification.title' on Android
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED DOCSTRING
   /// Title of a notification, comes from 'UNNotificationContent.title' on iOS
   /// and 'RemoteMessage.notification.title' on Android
   /// END EDITED DOCSTRING
   final String title;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Title of notification, comes from 'UNNotificationContent.body' on iOS
-  /// and 'RemoteMessage.notification.body' on Android
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED DOCSTRING
   /// Body of a notification, comes from 'UNNotificationContent.body' on iOS

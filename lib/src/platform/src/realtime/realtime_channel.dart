@@ -3,14 +3,6 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// A named channel through with realtime client can interact with ably service.
-///
-/// The same channel can be interacted with relevant APIs via rest channel.
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTL1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables messages to be published and subscribed to. Also enables historic
 /// messages to be retrieved and provides access to the [RealtimePresence]
@@ -23,27 +15,15 @@ class RealtimeChannel extends PlatformObject {
 
   late RealtimePresence _presence;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Required by [RealtimePresence], should not be used in other cases
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [RealtimePresence] object.
   /// END EDITED CANONICAL DOCSTRING
   Realtime get realtime => _realtime;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Required by [RealtimePresence], should not be used in other cases
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The channel name.
   /// END EDITED CANONICAL DOCSTRING
   String get name => _channelName;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL9
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [RealtimePresence] object.
@@ -76,12 +56,6 @@ class RealtimeChannel extends PlatformObject {
   @override
   Future<int> createPlatformInstance() async => _realtime.handle;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// returns channel history based on filters passed as [params]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an array of historical
   /// [Message] objects for the channel using the specified [params].
@@ -102,12 +76,6 @@ class RealtimeChannel extends PlatformObject {
       AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// publishes messages onto the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL6
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Publishes a [message] or list of [messages] to the channel, or a single
@@ -131,33 +99,16 @@ class RealtimeChannel extends PlatformObject {
     });
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// will hold reason for failure of attaching to channel in such cases
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// An [ErrorInfo] object describing the last error which occurred on the
   /// channel, if any.
   /// END EDITED CANONICAL DOCSTRING
   ErrorInfo? errorReason;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// modes of this channel as returned by Ably server
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// An array of [ChannelMode] objects.
   /// END EDITED CANONICAL DOCSTRING
   List<ChannelMode>? modes;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Subset of the params passed via [ClientOptions]
-  /// that the server has recognized and validated
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4k
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview)
@@ -167,32 +118,15 @@ class RealtimeChannel extends PlatformObject {
 
   // TODO(tihoic) RTL15 - experimental, ChannelProperties properties;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH4
-  /// (see IDL for more details)
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [PushChannel] object.
   /// END EDITED CANONICAL DOCSTRING
   late PushChannel push;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Current state of the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL2b
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The current [ChannelState] of the channel.
   /// END EDITED CANONICAL DOCSTRING
   ChannelState state;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Attaches the realtime client to this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL4
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Attach to this channel ensuring the channel is created in the Ably system
@@ -209,12 +143,6 @@ class RealtimeChannel extends PlatformObject {
         TxTransportKeys.channelName: _channelName,
       });
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Detaches the realtime client from this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL5
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Detach from this channel. Any resulting channel state change is emitted to
   /// any listeners registered using the [RealtimeChannel.on] stream. Once all
@@ -225,13 +153,6 @@ class RealtimeChannel extends PlatformObject {
         TxTransportKeys.channelName: _channelName,
       });
 
-  /// BEGIN LEGACY DOCSTRING
-  /// takes a [RealtimeChannelOptions]] object and sets or updates the
-  /// stored channel options
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL16
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Sets the [options] for the channel.
   /// END EDITED CANONICAL DOCSTRING
@@ -240,10 +161,6 @@ class RealtimeChannel extends PlatformObject {
         TxTransportKeys.channelName: _channelName,
         TxTransportKeys.options: options,
       });
-
-  /// BEGIN LEGACY DOCSTRING
-  /// stream of channel events with specified [ChannelEvent] type
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED DOCSTRING
   /// Stream of channel events with specified [ChannelEvent] type
@@ -256,23 +173,6 @@ class RealtimeChannel extends PlatformObject {
         (stateChange) =>
             channelEvent == null || stateChange.event == channelEvent,
       );
-
-  /// BEGIN LEGACY DOCSTRING
-  /// subscribes for messages on this channel
-  ///
-  /// there is no unsubscribe api in flutter like in other Ably client SDK's
-  /// as subscribe returns a stream which can be cancelled
-  /// by calling [StreamSubscription.cancel]
-  ///
-  /// Warning: the name/ names are not channel names, but message names.
-  /// See [Message] for more information.
-  ///
-  /// Calling subscribe the first time on a channel will automatically attach
-  /// that channel. If a channel is detached, subscribing again will not
-  /// reattach the channel. Remember to call [RealtimeChannel.attach]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL7
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Registers a listener for messages on this channel for an event [name] or

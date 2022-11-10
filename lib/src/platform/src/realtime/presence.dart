@@ -1,13 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Presence object on a [RealtimeChannel] helps to query
-/// Presence members and presence history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTP1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables the presence set to be entered and subscribed to, and the historic
 /// presence set to be retrieved for a channel.
@@ -15,19 +8,12 @@ import 'package:ably_flutter/src/platform/platform_internal.dart';
 class RealtimePresence extends PlatformObject {
   final RealtimeChannel _channel;
 
+  /// @nodoc
   /// instantiates with a channel
   RealtimePresence(this._channel);
 
   @override
   Future<int> createPlatformInstance() => _channel.realtime.handle;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Get the presence members for this Channel.
-  ///
-  /// filters the results if [params] are passed
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP11
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the current members present on the channel and the metadata for
@@ -48,14 +34,6 @@ class RealtimePresence extends PlatformObject {
         .map<PresenceMessage>((e) => e as PresenceMessage)
         .toList();
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Return the presence messages history for the channel as a PaginatedResult
-  ///
-  /// filters the results if [params] are passed
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP12
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an array of historical
@@ -81,13 +59,6 @@ class RealtimePresence extends PlatformObject {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Returns true when the initial member SYNC following
-  /// channel attach is completed.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP13
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Whether the presence set synchronization between Ably and the
   /// clients on the channel has been completed. Set to `true` when the sync is
@@ -96,13 +67,6 @@ class RealtimePresence extends PlatformObject {
   bool? syncComplete;
 
   String? get _realtimeClientId => _channel.realtime.options.clientId;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Enters the current client into this channel, optionally with the data
-  /// and/or extras provided
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP8
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enters the presence set for the channel, optionally passing a [data]
@@ -113,12 +77,6 @@ class RealtimePresence extends PlatformObject {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await enterClient(_realtimeClientId!, data);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Enter the specified client_id into this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Enters the presence set of the channel for a given [clientId], which is
@@ -137,12 +95,6 @@ class RealtimePresence extends PlatformObject {
     });
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Update the presence data for this client.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP9
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Updates the data payload for a presence member. If called before entering
   /// the presence set, this is treated as a [PresenceAction.enter] event.
@@ -152,12 +104,6 @@ class RealtimePresence extends PlatformObject {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await updateClient(_realtimeClientId!, data);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Update the presence data for a specified client_id into this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Updates the [data] payload for a presence member using a given [clientId],
@@ -175,12 +121,6 @@ class RealtimePresence extends PlatformObject {
     });
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Leave this client from this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP10
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Leaves the presence set for the channel. A client must have previously
   /// entered the presence set before they can leave it.
@@ -190,12 +130,6 @@ class RealtimePresence extends PlatformObject {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
     await leaveClient(_realtimeClientId!, data);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Leave a given client_id from this channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP15
-  /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
   /// Leaves the presence set of the channel for a given [clientId], which is
@@ -213,16 +147,6 @@ class RealtimePresence extends PlatformObject {
       if (data != null) TxTransportKeys.data: MessageData.fromValue(data),
     });
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// subscribes to presence messages on a realtime channel
-  ///
-  /// there is no unsubscribe api in flutter like in other Ably client SDK's
-  /// as subscribe returns a stream which can be used to create a
-  /// cancellable stream subscription
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTP6
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Returns a stream that emmits a [PresenceMessage]  each time a matching

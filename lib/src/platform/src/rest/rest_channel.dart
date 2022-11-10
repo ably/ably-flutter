@@ -3,14 +3,6 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// A named channel through with rest client can interact with ably service.
-///
-/// The same channel can be interacted with relevant APIs via realtime channel.
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSL1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables messages to be published and historic messages to be retrieved for a
 /// channel.
@@ -22,18 +14,10 @@ class RestChannel extends PlatformObject {
   /// END LEGACY DOCSTRING
   Rest rest;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Channel to receive push notifications on
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [PushChannel] object.
   /// END EDITED CANONICAL DOCSTRING
   PushChannel push;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// name of the channel
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The channel name.
@@ -41,13 +25,6 @@ class RestChannel extends PlatformObject {
   String name;
 
   late RestPresence _presence;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// presence interface for this channel
-  ///
-  /// can only query presence on the channel and presence history
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [RestPresence] object.
@@ -70,12 +47,6 @@ class RestChannel extends PlatformObject {
   /// END LEGACY DOCSTRING
   @override
   Future<int> createPlatformInstance() async => rest.handle;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// fetch message history on this channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an array of historical
@@ -100,12 +71,6 @@ class RestChannel extends PlatformObject {
     );
   }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// publish messages on this channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Publishes a [message] or list of [messages] to the channel, or a single
   /// message with the given event [name] and [data] payload.
@@ -124,13 +89,6 @@ class RestChannel extends PlatformObject {
       TxTransportKeys.messages: messages,
     });
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// takes a ChannelOptions object and sets or updates the
-  /// stored channel options, then indicates success
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Sets the [options] for the channel.

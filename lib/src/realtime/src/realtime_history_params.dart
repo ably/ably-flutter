@@ -1,52 +1,20 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Params for realtime history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTL10
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRINGS
 /// Contains properties used to filter [RealtimeChannel] history.
 /// END EDITED CANONICAL DOCSTRINGS
 @immutable
 class RealtimeHistoryParams {
-  /// BEGIN LEGACY DOCSTRING
-  /// [start] must be equal to or less than end and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to 1970-01-01T00:00:00Z in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10a
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// The [DateTime] from which messages are retrieved.
   /// END EDITED CANONICAL DOCSTRINGS
   final DateTime start;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// [end] must be equal to or greater than start and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to current datetime in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10a
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// The [DateTime] until messages are retrieved.
   /// END EDITED CANONICAL DOCSTRINGS
   final DateTime end;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Sorting history backwards or forwards
-  ///
-  /// if omitted the direction defaults to the REST API default (backwards)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10a
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// The order for which messages are returned in. Valid values
@@ -56,29 +24,11 @@ class RealtimeHistoryParams {
   /// END EDITED CANONICAL DOCSTRINGS
   final String direction;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Number of items returned in one page
-  /// [limit] supports up to 1,000 items.
-  ///
-  /// if omitted the direction defaults to the REST API default (100)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10a
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// An upper limit on the number of messages returned. The default is 100, and
   /// the maximum is 1000.
   /// END EDITED CANONICAL DOCSTRINGS
   final int limit;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Decides whether to retrieve messages from earlier session.
-  ///
-  /// if true, will only retrieve messages prior to the moment that the channel
-  /// was attached or emitted an UPDATE indicating loss of continuity.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTL10b
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// Whether it's ensured that the message history is up until the point

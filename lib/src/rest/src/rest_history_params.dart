@@ -1,50 +1,18 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Params for rest history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSL2b
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRINGS
 /// Contains properties used to filter [RestChannel] history.
 /// END EDITED CANONICAL DOCSTRINGS
 class RestHistoryParams {
-  /// BEGIN LEGACY DOCSTRING
-  /// [start] must be equal to or less than end and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to 1970-01-01T00:00:00Z in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
-  /// END LEGACY DOCSTRING
-
   /// BEGIN CANONICAL DOCSTRINGS
   /// The [DateTime] from which messages are retrieved.
   /// END CANONICAL DOCSTRINGS
   final DateTime start;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// [end] must be equal to or greater than start and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to current datetime in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// The [DateTime] until messages are retrieved.
   /// END EDITED CANONICAL DOCSTRINGS
   final DateTime end;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Sorting history backwards or forwards
-  ///
-  /// if omitted the direction defaults to the REST API default (backwards)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b2
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// The order for which messages are returned in. Valid values are `backwards`
@@ -52,15 +20,6 @@ class RestHistoryParams {
   /// orders messages from oldest to most recent. The default is `backwards`.
   /// END EDITED CANONICAL DOCSTRINGS
   final String direction;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Number of items returned in one page
-  /// [limit] supports up to 1,000 items.
-  ///
-  /// if omitted the direction defaults to the REST API default (100)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b3
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRINGS
   /// An upper limit on the number of messages returned. The default

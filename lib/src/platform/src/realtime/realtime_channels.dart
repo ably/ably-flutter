@@ -2,12 +2,6 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:meta/meta.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// A collection of realtime channel objects
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RTS1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Creates and destroys [RealtimeChannel] objects.
 /// END EDITED CANONICAL DOCSTRING
@@ -27,11 +21,6 @@ class RealtimeChannels extends Channels<RealtimeChannel> {
   @override
   @protected
   RealtimeChannel createChannel(String name) => RealtimeChannel(realtime, name);
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Detaches the channel and then releases the channel resource
-  /// so it can be garbage collected.
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Releases a [RealtimeChannel] object with a specified [name], deleting it.

@@ -1,20 +1,10 @@
 import 'package:meta/meta.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Response to a `requestToken` request
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TD1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains an Ably Token and its associated metadata.
 /// END EDITED CANONICAL DOCSTRING
 @immutable
 class TokenDetails {
-  /// BEGIN LEGACY DOCSTRING
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD2
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The [Ably Token](https://ably.com/docs/core-features/authentication#ably-tokens)
   /// itself. A typical Ably Token string appears with the form
@@ -22,23 +12,11 @@ class TokenDetails {
   /// END EDITED CANONICAL DOCSTRING
   final String? token;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Token expiry time in milliseconds
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD3
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The timestamp at which this token expires as milliseconds since the Unix
   /// epoch.
   /// END EDITED CANONICAL DOCSTRING
   final int? expires;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// the time the token was issued in milliseconds
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD4
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The timestamp at which this token was issued as milliseconds since the
@@ -46,30 +24,12 @@ class TokenDetails {
   /// END EDITED CANONICAL DOCSTRING
   final int? issued;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// stringified capabilities JSON
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD5
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The capabilities associated with this Ably Token. The capabilities value
   /// is a JSON-encoded representation of the resource paths and associated
   /// operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
   /// END EDITED CANONICAL DOCSTRING
   final String? capability;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Client ID assigned to the token.
-  ///
-  /// If [clientId] is not set (i.e. null), then the token is prohibited
-  /// from assuming a clientId in any operations, however if clientId
-  /// is a wildcard string '*', then the token is permitted to assume
-  /// any clientId. Any other string value for clientId implies that the
-  /// clientId is both enforced and assumed for all operations for this token
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD6
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The client ID, if any, bound to this Ably Token. If a client ID is
@@ -90,12 +50,6 @@ class TokenDetails {
     this.expires,
     this.issued,
   });
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Creates an instance from the map
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TD7
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// TD7	A static factory method to create a [TokenDetails] authentication

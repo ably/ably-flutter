@@ -5,28 +5,11 @@ import 'dart:io' as io show Platform;
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// The Ably Realtime client library establishes and maintains a persistent
-/// connection to Ably enabling low latency broadcasting and receiving of
-/// messages and presence state.
-///
-/// Learn more at the [Realtime Client Library API documentation](https://ably.com/documentation/realtime).
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// A client that extends functionality of the [Rest] and provides
 /// additional realtime-specific features.
 /// END EDITED CANONICAL DOCSTRING
 class Realtime extends PlatformObject {
-  /// BEGIN LEGACY DOCSTRING
-  /// instantiates with [ClientOptions] and a String [key]
-  ///
-  /// creates client options from key if [key] is provided
-  ///
-  /// raises [AssertionError] if both [options] and [key] are null
-  /// END LEGACY DOCSTRING
-  ///
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Constructs a `Realtime` object using an Ably [options] object or
   /// the Ably API [key] or token string used to validate the client.
@@ -41,11 +24,6 @@ class Realtime extends PlatformObject {
     _channels = RealtimeChannels(this);
     push = Push(realtime: this);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Create a realtime client from an API key without
-  /// configuring other parameters
-  /// END LEGACY DOCSTRING
 
   /// BEGIN CANONICAL DOCSTRING
   /// Constructs a `Realtime` object using an Ably API [key] or token string
@@ -82,44 +60,21 @@ class Realtime extends PlatformObject {
   // The _connection instance keeps a reference to this platform object.
   late final Connection _connection;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Provides access to the underlying Connection object
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Connection] object.
   /// END EDITED CANONICAL DOCSTRING
   Connection get connection => _connection;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// a custom auth object to perform authentication related operations
-  /// based on the [options]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// An [Auth] object.
   /// END EDITED CANONICAL DOCSTRING
   // Auth? auth;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// [ClientOptions] indicating authentication and other settings for this
-  /// instance to interact with ably service
-  /// END LEGACY DOCSTRING
-
-  /// BEGIN EDITED CANONICAL DOCSTRING
+  /// BEGIN EDITED DOCSTRING
   /// @nodoc
   /// A [ClientOptions] object used to configure the client connection to Ably.
-  /// END EDITED CANONICAL DOCSTRING
+  /// END EDITED DOCSTRING
   late ClientOptions options;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// a push object interacting with Push API
-  /// viz., subscribing for push notifications, etc
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Push] object.
@@ -128,20 +83,10 @@ class Realtime extends PlatformObject {
 
   late RealtimeChannels _channels;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Provides access to the underlying [RealtimeChannels]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// A [Channels] object.
   /// END EDITED CANONICAL DOCSTRING
   RealtimeChannels get channels => _channels;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// closes the [connection]
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls [Connection.close] and causes the connection to close, entering the
@@ -150,22 +95,12 @@ class Realtime extends PlatformObject {
   /// END EDITED CANONICAL DOCSTRING
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
-  /// BEGIN LEGACY DOCSTRING
-  /// connects to [connection]
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Calls [Connection.connect] and causes the connection to open, entering the
   /// connecting state. Explicitly calling [Connection.connect] is unnecessary
   /// unless the [ClientOptions.autoConnect] property is disabled.
   /// END EDITED CANONICAL DOCSTRING
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
-
-  /// BEGIN LEGACY DOCSTRING
-  /// creates and sends a raw request to ably service
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
@@ -194,12 +129,6 @@ class Realtime extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// gets stats based on params as a [PaginatedResult]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Queries the REST `/stats` API and retrieves your application's usage
   /// statistics. You must specify the [start] time from which stats are
@@ -225,12 +154,6 @@ class Realtime extends PlatformObject {
   //   throw UnimplementedError();
   // }
 
-  /// BEGIN LEGACY DOCSTRING
-  /// returns server time
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the [DateTime] from the Ably service. Clients that do not have
   /// access to a sufficiently well maintained time source and wish to issue
@@ -243,13 +166,6 @@ class Realtime extends PlatformObject {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// represents the current state of the device in respect of it being a
-  /// target for push notifications.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [LocalDevice] object that represents the current state of the

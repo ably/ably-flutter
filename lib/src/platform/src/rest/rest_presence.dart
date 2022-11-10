@@ -1,13 +1,6 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Presence object on a [RestChannel] helps to query Presence members
-/// and presence history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSP1
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Enables the retrieval of the current and historic presence set for a
 /// channel.
@@ -23,12 +16,6 @@ class RestPresence extends PlatformObject {
 
   @override
   Future<int> createPlatformInstance() => _restChannel.rest.handle;
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Obtain the set of members currently present for a channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves the current members present on the channel and the metadata for
@@ -52,12 +39,6 @@ class RestPresence extends PlatformObject {
       AblyMessage.castFrom<dynamic, PaginatedResult<dynamic>>(message),
     );
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Return the presence messages history for the channel.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP4
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Retrieves a [PaginatedResult] object, containing an

@@ -4,21 +4,11 @@ import 'dart:typed_data';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// BEGIN LEGACY DOCSTRING
-/// Utility methods for creating keys ([generateRandomKey]) and configuration
-/// objects ([CipherParams]) for symmetric encryption.
-/// END LEGACY DOCSTRING
-
 /// BEGIN EDITED CANONICAL DOCSTRING
 /// Contains the properties required to configure the encryption of [Message]
 /// payloads.
 /// END EDITED CANONICAL DOCSTRING
 class Crypto {
-  /// BEGIN LEGACY DOCSTRING
-  /// Default algorithm used of encryption
-  /// Currently only AES is supported
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The algorithm to use for encryption. Only `aes` is supported.
   /// END EDITED CANONICAL DOCSTRING
@@ -43,26 +33,10 @@ class Crypto {
   /// END LEGACY DOCSTRING
   static const keyLength128bits = 128;
 
-  /// BEGIN LEGACY DOCSTRING
-  /// Default mode used of encryption
-  /// Currently only CBC is supported
-  /// END LEGACY DOCSTRING
-
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// The cipher mode. Only `cbc` is supported.
   /// END EDITED CANONICAL DOCSTRING
   static const defaultMode = 'cbc';
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Gets the CipherParams which can be used to with [RestChannelOptions] or
-  /// [RealtimeChannelOptions] to specify encryption.
-  ///
-  ///  Pass a [String] containing a base64 encoded key or a [Uint8List]
-  ///  containing raw bytes for the key. This key must be 128 or 256 bits long.
-  ///  If you have a password, do not use it directly, instead you should
-  ///  derive a key from this password, for example by using a key derivation
-  ///  function (KDF) such as PBKDF2.
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING - NEEDS DISCUSSION AND CLEARING UP
   /// Returns a [CipherParams] object, using the private [key] used to encrypt
@@ -101,16 +75,6 @@ class Crypto {
       );
     }
   }
-
-  /// BEGIN LEGACY DOCSTRING
-  /// Create a random key
-  ///
-  /// Specify a [keyLength] to choose how long the key is.
-  /// Defaults to [defaultKeyLengthInBits].
-  ///
-  /// Warning: If you create a random key and encrypt messages without sharing
-  /// this key with other clients, there is no way to decrypt the messages.
-  /// END LEGACY DOCSTRING
 
   /// BEGIN EDITED CANONICAL DOCSTRING
   /// Generates and returns a Future with a random key as [Uint8List], to be
