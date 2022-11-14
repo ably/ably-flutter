@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 /// Contains the details of the push registration of a device.
 @immutable
 class DevicePushDetails {
-
   /// A [Map] object of key-value pairs that consists of the push transport and
   /// address.
   final Map<String, String>? recipient;

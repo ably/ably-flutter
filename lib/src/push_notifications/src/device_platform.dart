@@ -1,4 +1,3 @@
-
 /// Describes the device receiving push notifications.
 enum DevicePlatform {
 
