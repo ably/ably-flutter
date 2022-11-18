@@ -61,10 +61,11 @@ class Crypto {
   }
 
   /// Generates and returns a Future with a random key as [Uint8List], to be
-  /// used in the encryption of the channel, using the provided
-  /// [keyLength] - the length of the key, in bits, to be generated. If not
-  /// specified, this is equal to the default keyLength of the default
-  /// algorithm: for AES this is 256 bits.
+  /// used in the encryption of the channel.
+  ///
+  /// The provided [keyLength] is the length of the key to be generated, in
+  /// bits. If not specified, this is equal to the default keyLength of the
+  /// default algorithm: for AES this is 256 bits.
   static Future<Uint8List> generateRandomKey({
     int keyLength = defaultKeyLengthInBits,
   }) =>

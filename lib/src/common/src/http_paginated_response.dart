@@ -2,6 +2,7 @@ import 'package:ably_flutter/ably_flutter.dart';
 
 /// A superset of [PaginatedResult] which represents a page of results plus
 /// metadata indicating the relative queries available to it.
+///
 /// `HttpPaginatedResponse` additionally carries information about the
 /// response to an HTTP request.
 abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
@@ -18,8 +19,9 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   /// The HTTP status code of the response.
   int? statusCode;
 
-  /// Whether `statusCode` indicates success. This is equivalent to
-  /// `200 <= statusCode < 300`.
+  /// Whether `statusCode` indicates success.
+  ///
+  /// This is equivalent to `200 <= statusCode < 300`.
   bool? success;
 
   /// The error code if the `X-Ably-Errorcode` HTTP header is sent in the

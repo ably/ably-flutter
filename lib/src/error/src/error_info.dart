@@ -1,9 +1,8 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
 /// A generic Ably error object that contains an Ably-specific status code, and
-/// a generic status code. Errors returned from the Ably server are compatible
-/// with the `ErrorInfo` structure and should result in errors that inherit from
-/// `ErrorInfo`.
+/// a generic status code.
+///
+/// Errors returned from the Ably server are compatible with the `ErrorInfo`
+/// structure and should result in errors that inherit from `ErrorInfo`.
 class ErrorInfo {
   /// Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json).
   final int? code;

@@ -2,9 +2,11 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// Contains a page of results for message or presence history, stats, or REST
-/// presence requests. A `PaginatedResult` response from a REST API paginated
-/// query is also accompanied by metadata that indicates the relative queries
-/// available to the `PaginatedResult` object.
+/// presence requests.
+///
+/// A `PaginatedResult` response from a REST API paginated query is also
+/// accompanied by metadata that indicates the relative queries available to the
+/// `PaginatedResult` object.
 class PaginatedResult<T> extends PlatformObject {
   /// @nodoc
   /// stores page handle created by platform APIs
@@ -73,11 +75,13 @@ class PaginatedResult<T> extends PlatformObject {
     );
   }
 
-  /// Whether there are more pages available by calling next. Return
-  /// false if this page is the last page available.
+  /// Whether there are more pages available by calling next.
+  ///
+  /// Returns false if this page is the last page available.
   bool hasNext() => _hasNext;
 
-  /// Whether this page is the last page. Returns false if there are
-  /// more pages available by calling next available.
+  /// Whether this page is the last page.
+  ///
+  /// Returns false if there are more pages available by calling next available.
   bool isLast() => !_hasNext;
 }

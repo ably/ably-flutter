@@ -4,7 +4,9 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// [Rest.new] or the Realtime [Realtime.new]
 class ClientOptions extends AuthOptions {
   /// A client ID, used for identifying this client when publishing messages or
-  /// for presence purposes. The `clientId` can be any non-empty string, except
+  /// for presence purposes.
+  ///
+  /// The `clientId` can be any non-empty string, except
   /// it cannot contain a `*`. This option is primarily intended to be used in
   /// situations where the library is instantiated with a key. Note that a
   /// `clientId` may also be implicit in a token used to instantiate the
@@ -55,12 +57,13 @@ class ClientOptions extends AuthOptions {
   bool useBinaryProtocol = true;
 
   /// Whether the default behavior whereby the library queues messages on a
-  /// connection in the disconnected or connecting states is used. The default
-  /// behavior enables applications to submit messages immediately upon
-  /// instantiating the library without having to wait for the connection to be
-  /// established. Applications may use this option to disable queueing if they
-  /// wish to have application-level control over the queueing. The default is
-  /// `true`.
+  /// connection in the disconnected or connecting states is used.
+  ///
+  /// The default behavior enables applications to submit messages immediately
+  /// upon instantiating the library without having to wait for the connection
+  /// to be established. Applications may use this option to disable queueing if
+  /// they wish to have application-level control over the queueing. The default
+  /// is `true`.
   bool queueMessages = true;
 
   /// Whether messages originating from this connection should be echoed back on
@@ -85,6 +88,7 @@ class ClientOptions extends AuthOptions {
 
   /// A list of fallback hosts to be used in the case of an error necessitating
   /// the use of an alternative host.
+  ///
   /// If you have been provided a set of custom fallback hosts by Ably, please
   /// specify them here.
   List<String>? fallbackHosts;
@@ -109,9 +113,11 @@ class ClientOptions extends AuthOptions {
   /// miliseconds (30s).
   int suspendedRetryTimeout = 30000;
 
-  /// Whether idempotent publishing should be enabled - by assigning a unique
-  /// message ID client-side, the Ably servers are allowed to discard automatic
-  /// publish retries following a failure such as a network fault.
+  /// Whether idempotent publishing should be enabled.
+  ///
+  /// Assigning a unique message ID client-side allows the Ably servers to
+  /// discard automatic publish retries following a failure such as a network
+  /// fault.
   bool? idempotentRestPublishing;
 
   /// A set of key-value pairs that can be used to pass in arbitrary connection
@@ -134,10 +140,12 @@ class ClientOptions extends AuthOptions {
 
   /// Timeout for the wait of acknowledgement for operations performed via a
   /// realtime connection, before the client library considers a request failed
-  /// and triggers a failure condition. Operations include establishing a
-  /// connection with Ably, or sending a `HEARTBEAT`, `CONNECT`, `ATTACH`,
-  /// `DETACH` or `CLOSE` request. It is the equivalent of `httpRequestTimeout`
-  /// but for realtime operations, rather than REST.
+  /// and triggers a failure condition.
+  ///
+  /// Operations include establishing a connection with Ably, or sending a
+  /// `HEARTBEAT`, `CONNECT`, `ATTACH`, `DETACH` or `CLOSE` request. It is the
+  /// equivalent of `httpRequestTimeout` but for realtime operations, rather
+  /// than REST.
   int? realtimeRequestTimeout;
 
   /// The maximum time before HTTP requests are retried against the default

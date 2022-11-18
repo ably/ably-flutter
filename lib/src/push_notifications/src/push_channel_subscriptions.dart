@@ -10,15 +10,17 @@ abstract class PushChannelSubscriptions {
   );
 
   /// Retrieves all channels with at least one device subscribed to push
-  /// notifications using a [params] object. Returns a [PaginatedResult] object,
-  /// containing an array of channel names.
+  /// notifications using a [params] object.
+  ///
+  /// Returns a [PaginatedResult] object, containing an array of channel names.
   Future<PaginatedResult<String>> listChannels(
     PushChannelsParams params,
   );
 
   /// Subscribes a device, or a group of devices sharing the same `clientId` to
-  /// push notifications on a channel, using the [subscription] object. Returns
-  /// a [PushChannelSubscription] object describing the new or updated
+  /// push notifications on a channel, using the [subscription] object.
+  ///
+  /// Returns a [PushChannelSubscription] object describing the new or updated
   /// subscriptions.
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
 

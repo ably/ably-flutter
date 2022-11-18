@@ -4,24 +4,27 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// subsequently issue to less trusted clients.
 abstract class Auth {
   /// A client ID, used for identifying this client when publishing messages or
-  /// for presence purposes. The `clientId` can be any non-empty string, except
-  /// it cannot contain a `*`. This option is primarily intended to be used in
-  /// situations where the library is instantiated with a key. Note that a
-  /// `clientId` may also be implicit in a token used to instantiate the
-  /// library. An error is raised if a `clientId` specified here conflicts with
-  /// the `clientId` implicit in the token. Find out more about
-  /// [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
+  /// for presence purposes.
+  ///
+  /// The `clientId` can be any non-empty string, except it cannot contain a
+  /// `*`. This option is primarily intended to be used in situations where the
+  /// library is instantiated with a key. Note that a `clientId` may also be
+  /// implicit in a token used to instantiate the library. An error is raised if
+  /// a `clientId` specified here conflicts with the `clientId` implicit in the
+  /// token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
   String get clientId;
 
   /// Instructs the library to get a new token immediately using [tokenParams]
-  /// and [authOptions] parameters. When using the realtime client, it upgrades
-  /// the current realtime connection to use the new token, or if not connected,
-  /// initiates a connection to Ably, once the new token has been obtained.
-  /// Also stores any [tokenParams] and [authOptions] passed in as the new
-  /// defaults, to be used for all subsequent implicit or explicit token
-  /// requests. Any [tokenParams] and [authOptions] objects passed in entirely
-  /// replace, as opposed to being merged with, the current client library saved
-  /// values. Returns a [TokenDetails] object.
+  /// and [authOptions] parameters.
+  ///
+  /// When using the realtime client, it upgrades the current realtime
+  /// connection to use the new token, or if not connected, initiates a
+  /// connection to Ably, once the new token has been obtained. Also stores any
+  /// [tokenParams] and [authOptions] passed in as the new defaults, to be used
+  /// for all subsequent implicit or explicit token requests. Any [tokenParams]
+  /// and [authOptions] objects passed in entirely replace, as opposed to being
+  /// merged with, the current client library saved values. Returns a
+  /// [TokenDetails] object.
   Future<TokenDetails> authorize({
     AuthOptions? authOptions,
     TokenParams? tokenParams,

@@ -74,17 +74,22 @@ class Realtime extends PlatformObject {
   RealtimeChannels get channels => _channels;
 
   /// Calls [Connection.close] and causes the connection to close, entering the
-  /// closing state. Once closed, the library will not attempt to re-establish
-  /// the connection without an explicit call to [Connection.connect].
+  /// closing state.
+  ///
+  /// Once closed, the library will not attempt to re-establish the connection
+  /// without an explicit call to [Connection.connect].
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
   /// Calls [Connection.connect] and causes the connection to open, entering the
-  /// connecting state. Explicitly calling [Connection.connect] is unnecessary
-  /// unless the [ClientOptions.autoConnect] property is disabled.
+  /// connecting state.
+  ///
+  /// Explicitly calling [Connection.connect] is unnecessary unless the
+  /// [ClientOptions.autoConnect] property is disabled.
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
   /// `POST`.
+  ///
   /// [params] can be specified to include in the URL query of the
   /// request. The parameters depend on the endpoint being queried. See the
   /// [REST API reference](https://ably.com/docs/api/rest-api) for the available
@@ -109,10 +114,11 @@ class Realtime extends PlatformObject {
   // }
 
   /// Queries the REST `/stats` API and retrieves your application's usage
-  /// statistics. You must specify the [start] time from which stats are
-  /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
-  /// time until stats are retrieved, specified as milliseconds since the Unix
-  /// epoch.
+  /// statistics.
+  ///
+  /// You must specify the [start] time from which stats are retrieved,
+  /// specified as milliseconds since the Unix epoch, and the [end] time until
+  /// stats are retrieved, specified as milliseconds since the Unix epoch.
   /// Set the [direction], which describes the order in which stats are returned
   /// in. Valid values are `backwards` which orders stats from most recent to
   /// oldest, or `forwards` which orders stats from oldest to most recent. The

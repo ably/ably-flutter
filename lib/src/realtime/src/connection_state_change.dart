@@ -11,8 +11,10 @@ class ConnectionStateChange {
   /// The new [ConnectionState].
   final ConnectionState current;
 
-  /// The previous [ConnectionState]. For the [ConnectionEvent.update] event,
-  /// this is equal to the current [ConnectionState].
+  /// The previous [ConnectionState].
+  ///
+  /// For the [ConnectionEvent.update] event, this is equal to the current
+  /// [ConnectionState].
   final ConnectionState previous;
 
   /// An [ErrorInfo object containing any information relating to the

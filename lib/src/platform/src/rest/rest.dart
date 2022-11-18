@@ -41,6 +41,7 @@ class Rest extends PlatformObject {
 
   /// Makes a REST request to a provided [path] using a [method], such as `GET`,
   /// `POST`.
+  ///
   /// [params] can be specified to include in the URL query of the
   /// request. The parameters depend on the endpoint being queried. See the
   /// [REST API reference](https://ably.com/docs/api/rest-api) for the available
@@ -69,6 +70,7 @@ class Rest extends PlatformObject {
   /// retrieved, specified as milliseconds since the Unix epoch, and the [end]
   /// time until stats are retrieved, specified as milliseconds since the Unix
   /// epoch.
+  ///
   /// Set the [direction], which describes the order in which stats are returned
   /// in. Valid values are `backwards` which orders stats from most recent to
   /// oldest, or `forwards` which orders stats from oldest to most recent. The
@@ -87,7 +89,9 @@ class Rest extends PlatformObject {
   // }
 
   /// Retrieves the time from the Ably service as milliseconds since the Unix
-  /// epoch. Clients that do not have access to a sufficiently well maintained
+  /// epoch.
+  ///
+  /// Clients that do not have access to a sufficiently well maintained
   /// time source and wish to issue Ably [TokenRequest]s with a more accurate
   /// timestamp should use the [AuthOptions.queryTime] property on a
   /// [ClientOptions] object instead of this method.

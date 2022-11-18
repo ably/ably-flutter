@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 class RealtimePresenceParams {
   /// Whether to wait for a full presence set synchronization between Ably
   /// and the clients on the channel to complete before returning the results.
+  ///
   /// Synchronization begins as soon as the channel is [ChannelState.attached].
   /// When set to true the results will be returned as soon as the sync is
   /// complete. When set to false the current list of members will be returned

@@ -21,10 +21,11 @@ class Stats {
   /// message stats.
   StatsMessageTraffic? inbound;
 
-  /// The UTC time at which the time period covered begins. If `unit` is set to
-  /// `minute` this will be in the format `YYYY-mm-dd:HH:MM`, if `hour` it will
-  /// be `YYYY-mm-dd:HH`, if day it will be `YYYY-mm-dd:00` and if `month` it
-  /// will be `YYYY-mm-01:00`.
+  /// The UTC time at which the time period covered begins.
+  ///
+  /// If `unit` is set to `minute` this will be in the format
+  /// `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if day it will
+  /// be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.
   String? intervalId;
 
   /// A [StatsMessageTraffic] object containing the aggregate count of outbound

@@ -10,18 +10,23 @@ class DeviceDetails {
   /// The client ID the device is connected to Ably with.
   final String? clientId;
 
-  /// The [DevicePlatform] associated with the device. Describes the platform
-  /// the device uses, such as `android` or `ios`.
+  /// The [DevicePlatform] associated with the device.
+  ///
+  /// Describes the platform the device uses, such as `android` or `ios`.
   final DevicePlatform platform;
 
-  /// The [FormFactor] object associated with the device. Describes the type of
+  /// The [FormFactor] object associated with the device.
+  ///
+  /// Describes the type of
   /// the device, such as `phone` or `tablet`.
   final FormFactor formFactor;
 
   /// A [Map] object of key-value pairs that contains metadata for the device.
   final Map<String, String> metadata;
 
-  /// The [DevicePushDetails] object associated with the device. Describes the
+  /// The [DevicePushDetails] object associated with the device.
+  ///
+  /// Describes the
   /// details of the push registration of the device.
   final DevicePushDetails push;
 

@@ -19,8 +19,9 @@ class RestChannels extends Channels<RestChannel> {
   RestChannel createChannel(String name) =>
       RestChannel(_rest, PushChannel(name, rest: _rest), name);
 
-  /// Releases a [RestChannel] object with a specified [name], deleting it. It
-  /// also removes any listeners associated with the channel. To release a
+  /// Releases a [RestChannel] object with a specified [name], deleting it.
+  ///
+  /// It also removes any listeners associated with the channel. To release a
   /// channel, the [ChannelState] must be `INITIALIZED`, `DETACHED`, or
   /// `FAILED`.
   @override

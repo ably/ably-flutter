@@ -10,11 +10,14 @@ class RestHistoryParams {
 
   /// The order for which messages are returned in. Valid values are `backwards`
   /// which orders messages from most recent to oldest, or `forwards` which
-  /// orders messages from oldest to most recent. The default is `backwards`.
+  /// orders messages from oldest to most recent.
+  ///
+  /// The default is `backwards`.
   final String direction;
 
-  /// An upper limit on the number of messages returned. The default
-  /// is 100, and the maximum is 1000.
+  /// An upper limit on the number of messages returned.
+  ///
+  /// The default is 100, and the maximum is 1000.
   final int limit;
 
   /// @nodoc

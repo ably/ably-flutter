@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// Enables messages to be published and subscribed to. Also enables historic
-/// messages to be retrieved and provides access to the [RealtimePresence]
-/// object of a channel.
+/// Enables messages to be published and subscribed to.
+///
+/// Also enables historic messages to be retrieved and provides access to the
+/// [RealtimePresence] object of a channel.
 class RealtimeChannel extends PlatformObject {
   final Realtime _realtime;
 
@@ -105,6 +106,7 @@ class RealtimeChannel extends PlatformObject {
   /// Attach to this channel ensuring the channel is created in the Ably system
   /// and all messages published on the channel are received by any channel
   /// listeners registered using [RealtimeChannel.subscribe].
+  ///
   /// Any resulting channel state change will be emitted to any listeners
   /// registered using the [RealtimeChannel.on] stream. As a convenience,
   /// `attach()` is called implicitly if [RealtimeChannel.subscribe] for the
@@ -116,9 +118,10 @@ class RealtimeChannel extends PlatformObject {
       });
 
   /// Detach from this channel. Any resulting channel state change is emitted to
-  /// any listeners registered using the [RealtimeChannel.on] stream. Once all
-  /// clients globally have detached from the channel, the channel will be
-  /// released in the Ably service within two minutes.
+  /// any listeners registered using the [RealtimeChannel.on] stream.
+  ///
+  /// Once all clients globally have detached from the channel, the channel will
+  /// be released in the Ably service within two minutes.
   Future<void> detach() => invoke(PlatformMethod.detachRealtimeChannel, {
         TxTransportKeys.channelName: _channelName,
       });

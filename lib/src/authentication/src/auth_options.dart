@@ -1,14 +1,17 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
 /// Passes authentication-specific properties in authentication requests to
-/// Ably. Properties set using `AuthOptions` are used instead of the default
+/// Ably.
+///
+/// Properties set using `AuthOptions` are used instead of the default
 /// values set when the client library is instantiated, as opposed to being
 /// merged with them.
 abstract class AuthOptions {
-  /// Called when a new token is required. The role of the callback is to obtain
-  /// a fresh token, one of: an Ably Token string (in plain text format);
-  /// a signed [TokenRequest]; a [TokenDetails] (in JSON format); an
-  /// [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt).
+  /// Called when a new token is required.
+  ///
+  /// The role of the callback is to obtain a fresh token, one of: an Ably Token
+  /// string (in plain text format); a signed [TokenRequest]; a [TokenDetails]
+  /// (in JSON format); an [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt).
   /// See the [authentication documentation](https://ably.com/docs/realtime/authentication)
   /// for details of the Ably [TokenRequest] format and associated API calls.
   AuthCallback? authCallback;
@@ -23,29 +26,36 @@ abstract class AuthOptions {
   String? authMethod;
 
   /// The full API key string, as obtained from the [Ably dashboard](https://ably.com/dashboard).
+  ///
   /// Use this option if you wish to use Basic authentication, or wish to be
   /// able to issue Ably Tokens without needing to defer to a separate entity to
   /// sign Ably [TokenRequest]s. Read more about [Basic authentication](https://ably.com/docs/core-features/authentication#basic-authentication).
   String? key;
 
   /// An authenticated [TokenDetails] object (most commonly obtained from an
-  /// Ably Token Request response). This option is mostly useful for testing:
-  /// since tokens are short-lived, in production you almost always want to use
-  /// an authentication method that enables the client library to renew the
-  /// token automatically when the previous one expires, such as `authUrl` or
-  /// `authCallback`. Use this option if you wish to use Token authentication.
-  /// Read more about [Token authentication](https://ably.com/docs/core-features/authentication#token-authentication).
+  /// Ably Token Request response).
+  ///
+  /// This option is mostly useful for testing: since tokens are short-lived, in
+  /// production you almost always want to use an authentication method that
+  /// enables the client library to renew the token automatically when the
+  /// previous one expires, such as `authUrl` or `authCallback`. Use this option
+  /// if you wish to use Token authentication. Read more about
+  /// [Token authentication](https://ably.com/docs/core-features/authentication#token-authentication).
   TokenDetails? tokenDetails;
 
   /// A set of key-value pair headers to be added to any request made to the
-  /// `authUrl`. Useful when an application requires these to be added to
+  /// `authUrl`.
+  ///
+  /// Useful when an application requires these to be added to
   /// validate the request or implement the response. If the `authHeaders`
   /// object contains an `authorization` key, then `withCredentials` is set on
   /// the XHR request.
   Map<String, String>? authHeaders;
 
   /// A set of key-value pair params to be added to any request made to the
-  /// `authUrl`. When the `authMethod` is `GET`, query params are added to the
+  /// `authUrl`.
+  ///
+  /// When the `authMethod` is `GET`, query params are added to the
   /// URL, whereas when `authMethod` is `POST`, the params are sent as URL
   /// encoded form data. Useful when an application requires these to be added
   /// to validate the request or implement the response.
@@ -53,7 +63,9 @@ abstract class AuthOptions {
 
   /// Whether the library queries the Ably servers for the current time when
   /// issuing [TokenRequest]s instead of relying on a locally-available time of
-  /// day. Knowing the time accurately is needed to
+  /// day.
+  ///
+  /// Knowing the time accurately is needed to
   /// create valid signed Ably [TokenRequest]s, so this
   /// option is useful for library instances on auth servers where for some
   /// reason the server clock cannot be kept synchronized through normal means,

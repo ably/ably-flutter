@@ -38,7 +38,9 @@ class Push extends PlatformObject {
   }
 
   /// Activates the device for push notifications with FCM or APNS, obtaining a
-  /// unique identifier from them. Subsequently registers the device with Ably
+  /// unique identifier from them.
+  ///
+  /// Subsequently registers the device with Ably
   /// and stores the `deviceIdentityToken` in local storage.
   Future<void> activate() => invoke(PlatformMethod.pushActivate);
 

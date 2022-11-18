@@ -24,9 +24,10 @@ class PresenceMessage with ObjectHash {
   Object? get data => _data?.data;
 
   /// This will typically be empty as all presence messages received from Ably
-  /// are automatically decoded client-side using this value. However, if the
-  /// message encoding cannot be processed, this attribute will contain the
-  /// remaining transformations not applied to the data payload.
+  /// are automatically decoded client-side using this value.
+  ///
+  /// However, if the message encoding cannot be processed, this attribute will
+  /// contain the remaining transformations not applied to the data payload.
   final String? encoding;
 
   /// An object that may contain metadata and/or ancillary payloads.
@@ -83,11 +84,12 @@ class PresenceMessage with ObjectHash {
   //  RSL6 and RLS6b as mentioned in TP4
 
   /// Decodes and decrypts a deserialized PresenceMessage-like [jsonObject]
-  /// using the cipher in [channelOptions]. Any residual transforms
-  /// that cannot be decoded or decrypted will be in the encoding property.
-  /// Intended for users receiving messages from a source other than a REST or
-  /// Realtime channel (for example a queue) to avoid having to parse the
-  /// encoding string.
+  /// using the cipher in [channelOptions].
+  ///
+  /// Any residual transforms that cannot be decoded or decrypted will be in the
+  /// encoding property. Intended for users receiving messages from a source
+  /// other than a REST or Realtime channel (for example a queue) to avoid
+  /// having to parse the encoding string.
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
@@ -110,11 +112,12 @@ class PresenceMessage with ObjectHash {
             : null;
 
   /// Decodes and decrypts a [jsonArray] of deserialized PresenceMessage-like
-  /// object using the cipher in [channelOptions]. Any residual
-  /// transforms that cannot be decoded or decrypted will be in the encoding
-  /// property. Intended for users receiving messages from a source other than a
-  /// REST or Realtime channel (for example a queue) to avoid having to parse
-  /// the encoding string.
+  /// object using the cipher in [channelOptions].
+  ///
+  /// Any residual transforms that cannot be decoded or decrypted will be in the
+  /// encoding property. Intended for users receiving messages from a source
+  /// other than a REST or Realtime channel (for example a queue) to avoid
+  /// having to parse the encoding string.
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,

@@ -108,6 +108,7 @@ class RealtimePresence extends PlatformObject {
 
   /// Leaves the presence set for the channel. A client must have previously
   /// entered the presence set before they can leave it.
+  ///
   /// You can provide the [data] payload associated with the presence member.
   Future<void> leave([Object? data]) async {
     assert(_realtimeClientId != null, 'No client id specified on realtime');
