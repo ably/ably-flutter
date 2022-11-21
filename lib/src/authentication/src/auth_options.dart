@@ -76,9 +76,10 @@ abstract class AuthOptions {
   /// The default is `false`.
   bool? queryTime;
 
-  /// When `true`, forces token authentication to be used by the library. If a
-  /// `clientId` is not specified in the [ClientOptions] or
-  /// [TokenParams], then the Ably Token issued is [anonymous](https://ably.com/docs/core-features/authentication#identified-clients).
+  /// Whether library is forced to use token authentication.
+  ///
+  /// If a `clientId` is not specified in the [ClientOptions] or [TokenParams],
+  /// then the Ably Token issued is [anonymous](https://ably.com/docs/core-features/authentication#identified-clients).
   bool? useTokenAuth;
 
 // TODO(tiholic) missing token attribute here
