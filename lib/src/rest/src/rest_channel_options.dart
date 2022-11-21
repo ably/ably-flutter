@@ -7,7 +7,7 @@ class RestChannelOptions {
   /// that configure the behavior of the channel.
   final CipherParams? cipherParams;
 
-  /// Constructor `withCipherKey`, that onnly takes a private [key] used to
+  /// Constructor `withCipherKey`, that only takes a private [key] used to
   /// encrypt and decrypt payloads.
   static Future<RestChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
