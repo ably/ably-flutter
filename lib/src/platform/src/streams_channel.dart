@@ -26,10 +26,10 @@ import 'package:flutter/services.dart';
 
 /// @nodoc
 /// Manages multiple event listeners which would otherwise require verbose code
-/// on platform side
+/// on platform side.
 class StreamsChannel {
   /// @nodoc
-  /// initializes with event channel [name] and method [codec]
+  /// Initializes with event channel [name] and method [codec].
   StreamsChannel(this.name, this.codec);
 
   /// @nodoc
@@ -43,8 +43,8 @@ class StreamsChannel {
   int _lastId = 0;
 
   /// @nodoc
-  /// registers a listener on platform side and manages the listener
-  /// with incremental identifiers
+  /// Registers a listener on platform side and manages the listener
+  /// with incremental identifiers.
   Stream<T> receiveBroadcastStream<T>([Object? arguments]) {
     final methodChannel = MethodChannel(name, codec);
 

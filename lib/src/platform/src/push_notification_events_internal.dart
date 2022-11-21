@@ -6,25 +6,26 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
 /// @nodoc
-/// package-private implementation of [PushNotificationEvents]
+/// Package-private implementation of [PushNotificationEvents].
 class PushNotificationEventsInternal implements PushNotificationEvents {
   /// @nodoc
-  /// Invoked when pushOpenSettingsFor platform method is called
+  /// Invoked when pushOpenSettingsFor platform method is called.
   VoidCallback? onOpenSettingsHandler;
 
   /// @nodoc
-  /// Invoked when pushOnShowNotificationInForeground platform method is called
+  /// Invoked when pushOnShowNotificationInForeground platform method is called.
   Future<bool> Function(RemoteMessage message)?
       onShowNotificationInForegroundHandler;
 
   /// @nodoc
-  /// Exposes stream of received [RemoteMessage] objects
+  /// Exposes stream of received [RemoteMessage] objects.
+  ///
   /// New message is emitted after pushOnMessage platform method is called
   StreamController<RemoteMessage> onMessageStreamController =
       StreamController();
 
   /// @nodoc
-  /// Controller used to indicate notification was tapped
+  /// Controller used to indicate notification was tapped.
   StreamController<RemoteMessage> onNotificationTapStreamController =
       StreamController();
 
@@ -65,7 +66,7 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
 
   /// @nodoc
   /// Implementation of setOnBackgroundMessage. For more documentation,
-  /// see [PushNotificationEvents.setOnBackgroundMessage]
+  /// see [PushNotificationEvents.setOnBackgroundMessage].
   @override
   Future<void> setOnBackgroundMessage(BackgroundMessageHandler handler) async {
     _onBackgroundMessage = handler;
@@ -93,7 +94,7 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
   }
 
   /// @nodoc
-  /// Used to close internal [StreamController] instances
+  /// Used to close internal [StreamController] instances.
   // FIXME: This method is not called anywhere
   // See: https://github.com/ably/ably-flutter/issues/382
   void close() {

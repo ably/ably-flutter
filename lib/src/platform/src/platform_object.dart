@@ -11,7 +11,7 @@ abstract class PlatformObject {
   int? _handleValue; // Only for logging. Otherwise use _handle instead.
 
   /// @nodoc
-  /// immediately instantiates an object on platform side by calling
+  /// Immediately instantiates an object on platform side by calling
   /// [createPlatformInstance] if [fetchHandle] is true,
   /// otherwise, platform instance will be created only when
   /// [createPlatformInstance] is explicitly called.
@@ -25,13 +25,13 @@ abstract class PlatformObject {
   String toString() => 'Ably Flutter PlatformObject with handle: $_handleValue';
 
   /// @nodoc
-  /// creates an instance of this object on platform side
+  /// Creates an instance of this object on platform side.
   Future<int?> createPlatformInstance();
 
   /// @nodoc
-  /// returns [_handle] which will be same as handle on platform side
+  /// Returns [_handle] which will be same as handle on platform side.
   ///
-  /// if [_handle] is empty, it creates platform instance, acquires handle,
+  /// If [_handle] is empty, it creates platform instance, acquires handle,
   /// updates [_handle] and returns it.
   Future<int> get handle async => _handle ??= _acquireHandle();
 
@@ -39,9 +39,10 @@ abstract class PlatformObject {
       createPlatformInstance().then((value) => (_handleValue = value)!);
 
   /// @nodoc
-  /// invoke platform method channel without current handle
-  /// this method should be protected since it's only used to cover edge
-  /// case for creating rest and realtime instances
+  /// Invoke platform method channel without current handle.
+  ///
+  /// This method should be protected since it's only used to cover edge
+  /// case for creating rest and realtime instances.
   @protected
   Future<T?> invokeWithoutHandle<T>(final String method,
       [final Map<String, dynamic>? argument]) async {
@@ -52,8 +53,8 @@ abstract class PlatformObject {
   }
 
   /// @nodoc
-  /// invoke platform method channel with provided handle, or
-  /// current handle if [externalHandle] is not provided
+  /// Invoke platform method channel with provided handle, or
+  /// current handle if [externalHandle] is not provided.
   Future<T?> invoke<T>(final String method,
       [final Map<String, dynamic>? arguments,
       final int? externalHandle]) async {
@@ -65,9 +66,9 @@ abstract class PlatformObject {
   }
 
   /// @nodoc
-  /// invoke platform method channel with AblyMessage encapsulation
+  /// Invoke platform method channel with AblyMessage encapsulation.
   ///
-  /// this is similar to [invoke], but ensures the response is not null
+  /// This is similar to [invoke], but ensures the response is not null.
   Future<T> invokeRequest<T>(final String method,
       [final Map<String, dynamic>? arguments]) async {
     final response = await invoke<T>(method, arguments);
@@ -82,7 +83,7 @@ abstract class PlatformObject {
   }
 
   /// @nodoc
-  /// Listen for events
+  /// Listen for events.
   @protected
   Stream<T> listen<T>(final String method, [final Object? payload]) {
     // ignore: close_sinks, will be closed by listener
