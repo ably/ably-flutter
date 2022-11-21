@@ -26,7 +26,7 @@ class TokenDetails {
   final String? capability;
 
   /// The client ID, if any, bound to this Ably Token.
-  /// 
+  ///
   /// If a client ID is included, then the Ably Token authenticates its bearer
   /// as that client ID, and the Ably Token may only be used to perform
   /// operations on behalf of that client ID. The client is then considered to
@@ -43,7 +43,7 @@ class TokenDetails {
     this.issued,
   });
 
-  /// TD7	A static factory method to create a [TokenDetails] authentication
+  /// A static factory method to create a [TokenDetails] authentication
   /// token object from a deserialized `TokenDetails`-like object or a
   /// JSON stringified `TokenDetails` object.
   ///
