@@ -14,9 +14,9 @@ class Connection extends PlatformObject {
   ErrorInfo? _errorReason;
 
   /// @nodoc
-  /// instantiates a connection with [realtime] client instance
+  /// Instantiates a connection with [realtime] client instance.
   ///
-  /// sets default [state] to [ConnectionState.initialized] and starts listening
+  /// Sets default [state] to [ConnectionState.initialized] and starts listening
   /// for updates to the connection [state].
   Connection(this.realtime)
       : _state = ConnectionState.initialized,
@@ -69,7 +69,7 @@ class Connection extends PlatformObject {
   /// The current [ConnectionState] of the connection.
   ConnectionState get state => _state;
 
-  /// Stream of connection events with specified [ConnectionEvent] type
+  /// Stream of connection events with specified [ConnectionEvent] type.
   Stream<ConnectionStateChange> on([ConnectionEvent? connectionEvent]) =>
       listen<ConnectionStateChange>(
         PlatformMethod.onRealtimeConnectionStateChanged,

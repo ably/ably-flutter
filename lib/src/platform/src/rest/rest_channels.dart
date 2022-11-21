@@ -7,13 +7,13 @@ class RestChannels extends Channels<RestChannel> {
   final Rest _rest;
 
   /// @nodoc
-  /// instantiates with the ably [Rest] instance
+  /// Instantiates with the ably [Rest] instance.
   RestChannels(this._rest);
 
   /// @nodoc
-  /// creates a channel with provided name and options
+  /// Creates a channel with provided name and options.
   ///
-  /// This is a private method to be overridden by implementation classes
+  /// This is a private method to be overridden by implementation classes.
   @override
   @protected
   RestChannel createChannel(String name) =>

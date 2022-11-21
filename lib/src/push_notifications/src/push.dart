@@ -11,7 +11,7 @@ class Push extends PlatformObject {
   /// permissions.
   static PushActivationEvents activationEvents = PushActivationEventsInternal();
 
-  /// A static object that can be used to access message events related to push
+  /// A static object that can be used to access message events related to push.
   static PushNotificationEvents notificationEvents =
       PushNotificationEventsInternal();
 

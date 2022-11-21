@@ -8,22 +8,22 @@ import 'package:meta/meta.dart';
 @immutable
 class Notification {
   /// Title of a notification, comes from 'UNNotificationContent.title' on iOS
-  /// and 'RemoteMessage.notification.title' on Android
+  /// and 'RemoteMessage.notification.title' on Android.
   final String title;
 
   /// Body of a notification, comes from 'UNNotificationContent.body' on iOS
-  /// and 'RemoteMessage.notification.body' on Android
+  /// and 'RemoteMessage.notification.body' on Android.
   final String? body;
 
   /// @nodoc
-  /// Initializes an instance without any defaults
+  /// Initializes an instance without any defaults.
   const Notification({
     required this.title,
     this.body,
   });
 
   /// @nodoc
-  /// Creates an instance from the map
+  /// Creates an instance from the map.
   factory Notification.fromMap(Map<String, dynamic> map) => Notification(
         body: map[TxNotification.body] as String?,
         title: map[TxNotification.title] as String,

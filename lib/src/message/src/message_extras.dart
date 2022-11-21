@@ -11,17 +11,17 @@ class MessageExtras with ObjectHash {
   final Map<String, dynamic>? map;
 
   /// @nodoc
-  /// Configuration for delta compression extension
+  /// Configuration for delta compression extension.
   final DeltaExtras? _delta;
 
-  /// A getter for the [_delta] configuration received from channel message
+  /// A getter for the [_delta] configuration received from channel message.
   DeltaExtras? get delta => _delta;
 
-  /// Constructs an instance from given extras [map]
+  /// Constructs an instance from given extras [map].
   const MessageExtras(this.map) : _delta = null;
 
   /// Constructs an instance from given extras map and an instance of
-  /// [DeltaExtras]
+  /// [DeltaExtras].
   const MessageExtras._withDelta(this.map, this._delta);
 
   /// A static factory method that initializes [MessageExtras] with given

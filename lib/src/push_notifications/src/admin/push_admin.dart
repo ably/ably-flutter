@@ -12,7 +12,7 @@ abstract class PushAdmin {
   /// Sends a push notification, provided in the [payload] map, directly to a
   /// device, or a group of devices sharing the same `clientId`.
   ///
-  /// Set the [recipient] map containing the recipient details using
+  /// Sets the [recipient] map containing the recipient details using
   /// `clientId`, `deviceId` or the underlying notifications service.
   Future<void> publish(
     Map<String, dynamic> recipient,
