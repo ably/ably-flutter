@@ -1,7 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// Contains streams that will be emmit a message whenever events related to
-/// push notifications occur, such as device activation, deactivation, or update
+/// Contains streams that will emit a message whenever events related to push
+/// notifications occur, such as device activation, deactivation, or update
 /// fails.
 abstract class PushActivationEvents {
   /// A stream that emmits a message when device completes activation with Ably
