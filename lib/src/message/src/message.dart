@@ -34,8 +34,8 @@ class Message with ObjectHash {
   /// An object that may contain metadata, and/or ancillary payloads.
   final MessageExtras? extras;
 
-  /// Construct a Message object with an event [name], [data] payload, and a unique
-  /// [clientId].
+  /// Construct a Message object with an event [name], [data] payload, and a
+  /// unique [clientId].
   Message({
     this.clientId,
     this.connectionId,

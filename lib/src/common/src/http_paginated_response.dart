@@ -35,17 +35,17 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
   /// The headers of the response.
   List<Map<String, String>>? headers;
 
-  /// Returns a new [HttpPaginatedResponse], which is a page of results for message
-  /// and presence history, stats, and REST presence requests, loaded with the
-  /// next page of results.
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for
+  /// message and presence history, stats, and REST presence requests, loaded
+  /// with the next page of results.
   ///
   /// If there are no further pages, then null is returned.
   @override
   Future<HttpPaginatedResponse<T>> next();
 
-  /// Returns a new [HttpPaginatedResponse], which is a page of results for message
-  /// and presence history, stats, and REST presence requests, for the first
-  /// page of results.
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for
+  /// message and presence history, stats, and REST presence requests, for the
+  /// first page of results.
   @override
   Future<HttpPaginatedResponse<T>> first();
 }
