@@ -7,7 +7,7 @@ enum ChannelEvent {
   /// The channel has been initialized but no attach has yet been attempted.
   initialized,
 
-  ///	An attach has been initiated by sending a request to Ably.
+  /// An attach has been initiated by sending a request to Ably.
   ///
   /// This is a  transient state, followed either by a transition to `ATTACHED`,
   /// `SUSPENDED`, or `FAILED`.
@@ -30,7 +30,7 @@ enum ChannelEvent {
   /// user.
   detached,
 
-  ///	The channel, having previously been `ATTACHED`, has lost continuity,
+  /// The channel, having previously been `ATTACHED`, has lost continuity,
   /// usually due to the client being disconnected from Ably for longer than two
   /// minutes.
   ///
