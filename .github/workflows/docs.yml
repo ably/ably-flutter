@@ -22,16 +22,9 @@ jobs:
           mv README.md README.md.bak
           mv API_REF_INTRO_BLURB.md README.md
 
-      - name: Get Flutter Packages
-        run: flutter pub get
-
-      - name: Install dartdoc global package via pub tool in the Flutter context
-        run: |
-          flutter pub global activate dartdoc
-
       - name: Build Documentation
         run: |
-          flutter pub global run dartdoc
+          dart doc
           ls -al doc/api
 
       - name: Configure AWS Credentials
@@ -52,3 +45,4 @@ jobs:
         run: |
           mv README.md API_REF_INTRO_BLURB.md
           mv README.md.bak README.md
+          
