@@ -4,14 +4,17 @@ import 'dart:typed_data';
 class MessageData<T> {
   final T _data;
 
-  /// Only Map, List, string and Buffer types are supported
+  /// Constructs a [MessageData] object.
+  ///
+  /// Only Map, List, string and Buffer types are supported.
   MessageData(this._data)
       : assert(T == Map || T == List || T == String || T == Uint8List);
 
-  /// retrieve data
+  /// A getter for the [_data] object.
   T get data => _data;
 
-  /// initializes [MessageData] with given value and asserts from input type
+  /// A static factory method that initializes [MessageData] with given value
+  /// and asserts from input type.
   static MessageData<dynamic>? fromValue(Object? value) {
     if (value == null) {
       return null;

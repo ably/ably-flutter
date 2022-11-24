@@ -1,22 +1,21 @@
-/// Params used as a filter for querying presence on a channel
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSP3a
+import 'package:ably_flutter/ably_flutter.dart';
+
+/// Contains properties used to filter [RestPresence] members.
 class RestPresenceParams {
-  /// number of records to fetch per page
+  /// An upper limit on the number of messages returned.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a1
+  /// The default is 100, and the maximum is 1000.
   int limit;
 
-  /// filters members by the provided clientId
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a2
+  /// Filters the list of returned presence members by a specific client using
+  /// its ID.
   String? clientId;
 
-  /// filters members by the provided connectionId
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3a3
+  /// Filters the list of returned presence members by a specific connection
+  /// using its ID.
   String? connectionId;
 
+  /// @nodoc
   /// initializes with default [limit] set to 100
   RestPresenceParams({
     this.clientId,

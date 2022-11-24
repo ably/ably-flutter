@@ -1,30 +1,29 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// Configuration options for a [RealtimeChannel]
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TB1
+/// Passes additional properties to a [RealtimeChannel] object, such as
+/// encryption, [ChannelMode] and channel parameters.
 @immutable
 class RealtimeChannelOptions {
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2b
+  /// [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview
+  /// that configure the behavior of the channel.
   final CipherParams? cipherParams;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2c
+  /// [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview)
+  /// that configure the behavior of the channel.
   final Map<String, String>? params;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB2d
+  /// A list of [ChannelMode] objects.
   final List<ChannelMode>? modes;
 
-  /// Create a [RealtimeChannelOptions] directly from a CipherKey. This is a
-  /// convenience method you can use if you don't need to specify
-  /// other parameters of [RealtimeChannelOptions].
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TB3
+  /// Constructor `withCipherKey`, that only takes a private [key] used to
+  /// encrypt and decrypt payloads.
   static Future<RealtimeChannelOptions> withCipherKey(dynamic key) async {
     final cipherParams = await Crypto.getDefaultParams(key: key);
     return RealtimeChannelOptions(cipherParams: cipherParams);
   }
 
+  /// @nodoc
   /// create channel options with a cipher, params and modes
   /// If a [cipherParams] is set, messages will be encrypted with the cipher.
   ///

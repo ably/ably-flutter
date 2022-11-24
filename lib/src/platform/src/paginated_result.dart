@@ -1,12 +1,14 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// PaginatedResult [TG1](https://docs.ably.com/client-lib-development-guide/features/#TG1)
+/// Contains a page of results for message or presence history, stats, or REST
+/// presence requests.
 ///
-/// A type that represents page results from a paginated query.
-/// The response is accompanied by metadata that indicates the
-/// relative queries available.
+/// A `PaginatedResult` response from a REST API paginated query is also
+/// accompanied by metadata that indicates the relative queries available to the
+/// `PaginatedResult` object.
 class PaginatedResult<T> extends PlatformObject {
+  /// @nodoc
   /// stores page handle created by platform APIs
   ///
   /// handle is updated after creating an instance as they are received
@@ -20,19 +22,20 @@ class PaginatedResult<T> extends PlatformObject {
 
   late final List<T> _items;
 
-  /// items contain page of results
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TG3
+  /// Contains the current page of results; for example, an array of
+  /// [Message] or [PresenceMessage] objects for a channel history request.
   List<T> get items => _items;
 
   final bool _hasNext;
 
+  /// @nodoc
   /// Creates a PaginatedResult instance from items and a boolean indicating
   /// whether there is a next page
   PaginatedResult(this._items, {required bool hasNext})
       : _hasNext = hasNext,
         super(fetchHandle: false);
 
+  /// @nodoc
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
   ///
@@ -44,13 +47,15 @@ class PaginatedResult<T> extends PlatformObject {
         _pageHandle = message.handle,
         super(fetchHandle: false);
 
+  /// @nodoc
   @override
   Future<int?> createPlatformInstance() async => _pageHandle;
 
-  /// returns a new PaginatedResult loaded with the next page of results.
+  /// Returns a new [PaginatedResult], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, loaded with the
+  /// next page of results.
   ///
   /// If there are no further pages, then null is returned.
-  /// https://docs.ably.com/client-lib-development-guide/features/#TG4
   Future<PaginatedResult<T>> next() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.nextPage);
@@ -59,10 +64,9 @@ class PaginatedResult<T> extends PlatformObject {
     );
   }
 
-  /// returns a new PaginatedResult with the first page of results
-  ///
-  /// If there are no further pages, then null is returned.
-  /// https://docs.ably.com/client-lib-development-guide/features/#TG5
+  /// Returns a new [PaginatedResult], which is a page of results for message
+  /// and presence history, stats, and REST presence requests, for the first
+  /// page of results.
   Future<PaginatedResult<T>> first() async {
     final message =
         await invokeRequest<AblyMessage<dynamic>>(PlatformMethod.firstPage);
@@ -71,13 +75,13 @@ class PaginatedResult<T> extends PlatformObject {
     );
   }
 
-  /// returns true if there are further pages
+  /// Whether there are more pages available by calling next.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TG6
+  /// Returns false if this page is the last page available.
   bool hasNext() => _hasNext;
 
-  /// returns true if this page is the last page
+  /// Whether this page is the last page.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TG7
+  /// Returns false if there are more pages available by calling next available.
   bool isLast() => !_hasNext;
 }

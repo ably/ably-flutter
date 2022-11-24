@@ -1,20 +1,21 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// MessageTraffic contains a breakdown of summary stats data
-/// for traffic over various transport types
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TS7
+/// Contains a breakdown of summary stats data for traffic over various
+/// transport types.
 abstract class StatsMessageTraffic {
-  /// All messages count (includes realtime, rest and webhook messages).
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for all messages (includes realtime, rest and webhook messages).
   StatsMessageTypes? all;
 
-  /// Count of messages transferred over a realtime transport
-  /// such as WebSockets.
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages transferred over a realtime transport such as WebSocket.
   StatsMessageTypes? realtime;
 
-  /// Count of messages transferred using REST.
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages transferred over a rest transport such as WebSocket.
   StatsMessageTypes? rest;
 
-  /// Count of messages delivered using WebHooks.
+  /// A [StatsMessageTypes] object containing a breakdown of usage by message
+  /// type for messages delivered using webhooks.
   StatsMessageTypes? webhook;
 }

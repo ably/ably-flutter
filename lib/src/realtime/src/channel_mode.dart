@@ -1,18 +1,18 @@
-/// Set of flags that represent the capabilities of a channel for current client
-///
-/// See:
-/// https://docs.ably.com/client-lib-development-guide/features/#TB2d
-/// https://docs.ably.com/client-lib-development-guide/features/#RTL4m
+import 'package:ably_flutter/src/realtime/realtime.dart';
+import 'package:ably_flutter/src/rest/rest.dart';
+
+/// Describes the possible flags used to configure client capabilities, using
+/// [RestChannelOptions] or [RealtimeChannelOptions].
 enum ChannelMode {
-  /// specifies that channel can check for presence
+  /// The client can enter the presence set.
   presence,
 
-  /// specifies that channel can publish
+  /// The client can publish messages.
   publish,
 
-  /// specifies that channel can subscribe to messages
+  /// The client can subscribe to messages.
   subscribe,
 
-  /// specifies that channel can subscribe to presence events
+  /// The client can receive presence messages.
   presenceSubscribe,
 }

@@ -1,24 +1,28 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
-/// Status on a presence message
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TP2
+/// Describes the possible actions members in the presence set can emit.
 enum PresenceAction {
-  /// indicates that a client is absent for incoming [PresenceMessage]
+  /// A member is not present in the channel.
   absent,
 
-  /// indicates that a client is present for incoming [PresenceMessage]
+  /// When subscribing to presence events on a channel that already has members
+  /// present, this event is emitted for every member already present on the
+  /// channel before the subscribe listener was registered.
   present,
 
-  /// indicates that a client wants to enter a channel presence via
-  /// outgoing [PresenceMessage]
+  /// A new member has entered the channel.
   enter,
 
-  /// indicates that a client wants to leave a channel presence via
-  /// outgoing [PresenceMessage]
+  /// A member who was present has now left the channel.
+  ///
+  /// This may be a result of an explicit request to leave or implicitly when
+  /// detaching from the channel. Alternatively, if a member's connection is
+  /// abruptly disconnected and they do not resume their connection within a
+  /// minute, Ably treats this as a leave event as the client is no longer
+  /// present.
   leave,
 
-  /// indicates that presence status of a client in presence member map
-  /// needs to be updated
+  /// An already present member has updated their member data.
+  ///
+  /// Being notified of member data updates can be very useful, for example, it
+  /// can be used to update the status of a user when they are typing a message.
   update,
 }

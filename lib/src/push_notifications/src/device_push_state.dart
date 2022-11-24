@@ -1,14 +1,13 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// To indicate Push State of a device in [DeviceDetails] via [DevicePushState]
-/// while registering
+/// The current state of the push registration in [DevicePushDetails].
 enum DevicePushState {
-  /// indicates active push state of the device
+  /// Indicates that push state of the device is `active`.
   active,
 
-  /// indicates that push state is failing
+  /// Indicates that push state of the device is `failing`.
   failing,
 
-  /// indicates the device push state failed
+  /// Indicates that push state of the device is `failed`.
   failed,
 }

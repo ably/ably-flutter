@@ -1,19 +1,16 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// Params to filter push device registrations.
-///
-/// see: [PushDeviceRegistrations.list], [PushDeviceRegistrations.removeWhere]
-/// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
+/// Contains properties used to filter [PushDeviceRegistrations] devices.
 abstract class DeviceRegistrationParams {
-  /// filter by client id
+  /// The ID of the client.
   String? clientId;
 
-  /// filter by device id
+  /// The unique ID of the device.
   String? deviceId;
 
-  /// limit results for each page
+  /// Limit on the number of devices returned, up to 1,000.
   int? limit;
 
-  /// filter by device state
+  /// The current state of the push registration.
   DevicePushState? state;
 }

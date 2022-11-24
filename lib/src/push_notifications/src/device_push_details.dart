@@ -1,27 +1,21 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// Details of the push registration for a given device
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#PCP1
+/// Contains the details of the push registration of a device.
 @immutable
 class DevicePushDetails {
-  /// A map of string key/value pairs containing details of the push transport
-  /// and address.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCP3
+  /// A [Map] object of key-value pairs that consists of the push transport and
+  /// address.
   final Map<String, String>? recipient;
 
-  /// The state of the push registration.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCP4
+  /// The current state of the push registration.
   final DevicePushState? state;
 
-  /// Any error information associated with the registration.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCP2
+  /// An [ErrorInfo] object describing the most recent error when the `state` is
+  /// `Failing` or `Failed`.
   final ErrorInfo? errorReason;
 
+  /// @nodoc
   /// Initializes an instance without any defaults
   const DevicePushDetails({
     this.errorReason,

@@ -1,12 +1,12 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// The response from an HTTP request containing an empty or
-/// JSON-encodable object response
+/// A superset of [PaginatedResult] which represents a page of results plus
+/// metadata indicating the relative queries available to it.
 ///
-/// [T] can be a [Map] or [List]
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#HP1
+/// `HttpPaginatedResponse` additionally carries information about the
+/// response to an HTTP request.
 abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
+  /// @nodoc
   /// Instantiates by extracting result from [AblyMessage] returned from
   /// platform method.
   ///
@@ -16,44 +16,36 @@ abstract class HttpPaginatedResponse<T> extends PaginatedResult<T> {
     AblyMessage<PaginatedResult<dynamic>> message,
   ) : super.fromAblyMessage(message);
 
-  /// HTTP status code for the response
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP4
+  /// The HTTP status code of the response.
   int? statusCode;
 
-  /// indicates whether the request is successful
+  /// Whether `statusCode` indicates success.
   ///
-  /// true when 200 <= [statusCode] < 300
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP5
+  /// This is equivalent to `200 <= statusCode < 300`.
   bool? success;
 
-  /// Value from X-Ably-Errorcode HTTP header, if available in response
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP6
+  /// The error code if the `X-Ably-Errorcode` HTTP header is sent in the
+  /// response.
   int? errorCode;
 
-  /// Value from X-Ably-Errormessage HTTP header, if available in response
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP7
+  /// The error message if the `X-Ably-Errormessage` HTTP header is sent in the
+  /// response.
   String? errorMessage;
 
-  /// Array of key value pairs of each response header
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP8
+  /// The headers of the response.
   List<Map<String, String>>? headers;
 
-  /// returns a new HttpPaginatedResponse loaded with the next page of results.
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for
+  /// message and presence history, stats, and REST presence requests, loaded
+  /// with the next page of results.
   ///
   /// If there are no further pages, then null is returned.
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP2
   @override
   Future<HttpPaginatedResponse<T>> next();
 
-  /// returns a new HttpPaginatedResponse with the first page of results
-  ///
-  /// If there are no further pages, then null is returned.
-  /// https://docs.ably.com/client-lib-development-guide/features/#HP2
+  /// Returns a new [HttpPaginatedResponse], which is a page of results for
+  /// message and presence history, stats, and REST presence requests, for the
+  /// first page of results.
   @override
   Future<HttpPaginatedResponse<T>> first();
 }

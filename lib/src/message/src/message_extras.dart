@@ -10,20 +10,22 @@ class MessageExtras with ObjectHash {
   /// json-encodable map of extras
   final Map<String, dynamic>? map;
 
-  /// configuration for delta compression extension
+  /// @nodoc
+  /// Configuration for delta compression extension.
   final DeltaExtras? _delta;
 
-  /// delta configuration received from channel message
+  /// A getter for the [_delta] configuration received from channel message.
   DeltaExtras? get delta => _delta;
 
-  /// Creates an instance from given extras map
+  /// Constructs an instance from given extras [map].
   const MessageExtras(this.map) : _delta = null;
 
-  /// Creates an instance from given extras map and an instance of DeltaExtras
+  /// Constructs an instance from given extras map and an instance of
+  /// [DeltaExtras].
   const MessageExtras._withDelta(this.map, this._delta);
 
-  /// initializes [MessageExtras] with given value and validates
-  /// the data type, runtime
+  /// A static factory method that initializes [MessageExtras] with given
+  /// [extrasMap] and validates the data type.
   static MessageExtras? fromMap(Map<String, dynamic>? extrasMap) {
     if (extrasMap == null) return null;
     // In some cases, extrasMap may not be a mutable map

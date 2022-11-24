@@ -1,19 +1,16 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// Params to filter push channel subscriptions.
-///
-/// See [PushChannelSubscriptions.list], [PushChannelSubscriptions.removeWhere]
-/// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
+/// Contains properties used to filter [PushChannel] subscriptions.
 abstract class PushChannelSubscriptionParams {
-  /// filter by channel
+  /// The channel name.
   String? channel;
 
-  /// filter by clientId
+  /// The ID of the client.
   String? clientId;
 
-  /// filter by deviceId
+  /// The unique ID of the device.
   String? deviceId;
 
-  /// limit results for each page
+  /// A limit on the number of devices returned, up to 1,000.
   int? limit;
 }

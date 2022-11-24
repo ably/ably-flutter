@@ -1,14 +1,11 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
-/// To indicate the operating system -or- platform of the client using SDK
-/// in [DeviceDetails] while registering
+/// Describes the device receiving push notifications.
 enum DevicePlatform {
-  /// indicates an android device
+  /// The device platform is Android.
   android,
 
-  /// indicates an iOS device
+  /// The device platform is iOS.
   ios,
 
-  /// indicates a browser
+  /// The device platform is a web browser.
   browser,
 }

@@ -1,38 +1,26 @@
-/// Params for rest history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSL2b
+import 'package:ably_flutter/ably_flutter.dart';
+
+/// Contains properties used to filter [RestChannel] history.
 class RestHistoryParams {
-  /// [start] must be equal to or less than end and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to 1970-01-01T00:00:00Z in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
+  /// The [DateTime] from which messages are retrieved.
   final DateTime start;
 
-  /// [end] must be equal to or greater than start and is unaffected
-  /// by the request direction
-  ///
-  /// if omitted defaults to current datetime in local timezone
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b1
+  /// The [DateTime] until messages are retrieved.
   final DateTime end;
 
-  /// Sorting history backwards or forwards
+  /// The order for which messages are returned in. Valid values are `backwards`
+  /// which orders messages from most recent to oldest, or `forwards` which
+  /// orders messages from oldest to most recent.
   ///
-  /// if omitted the direction defaults to the REST API default (backwards)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b2
+  /// The default is `backwards`.
   final String direction;
 
-  /// Number of items returned in one page
-  /// [limit] supports up to 1,000 items.
+  /// An upper limit on the number of messages returned.
   ///
-  /// if omitted the direction defaults to the REST API default (100)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2b3
+  /// The default is 100, and the maximum is 1000.
   final int limit;
 
+  /// @nodoc
   /// instantiates with [direction] set to "backwards", [limit] to 100
   /// [start] to epoch and end to current time
   ///

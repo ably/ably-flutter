@@ -1,22 +1,25 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// Presence object on a [RestChannel] helps to query Presence members
-/// and presence history
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSP1
+/// Enables the retrieval of the current and historic presence set for a
+/// channel.
 class RestPresence extends PlatformObject {
   final RestChannel _restChannel;
 
+  /// @nodoc
   /// instantiates with a channel
   RestPresence(this._restChannel);
 
+  /// @nodoc
   @override
   Future<int> createPlatformInstance() => _restChannel.rest.handle;
 
-  /// Obtain the set of members currently present for a channel.
+  /// Retrieves the current members present on the channel and the metadata for
+  /// each member, such as their [PresenceAction] and ID, based on provided
+  /// [params].
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP3
+  /// Returns a [PaginatedResult] object, containing an
+  /// array of [PresenceMessage] objects.
   Future<PaginatedResult<PresenceMessage>> get([
     RestPresenceParams? params,
   ]) async {
@@ -32,9 +35,14 @@ class RestPresence extends PlatformObject {
     );
   }
 
-  /// Return the presence messages history for the channel.
+  /// Retrieves a [PaginatedResult] object, containing an
+  /// array of historical [PresenceMessage] objects for
+  /// the channel, based on provided [params].
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSP4
+  /// If the channel is configured to persist messages, then
+  /// presence messages can be retrieved from history for up to 72 hours in the
+  /// past. If not, presence messages can only be retrieved from history for up
+  /// to two minutes in the past.
   Future<PaginatedResult<PresenceMessage>> history([
     RestHistoryParams? params,
   ]) async {

@@ -3,43 +3,43 @@ import 'dart:async';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// A named channel through with rest client can interact with ably service.
-///
-/// The same channel can be interacted with relevant APIs via realtime channel.
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSL1
+/// Enables messages to be published and historic messages to be retrieved for a
+/// channel.
 class RestChannel extends PlatformObject {
+  /// @nodoc
   /// reference to Rest client
   Rest rest;
 
-  /// Channel to receive push notifications on
+  /// A [PushChannel] object.
   PushChannel push;
 
-  /// name of the channel
+  /// The channel name.
   String name;
 
   late RestPresence _presence;
 
-  /// presence interface for this channel
-  ///
-  /// can only query presence on the channel and presence history
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL3
+  /// A [RestPresence] object.
   RestPresence get presence => _presence;
 
+  /// @nodoc
   /// instantiates with [Rest], [name] and [RestChannelOptions]
   RestChannel(this.rest, this.push, this.name) {
     _presence = RestPresence(this);
   }
 
+  /// @nodoc
   /// createPlatformInstance will return restPlatformObject's handle
   /// as that is what will be required in platforms end to find rest instance
   /// and send message to channel
   @override
   Future<int> createPlatformInstance() async => rest.handle;
 
-  /// fetch message history on this channel
+  /// Retrieves a [PaginatedResult] object, containing an array of historical
+  /// [Message] objects for the channel using the specified [params].
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL2
+  /// If the channel is configured to persist messages, then messages can be
+  /// retrieved from history for up to 72 hours in the past. If not, messages
+  /// can only be retrieved from history for up to two minutes in the past.
   Future<PaginatedResult<Message>> history([
     RestHistoryParams? params,
   ]) async {
@@ -55,9 +55,8 @@ class RestChannel extends PlatformObject {
     );
   }
 
-  /// publish messages on this channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL1
+  /// Publishes a [message] or list of [messages] to the channel, or a single
+  /// message with the given event [name] and [data] payload.
   Future<void> publish({
     Message? message,
     List<Message>? messages,
@@ -73,10 +72,7 @@ class RestChannel extends PlatformObject {
     });
   }
 
-  /// takes a ChannelOptions object and sets or updates the
-  /// stored channel options, then indicates success
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSL7
+  /// Sets the [options] for the channel.
   Future<void> setOptions(RestChannelOptions options) =>
       invoke(PlatformMethod.setRestChannelOptions, {
         TxTransportKeys.channelName: name,

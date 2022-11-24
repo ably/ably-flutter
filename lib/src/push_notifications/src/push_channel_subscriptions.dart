@@ -1,33 +1,35 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// Manage push notification channel subscriptions for devices or clients
+/// Enables device push channel subscriptions.
 abstract class PushChannelSubscriptions {
-  /// List channel subscriptions filtered by optional params.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c1
+  /// Retrieves all push channel subscriptions matching the filter [params]
+  /// provided. Returns a [PaginatedResult] object, containing an array of
+  /// [PushChannelSubscription] objects.
   Future<PaginatedResult<PushChannelSubscription>> list(
     PushChannelSubscriptionParams params,
   );
 
-  /// List channels with at least one subscribed device.
+  /// Retrieves all channels with at least one device subscribed to push
+  /// notifications using a [params] object.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
+  /// Returns a [PaginatedResult] object, containing an array of channel names.
   Future<PaginatedResult<String>> listChannels(
     PushChannelsParams params,
   );
 
-  /// Save push channel subscription for a device or client ID.
+  /// Subscribes a device, or a group of devices sharing the same `clientId` to
+  /// push notifications on a channel, using the [subscription] object.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c3
+  /// Returns a [PushChannelSubscription] object describing the new or updated
+  /// subscriptions.
   Future<PushChannelSubscription> save(PushChannelSubscription subscription);
 
-  /// Remove a push channel subscription.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c4
+  /// Unsubscribes a device, or a group of devices sharing the same `clientId`
+  /// from receiving push notifications on a channel, using the [subscription]
+  /// object.
   Future<void> remove(PushChannelSubscription subscription);
 
-  /// Remove all matching push channel subscriptions.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1c5
+  /// Unsubscribes all devices from receiving push notifications on a channel
+  /// that match the filter [params] object provided.
   Future<void> removeWhere(PushChannelSubscriptionParams params);
 }

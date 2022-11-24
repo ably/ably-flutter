@@ -1,59 +1,43 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// A class providing parameters of a token request.
-///
-/// Parameters for a token request
-///
-/// [Auth.authorize], [Auth.requestToken] and [Auth.createTokenRequest]
-/// accept an instance of TokenParams as a parameter
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TK1
+/// Defines the properties of an Ably Token.
 @immutable
 class TokenParams {
-  /// Capability of the token.
+  /// The capabilities associated with this Ably Token.
   ///
-  /// If the token request is successful, the capability of the
-  /// returned token will be the intersection of this [capability]
-  /// with the capability of the issuing key.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2b
+  /// The capabilities value is a JSON-encoded representation of the resource
+  /// paths and associated operations. Read more about capabilities in the
+  /// [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained).
   final String? capability;
 
-  /// A clientId to associate with this token.
+  /// A client ID, used for identifying this client when publishing messages or
+  /// for presence purposes.
   ///
-  /// The generated token may be used to authenticate as this clientId.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2c
+  /// The `clientId` can be any non-empty string, except it cannot contain a
+  /// `*`. This option is primarily intended to be used in situations where the
+  /// library is instantiated with a key. Note that a `clientId` may also be
+  /// implicit in a token used to instantiate the library. An error is raised if
+  /// a `clientId` specified here conflicts with the clientId implicit in the
+  /// token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
   final String? clientId;
 
-  /// An opaque nonce string of at least 16 characters to ensure uniqueness.
-  ///
-  /// Timestamps, in conjunction with the nonce,
-  /// are used to prevent requests from being replayed
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
+  /// A cryptographically secure random string of at least 16 characters, used
+  /// to ensure the [TokenRequest] cannot be reused.
   final String? nonce;
 
-  /// The timestamp (in millis since the epoch) of this request.
+  /// The [DateTime] of this request.
   ///
-  ///	Timestamps, in conjunction with the nonce, are used to prevent
-  ///	token requests from being replayed.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2d
+  /// Timestamps, in conjunction with the `nonce`,  are used to prevent requests
+  /// from being replayed. `timestamp` is a "one-time" value, and is valid in a
+  /// request, but is not validly a member of any default token params such as
+  /// `ClientOptions.defaultTokenParams`.
   final DateTime? timestamp;
 
-  /// Requested time to live for the token.
-  ///
-  /// If the token request is successful, the TTL of the returned
-  /// token will be less than or equal to this value depending on
-  /// application settings and the attributes of the issuing key.
-  ///
-  /// 0 means Ably will set it to the default value
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TK2a
+  /// Requested time to live for the token in milliseconds.
   final int? ttl;
 
+  /// @nodoc
   /// instantiates a [TokenParams] with provided values
   const TokenParams({
     this.capability,
@@ -63,6 +47,7 @@ class TokenParams {
     this.ttl,
   });
 
+  /// @nodoc
   /// converts to a map of objects
   Map<String, dynamic> toMap() {
     final jsonMap = <String, dynamic>{};

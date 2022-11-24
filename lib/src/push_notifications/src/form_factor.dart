@@ -1,30 +1,26 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
-/// To indicate the type of device in [DeviceDetails] while registering
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#PCD4
+/// Describes the type of device receiving a push notification.
 enum FormFactor {
-  /// indicates the device is a mobile phone
+  /// The device is a phone.
   phone,
 
-  /// indicates the device is a tablet
+  /// The device is tablet.
   tablet,
 
-  /// indicates the device is a desktop
+  /// The device is a desktop.
   desktop,
 
-  /// indicates the device is a television
+  /// The device is a TV.
   tv,
 
-  /// indicates the device is a smart watch
+  /// The device is a watch.
   watch,
 
-  /// indicates the device is an automobile
+  /// The device is a car.
   car,
 
-  /// indicates the device is an embedded system / iOT device
+  /// The device is embedded.
   embedded,
 
-  /// indicates the device belong to categories other than mentioned above
+  /// The device is other.
   other,
 }

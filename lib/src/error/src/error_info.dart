@@ -1,31 +1,30 @@
-import 'package:ably_flutter/ably_flutter.dart';
-
-/// An [AblyException] encapsulates [ErrorInfo] which carries details
-/// about information related to Ably-specific error [code],
-/// generic [statusCode], error [message],
-/// link to error related documentation as [href],
-/// [requestId] and [cause] of this exception
+/// A generic Ably error object that contains an Ably-specific status code, and
+/// a generic status code.
 ///
-/// https://docs.ably.com/client-lib-development-guide/features/#TI1
+/// Errors returned from the Ably server are compatible with the `ErrorInfo`
+/// structure and should result in errors that inherit from `ErrorInfo`.
 class ErrorInfo {
-  /// ably specific error code
+  /// Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json).
   final int? code;
 
-  /// link to error related documentation as
+  /// This is included for REST responses to provide a URL for additional help
+  /// on the error code.
   final String? href;
 
-  /// error message
+  /// Additional message information, where available.
   final String? message;
 
-  /// cause for the error
+  /// Information pertaining to what caused the error where available.
   final ErrorInfo? cause;
 
-  /// generic status code
+  /// HTTP Status Code corresponding to this error, where applicable.
   final int? statusCode;
 
-  /// request id which triggered this exception
+  /// If a request fails, the request ID must be included in the `ErrorInfo`
+  /// returned to the user.
   final String? requestId;
 
+  /// @nodoc
   /// instantiates a [ErrorInfo] with provided values
   ErrorInfo({
     this.cause,

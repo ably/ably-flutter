@@ -2,53 +2,47 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:meta/meta.dart';
 
-/// An individual presence message sent or received via realtime
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TP1
+/// Contains an individual presence update sent to, or received from, Ably.
 @immutable
 class PresenceMessage with ObjectHash {
-  /// unique ID for this presence message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3a
+  /// A unique ID assigned to each `PresenceMessage` by Ably.
   final String? id;
 
-  /// presence action - to update presence status of current client,
-  /// or to understand presence state of another client
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3b
+  /// The type of [PresenceAction] the `PresenceMessage` is for.
   final PresenceAction? action;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3c
+  /// The ID of the client that published the `PresenceMessage`.
   final String? clientId;
 
-  /// connection id of the source of this message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3d
+  /// The ID of the connection associated with the client that published the
+  /// `PresenceMessage`.
   final String? connectionId;
 
   final MessageData<dynamic>? _data;
 
-  /// Message payload
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3e
+  /// The payload of the `PresenceMessage`.
   Object? get data => _data?.data;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3f
+  /// This will typically be empty as all presence messages received from Ably
+  /// are automatically decoded client-side using this value.
+  ///
+  /// However, if the message encoding cannot be processed, this attribute will
+  /// contain the remaining transformations not applied to the data payload.
   final String? encoding;
 
-  /// Message extras that may contain message metadata
-  /// and/or ancillary payloads
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3i
+  /// An object that may contain metadata and/or ancillary payloads.
   final MessageExtras? extras;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3g
+  /// The [DateTime] the PresenceMessage was received by Ably.
   final DateTime? timestamp;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP3h
+  /// Combines `clientId` and `connectionId` to ensure that multiple connected
+  /// clients with an identical `clientId` are uniquely identifiable. A string
+  /// function that returns the combined `clientId` and `connectionId`.
   String get memberKey => '$connectionId:$clientId';
 
-  /// instantiates presence message with
+  /// @nodoc
+  /// Constructs a [PresenceMessage] object.
   PresenceMessage({
     this.action,
     this.clientId,
@@ -84,10 +78,18 @@ class PresenceMessage with ObjectHash {
         extras,
       ]);
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP4
+  // https://docs.ably.com/client-lib-development-guide/features/#TP4
+  //
+  // TODO(tiholic): decoding and decryption is not implemented as per
+  //  RSL6 and RLS6b as mentioned in TP4
+
+  /// Decodes and decrypts a deserialized PresenceMessage-like [jsonObject]
+  /// using the cipher in [channelOptions].
   ///
-  /// TODO(tiholic): decoding and decryption is not implemented as per
-  ///  RSL6 and RLS6b as mentioned in TP4
+  /// Any residual transforms that cannot be decoded or decrypted will be in the
+  /// encoding property. Intended for users receiving messages from a source
+  /// other than a REST or Realtime channel (for example a queue) to avoid
+  /// having to parse the encoding string.
   PresenceMessage.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
@@ -109,7 +111,13 @@ class PresenceMessage with ObjectHash {
               )
             : null;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TP4
+  /// Decodes and decrypts a [jsonArray] of deserialized PresenceMessage-like
+  /// object using the cipher in [channelOptions].
+  ///
+  /// Any residual transforms that cannot be decoded or decrypted will be in the
+  /// encoding property. Intended for users receiving messages from a source
+  /// other than a REST or Realtime channel (for example a queue) to avoid
+  /// having to parse the encoding string.
   static List<PresenceMessage> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,

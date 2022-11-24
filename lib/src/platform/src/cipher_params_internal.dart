@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:ably_flutter/ably_flutter.dart';
 
+/// @nodoc
 /// The internal (non-public) representation of CipherParams.
 ///
 /// On Android, most fields are either private or package-private, and cannot
@@ -15,18 +16,22 @@ import 'package:ably_flutter/ably_flutter.dart';
 /// needing to store instances on the Android side and pass references/handles
 /// to the dart side.
 class CipherParamsInternal implements CipherParams {
+  /// @nodoc
   /// Android only
   /// Handle value read from platform implementation
   int? androidHandle;
 
+  /// @nodoc
   /// iOS only
   /// Encryption key returned by platform implementation
   Uint8List? key;
 
+  /// @nodoc
   /// iOS only
   /// Encryption algorithm returned by platform implementation
   String? algorithm;
 
+  /// @nodoc
   /// Create a Dart side representation of CipherParams for iOS devices
   CipherParamsInternal.forIOS({
     required this.algorithm,
@@ -46,6 +51,7 @@ class CipherParamsInternal implements CipherParams {
     }
   }
 
+  /// @nodoc
   /// Create a Dart side representation of CipherParams for Android devices
   CipherParamsInternal.forAndroid({
     required this.androidHandle,
@@ -62,6 +68,7 @@ class CipherParamsInternal implements CipherParams {
     }
   }
 
+  /// @nodoc
   /// Explicitly cast the [CipherParams] to [CipherParamsInternal] so
   /// it's possible to access the internal implementation details
   ///

@@ -2,13 +2,14 @@
 
 import 'package:ably_flutter/ably_flutter.dart';
 
+/// @nodoc
 /// This file contains push notification types specific to iOS. All types begin
 /// with "UN", since these types belong to the User Notifications framework
 ///
 /// These types exist so we can use iOS specific notification APIs, such as
 /// getting the current notification settings/ permissions the application has,
 /// and requesting permissions.
-
+///
 /// UNAuthorizationStatus: Constants indicating whether the app is allowed to
 /// schedule notifications.
 ///
@@ -21,6 +22,7 @@ enum UNAuthorizationStatus {
   ephemeral,
 }
 
+/// @nodoc
 /// Constants indicating the presentation styles for alerts.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unalertstyle)
@@ -30,6 +32,7 @@ enum UNAlertStyle {
   alert,
 }
 
+/// @nodoc
 /// Constants that indicate the current status of a notification setting.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unnotificationsetting)
@@ -39,6 +42,7 @@ enum UNNotificationSetting {
   enabled,
 }
 
+/// @nodoc
 /// Constants indicating the style previewing a notification's content.
 ///
 /// [Apple docs](https://developer.apple.com/documentation/usernotifications/unshowpreviewssetting)
@@ -48,6 +52,7 @@ enum UNShowPreviewsSetting {
   never,
 }
 
+/// @nodoc
 /// The object for managing notification-related settings and the authorization
 /// status of your app.
 ///
@@ -67,6 +72,7 @@ class UNNotificationSettings {
   UNShowPreviewsSetting showPreviewsSetting;
   UNNotificationSetting scheduledDeliverySetting;
 
+  /// @nodoc
   /// Users do not create this class. Call [Push.getNotificationSettings]
   /// instead.
   UNNotificationSettings({

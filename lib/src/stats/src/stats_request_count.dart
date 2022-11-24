@@ -1,14 +1,12 @@
-/// RequestCount contains aggregate counts for requests made
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TS8
+/// Contains the aggregate counts for requests made.
 abstract class StatsRequestCount {
-  /// Requests failed.
+  /// The number of requests that failed.
   int? failed;
 
-  /// Requests refused typically as a result of permissions
-  /// or a limit being exceeded.
+  /// The number of requests that were refused, typically as a result of
+  /// permissions or a limit being exceeded.
   int? refused;
 
-  /// Requests succeeded.
+  /// The number of requests that succeeded.
   int? succeeded;
 }

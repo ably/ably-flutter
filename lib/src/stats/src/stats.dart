@@ -1,53 +1,42 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// A class representing an individual statistic for a specified [intervalId]
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TS1
+/// Contains application statistics for a specified time interval and time
+/// period.
 class Stats {
-  /// Aggregates inbound and outbound messages.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
+  /// A [StatsMessageTypes] object containing the  aggregate count of all
+  /// message stats.
   StatsMessageTypes? all;
 
-  /// Breakdown of API requests received via the REST API.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
+  /// A [StatsRequestCount] object containing a breakdown of API Requests.
   StatsRequestCount? apiRequests;
 
-  /// Breakdown of channels stats.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12e
+  /// A [StatsResourceCount] object containing a breakdown of channels.
   StatsResourceCount? channels;
 
-  /// Breakdown of connection stats data for different (TLS vs non-TLS)
-  /// connection types.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12i
+  /// A [StatsConnectionTypes] object containing a breakdown of connection
+  /// related stats, such as min, mean and peak connections.
   StatsConnectionTypes? connections;
 
-  /// All inbound messages i.e.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12f
+  /// A [StatsMessageTraffic] object containing the aggregate count of inbound
+  /// message stats.
   StatsMessageTraffic? inbound;
 
-  /// The interval that this statistic applies to,
-  /// see GRANULARITY and INTERVAL_FORMAT_STRING.
+  /// The UTC time at which the time period covered begins.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12a
+  /// If `unit` is set to `minute` this will be in the format
+  /// `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if day it will
+  /// be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.
   String? intervalId;
 
-  /// All outbound messages i.e.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12g
+  /// A [StatsMessageTraffic] object containing the aggregate count of outbound
+  /// message stats.
   StatsMessageTraffic? outbound;
 
-  /// Messages persisted for later retrieval via the history API.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12h
+  /// A [StatsMessageTypes] object containing the aggregate count of persisted
+  /// message stats.
   StatsMessageTypes? persisted;
 
-  /// Breakdown of Token requests received via the REST API.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TS12l
+  /// A [StatsRequestCount] object containing a breakdown of Ably Token
+  /// requests.
   StatsRequestCount? tokenRequests;
 }

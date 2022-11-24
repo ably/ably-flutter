@@ -114,7 +114,6 @@ class AppProvisioning {
   /// Returns a demo token request that can be used to retrieve token
   /// Result of this method can be used directly to create [TokenRequest]
   /// with [TokenRequest.fromMap(map)] method
-  ///
   Future<Map<String, dynamic>> getTokenRequest() async {
     final response = await _httpRetryClient.get(
       Uri.parse(_tokenRequestAuthUrl),

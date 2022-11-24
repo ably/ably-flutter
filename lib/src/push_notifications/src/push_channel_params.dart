@@ -1,9 +1,7 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// params to filter channels on a [PushChannelSubscriptions]
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSH1c2
+/// Contains properties used to filter [PushChannelSubscriptions] channels.
 abstract class PushChannelsParams {
-  /// limit results for each page
+  /// A limit on the number of channels returned, up to 1,000.
   int? limit;
 }

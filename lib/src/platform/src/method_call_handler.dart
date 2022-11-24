@@ -2,8 +2,10 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
 
+/// @nodoc
 /// Handles method calls invoked from platform side to dart side
 class AblyMethodCallHandler {
+  /// @nodoc
   /// creates instance with method channel and forwards calls respective
   /// instance methods: [onAuthCallback], [onRealtimeAuthCallback], etc
   AblyMethodCallHandler(MethodChannel channel) {
@@ -38,6 +40,7 @@ class AblyMethodCallHandler {
     });
   }
 
+  /// @nodoc
   /// handles auth callback for rest instances
   Future<Object> onAuthCallback(AblyMessage<dynamic> message) async {
     final tokenParams = message.message as TokenParams;
@@ -51,6 +54,7 @@ class AblyMethodCallHandler {
     return rest.options.authCallback!(tokenParams);
   }
 
+  /// @nodoc
   /// handles auth callback for realtime instances
   Future<Object?> onRealtimeAuthCallback(AblyMessage<dynamic>? message) async {
     final tokenParams = message!.message as TokenParams;

@@ -1,17 +1,19 @@
-import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:ably_flutter/src/generated/platform_constants.dart';
 import 'package:meta/meta.dart';
 
-/// Delta extension configuration for [MessageExtras]
+/// Contains any arbitrary key-value pairs, which may also contain other
+/// primitive JSON types, JSON-encodable objects, or JSON-encodable arrays from
+/// delta compression.
 @immutable
 class DeltaExtras with ObjectHash {
-  /// the id of the message the delta was generated from
+  /// The ID of the message the delta was generated from.
   final String? from;
 
-  /// the delta format. Only "vcdiff" is supported currently
+  /// The delta compression format. Only vcdiff is supported.
   final String? format;
 
+  /// @nodoc
   /// create instance from a map
   @protected
   DeltaExtras.fromMap(Map<String, dynamic> value)

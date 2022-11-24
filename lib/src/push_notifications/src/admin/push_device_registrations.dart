@@ -1,39 +1,35 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// Manage device registrations for push notifications
-///
-/// https://ably.com/documentation/general/push/admin#device-registrations
+/// Enables the management of push notification registrations with Ably.
 abstract class PushDeviceRegistrations {
-  /// Get registered device by device ID.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b1
+  /// Retrieves the [DeviceDetails] of a device registered
+  /// to receive push notifications using the `id` property of a
+  /// [DeviceDetails] object, or by directly using the unique [deviceId].
   Future<DeviceDetails> get({
     DeviceDetails? deviceDetails,
     String? deviceId,
   });
 
-  /// List registered devices filtered by optional params.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b2
+  /// Retrieves all devices matching the filter [params] provided.
+  /// Returns a [PaginatedResult] object, containing an array of [DeviceDetails]
+  /// objects.
   Future<PaginatedResult<DeviceDetails>> list(
     DeviceRegistrationParams params,
   );
 
-  /// Save and register device.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b3
+  /// Registers or updates a [deviceDetails] object with Ably. Returns the new,
+  /// or updated [DeviceDetails] object.
   Future<DeviceDetails> save(DeviceDetails deviceDetails);
 
-  /// Remove device.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b4
+  /// Removes a device registered to receive push notifications from Ably using
+  /// the id property of a [deviceDetails] object, or by directly using the
+  /// unique [deviceId].
   Future<void> remove({
     DeviceDetails? deviceDetails,
     String? deviceId,
   });
 
-  /// Remove device matching where params.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH1b5
+  /// Removes all devices registered to receive push notifications from Ably
+  /// matching the filter [params] provided.
   Future<void> removeWhere(DeviceRegistrationParams params);
 }

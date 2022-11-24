@@ -2,53 +2,40 @@ import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/common/src/object_hash.dart';
 import 'package:meta/meta.dart';
 
-/// An individual message to be sent/received by Ably
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TM1
+/// Contains an individual message that is sent to, or received from, Ably.
 @immutable
 class Message with ObjectHash {
-  /// A unique ID for this message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2a
+  /// A Unique ID assigned by Ably to this message.
   final String? id;
 
-  /// The timestamp for this message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2f
+  /// Timestamp of when the message was received by Ably, as [DateTime].
   final DateTime? timestamp;
 
-  /// The id of the publisher of this message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2b
+  /// The client ID of the publisher of this message.
   final String? clientId;
 
-  /// The connection id of the publisher of this message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2c
+  /// The connection ID of the publisher of this message.
   final String? connectionId;
 
-  /// Any transformation applied to the data for this message
+  /// This is typically empty, as all messages received from Ably are
+  /// automatically decoded client-side using this value. However, if the
+  /// message encoding cannot be processed, this attribute contains the
+  /// remaining transformations not applied to the `data` payload.
   final String? encoding;
 
   final MessageData<dynamic>? _data;
 
-  /// Message payload
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2d
+  /// The message payload, if provided.
   Object? get data => _data?.data;
 
-  /// Name of the message
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2g
+  /// The event name.
   final String? name;
 
-  /// Message extras that may contain message metadata
-  /// and/or ancillary payloads
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM2i
+  /// An object that may contain metadata, and/or ancillary payloads.
   final MessageExtras? extras;
 
-  /// Creates a message instance with [name], [data] and [clientId]
+  /// Construct a Message object with an event [name], [data] payload, and a
+  /// unique [clientId].
   Message({
     this.clientId,
     this.connectionId,
@@ -84,10 +71,16 @@ class Message with ObjectHash {
         extras,
       ]);
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
-  ///
-  /// TODO(tiholic): decoding and decryption is not implemented as per
-  ///  RSL6 and RLS6b as mentioned in TM3
+  // https://docs.ably.com/client-lib-development-guide/features/#TM3
+  //
+  // TODO(tiholic): decoding and decryption is not implemented as per
+  // RSL6 and RLS6b as mentioned in TM3
+
+  /// A static factory method to create a [Message] object from a deserialized
+  /// Message-like object encoded using Ably's wire protocol, with a provided
+  /// Message-like deserialized [jsonObject] and optionally a [channelOptions]
+  /// object, which you can use to allow the library to decrypt the
+  /// data if you have an encrypted channel.
   Message.fromEncoded(
     Map<String, dynamic> jsonObject, [
     RestChannelOptions? channelOptions,
@@ -108,7 +101,10 @@ class Message with ObjectHash {
               )
             : null;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TM3
+  /// A static factory method to create an array of Message objects from an
+  /// [jsonArray] of deserialized Message-like object encoded using Ably's wire
+  /// protocol, and optionally a [channelOptions] object, which you can use to
+  /// allow the library to decrypt the data if you have an encrypted channel.
   static List<Message> fromEncodedArray(
     List<Map<String, dynamic>> jsonArray, [
     RestChannelOptions? channelOptions,

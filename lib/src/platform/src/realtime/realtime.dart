@@ -5,17 +5,11 @@ import 'dart:io' as io show Platform;
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// The Ably Realtime client library establishes and maintains a persistent
-/// connection to Ably enabling low latency broadcasting and receiving of
-/// messages and presence state.
-///
-/// Learn more at the [Realtime Client Library API documentation](https://ably.com/documentation/realtime).
+/// A client that extends functionality of the [Rest] and provides
+/// additional realtime-specific features.
 class Realtime extends PlatformObject {
-  /// instantiates with [ClientOptions] and a String [key]
-  ///
-  /// creates client options from key if [key] is provided
-  ///
-  /// raises [AssertionError] if both [options] and [key] are null
+  /// Constructs a `Realtime` object using an Ably [options] object or
+  /// the Ably API [key] or token string used to validate the client.
   Realtime({
     ClientOptions? options,
     final String? key,
@@ -27,11 +21,12 @@ class Realtime extends PlatformObject {
     push = Push(realtime: this);
   }
 
-  /// Create a realtime client from an API key without
-  /// configuring other parameters
+  /// Constructs a `Realtime` object using an Ably API [key] or token string
+  /// used to validate the client.
   factory Realtime.fromKey(String key) =>
       Realtime(options: ClientOptions(key: key));
 
+  ///@nodoc
   @override
   Future<int?> createPlatformInstance() async {
     final handle =
@@ -60,76 +55,57 @@ class Realtime extends PlatformObject {
   // The _connection instance keeps a reference to this platform object.
   late final Connection _connection;
 
-  /// Provides access to the underlying Connection object
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTC2
+  /// A [Connection] object.
   Connection get connection => _connection;
 
-  /// a custom auth object to perform authentication related operations
-  /// based on the [options]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC5
+  /// An [Auth] object.
   // Auth? auth;
 
-  /// [ClientOptions] indicating authentication and other settings for this
-  /// instance to interact with ably service
+  /// @nodoc
+  /// A [ClientOptions] object used to configure the client connection to Ably.
   late ClientOptions options;
 
-  /// a push object interacting with Push API
-  /// viz., subscribing for push notifications, etc
+  /// A [Push] object.
   late Push push;
 
   late RealtimeChannels _channels;
 
-  /// Provides access to the underlying [RealtimeChannels]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RTC3
+  /// A [Channels] object.
   RealtimeChannels get channels => _channels;
 
-  /// closes the [connection]
+  /// Calls [Connection.close] and causes the connection to close, entering the
+  /// closing state.
+  ///
+  /// Once closed, the library will not attempt to re-establish the connection
+  /// without an explicit call to [Connection.connect].
   Future<void> close() async => invoke(PlatformMethod.closeRealtime);
 
-  /// connects to [connection]
+  /// Calls [Connection.connect] and causes the connection to open, entering the
+  /// connecting state.
+  ///
+  /// Explicitly calling [Connection.connect] is unnecessary unless the
+  /// [ClientOptions.autoConnect] property is disabled.
   Future<void> connect() async => invoke<void>(PlatformMethod.connectRealtime);
 
-  /// creates and sends a raw request to ably service
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC19
-  // Future<HttpPaginatedResponse> request({
-  //   required String method,
-  //   required String path,
-  //   Map<String, dynamic>? params,
-  //   Object? body,
-  //   Map<String, String>? headers,
-  // }) {
-  //   throw UnimplementedError();
-  // }
-
-  /// gets stats based on params as a [PaginatedResult]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC6
-  // Future<PaginatedResult<Stats>> stats([Map<String, dynamic>? params]) {
-  //   throw UnimplementedError();
-  // }
-
-  /// returns server time
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSC16
+  /// Retrieves the [DateTime] from the Ably service. Clients that do not have
+  /// access to a sufficiently well maintained time source and wish to issue
+  /// Ably [TokenRequest]s with a more accurate timestamp should use the
+  /// [AuthOptions.queryTime] property on a [ClientOptions] object instead of
+  /// this method.
   Future<DateTime> time() async {
     final time = await invokeRequest<int>(PlatformMethod.realtimeTime);
     return DateTime.fromMillisecondsSinceEpoch(time);
   }
 
-  /// represents the current state of the device in respect of it being a
-  /// target for push notifications.
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH8
+  /// Retrieves a [LocalDevice] object that represents the current state of the
+  /// device as a target for push notifications.
   Future<LocalDevice> device() async =>
       invokeRequest<LocalDevice>(PlatformMethod.pushDevice);
 }
 
 Map<int?, Realtime> _realtimeInstances = {};
 
+/// @nodoc
 /// Returns readonly copy of instances of all [Realtime] clients created.
 Map<int?, Realtime> get realtimeInstances =>
     UnmodifiableMapView(_realtimeInstances);

@@ -1,16 +1,17 @@
 import 'package:ably_flutter/ably_flutter.dart';
 
-/// ConnectionTypes contains a breakdown of summary stats data
-/// for different (TLS vs non-TLS) connection types
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TS4
+/// Contains a breakdown of summary stats data for different (TLS vs non-TLS)
+/// connection types.
 abstract class StatsConnectionTypes {
-  /// All connection count (includes both TLS & non-TLS connections).
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over TLS connections (both TLS and non-TLS).
   StatsResourceCount? all;
 
-  /// Non-TLS connection count (unencrypted).
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over non-TLS connections.
   StatsResourceCount? plain;
 
-  /// TLS connection count.
+  /// A [StatsResourceCount] object containing a breakdown of usage by scope
+  /// over TLS connections.
   StatsResourceCount? tls;
 }

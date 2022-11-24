@@ -1,26 +1,19 @@
 import 'package:meta/meta.dart';
 
-/// Details of a push subscription to a channel.
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#PCS1
+/// Contains the subscriptions of a device, or a group of devices sharing the
+/// same `clientId`, has to a channel in order to receive push notifications.
 @immutable
 class PushChannelSubscription {
-  /// the channel name associated with this subscription
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCS4
+  /// The channel the push notification subscription is for.
   final String channel;
 
-  /// populated for subscriptions made for a specific device registration
-  /// (optional)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCS2
+  /// The unique ID of the device.
   final String? deviceId;
 
-  /// populated for subscriptions made for a specific clientId (optional)
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#PCS3
+  /// The ID of the client the device, or devices are associated to.
   final String? clientId;
 
+  /// @nodoc
   /// Initializes an instance without any defaults
   const PushChannelSubscription({
     required this.channel,

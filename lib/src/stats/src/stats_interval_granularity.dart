@@ -1,14 +1,14 @@
-/// https://docs.ably.com/client-lib-development-guide/features/#TS12c
+/// Describes the interval unit over which statistics are gathered.
 enum StatsIntervalGranularity {
-  /// indicates units in minutes
+  /// Interval unit over which statistics are gathered as minutes.
   minute,
 
-  /// indicates units in hours
+  /// Interval unit over which statistics are gathered as hours.
   hour,
 
-  /// indicates units in days
+  /// Interval unit over which statistics are gathered as days.
   day,
 
-  /// indicates units in months
+  /// Interval unit over which statistics are gathered as months.
   month,
 }

@@ -1,41 +1,31 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// Whenever the connection state changes,
-/// a ConnectionStateChange object is emitted on the [Connection] object
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TA1
+/// Contains [ConnectionState] change information emitted by the [Connection]
+/// object.
 @immutable
 class ConnectionStateChange {
-  /// https://docs.ably.com/client-lib-development-guide/features/#TA2
+  /// The event that triggered this [ConnectionState] change.
   final ConnectionEvent event;
 
-  /// current state of the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TA2
+  /// The new [ConnectionState].
   final ConnectionState current;
 
-  /// previous state of the channel
+  /// The previous [ConnectionState].
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TA2
+  /// For the [ConnectionEvent.update] event, this is equal to the current
+  /// [ConnectionState].
   final ConnectionState previous;
 
-  /// reason for failure, in case of a failed state
-  ///
-  /// If the channel state change includes error information,
-  /// then the reason attribute will contain an ErrorInfo
-  /// object describing the reason for the error
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TA3
+  /// An [ErrorInfo object containing any information relating to the
+  /// transition.
   final ErrorInfo? reason;
 
-  /// when the client is not connected, a connection attempt will be made
-  /// automatically by the library after the number of milliseconds
-  /// specified by [retryIn]
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TA2
+  /// Duration in milliseconds, after which the client retries a connection
+  /// where applicable.
   final int? retryIn;
 
+  /// @nodoc
   /// initializes without any defaults
   const ConnectionStateChange({
     required this.current,

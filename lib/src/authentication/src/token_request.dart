@@ -1,55 +1,48 @@
+import 'package:ably_flutter/ably_flutter.dart';
 import 'package:flutter/foundation.dart';
 
-/// spec: https://docs.ably.com/client-lib-development-guide/features/#TE1
+/// Contains the properties of a request for a token to Ably. Tokens are
+/// generated using [Auth.requestToken].
 @immutable
 class TokenRequest {
-  /// [keyName] is the first part of Ably API Key.
+  /// The name of the key against which this request is made.
   ///
-  /// provided keyName will be used to authorize requests made to Ably.
-  /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE2
-  ///
-  /// More details about Ably API Key:
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSA11
+  /// The key name is public, whereas the key secret is private.
   final String? keyName;
 
-  /// An opaque nonce string of at least 16 characters to ensure
-  ///	uniqueness of this request. Any subsequent request using the
-  ///	same nonce will be rejected.
-  ///
-  /// spec:
-  /// https://docs.ably.com/client-lib-development-guide/features/#TE2
-  /// https://docs.ably.com/client-lib-development-guide/features/#TE5
+  /// A cryptographically secure random string of at least 16 characters, used
+  /// to ensure the `TokenRequest` cannot be reused.
   final String? nonce;
 
-  /// The "Message Authentication Code" for this request.
-  ///
-  /// See the Ably Authentication documentation for more details.
-  /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE2
+  /// The Message Authentication Code for this request.
   final String? mac;
 
-  /// stringified capabilities JSON
+  /// Capability of the requested Ably Token. If the Ably `TokenRequest` is
+  /// successful, the capability of the returned Ably Token will be the
+  /// intersection of this capability with the capability of the issuing key.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TE3
+  /// The capabilities value is a JSON-encoded representation of the resource
+  /// paths and associated operations. Read more about capabilities in the
+  /// [capabilities docs](https://ably.com/docs/realtime/authentication).
   final String? capability;
 
-  ///  Client ID assigned to the tokenRequest.
+  /// The client ID to associate with the requested Ably Token.
   ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TE2
+  /// When provided, the Ably Token may only be used to perform operations on
+  /// behalf of that client ID.
   final String? clientId;
 
-  /// timestamp long – The timestamp (in milliseconds since the epoch)
-  /// of this request. Timestamps, in conjunction with the nonce,
-  /// are used to prevent requests from being replayed
-  ///
-  /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE5
+  /// The [DateTime] of this request.
   final DateTime? timestamp;
 
-  /// ttl attribute represents time to live (expiry)
-  /// of this token in milliseconds
+  /// Requested time to live for the Ably Token in milliseconds.
   ///
-  /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE4
+  /// If the Ably `TokenRequest` is successful, the TTL of the returned Ably
+  /// Token is less than or equal to this value, depending on application
+  /// settings and the attributes of the issuing key.
   final int? ttl;
 
+  /// @nodoc
   /// instantiates a [TokenRequest] with provided values
   const TokenRequest({
     this.capability,
@@ -61,7 +54,18 @@ class TokenRequest {
     this.ttl,
   });
 
-  /// spec: https://docs.ably.com/client-lib-development-guide/features/#TE7
+  /// A static factory method to create a [TokenRequest] object from a
+  /// deserialized `TokenRequest`-like object or a JSON stringified
+  /// `TokenRequest` object.
+  ///
+  /// This method is provided to minimize bugs as a result of differing
+  /// types by platform for fields such as `timestamp` or `ttl`. For example, in
+  /// Ruby `ttl` in the `TokenRequest` object is exposed in seconds as that is
+  /// idiomatic for the language, yet when serialized to JSON using `to_json` it
+  /// is automatically converted to the Ably standard which is milliseconds.
+  /// By using the `fromMap()` method when constructing a `TokenRequest` object,
+  /// Ably ensures that all fields are consistently serialized and deserialized
+  /// across platforms.
   TokenRequest.fromMap(Map<String, dynamic> map)
       : capability = map['capability'] as String?,
         clientId = map['clientId'] as String?,

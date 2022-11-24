@@ -1,20 +1,17 @@
-/// ResourceCount contains aggregate data for usage of a resource
-/// in a specific scope
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TS9
+/// Contains the aggregate data for usage of a resource in a specific scope.
 abstract class StatsResourceCount {
-  /// Average resources of this type used for this period.
+  /// The average number of resources of this type used for this period.
   int? mean;
 
-  /// Minimum total resources of this type used for this period.
+  /// The minimum total resources of this type used for this period.
   int? min;
 
-  /// Total resources of this type opened.
+  /// The total number of resources opened of this type.
   int? opened;
 
-  /// Peak resources of this type used for this period.
+  /// The peak number of resources of this type used for this period.
   int? peak;
 
-  /// Resource requests refused within this period.
+  /// The number of resource requests refused within this period.
   int? refused;
 }

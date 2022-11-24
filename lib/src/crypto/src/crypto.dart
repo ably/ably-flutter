@@ -4,35 +4,30 @@ import 'dart:typed_data';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// Utility methods for creating keys ([generateRandomKey]) and configuration
-/// objects ([CipherParams]) for symmetric encryption.
+/// Contains the properties required to configure the encryption of [Message]
+/// payloads.
 class Crypto {
-  /// Default algorithm used of encryption
-  /// Currently only AES is supported
+  /// The algorithm to use for encryption. Only `aes` is supported.
   static const defaultAlgorithm = 'aes';
 
+  /// @nodoc
   /// Default length of the key in bits
   /// Equals to [keyLength256bits]
   static const defaultKeyLengthInBits = keyLength256bits;
 
+  /// @nodoc
   /// Length of 256-bit key
   static const keyLength256bits = 256;
 
+  /// @nodoc
   /// Length of 128-bit key
   static const keyLength128bits = 128;
 
-  /// Default mode used of encryption
-  /// Currently only CBC is supported
+  /// The cipher mode. Only `cbc` is supported.
   static const defaultMode = 'cbc';
 
-  /// Gets the CipherParams which can be used to with [RestChannelOptions] or
-  /// [RealtimeChannelOptions] to specify encryption.
-  ///
-  ///  Pass a [String] containing a base64 encoded key or a [Uint8List]
-  ///  containing raw bytes for the key. This key must be 128 or 256 bits long.
-  ///  If you have a password, do not use it directly, instead you should
-  ///  derive a key from this password, for example by using a key derivation
-  ///  function (KDF) such as PBKDF2.
+  /// Returns a [CipherParams] object, using the private [key] used to encrypt
+  /// and decrypt payloads, and the default mode, key length and algorithm.
   static Future<CipherParams> getDefaultParams({required dynamic key}) async {
     if (key is String) {
       ensureSupportedKeyLength(base64Decode(key));
@@ -53,6 +48,7 @@ class Crypto {
     );
   }
 
+  /// @nodoc
   /// Validates the length of provided [key]
   /// Throws [AblyException] if key length is different than 128 or 256 bits
   static void ensureSupportedKeyLength(Uint8List key) {
@@ -64,13 +60,12 @@ class Crypto {
     }
   }
 
-  /// Create a random key
+  /// Generates and returns a Future with a random key as [Uint8List], to be
+  /// used in the encryption of the channel.
   ///
-  /// Specify a [keyLength] to choose how long the key is.
-  /// Defaults to [defaultKeyLengthInBits].
-  ///
-  /// Warning: If you create a random key and encrypt messages without sharing
-  /// this key with other clients, there is no way to decrypt the messages.
+  /// The provided [keyLength] is the length of the key to be generated, in
+  /// bits. If not specified, this is equal to the default keyLength of the
+  /// default algorithm: for AES this is 256 bits.
   static Future<Uint8List> generateRandomKey({
     int keyLength = defaultKeyLengthInBits,
   }) =>

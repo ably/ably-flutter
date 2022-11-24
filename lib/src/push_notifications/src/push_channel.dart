@@ -1,18 +1,19 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
-/// Channel to receive push notifications on
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#RSH7
+/// Enables devices to subscribe to push notifications for a channel.
 class PushChannel extends PlatformObject {
   final String _name;
 
+  /// @nodoc
   /// A rest client used platform side to invoke push notification methods
   final Rest? rest;
 
+  /// @nodoc
   /// A realtime client used platform side to invoke push notification methods
   final Realtime? realtime;
 
+  /// @nodoc
   /// Pass the channel name and an Ably realtime or rest client.
   PushChannel(this._name, {this.rest, this.realtime}) {
     final ablyClientNotPresent = rest == null && realtime == null;
@@ -23,48 +24,41 @@ class PushChannel extends PlatformObject {
     }
   }
 
+  /// @nodoc
   @override
   Future<int?> createPlatformInstance() => (realtime != null)
       ? (realtime as Realtime).handle
       : (rest as Rest).handle;
 
-  /// Subscribes device to push notifications on channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH7a
+  /// Subscribes the device to push notifications for the channel.
   Future<void> subscribeDevice() => invoke(
       PlatformMethod.pushSubscribeDevice, {TxTransportKeys.channelName: _name});
 
-  /// un-subscribes device from push notifications
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH7c
+  /// Unsubscribes the device from receiving push notifications for the channel.
   Future<void> unsubscribeDevice() => invoke(
       PlatformMethod.pushUnsubscribeDevice,
       {TxTransportKeys.channelName: _name});
 
-  /// Subscribes client to push notifications on the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH7b
+  /// Subscribes all devices associated with the current device's `clientId` to
+  /// push notifications for the channel.
   Future<void> subscribeClient() => invoke(
       PlatformMethod.pushSubscribeClient, {TxTransportKeys.channelName: _name});
 
-  /// un-subscribes client from push notifications
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH7d
+  /// Unsubscribes all devices associated with the current device's `clientId`
+  /// from receiving push notifications for the channel.
   Future<void> unsubscribeClient() => invoke(
       PlatformMethod.pushUnsubscribeClient,
       {TxTransportKeys.channelName: _name});
 
-  /// Lists subscriptions
+  /// Retrieves all push subscriptions for the channel.
   ///
-  /// as [PushChannelSubscription] objects encapsulated in a paginated result.
-  /// Optional filters can be passed as a [params] map. These filters include
-  /// [channel, deviceId, clientId and limit](https://ably.com/docs/rest-api/#list-channel-subscriptions).
+  /// Subscriptions can be filtered using a [params] object containing key-value
+  /// pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a
+  /// combination of both if concatFilters is set to true, and a limit on the
+  /// number of subscriptions returned, up to 1,000.
   ///
-  /// Requires Push Admin capability
-  ///
-  /// To listSubscriptions on Android, params must include a `deviceId` key.
-  /// This is because the package plugin uses ably-java.
-  /// https://docs.ably.com/client-lib-development-guide/features/#RSH7e
+  /// Returns a [PaginatedResult] object containing a list of
+  /// [PushChannelSubscription] objects.
   Future<PaginatedResult<PushChannelSubscription>> listSubscriptions(
       Map<String, String> params) async {
     if (!params.containsKey('deviceId') &&

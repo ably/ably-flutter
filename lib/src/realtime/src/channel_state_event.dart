@@ -1,39 +1,30 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:meta/meta.dart';
 
-/// Whenever the channel state changes, a ChannelStateChange object
-/// is emitted on the Channel object
-///
-/// https://docs.ably.com/client-lib-development-guide/features/#TH1
+/// Contains state change information emitted by [RestChannel] and
+/// [RealtimeChannel] objects.
 @immutable
 class ChannelStateChange {
-  /// the event that generated the channel state change
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TH5
+  /// The event that triggered this [ChannelState] change.
   final ChannelEvent event;
 
-  /// current state of the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TH2
+  /// The new current [ChannelState].
   final ChannelState current;
 
-  /// previous state of the channel
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TH2
+  /// The previous state. For the [ChannelEvent.update] event, this is equal to
+  /// the current [ChannelState].
   final ChannelState previous;
 
-  /// reason for failure, in case of a failed state
-  ///
-  /// If the channel state change includes error information,
-  /// then the reason attribute will contain an ErrorInfo
-  /// object describing the reason for the error
-  ///
-  /// https://docs.ably.com/client-lib-development-guide/features/#TH3
+  /// An [ErrorInfo] object containing any information relating to the
+  /// transition.
   final ErrorInfo? reason;
 
-  /// https://docs.ably.com/client-lib-development-guide/features/#TH4
+  /// Whether message continuity on this channel is preserved, see
+  /// [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors)
+  /// for more info.
   final bool resumed;
 
+  /// @nodoc
   /// initializes with [resumed] set to false
   const ChannelStateChange({
     required this.current,
