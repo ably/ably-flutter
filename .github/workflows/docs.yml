@@ -11,25 +11,20 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v2
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.x'
           cache: true
 
-      - name: Get Flutter Packages
-        run: flutter pub get
-
-      - name: Install dartdoc global package via pub tool in the Flutter context
-        run: flutter pub global activate dartdoc
-
-      - name: Use Intro Blurb
+      - name: Use Intro Blurb As Homepage
         run: |
           mv README.md README.md.bak
           mv API_REF_INTRO_BLURB.md README.md
 
       - name: Build Documentation
         run: |
-          flutter pub global run dartdoc
+          dart doc
           ls -al doc/api
 
       - name: Configure AWS Credentials
@@ -38,6 +33,7 @@ jobs:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::${{ secrets.ABLY_AWS_ACCOUNT_ID_SDK }}:role/ably-sdk-builds-ably-flutter
           role-session-name: "${{ github.run_id }}-${{ github.run_number }}"
+
       - name: Upload Documentation
         uses: ably/sdk-upload-action@v1
         with:
