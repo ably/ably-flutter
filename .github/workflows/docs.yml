@@ -17,6 +17,11 @@ jobs:
           flutter-version: '3.0.x'
           cache: true
 
+      - name: Use Intro Blurb As Homepage
+        run: |
+          mv README.md README.md.bak
+          mv API_REF_INTRO_BLURB.md README.md
+
       - name: Build Documentation
         run: |
           dart doc
@@ -35,3 +40,8 @@ jobs:
           sourcePath: doc/api
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           artifactName: dartdoc
+
+      - name: Restore Readme
+        run: |
+          mv README.md API_REF_INTRO_BLURB.md
+          mv README.md.bak README.md
