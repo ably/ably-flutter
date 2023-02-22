@@ -1,5 +1,6 @@
 package io.ably.flutter.plugin;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.messaging.RemoteMessage;
@@ -281,53 +282,69 @@ public class AblyMessageCodec extends StandardMessageCodec {
 
   private PlatformClientOptions decodeClientOptions(Map<String, Object> jsonMap) {
     if (jsonMap == null) return null;
-    final ClientOptions o = new ClientOptions();
+    final ClientOptions clientOptions = new ClientOptions();
 
     // AuthOptions (super class of ClientOptions)
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, v -> o.authUrl = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> o.authMethod = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.key, v -> o.key = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tokenDetails, v -> o.tokenDetails = decodeTokenDetails((Map<String, Object>) v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, v -> o.authHeaders = (Param[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, v -> o.authParams = (Param[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> o.queryTime = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> o.useTokenAuth = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, value -> clientOptions.authUrl = (String) value);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> clientOptions.authMethod = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.key, v -> clientOptions.key = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tokenDetails, v -> clientOptions.tokenDetails = decodeTokenDetails((Map<String, Object>) v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, value -> {
+      clientOptions.authHeaders = mapToParams((HashMap<String, String>) value);
+    });
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, value -> {
+       clientOptions.authParams = mapToParams((HashMap<String, String>) value);
+    });
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> clientOptions.queryTime = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> clientOptions.useTokenAuth = (Boolean) v);
 
     // ClientOptions
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> o.clientId = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.logLevel, v -> o.logLevel = decodeLogLevel((String) v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tls, v -> o.tls = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.restHost, v -> o.restHost = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> o.realtimeHost = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.port, v -> o.port = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> o.tlsPort = (Integer) v);
-    o.autoConnect = false; // Always avoid auto-connect, to allow handle to be returned back to Dart side before authCallback is called.
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.clientId, v -> clientOptions.clientId = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.logLevel, v -> clientOptions.logLevel = decodeLogLevel((String) v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tls, v -> clientOptions.tls = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.restHost, v -> clientOptions.restHost = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeHost, v -> clientOptions.realtimeHost = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.port, v -> clientOptions.port = (Integer) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tlsPort, v -> clientOptions.tlsPort = (Integer) v);
+    clientOptions.autoConnect = false; // Always avoid auto-connect, to allow handle to be returned back to Dart side before authCallback is called.
     // If the user specifies autoConnect, we call connect once we get the handle back to the dart side
     // In other words, Ably Flutter internally manually connects, but to the SDK user this looks like autoConnect.
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useBinaryProtocol, v -> o.useBinaryProtocol = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queueMessages, v -> o.queueMessages = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> o.echoMessages = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.recover, v -> o.recover = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.environment, v -> o.environment = (String) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.idempotentRestPublishing, v -> o.idempotentRestPublishing = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpOpenTimeout, v -> o.httpOpenTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> o.httpRequestTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> o.httpMaxRetryCount = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> o.realtimeRequestTimeout = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> o.fallbackHosts = (String[]) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> o.fallbackHostsUseDefault = (Boolean) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> o.fallbackRetryTimeout = readValueAsLong(v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> o.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> o.channelRetryTimeout = (Integer) v);
-    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> o.transportParams = decodeTransportParams((Map<String, String>) v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useBinaryProtocol, v -> clientOptions.useBinaryProtocol = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queueMessages, v -> clientOptions.queueMessages = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.echoMessages, v -> clientOptions.echoMessages = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.recover, v -> clientOptions.recover = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.environment, v -> clientOptions.environment = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.idempotentRestPublishing, v -> clientOptions.idempotentRestPublishing = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpOpenTimeout, v -> clientOptions.httpOpenTimeout = (Integer) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> clientOptions.httpRequestTimeout = (Integer) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> clientOptions.httpMaxRetryCount = (Integer) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> clientOptions.realtimeRequestTimeout = readValueAsLong(v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> clientOptions.fallbackHosts = (String[]) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> clientOptions.fallbackHostsUseDefault = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> clientOptions.fallbackRetryTimeout = readValueAsLong(v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> clientOptions.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.channelRetryTimeout, v -> clientOptions.channelRetryTimeout = (Integer) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.transportParams, v -> clientOptions.transportParams = decodeTransportParams((Map<String, String>) v));
 
-    o.agents = new HashMap<String, String>() {{
+    clientOptions.agents = new HashMap<String, String>() {{
         put("ably-flutter", BuildConfig.FLUTTER_PACKAGE_PLUGIN_VERSION);
         put("dart", (String) jsonMap.get(PlatformConstants.TxClientOptions.dartVersion));
     }};
 
 
-    return new PlatformClientOptions(o, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
+    return new PlatformClientOptions(clientOptions, jsonMap.containsKey(PlatformConstants.TxClientOptions.hasAuthCallback) ? ((boolean) jsonMap.get(PlatformConstants.TxClientOptions.hasAuthCallback)) : false);
+  }
+
+  @NonNull
+  private Param[] mapToParams(HashMap<String, String> value) {
+    final HashMap<String,String> paramMap = value;
+    final Param[] params = new Param[paramMap.size()];
+
+    int index = 0;
+    for(final String key: paramMap.keySet()) {
+      params[index++] = new Param(key, paramMap.get(key));
+    }
+    return params;
   }
 
   private int decodeLogLevel(String logLevelString) {
