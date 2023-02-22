@@ -32,6 +32,7 @@ class TestName {
       'realtimePublishWithAuthCallback';
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeTime = 'realtimeTime';
+  static const String realtimeAuthAuthorize = 'realtimeAuthorize';
 
   // rest
   static const String restCapabilities = 'restCapabilities';

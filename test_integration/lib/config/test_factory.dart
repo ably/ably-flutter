@@ -5,6 +5,9 @@ import 'package:ably_flutter_integration_test/test/crypto/crypto_ensure_supporte
 import 'package:ably_flutter_integration_test/test/crypto/crypto_generate_random_key_test.dart';
 import 'package:ably_flutter_integration_test/test/crypto/crypto_get_default_params.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime'
+    '/realtime_authorize_test'
+    '.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
@@ -58,6 +61,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePublishWithAuthCallback: testRealtimePublishWithAuthCallback,
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimeTime: testRealtimeTime,
+  TestName.realtimeAuthAuthorize : testRealtimeAuthroize,
 
   // rest tests
   TestName.restCapabilities: testRestCapabilities,
