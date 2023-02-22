@@ -59,7 +59,7 @@ class Realtime extends PlatformObject {
   Connection get connection => _connection;
 
   /// An [Auth] object.
-  // Auth? auth;
+  Auth? auth;
 
   /// @nodoc
   /// A [ClientOptions] object used to configure the client connection to Ably.
