@@ -113,6 +113,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
   Widget _getAction(String testName) {
     final playIcon = IconButton(
       icon: const Icon(Icons.play_arrow),
+      color: Colors.white,
       onPressed: () {
         handleDriverMessage(TestControlMessage(testName)).then((_) {
           setState(() {});
@@ -161,6 +162,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
           _getStatus(testName),
           IconButton(
             icon: const Icon(Icons.remove_red_eye),
+            color: Colors.white,
             onPressed: () {
               showDialog<void>(
                 context: context,
