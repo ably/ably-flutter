@@ -1,0 +1,105 @@
+%YAML 1.2
+---
+common-version: 1.2.0
+compliance:
+  Agent Identifier:
+    Operating System:
+    Runtime:
+  Authentication:
+    API Key:
+    Token:
+      Callback:
+      URL:
+        Query Time:
+  Debugging:
+    Error Information:
+    Logs:
+      .caveats: |
+        Client options has `logLevel`, as expected, but `logHandler` is deprecated.
+  Protocol:
+    JSON: # not tested in CI for the Flutter plugin GitHub repository
+    MessagePack:
+  Realtime:
+    Channel:
+      Attach:
+      Encryption:
+      History:
+      Mode:
+      Presence:
+        Enter:
+          Client:
+        Get:
+        History:
+        Subscribe:
+        Update:
+          Client:
+      Publish:
+      Retry Timeout:
+      State Events:
+      Subscribe:
+        Deltas: # not tested in CI for the Flutter plugin GitHub repository
+        Rewind: # not tested in CI for the Flutter plugin GitHub repository
+    Connection:
+      Disconnected Retry Timeout:
+        # the client option is present in the Java SDK but unused by the implementation
+        # tracked by https://github.com/ably/ably-java/issues/168
+        .variants: iOS
+      Get Identifier:
+      Lifecycle Control:
+      Ping:
+      Recovery:
+      State Events:
+      Suspended Retry Timeout:
+        # the client option is present in the Java SDK but unused by the implementation
+        # tracked by https://github.com/ably/ably-java/issues/168
+        .variants: iOS
+    Message Echoes:
+    Message Queuing:
+    Push Notifications:
+      Local Device State:
+    Transport Parameters:
+  REST:
+    Channel:
+      Encryption:
+      Existence Check:
+      Get:
+      History:
+      Iterate:
+      Name:
+      Presence:
+        History:
+        Member List:
+      Publish:
+        Idempotence:
+      Push Notifications:
+        List Subscriptions:
+        Subscribe:
+    Request Timeout:
+    Service:
+      Get Time:
+    Support Hyperlink on Request Failure:
+  Service:
+    Environment:
+    Fallbacks:
+      Hosts:
+      Internet Up Check:
+      REST Follows Realtime:
+        .variants: iOS
+      Retry Count:
+      Retry Timeout:
+    Host:
+  Testing:
+    Disable TLS:
+    TCP Insecure Port:
+    TCP Secure Port:
+  Transport:
+    Connection Open Timeout:
+      # the client option is present in the Cocoa SDK but unused by the implementation (see Cocoa SDK manifest)
+      .variants: Android
+variants:
+  Android:
+    .synopsis: |
+      Supports use by Flutter applications running on the Android operating system.
+  iOS:
+    .synopsis: |
+      Supports use by Flutter applications running on the iOS operating system.
