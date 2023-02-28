@@ -102,6 +102,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimeAuthAuthorize', 'value': 'realtimeAuthAuthorize'},
   {'name': 'realtimeAuthCreateTokenRequest', 'value': 'realtimeAuthCreateTokenRequest'},
   {'name': 'realtimeAuthCreateToken', 'value': 'realtimeAuthCreateToken'},
+  {'name': 'realtimeAuthGetClientId', 'value': 'realtimeAuthGetClientId'},
 
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},

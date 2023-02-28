@@ -51,6 +51,9 @@ final public class PlatformConstants {
         public static final String restPresenceGet = "restPresenceGet";
         public static final String restPresenceHistory = "restPresenceHistory";
         public static final String releaseRestChannel = "releaseRestChannel";
+        public static final String restAuthAuthorize = "restAuthAuthorize";
+        public static final String restAuthCreateTokenRequest = "restAuthCreateTokenRequest";
+        public static final String restAuthCreateToken = "restAuthCreateToken";
         public static final String createRealtime = "createRealtime";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
@@ -68,6 +71,10 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String realtimeTime = "realtimeTime";
         public static final String restTime = "restTime";
+        public static final String realtimeAuthAuthorize = "realtimeAuthAuthorize";
+        public static final String realtimeAuthCreateTokenRequest = "realtimeAuthCreateTokenRequest";
+        public static final String realtimeAuthCreateToken = "realtimeAuthCreateToken";
+        public static final String realtimeAuthGetClientId = "realtimeAuthGetClientId";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
         public static final String pushReset = "pushReset";
@@ -202,6 +209,19 @@ final public class PlatformConstants {
         public static final String issued = "issued";
         public static final String capability = "capability";
         public static final String clientId = "clientId";
+    }
+
+    static final public class TxAuthOptions {
+        public static final String authCallback = "authCallback";
+        public static final String authUrl = "authUrl";
+        public static final String authMethod = "authMethod";
+        public static final String key = "key";
+        public static final String token = "token";
+        public static final String tokenDetails = "tokenDetails";
+        public static final String authHeaders = "authHeaders";
+        public static final String authParams = "authParams";
+        public static final String queryTime = "queryTime";
+        public static final String useTokenAuth = "useTokenAuth";
     }
 
     static final public class TxTokenParams {

@@ -48,6 +48,9 @@ class PlatformMethod {
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
   static const String releaseRestChannel = 'releaseRestChannel';
+  static const String restAuthAuthorize = 'restAuthAuthorize';
+  static const String restAuthCreateTokenRequest = 'restAuthCreateTokenRequest';
+  static const String restAuthCreateToken = 'restAuthCreateToken';
   static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -66,6 +69,11 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String realtimeTime = 'realtimeTime';
   static const String restTime = 'restTime';
+  static const String realtimeAuthAuthorize = 'realtimeAuthAuthorize';
+  static const String realtimeAuthCreateTokenRequest =
+      'realtimeAuthCreateTokenRequest';
+  static const String realtimeAuthCreateToken = 'realtimeAuthCreateToken';
+  static const String realtimeAuthGetClientId = 'realtimeAuthGetClientId';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
   static const String pushReset = 'pushReset';
@@ -206,6 +214,19 @@ class TxTokenDetails {
   static const String issued = 'issued';
   static const String capability = 'capability';
   static const String clientId = 'clientId';
+}
+
+class TxAuthOptions {
+  static const String authCallback = 'authCallback';
+  static const String authUrl = 'authUrl';
+  static const String authMethod = 'authMethod';
+  static const String key = 'key';
+  static const String token = 'token';
+  static const String tokenDetails = 'tokenDetails';
+  static const String authHeaders = 'authHeaders';
+  static const String authParams = 'authParams';
+  static const String queryTime = 'queryTime';
+  static const String useTokenAuth = 'useTokenAuth';
 }
 
 class TxTokenParams {
@@ -385,8 +406,7 @@ class TxPushRequestPermission {
   static const String alert = 'alert';
   static const String carPlay = 'carPlay';
   static const String criticalAlert = 'criticalAlert';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String provisional = 'provisional';
   static const String announcement = 'announcement';
 }
@@ -402,8 +422,7 @@ class TxUNNotificationSettings {
   static const String alertStyle = 'alertStyle';
   static const String showPreviewsSetting = 'showPreviewsSetting';
   static const String criticalAlertSetting = 'criticalAlertSetting';
-  static const String providesAppNotificationSettings =
-      'providesAppNotificationSettings';
+  static const String providesAppNotificationSettings = 'providesAppNotificationSettings';
   static const String announcementSetting = 'announcementSetting';
   static const String scheduledDeliverySetting = 'scheduledDeliverySetting';
   static const String timeSensitiveSetting = 'timeSensitiveSetting';

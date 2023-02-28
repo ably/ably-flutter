@@ -4,6 +4,7 @@ import 'dart:io' as io show Platform;
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/realtime/src/RealtimeAuth.dart';
 
 /// A client that extends functionality of the [Rest] and provides
 /// additional realtime-specific features.
@@ -19,6 +20,7 @@ class Realtime extends PlatformObject {
     _connection = Connection(this);
     _channels = RealtimeChannels(this);
     push = Push(realtime: this);
+    auth = RealtimeAuth(this);
   }
 
   /// Constructs a `Realtime` object using an Ably API [key] or token string
