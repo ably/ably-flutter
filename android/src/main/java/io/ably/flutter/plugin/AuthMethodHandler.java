@@ -1,8 +1,13 @@
 package io.ably.flutter.plugin;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.annotation.NonNull;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.lib.rest.Auth;
@@ -14,9 +19,12 @@ class AuthMethodHandler {
     enum Type{Realtime,Rest}
 
     private final AblyInstanceStore instanceStore;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    final Handler handler = new Handler(Looper.getMainLooper());
 
     public AuthMethodHandler(AblyInstanceStore instanceStore) {
         this.instanceStore = instanceStore;
+
     }
 
     void authorize(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result, Type type) {
@@ -26,14 +34,17 @@ class AuthMethodHandler {
 
         final Auth.AuthOptions options =
                 (Auth.AuthOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
-        ;
-        try {
-            final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
-                    .authorize(tokenParams, options);
-            result.success(tokenDetails);
-        } catch (AblyException e) {
-            result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-        }
+
+        executor.execute(() -> {
+            try {
+                final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
+                        .authorize(tokenParams, options);
+                handler.post(() -> result.success(tokenDetails));
+            } catch (AblyException e) {
+                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+            }
+        });
+
     }
 
     private Auth getAuth(AblyFlutterMessage<Map<String, Object>> ablyMessage, Type type) {
@@ -50,14 +61,16 @@ class AuthMethodHandler {
 
         final Auth.AuthOptions options =
                 (Auth.AuthOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
-        ;
-        try {
-            final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
-                    .requestToken(tokenParams, options);
-            result.success(tokenDetails);
-        } catch (AblyException e) {
-            result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-        }
+
+        executor.execute(() -> {
+            try {
+                final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
+                        .requestToken(tokenParams, options);
+                handler.post(() -> result.success(tokenDetails));
+            } catch (AblyException e) {
+                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+            }
+        });
     }
 
     void createTokenRequest(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result, Type type) {
@@ -67,14 +80,16 @@ class AuthMethodHandler {
 
         final Auth.AuthOptions options =
                 (Auth.AuthOptions) ablyMessage.message.get(PlatformConstants.TxTransportKeys.options);
-        ;
-        try {
-            final Auth.TokenRequest tokenRequest = getAuth(ablyMessage, type)
-                    .createTokenRequest(tokenParams, options);
-            result.success(tokenRequest);
-        } catch (AblyException e) {
-            result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-        }
+
+        executor.execute(() -> {
+            try {
+                final Auth.TokenRequest tokenRequest = getAuth(ablyMessage, type)
+                        .createTokenRequest(tokenParams, options);
+                handler.post(() -> result.success(tokenRequest));
+            } catch (AblyException e) {
+                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+            }
+        });
     }
 
     public void clientId(MethodCall methodCall, MethodChannel.Result result, Type type) {
