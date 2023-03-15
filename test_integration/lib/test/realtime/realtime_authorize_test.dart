@@ -39,9 +39,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
       logLevel: LogLevel.verbose,
       useTokenAuth: true,
       autoConnect: false,
-      tokenDetails: firstToken,
-      authUrl: "https://echo.ably.io/respondwith",
-      authParams: {"status":"403"}
+      tokenDetails: firstToken
   );
   final realtime = Realtime(options: clientOptions);
   await realtime.connect();
@@ -59,7 +57,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
  final authOptions = AuthOptions(key: appKey, tokenDetails: secondtoken);
  final tokenDetails = await realtime.auth?.authorize(authOptions:
   authOptions);
-
+ print(tokenDetails);
   return {
     'handle': await realtime.handle
   };

@@ -12,7 +12,7 @@ abstract class Auth {
   /// implicit in a token used to instantiate the library. An error is raised if
   /// a `clientId` specified here conflicts with the `clientId` implicit in the
   /// token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients).
-  String? get clientId;
+  Future<String?>  get clientId;
 
   /// Instructs the library to get a new token immediately using [tokenParams]
   /// and [authOptions] parameters.

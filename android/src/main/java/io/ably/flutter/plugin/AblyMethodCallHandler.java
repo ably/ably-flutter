@@ -18,7 +18,6 @@ import java.util.concurrent.CountDownLatch;
 
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.push.PushActivationEventHandlers;
-import io.ably.flutter.plugin.push.PushMessagingEventHandlers;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
 import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
@@ -49,6 +48,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
   private final StreamsChannel streamsChannel;
   private final Map<String, BiConsumer<MethodCall, MethodChannel.Result>> _map;
   private final AblyInstanceStore instanceStore;
+  private final AuthMethodHandler authMethodHandler;
   @Nullable
   private RemoteMessage remoteMessageFromUserTapLaunchesApp;
 
@@ -59,6 +59,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     this.streamsChannel = streamsChannel;
     this.applicationContext = applicationContext;
     this.instanceStore = AblyInstanceStore.getInstance();
+    authMethodHandler = new AuthMethodHandler(this.instanceStore);
     _map = new HashMap<>();
     _map.put(PlatformConstants.PlatformMethod.getPlatformVersion, this::getPlatformVersion);
     _map.put(PlatformConstants.PlatformMethod.getVersion, this::getVersion);
@@ -90,6 +91,26 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.releaseRealtimeChannel, this::releaseRealtimeChannel);
     _map.put(PlatformConstants.PlatformMethod.realtimeTime, this::realtimeTime);
     _map.put(PlatformConstants.PlatformMethod.restTime, this::restTime);
+
+    //authorizations
+    _map.put(PlatformConstants.PlatformMethod.realtimeAuthAuthorize,
+            (methodCall, result) -> authMethodHandler.authorize(methodCall, result, AuthMethodHandler.Type.Realtime));
+    _map.put(PlatformConstants.PlatformMethod.realtimeAuthRequestToken,
+            (methodCall, result) -> authMethodHandler.requestToken(methodCall, result, AuthMethodHandler.Type.Realtime));
+    _map.put(PlatformConstants.PlatformMethod.realtimeAuthCreateTokenRequest,
+            (methodCall, result) -> authMethodHandler.createTokenRequest(methodCall, result, AuthMethodHandler.Type.Realtime));
+    _map.put(PlatformConstants.PlatformMethod.realtimeAuthGetClientId,
+            (methodCall, result) -> authMethodHandler.clientId(methodCall, result, AuthMethodHandler.Type.Realtime));
+
+    _map.put(PlatformConstants.PlatformMethod.restAuthAuthorize,
+            (methodCall, result) -> authMethodHandler.authorize(methodCall, result, AuthMethodHandler.Type.Rest));
+    _map.put(PlatformConstants.PlatformMethod.restAuthRequestToken,
+            (methodCall, result) -> authMethodHandler.requestToken(methodCall, result, AuthMethodHandler.Type.Rest));
+    _map.put(PlatformConstants.PlatformMethod.restAuthCreateTokenRequest,
+            (methodCall, result) -> authMethodHandler.createTokenRequest(methodCall, result,
+                    AuthMethodHandler.Type.Rest));
+    _map.put(PlatformConstants.PlatformMethod.restAuthGetClientId,
+            (methodCall, result) -> authMethodHandler.clientId(methodCall, result, AuthMethodHandler.Type.Rest));
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -559,7 +580,10 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         time(result, instanceStore.getRealtime(ablyMessage.handle));
     }
 
-    private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+
+
+
+  private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
         time(result, instanceStore.getRest(ablyMessage.handle));
     }

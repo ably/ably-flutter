@@ -50,7 +50,8 @@ class PlatformMethod {
   static const String releaseRestChannel = 'releaseRestChannel';
   static const String restAuthAuthorize = 'restAuthAuthorize';
   static const String restAuthCreateTokenRequest = 'restAuthCreateTokenRequest';
-  static const String restAuthCreateToken = 'restAuthCreateToken';
+  static const String restAuthRequestToken = 'restAuthRequestToken';
+  static const String restAuthGetClientId = 'restAuthGetClientId';
   static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -72,7 +73,7 @@ class PlatformMethod {
   static const String realtimeAuthAuthorize = 'realtimeAuthAuthorize';
   static const String realtimeAuthCreateTokenRequest =
       'realtimeAuthCreateTokenRequest';
-  static const String realtimeAuthCreateToken = 'realtimeAuthCreateToken';
+  static const String realtimeAuthRequestToken = 'realtimeAuthRequestToken';
   static const String realtimeAuthGetClientId = 'realtimeAuthGetClientId';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';

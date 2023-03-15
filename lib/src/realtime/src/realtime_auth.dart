@@ -17,8 +17,8 @@ class RealtimeAuth extends Auth{
     });
 
   @override
-  // TODO: implement clientId
-  String get clientId => "fake_id"; //this is temprorary
+  Future<String?> get clientId async => await realtime.invoke<String>(PlatformMethod
+      .realtimeAuthGetClientId);
 
   @override
   Future<TokenRequest?> createTokenRequest({AuthOptions? authOptions,
@@ -31,7 +31,7 @@ class RealtimeAuth extends Auth{
   @override
   Future<TokenDetails?> requestToken({AuthOptions? authOptions, TokenParams?
   tokenParams}) => realtime.invoke<TokenDetails>(PlatformMethod
-        .realtimeAuthCreateTokenRequest, {
+        .realtimeAuthRequestToken, {
       TxTransportKeys.options: authOptions,
       TxTransportKeys.params: tokenParams
     });

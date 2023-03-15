@@ -53,7 +53,8 @@ final public class PlatformConstants {
         public static final String releaseRestChannel = "releaseRestChannel";
         public static final String restAuthAuthorize = "restAuthAuthorize";
         public static final String restAuthCreateTokenRequest = "restAuthCreateTokenRequest";
-        public static final String restAuthCreateToken = "restAuthCreateToken";
+        public static final String restAuthRequestToken = "restAuthRequestToken";
+        public static final String restAuthGetClientId = "restAuthGetClientId";
         public static final String createRealtime = "createRealtime";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
@@ -73,7 +74,7 @@ final public class PlatformConstants {
         public static final String restTime = "restTime";
         public static final String realtimeAuthAuthorize = "realtimeAuthAuthorize";
         public static final String realtimeAuthCreateTokenRequest = "realtimeAuthCreateTokenRequest";
-        public static final String realtimeAuthCreateToken = "realtimeAuthCreateToken";
+        public static final String realtimeAuthRequestToken = "realtimeAuthRequestToken";
         public static final String realtimeAuthGetClientId = "realtimeAuthGetClientId";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";

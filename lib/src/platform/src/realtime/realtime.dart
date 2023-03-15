@@ -4,7 +4,7 @@ import 'dart:io' as io show Platform;
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:ably_flutter/src/realtime/src/RealtimeAuth.dart';
+import 'package:ably_flutter/src/realtime/src/realtime_auth.dart';
 
 /// A client that extends functionality of the [Rest] and provides
 /// additional realtime-specific features.

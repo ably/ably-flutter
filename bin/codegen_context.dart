@@ -76,7 +76,8 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'releaseRestChannel', 'value': 'releaseRestChannel'},
   {'name': 'restAuthAuthorize', 'value': 'restAuthAuthorize'},
   {'name': 'restAuthCreateTokenRequest', 'value': 'restAuthCreateTokenRequest'},
-  {'name': 'restAuthCreateToken', 'value': 'restAuthCreateToken'},
+  {'name': 'restAuthRequestToken', 'value': 'restAuthRequestToken'},
+  {'name': 'restAuthGetClientId', 'value': 'restAuthGetClientId'},
 
   // Realtime
   {'name': 'createRealtime', 'value': 'createRealtime'},
@@ -101,7 +102,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'restTime', 'value': 'restTime'},
   {'name': 'realtimeAuthAuthorize', 'value': 'realtimeAuthAuthorize'},
   {'name': 'realtimeAuthCreateTokenRequest', 'value': 'realtimeAuthCreateTokenRequest'},
-  {'name': 'realtimeAuthCreateToken', 'value': 'realtimeAuthCreateToken'},
+  {'name': 'realtimeAuthRequestToken', 'value': 'realtimeAuthRequestToken'},
   {'name': 'realtimeAuthGetClientId', 'value': 'realtimeAuthGetClientId'},
 
   // Push Notifications
