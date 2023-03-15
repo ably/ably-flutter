@@ -96,7 +96,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         put(PlatformConstants.CodecTypes.clientOptions,
             new CodecPair<>(null, self::decodeClientOptions));
         put(PlatformConstants.CodecTypes.tokenParams,
-            new CodecPair<>(self::encodeTokenParams, null));
+            new CodecPair<>(self::encodeTokenParams, self::decodeTokenParams));
         put(PlatformConstants.CodecTypes.tokenDetails,
             new CodecPair<>(null, self::decodeTokenDetails));
         put(PlatformConstants.CodecTypes.tokenRequest,
