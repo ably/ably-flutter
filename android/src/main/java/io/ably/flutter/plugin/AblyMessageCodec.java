@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.ToNumberPolicy;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -80,7 +81,12 @@ public class AblyMessageCodec extends StandardMessageCodec {
   }
 
   private Map<Byte, CodecPair> codecMap;
-  private static final Gson gson = new Gson();
+
+  private static final Gson gson = new Gson()
+          .newBuilder()
+          .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+          .create();
+
   private final CipherParamsStorage cipherParamsStorage;
 
   public AblyMessageCodec(CipherParamsStorage cipherParamsStorage) {
