@@ -48,7 +48,7 @@ SPEC CHECKSUMS:
   ably_flutter: bba4fea46a2a3269fae98b67bd5c0c75cf3f0132
   AblyDeltaCodec: 783d017270de70bbbc0a84e4235297b225d33636
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   msgpack: c85f6251873059738472ae136951cec5f30f3251

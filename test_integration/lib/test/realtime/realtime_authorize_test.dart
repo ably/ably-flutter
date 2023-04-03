@@ -1,6 +1,10 @@
+import 'dart:collection';
+
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'dart:convert';
+
 
 Future<Map<String, dynamic>> testRealtimeAuthroize({
   required Reporter reporter,
@@ -10,7 +14,6 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
 
   String wrongChannel = "wrongchannel";
   String rightChannel = "rightchannel";
-  String testClientId = "testClientId";
 
   final appKey = await AppProvisioning().provisionApp();
 
@@ -18,24 +21,17 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
   final clientOptionsForToken = ClientOptions(
       key: appKey,
       environment: 'sandbox',
-      clientId: testClientId,
       logLevel: LogLevel.verbose,
     );
 
   final ablyForToken = Rest(
     options: clientOptionsForToken,
   );
-
   /* get first token */
-  final firstTokenParams = TokenParams(capability: "${wrongChannel}:*,"
-      "clientId:${testClientId}");
-
-
-  final firstToken = await ablyForToken.auth?.requestToken(tokenParams: firstTokenParams);
+  final firstToken = await ablyForToken.auth?.requestToken();
   final clientOptions = ClientOptions(
       key: appKey,
       environment: 'sandbox',
-      clientId: 'someClientId',
       logLevel: LogLevel.verbose,
       useTokenAuth: true,
       autoConnect: false,
@@ -48,9 +44,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
 
 
   /* get second token */
-  final secondTokenParams = TokenParams(capability: "{${rightChannel}:*, "
-      "${wrongChannel}:*"
-      "clientId:${testClientId}}");
+  final secondTokenParams = TokenParams(capability: "{\"*\":[\"*\"]}");
   final secondtoken = await ablyForToken.auth?.requestToken(tokenParams: secondTokenParams);
 
   /* reauthorize */

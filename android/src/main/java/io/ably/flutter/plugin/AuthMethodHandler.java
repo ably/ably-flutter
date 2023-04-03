@@ -39,9 +39,10 @@ class AuthMethodHandler {
             try {
                 final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
                         .authorize(tokenParams, options);
-                handler.post(() -> result.success(tokenDetails));
+                result.success(tokenDetails);
             } catch (AblyException e) {
-                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+                result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
+               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
 
@@ -66,9 +67,11 @@ class AuthMethodHandler {
             try {
                 final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
                         .requestToken(tokenParams, options);
-                handler.post(() -> result.success(tokenDetails));
+                result.success(tokenDetails);
+               // handler.post(() -> result.success(tokenDetails));
             } catch (AblyException e) {
-                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+                result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
+               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
     }
@@ -85,9 +88,9 @@ class AuthMethodHandler {
             try {
                 final Auth.TokenRequest tokenRequest = getAuth(ablyMessage, type)
                         .createTokenRequest(tokenParams, options);
-                handler.post(() -> result.success(tokenRequest));
+                 result.success(tokenRequest);
             } catch (AblyException e) {
-                handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
             }
         });
     }
