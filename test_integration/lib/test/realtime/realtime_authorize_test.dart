@@ -1,4 +1,4 @@
-import 'dart:collection';
+
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
@@ -27,6 +27,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
   );
   /* get first token */
   final firstToken = await ablyForToken.auth?.requestToken();
+  print("First token's client id = ${firstToken?.clientId}");
 
   final clientOptions = ClientOptions(
       key: appKey,
@@ -39,8 +40,11 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
   await realtime.connect();
   final channel = realtime.channels.get(rightChannel);
   await channel.attach();
-
-  final refreshedToken = await realtime.auth?.authorize();
+  final TokenParams tokenParams = TokenParams(ttl: 20000);
+  final AuthOptions authOptions = AuthOptions(key: appKey, useTokenAuth: true);
+  final refreshedToken = await realtime.auth
+      ?.authorize(authOptions: authOptions ,tokenParams: tokenParams);
+  print("Refreshed token's client id = ${refreshedToken?.clientId}");
   if (refreshedToken == firstToken){
     throw Error();
   }

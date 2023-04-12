@@ -84,6 +84,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
   private static final Gson gson = new Gson();
   private final CipherParamsStorage cipherParamsStorage;
 
+
   public AblyMessageCodec(CipherParamsStorage cipherParamsStorage) {
     final AblyMessageCodec self = this;
     this.cipherParamsStorage = cipherParamsStorage;
@@ -95,6 +96,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
             new CodecPair<>(null, self::decodeAblyFlutterEventMessage));
         put(PlatformConstants.CodecTypes.clientOptions,
             new CodecPair<>(null, self::decodeClientOptions));
+        put(PlatformConstants.CodecTypes.authOptions,
+            new CodecPair<>(null, self::decodeAuthOptions));
         put(PlatformConstants.CodecTypes.tokenParams,
             new CodecPair<>(self::encodeTokenParams, self::decodeTokenParams));
         put(PlatformConstants.CodecTypes.tokenDetails,
@@ -280,6 +283,28 @@ public class AblyMessageCodec extends StandardMessageCodec {
       message = codecMap.get((byte) (int) type).decode((Map<String, Object>) message);
     }
     return new AblyEventMessage<>(eventName, message);
+  }
+
+
+  private Auth.AuthOptions decodeAuthOptions(Map<String, Object> jsonMap) {
+    if (jsonMap == null) return null;
+    final Auth.AuthOptions authOptions = new Auth.AuthOptions();
+
+    // AuthOptions
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authUrl, value -> authOptions.authUrl = (String) value);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authMethod, v -> authOptions.authMethod = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.key, v -> authOptions.key = (String) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.tokenDetails, v -> authOptions.tokenDetails = decodeTokenDetails((Map<String, Object>) v));
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authHeaders, value -> {
+      authOptions.authHeaders = mapToParams((HashMap<String, String>) value);
+    });
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.authParams, value -> {
+      authOptions.authParams = mapToParams((HashMap<String, String>) value);
+    });
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.queryTime, v -> authOptions.queryTime = (Boolean) v);
+    readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.useTokenAuth, v -> authOptions.useTokenAuth = (Boolean) v);
+
+    return authOptions;
   }
 
   private PlatformClientOptions decodeClientOptions(Map<String, Object> jsonMap) {

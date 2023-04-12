@@ -88,6 +88,7 @@ class Codec extends StandardMessageCodec {
         _encodeRealtimeChannelOptions,
         null,
       ),
+      CodecTypes.authOptions: _CodecPair<AuthOptions>(_encodeAuthOptions, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult<dynamic>>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -194,6 +195,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.ablyMessage;
     } else if (value is AblyEventMessage) {
       return CodecTypes.ablyEventMessage;
+    } else if (value is AuthOptions){
+      return CodecTypes.authOptions;
     }
     // ignore: avoid_returning_null
     return null;
@@ -381,6 +384,24 @@ class Codec extends StandardMessageCodec {
       TxRealtimeChannelOptions.modes,
       v.modes?.map(_encodeChannelMode).toList(),
     );
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeAuthOptions(
+      final AuthOptions authOptions) {
+    final jsonMap = <String, dynamic>{};
+    jsonMap[TxAuthOptions.tokenDetails] = _encodeTokenDetails(authOptions
+        .tokenDetails);
+    jsonMap[TxAuthOptions.authUrl] = authOptions.authUrl;
+    jsonMap[TxAuthOptions.authMethod] = authOptions.authMethod;
+    //jsonMap[TxAuthOptions.authCallback] = authOptions.authCallback;
+    jsonMap[TxAuthOptions.key] = authOptions.key;
+    jsonMap[TxAuthOptions.token] = authOptions.tokenDetails?.token;
+    jsonMap[TxAuthOptions.authHeaders] = authOptions.authHeaders;
+    jsonMap[TxAuthOptions.authParams] = authOptions.authParams;
+    jsonMap[TxAuthOptions.queryTime] = authOptions.queryTime;
+    jsonMap[TxAuthOptions.useTokenAuth] = authOptions.useTokenAuth;
+
     return jsonMap;
   }
 
