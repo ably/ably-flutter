@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_END
         return CodecTypeRestChannelOptions;
     } else if ([value isKindOfClass:[ARTCipherParams class]]) {
         return CodecTypeCipherParams;
+    }else if ([value isKindOfClass:[ARTAuthOptions class]]) {
+        return CodecTypeAuthOptions;
     }
     return 0;
 }
@@ -71,6 +73,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeUnNotificationSettings]: PushNotificationEncoders.encodeUNNotificationSettings,
         [NSString stringWithFormat:@"%d", CodecTypeRemoteMessage]: PushNotificationEncoders.encodeRemoteMessage,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.encodeCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenDetails]: encodeTokenDetails,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -294,6 +297,18 @@ static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams
                 [params timestamp]?@((long)([[params timestamp] timeIntervalSince1970]*1000)):nil);
     WRITE_VALUE(dictionary, TxTokenParams_capability, [params capability]);
     
+    return dictionary;
+};
+
+static AblyCodecEncoder encodeTokenDetails = ^NSMutableDictionary*(ARTTokenDetails *const details) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    
+    WRITE_VALUE(dictionary, TxTokenDetails_token, [details token]);
+    WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]);
+    WRITE_VALUE(dictionary, TxTokenDetails_expires, [details clientId]);
+    WRITE_VALUE(dictionary, TxTokenDetails_clientId, [details clientId]);
+    WRITE_VALUE(dictionary, TxTokenDetails_capability, [details capability]);
+   
     return dictionary;
 };
 
