@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeRealtimePresenceParams]: readRealtimePresenceParams,
         [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeAuthOptions]: readAuthOptions,
     };
     return _handlers[[NSString stringWithFormat:@"%@", type]];
 }
@@ -153,6 +154,21 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     return  [[AblyFlutterClientOptions alloc]
              initWithClientOptions:clientOptions
              hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
+};
+
+static AblyCodecDecoder readAuthOptions = ^ARTAuthOptions*(NSDictionary *const dictionary) {
+    ARTAuthOptions *const authOptions = [ARTAuthOptions new];
+
+    // AuthOptions (super class of ClientOptions)
+    READ_VALUE(authOptions, authUrl, dictionary, TxAuthOptions_authUrl);
+    READ_VALUE(authOptions, authMethod, dictionary, TxAuthOptions_authMethod);
+    READ_VALUE(authOptions, key, dictionary, TxAuthOptions_key);
+    ON_VALUE(^(const id value) { authOptions.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxAuthOptions_tokenDetails);
+    READ_VALUE(authOptions, authHeaders, dictionary, TxAuthOptions_authHeaders);
+    READ_VALUE(authOptions, authParams, dictionary, TxAuthOptions_authParams);
+    READ_VALUE(authOptions, queryTime, dictionary, TxAuthOptions_queryTime);
+
+    return authOptions;
 };
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary {

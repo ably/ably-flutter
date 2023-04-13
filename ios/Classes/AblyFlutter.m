@@ -756,7 +756,12 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
         // Encryption
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
         AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
-        AblyPlatformMethod_realtimeAuthAuthorize:
+        AblyPlatformMethod_realtimeAuthAuthorize: AuthHandlers.realtimeAuthorize,
+        AblyPlatformMethod_realtimeAuthCreateTokenRequest: AuthHandlers.realtimeCreateTokenRequest,
+        AblyPlatformMethod_realtimeAuthRequestToken: AuthHandlers.realtimeRequestToken,
+        AblyPlatformMethod_restAuthAuthorize: AuthHandlers.restAuthorize,
+        AblyPlatformMethod_restAuthCreateTokenRequest: AuthHandlers.restCreateTokenRequest,
+        AblyPlatformMethod_restAuthRequestToken: AuthHandlers.restRequestToken
     };
 
     [registrar addApplicationDelegate:self];
