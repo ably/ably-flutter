@@ -61,7 +61,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimePublishWithAuthCallback: testRealtimePublishWithAuthCallback,
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimeTime: testRealtimeTime,
-  TestName.realtimeAuthAuthorize : testRealtimeAuthroize,
+  TestName.realtimeAuthAuthorize: testRealtimeAuthroize,
 
   // rest tests
   TestName.restCapabilities: testRestCapabilities,

@@ -40,11 +40,10 @@
         <!-- Theme to apply as soon as Flutter begins rendering frames -->
         <meta-data
             android:name="io.flutter.embedding.android.NormalTheme"
-            android:resource="@style/NormalTheme"
-            />
+            android:resource="@style/NormalTheme" />
         <!-- Uncomment the following code to prevent Ably Flutter from handling push notifications -->
-<!--        <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"-->
-<!--            tools:node="remove">-->
-<!--        </receiver>-->
+        <!--        <receiver android:name="io.ably.flutter.plugin.push.FirebaseMessagingReceiver"-->
+        <!--            tools:node="remove">-->
+        <!--        </receiver>-->
     </application>
 </manifest>

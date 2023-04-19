@@ -16,7 +16,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 class AuthMethodHandler {
-    enum Type{Realtime,Rest}
+    enum Type {Realtime, Rest}
 
     private final AblyInstanceStore instanceStore;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -42,7 +42,7 @@ class AuthMethodHandler {
                 result.success(tokenDetails);
             } catch (AblyException e) {
                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+                // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
 
@@ -68,10 +68,10 @@ class AuthMethodHandler {
                 final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
                         .requestToken(tokenParams, options);
                 result.success(tokenDetails);
-               // handler.post(() -> result.success(tokenDetails));
+                // handler.post(() -> result.success(tokenDetails));
             } catch (AblyException e) {
                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
+                // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
     }
@@ -88,9 +88,9 @@ class AuthMethodHandler {
             try {
                 final Auth.TokenRequest tokenRequest = getAuth(ablyMessage, type)
                         .createTokenRequest(tokenParams, options);
-                 result.success(tokenRequest);
+                result.success(tokenRequest);
             } catch (AblyException e) {
-                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
+                result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
             }
         });
     }

@@ -18,20 +18,21 @@ import io.ably.lib.util.Log;
  * so `pushBackgroundFlutterApplicationReadyOnAndroid` platform method call doesn't need to be called.
  */
 public class BackgroundMethodCallHandler implements MethodChannel.MethodCallHandler {
-  private static final String TAG = AblyFlutter.class.getName();
-  private static final String CHANNEL_NAME = "io.ably.flutter.plugin.background";
-  public BackgroundMethodCallHandler(BinaryMessenger messenger, MethodCodec codec) {
-    MethodChannel methodChannel = new MethodChannel(messenger, CHANNEL_NAME, codec);
-    methodChannel.setMethodCallHandler(this);
-  }
+    private static final String TAG = AblyFlutter.class.getName();
+    private static final String CHANNEL_NAME = "io.ably.flutter.plugin.background";
 
-  @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    if (call.method.equals(pushBackgroundFlutterApplicationReadyOnAndroid)) {
-    Log.v(TAG, "Ignoring pushBackgroundFlutterApplicationReadyOnAndroid because it doesn't need to be called, " +
-        "since the user's Flutter app (default DartEntrypoint) is already running.");
-    } else {
-      result.notImplemented();
+    public BackgroundMethodCallHandler(BinaryMessenger messenger, MethodCodec codec) {
+        MethodChannel methodChannel = new MethodChannel(messenger, CHANNEL_NAME, codec);
+        methodChannel.setMethodCallHandler(this);
     }
-  }
+
+    @Override
+    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        if (call.method.equals(pushBackgroundFlutterApplicationReadyOnAndroid)) {
+            Log.v(TAG, "Ignoring pushBackgroundFlutterApplicationReadyOnAndroid because it doesn't need to be called, " +
+                    "since the user's Flutter app (default DartEntrypoint) is already running.");
+        } else {
+            result.notImplemented();
+        }
+    }
 }

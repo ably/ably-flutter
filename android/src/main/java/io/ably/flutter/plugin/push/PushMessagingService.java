@@ -18,15 +18,15 @@ import io.ably.lib.types.RegistrationToken;
 // See `android:permission` on `<receiver>`
 // [docs](https://developer.android.com/guide/topics/manifest/receiver-element#prmsn) for more information.
 public class PushMessagingService extends FirebaseMessagingService {
-  @Override
-  public void onNewToken(@NonNull String registrationToken) {
-    ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
-    super.onNewToken(registrationToken);
-  }
+    @Override
+    public void onNewToken(@NonNull String registrationToken) {
+        ActivationContext.getActivationContext(this).onNewRegistrationToken(RegistrationToken.Type.FCM, registrationToken);
+        super.onNewToken(registrationToken);
+    }
 
-  @Override
-  public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-    // This class does not do anything in onMessageReceived, since [AblyFlutterMessagingReceiver]
-    // listens to `com.google.android.c2dm.intent.RECEIVE` declared in the manifest.
-  }
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        // This class does not do anything in onMessageReceived, since [AblyFlutterMessagingReceiver]
+        // listens to `com.google.android.c2dm.intent.RECEIVE` declared in the manifest.
+    }
 }

@@ -20,7 +20,7 @@ analyzer:
     deprecated_member_use_from_same_package: ignore
 
 linter:
-    # subject to false positives, perhaps worth suppressing in code in such cases
+  # subject to false positives, perhaps worth suppressing in code in such cases
   rules:
     - always_declare_return_types
     - always_put_required_named_parameters_first

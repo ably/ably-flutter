@@ -19,7 +19,7 @@ import io.ably.lib.types.ClientOptions;
  * and keeps track of the instance on the Java side. When a platform method is called on the
  * Dart side, a string representing the method, and the handle representing the instance the method
  * is being called on is passed.
- *
+ * <p>
  * For example, when @{Realtime#connect} is called on the dart side, we need to know which Realtime
  * client this method is being called on, as there might be more than one. We can get the realtime
  * client by calling @{AblyInstanceStore#getRealtime(final long handle)}.
@@ -42,7 +42,7 @@ class AblyInstanceStore {
 
     /**
      * A reserved client handle. Safe to be used from any thread.
-     *
+     * <p>
      * Instances support the creation of a single Rest or Realtime instance, where only one of the
      * create methods may be called and it may only be called once.
      */
@@ -56,25 +56,27 @@ class AblyInstanceStore {
 
         /**
          * Create an {@link AblyRest} instance and store it using this handle.
-         * @param clientOptions The Ably client options for the new Rest instance.
+         *
+         * @param clientOptions      The Ably client options for the new Rest instance.
          * @param applicationContext The Android application context to supply to the new Rest
-         * instance using its {@link AblyRest#setAndroidContext(Context)} method.
+         *                           instance using its {@link AblyRest#setAndroidContext(Context)} method.
          * @return The handle used to store the instance. Same as {@link #getHandle()}.
          * @throws IllegalStateException If this handle has already been used to create a Rest or
-         * Realtime instance.
-         * @throws AblyException If the {@link AblyRest} instance creation failed.
+         *                               Realtime instance.
+         * @throws AblyException         If the {@link AblyRest} instance creation failed.
          */
         long createRest(ClientOptions clientOptions, Context applicationContext) throws AblyException;
 
         /**
          * Create an {@link AblyRealtime} instance and store it using this handle.
-         * @param clientOptions The Ably client options for the new Realtime instance.
+         *
+         * @param clientOptions      The Ably client options for the new Realtime instance.
          * @param applicationContext The Android application context to supply to the new Realtime
-         * instance using its {@link AblyRealtime#setAndroidContext(Context)} method.
+         *                           instance using its {@link AblyRealtime#setAndroidContext(Context)} method.
          * @return The handle used to store the instance. Same as {@link #getHandle()}.
          * @throws IllegalStateException If this handle has already been used to create a Rest or
-         * Realtime instance.
-         * @throws AblyException If the {@link AblyRealtime} instance creation failed.
+         *                               Realtime instance.
+         * @throws AblyException         If the {@link AblyRealtime} instance creation failed.
          */
         long createRealtime(ClientOptions clientOptions, Context applicationContext) throws AblyException;
     }
@@ -135,9 +137,10 @@ class AblyInstanceStore {
      * Gets the Ably client (either REST or Realtime) when the interface being
      * used is the same (e.g. When using Push from AblyBase / when it does
      * not matter).
-     *
+     * <p>
      * This method relies on the fact handles are unique between all Ably clients,
      * (both rest and realtime).
+     *
      * @param handle integer handle to either AblyRealtime or AblyRest
      * @return AblyBase
      */
@@ -145,12 +148,12 @@ class AblyInstanceStore {
         AblyRealtime realtime = getRealtime(handle);
         return (realtime != null) ? realtime : getRest(handle);
     }
-    
+
     synchronized Push getPush(final long handle) {
         AblyRealtime realtime = getRealtime(handle);
         return (realtime != null) ? realtime.push : getRest(handle).push;
     }
-    
+
     synchronized PushChannel getPushChannel(final long handle, final String channelName) {
         return getAblyClient(handle)
                 .channels

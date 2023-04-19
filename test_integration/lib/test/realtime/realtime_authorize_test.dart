@@ -31,12 +31,10 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
   final realtime = Realtime(options: clientOptions);
   await realtime.connect();
 
-  final tokenParams = TokenParams(ttl: 20000);
-  final authCallback = (params) async {
-    return TokenRequest.fromMap(
+  const tokenParams = TokenParams(ttl: 20000);
+  Future<TokenRequest> authCallback(params) async => TokenRequest.fromMap(
       await AppProvisioning().getTokenRequest(),
     );
-  };
   final authOptions = AuthOptions(
       key: appKey,
       useTokenAuth: true,

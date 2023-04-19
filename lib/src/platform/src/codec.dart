@@ -1,9 +1,7 @@
 import 'dart:io' as io show Platform;
-import 'dart:typed_data';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// @nodoc
@@ -195,7 +193,7 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.ablyMessage;
     } else if (value is AblyEventMessage) {
       return CodecTypes.ablyEventMessage;
-    } else if (value is AuthOptions){
+    } else if (value is AuthOptions) {
       return CodecTypes.authOptions;
     }
     // ignore: avoid_returning_null
@@ -387,11 +385,10 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  Map<String, dynamic> _encodeAuthOptions(
-      final AuthOptions authOptions) {
+  Map<String, dynamic> _encodeAuthOptions(final AuthOptions authOptions) {
     final jsonMap = <String, dynamic>{};
-    jsonMap[TxAuthOptions.tokenDetails] = _encodeTokenDetails(authOptions
-        .tokenDetails);
+    jsonMap[TxAuthOptions.tokenDetails] =
+        _encodeTokenDetails(authOptions.tokenDetails);
     jsonMap[TxAuthOptions.authUrl] = authOptions.authUrl;
     jsonMap[TxAuthOptions.authMethod] = authOptions.authMethod;
     //jsonMap[TxAuthOptions.authCallback] = authOptions.authCallback;
