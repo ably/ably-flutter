@@ -106,7 +106,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
       case _TestStatus.progress:
         return Colors.blue;
       case null:
-        return Colors.grey;
+        return Colors.white;
     }
   }
 
@@ -155,7 +155,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
           Expanded(
             child: Text(
               testName,
-              style: TextStyle(color: _getColor(testName)),
+              style: TextStyle(color: _getColor(testName), fontSize: 16),
             ),
           ),
           _getAction(testName),

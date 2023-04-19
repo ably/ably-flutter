@@ -51,8 +51,8 @@ NS_ASSUME_NONNULL_END
         return CodecTypeRestChannelOptions;
     } else if ([value isKindOfClass:[ARTCipherParams class]]) {
         return CodecTypeCipherParams;
-    }else if ([value isKindOfClass:[ARTAuthOptions class]]) {
-        return CodecTypeAuthOptions;
+    }else if ([value isKindOfClass:[ARTTokenDetails class]]) {
+        return CodecTypeTokenDetails;
     }
     return 0;
 }
@@ -83,7 +83,8 @@ NS_ASSUME_NONNULL_END
     if(type != 0){
         [self writeByte: type];
         AblyCodecEncoder encoder = [AblyFlutterWriter getEncoder: [NSString stringWithFormat:@"%d", type]];
-        [self writeValue: encoder(value)];
+        id encoded = encoder(value);
+        [self writeValue: encoded];
         return;
     }
     [super writeValue:value];
@@ -304,8 +305,12 @@ static AblyCodecEncoder encodeTokenDetails = ^NSMutableDictionary*(ARTTokenDetai
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     
     WRITE_VALUE(dictionary, TxTokenDetails_token, [details token]);
-    WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]);
-    WRITE_VALUE(dictionary, TxTokenDetails_expires, [details clientId]);
+
+    WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]?@((long)([[details issued] timeIntervalSince1970]*1000)):nil);
+    WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]?@((long)([[details expires] timeIntervalSince1970]*1000)):nil);
+     //WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]);
+   // WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]);
+    //WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]);
     WRITE_VALUE(dictionary, TxTokenDetails_clientId, [details clientId]);
     WRITE_VALUE(dictionary, TxTokenDetails_capability, [details capability]);
    

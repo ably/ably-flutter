@@ -1,26 +1,20 @@
-
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
-
 
 Future<Map<String, dynamic>> testRealtimeAuthroize({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-
-  const rightChannel = "rightchannel";
-
   final appKey = await AppProvisioning().provisionApp();
 
   //init ably for token
   final clientOptionsForToken = ClientOptions(
-      key: appKey,
-      environment: 'sandbox',
-      logLevel: LogLevel.verbose,
-    );
+    key: appKey,
+    environment: 'sandbox',
+    logLevel: LogLevel.verbose,
+  );
 
   final ablyForToken = Rest(
     options: clientOptionsForToken,
@@ -33,21 +27,26 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
       environment: 'sandbox',
       useTokenAuth: true,
       autoConnect: false,
-      tokenDetails: firstToken
-  );
+      tokenDetails: firstToken);
   final realtime = Realtime(options: clientOptions);
   await realtime.connect();
-  final channel = realtime.channels.get(rightChannel);
-  await channel.attach();
+
   final tokenParams = TokenParams(ttl: 20000);
-  final authOptions = AuthOptions(key: appKey, useTokenAuth: true);
+  final authCallback = (params) async {
+    return TokenRequest.fromMap(
+      await AppProvisioning().getTokenRequest(),
+    );
+  };
+  final authOptions = AuthOptions(
+      key: appKey,
+      useTokenAuth: true,
+      authCallback: authCallback,
+      authMethod: 'GET');
   final refreshedToken = await realtime.auth
-      ?.authorize(authOptions: authOptions ,tokenParams: tokenParams);
+      ?.authorize(authOptions: authOptions, tokenParams: tokenParams);
   //tokens must be different
-  if (refreshedToken == firstToken){
+  if (refreshedToken == firstToken) {
     throw Error();
   }
-  return {
-    'handle': await realtime.handle
-  };
+  return {'handle': await realtime.handle};
 }
