@@ -33,6 +33,9 @@ class TestName {
   static const String realtimeSubscribe = 'realtimeSubscribe';
   static const String realtimeTime = 'realtimeTime';
   static const String realtimeAuthAuthorize = 'realtimeAuthorize';
+  static const String realtimeCreateTokenRequest = 'realtimeCreateTokenRequest';
+  static const String realtimeRequestToken = 'realtimeRequestToken';
+
 
   // rest
   static const String restCapabilities = 'restCapabilities';
@@ -48,6 +51,10 @@ class TestName {
   static const String restPublishWithAuthCallback =
       'restPublishWithAuthCallback';
   static const String restTime = 'restTime';
+
+  static const String restAuthAuthorize = 'restAuthorize';
+  static const String restCreateTokenRequest = 'restCreateTokenRequest';
+  static const String restRequestToken = 'restRequestToken';
 
   // helpers
   static const String testHelperFlutterErrorTest = 'testHelperFlutterErrorTest';
