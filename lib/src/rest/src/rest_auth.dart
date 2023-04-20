@@ -1,27 +1,29 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
+/// See [Auth] for more information.
 class RestAuth extends Auth {
-  final Rest rest;
+  final Rest _rest;
 
-  RestAuth(this.rest);
+  /// Constructor for RestAuth
+  RestAuth(this._rest);
 
   @override
   Future<TokenDetails?> authorize(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      rest.invoke<TokenDetails>(PlatformMethod.restAuthAuthorize, {
+      _rest.invoke<TokenDetails>(PlatformMethod.restAuthAuthorize, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
 
   @override
   Future<String?> get clientId async =>
-      rest.invoke<String>(PlatformMethod.restAuthGetClientId);
+      _rest.invoke<String>(PlatformMethod.restAuthGetClientId);
 
   @override
   Future<TokenRequest?> createTokenRequest(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      rest.invoke<TokenRequest>(PlatformMethod.restAuthCreateTokenRequest, {
+      _rest.invoke<TokenRequest>(PlatformMethod.restAuthCreateTokenRequest, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
@@ -29,7 +31,7 @@ class RestAuth extends Auth {
   @override
   Future<TokenDetails?> requestToken(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      rest.invoke<TokenDetails>(PlatformMethod.restAuthRequestToken, {
+      _rest.invoke<TokenDetails>(PlatformMethod.restAuthRequestToken, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
