@@ -103,7 +103,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 put(PlatformConstants.CodecTypes.tokenDetails,
                         new CodecPair<>(self::encodeTokenDetails, self::decodeTokenDetails));
                 put(PlatformConstants.CodecTypes.tokenRequest,
-                        new CodecPair<>(null, self::decodeTokenRequest));
+                        new CodecPair<>(self::encodeTokenRequest, self::decodeTokenRequest));
                 put(PlatformConstants.CodecTypes.restChannelOptions,
                         new CodecPair<>(null, self::decodeRestChannelOptions));
                 put(PlatformConstants.CodecTypes.realtimeChannelOptions,
@@ -664,6 +664,19 @@ public class AblyMessageCodec extends StandardMessageCodec {
         writeValueToJson(jsonMap, PlatformConstants.TxTokenParams.ttl, c.ttl);
         // nonce is not supported in ably-java
         // Track @ https://github.com/ably/ably-flutter/issues/14
+        return jsonMap;
+    }
+
+    private Map<String, Object> encodeTokenRequest(Auth.TokenRequest tokenRequest) {
+        if (tokenRequest == null) return null;
+        HashMap<String, Object> jsonMap = new HashMap<>();
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.capability, tokenRequest.capability);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.clientId, tokenRequest.clientId);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.timestamp, tokenRequest.timestamp);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.ttl, tokenRequest.ttl);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.keyName, tokenRequest.keyName);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.mac, tokenRequest.mac);
+        writeValueToJson(jsonMap, PlatformConstants.TxTokenRequest.nonce, tokenRequest.nonce);
         return jsonMap;
     }
 
