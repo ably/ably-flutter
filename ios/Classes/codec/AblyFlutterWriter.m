@@ -51,8 +51,10 @@ NS_ASSUME_NONNULL_END
         return CodecTypeRestChannelOptions;
     } else if ([value isKindOfClass:[ARTCipherParams class]]) {
         return CodecTypeCipherParams;
-    }else if ([value isKindOfClass:[ARTTokenDetails class]]) {
+    } else if ([value isKindOfClass:[ARTTokenDetails class]]) {
         return CodecTypeTokenDetails;
+    } else if ([value isKindOfClass:[ARTTokenRequest class]]){
+        return CodecTypeTokenRequest;
     }
     return 0;
 }
@@ -74,6 +76,7 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeRemoteMessage]: PushNotificationEncoders.encodeRemoteMessage,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.encodeCipherParams,
         [NSString stringWithFormat:@"%d", CodecTypeTokenDetails]: encodeTokenDetails,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenRequest]: encodeTokenRequest,
     };
     return [_handlers objectForKey:[NSString stringWithFormat:@"%@", type]];
 }
@@ -297,6 +300,21 @@ static AblyCodecEncoder encodeTokenParams = ^NSMutableDictionary*(ARTTokenParams
     WRITE_VALUE(dictionary, TxTokenParams_timestamp,
                 [params timestamp]?@((long)([[params timestamp] timeIntervalSince1970]*1000)):nil);
     WRITE_VALUE(dictionary, TxTokenParams_capability, [params capability]);
+    
+    return dictionary;
+};
+
+static AblyCodecEncoder encodeTokenRequest = ^NSMutableDictionary*(ARTTokenRequest *const tokenRequest) {
+    NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
+    
+    WRITE_VALUE(dictionary, TxTokenRequest_ttl, [tokenRequest ttl]);
+    WRITE_VALUE(dictionary, TxTokenRequest_nonce, [tokenRequest nonce]);
+    WRITE_VALUE(dictionary, TxTokenRequest_clientId, [tokenRequest clientId]);
+    WRITE_VALUE(dictionary, TxTokenRequest_timestamp,
+                [tokenRequest timestamp]?@((long)([[tokenRequest timestamp] timeIntervalSince1970]*1000)):nil);
+    WRITE_VALUE(dictionary, TxTokenRequest_capability, [tokenRequest capability]);
+    WRITE_VALUE(dictionary, TxTokenRequest_mac, [tokenRequest mac]);
+    WRITE_VALUE(dictionary, TxTokenRequest_keyName, [tokenRequest keyName]);
     
     return dictionary;
 };
