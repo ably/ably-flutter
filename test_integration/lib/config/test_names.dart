@@ -35,6 +35,7 @@ class TestName {
   static const String realtimeAuthAuthorize = 'realtimeAuthorize';
   static const String realtimeCreateTokenRequest = 'realtimeCreateTokenRequest';
   static const String realtimeRequestToken = 'realtimeRequestToken';
+  static const String realtimeAuthClientId = 'realtimeAuthClientId';
 
 
   // rest
@@ -55,6 +56,7 @@ class TestName {
   static const String restAuthAuthorize = 'restAuthorize';
   static const String restCreateTokenRequest = 'restCreateTokenRequest';
   static const String restRequestToken = 'restRequestToken';
+  static const String restAuthClientId = 'restAuthClientId';
 
   // helpers
   static const String testHelperFlutterErrorTest = 'testHelperFlutterErrorTest';

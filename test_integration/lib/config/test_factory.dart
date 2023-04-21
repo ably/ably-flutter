@@ -5,6 +5,7 @@ import 'package:ably_flutter_integration_test/test/crypto/crypto_ensure_supporte
 import 'package:ably_flutter_integration_test/test/crypto/crypto_generate_random_key_test.dart';
 import 'package:ably_flutter_integration_test/test/crypto/crypto_get_default_params.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_auth_client_id_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime'
     '/realtime_authorize_test'
     '.dart';
@@ -22,6 +23,7 @@ import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_wit
 import 'package:ably_flutter_integration_test/test/realtime/realtime_request_token_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_subscribe.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_time_test.dart';
+import 'package:ably_flutter_integration_test/test/rest/rest_auth_client_id_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_authorize_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_capability_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_create_token_request_test.dart';
@@ -69,6 +71,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimeAuthAuthorize: testRealtimeAuthroize,
   TestName.realtimeRequestToken: testRealtimeRequestToken,
   TestName.realtimeCreateTokenRequest: testRealtimeCreateTokenRequest,
+  TestName.realtimeAuthClientId: testRealtimeAuthClientId,
 
   // rest tests
   TestName.restCapabilities: testRestCapabilities,
@@ -85,6 +88,7 @@ final testFactory = <String, TestFactory>{
   TestName.restAuthAuthorize: testRestAuthorize,
   TestName.restRequestToken: testRestRequestToken,
   TestName.restCreateTokenRequest: testRestCreateTokenRequest,
+  TestName.restAuthClientId: testRestAuthClientId,
 
   // helper tests
   TestName.testHelperUnhandledExceptionTest: testHelperUnhandledException,
