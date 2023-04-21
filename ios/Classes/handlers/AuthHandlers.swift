@@ -31,6 +31,13 @@ public class AuthHandlers: NSObject {
         })
     }
     
+    @objc
+    public static let realtimeAuthClientId: FlutterHandler = { ably, call, result in
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let realtime = ably.instanceStore.realtime(from: ablyMessage.handle)
+        let clientId =  realtime?.auth.clientId
+        result(clientId)
+    }
     
     @objc
     public static let realtimeAuthorize: FlutterHandler = { ably, call, result in
@@ -143,5 +150,13 @@ public class AuthHandlers: NSObject {
                        result(details)
         })
     
+    }
+    
+    @objc
+    public static let restAuthClientId: FlutterHandler = { ably, call, result in
+        let ablyMessage = call.arguments as! AblyFlutterMessage
+        let rest = ably.instanceStore.rest(from: ablyMessage.handle)
+        let clientId =  rest?.auth.clientId
+        result(clientId)
     }
 }

@@ -760,9 +760,11 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
         AblyPlatformMethod_realtimeAuthAuthorize: AuthHandlers.realtimeAuthorize,
         AblyPlatformMethod_realtimeAuthCreateTokenRequest: AuthHandlers.realtimeCreateTokenRequest,
         AblyPlatformMethod_realtimeAuthRequestToken: AuthHandlers.realtimeRequestToken,
+        AblyPlatformMethod_realtimeAuthGetClientId: AuthHandlers.realtimeAuthClientId,
         AblyPlatformMethod_restAuthAuthorize: AuthHandlers.restAuthorize,
         AblyPlatformMethod_restAuthCreateTokenRequest: AuthHandlers.restCreateTokenRequest,
-        AblyPlatformMethod_restAuthRequestToken: AuthHandlers.restRequestToken
+        AblyPlatformMethod_restAuthRequestToken: AuthHandlers.restRequestToken,
+        AblyPlatformMethod_restAuthGetClientId: AuthHandlers.restAuthClientId
     };
 
     [registrar addApplicationDelegate:self];
