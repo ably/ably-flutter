@@ -174,7 +174,9 @@ public class AblyMessageCodec extends StandardMessageCodec {
             return PlatformConstants.CodecTypes.ablyMessage;
         } else if (value instanceof ErrorInfo) {
             return PlatformConstants.CodecTypes.errorInfo;
-        } else if (value instanceof Auth.TokenParams) {
+        } else if(value instanceof Auth.TokenRequest){
+            return PlatformConstants.CodecTypes.tokenRequest;
+        }else if (value instanceof Auth.TokenParams) {
             return PlatformConstants.CodecTypes.tokenParams;
         } else if (value instanceof AsyncPaginatedResult) {
             return PlatformConstants.CodecTypes.paginatedResult;

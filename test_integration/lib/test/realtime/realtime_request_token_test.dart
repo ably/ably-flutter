@@ -20,7 +20,11 @@ Future<Map<String, dynamic>> testRealtimeRequestToken({
     options: clientOptionsForToken,
   );
 
-  await realtime.auth?.requestToken();
+  final token = await realtime.auth?.requestToken();
+
+  if (token == null) {
+    throw Error();
+  }
 
   return {'handle': await realtime.handle};
 }

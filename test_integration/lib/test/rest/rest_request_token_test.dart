@@ -20,7 +20,11 @@ Future<Map<String, dynamic>> testRestRequestToken({
     options: clientOptionsForToken,
   );
 
-  await rest.auth?.requestToken();
+  final token = await rest.auth?.requestToken();
+
+  if (token == null) {
+    throw Error();
+  }
 
   return {'handle': await rest.handle};
 }

@@ -79,7 +79,7 @@ class Codec extends StandardMessageCodec {
       CodecTypes.tokenDetails:
           _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
-          _CodecPair<TokenRequest>(_encodeTokenRequest, null),
+          _CodecPair<TokenRequest>(_encodeTokenRequest, _decodeTokenRequest),
       CodecTypes.restChannelOptions:
           _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
@@ -710,6 +710,25 @@ class Codec extends StandardMessageCodec {
         capability: _readFromJson<String>(jsonMap, TxTokenDetails.capability),
         clientId: _readFromJson<String>(jsonMap, TxTokenDetails.clientId),
       );
+
+  /// @nodoc
+  /// Decodes value [jsonMap] to [TokenRequest]
+  /// returns null if [jsonMap] is null
+  TokenRequest _decodeTokenRequest(Map<String, dynamic> jsonMap) {
+    final timestamp = _readFromJson<int>(jsonMap, TxTokenRequest.timestamp);
+    return TokenRequest(
+      capability: _readFromJson<String>(jsonMap, TxTokenRequest.capability),
+      clientId: _readFromJson<String>(jsonMap, TxTokenRequest.clientId),
+      keyName: _readFromJson<String>(jsonMap, TxTokenRequest.keyName),
+      mac: _readFromJson<String>(jsonMap, TxTokenRequest.mac),
+      nonce: _readFromJson<String>(jsonMap, TxTokenRequest.nonce),
+      timestamp: (timestamp != null)
+          ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+          : null,
+      ttl: _readFromJson<int>(jsonMap, TxTokenRequest.ttl),
+    );
+  }
+
 
   /// @nodoc
   /// Decodes value [jsonMap] to [TokenParams]

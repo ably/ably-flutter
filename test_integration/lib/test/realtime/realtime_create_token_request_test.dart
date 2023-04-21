@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> testRealtimeCreateTokenRequest({
   final realtime = Realtime(
     options: clientOptionsForToken,
   );
-  final request = realtime.auth?.createTokenRequest();
+  final request = await realtime.auth?.createTokenRequest();
   if (request == null) {
     throw Error();
   }

@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> testRestCreateTokenRequest({
   final rest = Rest(
     options: clientOptionsForToken,
   );
-  final request = rest.auth?.createTokenRequest();
+  final request = await rest.auth?.createTokenRequest();
   if (request == null) {
     throw Error();
   }
