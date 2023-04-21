@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_END
         return CodecTypeMessage;
     }else if([value isKindOfClass:[ARTPresenceMessage class]]){
         return CodecTypePresenceMessage;
+    } else if ([value isKindOfClass:[ARTTokenRequest class]]){
+        return CodecTypeTokenRequest;
     }else if([value isKindOfClass:[ARTTokenParams class]]){
         return CodecTypeTokenParams;
     }else if([value isKindOfClass:[ARTPaginatedResult class]]){
@@ -53,8 +55,6 @@ NS_ASSUME_NONNULL_END
         return CodecTypeCipherParams;
     } else if ([value isKindOfClass:[ARTTokenDetails class]]) {
         return CodecTypeTokenDetails;
-    } else if ([value isKindOfClass:[ARTTokenRequest class]]){
-        return CodecTypeTokenRequest;
     }
     return 0;
 }
