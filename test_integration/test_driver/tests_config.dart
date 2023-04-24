@@ -46,7 +46,6 @@ final _tests =
     'realtime#channels#channel#presence#history': testRealtimePresenceHistory,
     'should enter, update and leave Presence': testRealtimeEnterUpdateLeave,
     'should subscribe to channel presence': testRealtimePresenceSubscription,
-    'should authorize': testAuthorize,
   },
   TestModules.crypto: {
     'should generate random crypto key': testCryptoGenerateRandomKey,

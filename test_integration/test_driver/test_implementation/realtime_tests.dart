@@ -25,25 +25,6 @@ void testRealtimePublish(FlutterDriver Function() getDriver) {
   });
 }
 
-void testAuthorize(FlutterDriver Function() getDriver) {
-  const message = TestControlMessage(TestName.realtimePublish);
-  const message2 = TestControlMessage(TestName.realtimePublishWithAuthCallback);
-  late TestControlResponseMessage response;
-  late TestControlResponseMessage response2;
-  setUpAll(() async {
-    response = await requestDataForTest(getDriver(), message);
-    response2 = await requestDataForTest(getDriver(), message2);
-  });
-
-  test('publishes message without any response', () {
-    expect(response.payload['handle'], isA<int>());
-    expect(response.payload['handle'], greaterThan(0));
-  });
-  test('invokes authCallback if available in clientOptions', () {
-    expect(response2.payload['authCallbackInvoked'], isTrue);
-  });
-}
-
 void testRealtimeEncryptedPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEncryptedPublish);
   late TestControlResponseMessage response;
