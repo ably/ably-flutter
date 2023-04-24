@@ -102,7 +102,7 @@ public class AblyFlutter implements FlutterPlugin, ActivityAware, PluginRegistry
     @Override
     public boolean onNewIntent(Intent intent) {
         if (mainActivity != null) {
-            mainActivity.setIntent(intent);
+          mainActivity.setIntent(intent);
         }
         handleRemoteMessageIntent(intent, (message) -> {
             // Application already running when notification is tapped

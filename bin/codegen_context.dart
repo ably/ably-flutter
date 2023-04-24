@@ -102,10 +102,7 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimeTime', 'value': 'realtimeTime'},
   {'name': 'restTime', 'value': 'restTime'},
   {'name': 'realtimeAuthAuthorize', 'value': 'realtimeAuthAuthorize'},
-  {
-    'name': 'realtimeAuthCreateTokenRequest',
-    'value': 'realtimeAuthCreateTokenRequest'
-  },
+  {'name': 'realtimeAuthCreateTokenRequest', 'value': 'realtimeAuthCreateTokenRequest'},
   {'name': 'realtimeAuthRequestToken', 'value': 'realtimeAuthRequestToken'},
   {'name': 'realtimeAuthGetClientId', 'value': 'realtimeAuthGetClientId'},
 

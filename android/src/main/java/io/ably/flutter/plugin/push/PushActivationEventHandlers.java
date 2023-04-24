@@ -41,11 +41,10 @@ public class PushActivationEventHandlers {
         return instance;
     }
 
-    public void registerReceiver() {
-        pushActivationReceiver.register(context, this::activationResultReceived);
+    public void registerReceiver(){
+        pushActivationReceiver.register(context,this::activationResultReceived);
     }
-
-    public void unregisterReceiver() {
+    public void unregisterReceiver(){
         pushActivationReceiver.unregister(context);
     }
 

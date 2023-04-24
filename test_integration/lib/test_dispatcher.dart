@@ -183,7 +183,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-      theme: ThemeData(scaffoldBackgroundColor: Colors.black),
+      theme: new ThemeData(scaffoldBackgroundColor: Colors.black),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Test dispatcher'),
@@ -194,11 +194,12 @@ class _TestDispatcherState extends State<TestDispatcher> {
           children: <Widget>[
             Center(
               child: Text(
-                  _reporters.isEmpty
-                      ? '-'
-                      : 'running ${_reporters.length}'
-                          ' (${_reporters.keys.toList().toString()}) tests',
-                  style: const TextStyle(color: Colors.white)),
+                _reporters.isEmpty
+                    ? '-'
+                    : 'running ${_reporters.length}'
+                        ' (${_reporters.keys.toList().toString()}) tests',
+                  style: TextStyle(color: Colors.white)
+              ),
             ),
             Expanded(
               child: ListView.builder(
