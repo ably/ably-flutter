@@ -183,7 +183,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-      theme: new ThemeData(scaffoldBackgroundColor: Colors.black),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.black),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Test dispatcher'),
@@ -198,7 +198,7 @@ class _TestDispatcherState extends State<TestDispatcher> {
                     ? '-'
                     : 'running ${_reporters.length}'
                         ' (${_reporters.keys.toList().toString()}) tests',
-                  style: TextStyle(color: Colors.white)
+                  style: const TextStyle(color: Colors.white)
               ),
             ),
             Expanded(
