@@ -9,7 +9,6 @@ import 'package:ably_flutter_integration_test/test/realtime/realtime_auth_client
 import 'package:ably_flutter_integration_test/test/realtime'
     '/realtime_authorize_test'
     '.dart';
-import 'package:ably_flutter_integration_test/test/realtime/realtime_create_token_request_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_encrypted_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_events_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_history_test.dart';
@@ -20,7 +19,6 @@ import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_hi
 import 'package:ably_flutter_integration_test/test/realtime/realtime_presence_subscribe.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_publish_with_auth_callback_test.dart';
-import 'package:ably_flutter_integration_test/test/realtime/realtime_request_token_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_subscribe.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_time_test.dart';
 import 'package:ably_flutter_integration_test/test/rest/rest_auth_client_id_test.dart';
@@ -69,8 +67,6 @@ final testFactory = <String, TestFactory>{
   TestName.realtimeSubscribe: testRealtimeSubscribe,
   TestName.realtimeTime: testRealtimeTime,
   TestName.realtimeAuthAuthorize: testRealtimeAuthroize,
-  TestName.realtimeRequestToken: testRealtimeRequestToken,
-  TestName.realtimeCreateTokenRequest: testRealtimeCreateTokenRequest,
   TestName.realtimeAuthClientId: testRealtimeAuthClientId,
 
   // rest tests
