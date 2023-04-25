@@ -326,9 +326,6 @@ static AblyCodecEncoder encodeTokenDetails = ^NSMutableDictionary*(ARTTokenDetai
 
     WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]?@((long)([[details issued] timeIntervalSince1970]*1000)):nil);
     WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]?@((long)([[details expires] timeIntervalSince1970]*1000)):nil);
-     //WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]);
-   // WRITE_VALUE(dictionary, TxTokenDetails_issued, [details issued]);
-    //WRITE_VALUE(dictionary, TxTokenDetails_expires, [details expires]);
     WRITE_VALUE(dictionary, TxTokenDetails_clientId, [details clientId]);
     WRITE_VALUE(dictionary, TxTokenDetails_capability, [details capability]);
    

@@ -182,7 +182,6 @@ static AblyCodecDecoder readTokenParams = ^ARTTokenParams*(NSDictionary *const d
 
     READ_VALUE(tokenParams, capability, dictionary, TxTokenParams_capability);
     READ_VALUE(tokenParams, clientId, dictionary, TxTokenParams_clientId)
-   // READ_VALUE(tokenParams, nonce, dictionary, TxTokenParams_nonce);
     READ_VALUE(tokenParams, timestamp, dictionary, TxTokenParams_timestamp);
     READ_VALUE(tokenParams, ttl, dictionary, TxTokenParams_ttl);
 

@@ -20,7 +20,6 @@ class AuthMethodHandler {
 
     private final AblyInstanceStore instanceStore;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    final Handler handler = new Handler(Looper.getMainLooper());
 
     public AuthMethodHandler(AblyInstanceStore instanceStore) {
         this.instanceStore = instanceStore;
@@ -68,10 +67,8 @@ class AuthMethodHandler {
                 final Auth.TokenDetails tokenDetails = getAuth(ablyMessage, type)
                         .requestToken(tokenParams, options);
                 result.success(tokenDetails);
-               // handler.post(() -> result.success(tokenDetails));
             } catch (AblyException e) {
                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
     }
