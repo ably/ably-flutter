@@ -18,7 +18,7 @@ void testRestPublish(FlutterDriver Function() getDriver) {
   });
 }
 
-void testRestRequestToken(FlutterDriver Function() getDriver) {
+void testRestRequestTokenPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restRequestToken);
   late TestControlResponseMessage response;
   setUpAll(
