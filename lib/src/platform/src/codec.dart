@@ -391,8 +391,8 @@ class Codec extends StandardMessageCodec {
         .tokenDetails);
     jsonMap[TxAuthOptions.authUrl] = authOptions.authUrl;
     jsonMap[TxAuthOptions.authMethod] = authOptions.authMethod;
-    //jsonMap[TxAuthOptions.authCallback] = authOptions.authCallback;
     jsonMap[TxAuthOptions.key] = authOptions.key;
+    //For authOptions.authCallback happens check method_call_handler.dart
     jsonMap[TxAuthOptions.token] = authOptions.tokenDetails?.token;
     jsonMap[TxAuthOptions.authHeaders] = authOptions.authHeaders;
     jsonMap[TxAuthOptions.authParams] = authOptions.authParams;
