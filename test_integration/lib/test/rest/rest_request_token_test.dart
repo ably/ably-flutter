@@ -1,12 +1,14 @@
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
+import 'package:ably_flutter_integration_test/utils/rest.dart';
 
 Future<Map<String, dynamic>> testRestRequestToken({
   required Reporter reporter,
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
+  final logMessages = <List<String?>>[];
   final appKey = await AppProvisioning().provisionApp();
 
   //init ably for token
@@ -16,15 +18,22 @@ Future<Map<String, dynamic>> testRestRequestToken({
     logLevel: LogLevel.verbose,
   );
 
-  final rest = Rest(
+  final restForToken = Rest(
     options: clientOptionsForToken,
   );
 
-  final token = await rest.auth?.requestToken();
+  final token = await restForToken.auth?.requestToken();
 
-  if (token == null) {
-    throw Error();
-  }
+  final clientOptions = ClientOptions( 
+    tokenDetails: token,
+    environment: 'sandbox',
+    logLevel: LogLevel.verbose);
+   final tokenedRest = Rest(options: clientOptions);
+   
+   await publishMessages(tokenedRest.channels.get('test'));
 
-  return {'handle': await rest.handle};
+  return {
+    'handle': await tokenedRest.handle,
+    'log': logMessages,
+  };
 }
