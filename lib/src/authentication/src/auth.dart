@@ -25,7 +25,7 @@ abstract class Auth {
   /// and [authOptions] objects passed in entirely replace, as opposed to being
   /// merged with, the current client library saved values. Returns a
   /// [TokenDetails] object.
-  Future<TokenDetails?> authorize({
+  Future<TokenDetails> authorize({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
@@ -45,7 +45,7 @@ abstract class Auth {
   /// are used instead of, rather than being merged with, the default
   /// values. To understand why an Ably [TokenRequest] may be issued to clients
   /// in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication).
-  Future<TokenRequest?> createTokenRequest({
+  Future<TokenRequest> createTokenRequest({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });
@@ -63,7 +63,7 @@ abstract class Auth {
   /// with, the default values. To understand why an Ably [TokenRequest] may be
   /// issued to clients in favor of a token, see
   /// [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication).
-  Future<TokenDetails?> requestToken({
+  Future<TokenDetails> requestToken({
     AuthOptions? authOptions,
     TokenParams? tokenParams,
   });

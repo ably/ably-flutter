@@ -11,9 +11,9 @@ class RestAuth extends Auth {
   RestAuth(this._rest);
 
   @override
-  Future<TokenDetails?> authorize(
+  Future<TokenDetails> authorize(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _rest.invoke<TokenDetails>(PlatformMethod.restAuthAuthorize, {
+      _rest.invokeRequest<TokenDetails>(PlatformMethod.restAuthAuthorize, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
@@ -23,17 +23,17 @@ class RestAuth extends Auth {
       _rest.invoke<String>(PlatformMethod.restAuthGetClientId);
 
   @override
-  Future<TokenRequest?> createTokenRequest(
+  Future<TokenRequest> createTokenRequest(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _rest.invoke<TokenRequest>(PlatformMethod.restAuthCreateTokenRequest, {
+      _rest.invokeRequest<TokenRequest>(PlatformMethod.restAuthCreateTokenRequest, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
 
   @override
-  Future<TokenDetails?> requestToken(
+  Future<TokenDetails> requestToken(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _rest.invoke<TokenDetails>(PlatformMethod.restAuthRequestToken, {
+      _rest.invokeRequest<TokenDetails>(PlatformMethod.restAuthRequestToken, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
