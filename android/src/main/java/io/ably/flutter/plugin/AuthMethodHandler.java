@@ -41,7 +41,6 @@ class AuthMethodHandler {
                 result.success(tokenDetails);
             } catch (AblyException e) {
                 result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e);
-               // handler.post(() ->result.error(String.valueOf(e.errorInfo.code), e.errorInfo.message, e));
             }
         });
 

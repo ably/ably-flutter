@@ -1,6 +1,8 @@
 import 'dart:io' as io show Platform;
+import 'dart:typed_data';
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// @nodoc

@@ -20,7 +20,6 @@ class Realtime extends PlatformObject {
     _connection = Connection(this);
     _channels = RealtimeChannels(this);
     push = Push(realtime: this);
-    // auth = RealtimeAuth(this);
     auth = RealtimeAuth(this);
   }
 
