@@ -192,7 +192,7 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.ablyMessage;
     } else if (value is AblyEventMessage) {
       return CodecTypes.ablyEventMessage;
-    } else if (value is AuthOptions){
+    } else if (value is AuthOptions) {
       return CodecTypes.authOptions;
     }
     // ignore: avoid_returning_null
@@ -384,11 +384,10 @@ class Codec extends StandardMessageCodec {
     return jsonMap;
   }
 
-  Map<String, dynamic> _encodeAuthOptions(
-      final AuthOptions authOptions) {
+  Map<String, dynamic> _encodeAuthOptions(final AuthOptions authOptions) {
     final jsonMap = <String, dynamic>{};
-    jsonMap[TxAuthOptions.tokenDetails] = _encodeTokenDetails(authOptions
-        .tokenDetails);
+    jsonMap[TxAuthOptions.tokenDetails] =
+        _encodeTokenDetails(authOptions.tokenDetails);
     jsonMap[TxAuthOptions.authUrl] = authOptions.authUrl;
     jsonMap[TxAuthOptions.authMethod] = authOptions.authMethod;
     jsonMap[TxAuthOptions.key] = authOptions.key;
@@ -728,7 +727,6 @@ class Codec extends StandardMessageCodec {
       ttl: _readFromJson<int>(jsonMap, TxTokenRequest.ttl),
     );
   }
-
 
   /// @nodoc
   /// Decodes value [jsonMap] to [TokenParams]

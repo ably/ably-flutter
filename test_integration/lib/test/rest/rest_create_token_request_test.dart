@@ -18,7 +18,9 @@ Future<Map<String, dynamic>> testRestCreateTokenRequest({
   final rest = Rest(
     options: clientOptionsForToken,
   );
-  const tokenParams = TokenParams(ttl: 20000, capability: '{"testchannel":["publish"]}',
+  const tokenParams = TokenParams(
+      ttl: 20000,
+      capability: '{"testchannel":["publish"]}',
       clientId: 'testclient');
 
   final authOptions = AuthOptions(
@@ -26,10 +28,10 @@ Future<Map<String, dynamic>> testRestCreateTokenRequest({
       useTokenAuth: true,
       authMethod: 'GET',
       authHeaders: {'heardkey': 'headervalue'},
-      authUrl: "bogus",
+      authUrl: 'bogus',
       authParams: {'paramkey': 'paramvalue'});
-  final request = await rest.auth?.createTokenRequest(authOptions: authOptions,
-      tokenParams: tokenParams);
+  final request = await rest.auth
+      ?.createTokenRequest(authOptions: authOptions, tokenParams: tokenParams);
   if (request?.ttl != tokenParams.ttl ||
       request?.clientId != tokenParams.clientId ||
       request?.capability != tokenParams.capability) {

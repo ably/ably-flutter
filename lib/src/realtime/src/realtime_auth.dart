@@ -1,5 +1,3 @@
-
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
@@ -13,7 +11,8 @@ class RealtimeAuth extends Auth {
   @override
   Future<TokenDetails> authorize(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _realtime.invokeRequest<TokenDetails>(PlatformMethod.realtimeAuthAuthorize, {
+      _realtime.invokeRequest<TokenDetails>(
+          PlatformMethod.realtimeAuthAuthorize, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
@@ -34,7 +33,8 @@ class RealtimeAuth extends Auth {
   @override
   Future<TokenDetails> requestToken(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _realtime.invokeRequest<TokenDetails>(PlatformMethod.realtimeAuthRequestToken, {
+      _realtime.invokeRequest<TokenDetails>(
+          PlatformMethod.realtimeAuthRequestToken, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });

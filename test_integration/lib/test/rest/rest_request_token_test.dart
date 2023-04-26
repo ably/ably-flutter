@@ -24,13 +24,11 @@ Future<Map<String, dynamic>> testRestRequestToken({
 
   final token = await restForToken.auth?.requestToken();
 
-  final clientOptions = ClientOptions( 
-    tokenDetails: token,
-    environment: 'sandbox',
-    logLevel: LogLevel.verbose);
-   final tokenedRest = Rest(options: clientOptions);
-   
-   await publishMessages(tokenedRest.channels.get('test'));
+  final clientOptions = ClientOptions(
+      tokenDetails: token, environment: 'sandbox', logLevel: LogLevel.verbose);
+  final tokenedRest = Rest(options: clientOptions);
+
+  await publishMessages(tokenedRest.channels.get('test'));
 
   return {
     'handle': await tokenedRest.handle,

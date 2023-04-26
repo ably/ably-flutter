@@ -194,12 +194,11 @@ class _TestDispatcherState extends State<TestDispatcher> {
           children: <Widget>[
             Center(
               child: Text(
-                _reporters.isEmpty
-                    ? '-'
-                    : 'running ${_reporters.length}'
-                        ' (${_reporters.keys.toList().toString()}) tests',
-                  style: const TextStyle(color: Colors.white)
-              ),
+                  _reporters.isEmpty
+                      ? '-'
+                      : 'running ${_reporters.length}'
+                          ' (${_reporters.keys.toList().toString()}) tests',
+                  style: const TextStyle(color: Colors.white)),
             ),
             Expanded(
               child: ListView.builder(

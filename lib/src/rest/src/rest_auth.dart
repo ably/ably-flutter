@@ -1,5 +1,3 @@
-
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 
@@ -25,7 +23,8 @@ class RestAuth extends Auth {
   @override
   Future<TokenRequest> createTokenRequest(
           {AuthOptions? authOptions, TokenParams? tokenParams}) =>
-      _rest.invokeRequest<TokenRequest>(PlatformMethod.restAuthCreateTokenRequest, {
+      _rest.invokeRequest<TokenRequest>(
+          PlatformMethod.restAuthCreateTokenRequest, {
         TxTransportKeys.options: authOptions,
         TxTransportKeys.params: tokenParams
       });
