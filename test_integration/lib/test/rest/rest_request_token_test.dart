@@ -29,7 +29,5 @@ Future<Map<String, dynamic>> testRestRequestToken({
 
   await publishMessages(tokenedRest.channels.get('test'));
 
-  return {
-    'handle': await tokenedRest.handle
-  };
+  return {'handle': await tokenedRest.handle};
 }
