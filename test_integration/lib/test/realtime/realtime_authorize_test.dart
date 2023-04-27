@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
     options: clientOptionsForToken,
   );
   /* get first token */
-  final firstToken = await ablyForToken.auth?.requestToken();
+  final firstToken = await ablyForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
       key: appKey,
@@ -41,7 +41,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
       authCallback: authCallback,
       authMethod: 'GET');
   final refreshedToken = await realtime.auth
-      ?.authorize(authOptions: authOptions, tokenParams: tokenParams);
+      .authorize(authOptions: authOptions, tokenParams: tokenParams);
   //tokens must be different
   if (refreshedToken == firstToken) {
     throw Error();

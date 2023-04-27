@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> testRestAuthClientId({
     options: clientOptionsForToken,
   );
   /* get first token */
-  final firstToken = await ablyForToken.auth?.requestToken();
+  final firstToken = await ablyForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
       key: appKey,
@@ -31,7 +31,7 @@ Future<Map<String, dynamic>> testRestAuthClientId({
       tokenDetails: firstToken);
   final rest = Rest(options: clientOptions);
 
-  final clientId = await rest.auth?.clientId;
+  final clientId = await rest.auth.clientId;
   if (clientId != 'testClientId') {
     throw Error();
   }

@@ -22,7 +22,7 @@ Future<Map<String, dynamic>> testRestRequestToken({
     options: clientOptionsForToken,
   );
 
-  final token = await restForToken.auth?.requestToken();
+  final token = await restForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
       tokenDetails: token, environment: 'sandbox', logLevel: LogLevel.verbose);

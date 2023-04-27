@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> testRealtimeAuthClientId({
     options: clientOptionsForToken,
   );
   /* get first token */
-  final firstToken = await ablyForToken.auth?.requestToken();
+  final firstToken = await ablyForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
       key: appKey,
@@ -32,7 +32,7 @@ Future<Map<String, dynamic>> testRealtimeAuthClientId({
   final realtime = Realtime(options: clientOptions);
   await realtime.connect();
 
-  final clientId = await realtime.auth?.clientId;
+  final clientId = await realtime.auth.clientId;
   if (clientId != 'testClientId') {
     throw Error();
   }

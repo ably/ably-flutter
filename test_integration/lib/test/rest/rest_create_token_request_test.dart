@@ -31,10 +31,10 @@ Future<Map<String, dynamic>> testRestCreateTokenRequest({
       authUrl: 'bogus',
       authParams: {'paramkey': 'paramvalue'});
   final request = await rest.auth
-      ?.createTokenRequest(authOptions: authOptions, tokenParams: tokenParams);
-  if (request?.ttl != tokenParams.ttl ||
-      request?.clientId != tokenParams.clientId ||
-      request?.capability != tokenParams.capability) {
+      .createTokenRequest(authOptions: authOptions, tokenParams: tokenParams);
+  if (request.ttl != tokenParams.ttl ||
+      request.clientId != tokenParams.clientId ||
+      request.capability != tokenParams.capability) {
     throw Error();
   }
 

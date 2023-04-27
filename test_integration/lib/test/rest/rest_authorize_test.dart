@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> testRestAuthorize({
     options: clientOptionsForToken,
   );
   /* get first token */
-  final firstToken = await ablyForToken.auth?.requestToken();
+  final firstToken = await ablyForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
       key: appKey,
@@ -40,7 +40,7 @@ Future<Map<String, dynamic>> testRestAuthorize({
       authCallback: authCallback,
       authMethod: 'GET');
   final refreshedToken = await rest.auth
-      ?.authorize(authOptions: authOptions, tokenParams: tokenParams);
+      .authorize(authOptions: authOptions, tokenParams: tokenParams);
   //tokens must be different
   if (refreshedToken == firstToken) {
     throw Error();

@@ -36,7 +36,7 @@ class Rest extends PlatformObject {
   }
 
   /// An [Auth] object.
-  Auth? auth;
+  late Auth auth;
 
   /// An object that contains additional client-specific properties
   late ClientOptions options;
