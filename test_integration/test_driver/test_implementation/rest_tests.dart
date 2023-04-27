@@ -28,7 +28,7 @@ void testRestRequestTokenPublish(FlutterDriver Function() getDriver) {
       'rest instance with token has a valid handle and successfully'
       ' publishes messages', () {
     expect(response.payload['handle'], isA<int>());
-    expect(response.payload['log'], greaterThan(0));
+    expect(response.payload['handle'], greaterThan(0));
   });
 }
 

@@ -8,7 +8,6 @@ Future<Map<String, dynamic>> testRestRequestToken({
   Map<String, dynamic>? payload,
 }) async {
   reporter.reportLog('init start');
-  final logMessages = <List<String?>>[];
   final appKey = await AppProvisioning().provisionApp();
 
   //init ably for token
@@ -31,7 +30,6 @@ Future<Map<String, dynamic>> testRestRequestToken({
   await publishMessages(tokenedRest.channels.get('test'));
 
   return {
-    'handle': await tokenedRest.handle,
-    'log': logMessages,
+    'handle': await tokenedRest.handle
   };
 }
