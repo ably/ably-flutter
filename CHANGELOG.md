@@ -11,7 +11,9 @@
 
 **Closed issues:**
 
-- How to handle when user auth changes? [\#459](https://github.com/ably/ably-flutter/issues/459)
+- How to handle when user auth changes?
+Added new Auth methods: 'requestToken', 'authorize','createTokenRequest' [\#459](https://github
+.com/ably/ably-flutter/issues/459)
 - Expose `href` from `ErrorInfo` in bubbled exceptions [\#441](https://github.com/ably/ably-flutter/issues/441)
 - java.util.HashMap cannot be cast to io.ably.lib.types.Param [\#439](https://github.com/ably/ably-flutter/issues/439)
 
