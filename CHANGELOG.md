@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.16](https://github.com/ably/ably-flutter/tree/v1.2.16)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.15...v1.2.16)
+
+**Fixed bugs:**
+
+- authHeaders type conversion on Android Plugin is incorrect [\#444](https://github.com/ably/ably-flutter/issues/444)
+- iOS \_CastError exception [\#355](https://github.com/ably/ably-flutter/issues/355)
+
+**Closed issues:**
+
+- How to handle when user auth changes? [\#459](https://github.com/ably/ably-flutter/issues/459)
+- Expose `href` from `ErrorInfo` in bubbled exceptions [\#441](https://github.com/ably/ably-flutter/issues/441)
+- java.util.HashMap cannot be cast to io.ably.lib.types.Param [\#439](https://github.com/ably/ably-flutter/issues/439)
+
 ## [1.2.15](https://github.com/ably/ably-flutter/tree/v1.2.15)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.14...v1.2.15)
