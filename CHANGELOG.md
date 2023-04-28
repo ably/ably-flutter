@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.15...v1.2.16)
 
+**Implemented enhancements:**
+
+- Added new Auth methods: 'requestToken', 'authorize','createTokenRequest' [\#460](https://github.com/ably/ably-flutter/pull/460)
+
 **Fixed bugs:**
 
 - authHeaders type conversion on Android Plugin is incorrect [\#444](https://github.com/ably/ably-flutter/issues/444)
@@ -11,8 +15,7 @@
 
 **Closed issues:**
 
-- How to handle when user auth changes?
-Added new Auth methods: 'requestToken', 'authorize','createTokenRequest' [\#459](https://github
+- How to handle when user auth changes? [\#459](https://github
 .com/ably/ably-flutter/issues/459)
 - Expose `href` from `ErrorInfo` in bubbled exceptions [\#441](https://github.com/ably/ably-flutter/issues/441)
 - java.util.HashMap cannot be cast to io.ably.lib.types.Param [\#439](https://github.com/ably/ably-flutter/issues/439)
