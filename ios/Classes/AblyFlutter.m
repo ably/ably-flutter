@@ -641,6 +641,30 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
     }];
 };
 
+static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const ablyMessage = call.arguments;
+    NSDictionary *const message = ablyMessage.message;
+    NSString *const channelName = (NSString*) message[TxTransportKeys_channelName];
+    ARTTokenParams *const tokenParams = (ARTTokenParams *) message[TxTransportKeys_params];
+    ARTAuthOptions *const authOptions = (ARTAuthOptions *) message[TxTransportKeys_options];
+    
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
+    [realtime.auth requestToken:tokenParams withOptions:authOptions callback:^(ARTTokenDetails * _Nullable tokenDetails, NSError * _Nullable error) {
+        if (error) {
+            result([
+                    FlutterError
+                    errorWithCode:[NSString stringWithFormat: @"%ld", (long)error.code]
+                    message:[NSString stringWithFormat:@"Error creating token request = %@", error]
+                    details:error
+                    ]);
+        } else {
+            result(tokenDetails);
+        }
+        
+    }];
+};
+
 @implementation AblyFlutter {
     NSDictionary<NSString *, FlutterHandler>* _handlers;
     AblyStreamsChannel* _streamsChannel;
@@ -732,6 +756,15 @@ static const FlutterHandler _getFirstPage = ^void(AblyFlutter *const ably, Flutt
         // Encryption
         AblyPlatformMethod_cryptoGetParams: CryptoHandlers.getParams,
         AblyPlatformMethod_cryptoGenerateRandomKey: CryptoHandlers.generateRandomKey,
+        //Authorize
+        AblyPlatformMethod_realtimeAuthAuthorize: AuthHandlers.realtimeAuthorize,
+        AblyPlatformMethod_realtimeAuthCreateTokenRequest: AuthHandlers.realtimeCreateTokenRequest,
+        AblyPlatformMethod_realtimeAuthRequestToken: AuthHandlers.realtimeRequestToken,
+        AblyPlatformMethod_realtimeAuthGetClientId: AuthHandlers.realtimeAuthClientId,
+        AblyPlatformMethod_restAuthAuthorize: AuthHandlers.restAuthorize,
+        AblyPlatformMethod_restAuthCreateTokenRequest: AuthHandlers.restCreateTokenRequest,
+        AblyPlatformMethod_restAuthRequestToken: AuthHandlers.restRequestToken,
+        AblyPlatformMethod_restAuthGetClientId: AuthHandlers.restAuthClientId
     };
 
     [registrar addApplicationDelegate:self];

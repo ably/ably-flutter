@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_END
         [NSString stringWithFormat:@"%d", CodecTypeRealtimePresenceParams]: readRealtimePresenceParams,
         [NSString stringWithFormat:@"%d", CodecTypeMessageData]: readMessageData,
         [NSString stringWithFormat:@"%d", CodecTypeCipherParams]: CryptoCodec.readCipherParams,
+        [NSString stringWithFormat:@"%d", CodecTypeAuthOptions]: readAuthOptions,
+        [NSString stringWithFormat:@"%d", CodecTypeTokenParams]: readTokenParams,
     };
     return _handlers[[NSString stringWithFormat:@"%@", type]];
 }
@@ -91,20 +93,20 @@ static AblyCodecDecoder readAblyFlutterEventMessage = ^AblyFlutterEventMessage*(
  */
 #define ON_VALUE(BLOCK, DICTIONARY, JSON_KEY) { \
 const id value = [DICTIONARY objectForKey: JSON_KEY]; \
-if (value) { \
+if (value && !([value isKindOfClass:[NSNull class]])) { \
 BLOCK(value); \
 } \
 }
 
 #define READ_VALUE(OBJECT, PROPERTY, DICTIONARY, JSON_KEY) { \
-ON_VALUE(^(const id value) { OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); \
+ON_VALUE(^(const id value) {if(!([value isKindOfClass:[NSNull class]])) OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); \
 }
 
 /**
  Where an NSNumber has been decoded and the property to be set is BOOL.
  */
 #define READ_BOOL(OBJECT, PROPERTY, DICTIONARY, JSON_KEY) { \
-ON_VALUE(^(const id number) { OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
+ON_VALUE(^(const id number) {if(!([value isKindOfClass:[NSNull class]])) OBJECT.PROPERTY = [number boolValue]; }, DICTIONARY, JSON_KEY); \
 }
 
 static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDictionary *const dictionary) {
@@ -154,6 +156,38 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
              initWithClientOptions:clientOptions
              hasAuthCallback:dictionary[TxClientOptions_hasAuthCallback]];
 };
+
+static AblyCodecDecoder readAuthOptions = ^ARTAuthOptions*(NSDictionary *const dictionary) {
+    ARTAuthOptions *const authOptions = [ARTAuthOptions new];
+    READ_VALUE(authOptions, authUrl, dictionary, TxAuthOptions_authUrl);
+    
+    READ_VALUE(authOptions, authMethod, dictionary, TxAuthOptions_authMethod)
+     
+    ON_VALUE(^(const id value) { authOptions.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxAuthOptions_tokenDetails);
+    ;
+    READ_VALUE(authOptions, key, dictionary, TxAuthOptions_key);
+    
+    READ_VALUE(authOptions, authHeaders, dictionary, TxAuthOptions_authHeaders);
+    
+    READ_VALUE(authOptions, authParams, dictionary, TxAuthOptions_authParams);
+    
+    READ_VALUE(authOptions, queryTime, dictionary, TxAuthOptions_queryTime);
+
+
+    return authOptions;
+};
+
+static AblyCodecDecoder readTokenParams = ^ARTTokenParams*(NSDictionary *const dictionary) {
+    ARTTokenParams *const tokenParams = [ARTTokenParams new];
+
+    READ_VALUE(tokenParams, capability, dictionary, TxTokenParams_capability);
+    READ_VALUE(tokenParams, clientId, dictionary, TxTokenParams_clientId)
+    READ_VALUE(tokenParams, timestamp, dictionary, TxTokenParams_timestamp);
+    READ_VALUE(tokenParams, ttl, dictionary, TxTokenParams_ttl);
+
+    return tokenParams;
+};
+
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary {
     NSString *token = nil;

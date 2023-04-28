@@ -1,6 +1,5 @@
 import 'dart:io' as io show Platform;
 import 'dart:typed_data';
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/foundation.dart';
@@ -81,13 +80,14 @@ class Codec extends StandardMessageCodec {
       CodecTypes.tokenDetails:
           _CodecPair<TokenDetails>(_encodeTokenDetails, _decodeTokenDetails),
       CodecTypes.tokenRequest:
-          _CodecPair<TokenRequest>(_encodeTokenRequest, null),
+          _CodecPair<TokenRequest>(_encodeTokenRequest, _decodeTokenRequest),
       CodecTypes.restChannelOptions:
           _CodecPair<RestChannelOptions>(_encodeRestChannelOptions, null),
       CodecTypes.realtimeChannelOptions: _CodecPair<RealtimeChannelOptions>(
         _encodeRealtimeChannelOptions,
         null,
       ),
+      CodecTypes.authOptions: _CodecPair<AuthOptions>(_encodeAuthOptions, null),
       CodecTypes.paginatedResult:
           _CodecPair<PaginatedResult<dynamic>>(null, _decodePaginatedResult),
       CodecTypes.realtimeHistoryParams:
@@ -194,6 +194,8 @@ class Codec extends StandardMessageCodec {
       return CodecTypes.ablyMessage;
     } else if (value is AblyEventMessage) {
       return CodecTypes.ablyEventMessage;
+    } else if (value is AuthOptions) {
+      return CodecTypes.authOptions;
     }
     // ignore: avoid_returning_null
     return null;
@@ -381,6 +383,23 @@ class Codec extends StandardMessageCodec {
       TxRealtimeChannelOptions.modes,
       v.modes?.map(_encodeChannelMode).toList(),
     );
+    return jsonMap;
+  }
+
+  Map<String, dynamic> _encodeAuthOptions(final AuthOptions authOptions) {
+    final jsonMap = <String, dynamic>{};
+    jsonMap[TxAuthOptions.tokenDetails] =
+        _encodeTokenDetails(authOptions.tokenDetails);
+    jsonMap[TxAuthOptions.authUrl] = authOptions.authUrl;
+    jsonMap[TxAuthOptions.authMethod] = authOptions.authMethod;
+    jsonMap[TxAuthOptions.key] = authOptions.key;
+    //For authOptions.authCallback happens check method_call_handler.dart
+    jsonMap[TxAuthOptions.token] = authOptions.tokenDetails?.token;
+    jsonMap[TxAuthOptions.authHeaders] = authOptions.authHeaders;
+    jsonMap[TxAuthOptions.authParams] = authOptions.authParams;
+    jsonMap[TxAuthOptions.queryTime] = authOptions.queryTime;
+    jsonMap[TxAuthOptions.useTokenAuth] = authOptions.useTokenAuth;
+
     return jsonMap;
   }
 
@@ -692,6 +711,24 @@ class Codec extends StandardMessageCodec {
         capability: _readFromJson<String>(jsonMap, TxTokenDetails.capability),
         clientId: _readFromJson<String>(jsonMap, TxTokenDetails.clientId),
       );
+
+  /// @nodoc
+  /// Decodes value [jsonMap] to [TokenRequest]
+  /// returns null if [jsonMap] is null
+  TokenRequest _decodeTokenRequest(Map<String, dynamic> jsonMap) {
+    final timestamp = _readFromJson<int>(jsonMap, TxTokenRequest.timestamp);
+    return TokenRequest(
+      capability: _readFromJson<String>(jsonMap, TxTokenRequest.capability),
+      clientId: _readFromJson<String>(jsonMap, TxTokenRequest.clientId),
+      keyName: _readFromJson<String>(jsonMap, TxTokenRequest.keyName),
+      mac: _readFromJson<String>(jsonMap, TxTokenRequest.mac),
+      nonce: _readFromJson<String>(jsonMap, TxTokenRequest.nonce),
+      timestamp: (timestamp != null)
+          ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+          : null,
+      ttl: _readFromJson<int>(jsonMap, TxTokenRequest.ttl),
+    );
+  }
 
   /// @nodoc
   /// Decodes value [jsonMap] to [TokenParams]

@@ -7,6 +7,7 @@ Iterable<Map<String, dynamic>> get _types sync* {
 
     //Other ably objects
     'clientOptions',
+    'authOptions',
     'messageData',
     'messageExtras',
     'message',
@@ -74,6 +75,10 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'restPresenceGet', 'value': 'restPresenceGet'},
   {'name': 'restPresenceHistory', 'value': 'restPresenceHistory'},
   {'name': 'releaseRestChannel', 'value': 'releaseRestChannel'},
+  {'name': 'restAuthAuthorize', 'value': 'restAuthAuthorize'},
+  {'name': 'restAuthCreateTokenRequest', 'value': 'restAuthCreateTokenRequest'},
+  {'name': 'restAuthRequestToken', 'value': 'restAuthRequestToken'},
+  {'name': 'restAuthGetClientId', 'value': 'restAuthGetClientId'},
 
   // Realtime
   {'name': 'createRealtime', 'value': 'createRealtime'},
@@ -96,6 +101,13 @@ const List<Map<String, dynamic>> _platformMethods = [
   {'name': 'realtimeHistory', 'value': 'realtimeHistory'},
   {'name': 'realtimeTime', 'value': 'realtimeTime'},
   {'name': 'restTime', 'value': 'restTime'},
+  {'name': 'realtimeAuthAuthorize', 'value': 'realtimeAuthAuthorize'},
+  {
+    'name': 'realtimeAuthCreateTokenRequest',
+    'value': 'realtimeAuthCreateTokenRequest'
+  },
+  {'name': 'realtimeAuthRequestToken', 'value': 'realtimeAuthRequestToken'},
+  {'name': 'realtimeAuthGetClientId', 'value': 'realtimeAuthGetClientId'},
 
   // Push Notifications
   {'name': 'pushActivate', 'value': 'pushActivate'},
@@ -265,6 +277,21 @@ const List<Map<String, dynamic>> _objects = [
       'issued',
       'capability',
       'clientId'
+    ]
+  },
+  {
+    'name': 'AuthOptions',
+    'properties': <String>[
+      'authCallback',
+      'authUrl',
+      'authMethod',
+      'key',
+      'token',
+      'tokenDetails',
+      'authHeaders',
+      'authParams',
+      'queryTime',
+      'useTokenAuth'
     ]
   },
   {

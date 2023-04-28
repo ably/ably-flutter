@@ -106,13 +106,14 @@ class _TestDispatcherState extends State<TestDispatcher> {
       case _TestStatus.progress:
         return Colors.blue;
       case null:
-        return Colors.grey;
+        return Colors.white;
     }
   }
 
   Widget _getAction(String testName) {
     final playIcon = IconButton(
       icon: const Icon(Icons.play_arrow),
+      color: Colors.white,
       onPressed: () {
         handleDriverMessage(TestControlMessage(testName)).then((_) {
           setState(() {});
@@ -154,13 +155,14 @@ class _TestDispatcherState extends State<TestDispatcher> {
           Expanded(
             child: Text(
               testName,
-              style: TextStyle(color: _getColor(testName)),
+              style: TextStyle(color: _getColor(testName), fontSize: 16),
             ),
           ),
           _getAction(testName),
           _getStatus(testName),
           IconButton(
             icon: const Icon(Icons.remove_red_eye),
+            color: Colors.white,
             onPressed: () {
               showDialog<void>(
                 context: context,
@@ -181,7 +183,8 @@ class _TestDispatcherState extends State<TestDispatcher> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-          home: Scaffold(
+      theme: ThemeData(scaffoldBackgroundColor: Colors.black),
+      home: Scaffold(
         appBar: AppBar(
           title: const Text('Test dispatcher'),
         ),
@@ -191,11 +194,11 @@ class _TestDispatcherState extends State<TestDispatcher> {
           children: <Widget>[
             Center(
               child: Text(
-                _reporters.isEmpty
-                    ? '-'
-                    : 'running ${_reporters.length}'
-                        ' (${_reporters.keys.toList().toString()}) tests',
-              ),
+                  _reporters.isEmpty
+                      ? '-'
+                      : 'running ${_reporters.length}'
+                          ' (${_reporters.keys.toList().toString()}) tests',
+                  style: const TextStyle(color: Colors.white)),
             ),
             Expanded(
               child: ListView.builder(

@@ -9,30 +9,31 @@ typedef NS_ENUM(UInt8, CodecType) {
     CodecTypeAblyMessage = 128,
     CodecTypeAblyEventMessage = 129,
     CodecTypeClientOptions = 130,
-    CodecTypeMessageData = 131,
-    CodecTypeMessageExtras = 132,
-    CodecTypeMessage = 133,
-    CodecTypeTokenParams = 134,
-    CodecTypeTokenDetails = 135,
-    CodecTypeTokenRequest = 136,
-    CodecTypeRestChannelOptions = 137,
-    CodecTypeRealtimeChannelOptions = 138,
-    CodecTypePaginatedResult = 139,
-    CodecTypeRestHistoryParams = 140,
-    CodecTypeRealtimeHistoryParams = 141,
-    CodecTypeRestPresenceParams = 142,
-    CodecTypePresenceMessage = 143,
-    CodecTypeRealtimePresenceParams = 144,
-    CodecTypeDeviceDetails = 145,
-    CodecTypeLocalDevice = 146,
-    CodecTypePushChannelSubscription = 147,
-    CodecTypeUnNotificationSettings = 148,
-    CodecTypeRemoteMessage = 149,
-    CodecTypeErrorInfo = 150,
-    CodecTypeLogLevel = 151,
-    CodecTypeConnectionStateChange = 152,
-    CodecTypeChannelStateChange = 153,
-    CodecTypeCipherParams = 154,
+    CodecTypeAuthOptions = 131,
+    CodecTypeMessageData = 132,
+    CodecTypeMessageExtras = 133,
+    CodecTypeMessage = 134,
+    CodecTypeTokenParams = 135,
+    CodecTypeTokenDetails = 136,
+    CodecTypeTokenRequest = 137,
+    CodecTypeRestChannelOptions = 138,
+    CodecTypeRealtimeChannelOptions = 139,
+    CodecTypePaginatedResult = 140,
+    CodecTypeRestHistoryParams = 141,
+    CodecTypeRealtimeHistoryParams = 142,
+    CodecTypeRestPresenceParams = 143,
+    CodecTypePresenceMessage = 144,
+    CodecTypeRealtimePresenceParams = 145,
+    CodecTypeDeviceDetails = 146,
+    CodecTypeLocalDevice = 147,
+    CodecTypePushChannelSubscription = 148,
+    CodecTypeUnNotificationSettings = 149,
+    CodecTypeRemoteMessage = 150,
+    CodecTypeErrorInfo = 151,
+    CodecTypeLogLevel = 152,
+    CodecTypeConnectionStateChange = 153,
+    CodecTypeChannelStateChange = 154,
+    CodecTypeCipherParams = 155,
 };
 
 
@@ -49,6 +50,10 @@ extern NSString *const AblyPlatformMethod_restHistory;
 extern NSString *const AblyPlatformMethod_restPresenceGet;
 extern NSString *const AblyPlatformMethod_restPresenceHistory;
 extern NSString *const AblyPlatformMethod_releaseRestChannel;
+extern NSString *const AblyPlatformMethod_restAuthAuthorize;
+extern NSString *const AblyPlatformMethod_restAuthCreateTokenRequest;
+extern NSString *const AblyPlatformMethod_restAuthRequestToken;
+extern NSString *const AblyPlatformMethod_restAuthGetClientId;
 extern NSString *const AblyPlatformMethod_createRealtime;
 extern NSString *const AblyPlatformMethod_connectRealtime;
 extern NSString *const AblyPlatformMethod_closeRealtime;
@@ -66,6 +71,10 @@ extern NSString *const AblyPlatformMethod_releaseRealtimeChannel;
 extern NSString *const AblyPlatformMethod_realtimeHistory;
 extern NSString *const AblyPlatformMethod_realtimeTime;
 extern NSString *const AblyPlatformMethod_restTime;
+extern NSString *const AblyPlatformMethod_realtimeAuthAuthorize;
+extern NSString *const AblyPlatformMethod_realtimeAuthCreateTokenRequest;
+extern NSString *const AblyPlatformMethod_realtimeAuthRequestToken;
+extern NSString *const AblyPlatformMethod_realtimeAuthGetClientId;
 extern NSString *const AblyPlatformMethod_pushActivate;
 extern NSString *const AblyPlatformMethod_pushDeactivate;
 extern NSString *const AblyPlatformMethod_pushReset;
@@ -188,6 +197,18 @@ extern NSString *const TxTokenDetails_expires;
 extern NSString *const TxTokenDetails_issued;
 extern NSString *const TxTokenDetails_capability;
 extern NSString *const TxTokenDetails_clientId;
+
+// key constants for AuthOptions
+extern NSString *const TxAuthOptions_authCallback;
+extern NSString *const TxAuthOptions_authUrl;
+extern NSString *const TxAuthOptions_authMethod;
+extern NSString *const TxAuthOptions_key;
+extern NSString *const TxAuthOptions_token;
+extern NSString *const TxAuthOptions_tokenDetails;
+extern NSString *const TxAuthOptions_authHeaders;
+extern NSString *const TxAuthOptions_authParams;
+extern NSString *const TxAuthOptions_queryTime;
+extern NSString *const TxAuthOptions_useTokenAuth;
 
 // key constants for TokenParams
 extern NSString *const TxTokenParams_capability;

@@ -12,30 +12,31 @@ final public class PlatformConstants {
         public static final byte ablyMessage = (byte) 128;
         public static final byte ablyEventMessage = (byte) 129;
         public static final byte clientOptions = (byte) 130;
-        public static final byte messageData = (byte) 131;
-        public static final byte messageExtras = (byte) 132;
-        public static final byte message = (byte) 133;
-        public static final byte tokenParams = (byte) 134;
-        public static final byte tokenDetails = (byte) 135;
-        public static final byte tokenRequest = (byte) 136;
-        public static final byte restChannelOptions = (byte) 137;
-        public static final byte realtimeChannelOptions = (byte) 138;
-        public static final byte paginatedResult = (byte) 139;
-        public static final byte restHistoryParams = (byte) 140;
-        public static final byte realtimeHistoryParams = (byte) 141;
-        public static final byte restPresenceParams = (byte) 142;
-        public static final byte presenceMessage = (byte) 143;
-        public static final byte realtimePresenceParams = (byte) 144;
-        public static final byte deviceDetails = (byte) 145;
-        public static final byte localDevice = (byte) 146;
-        public static final byte pushChannelSubscription = (byte) 147;
-        public static final byte unNotificationSettings = (byte) 148;
-        public static final byte remoteMessage = (byte) 149;
-        public static final byte errorInfo = (byte) 150;
-        public static final byte logLevel = (byte) 151;
-        public static final byte connectionStateChange = (byte) 152;
-        public static final byte channelStateChange = (byte) 153;
-        public static final byte cipherParams = (byte) 154;
+        public static final byte authOptions = (byte) 131;
+        public static final byte messageData = (byte) 132;
+        public static final byte messageExtras = (byte) 133;
+        public static final byte message = (byte) 134;
+        public static final byte tokenParams = (byte) 135;
+        public static final byte tokenDetails = (byte) 136;
+        public static final byte tokenRequest = (byte) 137;
+        public static final byte restChannelOptions = (byte) 138;
+        public static final byte realtimeChannelOptions = (byte) 139;
+        public static final byte paginatedResult = (byte) 140;
+        public static final byte restHistoryParams = (byte) 141;
+        public static final byte realtimeHistoryParams = (byte) 142;
+        public static final byte restPresenceParams = (byte) 143;
+        public static final byte presenceMessage = (byte) 144;
+        public static final byte realtimePresenceParams = (byte) 145;
+        public static final byte deviceDetails = (byte) 146;
+        public static final byte localDevice = (byte) 147;
+        public static final byte pushChannelSubscription = (byte) 148;
+        public static final byte unNotificationSettings = (byte) 149;
+        public static final byte remoteMessage = (byte) 150;
+        public static final byte errorInfo = (byte) 151;
+        public static final byte logLevel = (byte) 152;
+        public static final byte connectionStateChange = (byte) 153;
+        public static final byte channelStateChange = (byte) 154;
+        public static final byte cipherParams = (byte) 155;
     }
 
     static final public class PlatformMethod {
@@ -51,6 +52,10 @@ final public class PlatformConstants {
         public static final String restPresenceGet = "restPresenceGet";
         public static final String restPresenceHistory = "restPresenceHistory";
         public static final String releaseRestChannel = "releaseRestChannel";
+        public static final String restAuthAuthorize = "restAuthAuthorize";
+        public static final String restAuthCreateTokenRequest = "restAuthCreateTokenRequest";
+        public static final String restAuthRequestToken = "restAuthRequestToken";
+        public static final String restAuthGetClientId = "restAuthGetClientId";
         public static final String createRealtime = "createRealtime";
         public static final String connectRealtime = "connectRealtime";
         public static final String closeRealtime = "closeRealtime";
@@ -68,6 +73,10 @@ final public class PlatformConstants {
         public static final String realtimeHistory = "realtimeHistory";
         public static final String realtimeTime = "realtimeTime";
         public static final String restTime = "restTime";
+        public static final String realtimeAuthAuthorize = "realtimeAuthAuthorize";
+        public static final String realtimeAuthCreateTokenRequest = "realtimeAuthCreateTokenRequest";
+        public static final String realtimeAuthRequestToken = "realtimeAuthRequestToken";
+        public static final String realtimeAuthGetClientId = "realtimeAuthGetClientId";
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
         public static final String pushReset = "pushReset";
@@ -202,6 +211,19 @@ final public class PlatformConstants {
         public static final String issued = "issued";
         public static final String capability = "capability";
         public static final String clientId = "clientId";
+    }
+
+    static final public class TxAuthOptions {
+        public static final String authCallback = "authCallback";
+        public static final String authUrl = "authUrl";
+        public static final String authMethod = "authMethod";
+        public static final String key = "key";
+        public static final String token = "token";
+        public static final String tokenDetails = "tokenDetails";
+        public static final String authHeaders = "authHeaders";
+        public static final String authParams = "authParams";
+        public static final String queryTime = "queryTime";
+        public static final String useTokenAuth = "useTokenAuth";
     }
 
     static final public class TxTokenParams {

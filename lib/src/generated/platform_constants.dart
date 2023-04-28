@@ -9,30 +9,31 @@ class CodecTypes {
   static const int ablyMessage = 128;
   static const int ablyEventMessage = 129;
   static const int clientOptions = 130;
-  static const int messageData = 131;
-  static const int messageExtras = 132;
-  static const int message = 133;
-  static const int tokenParams = 134;
-  static const int tokenDetails = 135;
-  static const int tokenRequest = 136;
-  static const int restChannelOptions = 137;
-  static const int realtimeChannelOptions = 138;
-  static const int paginatedResult = 139;
-  static const int restHistoryParams = 140;
-  static const int realtimeHistoryParams = 141;
-  static const int restPresenceParams = 142;
-  static const int presenceMessage = 143;
-  static const int realtimePresenceParams = 144;
-  static const int deviceDetails = 145;
-  static const int localDevice = 146;
-  static const int pushChannelSubscription = 147;
-  static const int unNotificationSettings = 148;
-  static const int remoteMessage = 149;
-  static const int errorInfo = 150;
-  static const int logLevel = 151;
-  static const int connectionStateChange = 152;
-  static const int channelStateChange = 153;
-  static const int cipherParams = 154;
+  static const int authOptions = 131;
+  static const int messageData = 132;
+  static const int messageExtras = 133;
+  static const int message = 134;
+  static const int tokenParams = 135;
+  static const int tokenDetails = 136;
+  static const int tokenRequest = 137;
+  static const int restChannelOptions = 138;
+  static const int realtimeChannelOptions = 139;
+  static const int paginatedResult = 140;
+  static const int restHistoryParams = 141;
+  static const int realtimeHistoryParams = 142;
+  static const int restPresenceParams = 143;
+  static const int presenceMessage = 144;
+  static const int realtimePresenceParams = 145;
+  static const int deviceDetails = 146;
+  static const int localDevice = 147;
+  static const int pushChannelSubscription = 148;
+  static const int unNotificationSettings = 149;
+  static const int remoteMessage = 150;
+  static const int errorInfo = 151;
+  static const int logLevel = 152;
+  static const int connectionStateChange = 153;
+  static const int channelStateChange = 154;
+  static const int cipherParams = 155;
 }
 
 class PlatformMethod {
@@ -48,6 +49,10 @@ class PlatformMethod {
   static const String restPresenceGet = 'restPresenceGet';
   static const String restPresenceHistory = 'restPresenceHistory';
   static const String releaseRestChannel = 'releaseRestChannel';
+  static const String restAuthAuthorize = 'restAuthAuthorize';
+  static const String restAuthCreateTokenRequest = 'restAuthCreateTokenRequest';
+  static const String restAuthRequestToken = 'restAuthRequestToken';
+  static const String restAuthGetClientId = 'restAuthGetClientId';
   static const String createRealtime = 'createRealtime';
   static const String connectRealtime = 'connectRealtime';
   static const String closeRealtime = 'closeRealtime';
@@ -66,6 +71,11 @@ class PlatformMethod {
   static const String realtimeHistory = 'realtimeHistory';
   static const String realtimeTime = 'realtimeTime';
   static const String restTime = 'restTime';
+  static const String realtimeAuthAuthorize = 'realtimeAuthAuthorize';
+  static const String realtimeAuthCreateTokenRequest =
+      'realtimeAuthCreateTokenRequest';
+  static const String realtimeAuthRequestToken = 'realtimeAuthRequestToken';
+  static const String realtimeAuthGetClientId = 'realtimeAuthGetClientId';
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
   static const String pushReset = 'pushReset';
@@ -206,6 +216,19 @@ class TxTokenDetails {
   static const String issued = 'issued';
   static const String capability = 'capability';
   static const String clientId = 'clientId';
+}
+
+class TxAuthOptions {
+  static const String authCallback = 'authCallback';
+  static const String authUrl = 'authUrl';
+  static const String authMethod = 'authMethod';
+  static const String key = 'key';
+  static const String token = 'token';
+  static const String tokenDetails = 'tokenDetails';
+  static const String authHeaders = 'authHeaders';
+  static const String authParams = 'authParams';
+  static const String queryTime = 'queryTime';
+  static const String useTokenAuth = 'useTokenAuth';
 }
 
 class TxTokenParams {

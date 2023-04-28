@@ -18,6 +18,34 @@ void testRestPublish(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRestRequestTokenPublish(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restRequestToken);
+  late TestControlResponseMessage response;
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
+
+  test(
+      'rest instance with token has a valid handle and successfully'
+      ' publishes messages', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+}
+
+void testRestCreateTokenRequestPublish(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.restCreateTokenRequest);
+  late TestControlResponseMessage response;
+  setUpAll(
+      () async => response = await requestDataForTest(getDriver(), message));
+
+  test(
+      'rest instance with token has a valid handle and successfully '
+      'publishes messages', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['log'], greaterThan(0));
+  });
+}
+
 void testRestEncryptedPublish(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.restEncryptedPublish);
   late TestControlResponseMessage response;

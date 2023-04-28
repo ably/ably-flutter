@@ -8,11 +8,11 @@ import 'package:flutter_driver/driver_extension.dart';
 void main() {
   final testDispatcherController = DispatcherController();
 
-  // track FlutterError's
-  FlutterError.onError = testDispatcherController.logFlutterErrors;
-
   // enable driver extension
   enableFlutterDriverExtension(handler: testDispatcherController.driveHandler);
+
+  // track FlutterError's
+  FlutterError.onError = testDispatcherController.logFlutterErrors;
 
   runZoned(
     () => runApp(

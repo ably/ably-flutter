@@ -1,5 +1,4 @@
 import 'package:flutter_driver/flutter_driver.dart';
-
 import 'test_implementation/basic_platform_tests.dart';
 import 'test_implementation/crypto_tests.dart';
 import 'test_implementation/helper_tests.dart';
@@ -19,6 +18,7 @@ final _tests =
   },
   TestModules.rest: {
     'should publish': testRestPublish,
+    'should publish with tokenRequest': testRestRequestTokenPublish,
     'should publish encrypted': testRestEncryptedPublish,
     'should retrieve history': testRestHistory,
     'should retrieve history with auth callback':

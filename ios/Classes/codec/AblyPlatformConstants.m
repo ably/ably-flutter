@@ -19,6 +19,10 @@ NSString *const AblyPlatformMethod_restHistory= @"restHistory";
 NSString *const AblyPlatformMethod_restPresenceGet= @"restPresenceGet";
 NSString *const AblyPlatformMethod_restPresenceHistory= @"restPresenceHistory";
 NSString *const AblyPlatformMethod_releaseRestChannel= @"releaseRestChannel";
+NSString *const AblyPlatformMethod_restAuthAuthorize= @"restAuthAuthorize";
+NSString *const AblyPlatformMethod_restAuthCreateTokenRequest= @"restAuthCreateTokenRequest";
+NSString *const AblyPlatformMethod_restAuthRequestToken= @"restAuthRequestToken";
+NSString *const AblyPlatformMethod_restAuthGetClientId= @"restAuthGetClientId";
 NSString *const AblyPlatformMethod_createRealtime= @"createRealtime";
 NSString *const AblyPlatformMethod_connectRealtime= @"connectRealtime";
 NSString *const AblyPlatformMethod_closeRealtime= @"closeRealtime";
@@ -36,6 +40,10 @@ NSString *const AblyPlatformMethod_releaseRealtimeChannel= @"releaseRealtimeChan
 NSString *const AblyPlatformMethod_realtimeHistory= @"realtimeHistory";
 NSString *const AblyPlatformMethod_realtimeTime= @"realtimeTime";
 NSString *const AblyPlatformMethod_restTime= @"restTime";
+NSString *const AblyPlatformMethod_realtimeAuthAuthorize= @"realtimeAuthAuthorize";
+NSString *const AblyPlatformMethod_realtimeAuthCreateTokenRequest= @"realtimeAuthCreateTokenRequest";
+NSString *const AblyPlatformMethod_realtimeAuthRequestToken= @"realtimeAuthRequestToken";
+NSString *const AblyPlatformMethod_realtimeAuthGetClientId= @"realtimeAuthGetClientId";
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
 NSString *const AblyPlatformMethod_pushReset= @"pushReset";
@@ -158,6 +166,18 @@ NSString *const TxTokenDetails_expires = @"expires";
 NSString *const TxTokenDetails_issued = @"issued";
 NSString *const TxTokenDetails_capability = @"capability";
 NSString *const TxTokenDetails_clientId = @"clientId";
+
+// key constants for AuthOptions
+NSString *const TxAuthOptions_authCallback = @"authCallback";
+NSString *const TxAuthOptions_authUrl = @"authUrl";
+NSString *const TxAuthOptions_authMethod = @"authMethod";
+NSString *const TxAuthOptions_key = @"key";
+NSString *const TxAuthOptions_token = @"token";
+NSString *const TxAuthOptions_tokenDetails = @"tokenDetails";
+NSString *const TxAuthOptions_authHeaders = @"authHeaders";
+NSString *const TxAuthOptions_authParams = @"authParams";
+NSString *const TxAuthOptions_queryTime = @"queryTime";
+NSString *const TxAuthOptions_useTokenAuth = @"useTokenAuth";
 
 // key constants for TokenParams
 NSString *const TxTokenParams_capability = @"capability";

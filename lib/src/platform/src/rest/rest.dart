@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
+import 'package:ably_flutter/src/rest/src/rest_auth.dart';
 
 Map<int?, Rest> _restInstances = {};
 
@@ -17,6 +18,7 @@ class Rest extends PlatformObject {
   Rest({required this.options}) : super() {
     channels = RestChannels(this);
     push = Push(rest: this);
+    auth = RestAuth(this);
   }
 
   /// Constructs a `Rest` object using an Ably API [key] or token string
@@ -34,7 +36,7 @@ class Rest extends PlatformObject {
   }
 
   /// An [Auth] object.
-  // Auth? auth;
+  late Auth auth;
 
   /// An object that contains additional client-specific properties
   late ClientOptions options;
