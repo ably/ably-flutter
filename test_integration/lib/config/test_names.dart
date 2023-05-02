@@ -36,6 +36,7 @@ class TestName {
   static const String realtimeCreateTokenRequest = 'realtimeCreateTokenRequest';
   static const String realtimeRequestToken = 'realtimeRequestToken';
   static const String realtimeAuthClientId = 'realtimeAuthClientId';
+  static const String realtimeWithAuthUrl = 'realtimeWithAuthUrl';
 
   // rest
   static const String restCapabilities = 'restCapabilities';
