@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
 
-//Make sure that creating realtime with authURL won't crash
+//Make sure that creating realtime with authUrk connects without a problem
 Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
   required Reporter reporter,
   Map<String, dynamic>? payload,
@@ -21,21 +19,27 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
   final ablyForToken = Rest(
     options: clientOptionsForToken,
   );
-  final accessToken = await ablyForToken.auth.requestToken();
+  final tokenDetails = await ablyForToken.auth.requestToken();
 
-  final Map<String, String> headers = {
-    HttpHeaders.authorizationHeader: "Bearer $accessToken",
-    HttpHeaders.contentTypeHeader: "application/json",
-    HttpHeaders.acceptLanguageHeader: "ios",
-  };
+  final authUrl =
+      'https://echo.ably.io/?body=${Uri.encodeComponent(tokenDetails.token!)}';
   final options = ClientOptions(
-    authUrl: 'https://auth.ably.io/auth',
-    authHeaders: headers,
-    echoMessages: false,
-  );
+      authUrl: authUrl,
+      environment: 'sandbox',
+      useTokenAuth: true,
+      autoConnect: false,
+      logLevel: LogLevel.verbose);
   final realtime = Realtime(options: options);
+  var connected = false;
   realtime.connection.on().listen((stateChange) {
-    print("Ably connection state changed: ${stateChange.event}");
+    if (stateChange.event == ConnectionEvent.connected) {
+      connected = true;
+    }
   });
+  await realtime.connect();
+  await Future<Duration>.delayed(const Duration(seconds: 5));
+  if (!connected) {
+    throw Error();
+  }
   return {'handle': await realtime.handle};
 }
