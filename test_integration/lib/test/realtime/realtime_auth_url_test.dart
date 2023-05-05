@@ -37,7 +37,7 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
     }
   });
   await realtime.connect();
-  await Future<Duration>.delayed(const Duration(seconds: 5));
+  await Future<void>.delayed(const Duration(seconds: 5));
   if (!connected) {
     throw Error();
   }
