@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
 import 'package:ably_flutter_integration_test/factory/reporter.dart';
@@ -30,16 +32,16 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
       autoConnect: false,
       logLevel: LogLevel.verbose);
   final realtime = Realtime(options: options);
-  var connected = false;
+  final completer = Completer<void>();
   realtime.connection.on().listen((stateChange) {
-    if (stateChange.event == ConnectionEvent.connected) {
-      connected = true;
+    if (stateChange.current == ConnectionState.connected) {
+      completer.complete();
     }
   });
   await realtime.connect();
-  await Future<void>.delayed(const Duration(seconds: 5));
-  if (!connected) {
+  await completer.future.timeout(const Duration(seconds: 30), onTimeout: () {
     throw Error();
-  }
+  });
+
   return {'handle': await realtime.handle};
 }
