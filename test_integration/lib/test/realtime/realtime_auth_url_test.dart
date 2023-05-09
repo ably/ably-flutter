@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter_integration_test/app_provisioning.dart';
@@ -39,9 +40,12 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
     }
   });
   await realtime.connect();
-  await completer.future.timeout(const Duration(seconds: 30), onTimeout: () {
+  Future<Void> _onTimeout() {
     throw Error();
-  });
+  }
+
+  await completer.future
+      .timeout(const Duration(seconds: 30), onTimeout: _onTimeout);
 
   return {'handle': await realtime.handle};
 }
