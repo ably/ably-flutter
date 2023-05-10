@@ -149,6 +149,19 @@ void testRealtimePublishSpec(FlutterDriver Function() getDriver) {
   });
 }
 
+void testRealtimeConnectWithAuthUrl(FlutterDriver Function() getDriver) {
+  const message = TestControlMessage(TestName.realtimeWithAuthUrl);
+  late TestControlResponseMessage response;
+  setUpAll(() async {
+    response = await requestDataForTest(getDriver(), message);
+  });
+
+  test('Connects to realtime with a valid handle', () {
+    expect(response.payload['handle'], isA<int>());
+    expect(response.payload['handle'], greaterThan(0));
+  });
+}
+
 void testRealtimeEncryptedPublishSpec(FlutterDriver Function() getDriver) {
   const message = TestControlMessage(TestName.realtimeEncryptedPublishSpec);
   late TestControlResponseMessage response;

@@ -6,6 +6,7 @@ import 'package:ably_flutter_integration_test/test/crypto/crypto_generate_random
 import 'package:ably_flutter_integration_test/test/crypto/crypto_get_default_params.dart';
 import 'package:ably_flutter_integration_test/test/helpers_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime/realtime_auth_client_id_test.dart';
+import 'package:ably_flutter_integration_test/test/realtime/realtime_auth_url_test.dart';
 import 'package:ably_flutter_integration_test/test/realtime'
     '/realtime_authorize_test'
     '.dart';
@@ -68,6 +69,7 @@ final testFactory = <String, TestFactory>{
   TestName.realtimeTime: testRealtimeTime,
   TestName.realtimeAuthAuthorize: testRealtimeAuthroize,
   TestName.realtimeAuthClientId: testRealtimeAuthClientId,
+  TestName.realtimeWithAuthUrl: testCreateRealtimeWithAuthUrl,
 
   // rest tests
   TestName.restCapabilities: testRestCapabilities,

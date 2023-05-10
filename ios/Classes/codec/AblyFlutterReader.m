@@ -102,6 +102,10 @@ BLOCK(value); \
 ON_VALUE(^(const id value) {if(!([value isKindOfClass:[NSNull class]])) OBJECT.PROPERTY = value; }, DICTIONARY, JSON_KEY); \
 }
 
+#define READ_URL(OBJECT, PROPERTY, DICTIONARY, JSON_KEY) { \
+ON_VALUE(^(const id value) {if(!([value isKindOfClass:[NSNull class]])) OBJECT.PROPERTY = [NSURL URLWithString:value]; }, DICTIONARY, JSON_KEY); \
+}
+
 /**
  Where an NSNumber has been decoded and the property to be set is BOOL.
  */
@@ -111,9 +115,8 @@ ON_VALUE(^(const id number) {if(!([value isKindOfClass:[NSNull class]])) OBJECT.
 
 static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDictionary *const dictionary) {
     ARTClientOptions *const clientOptions = [ARTClientOptions new];
-
     // AuthOptions (super class of ClientOptions)
-    READ_VALUE(clientOptions, authUrl, dictionary, TxClientOptions_authUrl);
+    READ_URL(clientOptions, authUrl, dictionary, TxClientOptions_authUrl);
     READ_VALUE(clientOptions, authMethod, dictionary, TxClientOptions_authMethod);
     READ_VALUE(clientOptions, key, dictionary, TxClientOptions_key);
     ON_VALUE(^(const id value) { clientOptions.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxClientOptions_tokenDetails);
@@ -159,8 +162,7 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
 
 static AblyCodecDecoder readAuthOptions = ^ARTAuthOptions*(NSDictionary *const dictionary) {
     ARTAuthOptions *const authOptions = [ARTAuthOptions new];
-    READ_VALUE(authOptions, authUrl, dictionary, TxAuthOptions_authUrl);
-    
+    READ_URL(authOptions, authUrl, dictionary, TxAuthOptions_authUrl);
     READ_VALUE(authOptions, authMethod, dictionary, TxAuthOptions_authMethod)
      
     ON_VALUE(^(const id value) { authOptions.tokenDetails = [AblyFlutterReader tokenDetailsFromDictionary: value]; }, dictionary, TxAuthOptions_tokenDetails);
