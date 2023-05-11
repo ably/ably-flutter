@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.17](https://github.com/ably/ably-flutter/tree/v1.2.17)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.16...v1.2.17)
+
+**Fixed bugs:**
+
+- Realtime connection with authUrl causes crash on iOS [\#465](https://github.com/ably/ably-flutter/issues/465)
+
+
 ## [1.2.16](https://github.com/ably/ably-flutter/tree/v1.2.16)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.15...v1.2.16)
