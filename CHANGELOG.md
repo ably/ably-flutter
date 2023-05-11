@@ -29,6 +29,11 @@
 - Expose `href` from `ErrorInfo` in bubbled exceptions [\#441](https://github.com/ably/ably-flutter/issues/441)
 - java.util.HashMap cannot be cast to io.ably.lib.types.Param [\#439](https://github.com/ably/ably-flutter/issues/439)
 
+**Merged pull requests:**
+
+- Add numbers strategy for Gson to prevent changing int to double [\#462](https://github.com/ably/ably-flutter/pull/462) ([Afur](https://github.com/Afur))
+- Expose error info in AblyException toString [\#447](https://github.com/ably/ably-flutter/pull/447) ([davyskiba](https://github.com/davyskiba))
+
 ## [1.2.15](https://github.com/ably/ably-flutter/tree/v1.2.15)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.14...v1.2.15)
