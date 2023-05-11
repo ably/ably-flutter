@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.17](https://github.com/ably/ably-flutter/tree/v1.2.17)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.16...v1.2.17)
+
+**Fixed bugs:**
+
+- Realtime connection with authUrl causes crash on iOS [\#465](https://github.com/ably/ably-flutter/issues/465)
+
 ## [1.2.16](https://github.com/ably/ably-flutter/tree/v1.2.16)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.15...v1.2.16)
@@ -19,6 +27,11 @@
 .com/ably/ably-flutter/issues/459)
 - Expose `href` from `ErrorInfo` in bubbled exceptions [\#441](https://github.com/ably/ably-flutter/issues/441)
 - java.util.HashMap cannot be cast to io.ably.lib.types.Param [\#439](https://github.com/ably/ably-flutter/issues/439)
+
+**Merged pull requests:**
+
+- Add numbers strategy for Gson to prevent changing int to double [\#462](https://github.com/ably/ably-flutter/pull/462) ([Afur](https://github.com/Afur))
+- Expose error info in AblyException toString [\#447](https://github.com/ably/ably-flutter/pull/447) ([davyskiba](https://github.com/davyskiba))
 
 ## [1.2.15](https://github.com/ably/ably-flutter/tree/v1.2.15)
 
