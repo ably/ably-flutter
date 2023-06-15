@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -348,7 +349,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpRequestTimeout, v -> clientOptions.httpRequestTimeout = (Integer) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.httpMaxRetryCount, v -> clientOptions.httpMaxRetryCount = (Integer) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.realtimeRequestTimeout, v -> clientOptions.realtimeRequestTimeout = readValueAsLong(v));
-        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> clientOptions.fallbackHosts = (String[]) v);
+        readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHosts, v -> clientOptions.fallbackHosts = Arrays.copyOf(((ArrayList<?>)v).toArray(), ((ArrayList<?>)v).size(), String[].class));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackHostsUseDefault, v -> clientOptions.fallbackHostsUseDefault = (Boolean) v);
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.fallbackRetryTimeout, v -> clientOptions.fallbackRetryTimeout = readValueAsLong(v));
         readValueFromJson(jsonMap, PlatformConstants.TxClientOptions.defaultTokenParams, v -> clientOptions.defaultTokenParams = decodeTokenParams((Map<String, Object>) v));
