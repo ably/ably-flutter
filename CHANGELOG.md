@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.18](https://github.com/ably/ably-flutter/tree/v1.2.18)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.17...v1.2.18)
+
+**Fixed bugs:**
+
+- Fix java/android custom fallbacks [\#470](https://github.com/ably/ably-flutter/pull/470)
+
 ## [1.2.17](https://github.com/ably/ably-flutter/tree/v1.2.17)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.16...v1.2.17)
