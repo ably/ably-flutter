@@ -141,6 +141,7 @@ The release process must include the following steps:
 2. Create a release branch named like `release/1.2.3`
 3. Add a commit to bump the version number
    - Update the version in `pubspec.yaml`
+   - Update the version in the 'Installation' section of `README.md`
    - Update the version of ably-flutter used in the example app and test integration app `podfile.lock` files:
    - Run `pod install` in `example/ios` and `test_integration/ios`, or run `pod install --project-directory=example/ios` and `pod install --project-directory=test_integration/ios`
    - Commit this
