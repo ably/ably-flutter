@@ -176,6 +176,9 @@ final public class PlatformConstants {
         public static final String recover = "recover";
         public static final String environment = "environment";
         public static final String idempotentRestPublishing = "idempotentRestPublishing";
+        public static final String disconnectedRetryTimeout = "disconnectedRetryTimeout";
+        public static final String suspendedRetryTimeout = "suspendedRetryTimeout";
+        public static final String httpMaxRetryDuration = "httpMaxRetryDuration";
         public static final String httpOpenTimeout = "httpOpenTimeout";
         public static final String httpRequestTimeout = "httpRequestTimeout";
         public static final String httpMaxRetryCount = "httpMaxRetryCount";

@@ -23,7 +23,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
     // https://github.com/ably/ably-java/
-    implementation 'io.ably:ably-android:1.2.28'
+    implementation 'io.ably:ably-android:1.2.31'
 
     // https://firebase.google.com/docs/cloud-messaging/android/client
     implementation 'com.google.firebase:firebase-messaging:23.0.4'
