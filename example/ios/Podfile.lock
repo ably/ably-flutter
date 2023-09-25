@@ -1,11 +1,11 @@
 PODS:
-  - Ably (1.2.10):
-    - AblyDeltaCodec (= 1.3.2)
+  - Ably (1.2.21):
+    - AblyDeltaCodec (= 1.3.3)
     - msgpack (= 0.4.0)
   - ably_flutter (1.2.18):
-    - Ably (= 1.2.10)
+    - Ably (= 1.2.21)
     - Flutter
-  - AblyDeltaCodec (1.3.2)
+  - AblyDeltaCodec (1.3.3)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -44,16 +44,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
 
 SPEC CHECKSUMS:
-  Ably: 80be962e2e87bac69727a26ba72b868c8e86288e
-  ably_flutter: 9de75b5ca387b7ae2662e85e19f30ac9f9060986
-  AblyDeltaCodec: 783d017270de70bbbc0a84e4235297b225d33636
+  Ably: b4fca530b001b0d4ed8e10f29193649c2cce9435
+  ably_flutter: 3539b7783c3e3c3845dc214606bae496c7b41de7
+  AblyDeltaCodec: add5d06a756b3581b12aab5b5500a320b8c55bea
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   msgpack: c85f6251873059738472ae136951cec5f30f3251
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+PODFILE CHECKSUM: 1e2c1b20be30d932ecf4aea37c7fa8602c49c7fa
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.12.1
