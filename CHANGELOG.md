@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.19](https://github.com/ably/ably-flutter/tree/v1.2.19)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.18...v1.2.19)
+
+**Closed issues:**
+
+- Ably causes runner to crash in XCode 15 [\#480](https://github.com/ably/ably-flutter/issues/480)
+- Does it work for flutter web [\#476](https://github.com/ably/ably-flutter/issues/476)
+- Update android decoder for updated clientOptions [\#472](https://github.com/ably/ably-flutter/issues/472)
+
 ## [1.2.18](https://github.com/ably/ably-flutter/tree/v1.2.18)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/1.2.17...v1.2.18)

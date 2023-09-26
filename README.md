@@ -70,7 +70,7 @@ In `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  ably_flutter: ^1.2.18
+  ably_flutter: ^1.2.19
 ```
 
 ### Import the package
