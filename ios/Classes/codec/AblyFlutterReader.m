@@ -150,10 +150,13 @@ static AblyCodecDecoder readClientOptions = ^AblyFlutterClientOptions*(NSDiction
     // channelRetryTimeout, asyncHttpThreadpoolSize, pushFullWait
     // track @ https://github.com/ably/ably-flutter/issues/14
 
-    [clientOptions addAgent:@"ably-flutter" version:FLUTTER_PACKAGE_PLUGIN_VERSION];
+    NSMutableDictionary *const clientAgents = [[NSMutableDictionary alloc]init];
+    [clientAgents setObject:FLUTTER_PACKAGE_PLUGIN_VERSION forKey:@"ably-flutter"];
     ON_VALUE(^(const id value) {
-        [clientOptions addAgent:@"dart" version:value];
+        [clientAgents setObject:value forKey:@"dart"];
     }, dictionary, TxClientOptions_dartVersion);
+
+    clientOptions.agents = clientAgents;
 
     return  [[AblyFlutterClientOptions alloc]
              initWithClientOptions:clientOptions
