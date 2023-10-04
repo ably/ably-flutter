@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.20](https://github.com/ably/ably-flutter/tree/v1.2.20)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.19...v1.2.20)
+
+**Closed issues:**
+
+- \[Android\] Encrypted channels periodically throws `java.util.ConcurrentModificationException` [\#483](https://github.com/ably/ably-flutter/issues/483)
+- Replace Cocoa client options calls to `addAgent:version` with `agents` property set [\#448](https://github.com/ably/ably-flutter/issues/448)
+
 ## [1.2.19](https://github.com/ably/ably-flutter/tree/v1.2.19)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.18...v1.2.19)
