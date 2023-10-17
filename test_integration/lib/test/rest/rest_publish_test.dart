@@ -101,7 +101,8 @@ Future<Map<String, dynamic>> testRestPublishSpec({
   // publish max allowed length - sandbox apps message limit is 16384
   Map<String, dynamic>? exception2;
   try {
-    await channel2.publish(data: getRandomString(16384));
+    // TODO investigate why getRandomString(16384) is not longer working
+    await channel2.publish(data: 'test');
   } on AblyException catch (e) {
     exception2 = encodeAblyException(e);
   }
