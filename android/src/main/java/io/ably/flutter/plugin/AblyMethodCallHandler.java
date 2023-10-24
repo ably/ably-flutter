@@ -179,8 +179,12 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       // We don't have a handler for a method with this name so tell the caller.
       result.notImplemented();
     } else {
-      // We have a handler for a method with this name so delegate to it.
-      handler.accept(call, result);
+      try {
+        // We have a handler for a method with this name so delegate to it.
+        handler.accept(call, result);
+      } catch (Exception e) {
+        Log.e(TAG, String.format("\"%s\" platform method received error during invocation", call.method), e);
+      }
     }
   }
 
