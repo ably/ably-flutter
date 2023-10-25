@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.21](https://github.com/ably/ably-flutter/tree/v1.2.21)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.20...v1.2.21)
+
+**Closed issues:**
+
+- prevent app crash during method channel call [\#489](https://github.com/ably/ably-flutter/pull/489)
+- fix numbers strategy for Gson to prevent changing int to double [\#486](https://github.com/ably/ably-flutter/pull/486)
+- int value is changed to double on Android [\#461](https://github.com/ably/ably-flutter/issues/461)
+
 ## [1.2.20](https://github.com/ably/ably-flutter/tree/v1.2.20)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.19...v1.2.20)
