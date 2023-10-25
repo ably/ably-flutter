@@ -7,7 +7,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.2.20"
+    version: "1.2.21"
   args:
     dependency: transitive
     description:
