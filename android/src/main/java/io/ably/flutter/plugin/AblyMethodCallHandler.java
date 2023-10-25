@@ -139,7 +139,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result rawResult) {
-    final MethodChannel.Result result = new SingleTimeMethodResult(new MainThreadMethodResult(rawResult));
+    final MethodChannel.Result result = new MainThreadMethodResult(call.method, rawResult);
     Log.v(TAG, String.format("onMethodCall: Ably Flutter platform method \"%s\" invoked.", call.method));
     final BiConsumer<MethodCall, MethodChannel.Result> handler = _map.get(call.method);
     if (null == handler) {
