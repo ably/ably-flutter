@@ -796,7 +796,7 @@ class Codec extends StandardMessageCodec {
 
     return DevicePushDetails(
       recipient:
-          (recipient != null) ? Map<String, String>.from(recipient) : null,
+          (recipient != null) ? Map<String, Object>.from(recipient) : null,
       state:
           _decodeDevicePushState(jsonMap[TxDevicePushDetails.state] as String?),
       errorReason: (jsonMapErrorReason != null)
