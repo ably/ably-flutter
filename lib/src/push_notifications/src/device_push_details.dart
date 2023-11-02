@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 class DevicePushDetails {
   /// A [Map] object of key-value pairs that consists of the push transport and
   /// address.
-  final Map<String, String>? recipient;
+  final Map<String, Object>? recipient;
 
   /// The current state of the push registration.
   final DevicePushState? state;
