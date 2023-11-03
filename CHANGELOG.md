@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.22](https://github.com/ably/ably-flutter/tree/v1.2.22)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.21...v1.2.22)
+
+**Closed issues:**
+
+- loading LocalDevice hit Unhandled Exception [\#491](https://github.com/ably/ably-flutter/issues/491)
+
 ## [1.2.21](https://github.com/ably/ably-flutter/tree/v1.2.21)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.20...v1.2.21)
