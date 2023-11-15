@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.23](https://github.com/ably/ably-flutter/tree/v1.2.23)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.22...v1.2.23)
+
+- `ably-cocoa` dependency is bumped to `1.2.23`
+
+**Closed issues:**
+
+- clear clientId after deregistration
+
 ## [1.2.22](https://github.com/ably/ably-flutter/tree/v1.2.22)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.21...v1.2.22)
