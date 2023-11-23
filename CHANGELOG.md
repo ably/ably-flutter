@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.24](https://github.com/ably/ably-flutter/tree/v1.2.24)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.23...v1.2.24)
+
+- `ably-android` dependency is bumped to `1.2.33`
+
 ## [1.2.23](https://github.com/ably/ably-flutter/tree/v1.2.23)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.22...v1.2.23)
