@@ -20,7 +20,8 @@ class BackgroundIsolateAndroidPlatform {
     _methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
         case PlatformMethod.pushOnBackgroundMessage:
-          return _onPushBackgroundMessage(call.arguments as RemoteMessage);
+          await _onPushBackgroundMessage(call.arguments as RemoteMessage);
+          return;
         default:
           throw PlatformException(
               code: 'invalid_method', message: 'No such method ${call.method}');
