@@ -83,7 +83,11 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
   /// Handles a RemoteMessage passed from the platform side.
   Future<void> handleBackgroundMessage(RemoteMessage remoteMessage) async {
     if (_onBackgroundMessage != null) {
-      await _onBackgroundMessage!(remoteMessage);
+      dynamic onBackgroundMessageResult = _onBackgroundMessage!(remoteMessage);
+      // ^^^ _onBackgroundMessage() can return void or Future<void>
+      if (onBackgroundMessageResult is Future) {        
+        await onBackgroundMessageResult; // if it returns a Future we await on it.
+      }
     } else {
       // ignore:avoid_print
       print('Received RemoteMessage but no handler was set. '
