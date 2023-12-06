@@ -85,7 +85,7 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
     if (_onBackgroundMessage != null) {
       dynamic onBackgroundMessageResult = _onBackgroundMessage!(remoteMessage);
       // ^^^ _onBackgroundMessage() can return void or Future<void>
-      if (onBackgroundMessageResult is Future) {        
+      if (onBackgroundMessageResult is Future) {
         await onBackgroundMessageResult; // if it returns a Future we await on it.
       }
     } else {
