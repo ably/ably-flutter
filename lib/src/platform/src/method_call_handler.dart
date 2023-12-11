@@ -26,16 +26,13 @@ class AblyMethodCallHandler {
         case PlatformMethod.pushOnBackgroundMessage:
           return _onPushBackgroundMessage(call.arguments as RemoteMessage);
         case PlatformMethod.pushOnShowNotificationInForeground:
-          return _pushNotificationEvents
-              .showNotificationInForeground(call.arguments as RemoteMessage);
+          return _pushNotificationEvents.showNotificationInForeground(call.arguments as RemoteMessage);
         case PlatformMethod.pushOnNotificationTap:
           return _onNotificationTap(call.arguments as RemoteMessage);
         case PlatformMethod.pushOpenSettingsFor:
           return _onOpenSettingsFor();
         default:
-          throw PlatformException(
-              code: 'Received invalid method channel call from Platform side',
-              message: 'No such method ${call.method}');
+          throw PlatformException(code: 'Received invalid method channel call from Platform side', message: 'No such method ${call.method}');
       }
     });
   }
@@ -68,10 +65,8 @@ class AblyMethodCallHandler {
     return realtime.options.authCallback!(tokenParams);
   }
 
-  final PushActivationEventsInternal _pushActivationEvents =
-      Push.activationEvents as PushActivationEventsInternal;
-  final PushNotificationEventsInternal _pushNotificationEvents =
-      Push.notificationEvents as PushNotificationEventsInternal;
+  final PushActivationEventsInternal _pushActivationEvents = Push.activationEvents as PushActivationEventsInternal;
+  final PushNotificationEventsInternal _pushNotificationEvents = Push.notificationEvents as PushNotificationEventsInternal;
 
   Future<Object?> _onPushOnActivate(ErrorInfo? error) async {
     _pushActivationEvents.onActivateStreamController.add(error);
@@ -94,13 +89,12 @@ class AblyMethodCallHandler {
   }
 
   Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
-    _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
+    await _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
     return null;
   }
 
   Future<Object?> _onNotificationTap(RemoteMessage remoteMessage) async {
-    _pushNotificationEvents.onNotificationTapStreamController
-        .add(remoteMessage);
+    _pushNotificationEvents.onNotificationTapStreamController.add(remoteMessage);
     return null;
   }
 

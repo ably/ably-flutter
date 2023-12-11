@@ -14,34 +14,28 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
 
   /// @nodoc
   /// Invoked when pushOnShowNotificationInForeground platform method is called.
-  Future<bool> Function(RemoteMessage message)?
-      onShowNotificationInForegroundHandler;
+  Future<bool> Function(RemoteMessage message)? onShowNotificationInForegroundHandler;
 
   /// @nodoc
   /// Exposes stream of received [RemoteMessage] objects.
   ///
   /// New message is emitted after pushOnMessage platform method is called
-  StreamController<RemoteMessage> onMessageStreamController =
-      StreamController();
+  StreamController<RemoteMessage> onMessageStreamController = StreamController();
 
   /// @nodoc
   /// Controller used to indicate notification was tapped.
-  StreamController<RemoteMessage> onNotificationTapStreamController =
-      StreamController();
+  StreamController<RemoteMessage> onNotificationTapStreamController = StreamController();
 
   BackgroundMessageHandler? _onBackgroundMessage;
 
   @override
-  Future<RemoteMessage?> get notificationTapLaunchedAppFromTerminated =>
-      Platform().invokePlatformMethod<RemoteMessage>(
-          PlatformMethod.pushNotificationTapLaunchedAppFromTerminated);
+  Future<RemoteMessage?> get notificationTapLaunchedAppFromTerminated => Platform().invokePlatformMethod<RemoteMessage>(PlatformMethod.pushNotificationTapLaunchedAppFromTerminated);
 
   @override
   Stream<RemoteMessage> get onMessage => onMessageStreamController.stream;
 
   @override
-  Stream<RemoteMessage> get onNotificationTap =>
-      onNotificationTapStreamController.stream;
+  Stream<RemoteMessage> get onNotificationTap => onNotificationTapStreamController.stream;
 
   @override
   void setOnOpenSettings(VoidCallback callback) {
@@ -49,8 +43,7 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
   }
 
   @override
-  void setOnShowNotificationInForeground(
-      Future<bool> Function(RemoteMessage message) callback) {
+  void setOnShowNotificationInForeground(Future<bool> Function(RemoteMessage message) callback) {
     onShowNotificationInForegroundHandler = callback;
   }
 
@@ -83,7 +76,7 @@ class PushNotificationEventsInternal implements PushNotificationEvents {
   /// Handles a RemoteMessage passed from the platform side.
   Future<void> handleBackgroundMessage(RemoteMessage remoteMessage) async {
     if (_onBackgroundMessage != null) {
-      dynamic onBackgroundMessageResult = _onBackgroundMessage!(remoteMessage);
+      final onBackgroundMessageResult = _onBackgroundMessage!(remoteMessage);
       // ^^^ _onBackgroundMessage() can return void or Future<void>
       if (onBackgroundMessageResult is Future) {
         await onBackgroundMessageResult; // if it returns a Future we await on it.
