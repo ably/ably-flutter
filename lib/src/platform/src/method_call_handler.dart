@@ -94,7 +94,7 @@ class AblyMethodCallHandler {
   }
 
   Future<Object?> _onPushBackgroundMessage(RemoteMessage remoteMessage) async {
-    _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
+    await _pushNotificationEvents.handleBackgroundMessage(remoteMessage);
     return null;
   }
 
