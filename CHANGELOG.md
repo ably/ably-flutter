@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.25](https://github.com/ably/ably-flutter/tree/v1.2.25)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.24...v1.2.25)
+
+**Closed issues:**
+
+- setOnBackgroundMessage not getting along with async/await [\#496](https://github.com/ably/ably-flutter/issues/496)
+
 ## [1.2.24](https://github.com/ably/ably-flutter/tree/v1.2.24)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.23...v1.2.24)
