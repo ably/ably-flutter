@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.26](https://github.com/ably/ably-flutter/tree/v1.2.26)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.25...v1.2.26)
+
+- `ably-cocoa` dependency is bumped to `1.2.24`
+
 ## [1.2.25](https://github.com/ably/ably-flutter/tree/v1.2.25)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.24...v1.2.25)
