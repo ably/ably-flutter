@@ -586,7 +586,6 @@ static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, Flutt
 
 static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
-    
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRest *const rest = [instanceStore restFrom:ablyMessage.handle];
     
@@ -603,7 +602,7 @@ static const FlutterHandler _connectionId = ^void(AblyFlutter *const ably, Flutt
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    NSString *const connectionId = [realtime.connection.id];
+    NSString *const connectionId = [realtime.connection id];
     result(connectionId);
 };
 
@@ -611,15 +610,15 @@ static const FlutterHandler _connectionKey = ^void(AblyFlutter *const ably, Flut
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    NSString *const connectionKey = [realtime.connection.key];
+    NSString *const connectionKey = [realtime.connection key];
     result(connectionKey);
 };
 
-static const FlutterHandler _connectionError = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+static const FlutterHandler _connectionErrorReason = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    ARTErrorInfo* connectionError = [realtime.connection.reason];
+    ARTErrorInfo* connectionError = [realtime.connection errorReason];
     result(connectionError);
 };
 
@@ -627,7 +626,7 @@ static const FlutterHandler _connectionRecoveryKey = ^void(AblyFlutter *const ab
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    NSString *const connectionRecoveryKey = [realtime.connection.recoveryKey];
+    NSString *const connectionRecoveryKey = [realtime.connection recoveryKey];
     result(connectionRecoveryKey);
 };
 
