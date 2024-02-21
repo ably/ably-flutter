@@ -112,6 +112,12 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.restAuthGetClientId,
             (methodCall, result) -> authMethodHandler.clientId(methodCall, result, AuthMethodHandler.Type.Rest));
 
+    // Connection specific handlers
+    _map.put(PlatformConstants.PlatformMethod.connectionId, this::connectionId);
+    _map.put(PlatformConstants.PlatformMethod.connectionKey, this::connectionKey);
+    _map.put(PlatformConstants.PlatformMethod.connectionRecoveryKey, this::connectionRecoveryKey);
+    _map.put(PlatformConstants.PlatformMethod.connectionErrorReason, this::connectionErrorReason);
+
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
     _map.put(PlatformConstants.PlatformMethod.pushDeactivate, this::pushDeactivate);
@@ -558,6 +564,30 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
         time(result, instanceStore.getRest(ablyMessage.handle));
     }
+
+  private void connectionId(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
+    AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+    result.success(realtime.connection.id);
+  }
+
+  private void connectionKey(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
+    AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+    result.success(realtime.connection.key);
+  }
+
+  private void connectionRecoveryKey(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
+    AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+    result.success(realtime.connection.recoveryKey);
+  }
+
+  private void connectionErrorReason(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
+    AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+    result.success(realtime.connection.reason);
+  }
 
     private void time(@NonNull MethodChannel.Result result, AblyBase client) {
         Callback<Long> callback = new Callback<Long>() {
