@@ -774,10 +774,10 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
         AblyPlatformMethod_realtimeTime:_realtimeTime,
         AblyPlatformMethod_restTime:_restTime,
         // Connection fields
-        AblyPlatformMethod_connectionId:_connectionId;
-        AblyPlatformMethod_connectionKey:_connectionKey;
-        AblyPlatformMethod_connectionRecoveryKey:_connectionRecoveryKey;
-        AblyPlatformMethod_connectionErrorReason:_connectionErrorReason;
+        AblyPlatformMethod_connectionId:_connectionId,
+        AblyPlatformMethod_connectionKey:_connectionKey,
+        AblyPlatformMethod_connectionRecoveryKey:_connectionRecoveryKey,
+        AblyPlatformMethod_connectionErrorReason:_connectionErrorReason,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,
