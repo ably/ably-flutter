@@ -614,14 +614,6 @@ static const FlutterHandler _connectionKey = ^void(AblyFlutter *const ably, Flut
     result(connectionKey);
 };
 
-static const FlutterHandler _connectionErrorReason = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
-    AblyFlutterMessage *const ablyMessage = call.arguments;
-    AblyInstanceStore *const instanceStore = [ably instanceStore];
-    ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    ARTErrorInfo* connectionError = [realtime.connection errorReason];
-    result(connectionError);
-};
-
 static const FlutterHandler _connectionRecoveryKey = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
@@ -776,7 +768,6 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
         AblyPlatformMethod_connectionId:_connectionId,
         AblyPlatformMethod_connectionKey:_connectionKey,
         AblyPlatformMethod_connectionRecoveryKey:_connectionRecoveryKey,
-        AblyPlatformMethod_connectionErrorReason:_connectionErrorReason,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,

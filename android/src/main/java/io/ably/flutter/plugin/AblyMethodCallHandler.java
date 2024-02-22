@@ -116,7 +116,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.connectionId, this::connectionId);
     _map.put(PlatformConstants.PlatformMethod.connectionKey, this::connectionKey);
     _map.put(PlatformConstants.PlatformMethod.connectionRecoveryKey, this::connectionRecoveryKey);
-    _map.put(PlatformConstants.PlatformMethod.connectionErrorReason, this::connectionErrorReason);
 
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
@@ -582,13 +581,6 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
     result.success(realtime.connection.recoveryKey);
   }
-
-  private void connectionErrorReason(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
-    final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
-    AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
-    result.success(realtime.connection.reason);
-  }
-
     private void time(@NonNull MethodChannel.Result result, AblyBase client) {
         Callback<Long> callback = new Callback<Long>() {
             @Override

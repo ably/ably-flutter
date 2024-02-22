@@ -81,7 +81,6 @@ final public class PlatformConstants {
         public static final String connectionId = "connectionId";
         public static final String connectionKey = "connectionKey";
         public static final String connectionRecoveryKey = "connectionRecoveryKey";
-        public static final String connectionErrorReason = "connectionErrorReason";
 
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
