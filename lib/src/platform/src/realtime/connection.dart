@@ -24,6 +24,7 @@ class Connection extends PlatformObject {
     on().listen((event) {
       _state = event.current;
       _errorReason = event.reason;
+      invoke<String?>(PlatformMethod.connectionId).then((_id) => id = _id);
     });
   }
 
@@ -37,7 +38,7 @@ class Connection extends PlatformObject {
 
   /// A unique public identifier for this connection, used to identify this
   /// member.
-  Future<String?> get id => invoke<String?>(PlatformMethod.connectionId);
+  String? id;
 
   /// A unique private connection key used to recover or resume a connection,
   /// assigned by Ably.
@@ -56,7 +57,7 @@ class Connection extends PlatformObject {
   /// See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
   /// for more information.
   @Deprecated('Use createRecoveryKey instead')
-  Future<String?> get recoveryKey => createRecoveryKey();
+  String? recoveryKey;
 
   /// The createRecoveryKey returns key string can be used by another client to
   /// recover this connection's state in the recover client options property.
