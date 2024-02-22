@@ -37,8 +37,7 @@ class Connection extends PlatformObject {
 
   /// A unique public identifier for this connection, used to identify this
   /// member.
-  Future<String?> get id async =>
-      invoke<String?>(PlatformMethod.connectionId);
+  Future<String?> get id => invoke<String?>(PlatformMethod.connectionId);
 
   /// A unique private connection key used to recover or resume a connection,
   /// assigned by Ably.
@@ -49,15 +48,22 @@ class Connection extends PlatformObject {
   /// to publish on behalf of this client. See the
   /// [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf)
   /// for more info.
-  Future<String?> get key async =>
-      invoke<String?>(PlatformMethod.connectionKey);
+  Future<String?> get key => invoke<String?>(PlatformMethod.connectionKey);
 
   /// The recovery key string can be used by another client to recover this
   /// connection's state in the recover client options property.
   ///
   /// See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
   /// for more information.
-  Future<String?> get recoveryKey async =>
+  @Deprecated('Use createRecoveryKey instead')
+  Future<String?> get recoveryKey => createRecoveryKey();
+
+  /// The createRecoveryKey returns key string can be used by another client to
+  /// recover this connection's state in the recover client options property.
+  ///
+  /// See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
+  /// for more information.
+  Future<String?> createRecoveryKey() =>
       invoke<String?>(PlatformMethod.connectionRecoveryKey);
 
   /// The serial number of the last message to be received on this connection,
