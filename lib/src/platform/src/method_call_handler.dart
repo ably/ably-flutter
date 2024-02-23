@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ably_flutter/ably_flutter.dart';
 import 'package:ably_flutter/src/platform/platform_internal.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +17,8 @@ class AblyMethodCallHandler {
           return onAuthCallback(call.arguments as AblyMessage);
         case PlatformMethod.realtimeAuthCallback:
           return onRealtimeAuthCallback(call.arguments as AblyMessage?);
+        case PlatformMethod.connectionIdUpdated:
+          return onConnectionIdUpdated(call.arguments as AblyMessage?);
         case PlatformMethod.pushOnActivate:
           return _onPushOnActivate(call.arguments as ErrorInfo?);
         case PlatformMethod.pushOnDeactivate:
@@ -66,6 +70,14 @@ class AblyMethodCallHandler {
       );
     }
     return realtime.options.authCallback!(tokenParams);
+  }
+
+  /// @nodoc
+  /// handles auth callback for realtime instances
+  Future<void> onConnectionIdUpdated(AblyMessage<dynamic>? message) async {
+    final updatedConnId = message!.message as String;
+    final realtime = realtimeInstances[message.handle];
+    realtime?.connection.id = updatedConnId;
   }
 
   final PushActivationEventsInternal _pushActivationEvents =

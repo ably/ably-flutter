@@ -15,7 +15,7 @@ void main() {
     expect(clientOptions.realtimeHost, isNull);
     expect(clientOptions.port, isNull);
     expect(clientOptions.tlsPort, isNull);
-    expect(clientOptions.autoConnect, isNull);
+    expect(clientOptions.autcoConnect, isNull);
     expect(clientOptions.useBinaryProtocol, isNull);
     expect(clientOptions.queueMessages, isNull);
     expect(clientOptions.echoMessages, isNull);

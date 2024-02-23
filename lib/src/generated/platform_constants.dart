@@ -80,6 +80,7 @@ class PlatformMethod {
   static const String connectionId = 'connectionId';
   static const String connectionKey = 'connectionKey';
   static const String connectionRecoveryKey = 'connectionRecoveryKey';
+  static const String connectionIdUpdated = 'connectionIdUpdated';
 
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
