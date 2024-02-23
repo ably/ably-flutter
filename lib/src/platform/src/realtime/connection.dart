@@ -24,7 +24,6 @@ class Connection extends PlatformObject {
     on().listen((event) {
       _state = event.current;
       _errorReason = event.reason;
-      invoke<String?>(PlatformMethod.connectionId).then((_id) => id = _id);
     });
   }
 
