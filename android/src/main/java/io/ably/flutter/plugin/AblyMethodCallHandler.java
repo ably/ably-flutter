@@ -23,6 +23,7 @@ import io.ably.flutter.plugin.util.BiConsumer;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.CompletionListener;
+import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.realtime.Presence;
 import io.ably.lib.rest.AblyBase;
 import io.ably.lib.rest.AblyRest;
@@ -458,7 +459,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
       }
 
       final long realtimeInstanceHandle = clientHandle.createRealtime(clientOptions.options, applicationContext);
-      final Realtime realtime = instanceStore.getRealtime(realtimeInstanceHandle);
+      final AblyRealtime realtime = instanceStore.getRealtime(realtimeInstanceHandle);
       realtime.connection.on(new ConnectionStateListener() {
         @Override
         public void onConnectionStateChanged(ConnectionStateChange state) {

@@ -71,7 +71,7 @@ class AblyMethodCallHandler {
   }
 
   /// @nodoc
-  /// handles auth callback for realtime instances
+  /// handles connection id updated for realtime instances
   Future<Object?> onConnectionIdUpdated(AblyMessage<dynamic>? message) async {
     final updatedConnId = message!.message as String;
     final realtime = realtimeInstances[message.handle];
