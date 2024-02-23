@@ -456,7 +456,18 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
           return token[0];
         };
       }
-      result.success(clientHandle.createRealtime(clientOptions.options, applicationContext));
+
+      final long realtimeInstanceHandle = clientHandle.createRealtime(clientOptions.options, applicationContext);
+      final Realtime realtime = instanceStore.getRealtime(realtimeInstanceHandle);
+      realtime.connection.on(new ConnectionStateListener() {
+        @Override
+        public void onConnectionStateChanged(ConnectionStateChange state) {
+          AblyFlutterMessage<String> channelMessage = new AblyFlutterMessage<>(realtime.connection.id, realtimeInstanceHandle);
+          methodChannel.invokeMethod(PlatformConstants.PlatformMethod.connectionIdUpdated, channelMessage);
+        }
+      });
+
+      result.success(realtimeInstanceHandle);
     } catch (final AblyException e) {
       handleAblyException(result, e);
     }
