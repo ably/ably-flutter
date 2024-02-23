@@ -264,10 +264,9 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
     [instanceStore setRealtime:realtime with:handle];
 
     [realtime.connection on:^(ARTConnectionStateChange *stateChange) {
-            AblyFlutterMessage *const message
-            = [[AblyFlutterMessage alloc] initWithMessage:[realtime.connection id] handle: handle];
-            [ably.channel invokeMethod:AblyPlatformMethod_connectionIdUpdated
-                               arguments:message]
+        AblyFlutterMessage *const message =
+              [[AblyFlutterMessage alloc] initWithMessage:[realtime.connection id] handle: handle];
+        [ably.channel invokeMethod:AblyPlatformMethod_connectionIdUpdated arguments:message];
     }];
 
     // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
@@ -593,6 +592,7 @@ static const FlutterHandler _realtimeTime = ^void(AblyFlutter *const ably, Flutt
 
 static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
+
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRest *const rest = [instanceStore restFrom:ablyMessage.handle];
     
