@@ -48,6 +48,7 @@ NSString *const AblyPlatformMethod_realtimeAuthGetClientId= @"realtimeAuthGetCli
 NSString *const AblyPlatformMethod_connectionId = @"connectionId";
 NSString *const AblyPlatformMethod_connectionKey = @"connectionKey";
 NSString *const AblyPlatformMethod_connectionRecoveryKey = @"connectionRecoveryKey";
+NSString *const AblyPlatformMethod_connectionIdUpdated = @"connectionIdUpdated";
 
 NSString *const AblyPlatformMethod_pushActivate= @"pushActivate";
 NSString *const AblyPlatformMethod_pushDeactivate= @"pushDeactivate";
