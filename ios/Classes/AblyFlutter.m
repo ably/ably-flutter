@@ -263,6 +263,13 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
     ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
     [instanceStore setRealtime:realtime with:handle];
 
+    [realtime.connection on:^(ARTConnectionStateChange *stateChange) {
+            AblyFlutterMessage *const message
+            = [[AblyFlutterMessage alloc] initWithMessage:[realtime.connection id] handle: handle];
+            [ably.channel invokeMethod:AblyPlatformMethod_connectionIdUpdated
+                               arguments:message]
+    }];
+
     // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
     // This is not an ideal solution. We save the deviceToken given in didRegisterForRemoteNotificationsWithDeviceToken and the
     // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
