@@ -40,10 +40,6 @@ class Connection extends PlatformObject {
   /// member.
   String? id;
 
-  /// fetchId returns unique public identifier for this connection.
-  /// used to identify this member.
-  Future<String?> fetchId() => invoke<String?>(PlatformMethod.connectionId);
-
   /// A unique private connection key used to recover or resume a connection,
   /// assigned by Ably.
   ///
@@ -54,17 +50,6 @@ class Connection extends PlatformObject {
   /// [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf)
   /// for more info.
   String? key;
-
-  /// fetchKey returns a unique private connection key used to recover
-  /// or resume a connection, assigned by Ably.
-  ///
-  /// When recovering a connection explicitly, the `recoveryKey` is used in the
-  /// recover client options as it contains both the key and the last message
-  /// serial. This private connection key can also be used by other REST clients
-  /// to publish on behalf of this client. See the
-  /// [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf)
-  /// for more info.
-  Future<String?> fetchKey() => invoke<String?>(PlatformMethod.connectionKey);
 
   /// The recovery key string can be used by another client to recover this
   /// connection's state in the recover client options property.
