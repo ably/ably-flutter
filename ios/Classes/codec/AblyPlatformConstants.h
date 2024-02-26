@@ -75,6 +75,9 @@ extern NSString *const AblyPlatformMethod_realtimeAuthAuthorize;
 extern NSString *const AblyPlatformMethod_realtimeAuthCreateTokenRequest;
 extern NSString *const AblyPlatformMethod_realtimeAuthRequestToken;
 extern NSString *const AblyPlatformMethod_realtimeAuthGetClientId;
+
+extern NSString *const AblyPlatformMethod_connectionRecoveryKey;
+
 extern NSString *const AblyPlatformMethod_pushActivate;
 extern NSString *const AblyPlatformMethod_pushDeactivate;
 extern NSString *const AblyPlatformMethod_pushReset;

@@ -55,7 +55,16 @@ class Connection extends PlatformObject {
   ///
   /// See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
   /// for more information.
+  @Deprecated('Use createRecoveryKey instead')
   String? recoveryKey;
+
+  /// The createRecoveryKey returns key string can be used by another client to
+  /// recover this connection's state in the recover client options property.
+  ///
+  /// See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options)
+  /// for more information.
+  Future<String?> createRecoveryKey() =>
+      invoke<String?>(PlatformMethod.connectionRecoveryKey);
 
   /// The serial number of the last message to be received on this connection,
   /// used automatically by the library when recovering or resuming a
