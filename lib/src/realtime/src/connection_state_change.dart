@@ -35,3 +35,20 @@ class ConnectionStateChange {
     this.retryIn,
   });
 }
+
+/// @nodoc
+@immutable
+class EnrichedConnectionStateChange {
+  /// @nodoc
+  final ConnectionStateChange stateChange;
+
+  /// @nodoc
+  final String? connectionId;
+
+  /// @nodoc
+  final String? connectionKey;
+
+  /// @nodoc
+  const EnrichedConnectionStateChange(
+      {required this.stateChange, this.connectionId, this.connectionKey});
+}

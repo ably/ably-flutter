@@ -133,14 +133,16 @@ class RealtimeSliver extends HookWidget {
       );
 
   Widget buildReleaseRealtimeChannelButton(
-          ValueNotifier<ably.ConnectionState> connectionState,
-          ValueNotifier<ably.ChannelState> channelState) =>
+    ValueNotifier<ably.ConnectionState> connectionState,
+    ValueNotifier<ably.ChannelState> channelState,
+    ValueNotifier<String?> connectionId,
+  ) =>
       TextButton(
         onPressed: () async {
           await channel.detach();
           realtime.channels.release(Constants.channelName);
           channel = realtime.channels.get(Constants.channelName);
-          setupListeners(connectionState, channelState);
+          setupListeners(connectionState, channelState, connectionId);
         },
         child: const Text('Release'),
       );
@@ -176,6 +178,7 @@ class RealtimeSliver extends HookWidget {
   Widget build(BuildContext context) {
     final connectionState =
         useState<ably.ConnectionState>(realtime.connection.state);
+    final connectionId = useState<String?>(realtime.connection.id);
     final channelState = useState<ably.ChannelState>(channel.state);
     final latestMessage = useState<ably.Message?>(null);
     final channelSubscription =
@@ -185,7 +188,7 @@ class RealtimeSliver extends HookWidget {
 
     useEffect(() {
       realtime.time().then((value) => realtimeTime.value = value);
-      setupListeners(connectionState, channelState);
+      setupListeners(connectionState, channelState, connectionId);
       return dispose;
     }, []);
 
@@ -198,6 +201,7 @@ class RealtimeSliver extends HookWidget {
         ),
         Text('Realtime time: ${realtimeTime.value}'),
         Text('Connection State: ${connectionState.value}'),
+        Text('Connection Id: ${connectionId.value ?? '-'}'),
         buildEncryptionSwitch(useEncryption),
         Row(
           children: <Widget>[
@@ -222,7 +226,7 @@ class RealtimeSliver extends HookWidget {
             Expanded(child: buildChannelDetachButton(channelState.value)),
             Expanded(
                 child: buildReleaseRealtimeChannelButton(
-                    connectionState, channelState)),
+                    connectionState, channelState, connectionId)),
           ],
         ),
         Row(
@@ -286,8 +290,10 @@ class RealtimeSliver extends HookWidget {
     );
   }
 
-  void setupListeners(ValueNotifier<ably.ConnectionState> connectionState,
-      ValueNotifier<ably.ChannelState> channelState) {
+  void setupListeners(
+      ValueNotifier<ably.ConnectionState> connectionState,
+      ValueNotifier<ably.ChannelState> channelState,
+      ValueNotifier<String?> connectionId) {
     dispose();
     final connectionSubscription =
         realtime.connection.on().listen((connectionStateChange) {
@@ -295,6 +301,7 @@ class RealtimeSliver extends HookWidget {
         logAndDisplayError(connectionStateChange.reason);
       }
       connectionState.value = connectionStateChange.current;
+      connectionId.value = realtime.connection.id;
       print('${DateTime.now()}:'
           ' ConnectionStateChange event: ${connectionStateChange.event}'
           '\nReason: ${connectionStateChange.reason}');
