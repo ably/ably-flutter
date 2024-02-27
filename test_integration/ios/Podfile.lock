@@ -1,9 +1,9 @@
 PODS:
-  - Ably (1.2.24):
+  - Ably (1.2.25):
     - AblyDeltaCodec (= 1.3.3)
     - msgpack (= 0.4.0)
   - ably_flutter (1.2.26):
-    - Ably (= 1.2.24)
+    - Ably (= 1.2.25)
     - Flutter
   - AblyDeltaCodec (1.3.3)
   - Flutter (1.0.0)
