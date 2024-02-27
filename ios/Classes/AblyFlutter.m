@@ -603,7 +603,7 @@ static const FlutterHandler _connectionRecoveryKey = ^void(AblyFlutter *const ab
     AblyFlutterMessage *const ablyMessage = call.arguments;
     AblyInstanceStore *const instanceStore = [ably instanceStore];
     ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
-    NSString *const connectionRecoveryKey = [realtime.connection recoveryKey];
+    NSString *const connectionRecoveryKey = [realtime.connection createRecoveryKey];
     result(connectionRecoveryKey);
 };
 
