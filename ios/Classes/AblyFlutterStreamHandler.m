@@ -5,6 +5,20 @@
 #import "AblyFlutterMessage.h"
 #import "codec/AblyPlatformConstants.h"
 
+@implementation _AblyConnectionStateChange
+
+- (instancetype)initWithStateChange:(ARTConnectionStateChange *)stateChange connectionId:(NSString *)connectionId connectionKey:(NSString *)connectionKey {
+    self = [super init];
+    if (self) {
+        _value = stateChange;
+        _connectionId = connectionId;
+        _connectionKey = connectionKey;
+    }
+    return self;
+}
+
+@end
+
 @implementation AblyFlutterStreamHandler{
     ARTEventListener *listener;
 }
@@ -42,7 +56,8 @@
                              details:eventName
                     ]);
                 } else {
-                    emitter(stateChange);
+                    _AblyConnectionStateChange * const _stateChange = [[_AblyConnectionStateChange alloc] initWithStateChange:stateChange connectionId:realtime.connection.id connectionKey:realtime.connection.key];
+                    emitter(_stateChange);
                 }
             }];
         } else if ([AblyPlatformMethod_onRealtimeChannelStateChanged isEqual: eventName]) {
