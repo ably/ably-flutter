@@ -252,6 +252,8 @@ NSString *const TxConnectionStateChange_previous = @"previous";
 NSString *const TxConnectionStateChange_event = @"event";
 NSString *const TxConnectionStateChange_retryIn = @"retryIn";
 NSString *const TxConnectionStateChange_reason = @"reason";
+NSString *const TxConnectionStateChange_connectionId = @"connectionId";
+NSString *const TxConnectionStateChange_connectionKey = @"connectionKey";
 
 // key constants for ChannelStateChange
 NSString *const TxChannelStateChange_current = @"current";

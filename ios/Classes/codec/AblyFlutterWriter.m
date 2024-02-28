@@ -5,6 +5,7 @@
 #import "AblyFlutterMessage.h"
 #import "AblyFlutterReader.h"
 #import "AblyPlatformConstants.h"
+#import "AblyFlutterStreamHandler.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -21,7 +22,7 @@ NS_ASSUME_NONNULL_END
         return CodecTypeAblyMessage;
     }else if([value isKindOfClass:[ARTErrorInfo class]]){
         return CodecTypeErrorInfo;
-    }else if([value isKindOfClass:[ARTConnectionStateChange class]]){
+    } else if([value isKindOfClass:[_AblyConnectionStateChange class]]){
         return CodecTypeConnectionStateChange;
     }else if([value isKindOfClass:[ARTChannelStateChange class]]){
         return CodecTypeChannelStateChange;
@@ -207,19 +208,21 @@ static AblyCodecEncoder encodeErrorInfo = ^NSMutableDictionary*(ARTErrorInfo *co
     }
 }
 
-static AblyCodecEncoder encodeConnectionStateChange = ^NSMutableDictionary*(ARTConnectionStateChange *const stateChange) {
+static AblyCodecEncoder encodeConnectionStateChange = ^NSMutableDictionary*(_AblyConnectionStateChange *const stateChange) {
     NSMutableDictionary<NSString *, NSObject *> *dictionary = [[NSMutableDictionary alloc] init];
     WRITE_VALUE(dictionary,
                 TxConnectionStateChange_current,
-                [AblyFlutterWriter encodeConnectionState: [stateChange current]]);
+                [AblyFlutterWriter encodeConnectionState: [stateChange.value current]]);
     WRITE_VALUE(dictionary,
                 TxConnectionStateChange_previous,
-                [AblyFlutterWriter encodeConnectionState: [stateChange previous]]);
+                [AblyFlutterWriter encodeConnectionState: [stateChange.value previous]]);
     WRITE_VALUE(dictionary,
                 TxConnectionStateChange_event,
-                [AblyFlutterWriter encodeConnectionEvent: [stateChange event]]);
-    WRITE_VALUE(dictionary, TxConnectionStateChange_retryIn, [stateChange retryIn]?@((int)([stateChange retryIn] * 1000)):nil);
-    WRITE_VALUE(dictionary, TxConnectionStateChange_reason, encodeErrorInfo([stateChange reason]));
+                [AblyFlutterWriter encodeConnectionEvent: [stateChange.value event]]);
+    WRITE_VALUE(dictionary, TxConnectionStateChange_retryIn, [stateChange.value retryIn]?@((int)([stateChange.value retryIn] * 1000)):nil);
+    WRITE_VALUE(dictionary, TxConnectionStateChange_reason, encodeErrorInfo([stateChange.value reason]));
+    WRITE_VALUE(dictionary, TxConnectionStateChange_connectionId, stateChange.connectionId);
+    WRITE_VALUE(dictionary, TxConnectionStateChange_connectionKey, stateChange.connectionKey);
     return dictionary;
 };
 

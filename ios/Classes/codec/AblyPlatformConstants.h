@@ -283,6 +283,8 @@ extern NSString *const TxConnectionStateChange_previous;
 extern NSString *const TxConnectionStateChange_event;
 extern NSString *const TxConnectionStateChange_retryIn;
 extern NSString *const TxConnectionStateChange_reason;
+extern NSString *const TxConnectionStateChange_connectionId;
+extern NSString *const TxConnectionStateChange_connectionKey;
 
 // key constants for ChannelStateChange
 extern NSString *const TxChannelStateChange_current;

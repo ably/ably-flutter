@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.ably.flutter.plugin.dto.EnrichedConnectionStateChange;
 import io.ably.flutter.plugin.generated.PlatformConstants;
 import io.ably.flutter.plugin.types.SerializationException;
 import io.ably.flutter.plugin.types.PlatformClientOptions;
@@ -30,7 +31,6 @@ import io.ably.lib.realtime.ChannelState;
 import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionEvent;
 import io.ably.lib.realtime.ConnectionState;
-import io.ably.lib.realtime.ConnectionStateListener;
 import io.ably.lib.rest.Auth;
 import io.ably.lib.rest.Auth.TokenDetails;
 import io.ably.lib.rest.DeviceDetails;
@@ -186,7 +186,7 @@ public class AblyMessageCodec extends StandardMessageCodec {
             return PlatformConstants.CodecTypes.tokenParams;
         } else if (value instanceof AsyncPaginatedResult) {
             return PlatformConstants.CodecTypes.paginatedResult;
-        } else if (value instanceof ConnectionStateListener.ConnectionStateChange) {
+        } else if (value instanceof EnrichedConnectionStateChange) {
             return PlatformConstants.CodecTypes.connectionStateChange;
         } else if (value instanceof ChannelStateListener.ChannelStateChange) {
             return PlatformConstants.CodecTypes.channelStateChange;
@@ -821,14 +821,16 @@ public class AblyMessageCodec extends StandardMessageCodec {
         return jsonMap;
     }
 
-    private Map<String, Object> encodeConnectionStateChange(ConnectionStateListener.ConnectionStateChange c) {
+    private Map<String, Object> encodeConnectionStateChange(EnrichedConnectionStateChange c) {
         if (c == null) return null;
         final HashMap<String, Object> jsonMap = new HashMap<>();
-        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, encodeConnectionState(c.current));
-        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, encodeConnectionState(c.previous));
-        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, encodeConnectionEvent(c.event));
-        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.retryIn, c.retryIn);
-        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.reason));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.current, encodeConnectionState(c.stateChange.current));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.previous, encodeConnectionState(c.stateChange.previous));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.event, encodeConnectionEvent(c.stateChange.event));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.retryIn, c.stateChange.retryIn);
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.reason, encodeErrorInfo(c.stateChange.reason));
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.connectionId, c.connectionId);
+        writeValueToJson(jsonMap, PlatformConstants.TxConnectionStateChange.connectionKey,c.connectionKey);
         return jsonMap;
     }
 

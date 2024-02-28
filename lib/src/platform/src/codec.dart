@@ -129,7 +129,8 @@ class Codec extends StandardMessageCodec {
 
       // Events - Connection
       CodecTypes.connectionStateChange:
-          _CodecPair<ConnectionStateChange>(null, _decodeConnectionStateChange),
+          _CodecPair<EnrichedConnectionStateChange>(
+              null, _decodeConnectionStateChange),
 
       // Events - Channel
       CodecTypes.channelStateChange:
@@ -1096,9 +1097,14 @@ class Codec extends StandardMessageCodec {
   /// @nodoc
   /// Decodes value [jsonMap] to [ConnectionStateChange]
   /// returns null if [jsonMap] is null
-  ConnectionStateChange _decodeConnectionStateChange(
+  EnrichedConnectionStateChange _decodeConnectionStateChange(
     Map<String, dynamic> jsonMap,
   ) {
+    final connectionId =
+        _readFromJson<String>(jsonMap, TxConnectionStateChange.connectionId);
+    final connectionKey =
+        _readFromJson<String>(jsonMap, TxConnectionStateChange.connectionKey);
+
     final current = _decodeConnectionState(
         _readFromJson<String>(jsonMap, TxConnectionStateChange.current));
     final previous = _decodeConnectionState(
@@ -1112,12 +1118,16 @@ class Codec extends StandardMessageCodec {
       TxConnectionStateChange.reason,
     ));
     final reason = (errorInfo == null) ? null : _decodeErrorInfo(errorInfo);
-    return ConnectionStateChange(
-      current: current,
-      previous: previous,
-      event: event,
-      retryIn: retryIn,
-      reason: reason,
+    return EnrichedConnectionStateChange(
+      stateChange: ConnectionStateChange(
+        current: current,
+        previous: previous,
+        event: event,
+        retryIn: retryIn,
+        reason: reason,
+      ),
+      connectionId: connectionId,
+      connectionKey: connectionKey,
     );
   }
 
