@@ -562,7 +562,7 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     private void connectionRecoveryKey(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage<?> ablyMessage = (AblyFlutterMessage<?>) methodCall.arguments;
         AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
-        result.success(realtime.connection.createRecovertKey());
+        result.success(realtime.connection.createRecoveryKey());
     }
 
     private void time(@NonNull MethodChannel.Result result, AblyBase client) {
