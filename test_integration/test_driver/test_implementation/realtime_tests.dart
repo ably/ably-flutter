@@ -316,10 +316,11 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
         // TODO(tiholic): get rid of _stateChangeEvents and _stateChangePrevious
         //  variables as they are a way to make tests pass due to
         //  https://github.com/ably/ably-flutter/issues/63
-        List<String> _stateChangeEvents;
+        List<String> _stateChangeCurrent;
         List<String> _stateChangePrevious;
+        List<String> _stateChangeEvents;
         if (channelStateChanges.length == 4) {
-          _stateChangeEvents = const [
+          _stateChangeCurrent = const [
             'attaching',
             'attached',
             'detaching',
@@ -331,10 +332,10 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
             'attached',
             'detaching',
           ];
-        }
-        if (channelStateChanges.length == 5) {
+          _stateChangeEvents = _stateChangeCurrent;
+        } else if (channelStateChanges.length == 5) {
           // ios
-          _stateChangeEvents = const [
+          _stateChangeCurrent = const [
             'attaching',
             'attached',
             'detaching',
@@ -348,8 +349,9 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
             'detaching',
             'detached',
           ];
+          _stateChangeEvents = _stateChangeCurrent;
         } else {
-          _stateChangeEvents = const [
+          _stateChangeCurrent = const [
             'attaching',
             'attaching',
             'attached',
@@ -359,19 +361,27 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
           ];
           _stateChangePrevious = const [
             'initialized',
-            'initialized',
             'attaching',
             'attaching',
             'attached',
+            'attached',
             'detaching',
+          ];
+          _stateChangeEvents = const [
+            'attaching',
+            'attaching',
+            'attached',
+            'update',
+            'detaching',
+            'detached',
           ];
         }
 
-        // expect(channelStateChanges.map((e) => e['event']),
-        //     orderedEquals(_stateChangeEvents));
+        expect(channelStateChanges.map((e) => e['event']),
+            orderedEquals(_stateChangeEvents));
 
         expect(channelStateChanges.map((e) => e['current']),
-            orderedEquals(_stateChangeEvents));
+            orderedEquals(_stateChangeCurrent));
 
         expect(channelStateChanges.map((e) => e['previous']),
             orderedEquals(_stateChangePrevious));
