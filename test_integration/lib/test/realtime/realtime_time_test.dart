@@ -14,7 +14,7 @@ Future<Map<String, dynamic>> testRealtimeTime({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
 

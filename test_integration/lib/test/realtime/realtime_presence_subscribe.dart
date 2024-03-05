@@ -23,7 +23,7 @@ Future<Map<String, dynamic>> testRealtimePresenceSubscribe({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   ).channels.get('test').presence;
 

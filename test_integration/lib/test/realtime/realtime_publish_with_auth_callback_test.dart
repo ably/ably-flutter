@@ -10,7 +10,7 @@ Future<Map<String, dynamic>> testRealtimePublishWithAuthCallback({
   var authCallbackInvoked = false;
   final realtime = Realtime(
     options: ClientOptions(
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
       authCallback: (params) async {
         authCallbackInvoked = true;
         return TokenRequest.fromMap(

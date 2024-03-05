@@ -14,7 +14,7 @@ Future<Map<String, dynamic>> testRestRequestToken({
   final clientOptionsForToken = ClientOptions(
     key: appKey,
     environment: 'sandbox',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final restForToken = Rest(
@@ -24,7 +24,7 @@ Future<Map<String, dynamic>> testRestRequestToken({
   final token = await restForToken.auth.requestToken();
 
   final clientOptions = ClientOptions(
-      tokenDetails: token, environment: 'sandbox', logLevel: LogLevel.verbose);
+      tokenDetails: token, environment: 'sandbox', logLevel: LogLevel.error);
   final tokenedRest = Rest(options: clientOptions);
 
   await publishMessages(tokenedRest.channels.get('test'));

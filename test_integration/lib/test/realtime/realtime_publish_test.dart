@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> testRealtimePublish({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
   await publishMessages(realtime.channels.get('test'));
@@ -40,7 +40,7 @@ Future<Map<String, dynamic>> testRealtimePublishSpec({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
   final channel = realtime.channels.get('test');

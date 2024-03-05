@@ -17,7 +17,7 @@ Future<Map<String, dynamic>> testRestHistory({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
   final channel = rest.channels.get('test');

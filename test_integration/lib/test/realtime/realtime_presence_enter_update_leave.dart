@@ -14,7 +14,7 @@ ClientOptions getClientOptions(
       key: appKey,
       environment: 'sandbox',
       clientId: clientId,
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     );
 
 Future<Map<String, dynamic>> testRealtimePresenceEnterUpdateLeave({

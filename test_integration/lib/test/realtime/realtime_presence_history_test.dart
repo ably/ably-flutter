@@ -17,7 +17,7 @@ Future<Map<String, dynamic>> testRealtimePresenceHistory({
     key: appKey,
     environment: 'sandbox',
     clientId: 'someClientId',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final realtime = Realtime(options: options);

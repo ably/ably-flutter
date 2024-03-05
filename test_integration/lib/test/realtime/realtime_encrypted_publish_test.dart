@@ -52,7 +52,7 @@ Future<Map<String, dynamic>> testRealtimeEncryptedPublishSpec({
       key: appKey,
       environment: 'sandbox',
       clientId: clientId,
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
 

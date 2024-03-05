@@ -17,7 +17,7 @@ Future<Map<String, dynamic>> testRestPresenceHistory({
     key: appKey,
     environment: 'sandbox',
     clientId: 'someClientId',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final rest = Rest(options: options);

@@ -19,7 +19,7 @@ Future<Map<String, dynamic>> testRestPublish({
       key: appKey.toString(),
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
   await publishMessages(rest.channels.get('test'));
@@ -40,7 +40,7 @@ Future<Map<String, dynamic>> testRestPublishSpec({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
   final channel = rest.channels.get('test');

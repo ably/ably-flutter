@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> testRestAuthClientId({
   final clientOptionsForToken = ClientOptions(
     key: appKey,
     environment: 'sandbox',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final ablyForToken = Rest(

@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> testRealtimeAuthroize({
   final clientOptionsForToken = ClientOptions(
     key: appKey,
     environment: 'sandbox',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final ablyForToken = Rest(

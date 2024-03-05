@@ -22,7 +22,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublish({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
 
@@ -53,7 +53,7 @@ Future<Map<String, dynamic>> testRestEncryptedPublishSpec({
       key: appKey,
       environment: 'sandbox',
       clientId: clientId,
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
 
