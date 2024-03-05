@@ -599,6 +599,14 @@ static const FlutterHandler _restTime = ^void(AblyFlutter *const ably, FlutterMe
     }];
 };
 
+static const FlutterHandler _connectionRecoveryKey = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
+    AblyFlutterMessage *const ablyMessage = call.arguments;
+    AblyInstanceStore *const instanceStore = [ably instanceStore];
+    ARTRealtime *const realtime = [instanceStore realtimeFrom:ablyMessage.handle];
+    NSString *const connectionRecoveryKey = [realtime.connection createRecoveryKey];
+    result(connectionRecoveryKey);
+};
+
 static const FlutterHandler _getNextPage = ^void(AblyFlutter *const ably, FlutterMethodCall *const call, const FlutterResult result) {
     AblyFlutterMessage *const ablyMessage = call.arguments;
     
@@ -741,6 +749,8 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
         AblyPlatformMethod_releaseRealtimeChannel: _releaseRealtimeChannel,
         AblyPlatformMethod_realtimeTime:_realtimeTime,
         AblyPlatformMethod_restTime:_restTime,
+        // Connection fields
+        AblyPlatformMethod_connectionRecoveryKey:_connectionRecoveryKey,
         // Push Notifications
         AblyPlatformMethod_pushActivate: PushHandlers.activate,
         AblyPlatformMethod_pushRequestPermission: PushHandlers.requestPermission,

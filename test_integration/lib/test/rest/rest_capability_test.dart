@@ -24,7 +24,7 @@ Future<Map<String, dynamic>> testRestCapabilities({
       key: appKey,
       environment: 'sandbox',
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
     ),
   );
 

@@ -76,6 +76,9 @@ class PlatformMethod {
       'realtimeAuthCreateTokenRequest';
   static const String realtimeAuthRequestToken = 'realtimeAuthRequestToken';
   static const String realtimeAuthGetClientId = 'realtimeAuthGetClientId';
+
+  static const String connectionRecoveryKey = 'connectionRecoveryKey';
+
   static const String pushActivate = 'pushActivate';
   static const String pushDeactivate = 'pushDeactivate';
   static const String pushReset = 'pushReset';

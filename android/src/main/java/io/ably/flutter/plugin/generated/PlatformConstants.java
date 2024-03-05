@@ -77,6 +77,9 @@ final public class PlatformConstants {
         public static final String realtimeAuthCreateTokenRequest = "realtimeAuthCreateTokenRequest";
         public static final String realtimeAuthRequestToken = "realtimeAuthRequestToken";
         public static final String realtimeAuthGetClientId = "realtimeAuthGetClientId";
+
+        public static final String connectionRecoveryKey = "connectionRecoveryKey";
+
         public static final String pushActivate = "pushActivate";
         public static final String pushDeactivate = "pushDeactivate";
         public static final String pushReset = "pushReset";

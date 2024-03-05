@@ -16,7 +16,7 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
   final clientOptionsForToken = ClientOptions(
     key: appKey,
     environment: 'sandbox',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
     fallbackHosts: <String>['a.ably-realtime.com', 'b.ably-realtime.com'],
   );
 
@@ -32,7 +32,7 @@ Future<Map<String, dynamic>> testCreateRealtimeWithAuthUrl({
       environment: 'sandbox',
       useTokenAuth: true,
       autoConnect: false,
-      logLevel: LogLevel.verbose);
+      logLevel: LogLevel.error);
   final realtime = Realtime(options: options);
   final completer = Completer<void>();
   realtime.connection.on().listen((stateChange) {

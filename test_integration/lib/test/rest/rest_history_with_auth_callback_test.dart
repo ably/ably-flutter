@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> testRestHistoryWithAuthCallback({
   final rest = Rest(
     options: ClientOptions(
       clientId: 'someClientId',
-      logLevel: LogLevel.verbose,
+      logLevel: LogLevel.error,
       authCallback: (params) async {
         authCallbackInvoked = true;
         return TokenRequest.fromMap(

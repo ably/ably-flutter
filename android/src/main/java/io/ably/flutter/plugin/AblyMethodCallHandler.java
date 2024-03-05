@@ -112,6 +112,9 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
     _map.put(PlatformConstants.PlatformMethod.restAuthGetClientId,
             (methodCall, result) -> authMethodHandler.clientId(methodCall, result, AuthMethodHandler.Type.Rest));
 
+    // Connection specific handlers
+    _map.put(PlatformConstants.PlatformMethod.connectionRecoveryKey, this::connectionRecoveryKey);
+
     // Push Notifications
     _map.put(PlatformConstants.PlatformMethod.pushActivate, this::pushActivate);
     _map.put(PlatformConstants.PlatformMethod.pushDeactivate, this::pushDeactivate);
@@ -551,12 +554,15 @@ public class AblyMethodCallHandler implements MethodChannel.MethodCallHandler {
         time(result, instanceStore.getRealtime(ablyMessage.handle));
     }
 
-
-
-
-  private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    private void restTime(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
         final AblyFlutterMessage ablyMessage = (AblyFlutterMessage) methodCall.arguments;
         time(result, instanceStore.getRest(ablyMessage.handle));
+    }
+
+    private void connectionRecoveryKey(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        final AblyFlutterMessage<?> ablyMessage = (AblyFlutterMessage<?>) methodCall.arguments;
+        AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+        result.success(realtime.connection.createRecoveryKey());
     }
 
     private void time(@NonNull MethodChannel.Result result, AblyBase client) {

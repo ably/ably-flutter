@@ -12,7 +12,7 @@ Future<Map<String, dynamic>> testRestCreateTokenRequest({
   final clientOptionsForToken = ClientOptions(
     key: appKey,
     environment: 'sandbox',
-    logLevel: LogLevel.verbose,
+    logLevel: LogLevel.error,
   );
 
   final rest = Rest(
