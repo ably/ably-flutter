@@ -312,6 +312,8 @@ final public class PlatformConstants {
         public static final String event = "event";
         public static final String retryIn = "retryIn";
         public static final String reason = "reason";
+        public static final String connectionId = "connectionId";
+        public static final String connectionKey = "connectionKey";
     }
 
     static final public class TxChannelStateChange {

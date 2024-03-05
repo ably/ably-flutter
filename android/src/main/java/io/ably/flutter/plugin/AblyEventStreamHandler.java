@@ -5,7 +5,9 @@ import android.os.Looper;
 
 import java.util.Map;
 
+import io.ably.flutter.plugin.dto.EnrichedConnectionStateChange;
 import io.ably.flutter.plugin.generated.PlatformConstants;
+import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.realtime.ChannelStateListener;
 import io.ably.lib.realtime.ConnectionStateListener;
@@ -76,12 +78,15 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
 
   static private class PluginConnectionStateListener extends Listener implements ConnectionStateListener {
 
-    PluginConnectionStateListener(EventChannel.EventSink eventSink) {
+    private final AblyRealtime realtime;
+
+    PluginConnectionStateListener(EventChannel.EventSink eventSink, AblyRealtime realtime) {
       super(eventSink);
+      this.realtime = realtime;
     }
 
     public void onConnectionStateChanged(ConnectionStateChange stateChange) {
-      eventSink.success(stateChange);
+      eventSink.success(new EnrichedConnectionStateChange(stateChange, realtime.connection.id, realtime.connection.key));
     }
 
   }
@@ -132,8 +137,9 @@ public class AblyEventStreamHandler implements EventChannel.StreamHandler {
     try {
       switch (eventName) {
         case PlatformConstants.PlatformMethod.onRealtimeConnectionStateChanged:
-          connectionStateListener = new PluginConnectionStateListener(eventSink);
-          instanceStore.getRealtime(ablyMessage.handle).connection.on(connectionStateListener);
+          final AblyRealtime realtime = instanceStore.getRealtime(ablyMessage.handle);
+          connectionStateListener = new PluginConnectionStateListener(eventSink, realtime);
+          realtime.connection.on(connectionStateListener);
           break;
         case PlatformConstants.PlatformMethod.onRealtimeChannelStateChanged:
           assert eventPayload != null : "onRealtimeChannelStateChanged: event message is missing";

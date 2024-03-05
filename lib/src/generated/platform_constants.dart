@@ -314,6 +314,8 @@ class TxConnectionStateChange {
   static const String event = 'event';
   static const String retryIn = 'retryIn';
   static const String reason = 'reason';
+  static const String connectionId = 'connectionId';
+  static const String connectionKey = 'connectionKey';
 }
 
 class TxChannelStateChange {

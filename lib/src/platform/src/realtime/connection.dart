@@ -13,6 +13,10 @@ class Connection extends PlatformObject {
 
   ErrorInfo? _errorReason;
 
+  String? _id;
+
+  String? _key;
+
   /// @nodoc
   /// Instantiates a connection with [realtime] client instance.
   ///
@@ -21,9 +25,11 @@ class Connection extends PlatformObject {
   Connection(this.realtime)
       : _state = ConnectionState.initialized,
         super() {
-    on().listen((event) {
-      _state = event.current;
-      _errorReason = event.reason;
+    _onConnectionStateChange().listen((event) {
+      _state = event.stateChange.current;
+      _errorReason = event.stateChange.reason;
+      _id = event.connectionId;
+      _key = event.connectionKey;
     });
   }
 
@@ -37,7 +43,7 @@ class Connection extends PlatformObject {
 
   /// A unique public identifier for this connection, used to identify this
   /// member.
-  String? id;
+  String? get id => _id;
 
   /// A unique private connection key used to recover or resume a connection,
   /// assigned by Ably.
@@ -48,7 +54,7 @@ class Connection extends PlatformObject {
   /// to publish on behalf of this client. See the
   /// [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf)
   /// for more info.
-  String? key;
+  String? get key => _key;
 
   /// The recovery key string can be used by another client to recover this
   /// connection's state in the recover client options property.
@@ -78,13 +84,18 @@ class Connection extends PlatformObject {
   /// The current [ConnectionState] of the connection.
   ConnectionState get state => _state;
 
+  /// @nodoc
+  Stream<EnrichedConnectionStateChange> _onConnectionStateChange() =>
+      listen<EnrichedConnectionStateChange>(
+        PlatformMethod.onRealtimeConnectionStateChanged,
+      );
+
   /// Stream of connection events with specified [ConnectionEvent] type.
   Stream<ConnectionStateChange> on([ConnectionEvent? connectionEvent]) =>
-      listen<ConnectionStateChange>(
-        PlatformMethod.onRealtimeConnectionStateChanged,
-      ).where((connectionStateChange) =>
-          connectionEvent == null ||
-          connectionStateChange.event == connectionEvent);
+      _onConnectionStateChange().map((event) => event.stateChange).where(
+          (connectionStateChange) =>
+              connectionEvent == null ||
+              connectionStateChange.event == connectionEvent);
 
   /// Causes the connection to close, entering the [ConnectionState.closing]
   /// state.
