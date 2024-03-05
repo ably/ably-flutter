@@ -337,7 +337,9 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
         } else {
           _stateChangeEvents = const [
             'attaching',
+            'attaching',
             'attached',
+            'update',
             'detaching',
             'detached',
           ];
