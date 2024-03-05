@@ -320,6 +320,7 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
         List<String> _stateChangePrevious;
         List<String> _stateChangeEvents;
         if (channelStateChanges.length == 4) {
+          // iOS
           _stateChangeCurrent = const [
             'attaching',
             'attached',
@@ -331,26 +332,10 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
             'attaching',
             'attached',
             'detaching',
-          ];
-          _stateChangeEvents = _stateChangeCurrent;
-        } else if (channelStateChanges.length == 5) {
-          // ios
-          _stateChangeCurrent = const [
-            'attaching',
-            'attached',
-            'detaching',
-            'detached',
-            'detached',
-          ];
-          _stateChangePrevious = const [
-            'initialized',
-            'attaching',
-            'attached',
-            'detaching',
-            'detached',
           ];
           _stateChangeEvents = _stateChangeCurrent;
         } else {
+          // android
           _stateChangeCurrent = const [
             'attaching',
             'attaching',
@@ -392,15 +377,38 @@ void testRealtimeEvents(FlutterDriver Function() getDriver) {
       '#on returns a stream which can be subscribed'
       ' for channel state changes with filter',
       () {
+        List<String> _stateChangeCurrent;
+        List<String> _stateChangePrevious;
+        List<String> _stateChangeEvents;
+        if (channelStateChanges.length == 4) {
+          // iOS
+          _stateChangeCurrent = const [
+            'attaching',
+          ];
+          _stateChangePrevious = const [
+            'initialized',
+          ];
+        } else {
+          // Android
+          _stateChangeCurrent = const [
+            'attaching',
+            'attaching',
+          ];
+          _stateChangePrevious = const [
+            'initialized',
+            'attaching',
+          ];
+        }
+        _stateChangeEvents = _stateChangeCurrent;
         // filteredChannelStateChanges
         expect(filteredChannelStateChanges.map((e) => e['event']),
-            orderedEquals(const ['attaching']));
+            orderedEquals(_stateChangeEvents));
 
         expect(filteredChannelStateChanges.map((e) => e['current']),
-            orderedEquals(const ['attaching']));
+            orderedEquals(_stateChangeCurrent));
 
         expect(filteredChannelStateChanges.map((e) => e['previous']),
-            orderedEquals(const ['initialized']));
+            orderedEquals(_stateChangePrevious));
       },
     );
   });
