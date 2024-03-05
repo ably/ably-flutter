@@ -136,13 +136,15 @@ class RealtimeSliver extends HookWidget {
     ValueNotifier<ably.ConnectionState> connectionState,
     ValueNotifier<ably.ChannelState> channelState,
     ValueNotifier<String?> connectionId,
+    ValueNotifier<String?> recoveryKey,
   ) =>
       TextButton(
         onPressed: () async {
           await channel.detach();
           realtime.channels.release(Constants.channelName);
           channel = realtime.channels.get(Constants.channelName);
-          setupListeners(connectionState, channelState, connectionId);
+          setupListeners(
+              connectionState, channelState, connectionId, recoveryKey);
         },
         child: const Text('Release'),
       );
@@ -179,6 +181,7 @@ class RealtimeSliver extends HookWidget {
     final connectionState =
         useState<ably.ConnectionState>(realtime.connection.state);
     final connectionId = useState<String?>(realtime.connection.id);
+    final recoveryKey = useState<String?>('');
     final channelState = useState<ably.ChannelState>(channel.state);
     final latestMessage = useState<ably.Message?>(null);
     final channelSubscription =
@@ -188,7 +191,7 @@ class RealtimeSliver extends HookWidget {
 
     useEffect(() {
       realtime.time().then((value) => realtimeTime.value = value);
-      setupListeners(connectionState, channelState, connectionId);
+      setupListeners(connectionState, channelState, connectionId, recoveryKey);
       return dispose;
     }, []);
 
@@ -202,6 +205,7 @@ class RealtimeSliver extends HookWidget {
         Text('Realtime time: ${realtimeTime.value}'),
         Text('Connection State: ${connectionState.value}'),
         Text('Connection Id: ${connectionId.value ?? '-'}'),
+        Text('Connection Recovery Key: ${recoveryKey.value ?? '-'}'),
         buildEncryptionSwitch(useEncryption),
         Row(
           children: <Widget>[
@@ -226,7 +230,7 @@ class RealtimeSliver extends HookWidget {
             Expanded(child: buildChannelDetachButton(channelState.value)),
             Expanded(
                 child: buildReleaseRealtimeChannelButton(
-                    connectionState, channelState, connectionId)),
+                    connectionState, channelState, connectionId, recoveryKey)),
           ],
         ),
         Row(
@@ -293,7 +297,8 @@ class RealtimeSliver extends HookWidget {
   void setupListeners(
       ValueNotifier<ably.ConnectionState> connectionState,
       ValueNotifier<ably.ChannelState> channelState,
-      ValueNotifier<String?> connectionId) {
+      ValueNotifier<String?> connectionId,
+      ValueNotifier<String?> recoveryKey) {
     dispose();
     final connectionSubscription =
         realtime.connection.on().listen((connectionStateChange) {
@@ -302,6 +307,9 @@ class RealtimeSliver extends HookWidget {
       }
       connectionState.value = connectionStateChange.current;
       connectionId.value = realtime.connection.id;
+      realtime.connection
+          .createRecoveryKey()
+          .then((value) => {recoveryKey.value = value});
       print('${DateTime.now()}:'
           ' ConnectionStateChange event: ${connectionStateChange.event}'
           '\nReason: ${connectionStateChange.reason}');
