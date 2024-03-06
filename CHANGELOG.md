@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.27](https://github.com/ably/ably-flutter/tree/v1.2.27)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.26...v1.2.27)
+
+**Fixed bugs:**
+
+- When the app comes back to the foreground from the background [\#504](https://github.com/ably/ably-flutter/issues/504)
+
+**Closed issues:**
+
+- How do we get connectionId from connection? [\#502](https://github.com/ably/ably-flutter/issues/502)
+- Implement no-connection-serial [\#438](https://github.com/ably/ably-flutter/issues/438)
+
 ## [1.2.26](https://github.com/ably/ably-flutter/tree/v1.2.26)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.25...v1.2.26)
