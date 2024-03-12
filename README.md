@@ -29,8 +29,6 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 ## Installation
 
-See [requirements](#requirements) for a list of prerequisites
-
 ### Specify Dependency
 
 In `pubspec.yaml` file:
@@ -52,7 +50,7 @@ When increasing the version of `ably_flutter` in your `pubspec.yaml`, if there a
 
 ## Usage
 
-Also available in [examples](example/example.md) for [pub.dev examples page](https://pub.dev/packages/ably_flutter/example)
+Please check [demo code snippets](example/example.md) and [flutter example app](./CONTRIBUTING.md#running-the-example) for more detailed usage.
 
 ### Authentication
 
