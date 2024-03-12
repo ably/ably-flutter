@@ -673,7 +673,7 @@ Future<void>.delayed(Duration.zero, () {
 });
 ```
 
-### Push Notifications
+## Push Notifications
 
 By default, push-related components in the sample app won't work on Android, because of a dummy [google-services.json](example/android/app/src/google-services.json) file. In order to use push messaging features of Ably SDK, additional FCM/APNS configuration is required.
 
