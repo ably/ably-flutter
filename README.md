@@ -129,6 +129,13 @@ realtime.connection
     });
 ```
 
+#### Retrieve connection id, state etc
+```dart
+String connectionId = realtime.connection.id;
+ConnectionState state = realtime.connection.state;
+String recoveryKey = await realtime.connection.createRecoveryKey(); // https://ably.com/docs/connect/states?q=recovery#connection-state-recover-options
+```
+
 ### Realtime channel
 
 #### Create instance of Realtime channel
