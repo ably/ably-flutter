@@ -1,5 +1,9 @@
 # Contributing to Ably Flutter
 
+## Overview
+A [Flutter](https://flutter.dev/) plugin for [Ably](https://www.ably.com),
+built on top of Ably's [iOS](https://github.com/ably/ably-cocoa) and [Android](https://github.com/ably/ably-java) SDKs. [Web support](https://github.com/ably/ably-flutter/issues/95) will be added in the near future built on top of [ably-js](https://github.com/ably/ably-js).
+
 ## Development Flow
 
 The code in this repository has been constructed to be
