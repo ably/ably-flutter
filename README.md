@@ -13,13 +13,13 @@ _[Ably](https://ably.com) is the platform that powers synchronized digital exper
 
 - Android
 - iOS
-- Push notification, [check support section](#push-notifications).
+- Push notifications, [check support section](#push-notifications)
 
 ## Requirements
 
-- Flutter 2.5.0 or higher is required.
-- iOS 10 or newer.
-- Android API Level 19 (Android 4.4, KitKat) or newer.
+- Flutter 2.5.0 or higher
+- iOS 10 or newer
+- Android API Level 19 (Android 4.4, KitKat) or newer
 
 This project uses Java 8 language features, utilizing [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
 to support lower versions of the Android runtime (i.e. API Levels prior to 24).
