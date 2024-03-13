@@ -1,5 +1,48 @@
 # Contributing to Ably Flutter
 
+## Overview
+A [Flutter](https://flutter.dev/) plugin for [Ably](https://www.ably.com), built on top of Ably's [iOS](https://github.com/ably/ably-cocoa) and [Android](https://github.com/ably/ably-java) SDKs.
+
+## Running the example
+
+### Authorization in the example app
+
+There are two different ways the example application can be configured to use Ably services:
+
+1. Without the Ably SDK key: the application will request a sandbox key provision from Ably server at startup, but be aware that:
+
+    - provisioned key may not support all features available in Ably SDK.
+    - provisioned keys aren't able to use Ably push notifications. This feature requires APNS and FCM identifiers to be registered for Ably instance, which can't be done with sandbox applications
+    - provisioned key will change on application restart
+
+2. With the Ably SDK key: you can create a free account on [ably.com](https://ably.com/) and then use your API key from there in the example app. This approach will give you much more control over the API capabilities and grant access to development console, where API communication can be conveniently inspected.
+
+#### Android Studio / IntelliJ Idea
+
+Under the run/ debug configuration drop down menu, click `Edit Configurations...`. Duplicate the `Example App (Duplicate and modify)` configuration. Leave the "Store as project file" unchecked to avoid committing your Ably API key into a repository. Update this new run configuration's `additional run args` with your ably API key. Run or debug the your new run/ debug configuration.
+
+![Drop down menu for Run/Debug Configurations in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-1.png)
+
+![Run/Debug Configurations window in Android Studio](https://github.com/ably/ably-flutter/raw/main/images/run-configuration-2.png)
+
+#### Visual Studio Code
+
+- Under `Run and Debug`,
+  - Select the gear icon to view [launch.json](.vscode/launch.json)
+  - Find `Example App` launch configuration
+  - Add your Ably API key to the `configurations.args`, i.e. replace `replace_with_your_api_key` with your own Ably API key.
+  - Choose a device to launch the app:
+    - to launch on a device, make sure it is the only device plugged in.
+    - to run on a specific device when you have multiple plugged in, add another element to the `configuration.args` value, with `--device-id=replace_with_device_id`. Make sure to replace `replace_with_your_device` with your device ID from `flutter devices`.
+- From `Run and Debug` select the `Example App` configuration and run it
+
+#### Command Line using the Flutter Tool
+
+- Change into the example app directory: `cd example`
+- Install dependencies: `flutter pub get`
+- Launch the application: `flutter run --dart-define ABLY_API_KEY=put_your_ably_api_key_here`, remembering to replace `put_your_ably_api_key_here` with your own API key.
+  - To choose a specific device when more than one are connected: get your device ID using `flutter devices`, and then running `flutter run --dart-define=ABLY_API_KEY=put_your_ably_api_key_here --device-id replace_with_device_id`
+
 ## Development Flow
 
 The code in this repository has been constructed to be
