@@ -15,17 +15,24 @@ Future<void> main() async {
   // Because AblyService has to be initialized before runApp is called
   // provisioning also has to be done before the app starts
   final apiKeyProvision = await ApiKeyService().getOrProvisionApiKey();
-  final ablyService = AblyService(apiKeyProvision: apiKeyProvision);
-  runApp(AblyFlutterExampleApp(ablyService: ablyService));
+  runApp(AblyFlutterExampleApp(apiKeyProvision: apiKeyProvision));
 }
 
-class AblyFlutterExampleApp extends StatelessWidget {
-  final AblyService ablyService;
+class AblyFlutterExampleApp extends StatefulWidget {
+  final ApiKeyProvision apiKeyProvision;
 
   const AblyFlutterExampleApp({
-    required this.ablyService,
+    required this.apiKeyProvision,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<AblyFlutterExampleApp> createState() => _AblyFlutterExampleAppState();
+}
+
+class _AblyFlutterExampleAppState extends State<AblyFlutterExampleApp> {
+  AblyService? ablyService;
+  String clientId = '';
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -34,21 +41,71 @@ class AblyFlutterExampleApp extends StatelessWidget {
             title: const Text('Ably Flutter Example App'),
           ),
           body: Center(
-            child: ListView(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
-                children: [
-                  SystemDetailsSliver(
-                    apiKeyProvision: ablyService.apiKeyProvision,
-                  ),
-                  const Divider(),
-                  RealtimeSliver(ablyService),
-                  const Divider(),
-                  RestSliver(ablyService.rest),
-                  const Divider(),
-                  PushNotificationsSliver(ablyService.pushNotificationService)
-                ]),
+            child: ablyService == null
+                ? ListView(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 36),
+                    children: [
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Enter Client ID',
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              clientId = value;
+                            });
+                          },
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              ablyService = AblyService(
+                                  apiKeyProvision: widget.apiKeyProvision,
+                                  clientId: clientId);
+                            });
+                          },
+                          child: const Text('Submit'),
+                        )
+                      ])
+                : AblyFlutterExampleContent(
+                    ablyService: ablyService!,
+                    onLogout: () {
+                      setState(() {
+                        ablyService = null;
+                      });
+                    }),
           ),
         ),
       );
+}
+
+class AblyFlutterExampleContent extends StatelessWidget {
+  final AblyService ablyService;
+  final void Function() onLogout;
+
+  const AblyFlutterExampleContent({
+    required this.ablyService,
+    required this.onLogout,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => ListView(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 36),
+          children: [
+            ElevatedButton(
+              onPressed: onLogout,
+              child: const Text('Logout'),
+            ),
+            SystemDetailsSliver(
+              apiKeyProvision: ablyService.apiKeyProvision,
+              clientId: ablyService.clientId,
+            ),
+            const Divider(),
+            RealtimeSliver(ablyService),
+            const Divider(),
+            RestSliver(ablyService.rest),
+            const Divider(),
+            PushNotificationsSliver(ablyService.pushNotificationService)
+          ]);
 }
