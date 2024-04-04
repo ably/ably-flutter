@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.29](https://github.com/ably/ably-flutter/tree/v1.2.29)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.28...v1.2.29)
+
+This release contains Ably Push Notification improvements
+
+- Updated `ably-cocoa` dependency to `1.2.29`
+- Updated `ably-android` dependency to `1.2.36`
+
 ## [1.2.28](https://github.com/ably/ably-flutter/tree/v1.2.28)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.27...v1.2.28)
