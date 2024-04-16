@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'Ably', '1.2.29'
+  s.dependency 'Ably', '1.2.30'
   s.platform = :ios
   s.ios.deployment_target  = '10.0'
 
@@ -28,5 +28,6 @@ Pod::Spec.new do |s|
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
     'GCC_PREPROCESSOR_DEFINITIONS' => "FLUTTER_PACKAGE_PLUGIN_VERSION=\\@\\\"#{flutter_package_plugin_version}\\\""
   }
+  s.resource_bundles = {'ably_flutter' => ['Resources/PrivacyInfo.xcprivacy']}
   s.swift_version = '5.0'
 end
