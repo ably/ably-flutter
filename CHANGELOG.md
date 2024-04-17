@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.30](https://github.com/ably/ably-flutter/tree/v1.2.30)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.29...v1.2.30)
+
+This release includes a new privacy manifest as required under new Apple guidelines. 
+
+- Updated `ably-cocoa` dependency to `1.2.30`
+
 ## [1.2.29](https://github.com/ably/ably-flutter/tree/v1.2.29)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.28...v1.2.29)
