@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.31](https://github.com/ably/ably-flutter/tree/v1.2.31)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.30...v1.2.31)
+
+This release improves support for Android 19
+
+- Updated `ably-android` dependency to `1.2.38`
+
 ## [1.2.30](https://github.com/ably/ably-flutter/tree/v1.2.30)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.29...v1.2.30)
