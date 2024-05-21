@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.32](https://github.com/ably/ably-flutter/tree/v1.2.32)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.31...v1.2.32)
+
+**Fixed bugs:**
+
+- Message extras deserialization not working [\#523](https://github.com/ably/ably-flutter/issues/523)
+
 ## [1.2.31](https://github.com/ably/ably-flutter/tree/v1.2.31)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.30...v1.2.31)
