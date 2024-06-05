@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.33](https://github.com/ably/ably-flutter/tree/v1.2.33)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.32...v1.2.33)
+
+- Updated `ably-android` dependency to `1.2.39`
+
 ## [1.2.32](https://github.com/ably/ably-flutter/tree/v1.2.32)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.31...v1.2.32)
