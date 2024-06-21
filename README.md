@@ -35,7 +35,7 @@ In `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  ably_flutter: ^1.2.32
+  ably_flutter: ^1.2.33
 ```
 
 ### Import the package
