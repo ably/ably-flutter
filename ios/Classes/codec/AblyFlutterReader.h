@@ -9,6 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(ARTTokenDetails *)tokenDetailsFromDictionary: (NSDictionary *) dictionary;
 +(ARTTokenParams *)tokenParamsFromDictionary: (NSDictionary *) dictionary;
++(NSDictionary<NSString *, ARTStringifiable *> *)transportParamsFromDictionary: (NSDictionary *) dictionary;
 
 @end
 
