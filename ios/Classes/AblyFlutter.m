@@ -801,7 +801,6 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
     // Check if application was launched from a notification tap.
     
     // https://stackoverflow.com/a/21611009/7365866
