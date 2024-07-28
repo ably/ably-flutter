@@ -76,14 +76,6 @@ static const FlutterHandler _createRest = ^void(AblyFlutter *const ably, Flutter
     ARTRest *const rest = [[ARTRest alloc] initWithOptions:options.clientOptions];
     [instanceStore setRest:rest with: handle];
 
-    NSData *const apnsDeviceToken = ably.instanceStore.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
-    NSError *const error = ably.instanceStore.didFailToRegisterForRemoteNotificationsWithError_error;
-    if (apnsDeviceToken != nil) {
-        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:apnsDeviceToken rest:rest];
-    } else if (error != nil) {
-        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error rest:rest];
-    }
-
     result(handle);
 };
 
@@ -262,19 +254,6 @@ static const FlutterHandler _createRealtime = ^void(AblyFlutter *const ably, Flu
     }
     ARTRealtime *const realtime = [[ARTRealtime alloc] initWithOptions:options.clientOptions];
     [instanceStore setRealtime:realtime with:handle];
-
-    // Giving Ably client the deviceToken registered at device launch (didRegisterForRemoteNotificationsWithDeviceToken).
-    // This is not an ideal solution. We save the deviceToken given in didRegisterForRemoteNotificationsWithDeviceToken and the
-    // error in didFailToRegisterForRemoteNotificationsWithError and pass it to Ably in the first client that is first created.
-    // Ideally, the Ably client doesn't need to be created, and we can pass the deviceToken to Ably like in Ably Java.
-    // This is similarly repeated for in _createRest
-    NSData *const apnsDeviceToken = ably.instanceStore.didRegisterForRemoteNotificationsWithDeviceToken_deviceToken;
-    NSError *const error = ably.instanceStore.didFailToRegisterForRemoteNotificationsWithError_error;
-    if (apnsDeviceToken != nil) {
-        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:apnsDeviceToken realtime:realtime];
-    } else if (error != nil) {
-        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error realtime:realtime];
-    }
     
     result(handle);
 };
@@ -813,16 +792,13 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 }
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
-/// Save the deviceToken provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
+
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Set deviceToken on all existing Ably clients, and a property which used for all future Ably clients.
     [_instanceStore didRegisterForRemoteNotificationsWithDeviceToken: deviceToken];
 }
 
-/// Save the error if it occurred during APNs device registration provided so we can pass it to the first Ably client which gets created, in createRealtime or createRest.
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    // This error will be used when the first Ably client is made.
-    _instanceStore.didFailToRegisterForRemoteNotificationsWithError_error = error;
+    [_instanceStore didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
