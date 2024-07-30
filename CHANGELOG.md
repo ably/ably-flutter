@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.34](https://github.com/ably/ably-flutter/tree/v1.2.34)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.33...v1.2.34)
+
+- Updated `ably-cocoa` dependency to `1.2.33`
+
+**Fixed bugs:**
+
+- The `title` field in the push notification should be nullable [\#532](https://github.com/ably/ably-flutter/issues/532)
+
 ## [1.2.33](https://github.com/ably/ably-flutter/tree/v1.2.33)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.32...v1.2.33)
