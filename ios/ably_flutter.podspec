@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'Ably', '1.2.30'
+  s.dependency 'Ably', '1.2.33'
   s.platform = :ios
   s.ios.deployment_target  = '10.0'
 
