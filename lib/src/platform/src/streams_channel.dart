@@ -40,7 +40,7 @@ class StreamsChannel {
   /// The message codec used by this channel, not null.
   final MethodCodec codec;
 
-  int _lastId = 0;
+  static int _lastId = 0;
 
   /// @nodoc
   /// Registers a listener on platform side and manages the listener
