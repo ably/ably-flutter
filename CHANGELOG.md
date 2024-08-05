@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.35](https://github.com/ably/ably-flutter/tree/v1.2.35)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.34...v1.2.35)
+
+**Fixed bugs:**
+
+- Not compiling on fresh new Android project [\#550](https://github.com/ably/ably-flutter/issues/550)
+- Error inside Realtime client subscription after hot restart [\#531](https://github.com/ably/ably-flutter/issues/531)
+
 ## [1.2.34](https://github.com/ably/ably-flutter/tree/v1.2.34)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.33...v1.2.34)
