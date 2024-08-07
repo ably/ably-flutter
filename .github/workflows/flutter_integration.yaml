@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         device: # Device names must be shown in `xcrun simctl list devices`
-          - 'iPhone 12' # we are not specifying the iOS version as it tends to change
+          - 'iPhone 14' # we are not specifying the iOS version as it tends to change
       fail-fast: false
     runs-on: 'macos-latest'
     steps:
@@ -66,5 +66,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
+            adb kill-server
+            adb start-server
             flutter pub get
             cd test_integration && ./run_integration_tests.sh
