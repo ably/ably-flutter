@@ -794,6 +794,8 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    if (PushHandlers.pushActivatorHandle == nil)
+        return;
     ARTRealtime *const realtime = [_instanceStore realtimeFrom:PushHandlers.pushActivatorHandle];
     if (realtime) {
         [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken realtime:realtime];
@@ -807,6 +809,8 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    if (PushHandlers.pushActivatorHandle == nil)
+        return;
     ARTRealtime *const realtime = [_instanceStore realtimeFrom:PushHandlers.pushActivatorHandle];
     if (realtime) {
         [ARTPush didFailToRegisterForRemoteNotificationsWithError:error realtime:realtime];
