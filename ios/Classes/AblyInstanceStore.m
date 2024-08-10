@@ -65,21 +65,6 @@
     return _paginatedResults[handle];
 }
 
-// Set device token for the first created realtime object, device of which is available for others, because it's static
--(void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *const)deviceToken {
-    ARTRealtime *const realtime = _realtimeInstances.allValues.firstObject;
-    if (realtime) {
-        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken realtime:realtime];
-    }
-}
-
--(void)didFailToRegisterForRemoteNotificationsWithError:(NSError *const)error {
-    ARTRealtime *const realtime = _realtimeInstances.allValues.firstObject;
-    if (realtime) {
-        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error realtime:realtime];
-    }
-}
-
 -(void)reset {
     for (ARTRealtime *const r in _realtimeInstances.allValues) {
         [r close];

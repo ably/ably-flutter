@@ -793,12 +793,30 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 
 #pragma mark - Push Notifications Registration - UIApplicationDelegate
 
--(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [_instanceStore didRegisterForRemoteNotificationsWithDeviceToken: deviceToken];
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    ARTRealtime *const realtime = [_instanceStore realtimeFrom:PushHandlers.pushActivatorHandle];
+    if (realtime) {
+        [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken realtime:realtime];
+    }
+    else {
+        ARTRest *const rest = [_instanceStore restFrom:PushHandlers.pushActivatorHandle];
+        if (rest) {
+            [ARTPush didRegisterForRemoteNotificationsWithDeviceToken:deviceToken rest:rest];
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    [_instanceStore didFailToRegisterForRemoteNotificationsWithError:error];
+    ARTRealtime *const realtime = [_instanceStore realtimeFrom:PushHandlers.pushActivatorHandle];
+    if (realtime) {
+        [ARTPush didFailToRegisterForRemoteNotificationsWithError:error realtime:realtime];
+    }
+    else {
+        ARTRest *const rest = [_instanceStore restFrom:PushHandlers.pushActivatorHandle];
+        if (rest) {
+            [ARTPush didFailToRegisterForRemoteNotificationsWithError:error rest:rest];
+        }
+    }
 }
 
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
