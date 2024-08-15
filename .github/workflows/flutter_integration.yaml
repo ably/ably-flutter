@@ -9,9 +9,9 @@ jobs:
     strategy:
       matrix:
         device: # Device names must be shown in `xcrun simctl list devices`
-          - 'iPhone 12' # we are not specifying the iOS version as it tends to change
+          - 'iPhone 14' # we are not specifying the iOS version as it tends to change
       fail-fast: false
-    runs-on: 'macos-11'
+    runs-on: 'macos-latest'
     steps:
       - name: 'List Simulators'
         run: 'xcrun simctl list devices'
@@ -42,7 +42,7 @@ jobs:
         api-level: [24, 29]
       fail-fast: false
 
-    runs-on: 'macos-11'
+    runs-on: 'macos-latest'
 
     steps:
       - uses: actions/checkout@v3
