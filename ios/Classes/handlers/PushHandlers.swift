@@ -2,12 +2,17 @@ import Foundation
 import UserNotifications
 
 public class PushHandlers: NSObject {
+    
+    @objc
+    public static var pushActivatorHandle: NSNumber?
+    
     @objc
     public static var pushNotificationTapLaunchedAppFromTerminatedData: Dictionary<AnyHashable, Any>? = nil;
 
     @objc
     public static let activate: FlutterHandler = { ably, call, result in
         if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
+            pushActivatorHandle = (call.arguments as! AblyFlutterMessage).handle
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForActivate = result
             push.activate()
         } else {
@@ -18,6 +23,7 @@ public class PushHandlers: NSObject {
     @objc
     public static let deactivate: FlutterHandler = { ably, call, result in
         if let push = getPush(instanceStore: ably.instanceStore, call: call, result: result) {
+            pushActivatorHandle = nil
             PushActivationEventHandlers.getInstance(methodChannel: ably.channel).flutterResultForDeactivate = result
             push.deactivate()
         } else {
