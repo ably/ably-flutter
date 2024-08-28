@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ably_flutter/ably_flutter.dart' as ably;
-import 'package:ably_flutter_example/constants.dart';
 import 'package:ably_flutter_example/ui/paginated_result_viewer.dart';
 import 'package:ably_flutter_example/ui/text_row.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +96,7 @@ class RealtimePresenceSliver extends HookWidget {
   Widget updateRealtimePresence() => TextButton(
         onPressed: () async {
           await channel.presence
-              .updateClient(Constants.clientId, _nextPresenceData);
+              .updateClient(realtime.options.clientId!, _nextPresenceData);
         },
         child: const Text('Update'),
       );
