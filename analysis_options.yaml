@@ -24,7 +24,6 @@ linter:
   rules:
     - always_declare_return_types
     - always_put_required_named_parameters_first
-    - always_require_non_null_named_parameters
     - always_use_package_imports
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
@@ -44,8 +43,6 @@ linter:
     - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
-    - avoid_returning_null_for_future
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters
@@ -66,7 +63,6 @@ linter:
     - do_not_use_environment
     - empty_constructor_bodies
     - hash_and_equals
-    - invariant_booleans
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - lines_longer_than_80_chars
