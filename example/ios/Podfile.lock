@@ -47,10 +47,10 @@ SPEC CHECKSUMS:
   Ably: 1d78e5dec56db6d2cf91b10d14fea796ce591bae
   ably_flutter: e4b2f440e48855dbbd94856f27fa73dc53f17e23
   AblyDeltaCodec: add5d06a756b3581b12aab5b5500a320b8c55bea
-  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
-  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   msgpack: c85f6251873059738472ae136951cec5f30f3251
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
