@@ -64,10 +64,10 @@ jobs:
           cache: true
 
       - name: 'Run Flutter Driver tests'
+        timeout-minutes: 30
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          timeout-minutes: 30
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
