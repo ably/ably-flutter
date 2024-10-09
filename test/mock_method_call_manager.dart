@@ -14,7 +14,7 @@ class MockMethodCallManager {
   MockMethodCallManager() {
     final channel =
         MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, handler);
     Platform(methodChannel: channel);
   }
@@ -25,7 +25,7 @@ class MockMethodCallManager {
     handleCounter = 0;
     final channel =
         MethodChannel('io.ably.flutter.plugin', StandardMethodCodec(Codec()));
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, handler);
     Platform(methodChannel: channel);
   }

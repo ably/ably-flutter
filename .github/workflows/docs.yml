@@ -10,11 +10,11 @@ jobs:
       deployments: write
       id-token: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.x'
+          flutter-version: '3.24'
           cache: true
 
       - name: Use Intro Blurb As Homepage

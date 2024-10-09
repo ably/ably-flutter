@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.4.0'
     }
 }
 
@@ -33,7 +33,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 34
+
+    // Conditional for compatibility with AGP <4.2.
+    if (project.android.hasProperty("namespace")) {
+        namespace 'io.ably.flutter.plugin'
+    }
 
     // Require Java language level 8 so we can use Method References (used with Lambdas)
     compileOptions {
@@ -55,6 +60,9 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    buildFeatures {
+        buildConfig true
     }
 }
 
