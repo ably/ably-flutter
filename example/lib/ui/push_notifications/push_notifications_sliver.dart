@@ -47,8 +47,8 @@ class PushNotificationsSliver extends StatelessWidget {
         ],
       );
 
-  Widget buildSummaryText() => Column(
-        children: const [
+  Widget buildSummaryText() => const Column(
+        children: [
           Text(
               'Activate your device, view your local device information, '
               'subscribe to a push channel with either your device or '
