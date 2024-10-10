@@ -398,6 +398,8 @@ public class AblyMessageCodec extends StandardMessageCodec {
                 return Log.INFO;
             case PlatformConstants.TxLogLevelEnum.error:
                 return Log.ERROR;
+            case PlatformConstants.TxLogLevelEnum.warn:
+                return Log.WARN;
             default:
                 throw SerializationException.forEnum(logLevelString, Log.class);
         }
