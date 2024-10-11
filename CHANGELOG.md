@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.36](https://github.com/ably/ably-flutter/tree/v1.2.36)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.35...v1.2.36)
+
+**Fixed bugs:**
+
+- Error on Android Build [\#551](https://github.com/ably/ably-flutter/issues/551)
+
 ## [1.2.35](https://github.com/ably/ably-flutter/tree/v1.2.35)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.34...v1.2.35)
