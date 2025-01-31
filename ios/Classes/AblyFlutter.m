@@ -699,7 +699,7 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
     AblyFlutter *const ably = [[AblyFlutter alloc] initWithChannel:methodChannel
                                                     streamsChannel:streamsChannel
                                                          registrar:registrar
-                                                        handleAPNs:handleAPNs != nil ? [handleAPNs boolValue] : YES];
+                                                        handleAPNs:handleAPNs != nil ? [handleAPNs boolValue] : NO];
     
     // registering method channel with registrar
     [registrar addMethodCallDelegate:ably channel:methodChannel];
