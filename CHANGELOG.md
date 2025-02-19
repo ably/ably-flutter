@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.37](https://github.com/ably/ably-flutter/tree/v1.2.37)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.36...v1.2.37)
+
+- Fixed Flutter 3.29 compatibility issues
+
 ## [1.2.36](https://github.com/ably/ably-flutter/tree/v1.2.36)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.35...v1.2.36)
