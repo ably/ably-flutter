@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.38](https://github.com/ably/ably-flutter/tree/v1.2.38)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.37...v1.2.38)
+
+- Fixed NullPointerException [\#568](https://github.com/ably/ably-flutter/pull/568)
+
 ## [1.2.37](https://github.com/ably/ably-flutter/tree/v1.2.37)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.36...v1.2.37)
