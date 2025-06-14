@@ -178,7 +178,7 @@ final class StreamsChannel {
             @Override
             @UiThread
             public void success(Object event) {
-                if (hasEnded.get() || streams.get(id).sink != this) {
+                if (hasEnded.get() || streams.get(id) == null || streams.get(id).sink != this) {
                     return;
                 }
                 StreamsChannel.this.messenger.send(name, codec.encodeSuccessEnvelope(event));
@@ -187,7 +187,7 @@ final class StreamsChannel {
             @Override
             @UiThread
             public void error(String errorCode, String errorMessage, Object errorDetails) {
-                if (hasEnded.get() || streams.get(id).sink != this) {
+                if (hasEnded.get() || streams.get(id) == null || streams.get(id).sink != this) {
                     return;
                 }
                 StreamsChannel.this.messenger.send(
@@ -198,7 +198,7 @@ final class StreamsChannel {
             @Override
             @UiThread
             public void endOfStream() {
-                if (hasEnded.getAndSet(true) || streams.get(id).sink != this) {
+                if (hasEnded.getAndSet(true) || streams.get(id) == null || streams.get(id).sink != this) {
                     return;
                 }
                 StreamsChannel.this.messenger.send(name, null);
