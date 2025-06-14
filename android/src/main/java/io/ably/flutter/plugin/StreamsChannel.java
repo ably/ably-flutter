@@ -178,7 +178,7 @@ final class StreamsChannel {
             @Override
             @UiThread
             public void success(Object event) {
-                if (hasEnded.get() || streams.get(id).sink != this) {
+                if (hasEnded.get() || streams.get(id) == null || streams.get(id).sink != this) {
                     return;
                 }
                 StreamsChannel.this.messenger.send(name, codec.encodeSuccessEnvelope(event));
