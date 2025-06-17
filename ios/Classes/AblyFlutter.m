@@ -695,7 +695,11 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
     
     // initializing method channel for round-trip method calls
     FlutterMethodChannel *const methodChannel = [FlutterMethodChannel methodChannelWithName:@"io.ably.flutter.plugin" binaryMessenger:[registrar messenger] codec:methodCodec];
-    AblyFlutter *const ably = [[AblyFlutter alloc] initWithChannel:methodChannel streamsChannel: streamsChannel registrar:registrar];
+    NSNumber *handleAPNs = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"AblyFlutterHandlePushNotifications"];
+    AblyFlutter *const ably = [[AblyFlutter alloc] initWithChannel:methodChannel
+                                                    streamsChannel:streamsChannel
+                                                         registrar:registrar
+                                                        handleAPNs:handleAPNs != nil ? [handleAPNs boolValue] : YES];
     
     // registering method channel with registrar
     [registrar addMethodCallDelegate:ably channel:methodChannel];
@@ -708,7 +712,8 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
 
 -(instancetype)initWithChannel:(FlutterMethodChannel *const)channel
                 streamsChannel:(AblyStreamsChannel *const)streamsChannel
-                     registrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+                     registrar:(NSObject<FlutterPluginRegistrar>*)registrar
+                    handleAPNs:(BOOL)handleAPNs {
     self = [super init];
     if (!self) {
         return nil;
@@ -716,10 +721,13 @@ static const FlutterHandler _realtimeAuthCreateTokenRequest = ^void(AblyFlutter 
     _instanceStore = [AblyInstanceStore sharedInstance];
     _channel = channel;
     _streamsChannel = streamsChannel;
-    UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
-    _pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
-    center.delegate = _pushNotificationEventHandlers;
-    
+
+    if (handleAPNs) {
+        UNUserNotificationCenter *const center = UNUserNotificationCenter.currentNotificationCenter;
+        _pushNotificationEventHandlers = [[PushNotificationEventHandlers alloc] initWithDelegate: center.delegate andMethodChannel: channel];
+        center.delegate = _pushNotificationEventHandlers;
+    }
+
     _handlers = @{
         AblyPlatformMethod_getPlatformVersion: _getPlatformVersion,
         AblyPlatformMethod_getVersion: _getVersion,
