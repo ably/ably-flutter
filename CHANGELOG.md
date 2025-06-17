@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.39](https://github.com/ably/ably-flutter/tree/v1.2.39)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.38...v1.2.39)
+
+- Added ability to opt out of iOS push notifications [\#560](https://github.com/ably/ably-flutter/pull/560)
+
 ## [1.2.38](https://github.com/ably/ably-flutter/tree/v1.2.38)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.37...v1.2.38)
