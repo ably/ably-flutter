@@ -25,21 +25,22 @@ Everything you need to get started with Ably:
 
 ## Supported platforms
 
-- Android
-- iOS
-- Push notifications, [check support section](#push-notifications)
+Ably aims to support a wide range of platforms. If you experience any compatibility issues, open an issue in the repository or contact [Ably support](https://ably.com/support).
 
-## Requirements
+This SDK supports the following platforms:
 
-- Flutter 2.5.0 or higher
-- iOS 10 or newer
-- Android API Level 19 (Android 4.4, KitKat) or newer
+| Platform | Support |
+|----------|---------|
+| Android  | Android 4.4 (API level 19) or newer. Java 8 language features supported via [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring). |
+| iOS      | iOS 10 or newer |
+| Flutter  | Flutter 2.5.0 or higher |
 
-This project uses Java 8 language features, utilizing [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-to support lower versions of the Android runtime (i.e. API Levels prior to 24).
+> [!NOTE]
+> If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
+You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin).
 
-If your project needs support for SDK Version lower than 24, Android Gradle Plugin 4.0.0+ must be used.
-You might also need to upgrade [gradle distribution](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) accordingly.
+> [!IMPORTANT]
+> SDK versions < 1.2.25 will be [deprecated](https://ably.com/docs/platform/deprecate/protocol-v1) from November 1, 2025.
 
 ## Installation
 
