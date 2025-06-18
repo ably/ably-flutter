@@ -50,12 +50,12 @@ The [CHANGELOG.md](/ably/ably-flutter/blob/main/CONTRIBUTING.md) contains detail
 
 ---
 
-## Support, feedback and troubleshooting
-
-Please visit [ably.com/support](https://ably.com/support) for access to our knowledge base and to ask for any assistance.
-
-To see what has changed in recent versions, see the [CHANGELOG](CHANGELOG.md).
-
 ## Contributing
 
-For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
+Read the [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines to contribute to Ably.
+
+---
+
+## Support, Feedback, and Troubleshooting
+
+For help or technical support, visit the [Ably Support page](https://ably.com/support) or [GitHub Issues](https://github.com/ably/ably-flutter/issues) for community-reported bugs and discussions.
