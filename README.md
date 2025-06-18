@@ -44,6 +44,12 @@ You might also need to upgrade [gradle distribution](https://developer.android.c
 
 ---
 
+## Releases
+
+The [CHANGELOG.md](/ably/ably-flutter/blob/main/CONTRIBUTING.md) contains details of the latest releases for this SDK. You can also view all Ably releases on [changelog.ably.com](https://changelog.ably.com).
+
+---
+
 ## Support, feedback and troubleshooting
 
 Please visit [ably.com/support](https://ably.com/support) for access to our knowledge base and to ask for any assistance.
