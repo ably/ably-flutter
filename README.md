@@ -53,10 +53,3 @@ To see what has changed in recent versions, see the [CHANGELOG](CHANGELOG.md).
 ## Contributing
 
 For guidance on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Resources
-
-- [Quickstart Guide](https://www.ably.com/docs/quick-start-guide?lang=flutter)
-- [Introducing the Ably Flutter plugin](https://www.ably.com/blog/ably-flutter-plugin) by [Srushtika](https://github.com/Srushtika) (Developer Advocate)
-- [Building a Realtime Cryptocurrency App with Flutter](https://www.ably.com/tutorials/realtime-cryptocurrency-app-flutter) by [pr-Mais](https://github.com/pr-Mais) and [escamoteur](https://github.com/escamoteur)
-- [Building realtime apps with Flutter and WebSockets: client-side considerations](https://www.ably.com/topic/websockets-flutter)
