@@ -40,15 +40,13 @@ class StreamsChannel {
   /// The message codec used by this channel, not null.
   final MethodCodec codec;
 
-  static int _lastId = 0;
-
   /// @nodoc
   /// Registers a listener on platform side and manages the listener
   /// with incremental identifiers.
   Stream<T> receiveBroadcastStream<T>([Object? arguments]) {
     final methodChannel = MethodChannel(name, codec);
 
-    final id = ++_lastId;
+    final id = StableIdGenerator.generate();
     final handlerName = '$name#$id';
 
     late StreamController<T> controller;

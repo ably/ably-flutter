@@ -17,7 +17,8 @@ class Platform {
     _streamsChannel = StreamsChannel('io.ably.flutter.stream', _codec);
     AblyMethodCallHandler(_methodChannel!);
     BackgroundIsolateAndroidPlatform().setupCallHandler();
-    invokePlatformMethod<void>(PlatformMethod.resetAblyClients);
+    _ablyClientsResetFuture = _invokePlatformMethodWithoutResetCheck<void>(
+        PlatformMethod.resetAblyClients);
   }
 
   static Platform? _platform;
@@ -41,23 +42,18 @@ class Platform {
   /// instance of method channel to listen to android/ios events
   late final StreamsChannel? _streamsChannel;
 
+  late final Future<void> _ablyClientsResetFuture;
+
   /// @nodoc
-  /// Call a platform method which may return null/void as a result
+  /// Call a platform method which may return null/void as a result and
+  /// check that ably clients have successfully reset
   Future<T?> invokePlatformMethod<T>(String method,
       [AblyMessage<Map<String, dynamic>>? arguments]) async {
-    try {
-      // If argument is null, pass an empty [AblyMessage], because codec fails
-      // if argument value is null
-      final methodArguments = arguments ?? AblyMessage.empty();
-      return await _methodChannel!.invokeMethod<T>(method, methodArguments);
-    } on PlatformException catch (platformException) {
-      // Convert some PlatformExceptions into AblyException
-      if (platformException.details is ErrorInfo) {
-        throw AblyException.fromPlatformException(platformException);
-      } else {
-        rethrow;
-      }
-    }
+    // Check if ably clients have successfully reset
+    // (to ensure platform method calls won't interfere
+    // with each other after Platform singleton is reinitialized)
+    await _ablyClientsResetFuture;
+    return _invokePlatformMethodWithoutResetCheck(method, arguments);
   }
 
   /// @nodoc
@@ -71,6 +67,25 @@ class Platform {
               'method unexpectedly returned a null value.');
     } else {
       return result;
+    }
+  }
+
+  /// @nodoc
+  /// Call a platform method which may return null/void as a result
+  Future<T?> _invokePlatformMethodWithoutResetCheck<T>(String method,
+      [AblyMessage<Map<String, dynamic>>? arguments]) async {
+    try {
+      // If argument is null, pass an empty [AblyMessage], because codec fails
+      // if argument value is null
+      final methodArguments = arguments ?? AblyMessage.empty();
+      return await _methodChannel!.invokeMethod<T>(method, methodArguments);
+    } on PlatformException catch (platformException) {
+      // Convert some PlatformExceptions into AblyException
+      if (platformException.details is ErrorInfo) {
+        throw AblyException.fromPlatformException(platformException);
+      } else {
+        rethrow;
+      }
     }
   }
 

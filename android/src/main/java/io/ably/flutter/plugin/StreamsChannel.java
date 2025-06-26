@@ -79,8 +79,8 @@ final class StreamsChannel {
 
     private final class IncomingStreamRequestHandler implements BinaryMessageHandler {
         private final StreamHandlerFactory factory;
-        private final ConcurrentHashMap<Integer, StreamsChannel.Stream> streams = new ConcurrentHashMap<>();
-        private final ConcurrentHashMap<Integer, Object> listenerArguments = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<Long, StreamsChannel.Stream> streams = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<Long, Object> listenerArguments = new ConcurrentHashMap<>();
 
         IncomingStreamRequestHandler(StreamHandlerFactory factory) {
             this.factory = factory;
@@ -96,9 +96,9 @@ final class StreamsChannel {
                 return;
             }
 
-            final int id;
+            final long id;
             try {
-                id = Integer.parseInt(methodParts[1]);
+                id = Long.parseLong(methodParts[1]);
             } catch (NumberFormatException e) {
                 reply.reply(codec.encodeErrorEnvelope("error", e.getMessage(), null));
                 return;
@@ -118,7 +118,7 @@ final class StreamsChannel {
             }
         }
 
-        private void onListen(int id, Object arguments, BinaryReply callback) {
+        private void onListen(long id, Object arguments, BinaryReply callback) {
             final Stream stream = new Stream(new IncomingStreamRequestHandler.EventSinkImplementation(id), factory.create(arguments));
             streams.putIfAbsent(id, stream);
             listenerArguments.put(id, arguments);
@@ -133,7 +133,7 @@ final class StreamsChannel {
             }
         }
 
-        private void onCancel(int id, Object arguments, BinaryReply callback) {
+        private void onCancel(long id, Object arguments, BinaryReply callback) {
             final Stream oldStream = streams.remove(id);
 
             if (oldStream != null) {
@@ -152,25 +152,25 @@ final class StreamsChannel {
         }
 
         void clearAll() {
-            for (ConcurrentHashMap.Entry<Integer, StreamsChannel.Stream> entry : incomingStreamRequestHandler.streams.entrySet()) {
-                int id = entry.getKey();
+            for (ConcurrentHashMap.Entry<Long, StreamsChannel.Stream> entry : incomingStreamRequestHandler.streams.entrySet()) {
+                long id = entry.getKey();
                 Object arguments = listenerArguments.get(id);
                 this.onCancel(id, arguments, null);
             }
         }
 
-        private void logError(int id, String message, Throwable e) {
+        private void logError(long id, String message, Throwable e) {
             Log.e(TAG + name, String.format("%s [id=%d]", message, id), e);
         }
 
         private final class EventSinkImplementation implements EventChannel.EventSink {
 
-            final int id;
+            final long id;
             final String name;
             final AtomicBoolean hasEnded = new AtomicBoolean(false);
 
             @SuppressLint("DefaultLocale")
-            private EventSinkImplementation(int id) {
+            private EventSinkImplementation(long id) {
                 this.id = id;
                 this.name = String.format("%s#%d", StreamsChannel.this.name, id);
             }
