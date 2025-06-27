@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.40](https://github.com/ably/ably-flutter/tree/v1.2.40)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.39...v1.2.40)
+
+- Added stable 64-bit ID generation for streams and improve platform reset handling [\#573](https://github.com/ably/ably-flutter/pull/573)
+
 ## [1.2.39](https://github.com/ably/ably-flutter/tree/v1.2.39)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.38...v1.2.39)
