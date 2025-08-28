@@ -1,4 +1,4 @@
-![Ably Pub/Sub PHP Header](images/flutterSDK-github.png)
+![Ably Pub/Sub PHP Header](images/FlutterSDK-github.png)
 [![Pub Version](https://img.shields.io/pub/v/ably_flutter)](https://pub.dev/packages/ably_flutter)
 [![License](https://badgen.net/github/license/ably/ably-flutter)](https://github.com/ably/ably-flutter/blob/main/LICENSE)
 
