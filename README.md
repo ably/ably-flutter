@@ -1,4 +1,4 @@
-![Ably Pub/Sub PHP Header](images/FlutterSDK-github.png)
+![Ably Pub/Sub Flutter Header](images/flutterSDK-github.png)
 [![Pub Version](https://img.shields.io/pub/v/ably_flutter)](https://pub.dev/packages/ably_flutter)
 [![License](https://badgen.net/github/license/ably/ably-flutter)](https://github.com/ably/ably-flutter/blob/main/LICENSE)
 
@@ -102,7 +102,6 @@ The following code connects to Ably's realtime messaging service, subscribes to 
     name: 'test-event',
     data: 'hello world',
   );
-}
 ```
 
 ---
@@ -110,7 +109,7 @@ The following code connects to Ably's realtime messaging service, subscribes to 
 
 ## Releases
 
-The [CHANGELOG.md](./CONTRIBUTING.md) contains details of the latest releases for this SDK. You can also view all Ably releases on [changelog.ably.com](https://changelog.ably.com).
+The [CHANGELOG.md](./CHANGELOG.md) contains details of the latest releases for this SDK. You can also view all Ably releases on [changelog.ably.com](https://changelog.ably.com).
 
 ---
 
