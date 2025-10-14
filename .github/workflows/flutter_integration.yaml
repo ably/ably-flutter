@@ -53,7 +53,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24'
+          flutter-version: '3.29'
           cache: true
 
       - name: 'Run Flutter Driver tests'
@@ -65,4 +65,4 @@ jobs:
           disable-animations: true
           script: |
             flutter pub get
-            cd test_integration && flutter drive
+            cd test_integration && flutter build apk && flutter drive
