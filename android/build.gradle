@@ -1,14 +1,16 @@
 group 'io.ably.flutter.plugin'
-version '1.0'
+// Use the snapshot suffix to show that build artifacts are not shared.
+// This Gradle file is used by Flutter to build itself.
+version '1.0-SNAPSHOT'
 
 buildscript {
     repositories {
         google()
-        mavenCentral() // for firebase-messaging
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.0'
+        classpath 'com.android.tools.build:gradle:8.12.1'
     }
 }
 
@@ -26,36 +28,25 @@ dependencies {
     implementation 'io.ably:ably-android:1.2.40'
 
     // https://firebase.google.com/docs/cloud-messaging/android/client
-    implementation 'com.google.firebase:firebase-messaging:23.0.4'
-
-    // https://github.com/google/desugar_jdk_libs
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation 'com.google.firebase:firebase-messaging:23.0.6'
 }
 
 android {
-    compileSdkVersion 34
+    // older version of flutter sdk doesn't provide `compileSdkVersion` defaults to 34
+    compileSdkVersion flutter.compileSdkVersion ?: 34
 
     // Conditional for compatibility with AGP <4.2.
     if (project.android.hasProperty("namespace")) {
         namespace 'io.ably.flutter.plugin'
     }
 
-    // Require Java language level 8 so we can use Method References (used with Lambdas)
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-
-        // Flag to enable Java 8 language APIs while supporting to older SDK Versions
-        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
         minSdkVersion 19
-
-        // Required when setting minSdkVersion to 20 or lower so we can use
-        // the Java 8 language APIs as mentioned here:
-        // https://developer.android.com/studio/write/java8-support#library-desugaring
-        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -63,6 +54,12 @@ android {
     }
     buildFeatures {
         buildConfig true
+    }
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 }
 
