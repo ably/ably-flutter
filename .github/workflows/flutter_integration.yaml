@@ -7,11 +7,6 @@ on:
 
 jobs:
   ios:
-    strategy:
-      matrix:
-        device: # Device names must be shown in `xcrun simctl list devices`
-          - 'iPhone 15' # we are not specifying the iOS version as it tends to change
-      fail-fast: false
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +17,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24'
+          flutter-version: '3.29'
           cache: true
 
       # test_integration package depends on ably_flutter, so before we run integration

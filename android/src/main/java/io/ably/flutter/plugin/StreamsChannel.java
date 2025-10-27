@@ -20,11 +20,10 @@
 
 package io.ably.flutter.plugin;
 
-import android.annotation.SuppressLint;
-
 import androidx.annotation.UiThread;
 
 import java.nio.ByteBuffer;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -160,7 +159,7 @@ final class StreamsChannel {
         }
 
         private void logError(long id, String message, Throwable e) {
-            Log.e(TAG + name, String.format("%s [id=%d]", message, id), e);
+            Log.e(TAG + name, String.format(Locale.ROOT, "%s [id=%d]", message, id), e);
         }
 
         private final class EventSinkImplementation implements EventChannel.EventSink {
@@ -169,10 +168,9 @@ final class StreamsChannel {
             final String name;
             final AtomicBoolean hasEnded = new AtomicBoolean(false);
 
-            @SuppressLint("DefaultLocale")
             private EventSinkImplementation(long id) {
                 this.id = id;
-                this.name = String.format("%s#%d", StreamsChannel.this.name, id);
+                this.name = String.format(Locale.ROOT, "%s#%d", StreamsChannel.this.name, id);
             }
 
             @Override
