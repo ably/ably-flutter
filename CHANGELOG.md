@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.41](https://github.com/ably/ably-flutter/tree/v1.2.41)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.40...v1.2.41)
+
+- Fixed the issue when the device locale has its own digits symbols [\#581](https://github.com/ably/ably-flutter/pull/581)
+- Fixed warnings in build scripts for new flutter versions [\#579](https://github.com/ably/ably-flutter/pull/579)
+
 ## [1.2.40](https://github.com/ably/ably-flutter/tree/v1.2.40)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.39...v1.2.40)
