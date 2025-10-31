@@ -4,16 +4,17 @@ import 'package:ably_flutter_example/push_notifications/push_notification_servic
 import 'package:ably_flutter_example/ui/api_key_service.dart';
 
 class AblyService {
+  final String clientId;
   late final ably.Realtime realtime;
   late final ably.Rest rest;
   late final PushNotificationService pushNotificationService;
   late final ApiKeyProvision apiKeyProvision;
 
-  AblyService({required this.apiKeyProvision}) {
+  AblyService({required this.apiKeyProvision, required this.clientId}) {
     realtime = ably.Realtime(
       options: ably.ClientOptions(
         key: apiKeyProvision.key,
-        clientId: Constants.clientId,
+        clientId: clientId,
         logLevel: ably.LogLevel.verbose,
         environment: apiKeyProvision.source == ApiKeySource.env
             ? null
@@ -24,7 +25,7 @@ class AblyService {
     rest = ably.Rest(
       options: ably.ClientOptions(
         key: apiKeyProvision.key,
-        clientId: Constants.clientId,
+        clientId: clientId,
         logLevel: ably.LogLevel.verbose,
         environment: apiKeyProvision.source == ApiKeySource.env
             ? null
