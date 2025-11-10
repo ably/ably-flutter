@@ -2,7 +2,7 @@ PODS:
   - Ably (1.2.53):
     - AblyDeltaCodec (= 1.3.3)
     - msgpack (= 0.4.0)
-  - ably_flutter (1.2.41):
+  - ably_flutter (1.2.42):
     - Ably (= 1.2.53)
     - Flutter
   - AblyDeltaCodec (1.3.3)
@@ -27,7 +27,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ably: 1756d6590a572809c10fc4bcc32e05fe9e7867d7
-  ably_flutter: 8ca7f39bfa848e44468c8579a2d5a4e4ff1675f5
+  ably_flutter: 9e5993925bd7b126cc75bb0307413ad07ac67928
   AblyDeltaCodec: add5d06a756b3581b12aab5b5500a320b8c55bea
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   msgpack: c85f6251873059738472ae136951cec5f30f3251
