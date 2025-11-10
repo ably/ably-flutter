@@ -188,7 +188,7 @@ The release process must include the following steps:
    - Update the version of ably-flutter used in the example app and test integration app `podfile.lock` files:
    - Run `pod install` in `example/ios` and `test_integration/ios`, or run `pod install --project-directory=example/ios` and `pod install --project-directory=test_integration/ios`
    - Commit this
-4.  Run [`github_changelog_generator`](https://github.com/github-changelog-generator/github-changelog-generator) to automate the update of the [CHANGELOG](./CHANGELOG.md). This may require some manual intervention, both in terms of how the command is run and how the change log file is modified. Your mileage may vary:
+4. Run [`github_changelog_generator`](https://github.com/github-changelog-generator/github-changelog-generator) to automate the update of the [CHANGELOG](./CHANGELOG.md). This may require some manual intervention, both in terms of how the command is run and how the change log file is modified. Your mileage may vary:
     - The command you will need to run will look something like this: `github_changelog_generator -u ably -p ably-flutter --since-tag v1.2.2 --output delta.md --token $GITHUB_TOKEN_WITH_REPO_ACCESS`. Generate token [here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token).
     - Using the command above, `--output delta.md` writes changes made after `--since-tag` to a new file.
     - The contents of that new file (`delta.md`) then need to be manually inserted at the top of the `CHANGELOG.md`, changing the "Unreleased" heading and linking with the current version numbers.
@@ -198,10 +198,11 @@ The release process must include the following steps:
 7. Open a PR for the release against the release branch you just pushed
 8. Gain approval(s) for the release PR from maintainer(s)
 9. Land the release PR to `main`
-10. Execute `flutter pub publish` from the root of this repository
-11. Create a tag named like `v1.2.3`, using `git tag v1.2.3`
-12. Push the newly created tag to GitHub: `git push origin v1.2.3`
-13. Create a release on GitHub following the [previous releases]((https://github.com/ably/ably-flutter/releases)) as examples.
+10. Create a tag named like `v1.2.3`, using `git tag v1.2.3`
+11. Push the newly created tag to GitHub: `git push origin v1.2.3`
+12. Create a release on GitHub following the [previous releases]((https://github.com/ably/ably-flutter/releases)) as examples.
+13. Go to the [Release Workflow](https://github.com/ably/ably-flutter/actions/workflows/release.yaml) and ask [ably/team-sdk](https://github.com/orgs/ably/teams/team-sdk) member to approve publishing to the pub.dev registry
+14. Update the [Ably Changelog](https://changelog.ably.com/) (via [headwayapp](https://headwayapp.co/)) with these changes
 
 We tend to use [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator) to collate the information required for a change log update.
 Your mileage may vary, but it seems the most reliable method to invoke the generator is something like:
