@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.42](https://github.com/ably/ably-flutter/tree/v1.2.42)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.41...v1.2.42)
+
+- Updated `ably-cocoa` dependency to `1.2.53`
+- Fixed the issue in which app crashes when the HTTPS response status code is 404 [\#583](https://github.com/ably/ably-flutter/issues/583)
+
 ## [1.2.41](https://github.com/ably/ably-flutter/tree/v1.2.41)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.40...v1.2.41)
