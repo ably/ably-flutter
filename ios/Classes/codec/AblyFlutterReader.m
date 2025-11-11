@@ -253,7 +253,7 @@ static AblyCodecDecoder readTokenParams = ^ARTTokenParams*(NSDictionary *const d
 
     for (NSString *key in dictionary) {
         NSString *value = dictionary[key];
-        ARTStringifiable *stringifiable = [[ARTStringifiable alloc] initWithString:value];
+        ARTStringifiable *stringifiable = [ARTStringifiable withString:value];
         result[key] = stringifiable;
     }
 
