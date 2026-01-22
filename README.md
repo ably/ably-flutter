@@ -54,7 +54,7 @@ Add the Ably Flutter package to your project by including it in your `pubspec.ya
 
 ```yaml
 dependencies:
-  ably_flutter: ^1.2.42
+  ably_flutter: ^1.2.43
 ```
 
 Once added to your dependencies, import it in your Dart code:

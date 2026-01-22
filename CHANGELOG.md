@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.43](https://github.com/ably/ably-flutter/tree/v1.2.43)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.42...v1.2.43)
+
+- Updated `ably-java` dependency to `1.6.0`
+
 ## [1.2.42](https://github.com/ably/ably-flutter/tree/v1.2.42)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.41...v1.2.42)
