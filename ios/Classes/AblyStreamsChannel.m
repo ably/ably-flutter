@@ -66,26 +66,26 @@
         [_messenger setMessageHandlerOnChannel:_name binaryMessageHandler:nil];
         return;
     }
-    
+
     _streams = [NSMutableDictionary new];
     _listenerArguments = [NSMutableDictionary new];
     FlutterBinaryMessageHandler messageHandler = ^(NSData* message, FlutterBinaryReply callback) {
         FlutterMethodCall* call = [self->_codec decodeMethodCall:message];
         NSArray *methodParts = [call.method componentsSeparatedByString:@"#"];
-        
+
         if (methodParts.count != 2) {
             callback(nil);
             return;
         }
-        
+
         NSInteger keyValue = [methodParts.lastObject integerValue];
         if(keyValue == 0) {
             callback([self->_codec encodeErrorEnvelope:[FlutterError errorWithCode:@"error" message:[NSString stringWithFormat:@"Invalid method name: %@", call.method] details:nil]]);
             return;
         }
-        
+
         NSNumber *key = [NSNumber numberWithInteger:keyValue];
-        
+
         if ([methodParts.firstObject isEqualToString:@"listen"]) {
             [self listenForCall:call withKey:key usingCallback:callback andFactory:factory];
         } else if ([methodParts.firstObject isEqualToString:@"cancel"]) {
@@ -94,7 +94,7 @@
             callback(nil);
         }
     };
-    
+
     [_messenger setMessageHandlerOnChannel:_name binaryMessageHandler:messageHandler];
 }
 
@@ -110,22 +110,25 @@
 - (void)listenForCall:(FlutterMethodCall*)call withKey:(NSNumber*)key usingCallback:(FlutterBinaryReply)callback andFactory:(NSObject<FlutterStreamHandler> *(^)(id))factory {
     AblyStreamsChannelStream *stream = [AblyStreamsChannelStream new];
     stream.sink = ^(id event) {
-        NSString *name = [NSString stringWithFormat:@"%@#%@", self->_name, key];
-        
-        if (event == FlutterEndOfEventStream) {
-            [self->_messenger sendOnChannel:name message:nil];
-        } else if ([event isKindOfClass:[FlutterError class]]) {
-            [self->_messenger sendOnChannel:name
-                                    message:[self->_codec encodeErrorEnvelope:(FlutterError*)event]];
-        } else {
-            [self->_messenger sendOnChannel:name message:[self->_codec encodeSuccessEnvelope:event]];
+        @try {
+            NSString *name = [NSString stringWithFormat:@"%@#%@", self->_name, key];
+            if (event == FlutterEndOfEventStream) {
+                [self->_messenger sendOnChannel:name message:nil];
+            } else if ([event isKindOfClass:[FlutterError class]]) {
+                [self->_messenger sendOnChannel:name
+                                        message:[self->_codec encodeErrorEnvelope:(FlutterError*)event]];
+            } else {
+                [self->_messenger sendOnChannel:name message:[self->_codec encodeSuccessEnvelope:event]];
+            }
+        } @catch (NSException *exception) {
+            NSLog(@"AblyFlutter: Dropped event, engine not running: %@", exception.reason);
         }
     };
     stream.handler = factory(call.arguments);
-    
+
     [_streams setObject:stream forKey:key];
     [_listenerArguments setObject:call.arguments forKey:key];
-    
+
     [self triggerCallback:callback
                     error:[stream.handler onListenWithArguments:call.arguments eventSink:stream.sink]];
 }
@@ -136,10 +139,10 @@
         callback([_codec encodeErrorEnvelope:[FlutterError errorWithCode:@"error" message:@"No active stream to cancel" details:nil]]);
         return;
     }
-    
+
     [_streams removeObjectForKey:key];
     [_listenerArguments removeObjectForKey:key];
-    
+
     [self triggerCallback:callback error:[stream.handler onCancelWithArguments:call.arguments]];
 }
 
