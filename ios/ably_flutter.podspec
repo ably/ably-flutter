@@ -22,12 +22,16 @@ Pod::Spec.new do |s|
   s.platform = :ios
   s.ios.deployment_target  = '10.0'
 
-  # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
+  # Flutter 3.x ships both arm64 and x86_64 simulator slices; no arch restriction needed.
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
     'GCC_PREPROCESSOR_DEFINITIONS' => "FLUTTER_PACKAGE_PLUGIN_VERSION=\\@\\\"#{flutter_package_plugin_version}\\\""
   }
   s.resource_bundles = {'ably_flutter' => ['Resources/PrivacyInfo.xcprivacy']}
   s.swift_version = '5.0'
+
+  s.test_spec 'Tests' do |ts|
+    ts.source_files = 'Tests/**/*.{h,m}'
+    ts.framework = 'XCTest'
+  end
 end
