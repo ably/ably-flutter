@@ -173,7 +173,18 @@ Documentation stored in repository should follow the schema defined in [Ably Tem
 
 When referencing images in markdown files, using a local path such as `images/android.png`, for example `![An android device running on API level 30](images/android.png)` will result in the image missing on pub.dev README preview. Therefore, we currently reference images through the github.com URL path (`https://github.com/ably/ably-flutter/raw/`), for example to reference `images/android.png`, we would use `![An android device running on API level 30](https://github.com/ably/ably-flutter/raw/main/images/android.png)`. [A suggestion](https://github.com/dart-lang/pub-dev/issues/5068) has been made to automatically replace this relative image path to the github URL path.
 
-## Release Process
+## Release Process (Claude Code)
+
+1. Ensure that all work intended for this release has landed to `main`
+2. Run `/release patch|minor|major` in Claude Code — this creates the release branch, bumps the version in all required files, and populates the [CHANGELOG](./CHANGELOG.md) with merged PRs since the last tag automatically
+3. Review the `### What's Changed` entries in [CHANGELOG.md](./CHANGELOG.md) and adjust if needed, then commit any edits
+4. Create a release PR (ensure you include an SDK Team Engineering Lead and the SDK Team Product Manager as reviewers) and gain approvals for it, then merge that to `main`
+5. Create a tag named like `v2.0.1` and push it to GitHub - e.g. `git tag v2.0.1 && git push origin v2.0.1`
+6. Create the release on GitHub including populating the release notes
+7. Go to the [Release Workflow](https://github.com/ably/ably-flutter/actions/workflows/release.yaml) and ask [ably/team-sdk](https://github.com/orgs/ably/teams/team-sdk) member to approve publishing to the pub.dev registry
+8. Update the [Ably Changelog](https://changelog.ably.com/) (via [headwayapp](https://headwayapp.co/)) with these changes
+
+## Release Process (Manual)
 
 Releases should always be made through a release pull request (PR), which needs to bump the version number and add to the [change log](CHANGELOG.md).
 For an example of a previous release PR, see [#89](https://github.com/ably/ably-flutter/pull/89).
