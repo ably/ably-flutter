@@ -11,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: futureware-tech/simulator-action@v5
-        id: ios-simulator
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29'
@@ -30,11 +27,19 @@ jobs:
             --validation-dir=/tmp/ably_test_build \
             --no-clean 
 
+      - name: Pick simulator
+        run: |
+          UDID=$(xcrun simctl list devices available | \
+            grep -E "iPhone" | head -n 1 | \
+            sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          echo "SIMULATOR_ID=$UDID" >> $GITHUB_ENV
+
+
       - name: Run iOS unit tests
         timeout-minutes: 30
         run: |
           xcodebuild test \
             -workspace /tmp/ably_test_build/App.xcworkspace \
             -scheme ably_flutter-Unit-Tests \
-            -destination 'id=${{ steps.ios-simulator.outputs.udid }}' \
+            -destination "id=$SIMULATOR_ID,arch=arm64" \
             CODE_SIGNING_ALLOWED=NO
