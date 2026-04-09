@@ -185,7 +185,47 @@ import ably_flutter
 - Your device is now ready to receive and display user notifications (called alert notifications on iOS and notifications on Android) to the user, when the application is in the background.
 - For debugging: You could use the Ably dashboard (notification tab) or the Push Admin API using another SDK to ensure the device has been subscribed by listing the subscriptions on a specific channel. Alternatively, you can list the push channels the device or client is subscribed to: `final subscriptions = channel.push.listSubscriptions()`. This API requires Push Admin capability, and should be used for debugging. This means you must use an Ably API key or token with the `push-admin` capability.
 
-### Notification Permissions (iOS only)
+### Notification Permissions
+
+SDK users are free to choose any library they prefer for managing device permissions, allowing flexibility based on their project requirements.
+
+#### Notification Permissions using `permission_handler` package
+
+However, we recommend using the  [flutter-permission-handler](https://github.com/baseflow/flutter-permission-handler) package due to its reliable cross-platform support for both iOS and Android.
+
+> [!NOTE]
+> Requesting notification permissions is only necessary for Android 13 (API level 33) and above. For earlier Android versions, notification permissions are granted by default.
+
+To implement it in your app, follow these steps:
+
+1. Add `permission_handler` to your `pubspec.yaml` dependencies.
+2. Use `Permission.notification.request()` to request notification permissions across both iOS and Android.
+
+Example using `permission_handler`:
+
+```dart
+import 'package:permission_handler/permission_handler.dart';
+
+// Request notification permission
+PermissionStatus status = await Permission.notification.request();
+
+if (status.isGranted) {
+  // Handle permission granted
+} else {
+  // Handle permission denied
+}
+```
+
+#### Built-in Notification Permissions managment (iOS only)
+
+> [!WARNING]
+> **Deprecation Notice:**
+> 
+> This approach to requesting notification permissions is deprecated for two key reasons:
+>
+> 1. **Platform Limitation:** The `Push#requestPermission` method only works for iOS and does not support Android, which means developers have to rely on platform-specific code.
+> 
+> 2. **Client Initialization Dependency:** The `requestPermission` method is tied to the Ably Push object, which requires an initialized Ably client to request permissions. This is not an ideal design, as permission requests should not depend on initializing the Ably client. Instead, permission handling should be a standalone utility function.
 
 Requesting permissions:
 
@@ -207,6 +247,12 @@ if (Platform.isIOS) {
   final notificationSettings = await realtime.push.getNotificationSettings();
 }
 ```
+
+> [!NOTE] 
+> We are currently working on adding built-in support for notification permissions as a utility function within our SDK. 
+> This update will simplify permission handling and provide a unified solution for both iOS and Android. 
+> You can subscribe to [the issue](https://github.com/ably/ably-flutter/issues/545) to receive updates on our progress. 
+> Once implemented, using third-party libraries like flutter-permission-handler will be optional for managing notification permissions.
 
 ### Sending Messages
 
