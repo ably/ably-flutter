@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.44](https://github.com/ably/ably-flutter/tree/v1.2.44)
+
+[Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.43...v1.2.44)
+
+- Fix exceptions when FlutterEngine is suspended during event emission [#595](https://github.com/ably/ably-flutter/pull/595)
+
 ## [1.2.43](https://github.com/ably/ably-flutter/tree/v1.2.43)
 
 [Full Changelog](https://github.com/ably/ably-flutter/compare/v1.2.42...v1.2.43)
