@@ -11,10 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: futureware-tech/simulator-action@v3
-        with:
-          model: ${{ matrix.device }}
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29'
@@ -24,11 +20,36 @@ jobs:
       # tests it's best to perform dependency update in both packages, to make sure that
       # integration tests are run with exactly the same dependencies as specified in
       # current version of ably_flutter package
-      - name: 'Run Flutter Driver tests'
-        timeout-minutes: 30
+      - name: Update dependencies
         run: |
           flutter pub get
-          cd test_integration && flutter drive
+          cd test_integration && flutter pub get
+
+      - name: Build iOS app (no simulator needed yet)
+        working-directory: test_integration
+        run: flutter build ios --simulator
+
+      - name: Pick simulator
+        run: |
+          DEVICE=$(xcrun simctl list devices available | \
+            grep -E "iPhone" | head -n 1)
+          echo $DEVICE
+          UDID=$(echo $DEVICE | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          echo "SIMULATOR_ID=$UDID" >> $GITHUB_ENV
+
+      - name: Boot simulator
+        timeout-minutes: 5
+        run: |
+          xcrun simctl boot "$SIMULATOR_ID" || true
+          xcrun simctl bootstatus "$SIMULATOR_ID" -b
+
+      - name: Run integration tests (no rebuild)
+        timeout-minutes: 25
+        working-directory: test_integration
+        run: |
+          flutter drive --no-pub --no-build \
+            --use-application-binary=build/ios/iphonesimulator/Runner.app \
+            -d $SIMULATOR_ID
 
   android:
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-![Ably Pub/Sub Flutter Header](images/flutterSDK-github.png)
+![Ably Pub/Sub Flutter Header](images/flutter-github.png)
 [![Pub Version](https://img.shields.io/pub/v/ably_flutter)](https://pub.dev/packages/ably_flutter)
 [![License](https://badgen.net/github/license/ably/ably-flutter)](https://github.com/ably/ably-flutter/blob/main/LICENSE)
 
@@ -54,7 +54,7 @@ Add the Ably Flutter package to your project by including it in your `pubspec.ya
 
 ```yaml
 dependencies:
-  ably_flutter: ^1.2.43
+  ably_flutter: ^1.2.44
 ```
 
 Once added to your dependencies, import it in your Dart code:
